@@ -1,0 +1,121 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="page-header">
+        <h1>Deployment Management</h1>
+        <p>Monitor and manage application deployments, releases, and infrastructure.</p>
+      </div>
+      
+      <div class="content-section">
+        <div class="row">
+          <div class="col-md-6 col-lg-3 mb-4">
+            <div class="deployment-card">
+              <div class="card-header">
+                <div class="status-indicator active"></div>
+                <h3>Production</h3>
+              </div>
+              <div class="deployment-info">
+                <div class="version">v2.4.1</div>
+                <div class="last-deploy">Last deploy: 2 hours ago</div>
+                <div class="health-status healthy">Healthy</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3 mb-4">
+            <div class="deployment-card">
+              <div class="card-header">
+                <div class="status-indicator active"></div>
+                <h3>Staging</h3>
+              </div>
+              <div class="deployment-info">
+                <div class="version">v2.5.0-rc1</div>
+                <div class="last-deploy">Last deploy: 1 day ago</div>
+                <div class="health-status healthy">Healthy</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3 mb-4">
+            <div class="deployment-card">
+              <div class="card-header">
+                <div class="status-indicator warning"></div>
+                <h3>Development</h3>
+              </div>
+              <div class="deployment-info">
+                <div class="version">v2.5.0-dev</div>
+                <div class="last-deploy">Last deploy: 3 hours ago</div>
+                <div class="health-status warning">Building</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3 mb-4">
+            <div class="deployment-card">
+              <div class="card-header">
+                <div class="status-indicator inactive"></div>
+                <h3>Testing</h3>
+              </div>
+              <div class="deployment-info">
+                <div class="version">v2.4.2-test</div>
+                <div class="last-deploy">Last deploy: 1 week ago</div>
+                <div class="health-status inactive">Inactive</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row mt-4">
+          <div class="col-md-8">
+            <div class="deployment-history">
+              <h3>Recent Deployments</h3>
+              <div class="deployment-timeline">
+                <div class="timeline-item">
+                  <div class="timeline-marker success"></div>
+                  <div class="timeline-content">
+                    <div class="deployment-title">Production v2.4.1</div>
+                    <div class="deployment-details">
+                      <span class="deploy-user">by John Doe</span>
+                      <span class="deploy-time">2 hours ago</span>
+                    </div>
+                    <div class="deployment-status success">Successful</div>
+                  </div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-marker success"></div>
+                  <div class="timeline-content">
+                    <div class="deployment-title">Staging v2.5.0-rc1</div>
+                    <div class="deployment-details">
+                      <span class="deploy-user">by Jane Smith</span>
+                      <span class="deploy-time">1 day ago</span>
+                    </div>
+                    <div class="deployment-status success">Successful</div>
+                  </div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-marker warning"></div>
+                  <div class="timeline-content">
+                    <div class="deployment-title">Development v2.5.0-dev</div>
+                    <div class="deployment-details">
+                      <span class="deploy-user">by Mike Johnson</span>
+                      <span class="deploy-time">3 hours ago</span>
+                    </div>
+                    <div class="deployment-status warning">In Progress</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="deployment-actions">
+              <h3>Quick Actions</h3>
+              <div class="action-buttons">
+                <button class="btn btn-primary">Deploy to Production</button>
+                <button class="btn btn-secondary">Rollback</button>
+                <button class="btn btn-outline-primary">View Logs</button>
+                <button class="btn btn-outline-secondary">Configuration</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

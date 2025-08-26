@@ -64,6 +64,30 @@ const routes: Routes = [
         (m) => m.ChangePasswordModule
       ),
   },
+  {
+    path: "revenue",
+    loadChildren: () =>
+      import("./revenue/revenue.module").then((m) => m.RevenueModule),
+    // canActivate: [AuthGuard, ChatbotGuard],
+  },
+  {
+    path: "content",
+    loadChildren: () =>
+      import("./content/content.module").then((m) => m.ContentModule),
+    // canActivate: [AuthGuard, ChatbotGuard],
+  },
+  {
+    path: "deployment",
+    loadChildren: () =>
+      import("./deployment/deployment.module").then((m) => m.DeploymentModule),
+    // canActivate: [AuthGuard, ChatbotGuard],
+  },
+  {
+    path: "status",
+    loadChildren: () =>
+      import("./status/status.module").then((m) => m.StatusModule),
+    // canActivate: [AuthGuard, ChatbotGuard],
+  },
 ];
 
 @NgModule({

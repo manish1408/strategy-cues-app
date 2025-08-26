@@ -17,137 +17,41 @@
           <!-- Sidebar Navigation -->
 
           <div class="d-flex align-items-center justify-content-between">
-            <!-- <img class="milo-logo img-fluid" src="assets/icons/milo-logo-white.svg" /> -->
-
-            <h2 class="text-white" style="font-size: 20px; font-weight: 600;">Strategic Cues</h2>
+            <img class="milo-logo img-fluid" src="https://strategycues.com/wp-content/uploads/2025/02/Asset-2-8.png" />
 
             <img src="assets/icons/arrow-square-left.svg" (click)="toggleSidebar()" class="cursor-pointer" />
           </div>
 
           <ul class="sidebar-nav mt-4">
 
-
-            <!-- Main Menu Section -->
-            <li>
-              <h2 class="sidebar-menu-title">Revenue Magt Cues</h2>
-              <ul class="sidebar-nav">
-                <!-- Conversations -->
-                <li class="sidebar-item">
-                  <a routerLink="/conversations" [queryParams]="{ id: selectedOperator?.chatbotId }"
-                    routerLinkActive="active-link" class="sidebar-link">
-                    <!-- <img src="assets/icons/messages.svg" /> -->
-                    All listings </a>
-                </li>
-
-                <!-- LLM Settings -->
-                <li class="sidebar-item">
-                  <a routerLink="/contacts" [queryParams]="{ id: selectedOperator?.chatbotId }"
-                    routerLinkActive="active-link" class="sidebar-link">
-                    <!-- <img src="assets/icons/phone.svg" /> -->
-                    Listings </a>
-                </li>
-
-
-
-
-
-                <!-- feedback -->
-                <li class="sidebar-item">
-                  <a routerLink="/feedback" [queryParams]="{ id: selectedOperator?.chatbotId }"
-                    routerLinkActive="active-link" class="sidebar-link text-wrap">
-                    <!-- <img src="assets/icons/llm.svg" /> -->
-                    Group
-                  </a>
-                </li>
-
-
-                <li class="sidebar-item">
-                  <a routerLink="/whatsapp" [queryParams]="{ id: selectedOperator?.chatbotId }"
-                    routerLinkActive="active-link" class="sidebar-link text-wrap">
-                    <!-- <img src="assets/icons/whatsapp.svg" /> -->
-                    Sub Group </a>
-                </li>
-
-
-              </ul>
-            </li>
-
-            <!-- AI Tools Section -->
-            <li>
-              <h2 class="sidebar-menu-title">Content Cues</h2>
-              <ul class="sidebar-nav">
-
-                <!-- Knowledge -->
-                <li class="sidebar-item">
-                  <h3 class="sidebar-menu-title" style="padding-left: 10px;">Group</h3>
-                  <ul>
-                    <li>
-                      <a routerLink="/files-data" [queryParams]="{ id: selectedOperator?.chatbotId }"
-                        class="sidebar-link" routerLinkActive="active-link">
-                        <!-- <img src="assets/icons/lamp-light.svg" /> -->
-                        Focus Units
-                      </a>
-                    </li>
-                    <li>
-                      <a routerLink="/files-data" [queryParams]="{ id: selectedOperator?.chatbotId }"
-                        class="sidebar-link" routerLinkActive="active-link">
-                        <!-- <img src="assets/icons/lamp-light.svg" /> -->
-                        High Performing
-                      </a>
-                    </li>
-                    <li>
-                      <a routerLink="/files-data" [queryParams]="{ id: selectedOperator?.chatbotId }"
-                        class="sidebar-link" routerLinkActive="active-link">
-                        <!-- <img src="assets/icons/lamp-light.svg" /> -->
-                        Trending Units
-                      </a>
-                    </li>
-                  </ul>
-                  <h3 class="sidebar-menu-title" style="padding-left: 10px;">Sub Group</h3>
-                  <ul>
-                    <li>
-                      <a routerLink="/files-data" [queryParams]="{ id: selectedOperator?.chatbotId }"
-                        class="sidebar-link" routerLinkActive="active-link">
-                        <!-- <img src="assets/icons/lamp-light.svg" /> -->
-                        New Units
-                      </a>
-                    </li>
-                    <li>
-                      <a routerLink="/files-data" [queryParams]="{ id: selectedOperator?.chatbotId }"
-                        class="sidebar-link" routerLinkActive="active-link">
-                        <!-- <img src="assets/icons/lamp-light.svg" /> -->
-                        JBR 1 Bedroom
-                      </a>
-                    </li>
-                    <li>
-                      <a routerLink="/files-data" [queryParams]="{ id: selectedOperator?.chatbotId }"
-                        class="sidebar-link" routerLinkActive="active-link">
-                        <!-- <img src="assets/icons/lamp-light.svg" /> -->
-                        Marina
-                      </a>
-                    </li>
-                  </ul>
-
-              </ul>
-            </li>
+            <!-- New Pages -->
             <li class="sidebar-menu-item">
-              <a routerLink="/installation" routerLinkActive="active-link" class="sidebar-link" #rla="routerLinkActive">
-                <!-- <img src="assets/icons/installation.svg" /> -->
-                Deployment Cues
+              <a routerLink="/revenue" routerLinkActive="active-link" class="sidebar-link">
+                <i class="fas fa-chart-line me-2"></i>
+                Revenue
               </a>
             </li>
 
-            <!-- Dashboard -->
             <li class="sidebar-menu-item">
-              <a routerLink="/dashboard" routerLinkActive="active-link" class="sidebar-link" #rlad="routerLinkActive">
-                <!-- <img src="assets/icons/dashboard.svg" /> -->
-                Status Board
+              <a routerLink="/content" routerLinkActive="active-link" class="sidebar-link">
+                <i class="fas fa-file-alt me-2"></i>
+                Content
               </a>
             </li>
 
+            <li class="sidebar-menu-item">
+              <a routerLink="/deployment" routerLinkActive="active-link" class="sidebar-link">
+                <i class="fas fa-rocket me-2"></i>
+                Deployment
+              </a>
+            </li>
 
-
-
+            <li class="sidebar-menu-item">
+              <a routerLink="/status" routerLinkActive="active-link" class="sidebar-link">
+                <i class="fas fa-heartbeat me-2"></i>
+                Status
+              </a>
+            </li>
 
           </ul>
 

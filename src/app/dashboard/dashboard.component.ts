@@ -45,7 +45,7 @@ export class DashboardComponent {
     name: 'feedbackScheme',
     selectable: true,
     group: ScaleType.Ordinal,
-    domain: ['#5DD89D', '#072032', '#FFF59F', '#89FFBA', '#12715B'],
+    domain: ['#5DD89D', '#072032', '#FFF59F', '#89FFBA', '#FCDF46'],
   };
   feedbackNull = true;
 
@@ -53,13 +53,13 @@ export class DashboardComponent {
     name: 'customScheme',
     selectable: true,
     group: ScaleType.Ordinal,
-    domain: ['#5DD89D', '#072032', '#FFF59F', '#89FFBA', '#12715B'],
+    domain: ['#5DD89D', '#072032', '#FFF59F', '#89FFBA', '#FCDF46'],
   };
   customColorSchemeBar: Color = {
     name: 'customScheme',
     selectable: true,
     group: ScaleType.Ordinal,
-    domain: ['#5DD89D', '#072032', '#FFF59F', '#89FFBA', '#12715B'],
+    domain: ['#5DD89D', '#072032', '#FFF59F', '#89FFBA', '#FCDF46'],
   };
 
   constructor(

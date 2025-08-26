@@ -1,0 +1,122 @@
+.page-header {
+  margin-bottom: 2rem;
+  
+  h1 {
+    color: var(--primary);
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin: 0;
+  }
+}
+
+.content-section {
+  margin-top: 2rem;
+}
+
+.content-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #f0f0f0;
+  text-align: center;
+  height: 100%;
+  
+  .card-icon {
+    font-size: 2.5rem;
+    color: var(--secondary);
+    margin-bottom: 1rem;
+  }
+  
+  h3 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+    font-size: 1.4rem;
+  }
+  
+  p {
+    color: #666;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+  }
+  
+  .content-stats {
+    .stat-number {
+      display: block;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--secondary);
+    }
+    
+    .stat-label {
+      font-size: 0.9rem;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+}
+
+.recent-content, .content-calendar {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #f0f0f0;
+  height: 100%;
+  
+  h3 {
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+    font-size: 1.4rem;
+  }
+}
+
+.content-list {
+  .content-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid #f0f0f0;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+    
+    .content-type {
+      background: var(--secondary);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      min-width: 70px;
+      text-align: center;
+      margin-right: 1rem;
+    }
+    
+    .content-title {
+      flex: 1;
+      font-weight: 600;
+      color: var(--primary);
+    }
+    
+    .content-date {
+      color: #666;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+.content-calendar {
+  p {
+    color: #666;
+    font-style: italic;
+  }
+}
