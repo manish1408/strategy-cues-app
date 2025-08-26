@@ -1,0 +1,64 @@
+<!-- <div class="topic__inner__blk topic-filter">
+    <h2 class="filter-title">{{ filterType }}</h2>
+    <div class="topic__dropdown float-left">
+      <div class="fopic__form"> -->
+        <!-- [style.width]="width ? width : '358px'" -->
+        <!-- class="iielevenlabs-bar" -->
+        <div class="position-relative" >
+          <ngx-select-dropdown [config]="dropdownSettings" [options]="topics" [(ngModel)]="selectedTopic"
+            [multiple]="true" (change)="applyFilter()" [selectedItemTemplate]="selectedItemTemplate"
+            [optionItemTemplate]="optionTemplate" [dropdownButtonTemplate]="dropdownButtonTemplate"></ngx-select-dropdown>
+          <div class="position-relative">
+            <ng-template #dropdownButtonTemplate>
+              <div class="ng-select-btn-wrapper" #dropdownBtnWrapper>
+  
+                <button class="ng-select-btn">
+                  <ng-container *ngIf="selectedTopic && selectedTopic.length >0;else noTopic">
+                    <div class="btn-span" *ngFor="let st of selectedTopic | slice:0:2">
+                      <span>{{ st.value }}</span>
+                      <img src="assets/images/icon/cross.svg" (click)="clearSelected($event,st)" />
+                    </div>
+                    <ng-container *ngIf="selectedTopic.length > 2">
+                      <span class="extra-count">+{{ selectedTopic.length - 2 }}</span>
+                    </ng-container>
+                  </ng-container>
+                  <ng-template #noTopic>All</ng-template>
+                </button>
+                <img src="assets/images/icon/down-arrow.svg" />
+              </div>
+            </ng-template>
+            <ng-template #selectedItemTemplate let-item="item" let-config="config">
+              <div class="ngx-select-item">
+                <span>{{ item.value }}</span>
+                <img src="assets/images/icon/circle-checked.svg" />
+              </div>
+            </ng-template>
+            <ng-template #optionTemplate let-item="item" let-config="config">
+              <div class="ngx-select-item">
+                <span>{{ item.value }}</span>
+                <img src="assets/images/icon/circle-outline.svg" />
+              </div>
+            </ng-template>
+  
+          </div>
+        </div>
+      <!-- </div>
+    </div>
+  </div> -->
+
+  <!-- <div class="iielevenlabs-bar">
+    <ngx-select-dropdown [config]="dropdownSettings" [options]="topics" [(ngModel)]="selectedTopic"
+            [multiple]="true" (change)="applyFilter()" [selectedItemTemplate]="selectedItemTemplate"
+            [optionItemTemplate]="optionTemplate" [dropdownButtonTemplate]="dropdownButtonTemplate"></ngx-select-dropdown>
+    <select >
+      <option value="">All</option>
+      <option value="Slack">Slack</option>
+      <option value="Microsoft Teams">Microsoft Teams</option>
+      <option value="Website">Website</option>
+      <option value="WhatsApp">WhatsApp</option>
+      <option value="Instagram/Messenger">Instagram/Messenger</option>
+      <option value="Discord">Discord</option>
+      <option value="Voice">Voice</option>
+    </select>
+    <img src="assets/images/icon/arrow-down.svg" class="arrow-down" />
+  </div> -->

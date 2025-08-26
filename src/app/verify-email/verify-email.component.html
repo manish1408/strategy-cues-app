@@ -1,0 +1,108 @@
+<nav class="navbar navbar-expand-lg bg-white">
+  <div class="container">
+    <a class="navbar-brand" href="#">
+      <img
+        src="assets/icons/milo-logo.svg"
+        style="height: 30px;" 
+        alt="Logo"
+        class="d-inline-block align-text-top"
+      />
+    </a>
+    <button class="btn btn-primary" routerLink="/signup">SIGN UP</button>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="vh-90 row justify-content-center align-items-center">
+    <div class="d-none d-lg-block col-lg-8">
+      <div
+        class="d-flex flex-column justify-content-center align-items-start gap-3 left-section"
+      >
+      <h2>
+        Grow your Ecommerce<br />
+        sales with <span>AI agents</span>
+      </h2>
+      </div>
+    </div>
+    <div class="col-12 col-lg-4">
+      <div class="right-section">
+        <!-- <img
+          class="logo-img"
+          src="assets/icons/milo-logo.svg"
+          alt="Milo Logo"
+        /> -->
+        <div class="title-wrapper">
+          <h2 class="title">Check your email for the code</h2>
+          <p class="desc">
+            We've sent a 6 digit code to <strong>{{ email }}</strong>.<br />
+            If you don't see it, please check your <strong>spam or junk folder</strong>.
+          </p>
+        </div>
+
+        <div class="form-wrapper">
+          <div class="user-form">
+            <div class="col-12">
+              <div class="mb-4">
+                <ng-otp-input
+                  #ngOtpInput
+                  [config]="config"
+                  (onInputChange)="onOtpChange($event)"
+                  id="otp-button"
+                  [formCtrl]="code"
+                ></ng-otp-input>
+              </div>
+            </div>
+            <button
+              type="submit"
+              class="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-1"
+              [disabled]="isCheckingOTP"
+              (click)="onSubmit()"
+            >
+              <div
+                *ngIf="isCheckingOTP"
+                class="spinner-border spinner-border-sm"
+                role="status"
+              >
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              Verify email
+              <img src="assets/icons/arrow-right.svg" />
+            </button>
+            <div class="resend-opt" (click)="onResendOTP()">
+              Resend code
+            </div>
+            <!-- </form> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="container">
+    <div class="row vh-100 justify-content-center align-items-center">
+      <div class="col-md-8 col-offset-md-2 text-center">
+        <h1 class="text-2xl font-bold text-gray-900 md:text-3xl">
+          Check your email for the code
+        </h1>
+        <div class="text-center">
+          <p class="text-base-secondary-text">We've sent a 6 digit code to</p>
+          <p class="font-semibold text-base-secondary-text">
+            {{ email }}
+          </p>
+        </div>
+        <ng-otp-input
+          #ngOtpInput
+          [config]="config"
+          (onInputChange)="onOtpChange($event)"
+          id="signin-button"
+        ></ng-otp-input>
+        <div *ngIf="isCheckingOTP" class="mt-4">
+          <div class="spinner-border spinner-border-sm" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          Checking the code
+        </div>
+      </div>
+    </div>
+  </div> -->
+</div>

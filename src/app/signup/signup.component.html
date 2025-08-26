@@ -1,0 +1,129 @@
+<nav class="navbar navbar-expand-lg bg-white">
+  <div class="container">
+    <a class="navbar-brand" href="#" class="text-dark fs-2">
+      Strategy Cues
+      <!-- <img style="height: 30px;" src="assets/icons/milo-logo.svg" alt="Logo" class="d-inline-block align-text-top" /> -->
+    </a>
+
+    <button class="btn btn-primary" routerLink="/signin">SIGN IN</button>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="vh-90 row justify-content-center align-items-center">
+    <div class="d-none d-lg-block col-lg-8">
+      <div class="d-flex flex-column justify-content-center align-items-start gap-3 left-section">
+        <h2>
+          Grow your Ecommerce<br />
+          sales with <span>AI agents</span>
+        </h2>
+      </div>
+    </div>
+    <div class="col-12 col-lg-4">
+      <div class="right-section">
+        <!-- <img
+          class="logo-img"
+          src="assets/icons/milo-logo.svg"
+          alt="Milo Logo"
+        />
+        <div class="title-wrapper">
+          <h2 class="title">Start your journey with us</h2>
+          <p class="desc">Enter your credential to view all insights</p>
+        </div> -->
+
+        <div class="form-wrapper">
+          <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="user-form">
+            <div class="input-field mb-3">
+              <label for="name" class="form-label">Enter name</label>
+              <input type="text" class="form-control" id="name" placeholder="Enter your name" formControlName="name"
+                [ngClass]="{ 'is-invalid': hasError('name') }" />
+
+              <div class="invalid-feedback text-start"
+                *ngIf="signupForm.get('name')?.hasError('required') && signupForm.get('name')?.touched">
+                Name is required
+              </div>
+              <div class="invalid-feedback text-start"
+                *ngIf="signupForm.get('name')?.hasError('minlength') && signupForm.get('name')?.touched">
+                Name must be more than 3 characters
+              </div>
+            </div>
+            <div class="input-field mb-3">
+              <label for="email" class="form-label">Email address</label>
+              <input type="email" class="form-control" id="email" placeholder="Enter your email address"
+                formControlName="email" [ngClass]="{ 'is-invalid': hasError('email') }" />
+
+              <div class="invalid-feedback text-start">Email is required</div>
+            </div>
+            <div class="input-field position-relative mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input [type]="passwordType" class="form-control" id="password" placeholder="Enter your password"
+                formControlName="password" [ngClass]="{ 'is-invalid': hasError('password') }" />
+
+              <div class="eye-wrapper">
+                <img src="assets/icons/eye-2.png" *ngIf="passwordType === 'password'" class="fa-solid fa-eye"
+                  (click)="showPassword('password')" />
+                <img src="assets/icons/eye-slash.png" *ngIf="passwordType === 'text'" class="fa-solid fa-eye-slash"
+                  (click)="showPassword('text')" />
+              </div>
+
+              <div class="invalid-feedback text-start">
+                {{ getErrorMessage("password") }}
+              </div>
+            </div>
+            <div class="input-field">
+              <label for="phone" class="form-label">Phone number</label>
+              <div style="display: flex;" class="d-flex align-items-start gap-0">
+                <!-- <app-phone-dropdown (countrySelected)="onCountrySelected($event)" [selectedCountry]="selectedCountry" [loadingIp]="loadingIp"></app-phone-dropdown> -->
+                <div class="w-100">
+                  <input id="phone" type="text" placeholder="Enter phone number" formControlName="phone"
+                    [ngClass]="{ 'is-invalid': hasError('phone') }" class="form-control phone-input" />
+                  <div class="invalid-feedback text-start">
+                    Phone number is required
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="policy-field mb-3 mt-3"> 
+              <!-- <input
+                id="d-policy"
+                type="checkbox"
+                formControlName="terms"
+                [ngClass]="{ 'is-invalid': hasError('terms') }"
+              /> -->
+              <label for="d-policy">If you proceed with signup, you agree to the <span><a href="https://miloassistant.ai/terms" target="_blank">terms and
+                    conditions.</a></span></label>
+
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-1"
+              [disabled]="loading">
+              <div *ngIf="loading" class="spinner-border spinner-border-sm" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              SIGN UP <img src="assets/icons/arrow-right.svg" />
+            </button>
+          </form>
+
+          <!-- <div class="d-flex align-items-center justify-content-center gap-2 my-3">
+            <div class="divider-lines"></div>
+            <span class="divider-text">OR</span>
+            <div class="divider-lines"></div>
+          </div>
+          <button class="btn btn-google w-100 d-flex align-items-center justify-content-center gap-2"
+            (click)="signInWithGoogle()" [disabled]="loading">
+            <div *ngIf="loading" class="spinner-border spinner-border-sm" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <img src="assets/icons/google.svg" class="google-icon" />
+            Sign up with Google
+          </button> -->
+
+            <p class="note">
+              Already have a account?
+              <a routerLink="/login">Login Here!</a>
+            </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,262 @@
+<!-- Only chatbot content -->
+<ng-container *ngIf="isChatbotPage;else mainContent">
+  <router-outlet></router-outlet>
+</ng-container>
+<ng-template #mainContent>
+  <ng-container *ngIf="!isLoggedIn">
+    <main class="auth-content">
+      <router-outlet></router-outlet>
+    </main>
+  </ng-container>
+
+  <ng-container *ngIf="isLoggedIn">
+    <div class="wrapper">
+      <!-- Sidebar -->
+      <aside id="sidebar" [class.collapsed]="isCollapsed">
+        <div class="w-100">
+          <!-- Sidebar Navigation -->
+
+          <div class="d-flex align-items-center justify-content-between">
+            <!-- <img class="milo-logo img-fluid" src="assets/icons/milo-logo-white.svg" /> -->
+
+            <h2 class="text-white" style="font-size: 20px; font-weight: 600;">Strategic Cues</h2>
+
+            <img src="assets/icons/arrow-square-left.svg" (click)="toggleSidebar()" class="cursor-pointer" />
+          </div>
+
+          <ul class="sidebar-nav mt-4">
+
+
+            <!-- Main Menu Section -->
+            <li>
+              <h2 class="sidebar-menu-title">Revenue Magt Cues</h2>
+              <ul class="sidebar-nav">
+                <!-- Conversations -->
+                <li class="sidebar-item">
+                  <a routerLink="/conversations" [queryParams]="{ id: selectedOperator?.chatbotId }"
+                    routerLinkActive="active-link" class="sidebar-link">
+                    <!-- <img src="assets/icons/messages.svg" /> -->
+                    All listings </a>
+                </li>
+
+                <!-- LLM Settings -->
+                <li class="sidebar-item">
+                  <a routerLink="/contacts" [queryParams]="{ id: selectedOperator?.chatbotId }"
+                    routerLinkActive="active-link" class="sidebar-link">
+                    <!-- <img src="assets/icons/phone.svg" /> -->
+                    Listings </a>
+                </li>
+
+
+
+
+
+                <!-- feedback -->
+                <li class="sidebar-item">
+                  <a routerLink="/feedback" [queryParams]="{ id: selectedOperator?.chatbotId }"
+                    routerLinkActive="active-link" class="sidebar-link text-wrap">
+                    <!-- <img src="assets/icons/llm.svg" /> -->
+                    Group
+                  </a>
+                </li>
+
+
+                <li class="sidebar-item">
+                  <a routerLink="/whatsapp" [queryParams]="{ id: selectedOperator?.chatbotId }"
+                    routerLinkActive="active-link" class="sidebar-link text-wrap">
+                    <!-- <img src="assets/icons/whatsapp.svg" /> -->
+                    Sub Group </a>
+                </li>
+
+
+              </ul>
+            </li>
+
+            <!-- AI Tools Section -->
+            <li>
+              <h2 class="sidebar-menu-title">Content Cues</h2>
+              <ul class="sidebar-nav">
+
+                <!-- Knowledge -->
+                <li class="sidebar-item">
+                  <h3 class="sidebar-menu-title" style="padding-left: 10px;">Group</h3>
+                  <ul>
+                    <li>
+                      <a routerLink="/files-data" [queryParams]="{ id: selectedOperator?.chatbotId }"
+                        class="sidebar-link" routerLinkActive="active-link">
+                        <!-- <img src="assets/icons/lamp-light.svg" /> -->
+                        Focus Units
+                      </a>
+                    </li>
+                    <li>
+                      <a routerLink="/files-data" [queryParams]="{ id: selectedOperator?.chatbotId }"
+                        class="sidebar-link" routerLinkActive="active-link">
+                        <!-- <img src="assets/icons/lamp-light.svg" /> -->
+                        High Performing
+                      </a>
+                    </li>
+                    <li>
+                      <a routerLink="/files-data" [queryParams]="{ id: selectedOperator?.chatbotId }"
+                        class="sidebar-link" routerLinkActive="active-link">
+                        <!-- <img src="assets/icons/lamp-light.svg" /> -->
+                        Trending Units
+                      </a>
+                    </li>
+                  </ul>
+                  <h3 class="sidebar-menu-title" style="padding-left: 10px;">Sub Group</h3>
+                  <ul>
+                    <li>
+                      <a routerLink="/files-data" [queryParams]="{ id: selectedOperator?.chatbotId }"
+                        class="sidebar-link" routerLinkActive="active-link">
+                        <!-- <img src="assets/icons/lamp-light.svg" /> -->
+                        New Units
+                      </a>
+                    </li>
+                    <li>
+                      <a routerLink="/files-data" [queryParams]="{ id: selectedOperator?.chatbotId }"
+                        class="sidebar-link" routerLinkActive="active-link">
+                        <!-- <img src="assets/icons/lamp-light.svg" /> -->
+                        JBR 1 Bedroom
+                      </a>
+                    </li>
+                    <li>
+                      <a routerLink="/files-data" [queryParams]="{ id: selectedOperator?.chatbotId }"
+                        class="sidebar-link" routerLinkActive="active-link">
+                        <!-- <img src="assets/icons/lamp-light.svg" /> -->
+                        Marina
+                      </a>
+                    </li>
+                  </ul>
+
+              </ul>
+            </li>
+            <li class="sidebar-menu-item">
+              <a routerLink="/installation" routerLinkActive="active-link" class="sidebar-link" #rla="routerLinkActive">
+                <!-- <img src="assets/icons/installation.svg" /> -->
+                Deployment Cues
+              </a>
+            </li>
+
+            <!-- Dashboard -->
+            <li class="sidebar-menu-item">
+              <a routerLink="/dashboard" routerLinkActive="active-link" class="sidebar-link" #rlad="routerLinkActive">
+                <!-- <img src="assets/icons/dashboard.svg" /> -->
+                Status Board
+              </a>
+            </li>
+
+
+
+
+
+          </ul>
+
+
+
+        </div>
+        <!-- <div class="sidebar-card">
+        <img src="assets/icons/dots.svg" />
+        <h2>Get dedicated help to build your Agent</h2>
+      </div> -->
+      </aside>
+      <!-- Main Component -->
+      <div class="main">
+        <nav class="navbar navbar-expand px-3 justify-content-between top-nav">
+          <div class="d-flex align-items-center justify-content-between">
+            <img *ngIf="isCollapsed" src="assets/icons/arrow-square-left.svg" (click)="toggleSidebar()"
+              class="cursor-pointer collapse-arrow me-2" />
+            <div class="dropdown">
+              <button type="button" class="btn chat-drop-btn dropdown-toggle" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                {{
+                (selectedOperator?.chatbotName ) || "Select Operator"
+                }}
+              </button>
+
+              <ul class="dropdown-menu chat-drop p-0">
+                <li>
+                  <a routerLink="/all-chatbots" class="dropdown-item">
+                    All Operators</a>
+                </li>
+                <li *ngFor="let cb of selectedOperator?.chatbots">
+                  <a role="button" class="dropdown-item" (click)="selectedOperator = cb">{{
+                    cb?.themeDetails?.chatbotName
+                    }}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="header__dropdown">
+            <div class="dropdown">
+              <button class="btn dropdown-toggle profile-dropdown m-0" type="button" id="dropdownMenuButton1"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <img [src]="user && user?.profilePic ? user?.profilePic : avatar" class="avatar-img" />
+                <h4 *ngIf="user?.name">
+                  {{ user?.name }}
+                </h4>
+                <img class="down-icon" src="assets/icons/arrow-down.svg" />
+              </button>
+              <ul class="dropdown-menu user-drop p-0" aria-labelledby="dropdownMenuButton1">
+
+                <li>
+                  <a class="dropdown-item" routerLink="/profile">
+                    <img src="assets/icons/profile-circle.svg
+              " />
+                    Profile</a>
+                </li>
+                <li *ngIf="!user?.authType && user?.authType !=='google'">
+                  <a class="dropdown-item" routerLink="/change-password">
+                    <img src="assets/icons/lock.svg
+              " />
+                    Change Password</a>
+                </li>
+
+                <li>
+                  <a class="dropdown-item" routerLink="/all-chatbots">
+                    <img src="assets/icons/bot.svg
+                " />
+                    All Operators</a>
+                </li>
+<!-- 
+                <li>
+                  <a class="dropdown-item" routerLink="/all-users">
+                    <img src="assets/icons/profile-circle.svg
+                " />
+                    All Users</a>
+                </li> -->
+
+                <!-- <li>
+                <a class="dropdown-item" routerLink="/change-password">
+                  <img
+                    src="assets/icons/billing.svg
+                "
+                  />
+                  Billing</a
+                >
+              </li> -->
+                <div style="border-bottom: 1px solid #dfe9f2"></div>
+
+                <li>
+                  <a class="dropdown-item cursor-pointer" (click)="signOut()">
+                    <img src="assets/icons/log-out.svg
+                " />
+                    Signout</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+        <main class="content px-2">
+          <div class="container-fluid">
+            <!-- <app-warning-modal></app-warning-modal> -->
+            <router-outlet></router-outlet>
+            <!-- <div class="footer-text mt-4 mb-3">
+            <p>Made with <span>♥</span> by <a href="https://www.distinctcloud.io/" target="_blank"> Distinct Cloud Labs
+              </a></p>
+          </div> -->
+          </div>
+        </main>
+      </div>
+    </div>
+  </ng-container>
+</ng-template>

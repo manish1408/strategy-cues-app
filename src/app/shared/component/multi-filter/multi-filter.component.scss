@@ -1,0 +1,154 @@
+
+// .topic-filter {
+//     .single__topic__drop {
+//       width: 358px;
+//     }
+//     .coaching-topics {
+//       color: var(--Medium-Grey, #7995b5);
+//       font-size: 12px;
+//       font-weight: 400;
+//       line-height: 18px;
+//     }
+//     .filter-title {
+//       color: var(--Medium-Grey, #7995b5);
+//       font-family: Roboto;
+//       font-size: 14px;
+//       font-style: normal;
+//       font-weight: 500;
+//       line-height: 20px;
+//     }
+//     .topic__inner__blk {
+//       display: flex;
+//       align-items: flex-end;
+//       margin-bottom: 40px;
+//       flex-wrap: nowrap;
+//       gap: 15px;
+//     }
+  
+//     .btn-cion {
+//       color: var(--white, #fff);
+//       font-size: 14px;
+//       font-weight: 500;
+//       border-radius: 8px;
+//       border: none !important;
+//       background: var(--teal, #00c7c7);
+//       background-color: var(--teal, #00c7c7) !important;
+//       display: flex;
+//       align-items: center;
+//       justify-content: space-between;
+//       gap: 10px;
+//       height: 40px !important;
+//     }
+  
+//     .multiselect-dropdown .dropdown-btn {
+//       border: 1px solid var(--Light-grey, #dfe9f2) !important;
+//       border-radius: 8px !important;
+//       // padding: 8px 12px !important;
+//     }
+//     .multiselect-dropdown .dropdown-list {
+//       padding-top: 14px !important;
+//       padding-bottom: 14px !important;
+//       border-radius: 12px !important;
+//       border: 1px solid var(--Light-grey, #dfe9f2) !important;
+//       box-shadow: 0px 6px 12px 0px rgba(153, 171, 196, 0.3) !important;
+//       margin-top: 0px !important;
+//     }
+//     .multiselect-dropdown .dropdown-list li {
+//       padding: 16px 10px 16px 24px !important;
+//     }
+//     .multiselect-item-checkbox input[type="checkbox"] + div {
+//       padding-left: 0em !important;
+//       color: var(--Dark-Navy, #12234c) !important;
+//       font-family: Roboto;
+//       font-size: 14px;
+//       font-style: normal;
+//       font-weight: 400;
+//       line-height: 20px;
+//     }
+  
+//     .multiselect-item-checkbox input[type="checkbox"] + div:before {
+//       color: #00c7c7 !important;
+//       left: unset !important;
+//       width: 20px !important;
+//       height: 20px !important;
+//       border: 1px solid #cfdbeb !important;
+//       right: 5px !important;
+//       border-radius: 100% !important;
+//     }
+//     .multiselect-item-checkbox input[type="checkbox"]:checked + div:before {
+//       background: #00c7c7 !important;
+//       border: 1px solid #00c7c7 !important;
+//     }
+//     .multiselect-item-checkbox input[type="checkbox"] + div:after {
+//       left: unset !important;
+//       margin-top: -2px !important;
+//       right: 10px !important;
+//     }
+//     .multiselect-dropdown .dropdown-btn .selected-item-container .selected-item {
+//       border: none !important;
+//       background: #00c7c7 !important;
+//       border-radius: 8px !important;
+//       margin-bottom: 0px !important;
+//     }
+//     .multiselect-dropdown .dropdown-btn .dropdown-multiselect__caret {
+//       top: 3px !important;
+//     }
+//     .multiselect-dropdown .dropdown-list .no-data {
+//       padding: 0px 10px 0px 24px !important;
+//     }
+//     .multiselect-dropdown .no-data h5 {
+//       font-size: 14px;
+//       margin: 0;
+//       font-weight: 400;
+//     }
+//   }
+  
+//   .topic-filter {
+//     scrollbar-width: thin;
+//   }
+  
+//   .topic-filter ::-webkit-scrollbar {
+//     width: 10px;
+//     height: 10px;
+//     border-radius: 18px;
+//   }
+  
+//   .topic-filter ::-webkit-scrollbar-track {
+//     border-radius: 18px;
+//     background: var(--Light-grey, #dfe9f2);
+//   }
+  
+//   .topic-filter ::-webkit-scrollbar-thumb {
+//     background: var(--Grey, #99abc4);
+//     border-radius: 18px;
+//   }
+  
+//   .dropdown-item input[type="checkbox"] + div {
+//     padding-left: 0em !important;
+//     color: var(--Dark-Navy, #12234c) !important;
+//     font-family: Roboto;
+//     font-size: 14px;
+//     font-style: normal;
+//     font-weight: 400;
+//     line-height: 20px;
+//   }
+  
+//   .dropdown-item input[type="checkbox"] + div:before {
+//     color: #00c7c7 !important;
+//     left: unset !important;
+//     width: 20px !important;
+//     height: 20px !important;
+//     border: 1px solid #cfdbeb !important;
+//     right: 5px !important;
+//     border-radius: 100% !important;
+//   }
+//   input[type="checkbox"]:checked + div:before {
+//     background: #00c7c7 !important;
+//     border: 1px solid #00c7c7 !important;
+//   }
+//   input[type="checkbox"] + div:after {
+//     left: unset !important;
+//     margin-top: -2px !important;
+//     right: 10px !important;
+//   }
+  

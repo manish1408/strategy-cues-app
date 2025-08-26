@@ -1,0 +1,243 @@
+<div class="row">
+  <div class="col-6 col-md-9">
+    <h4 class="title">Settings</h4>
+    <p class="desc">Users interacting with your bot</p>
+  </div>
+  <div class="col-6 col-md-3">
+    <button
+      type="submit"
+      class="btn btn-primary float-end"
+      [disabled]="loading"
+      (click)="onSubmit()"
+    >
+      {{ loading ? "Submitting..." : "Save Changes" }}
+    </button>
+  </div>
+</div>
+<!-- <div class="col-4"> -->
+<form [formGroup]="settingsForm">
+  <div class="row mt-4">
+    <div class="col-12 col-md-6">
+      <div class="mb-3">
+        <label for="tax" class="form-label">Profile Image</label>
+        <div class="form-control">
+          <img class="avatar-img cursor-pointer" [src]="profileImage" (click)="fileInput.click()" />
+          <input type="file" #fileInput class="d-none" (change)="onFileSelected($event, 'profilePic')" accept="image/*" />
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6">
+      <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          [maxlength]="100"
+          placeholder="Name"
+          formControlName="name"
+          [ngClass]="{ 'is-invalid': hasError('name') }"
+        />
+        <div class="invalid-feedback">Name is required</div>
+      </div>
+    <!-- </div>
+    <div class="col-12 col-md-6"> -->
+      <div class="mb-3">
+        <label for="email" class="form-label">Email address</label>
+        <input
+          type="email"
+          class="form-control"
+          id="email"
+          [maxlength]="100"
+          placeholder="name@example.com"
+          formControlName="email"
+          [ngClass]="{ 'is-invalid': hasError('email') }"
+          [disabled]="true"
+          readonly
+        />
+        <div class="invalid-feedback">Email is required</div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6">
+      <div class="mb-3">
+        <label for="phone" class="form-label">Phone Number</label>
+        <input
+          type="text"
+          class="form-control"
+          id="phone"
+          [maxlength]="100"
+          placeholder="Phone Number"
+          formControlName="phone"
+          [ngClass]="{ 'is-invalid': hasError('phone') }"
+        />
+        <div class="invalid-feedback">Phone number is required</div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6">
+      <div class="mb-3">
+        <label for="company" class="form-label">Company Name</label>
+        <input
+          type="text"
+          class="form-control"
+          id="company"
+          [maxlength]="100"
+          placeholder="Company name"
+          formControlName="companyName"
+          [ngClass]="{ 'is-invalid': hasError('companyName') }"
+        />
+        <div class="invalid-feedback">Company name is required</div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6">
+      <div class="mb-3">
+        <label for="state" class="form-label">State</label>
+        <input
+          type="text"
+          class="form-control"
+          id="state"
+          [maxlength]="100"
+          placeholder="State name"
+          formControlName="state"
+          [ngClass]="{ 'is-invalid': hasError('state') }"
+        />
+        <div class="invalid-feedback">State Name is required</div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6">
+      <!-- <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Country Name</label>
+        <select
+          formControlName="country"
+          class="form-select"
+          aria-label="Default select example"
+        >
+          <option *ngFor="let country of countries" [value]='country.name'>{{country.name}}</option>
+        </select>
+      </div> -->
+      <div class="mb-3">
+        <label for="country" class="form-label">Country Name</label>
+        <input
+          type="text"
+          class="form-control"
+          id="country"
+          [maxlength]="100"
+          placeholder="Country Name"
+          formControlName="country"
+          [ngClass]="{ 'is-invalid': hasError('country') }"
+        />
+        <div class="invalid-feedback">Country Name is required</div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6">
+      <div class="mb-3">
+        <label for="zip" class="form-label">Zip Code</label>
+        <input
+          type="text"
+          class="form-control"
+          id="zip"
+          [maxlength]="100"
+          placeholder="Zip Code"
+          formControlName="zip"
+          [ngClass]="{ 'is-invalid': hasError('zip') }"
+        />
+        <div class="invalid-feedback">Zip code is required</div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6">
+      <div class="mb-3">
+        <label for="tax" class="form-label">Tax Id</label>
+        <input
+          type="text"
+          class="form-control"
+          id="tax"
+          [maxlength]="100"
+          placeholder="Tax Id"
+          formControlName="taxId"
+          [ngClass]="{ 'is-invalid': hasError('taxId') }"
+        />
+        <div class="invalid-feedback">Tax Id is required</div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6">
+      <div class="mb-3">
+        <label for="address" class="form-label">Address</label>
+        <textarea
+          rows="4"
+          type="text"
+          class="form-control"
+          id="address"
+          [maxlength]="100"
+          placeholder="Address..."
+          formControlName="address"
+          [ngClass]="{ 'is-invalid': hasError('address') }"
+        >
+        </textarea>
+        <div class="invalid-feedback">Address is required</div>
+      </div>
+    </div>
+
+    <!-- <div class="col-12 col-md-6">
+    </div> -->
+    
+    <!-- <div class="col-12 col-md-6">
+    
+      <div class="mb-3">
+        <label for="currentPassword" class="form-label">Current Password</label>
+        <input type="password" class="form-control" id="currentPassword" placeholder="Current Password"
+          formControlName="currentPassword" [ngClass]="{ 'is-invalid': hasError('currentPassword') }" />
+        <div class="invalid-feedback">Current Password is required</div>
+      </div>
+    </div>
+    
+    <div class="col-12 col-md-6">
+    
+      <div class="mb-3">
+        <label for="newPassword" class="form-label">New Password</label>
+        <input type="password" class="form-control" id="newPassword" placeholder="New Password"
+          formControlName="newPassword" [ngClass]="{ 'is-invalid': hasError('newPassword') }" />
+        <div class="invalid-feedback">New Password is required</div>
+      </div>
+    </div> -->
+    
+    <!-- <div class="col-12 col-md-6">
+      <div class="bg-choser">
+        <div class="form-group">
+          <img class="avatar-img cursor-pointer" [src]="profileImage" (click)="fileInput.click()" />
+          <input type="file" #fileInput class="d-none" (change)="onFileSelected($event, 'profilePic')" accept="image/*" />
+        </div>
+        <div class="text">Profile Image</div>
+      </div>
+    </div> -->
+
+    <!-- <div class="col-12">
+          <div class="mb-3">
+            <label for="widgetImage" class="form-label">Upload Widget Image</label>
+            <div class="d-flex">
+              <ngx-dropzone (change)="onSelect($event)" [multiple]="false" class="imagePicker">
+                <i *ngIf="!widgetImage && !widgetImageDetail" class="fa-solid fa-circle-user display-1 "></i>
+                <img *ngIf="widgetImage ||  widgetImageDetail" class="border rounded-circle" height="100" width="100" alt="profile"
+                  [src]="widgetImageDetail ?  widgetImageDetail.fileUrl : getImageSrc()">
+              </ngx-dropzone>
+              <i *ngIf="widgetImage || widgetImageDetail" (click)="widgetImage = widgetImageDetail = null" class="fa-solid fa-xmark cross-btn"></i>
+            </div>
+          </div>
+        </div> -->
+
+    <!-- <div class="col-12 mt-4">
+          <button
+            type="submit"
+            class="btn btn-primary w-100"
+            [disabled]="loading"
+          >
+            {{ loading ? "Submitting..." : "Save Changes" }}
+          </button>
+        </div> -->
+    <!-- </div> -->
+  </div>
+</form>

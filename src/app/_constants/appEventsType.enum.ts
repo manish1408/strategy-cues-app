@@ -1,0 +1,5 @@
+export enum AppEventType {
+  NEW_CHAT_ADDED,
+  MESSAGES_UPDATE,
+  ASSIGNED_TO_UPDATE
+}

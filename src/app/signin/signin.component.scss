@@ -1,0 +1,223 @@
+.wc-btn:disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.generic-form-box {
+  // background-color: transparent;
+  border-radius: 30px;
+  width: 550px;
+  padding: 70px 45px 80px;
+  position: relative;
+  text-align: center;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+// Modal CSS
+
+.input-field {
+  border: none;
+  border-radius: 8px;
+  // background: var(--light-grey, #f1f3f5);
+  padding: 0px 0px;
+  margin-top: 5px;
+}
+.input-field::placeholder {
+  color: var(--medium-grey, #7995b5) !important;
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 20px;
+  opacity: 1;
+}
+
+.modal-body {
+  h1 {
+    font-size: 30px;
+    font-weight: 700;
+    color: #12234c;
+  }
+
+  p {
+    font-family: Roboto;
+    font-size: 28px;
+    font-weight: 300;
+    color: #7995b5;
+  }
+  a {
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: underline !important;
+  }
+  span {
+    color: #00c7c7;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  label {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .logo-image {
+    height: 48px;
+  }
+}
+.modal-header {
+  border: none !important;
+}
+.btn-close {
+  color: black !important;
+  font-size: 10px;
+
+  position: absolute;
+  right: 15px;
+  top: 7px;
+}
+
+.section-2-modal {
+  background-color: #f1f3f5;
+  // height: 100vh;
+}
+.custom-content {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  btn-cion-web {
+    border-radius: 10px !important;
+  }
+}
+.custom-modal {
+  background-color: transparent;
+  border: none;
+}
+
+//
+
+.middle-section {
+  border-top: 1px solid #f1f3f5;
+}
+.modal-section2 {
+  padding: 40px 0px;
+  background-color: #f1f3f5;
+}
+.top-row {
+  height: 80vh;
+}
+.part-1 {
+  background-color: #f1f3f5;
+}
+.part-2 {
+  background-color: #dfe9f2;
+}
+.modal-header-div {
+  padding: 30px;
+}
+
+.custom-invalid-leads {
+  display: flex;
+
+  font-size: 0.875em;
+  color: var(--bs-form-invalid-color);
+}
+
+.form-control.is-invalid {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right calc(0.375em + 0.1875rem) center;
+  background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+.left-section {
+  h2 {
+    font-size: 44px;
+    font-weight: 500;
+    color: #072032;
+    line-height: 54px;
+    span {
+      color: #12715B;
+    }
+  }
+  img {
+    width: 582px;
+    height: 328px;
+    object-fit: cover;
+    cursor: pointer;
+  }
+}
+.right-section {
+  background-color: #ffffff;
+  border: 1px solid #ebedef;
+  border-radius: 24px;
+  padding: 34px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  .logo-img {
+    width: 130px;
+    height: 50px;
+    // object-fit: cover;
+  }
+  .forgot-text {
+    color: #12715B;
+    font-size: 12px;
+    font-weight: 400;
+    margin-bottom: 24px;
+  }
+  .title-wrapper {
+    .title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #101828;
+      line-height: 28px;
+      margin-bottom: 8px;
+    }
+    .desc {
+      font-size: 12px;
+      font-weight: 400;
+      color: #a1a1a2;
+      margin: 0;
+    }
+  }
+  .note {
+    color: #000000;
+    font-size: 14px;
+    font-weight: 400;
+    margin: 0;
+    margin-top: 16px;
+    text-align: center;
+    a {
+      color: #12715B;
+      text-decoration: none !important;
+    }
+  }
+  .policy-field {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    label {
+      color: #072032;
+      font-size: 12px;
+      font-weight: 400;
+      margin: 0;
+      a {
+        color: #12715B;
+        text-decoration: none !important;
+      }
+    }
+  }
+}
+
+.eye-wrapper {
+  position: absolute;
+  top: 30px !important;
+  right: 9px !important;
+  cursor: pointer;
+  img {
+    width: 20px;
+    height: 20px;
+  }
+}
