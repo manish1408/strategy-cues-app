@@ -4,10 +4,12 @@ import { FormsModule } from '@angular/forms';
 
 import { RevenueRoutingModule } from './revenue-routing.module';
 import { RevenueComponent } from './revenue.component';
+import { PropertyDetailsComponent } from './property-details/property-details.component';
 
 @NgModule({
   declarations: [
-    RevenueComponent
+    RevenueComponent,
+    PropertyDetailsComponent
   ],
   imports: [
     CommonModule,

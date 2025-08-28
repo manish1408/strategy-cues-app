@@ -1,0 +1,4202 @@
+[
+  {
+    "Listing_Name": "JLT - Studio #01",
+    "Area": "JLT",
+    "Room_Type": "Studio",
+    "Occupancy": {
+      "7_days": "76%",
+      "30_days": "47%",
+      "TM": "55%",
+      "NM": "39%"
+    },
+    "ADR": {
+      "TM": "223",
+      "NM": "239"
+    },
+    "RevPAR": {
+      "TM": "122",
+      "NM": "93"
+    },
+    "MPI": "93%",
+    "STLY_Var": {
+      "Occ": "117%",
+      "ADR": "96%",
+      "RevPAR": "128%"
+    },
+    "STLM_Var": {
+      "Occ": "3%",
+      "ADR": "-7%",
+      "RevPAR": "-12%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "2%",
+      "14_Days": "7%",
+      "30_Days": "17%"
+    },
+    "Min_Rate_Threshold": "26%",
+    "BookingCom": {
+      "Genius": "No",
+      "Mobile": "No",
+      "Pref": "No",
+      "Weekly": "No",
+      "Monthly": "No",
+      "LM_Disc": "Yes"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "Member": "No",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "Yes"
+    },
+    "CXL_Policy": {
+      "Booking": "5 days 100%",
+      "Airbnb": "7 days 100%",
+      "VRBO": "3 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "2",
+      "Airbnb": "3",
+      "VRBO": "2"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "04/08/25",
+        "Last_Rev_Score": "8",
+        "Rev_Score": "9",
+        "Total_Rev": "138"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "11/07/25",
+        "Last_Rev_Score": "4.2",
+        "Rev_Score": "3.9",
+        "Total_Rev": "407"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "21/08/25",
+        "Last_Rev_Score": "4.1",
+        "Rev_Score": "4.7",
+        "Total_Rev": "190"
+      }
+    }
+  },
+  {
+    "Listing_Name": "JLT - Studio #02",
+    "Area": "JLT",
+    "Room_Type": "Studio",
+    "Occupancy": {
+      "7_days": "74%",
+      "30_days": "51%",
+      "TM": "89%",
+      "NM": "43%"
+    },
+    "ADR": {
+      "TM": "225",
+      "NM": "235"
+    },
+    "RevPAR": {
+      "TM": "200",
+      "NM": "101"
+    },
+    "MPI": "90%",
+    "STLY_Var": {
+      "Occ": "84%",
+      "ADR": "96%",
+      "RevPAR": "109%"
+    },
+    "STLM_Var": {
+      "Occ": "1%",
+      "ADR": "-3%",
+      "RevPAR": "-1%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "6%",
+      "14_Days": "7%",
+      "30_Days": "18%"
+    },
+    "Min_Rate_Threshold": "32%",
+    "BookingCom": {
+      "Genius": "No",
+      "Mobile": "No",
+      "Pref": "No",
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "LM_Disc": "Yes"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "Member": "No",
+      "LM_Disc": "No"
+    },
+    "VRBO": {
+      "Weekly": "No",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "3 days 100%",
+      "Airbnb": "5 days 100%",
+      "VRBO": "3 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "2+2",
+      "Airbnb": "3",
+      "VRBO": "2+2"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "22/08/25",
+        "Last_Rev_Score": "7",
+        "Rev_Score": "9",
+        "Total_Rev": "485"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "16/07/25",
+        "Last_Rev_Score": "4.2",
+        "Rev_Score": "4.9",
+        "Total_Rev": "678"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "28/07/25",
+        "Last_Rev_Score": "3.3",
+        "Rev_Score": "3.5",
+        "Total_Rev": "292"
+      }
+    }
+  },
+  {
+    "Listing_Name": "JLT - Loft #03",
+    "Area": "JLT",
+    "Room_Type": "Loft",
+    "Occupancy": {
+      "7_days": "74%",
+      "30_days": "84%",
+      "TM": "65%",
+      "NM": "48%"
+    },
+    "ADR": {
+      "TM": "534",
+      "NM": "597"
+    },
+    "RevPAR": {
+      "TM": "347",
+      "NM": "286"
+    },
+    "MPI": "99%",
+    "STLY_Var": {
+      "Occ": "78%",
+      "ADR": "122%",
+      "RevPAR": "116%"
+    },
+    "STLM_Var": {
+      "Occ": "-7%",
+      "ADR": "-4%",
+      "RevPAR": "8%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "3%",
+      "14_Days": "14%",
+      "30_Days": "23%"
+    },
+    "Min_Rate_Threshold": "29%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "Yes",
+      "Pref": "No",
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "LM_Disc": "No"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "Member": "No",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "3 days 100%",
+      "Airbnb": "7 days 100%",
+      "VRBO": "14 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "2+1",
+      "Airbnb": "3",
+      "VRBO": "2"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "11/07/25",
+        "Last_Rev_Score": "8",
+        "Rev_Score": "8",
+        "Total_Rev": "1089"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "29/06/25",
+        "Last_Rev_Score": "3.7",
+        "Rev_Score": "4.6",
+        "Total_Rev": "674"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "25/07/25",
+        "Last_Rev_Score": "4.2",
+        "Rev_Score": "3.5",
+        "Total_Rev": "87"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Palm Jumeirah - Studio #04",
+    "Area": "Palm Jumeirah",
+    "Room_Type": "Studio",
+    "Occupancy": {
+      "7_days": "95%",
+      "30_days": "56%",
+      "TM": "41%",
+      "NM": "32%"
+    },
+    "ADR": {
+      "TM": "746",
+      "NM": "706"
+    },
+    "RevPAR": {
+      "TM": "305",
+      "NM": "225"
+    },
+    "MPI": "108%",
+    "STLY_Var": {
+      "Occ": "89%",
+      "ADR": "105%",
+      "RevPAR": "88%"
+    },
+    "STLM_Var": {
+      "Occ": "-8%",
+      "ADR": "-6%",
+      "RevPAR": "11%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "8%",
+      "14_Days": "5%",
+      "30_Days": "27%"
+    },
+    "Min_Rate_Threshold": "34%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "No",
+      "Pref": "No",
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "LM_Disc": "No"
+    },
+    "Airbnb": {
+      "Weekly": "No",
+      "Monthly": "No",
+      "Member": "No",
+      "LM_Disc": "No"
+    },
+    "VRBO": {
+      "Weekly": "No",
+      "Monthly": "Yes"
+    },
+    "CXL_Policy": {
+      "Booking": "7 days 100%",
+      "Airbnb": "14 days 100%",
+      "VRBO": "14 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "2",
+      "Airbnb": "2+1",
+      "VRBO": "2+1"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "22/08/25",
+        "Last_Rev_Score": "8",
+        "Rev_Score": "7",
+        "Total_Rev": "1184"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "12/08/25",
+        "Last_Rev_Score": "4.4",
+        "Rev_Score": "3.8",
+        "Total_Rev": "744"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "17/07/25",
+        "Last_Rev_Score": "3.1",
+        "Rev_Score": "3.3",
+        "Total_Rev": "21"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Dubai Marina - Loft #05",
+    "Area": "Dubai Marina",
+    "Room_Type": "Loft",
+    "Occupancy": {
+      "7_days": "71%",
+      "30_days": "65%",
+      "TM": "71%",
+      "NM": "38%"
+    },
+    "ADR": {
+      "TM": "610",
+      "NM": "569"
+    },
+    "RevPAR": {
+      "TM": "433",
+      "NM": "216"
+    },
+    "MPI": "119%",
+    "STLY_Var": {
+      "Occ": "78%",
+      "ADR": "126%",
+      "RevPAR": "121%"
+    },
+    "STLM_Var": {
+      "Occ": "15%",
+      "ADR": "5%",
+      "RevPAR": "-6%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "2%",
+      "14_Days": "5%",
+      "30_Days": "23%"
+    },
+    "Min_Rate_Threshold": "21%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "Yes",
+      "Pref": "No",
+      "Weekly": "No",
+      "Monthly": "No",
+      "LM_Disc": "Yes"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "Yes",
+      "Member": "No",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "14 days 100%",
+      "Airbnb": "5 days 100%",
+      "VRBO": "7 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "3",
+      "Airbnb": "2+1",
+      "VRBO": "2"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "29/07/25",
+        "Last_Rev_Score": "10",
+        "Rev_Score": "7",
+        "Total_Rev": "153"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "16/07/25",
+        "Last_Rev_Score": "5.0",
+        "Rev_Score": "4.8",
+        "Total_Rev": "115"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "28/06/25",
+        "Last_Rev_Score": "4.5",
+        "Rev_Score": "3.6",
+        "Total_Rev": "213"
+      }
+    }
+  },
+  {
+    "Listing_Name": "JBR - 3BR #06",
+    "Area": "JBR",
+    "Room_Type": "3BR",
+    "Occupancy": {
+      "7_days": "55%",
+      "30_days": "51%",
+      "TM": "64%",
+      "NM": "25%"
+    },
+    "ADR": {
+      "TM": "785",
+      "NM": "681"
+    },
+    "RevPAR": {
+      "TM": "502",
+      "NM": "170"
+    },
+    "MPI": "109%",
+    "STLY_Var": {
+      "Occ": "86%",
+      "ADR": "119%",
+      "RevPAR": "103%"
+    },
+    "STLM_Var": {
+      "Occ": "11%",
+      "ADR": "7%",
+      "RevPAR": "-8%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "4%",
+      "14_Days": "8%",
+      "30_Days": "16%"
+    },
+    "Min_Rate_Threshold": "40%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "No",
+      "Pref": "Yes",
+      "Weekly": "Yes",
+      "Monthly": "Yes",
+      "LM_Disc": "Yes"
+    },
+    "Airbnb": {
+      "Weekly": "No",
+      "Monthly": "No",
+      "Member": "Yes",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "No",
+      "Monthly": "Yes"
+    },
+    "CXL_Policy": {
+      "Booking": "3 days 100%",
+      "Airbnb": "5 days 100%",
+      "VRBO": "14 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "2",
+      "Airbnb": "4",
+      "VRBO": "2+1"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "20/07/25",
+        "Last_Rev_Score": "10",
+        "Rev_Score": "7",
+        "Total_Rev": "217"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "31/07/25",
+        "Last_Rev_Score": "4.5",
+        "Rev_Score": "4.5",
+        "Total_Rev": "343"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "28/06/25",
+        "Last_Rev_Score": "3.5",
+        "Rev_Score": "4.4",
+        "Total_Rev": "165"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Business Bay - 1BR #07",
+    "Area": "Business Bay",
+    "Room_Type": "1BR",
+    "Occupancy": {
+      "7_days": "94%",
+      "30_days": "38%",
+      "TM": "69%",
+      "NM": "45%"
+    },
+    "ADR": {
+      "TM": "435",
+      "NM": "453"
+    },
+    "RevPAR": {
+      "TM": "300",
+      "NM": "203"
+    },
+    "MPI": "133%",
+    "STLY_Var": {
+      "Occ": "74%",
+      "ADR": "90%",
+      "RevPAR": "114%"
+    },
+    "STLM_Var": {
+      "Occ": "-8%",
+      "ADR": "9%",
+      "RevPAR": "-6%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "5%",
+      "14_Days": "6%",
+      "30_Days": "21%"
+    },
+    "Min_Rate_Threshold": "38%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "Yes",
+      "Pref": "Yes",
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "LM_Disc": "Yes"
+    },
+    "Airbnb": {
+      "Weekly": "No",
+      "Monthly": "No",
+      "Member": "No",
+      "LM_Disc": "No"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "3 days 100%",
+      "Airbnb": "5 days 100%",
+      "VRBO": "7 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "2",
+      "Airbnb": "2",
+      "VRBO": "4+1"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "22/07/25",
+        "Last_Rev_Score": "7",
+        "Rev_Score": "9",
+        "Total_Rev": "627"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "19/07/25",
+        "Last_Rev_Score": "3.8",
+        "Rev_Score": "4.2",
+        "Total_Rev": "723"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "17/07/25",
+        "Last_Rev_Score": "4.7",
+        "Rev_Score": "4.1",
+        "Total_Rev": "133"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Dubai Marina - Townhouse #08",
+    "Area": "Dubai Marina",
+    "Room_Type": "Townhouse",
+    "Occupancy": {
+      "7_days": "91%",
+      "30_days": "77%",
+      "TM": "42%",
+      "NM": "25%"
+    },
+    "ADR": {
+      "TM": "754",
+      "NM": "828"
+    },
+    "RevPAR": {
+      "TM": "316",
+      "NM": "207"
+    },
+    "MPI": "106%",
+    "STLY_Var": {
+      "Occ": "119%",
+      "ADR": "98%",
+      "RevPAR": "125%"
+    },
+    "STLM_Var": {
+      "Occ": "7%",
+      "ADR": "5%",
+      "RevPAR": "5%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "1%",
+      "14_Days": "5%",
+      "30_Days": "12%"
+    },
+    "Min_Rate_Threshold": "40%",
+    "BookingCom": {
+      "Genius": "No",
+      "Mobile": "No",
+      "Pref": "No",
+      "Weekly": "No",
+      "Monthly": "No",
+      "LM_Disc": "Yes"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "Yes",
+      "Member": "No",
+      "LM_Disc": "No"
+    },
+    "VRBO": {
+      "Weekly": "No",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "5 days 100%",
+      "Airbnb": "5 days 100%",
+      "VRBO": "3 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "2+2",
+      "Airbnb": "4",
+      "VRBO": "3"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "18/07/25",
+        "Last_Rev_Score": "7",
+        "Rev_Score": "8",
+        "Total_Rev": "382"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "06/07/25",
+        "Last_Rev_Score": "4.7",
+        "Rev_Score": "4.9",
+        "Total_Rev": "45"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "15/08/25",
+        "Last_Rev_Score": "4.5",
+        "Rev_Score": "3.8",
+        "Total_Rev": "215"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Dubai Creek Harbour - Townhouse #09",
+    "Area": "Dubai Creek Harbour",
+    "Room_Type": "Townhouse",
+    "Occupancy": {
+      "7_days": "83%",
+      "30_days": "81%",
+      "TM": "50%",
+      "NM": "75%"
+    },
+    "ADR": {
+      "TM": "773",
+      "NM": "714"
+    },
+    "RevPAR": {
+      "TM": "386",
+      "NM": "535"
+    },
+    "MPI": "129%",
+    "STLY_Var": {
+      "Occ": "76%",
+      "ADR": "114%",
+      "RevPAR": "87%"
+    },
+    "STLM_Var": {
+      "Occ": "4%",
+      "ADR": "3%",
+      "RevPAR": "-3%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "4%",
+      "14_Days": "7%",
+      "30_Days": "10%"
+    },
+    "Min_Rate_Threshold": "31%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "Yes",
+      "Pref": "No",
+      "Weekly": "No",
+      "Monthly": "Yes",
+      "LM_Disc": "No"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "Member": "No",
+      "LM_Disc": "No"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "5 days 100%",
+      "Airbnb": "7 days 100%",
+      "VRBO": "3 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "2",
+      "Airbnb": "4",
+      "VRBO": "3"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "04/08/25",
+        "Last_Rev_Score": "8",
+        "Rev_Score": "10",
+        "Total_Rev": "1097"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "19/08/25",
+        "Last_Rev_Score": "4.1",
+        "Rev_Score": "4.5",
+        "Total_Rev": "280"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "24/08/25",
+        "Last_Rev_Score": "4.4",
+        "Rev_Score": "3.2",
+        "Total_Rev": "280"
+      }
+    }
+  },
+  {
+    "Listing_Name": "JLT - Townhouse #10",
+    "Area": "JLT",
+    "Room_Type": "Townhouse",
+    "Occupancy": {
+      "7_days": "54%",
+      "30_days": "86%",
+      "TM": "67%",
+      "NM": "29%"
+    },
+    "ADR": {
+      "TM": "685",
+      "NM": "622"
+    },
+    "RevPAR": {
+      "TM": "458",
+      "NM": "180"
+    },
+    "MPI": "127%",
+    "STLY_Var": {
+      "Occ": "91%",
+      "ADR": "129%",
+      "RevPAR": "105%"
+    },
+    "STLM_Var": {
+      "Occ": "6%",
+      "ADR": "1%",
+      "RevPAR": "9%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "7%",
+      "14_Days": "9%",
+      "30_Days": "22%"
+    },
+    "Min_Rate_Threshold": "32%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "Yes",
+      "Pref": "No",
+      "Weekly": "No",
+      "Monthly": "No",
+      "LM_Disc": "No"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "Yes",
+      "Member": "No",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "7 days 100%",
+      "Airbnb": "14 days 100%",
+      "VRBO": "14 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "3",
+      "Airbnb": "4+1",
+      "VRBO": "2+1"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "25/07/25",
+        "Last_Rev_Score": "9",
+        "Rev_Score": "8",
+        "Total_Rev": "223"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "08/08/25",
+        "Last_Rev_Score": "4.3",
+        "Rev_Score": "4.6",
+        "Total_Rev": "363"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "21/08/25",
+        "Last_Rev_Score": "4.6",
+        "Rev_Score": "4.6",
+        "Total_Rev": "163"
+      }
+    }
+  },
+  {
+    "Listing_Name": "JBR - 1BR #11",
+    "Area": "JBR",
+    "Room_Type": "1BR",
+    "Occupancy": {
+      "7_days": "87%",
+      "30_days": "90%",
+      "TM": "70%",
+      "NM": "64%"
+    },
+    "ADR": {
+      "TM": "453",
+      "NM": "391"
+    },
+    "RevPAR": {
+      "TM": "317",
+      "NM": "250"
+    },
+    "MPI": "139%",
+    "STLY_Var": {
+      "Occ": "119%",
+      "ADR": "94%",
+      "RevPAR": "114%"
+    },
+    "STLM_Var": {
+      "Occ": "8%",
+      "ADR": "-2%",
+      "RevPAR": "10%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "7%",
+      "14_Days": "11%",
+      "30_Days": "22%"
+    },
+    "Min_Rate_Threshold": "17%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "No",
+      "Pref": "No",
+      "Weekly": "No",
+      "Monthly": "No",
+      "LM_Disc": "No"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "Member": "No",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "3 days 100%",
+      "Airbnb": "14 days 100%",
+      "VRBO": "5 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "3",
+      "Airbnb": "4+1",
+      "VRBO": "4"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "22/07/25",
+        "Last_Rev_Score": "10",
+        "Rev_Score": "9",
+        "Total_Rev": "956"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "18/07/25",
+        "Last_Rev_Score": "4.7",
+        "Rev_Score": "4.9",
+        "Total_Rev": "456"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "04/07/25",
+        "Last_Rev_Score": "4.8",
+        "Rev_Score": "4.0",
+        "Total_Rev": "86"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Business Bay - 3BR #12",
+    "Area": "Business Bay",
+    "Room_Type": "3BR",
+    "Occupancy": {
+      "7_days": "64%",
+      "30_days": "56%",
+      "TM": "80%",
+      "NM": "42%"
+    },
+    "ADR": {
+      "TM": "603",
+      "NM": "648"
+    },
+    "RevPAR": {
+      "TM": "482",
+      "NM": "272"
+    },
+    "MPI": "134%",
+    "STLY_Var": {
+      "Occ": "119%",
+      "ADR": "123%",
+      "RevPAR": "116%"
+    },
+    "STLM_Var": {
+      "Occ": "4%",
+      "ADR": "-6%",
+      "RevPAR": "10%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "5%",
+      "14_Days": "7%",
+      "30_Days": "18%"
+    },
+    "Min_Rate_Threshold": "20%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "Yes",
+      "Pref": "Yes",
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "LM_Disc": "No"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "Yes",
+      "Member": "No",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "3 days 100%",
+      "Airbnb": "14 days 100%",
+      "VRBO": "14 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "2",
+      "Airbnb": "2+2",
+      "VRBO": "2+2"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "09/07/25",
+        "Last_Rev_Score": "9",
+        "Rev_Score": "10",
+        "Total_Rev": "1152"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "10/07/25",
+        "Last_Rev_Score": "4.6",
+        "Rev_Score": "4.8",
+        "Total_Rev": "245"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "26/07/25",
+        "Last_Rev_Score": "3.4",
+        "Rev_Score": "4.0",
+        "Total_Rev": "19"
+      }
+    }
+  },
+  {
+    "Listing_Name": "JLT - Townhouse #13",
+    "Area": "JLT",
+    "Room_Type": "Townhouse",
+    "Occupancy": {
+      "7_days": "89%",
+      "30_days": "58%",
+      "TM": "50%",
+      "NM": "54%"
+    },
+    "ADR": {
+      "TM": "702",
+      "NM": "681"
+    },
+    "RevPAR": {
+      "TM": "351",
+      "NM": "367"
+    },
+    "MPI": "93%",
+    "STLY_Var": {
+      "Occ": "109%",
+      "ADR": "124%",
+      "RevPAR": "86%"
+    },
+    "STLM_Var": {
+      "Occ": "11%",
+      "ADR": "-8%",
+      "RevPAR": "-10%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "7%",
+      "14_Days": "6%",
+      "30_Days": "24%"
+    },
+    "Min_Rate_Threshold": "15%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "Yes",
+      "Pref": "Yes",
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "LM_Disc": "Yes"
+    },
+    "Airbnb": {
+      "Weekly": "No",
+      "Monthly": "No",
+      "Member": "Yes",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "7 days 100%",
+      "Airbnb": "5 days 100%",
+      "VRBO": "3 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "4+1",
+      "Airbnb": "2",
+      "VRBO": "2"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "27/06/25",
+        "Last_Rev_Score": "7",
+        "Rev_Score": "8",
+        "Total_Rev": "91"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "18/07/25",
+        "Last_Rev_Score": "3.7",
+        "Rev_Score": "4.0",
+        "Total_Rev": "705"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "19/08/25",
+        "Last_Rev_Score": "4.1",
+        "Rev_Score": "3.6",
+        "Total_Rev": "136"
+      }
+    }
+  },
+  {
+    "Listing_Name": "JBR - Loft #14",
+    "Area": "JBR",
+    "Room_Type": "Loft",
+    "Occupancy": {
+      "7_days": "69%",
+      "30_days": "62%",
+      "TM": "85%",
+      "NM": "32%"
+    },
+    "ADR": {
+      "TM": "707",
+      "NM": "805"
+    },
+    "RevPAR": {
+      "TM": "600",
+      "NM": "257"
+    },
+    "MPI": "134%",
+    "STLY_Var": {
+      "Occ": "80%",
+      "ADR": "109%",
+      "RevPAR": "91%"
+    },
+    "STLM_Var": {
+      "Occ": "8%",
+      "ADR": "4%",
+      "RevPAR": "0%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "4%",
+      "14_Days": "5%",
+      "30_Days": "28%"
+    },
+    "Min_Rate_Threshold": "32%",
+    "BookingCom": {
+      "Genius": "No",
+      "Mobile": "Yes",
+      "Pref": "No",
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "LM_Disc": "No"
+    },
+    "Airbnb": {
+      "Weekly": "No",
+      "Monthly": "No",
+      "Member": "Yes",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "No",
+      "Monthly": "Yes"
+    },
+    "CXL_Policy": {
+      "Booking": "7 days 100%",
+      "Airbnb": "3 days 100%",
+      "VRBO": "14 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "3",
+      "Airbnb": "2",
+      "VRBO": "3"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "03/08/25",
+        "Last_Rev_Score": "9",
+        "Rev_Score": "8",
+        "Total_Rev": "941"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "15/08/25",
+        "Last_Rev_Score": "4.6",
+        "Rev_Score": "5.0",
+        "Total_Rev": "296"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "18/07/25",
+        "Last_Rev_Score": "4.6",
+        "Rev_Score": "4.2",
+        "Total_Rev": "252"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Dubai Creek Harbour - Townhouse #15",
+    "Area": "Dubai Creek Harbour",
+    "Room_Type": "Townhouse",
+    "Occupancy": {
+      "7_days": "61%",
+      "30_days": "57%",
+      "TM": "55%",
+      "NM": "30%"
+    },
+    "ADR": {
+      "TM": "745",
+      "NM": "693"
+    },
+    "RevPAR": {
+      "TM": "409",
+      "NM": "207"
+    },
+    "MPI": "102%",
+    "STLY_Var": {
+      "Occ": "98%",
+      "ADR": "105%",
+      "RevPAR": "133%"
+    },
+    "STLM_Var": {
+      "Occ": "11%",
+      "ADR": "4%",
+      "RevPAR": "-2%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "1%",
+      "14_Days": "11%",
+      "30_Days": "20%"
+    },
+    "Min_Rate_Threshold": "15%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "Yes",
+      "Pref": "Yes",
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "LM_Disc": "No"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "Member": "Yes",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "5 days 100%",
+      "Airbnb": "14 days 100%",
+      "VRBO": "14 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "3",
+      "Airbnb": "2",
+      "VRBO": "2"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "08/08/25",
+        "Last_Rev_Score": "7",
+        "Rev_Score": "10",
+        "Total_Rev": "548"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "07/08/25",
+        "Last_Rev_Score": "4.5",
+        "Rev_Score": "4.2",
+        "Total_Rev": "586"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "24/07/25",
+        "Last_Rev_Score": "3.7",
+        "Rev_Score": "5.0",
+        "Total_Rev": "286"
+      }
+    }
+  },
+  {
+    "Listing_Name": "JLT - 3BR #16",
+    "Area": "JLT",
+    "Room_Type": "3BR",
+    "Occupancy": {
+      "7_days": "76%",
+      "30_days": "75%",
+      "TM": "54%",
+      "NM": "32%"
+    },
+    "ADR": {
+      "TM": "554",
+      "NM": "521"
+    },
+    "RevPAR": {
+      "TM": "299",
+      "NM": "166"
+    },
+    "MPI": "131%",
+    "STLY_Var": {
+      "Occ": "82%",
+      "ADR": "110%",
+      "RevPAR": "92%"
+    },
+    "STLM_Var": {
+      "Occ": "-4%",
+      "ADR": "-2%",
+      "RevPAR": "11%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "8%",
+      "14_Days": "8%",
+      "30_Days": "28%"
+    },
+    "Min_Rate_Threshold": "34%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "Yes",
+      "Pref": "Yes",
+      "Weekly": "Yes",
+      "Monthly": "Yes",
+      "LM_Disc": "Yes"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "Member": "Yes",
+      "LM_Disc": "No"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "5 days 100%",
+      "Airbnb": "14 days 100%",
+      "VRBO": "3 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "2",
+      "Airbnb": "4",
+      "VRBO": "2+2"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "27/07/25",
+        "Last_Rev_Score": "9",
+        "Rev_Score": "10",
+        "Total_Rev": "747"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "15/08/25",
+        "Last_Rev_Score": "4.9",
+        "Rev_Score": "4.1",
+        "Total_Rev": "509"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "19/08/25",
+        "Last_Rev_Score": "4.6",
+        "Rev_Score": "3.9",
+        "Total_Rev": "42"
+      }
+    }
+  },
+  {
+    "Listing_Name": "JLT - Studio #17",
+    "Area": "JLT",
+    "Room_Type": "Studio",
+    "Occupancy": {
+      "7_days": "67%",
+      "30_days": "42%",
+      "TM": "76%",
+      "NM": "44%"
+    },
+    "ADR": {
+      "TM": "239",
+      "NM": "213"
+    },
+    "RevPAR": {
+      "TM": "181",
+      "NM": "93"
+    },
+    "MPI": "90%",
+    "STLY_Var": {
+      "Occ": "85%",
+      "ADR": "97%",
+      "RevPAR": "120%"
+    },
+    "STLM_Var": {
+      "Occ": "15%",
+      "ADR": "11%",
+      "RevPAR": "-5%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "7%",
+      "14_Days": "11%",
+      "30_Days": "24%"
+    },
+    "Min_Rate_Threshold": "19%",
+    "BookingCom": {
+      "Genius": "No",
+      "Mobile": "No",
+      "Pref": "No",
+      "Weekly": "No",
+      "Monthly": "No",
+      "LM_Disc": "No"
+    },
+    "Airbnb": {
+      "Weekly": "No",
+      "Monthly": "Yes",
+      "Member": "Yes",
+      "LM_Disc": "No"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "Yes"
+    },
+    "CXL_Policy": {
+      "Booking": "3 days 100%",
+      "Airbnb": "5 days 100%",
+      "VRBO": "3 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "3",
+      "Airbnb": "3",
+      "VRBO": "4+1"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "19/07/25",
+        "Last_Rev_Score": "9",
+        "Rev_Score": "9",
+        "Total_Rev": "116"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "12/08/25",
+        "Last_Rev_Score": "3.9",
+        "Rev_Score": "4.1",
+        "Total_Rev": "484"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "22/08/25",
+        "Last_Rev_Score": "4.4",
+        "Rev_Score": "4.9",
+        "Total_Rev": "106"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Palm Jumeirah - 1BR #18",
+    "Area": "Palm Jumeirah",
+    "Room_Type": "1BR",
+    "Occupancy": {
+      "7_days": "94%",
+      "30_days": "45%",
+      "TM": "57%",
+      "NM": "34%"
+    },
+    "ADR": {
+      "TM": "832",
+      "NM": "744"
+    },
+    "RevPAR": {
+      "TM": "474",
+      "NM": "252"
+    },
+    "MPI": "89%",
+    "STLY_Var": {
+      "Occ": "73%",
+      "ADR": "100%",
+      "RevPAR": "135%"
+    },
+    "STLM_Var": {
+      "Occ": "-1%",
+      "ADR": "6%",
+      "RevPAR": "-9%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "8%",
+      "14_Days": "15%",
+      "30_Days": "19%"
+    },
+    "Min_Rate_Threshold": "32%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "Yes",
+      "Pref": "No",
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "LM_Disc": "No"
+    },
+    "Airbnb": {
+      "Weekly": "No",
+      "Monthly": "No",
+      "Member": "Yes",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "No",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "3 days 100%",
+      "Airbnb": "7 days 100%",
+      "VRBO": "3 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "2+1",
+      "Airbnb": "3",
+      "VRBO": "4"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "16/07/25",
+        "Last_Rev_Score": "9",
+        "Rev_Score": "9",
+        "Total_Rev": "421"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "20/07/25",
+        "Last_Rev_Score": "4.2",
+        "Rev_Score": "4.8",
+        "Total_Rev": "113"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "27/07/25",
+        "Last_Rev_Score": "3.7",
+        "Rev_Score": "3.8",
+        "Total_Rev": "58"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Downtown Dubai - 3BR #19",
+    "Area": "Downtown Dubai",
+    "Room_Type": "3BR",
+    "Occupancy": {
+      "7_days": "71%",
+      "30_days": "80%",
+      "TM": "82%",
+      "NM": "50%"
+    },
+    "ADR": {
+      "TM": "858",
+      "NM": "856"
+    },
+    "RevPAR": {
+      "TM": "703",
+      "NM": "428"
+    },
+    "MPI": "137%",
+    "STLY_Var": {
+      "Occ": "118%",
+      "ADR": "125%",
+      "RevPAR": "87%"
+    },
+    "STLM_Var": {
+      "Occ": "-2%",
+      "ADR": "2%",
+      "RevPAR": "-9%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "7%",
+      "14_Days": "12%",
+      "30_Days": "10%"
+    },
+    "Min_Rate_Threshold": "31%",
+    "BookingCom": {
+      "Genius": "No",
+      "Mobile": "Yes",
+      "Pref": "Yes",
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "LM_Disc": "Yes"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "Yes",
+      "Member": "Yes",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "14 days 100%",
+      "Airbnb": "3 days 100%",
+      "VRBO": "3 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "4+1",
+      "Airbnb": "4",
+      "VRBO": "2+1"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "12/07/25",
+        "Last_Rev_Score": "7",
+        "Rev_Score": "9",
+        "Total_Rev": "1178"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "26/08/25",
+        "Last_Rev_Score": "4.3",
+        "Rev_Score": "3.9",
+        "Total_Rev": "136"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "28/07/25",
+        "Last_Rev_Score": "4.9",
+        "Rev_Score": "4.4",
+        "Total_Rev": "83"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Downtown Dubai - Loft #20",
+    "Area": "Downtown Dubai",
+    "Room_Type": "Loft",
+    "Occupancy": {
+      "7_days": "71%",
+      "30_days": "37%",
+      "TM": "70%",
+      "NM": "55%"
+    },
+    "ADR": {
+      "TM": "820",
+      "NM": "764"
+    },
+    "RevPAR": {
+      "TM": "574",
+      "NM": "420"
+    },
+    "MPI": "100%",
+    "STLY_Var": {
+      "Occ": "99%",
+      "ADR": "125%",
+      "RevPAR": "94%"
+    },
+    "STLM_Var": {
+      "Occ": "6%",
+      "ADR": "-4%",
+      "RevPAR": "15%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "2%",
+      "14_Days": "8%",
+      "30_Days": "23%"
+    },
+    "Min_Rate_Threshold": "20%",
+    "BookingCom": {
+      "Genius": "No",
+      "Mobile": "Yes",
+      "Pref": "No",
+      "Weekly": "Yes",
+      "Monthly": "Yes",
+      "LM_Disc": "No"
+    },
+    "Airbnb": {
+      "Weekly": "No",
+      "Monthly": "No",
+      "Member": "Yes",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "14 days 100%",
+      "Airbnb": "14 days 100%",
+      "VRBO": "7 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "2+1",
+      "Airbnb": "4+1",
+      "VRBO": "2+1"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "21/07/25",
+        "Last_Rev_Score": "9",
+        "Rev_Score": "8",
+        "Total_Rev": "891"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "24/08/25",
+        "Last_Rev_Score": "4.0",
+        "Rev_Score": "4.4",
+        "Total_Rev": "410"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "02/08/25",
+        "Last_Rev_Score": "5.0",
+        "Rev_Score": "4.6",
+        "Total_Rev": "82"
+      }
+    }
+  },
+  {
+    "Listing_Name": "JBR - Loft #21",
+    "Area": "JBR",
+    "Room_Type": "Loft",
+    "Occupancy": {
+      "7_days": "49%",
+      "30_days": "50%",
+      "TM": "46%",
+      "NM": "53%"
+    },
+    "ADR": {
+      "TM": "705",
+      "NM": "669"
+    },
+    "RevPAR": {
+      "TM": "324",
+      "NM": "354"
+    },
+    "MPI": "91%",
+    "STLY_Var": {
+      "Occ": "103%",
+      "ADR": "119%",
+      "RevPAR": "85%"
+    },
+    "STLM_Var": {
+      "Occ": "-8%",
+      "ADR": "7%",
+      "RevPAR": "13%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "5%",
+      "14_Days": "9%",
+      "30_Days": "29%"
+    },
+    "Min_Rate_Threshold": "32%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "Yes",
+      "Pref": "No",
+      "Weekly": "No",
+      "Monthly": "No",
+      "LM_Disc": "No"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "Member": "Yes",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "No",
+      "Monthly": "Yes"
+    },
+    "CXL_Policy": {
+      "Booking": "7 days 100%",
+      "Airbnb": "5 days 100%",
+      "VRBO": "3 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "3",
+      "Airbnb": "2",
+      "VRBO": "4+1"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "12/07/25",
+        "Last_Rev_Score": "6",
+        "Rev_Score": "10",
+        "Total_Rev": "390"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "13/07/25",
+        "Last_Rev_Score": "3.9",
+        "Rev_Score": "3.8",
+        "Total_Rev": "352"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "07/07/25",
+        "Last_Rev_Score": "3.1",
+        "Rev_Score": "3.8",
+        "Total_Rev": "225"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Palm Jumeirah - 3BR #22",
+    "Area": "Palm Jumeirah",
+    "Room_Type": "3BR",
+    "Occupancy": {
+      "7_days": "78%",
+      "30_days": "82%",
+      "TM": "51%",
+      "NM": "35%"
+    },
+    "ADR": {
+      "TM": "1042",
+      "NM": "1098"
+    },
+    "RevPAR": {
+      "TM": "531",
+      "NM": "384"
+    },
+    "MPI": "96%",
+    "STLY_Var": {
+      "Occ": "75%",
+      "ADR": "129%",
+      "RevPAR": "109%"
+    },
+    "STLM_Var": {
+      "Occ": "5%",
+      "ADR": "10%",
+      "RevPAR": "-8%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "4%",
+      "14_Days": "11%",
+      "30_Days": "30%"
+    },
+    "Min_Rate_Threshold": "18%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "No",
+      "Pref": "No",
+      "Weekly": "Yes",
+      "Monthly": "Yes",
+      "LM_Disc": "No"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "Member": "No",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "No",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "14 days 100%",
+      "Airbnb": "7 days 100%",
+      "VRBO": "5 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "3",
+      "Airbnb": "3",
+      "VRBO": "2"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "11/08/25",
+        "Last_Rev_Score": "9",
+        "Rev_Score": "9",
+        "Total_Rev": "655"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "13/07/25",
+        "Last_Rev_Score": "3.9",
+        "Rev_Score": "5.0",
+        "Total_Rev": "694"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "01/08/25",
+        "Last_Rev_Score": "3.5",
+        "Rev_Score": "4.2",
+        "Total_Rev": "30"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Business Bay - 2BR #23",
+    "Area": "Business Bay",
+    "Room_Type": "2BR",
+    "Occupancy": {
+      "7_days": "40%",
+      "30_days": "51%",
+      "TM": "78%",
+      "NM": "47%"
+    },
+    "ADR": {
+      "TM": "569",
+      "NM": "620"
+    },
+    "RevPAR": {
+      "TM": "443",
+      "NM": "291"
+    },
+    "MPI": "99%",
+    "STLY_Var": {
+      "Occ": "110%",
+      "ADR": "102%",
+      "RevPAR": "124%"
+    },
+    "STLM_Var": {
+      "Occ": "10%",
+      "ADR": "-5%",
+      "RevPAR": "8%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "1%",
+      "14_Days": "8%",
+      "30_Days": "24%"
+    },
+    "Min_Rate_Threshold": "11%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "No",
+      "Pref": "Yes",
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "LM_Disc": "Yes"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "Member": "No",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "No",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "7 days 100%",
+      "Airbnb": "14 days 100%",
+      "VRBO": "7 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "4+1",
+      "Airbnb": "2+2",
+      "VRBO": "2"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "28/07/25",
+        "Last_Rev_Score": "6",
+        "Rev_Score": "8",
+        "Total_Rev": "512"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "02/07/25",
+        "Last_Rev_Score": "4.5",
+        "Rev_Score": "4.6",
+        "Total_Rev": "426"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "03/07/25",
+        "Last_Rev_Score": "4.6",
+        "Rev_Score": "3.9",
+        "Total_Rev": "207"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Palm Jumeirah - Studio #24",
+    "Area": "Palm Jumeirah",
+    "Room_Type": "Studio",
+    "Occupancy": {
+      "7_days": "94%",
+      "30_days": "58%",
+      "TM": "87%",
+      "NM": "68%"
+    },
+    "ADR": {
+      "TM": "728",
+      "NM": "699"
+    },
+    "RevPAR": {
+      "TM": "633",
+      "NM": "475"
+    },
+    "MPI": "101%",
+    "STLY_Var": {
+      "Occ": "107%",
+      "ADR": "114%",
+      "RevPAR": "125%"
+    },
+    "STLM_Var": {
+      "Occ": "5%",
+      "ADR": "-8%",
+      "RevPAR": "7%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "6%",
+      "14_Days": "13%",
+      "30_Days": "17%"
+    },
+    "Min_Rate_Threshold": "30%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "No",
+      "Pref": "No",
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "LM_Disc": "Yes"
+    },
+    "Airbnb": {
+      "Weekly": "No",
+      "Monthly": "Yes",
+      "Member": "Yes",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "No",
+      "Monthly": "Yes"
+    },
+    "CXL_Policy": {
+      "Booking": "14 days 100%",
+      "Airbnb": "7 days 100%",
+      "VRBO": "14 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "4",
+      "Airbnb": "4+1",
+      "VRBO": "4+1"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "17/08/25",
+        "Last_Rev_Score": "9",
+        "Rev_Score": "7",
+        "Total_Rev": "1052"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "18/07/25",
+        "Last_Rev_Score": "4.1",
+        "Rev_Score": "4.9",
+        "Total_Rev": "53"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "13/07/25",
+        "Last_Rev_Score": "3.7",
+        "Rev_Score": "4.0",
+        "Total_Rev": "125"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Dubai Marina - Townhouse #25",
+    "Area": "Dubai Marina",
+    "Room_Type": "Townhouse",
+    "Occupancy": {
+      "7_days": "73%",
+      "30_days": "42%",
+      "TM": "81%",
+      "NM": "47%"
+    },
+    "ADR": {
+      "TM": "747",
+      "NM": "756"
+    },
+    "RevPAR": {
+      "TM": "605",
+      "NM": "355"
+    },
+    "MPI": "88%",
+    "STLY_Var": {
+      "Occ": "95%",
+      "ADR": "107%",
+      "RevPAR": "97%"
+    },
+    "STLM_Var": {
+      "Occ": "-8%",
+      "ADR": "-2%",
+      "RevPAR": "8%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "1%",
+      "14_Days": "4%",
+      "30_Days": "20%"
+    },
+    "Min_Rate_Threshold": "17%",
+    "BookingCom": {
+      "Genius": "No",
+      "Mobile": "No",
+      "Pref": "Yes",
+      "Weekly": "No",
+      "Monthly": "No",
+      "LM_Disc": "No"
+    },
+    "Airbnb": {
+      "Weekly": "No",
+      "Monthly": "Yes",
+      "Member": "No",
+      "LM_Disc": "No"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "Yes"
+    },
+    "CXL_Policy": {
+      "Booking": "5 days 100%",
+      "Airbnb": "5 days 100%",
+      "VRBO": "7 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "2+1",
+      "Airbnb": "2",
+      "VRBO": "4+1"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "02/07/25",
+        "Last_Rev_Score": "6",
+        "Rev_Score": "8",
+        "Total_Rev": "80"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "04/08/25",
+        "Last_Rev_Score": "4.7",
+        "Rev_Score": "4.1",
+        "Total_Rev": "351"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "25/08/25",
+        "Last_Rev_Score": "3.3",
+        "Rev_Score": "3.3",
+        "Total_Rev": "220"
+      }
+    }
+  },
+  {
+    "Listing_Name": "JLT - Studio #26",
+    "Area": "JLT",
+    "Room_Type": "Studio",
+    "Occupancy": {
+      "7_days": "86%",
+      "30_days": "41%",
+      "TM": "63%",
+      "NM": "57%"
+    },
+    "ADR": {
+      "TM": "280",
+      "NM": "275"
+    },
+    "RevPAR": {
+      "TM": "176",
+      "NM": "156"
+    },
+    "MPI": "122%",
+    "STLY_Var": {
+      "Occ": "76%",
+      "ADR": "118%",
+      "RevPAR": "117%"
+    },
+    "STLM_Var": {
+      "Occ": "-9%",
+      "ADR": "8%",
+      "RevPAR": "-3%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "8%",
+      "14_Days": "14%",
+      "30_Days": "10%"
+    },
+    "Min_Rate_Threshold": "11%",
+    "BookingCom": {
+      "Genius": "No",
+      "Mobile": "No",
+      "Pref": "No",
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "LM_Disc": "Yes"
+    },
+    "Airbnb": {
+      "Weekly": "No",
+      "Monthly": "Yes",
+      "Member": "Yes",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "No",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "7 days 100%",
+      "Airbnb": "14 days 100%",
+      "VRBO": "7 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "3",
+      "Airbnb": "4",
+      "VRBO": "4"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "30/07/25",
+        "Last_Rev_Score": "6",
+        "Rev_Score": "7",
+        "Total_Rev": "1179"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "11/07/25",
+        "Last_Rev_Score": "4.8",
+        "Rev_Score": "4.3",
+        "Total_Rev": "253"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "31/07/25",
+        "Last_Rev_Score": "3.7",
+        "Rev_Score": "4.0",
+        "Total_Rev": "217"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Downtown Dubai - 3BR #27",
+    "Area": "Downtown Dubai",
+    "Room_Type": "3BR",
+    "Occupancy": {
+      "7_days": "41%",
+      "30_days": "73%",
+      "TM": "63%",
+      "NM": "34%"
+    },
+    "ADR": {
+      "TM": "810",
+      "NM": "850"
+    },
+    "RevPAR": {
+      "TM": "510",
+      "NM": "289"
+    },
+    "MPI": "128%",
+    "STLY_Var": {
+      "Occ": "100%",
+      "ADR": "94%",
+      "RevPAR": "90%"
+    },
+    "STLM_Var": {
+      "Occ": "-7%",
+      "ADR": "3%",
+      "RevPAR": "13%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "3%",
+      "14_Days": "12%",
+      "30_Days": "11%"
+    },
+    "Min_Rate_Threshold": "28%",
+    "BookingCom": {
+      "Genius": "No",
+      "Mobile": "No",
+      "Pref": "No",
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "LM_Disc": "No"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "Member": "Yes",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "Yes"
+    },
+    "CXL_Policy": {
+      "Booking": "5 days 100%",
+      "Airbnb": "5 days 100%",
+      "VRBO": "14 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "2+1",
+      "Airbnb": "2",
+      "VRBO": "2+2"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "03/07/25",
+        "Last_Rev_Score": "10",
+        "Rev_Score": "9",
+        "Total_Rev": "285"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "09/07/25",
+        "Last_Rev_Score": "3.9",
+        "Rev_Score": "4.1",
+        "Total_Rev": "459"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "03/07/25",
+        "Last_Rev_Score": "4.1",
+        "Rev_Score": "4.6",
+        "Total_Rev": "290"
+      }
+    }
+  },
+  {
+    "Listing_Name": "JLT - Townhouse #28",
+    "Area": "JLT",
+    "Room_Type": "Townhouse",
+    "Occupancy": {
+      "7_days": "73%",
+      "30_days": "77%",
+      "TM": "57%",
+      "NM": "69%"
+    },
+    "ADR": {
+      "TM": "634",
+      "NM": "544"
+    },
+    "RevPAR": {
+      "TM": "361",
+      "NM": "375"
+    },
+    "MPI": "133%",
+    "STLY_Var": {
+      "Occ": "89%",
+      "ADR": "111%",
+      "RevPAR": "107%"
+    },
+    "STLM_Var": {
+      "Occ": "8%",
+      "ADR": "4%",
+      "RevPAR": "-10%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "3%",
+      "14_Days": "15%",
+      "30_Days": "30%"
+    },
+    "Min_Rate_Threshold": "10%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "Yes",
+      "Pref": "No",
+      "Weekly": "Yes",
+      "Monthly": "Yes",
+      "LM_Disc": "Yes"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "Member": "No",
+      "LM_Disc": "No"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "3 days 100%",
+      "Airbnb": "3 days 100%",
+      "VRBO": "7 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "3",
+      "Airbnb": "4+1",
+      "VRBO": "3"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "26/07/25",
+        "Last_Rev_Score": "10",
+        "Rev_Score": "10",
+        "Total_Rev": "898"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "09/08/25",
+        "Last_Rev_Score": "3.8",
+        "Rev_Score": "4.4",
+        "Total_Rev": "373"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "30/07/25",
+        "Last_Rev_Score": "3.2",
+        "Rev_Score": "4.4",
+        "Total_Rev": "254"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Downtown Dubai - Studio #29",
+    "Area": "Downtown Dubai",
+    "Room_Type": "Studio",
+    "Occupancy": {
+      "7_days": "73%",
+      "30_days": "40%",
+      "TM": "78%",
+      "NM": "28%"
+    },
+    "ADR": {
+      "TM": "498",
+      "NM": "482"
+    },
+    "RevPAR": {
+      "TM": "388",
+      "NM": "134"
+    },
+    "MPI": "85%",
+    "STLY_Var": {
+      "Occ": "83%",
+      "ADR": "109%",
+      "RevPAR": "98%"
+    },
+    "STLM_Var": {
+      "Occ": "-1%",
+      "ADR": "2%",
+      "RevPAR": "-9%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "1%",
+      "14_Days": "11%",
+      "30_Days": "23%"
+    },
+    "Min_Rate_Threshold": "15%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "Yes",
+      "Pref": "Yes",
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "LM_Disc": "Yes"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "Member": "Yes",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "Yes"
+    },
+    "CXL_Policy": {
+      "Booking": "14 days 100%",
+      "Airbnb": "14 days 100%",
+      "VRBO": "14 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "2+2",
+      "Airbnb": "2",
+      "VRBO": "3"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "25/08/25",
+        "Last_Rev_Score": "8",
+        "Rev_Score": "8",
+        "Total_Rev": "992"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "04/07/25",
+        "Last_Rev_Score": "4.5",
+        "Rev_Score": "4.2",
+        "Total_Rev": "467"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "03/07/25",
+        "Last_Rev_Score": "3.2",
+        "Rev_Score": "4.0",
+        "Total_Rev": "210"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Business Bay - 2BR #30",
+    "Area": "Business Bay",
+    "Room_Type": "2BR",
+    "Occupancy": {
+      "7_days": "81%",
+      "30_days": "90%",
+      "TM": "61%",
+      "NM": "74%"
+    },
+    "ADR": {
+      "TM": "565",
+      "NM": "537"
+    },
+    "RevPAR": {
+      "TM": "344",
+      "NM": "397"
+    },
+    "MPI": "95%",
+    "STLY_Var": {
+      "Occ": "74%",
+      "ADR": "122%",
+      "RevPAR": "125%"
+    },
+    "STLM_Var": {
+      "Occ": "-4%",
+      "ADR": "3%",
+      "RevPAR": "-1%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "3%",
+      "14_Days": "7%",
+      "30_Days": "13%"
+    },
+    "Min_Rate_Threshold": "14%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "Yes",
+      "Pref": "Yes",
+      "Weekly": "No",
+      "Monthly": "Yes",
+      "LM_Disc": "No"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "Member": "No",
+      "LM_Disc": "No"
+    },
+    "VRBO": {
+      "Weekly": "No",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "7 days 100%",
+      "Airbnb": "7 days 100%",
+      "VRBO": "5 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "3",
+      "Airbnb": "2",
+      "VRBO": "3"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "29/07/25",
+        "Last_Rev_Score": "8",
+        "Rev_Score": "9",
+        "Total_Rev": "165"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "04/08/25",
+        "Last_Rev_Score": "4.3",
+        "Rev_Score": "4.2",
+        "Total_Rev": "482"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "24/08/25",
+        "Last_Rev_Score": "3.1",
+        "Rev_Score": "4.7",
+        "Total_Rev": "44"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Dubai Creek Harbour - Studio #31",
+    "Area": "Dubai Creek Harbour",
+    "Room_Type": "Studio",
+    "Occupancy": {
+      "7_days": "61%",
+      "30_days": "40%",
+      "TM": "64%",
+      "NM": "54%"
+    },
+    "ADR": {
+      "TM": "368",
+      "NM": "378"
+    },
+    "RevPAR": {
+      "TM": "235",
+      "NM": "204"
+    },
+    "MPI": "122%",
+    "STLY_Var": {
+      "Occ": "105%",
+      "ADR": "92%",
+      "RevPAR": "113%"
+    },
+    "STLM_Var": {
+      "Occ": "0%",
+      "ADR": "11%",
+      "RevPAR": "3%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "3%",
+      "14_Days": "4%",
+      "30_Days": "24%"
+    },
+    "Min_Rate_Threshold": "13%",
+    "BookingCom": {
+      "Genius": "No",
+      "Mobile": "No",
+      "Pref": "No",
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "LM_Disc": "Yes"
+    },
+    "Airbnb": {
+      "Weekly": "No",
+      "Monthly": "No",
+      "Member": "No",
+      "LM_Disc": "No"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "14 days 100%",
+      "Airbnb": "14 days 100%",
+      "VRBO": "7 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "4+1",
+      "Airbnb": "4",
+      "VRBO": "2"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "07/07/25",
+        "Last_Rev_Score": "8",
+        "Rev_Score": "7",
+        "Total_Rev": "725"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "20/08/25",
+        "Last_Rev_Score": "4.3",
+        "Rev_Score": "4.3",
+        "Total_Rev": "278"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "11/07/25",
+        "Last_Rev_Score": "4.7",
+        "Rev_Score": "4.9",
+        "Total_Rev": "81"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Palm Jumeirah - Townhouse #32",
+    "Area": "Palm Jumeirah",
+    "Room_Type": "Townhouse",
+    "Occupancy": {
+      "7_days": "68%",
+      "30_days": "74%",
+      "TM": "59%",
+      "NM": "66%"
+    },
+    "ADR": {
+      "TM": "1068",
+      "NM": "1201"
+    },
+    "RevPAR": {
+      "TM": "630",
+      "NM": "792"
+    },
+    "MPI": "129%",
+    "STLY_Var": {
+      "Occ": "112%",
+      "ADR": "115%",
+      "RevPAR": "93%"
+    },
+    "STLM_Var": {
+      "Occ": "-1%",
+      "ADR": "9%",
+      "RevPAR": "0%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "6%",
+      "14_Days": "6%",
+      "30_Days": "26%"
+    },
+    "Min_Rate_Threshold": "12%",
+    "BookingCom": {
+      "Genius": "No",
+      "Mobile": "Yes",
+      "Pref": "No",
+      "Weekly": "Yes",
+      "Monthly": "Yes",
+      "LM_Disc": "Yes"
+    },
+    "Airbnb": {
+      "Weekly": "No",
+      "Monthly": "No",
+      "Member": "Yes",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "3 days 100%",
+      "Airbnb": "3 days 100%",
+      "VRBO": "7 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "4",
+      "Airbnb": "2+1",
+      "VRBO": "4"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "02/08/25",
+        "Last_Rev_Score": "7",
+        "Rev_Score": "8",
+        "Total_Rev": "420"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "04/07/25",
+        "Last_Rev_Score": "4.5",
+        "Rev_Score": "4.5",
+        "Total_Rev": "189"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "11/07/25",
+        "Last_Rev_Score": "3.9",
+        "Rev_Score": "3.9",
+        "Total_Rev": "126"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Downtown Dubai - Townhouse #33",
+    "Area": "Downtown Dubai",
+    "Room_Type": "Townhouse",
+    "Occupancy": {
+      "7_days": "64%",
+      "30_days": "40%",
+      "TM": "74%",
+      "NM": "40%"
+    },
+    "ADR": {
+      "TM": "950",
+      "NM": "935"
+    },
+    "RevPAR": {
+      "TM": "703",
+      "NM": "374"
+    },
+    "MPI": "104%",
+    "STLY_Var": {
+      "Occ": "120%",
+      "ADR": "120%",
+      "RevPAR": "97%"
+    },
+    "STLM_Var": {
+      "Occ": "4%",
+      "ADR": "6%",
+      "RevPAR": "12%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "5%",
+      "14_Days": "10%",
+      "30_Days": "26%"
+    },
+    "Min_Rate_Threshold": "26%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "Yes",
+      "Pref": "Yes",
+      "Weekly": "No",
+      "Monthly": "No",
+      "LM_Disc": "Yes"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "Yes",
+      "Member": "No",
+      "LM_Disc": "No"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "Yes"
+    },
+    "CXL_Policy": {
+      "Booking": "3 days 100%",
+      "Airbnb": "5 days 100%",
+      "VRBO": "7 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "3",
+      "Airbnb": "4",
+      "VRBO": "2+1"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "04/07/25",
+        "Last_Rev_Score": "9",
+        "Rev_Score": "7",
+        "Total_Rev": "504"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "05/07/25",
+        "Last_Rev_Score": "4.2",
+        "Rev_Score": "4.2",
+        "Total_Rev": "47"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "31/07/25",
+        "Last_Rev_Score": "3.1",
+        "Rev_Score": "4.1",
+        "Total_Rev": "125"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Downtown Dubai - 1BR #34",
+    "Area": "Downtown Dubai",
+    "Room_Type": "1BR",
+    "Occupancy": {
+      "7_days": "73%",
+      "30_days": "58%",
+      "TM": "46%",
+      "NM": "70%"
+    },
+    "ADR": {
+      "TM": "553",
+      "NM": "522"
+    },
+    "RevPAR": {
+      "TM": "254",
+      "NM": "365"
+    },
+    "MPI": "126%",
+    "STLY_Var": {
+      "Occ": "91%",
+      "ADR": "99%",
+      "RevPAR": "93%"
+    },
+    "STLM_Var": {
+      "Occ": "12%",
+      "ADR": "-4%",
+      "RevPAR": "12%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "8%",
+      "14_Days": "11%",
+      "30_Days": "29%"
+    },
+    "Min_Rate_Threshold": "10%",
+    "BookingCom": {
+      "Genius": "No",
+      "Mobile": "Yes",
+      "Pref": "Yes",
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "LM_Disc": "No"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "Member": "Yes",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "14 days 100%",
+      "Airbnb": "3 days 100%",
+      "VRBO": "3 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "3",
+      "Airbnb": "4",
+      "VRBO": "4"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "25/08/25",
+        "Last_Rev_Score": "10",
+        "Rev_Score": "8",
+        "Total_Rev": "344"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "08/08/25",
+        "Last_Rev_Score": "4.1",
+        "Rev_Score": "4.5",
+        "Total_Rev": "266"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "21/07/25",
+        "Last_Rev_Score": "3.8",
+        "Rev_Score": "4.4",
+        "Total_Rev": "48"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Dubai Marina - Loft #35",
+    "Area": "Dubai Marina",
+    "Room_Type": "Loft",
+    "Occupancy": {
+      "7_days": "42%",
+      "30_days": "83%",
+      "TM": "72%",
+      "NM": "60%"
+    },
+    "ADR": {
+      "TM": "649",
+      "NM": "650"
+    },
+    "RevPAR": {
+      "TM": "467",
+      "NM": "390"
+    },
+    "MPI": "86%",
+    "STLY_Var": {
+      "Occ": "94%",
+      "ADR": "120%",
+      "RevPAR": "87%"
+    },
+    "STLM_Var": {
+      "Occ": "-2%",
+      "ADR": "-8%",
+      "RevPAR": "-1%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "2%",
+      "14_Days": "9%",
+      "30_Days": "17%"
+    },
+    "Min_Rate_Threshold": "33%",
+    "BookingCom": {
+      "Genius": "No",
+      "Mobile": "Yes",
+      "Pref": "No",
+      "Weekly": "No",
+      "Monthly": "Yes",
+      "LM_Disc": "Yes"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "Member": "No",
+      "LM_Disc": "No"
+    },
+    "VRBO": {
+      "Weekly": "No",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "5 days 100%",
+      "Airbnb": "5 days 100%",
+      "VRBO": "3 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "4+1",
+      "Airbnb": "3",
+      "VRBO": "2"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "08/08/25",
+        "Last_Rev_Score": "7",
+        "Rev_Score": "7",
+        "Total_Rev": "458"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "01/07/25",
+        "Last_Rev_Score": "3.6",
+        "Rev_Score": "4.9",
+        "Total_Rev": "547"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "01/08/25",
+        "Last_Rev_Score": "5.0",
+        "Rev_Score": "4.2",
+        "Total_Rev": "134"
+      }
+    }
+  },
+  {
+    "Listing_Name": "JLT - 1BR #36",
+    "Area": "JLT",
+    "Room_Type": "1BR",
+    "Occupancy": {
+      "7_days": "44%",
+      "30_days": "77%",
+      "TM": "89%",
+      "NM": "28%"
+    },
+    "ADR": {
+      "TM": "336",
+      "NM": "321"
+    },
+    "RevPAR": {
+      "TM": "299",
+      "NM": "89"
+    },
+    "MPI": "140%",
+    "STLY_Var": {
+      "Occ": "111%",
+      "ADR": "111%",
+      "RevPAR": "102%"
+    },
+    "STLM_Var": {
+      "Occ": "3%",
+      "ADR": "4%",
+      "RevPAR": "11%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "8%",
+      "14_Days": "10%",
+      "30_Days": "20%"
+    },
+    "Min_Rate_Threshold": "15%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "Yes",
+      "Pref": "No",
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "LM_Disc": "No"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "Member": "No",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "Yes"
+    },
+    "CXL_Policy": {
+      "Booking": "7 days 100%",
+      "Airbnb": "7 days 100%",
+      "VRBO": "14 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "4",
+      "Airbnb": "4+1",
+      "VRBO": "3"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "16/08/25",
+        "Last_Rev_Score": "9",
+        "Rev_Score": "9",
+        "Total_Rev": "965"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "24/08/25",
+        "Last_Rev_Score": "4.6",
+        "Rev_Score": "4.9",
+        "Total_Rev": "649"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "30/07/25",
+        "Last_Rev_Score": "3.5",
+        "Rev_Score": "5.0",
+        "Total_Rev": "34"
+      }
+    }
+  },
+  {
+    "Listing_Name": "JLT - 3BR #37",
+    "Area": "JLT",
+    "Room_Type": "3BR",
+    "Occupancy": {
+      "7_days": "51%",
+      "30_days": "80%",
+      "TM": "87%",
+      "NM": "68%"
+    },
+    "ADR": {
+      "TM": "566",
+      "NM": "568"
+    },
+    "RevPAR": {
+      "TM": "492",
+      "NM": "386"
+    },
+    "MPI": "95%",
+    "STLY_Var": {
+      "Occ": "71%",
+      "ADR": "99%",
+      "RevPAR": "123%"
+    },
+    "STLM_Var": {
+      "Occ": "-8%",
+      "ADR": "-1%",
+      "RevPAR": "12%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "6%",
+      "14_Days": "9%",
+      "30_Days": "22%"
+    },
+    "Min_Rate_Threshold": "40%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "No",
+      "Pref": "No",
+      "Weekly": "No",
+      "Monthly": "Yes",
+      "LM_Disc": "No"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "Member": "Yes",
+      "LM_Disc": "No"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "Yes"
+    },
+    "CXL_Policy": {
+      "Booking": "5 days 100%",
+      "Airbnb": "14 days 100%",
+      "VRBO": "14 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "4",
+      "Airbnb": "2",
+      "VRBO": "2+2"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "08/07/25",
+        "Last_Rev_Score": "8",
+        "Rev_Score": "10",
+        "Total_Rev": "489"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "18/07/25",
+        "Last_Rev_Score": "3.9",
+        "Rev_Score": "4.9",
+        "Total_Rev": "522"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "14/08/25",
+        "Last_Rev_Score": "3.2",
+        "Rev_Score": "4.7",
+        "Total_Rev": "236"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Business Bay - Studio #38",
+    "Area": "Business Bay",
+    "Room_Type": "Studio",
+    "Occupancy": {
+      "7_days": "67%",
+      "30_days": "67%",
+      "TM": "60%",
+      "NM": "67%"
+    },
+    "ADR": {
+      "TM": "373",
+      "NM": "393"
+    },
+    "RevPAR": {
+      "TM": "223",
+      "NM": "263"
+    },
+    "MPI": "107%",
+    "STLY_Var": {
+      "Occ": "115%",
+      "ADR": "94%",
+      "RevPAR": "120%"
+    },
+    "STLM_Var": {
+      "Occ": "-5%",
+      "ADR": "12%",
+      "RevPAR": "-7%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "6%",
+      "14_Days": "12%",
+      "30_Days": "17%"
+    },
+    "Min_Rate_Threshold": "13%",
+    "BookingCom": {
+      "Genius": "No",
+      "Mobile": "No",
+      "Pref": "Yes",
+      "Weekly": "Yes",
+      "Monthly": "Yes",
+      "LM_Disc": "No"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "Member": "Yes",
+      "LM_Disc": "No"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "Yes"
+    },
+    "CXL_Policy": {
+      "Booking": "14 days 100%",
+      "Airbnb": "14 days 100%",
+      "VRBO": "14 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "4",
+      "Airbnb": "2",
+      "VRBO": "2+1"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "06/08/25",
+        "Last_Rev_Score": "6",
+        "Rev_Score": "10",
+        "Total_Rev": "1004"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "14/07/25",
+        "Last_Rev_Score": "4.3",
+        "Rev_Score": "4.0",
+        "Total_Rev": "584"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "17/07/25",
+        "Last_Rev_Score": "4.2",
+        "Rev_Score": "4.6",
+        "Total_Rev": "71"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Dubai Creek Harbour - Studio #39",
+    "Area": "Dubai Creek Harbour",
+    "Room_Type": "Studio",
+    "Occupancy": {
+      "7_days": "59%",
+      "30_days": "64%",
+      "TM": "49%",
+      "NM": "44%"
+    },
+    "ADR": {
+      "TM": "396",
+      "NM": "351"
+    },
+    "RevPAR": {
+      "TM": "194",
+      "NM": "154"
+    },
+    "MPI": "95%",
+    "STLY_Var": {
+      "Occ": "80%",
+      "ADR": "110%",
+      "RevPAR": "130%"
+    },
+    "STLM_Var": {
+      "Occ": "-1%",
+      "ADR": "-6%",
+      "RevPAR": "-4%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "4%",
+      "14_Days": "14%",
+      "30_Days": "27%"
+    },
+    "Min_Rate_Threshold": "18%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "Yes",
+      "Pref": "No",
+      "Weekly": "Yes",
+      "Monthly": "Yes",
+      "LM_Disc": "No"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "Member": "No",
+      "LM_Disc": "No"
+    },
+    "VRBO": {
+      "Weekly": "No",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "3 days 100%",
+      "Airbnb": "3 days 100%",
+      "VRBO": "3 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "4+1",
+      "Airbnb": "4",
+      "VRBO": "2+2"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "16/07/25",
+        "Last_Rev_Score": "7",
+        "Rev_Score": "10",
+        "Total_Rev": "112"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "26/07/25",
+        "Last_Rev_Score": "4.8",
+        "Rev_Score": "4.5",
+        "Total_Rev": "677"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "07/08/25",
+        "Last_Rev_Score": "4.0",
+        "Rev_Score": "4.6",
+        "Total_Rev": "212"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Dubai Marina - Townhouse #40",
+    "Area": "Dubai Marina",
+    "Room_Type": "Townhouse",
+    "Occupancy": {
+      "7_days": "71%",
+      "30_days": "73%",
+      "TM": "66%",
+      "NM": "55%"
+    },
+    "ADR": {
+      "TM": "707",
+      "NM": "634"
+    },
+    "RevPAR": {
+      "TM": "466",
+      "NM": "348"
+    },
+    "MPI": "114%",
+    "STLY_Var": {
+      "Occ": "83%",
+      "ADR": "111%",
+      "RevPAR": "123%"
+    },
+    "STLM_Var": {
+      "Occ": "13%",
+      "ADR": "3%",
+      "RevPAR": "0%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "3%",
+      "14_Days": "9%",
+      "30_Days": "26%"
+    },
+    "Min_Rate_Threshold": "27%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "Yes",
+      "Pref": "Yes",
+      "Weekly": "Yes",
+      "Monthly": "Yes",
+      "LM_Disc": "Yes"
+    },
+    "Airbnb": {
+      "Weekly": "No",
+      "Monthly": "No",
+      "Member": "Yes",
+      "LM_Disc": "No"
+    },
+    "VRBO": {
+      "Weekly": "No",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "7 days 100%",
+      "Airbnb": "5 days 100%",
+      "VRBO": "5 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "3",
+      "Airbnb": "4",
+      "VRBO": "3"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "26/07/25",
+        "Last_Rev_Score": "8",
+        "Rev_Score": "10",
+        "Total_Rev": "97"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "21/08/25",
+        "Last_Rev_Score": "4.9",
+        "Rev_Score": "4.4",
+        "Total_Rev": "266"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "13/08/25",
+        "Last_Rev_Score": "4.2",
+        "Rev_Score": "3.3",
+        "Total_Rev": "149"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Dubai Creek Harbour - Townhouse #41",
+    "Area": "Dubai Creek Harbour",
+    "Room_Type": "Townhouse",
+    "Occupancy": {
+      "7_days": "48%",
+      "30_days": "55%",
+      "TM": "74%",
+      "NM": "25%"
+    },
+    "ADR": {
+      "TM": "756",
+      "NM": "749"
+    },
+    "RevPAR": {
+      "TM": "559",
+      "NM": "187"
+    },
+    "MPI": "139%",
+    "STLY_Var": {
+      "Occ": "76%",
+      "ADR": "117%",
+      "RevPAR": "93%"
+    },
+    "STLM_Var": {
+      "Occ": "14%",
+      "ADR": "4%",
+      "RevPAR": "-1%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "1%",
+      "14_Days": "10%",
+      "30_Days": "11%"
+    },
+    "Min_Rate_Threshold": "28%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "Yes",
+      "Pref": "Yes",
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "LM_Disc": "No"
+    },
+    "Airbnb": {
+      "Weekly": "No",
+      "Monthly": "No",
+      "Member": "No",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "Yes"
+    },
+    "CXL_Policy": {
+      "Booking": "7 days 100%",
+      "Airbnb": "7 days 100%",
+      "VRBO": "5 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "2+1",
+      "Airbnb": "4",
+      "VRBO": "4"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "01/08/25",
+        "Last_Rev_Score": "10",
+        "Rev_Score": "7",
+        "Total_Rev": "142"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "24/08/25",
+        "Last_Rev_Score": "3.7",
+        "Rev_Score": "4.2",
+        "Total_Rev": "505"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "24/07/25",
+        "Last_Rev_Score": "3.9",
+        "Rev_Score": "4.3",
+        "Total_Rev": "268"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Palm Jumeirah - 2BR #42",
+    "Area": "Palm Jumeirah",
+    "Room_Type": "2BR",
+    "Occupancy": {
+      "7_days": "49%",
+      "30_days": "61%",
+      "TM": "79%",
+      "NM": "72%"
+    },
+    "ADR": {
+      "TM": "890",
+      "NM": "861"
+    },
+    "RevPAR": {
+      "TM": "703",
+      "NM": "619"
+    },
+    "MPI": "138%",
+    "STLY_Var": {
+      "Occ": "89%",
+      "ADR": "127%",
+      "RevPAR": "106%"
+    },
+    "STLM_Var": {
+      "Occ": "7%",
+      "ADR": "7%",
+      "RevPAR": "10%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "5%",
+      "14_Days": "11%",
+      "30_Days": "10%"
+    },
+    "Min_Rate_Threshold": "21%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "Yes",
+      "Pref": "No",
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "LM_Disc": "No"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "Member": "Yes",
+      "LM_Disc": "No"
+    },
+    "VRBO": {
+      "Weekly": "No",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "5 days 100%",
+      "Airbnb": "3 days 100%",
+      "VRBO": "14 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "2+1",
+      "Airbnb": "4",
+      "VRBO": "4+1"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "11/07/25",
+        "Last_Rev_Score": "10",
+        "Rev_Score": "10",
+        "Total_Rev": "352"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "05/07/25",
+        "Last_Rev_Score": "4.5",
+        "Rev_Score": "3.8",
+        "Total_Rev": "737"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "19/08/25",
+        "Last_Rev_Score": "3.4",
+        "Rev_Score": "4.0",
+        "Total_Rev": "219"
+      }
+    }
+  },
+  {
+    "Listing_Name": "JLT - 1BR #43",
+    "Area": "JLT",
+    "Room_Type": "1BR",
+    "Occupancy": {
+      "7_days": "64%",
+      "30_days": "60%",
+      "TM": "79%",
+      "NM": "55%"
+    },
+    "ADR": {
+      "TM": "352",
+      "NM": "352"
+    },
+    "RevPAR": {
+      "TM": "278",
+      "NM": "193"
+    },
+    "MPI": "140%",
+    "STLY_Var": {
+      "Occ": "117%",
+      "ADR": "93%",
+      "RevPAR": "130%"
+    },
+    "STLM_Var": {
+      "Occ": "7%",
+      "ADR": "2%",
+      "RevPAR": "9%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "8%",
+      "14_Days": "12%",
+      "30_Days": "22%"
+    },
+    "Min_Rate_Threshold": "20%",
+    "BookingCom": {
+      "Genius": "No",
+      "Mobile": "Yes",
+      "Pref": "No",
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "LM_Disc": "No"
+    },
+    "Airbnb": {
+      "Weekly": "No",
+      "Monthly": "No",
+      "Member": "Yes",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "No",
+      "Monthly": "Yes"
+    },
+    "CXL_Policy": {
+      "Booking": "7 days 100%",
+      "Airbnb": "5 days 100%",
+      "VRBO": "7 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "2+2",
+      "Airbnb": "4+1",
+      "VRBO": "2+1"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "13/07/25",
+        "Last_Rev_Score": "9",
+        "Rev_Score": "9",
+        "Total_Rev": "1032"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "04/08/25",
+        "Last_Rev_Score": "4.3",
+        "Rev_Score": "4.9",
+        "Total_Rev": "758"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "09/08/25",
+        "Last_Rev_Score": "3.6",
+        "Rev_Score": "4.2",
+        "Total_Rev": "283"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Dubai Creek Harbour - 2BR #44",
+    "Area": "Dubai Creek Harbour",
+    "Room_Type": "2BR",
+    "Occupancy": {
+      "7_days": "51%",
+      "30_days": "61%",
+      "TM": "58%",
+      "NM": "27%"
+    },
+    "ADR": {
+      "TM": "588",
+      "NM": "641"
+    },
+    "RevPAR": {
+      "TM": "341",
+      "NM": "173"
+    },
+    "MPI": "103%",
+    "STLY_Var": {
+      "Occ": "115%",
+      "ADR": "95%",
+      "RevPAR": "107%"
+    },
+    "STLM_Var": {
+      "Occ": "13%",
+      "ADR": "7%",
+      "RevPAR": "-6%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "4%",
+      "14_Days": "12%",
+      "30_Days": "18%"
+    },
+    "Min_Rate_Threshold": "39%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "Yes",
+      "Pref": "Yes",
+      "Weekly": "No",
+      "Monthly": "Yes",
+      "LM_Disc": "Yes"
+    },
+    "Airbnb": {
+      "Weekly": "No",
+      "Monthly": "Yes",
+      "Member": "Yes",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "5 days 100%",
+      "Airbnb": "3 days 100%",
+      "VRBO": "5 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "3",
+      "Airbnb": "4+1",
+      "VRBO": "3"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "27/07/25",
+        "Last_Rev_Score": "7",
+        "Rev_Score": "9",
+        "Total_Rev": "707"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "08/08/25",
+        "Last_Rev_Score": "4.5",
+        "Rev_Score": "4.9",
+        "Total_Rev": "111"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "16/07/25",
+        "Last_Rev_Score": "4.1",
+        "Rev_Score": "4.2",
+        "Total_Rev": "24"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Dubai Creek Harbour - 1BR #45",
+    "Area": "Dubai Creek Harbour",
+    "Room_Type": "1BR",
+    "Occupancy": {
+      "7_days": "64%",
+      "30_days": "50%",
+      "TM": "65%",
+      "NM": "75%"
+    },
+    "ADR": {
+      "TM": "489",
+      "NM": "550"
+    },
+    "RevPAR": {
+      "TM": "317",
+      "NM": "412"
+    },
+    "MPI": "116%",
+    "STLY_Var": {
+      "Occ": "81%",
+      "ADR": "108%",
+      "RevPAR": "87%"
+    },
+    "STLM_Var": {
+      "Occ": "9%",
+      "ADR": "-5%",
+      "RevPAR": "-2%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "5%",
+      "14_Days": "11%",
+      "30_Days": "30%"
+    },
+    "Min_Rate_Threshold": "27%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "No",
+      "Pref": "Yes",
+      "Weekly": "Yes",
+      "Monthly": "Yes",
+      "LM_Disc": "No"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "Member": "No",
+      "LM_Disc": "No"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "Yes"
+    },
+    "CXL_Policy": {
+      "Booking": "7 days 100%",
+      "Airbnb": "5 days 100%",
+      "VRBO": "5 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "4",
+      "Airbnb": "4+1",
+      "VRBO": "3"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "05/07/25",
+        "Last_Rev_Score": "9",
+        "Rev_Score": "9",
+        "Total_Rev": "227"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "01/08/25",
+        "Last_Rev_Score": "4.5",
+        "Rev_Score": "4.0",
+        "Total_Rev": "163"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "27/07/25",
+        "Last_Rev_Score": "3.6",
+        "Rev_Score": "3.6",
+        "Total_Rev": "138"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Business Bay - 2BR #46",
+    "Area": "Business Bay",
+    "Room_Type": "2BR",
+    "Occupancy": {
+      "7_days": "76%",
+      "30_days": "69%",
+      "TM": "86%",
+      "NM": "61%"
+    },
+    "ADR": {
+      "TM": "512",
+      "NM": "481"
+    },
+    "RevPAR": {
+      "TM": "440",
+      "NM": "293"
+    },
+    "MPI": "85%",
+    "STLY_Var": {
+      "Occ": "86%",
+      "ADR": "113%",
+      "RevPAR": "129%"
+    },
+    "STLM_Var": {
+      "Occ": "4%",
+      "ADR": "1%",
+      "RevPAR": "-7%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "7%",
+      "14_Days": "14%",
+      "30_Days": "26%"
+    },
+    "Min_Rate_Threshold": "39%",
+    "BookingCom": {
+      "Genius": "No",
+      "Mobile": "No",
+      "Pref": "No",
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "LM_Disc": "Yes"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "Yes",
+      "Member": "Yes",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "No",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "14 days 100%",
+      "Airbnb": "14 days 100%",
+      "VRBO": "5 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "2+1",
+      "Airbnb": "4+1",
+      "VRBO": "4"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "02/07/25",
+        "Last_Rev_Score": "6",
+        "Rev_Score": "10",
+        "Total_Rev": "1131"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "12/07/25",
+        "Last_Rev_Score": "4.0",
+        "Rev_Score": "4.9",
+        "Total_Rev": "134"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "23/08/25",
+        "Last_Rev_Score": "4.7",
+        "Rev_Score": "4.8",
+        "Total_Rev": "108"
+      }
+    }
+  },
+  {
+    "Listing_Name": "JBR - 1BR #47",
+    "Area": "JBR",
+    "Room_Type": "1BR",
+    "Occupancy": {
+      "7_days": "48%",
+      "30_days": "76%",
+      "TM": "68%",
+      "NM": "32%"
+    },
+    "ADR": {
+      "TM": "491",
+      "NM": "543"
+    },
+    "RevPAR": {
+      "TM": "333",
+      "NM": "173"
+    },
+    "MPI": "128%",
+    "STLY_Var": {
+      "Occ": "83%",
+      "ADR": "127%",
+      "RevPAR": "116%"
+    },
+    "STLM_Var": {
+      "Occ": "4%",
+      "ADR": "-7%",
+      "RevPAR": "2%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "3%",
+      "14_Days": "12%",
+      "30_Days": "23%"
+    },
+    "Min_Rate_Threshold": "24%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "No",
+      "Pref": "No",
+      "Weekly": "Yes",
+      "Monthly": "Yes",
+      "LM_Disc": "Yes"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "Yes",
+      "Member": "Yes",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "No",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "3 days 100%",
+      "Airbnb": "3 days 100%",
+      "VRBO": "14 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "2",
+      "Airbnb": "2+2",
+      "VRBO": "3"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "15/08/25",
+        "Last_Rev_Score": "7",
+        "Rev_Score": "10",
+        "Total_Rev": "816"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "30/06/25",
+        "Last_Rev_Score": "4.1",
+        "Rev_Score": "4.8",
+        "Total_Rev": "406"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "02/08/25",
+        "Last_Rev_Score": "3.2",
+        "Rev_Score": "4.9",
+        "Total_Rev": "281"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Dubai Creek Harbour - 2BR #48",
+    "Area": "Dubai Creek Harbour",
+    "Room_Type": "2BR",
+    "Occupancy": {
+      "7_days": "60%",
+      "30_days": "71%",
+      "TM": "74%",
+      "NM": "50%"
+    },
+    "ADR": {
+      "TM": "505",
+      "NM": "456"
+    },
+    "RevPAR": {
+      "TM": "373",
+      "NM": "228"
+    },
+    "MPI": "118%",
+    "STLY_Var": {
+      "Occ": "78%",
+      "ADR": "104%",
+      "RevPAR": "85%"
+    },
+    "STLM_Var": {
+      "Occ": "11%",
+      "ADR": "9%",
+      "RevPAR": "1%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "7%",
+      "14_Days": "7%",
+      "30_Days": "17%"
+    },
+    "Min_Rate_Threshold": "24%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "Yes",
+      "Pref": "No",
+      "Weekly": "No",
+      "Monthly": "Yes",
+      "LM_Disc": "No"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "No",
+      "Member": "No",
+      "LM_Disc": "Yes"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "Yes"
+    },
+    "CXL_Policy": {
+      "Booking": "3 days 100%",
+      "Airbnb": "14 days 100%",
+      "VRBO": "3 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "2+1",
+      "Airbnb": "4+1",
+      "VRBO": "2"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "01/08/25",
+        "Last_Rev_Score": "9",
+        "Rev_Score": "8",
+        "Total_Rev": "1155"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "13/08/25",
+        "Last_Rev_Score": "4.6",
+        "Rev_Score": "4.7",
+        "Total_Rev": "163"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "25/07/25",
+        "Last_Rev_Score": "5.0",
+        "Rev_Score": "3.6",
+        "Total_Rev": "299"
+      }
+    }
+  },
+  {
+    "Listing_Name": "Palm Jumeirah - Townhouse #49",
+    "Area": "Palm Jumeirah",
+    "Room_Type": "Townhouse",
+    "Occupancy": {
+      "7_days": "86%",
+      "30_days": "88%",
+      "TM": "59%",
+      "NM": "34%"
+    },
+    "ADR": {
+      "TM": "1154",
+      "NM": "1091"
+    },
+    "RevPAR": {
+      "TM": "680",
+      "NM": "370"
+    },
+    "MPI": "127%",
+    "STLY_Var": {
+      "Occ": "103%",
+      "ADR": "104%",
+      "RevPAR": "111%"
+    },
+    "STLM_Var": {
+      "Occ": "7%",
+      "ADR": "10%",
+      "RevPAR": "11%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "3%",
+      "14_Days": "14%",
+      "30_Days": "23%"
+    },
+    "Min_Rate_Threshold": "27%",
+    "BookingCom": {
+      "Genius": "Yes",
+      "Mobile": "No",
+      "Pref": "No",
+      "Weekly": "No",
+      "Monthly": "No",
+      "LM_Disc": "Yes"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "Yes",
+      "Member": "Yes",
+      "LM_Disc": "No"
+    },
+    "VRBO": {
+      "Weekly": "Yes",
+      "Monthly": "No"
+    },
+    "CXL_Policy": {
+      "Booking": "7 days 100%",
+      "Airbnb": "5 days 100%",
+      "VRBO": "14 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "2",
+      "Airbnb": "4",
+      "VRBO": "3"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "31/07/25",
+        "Last_Rev_Score": "10",
+        "Rev_Score": "8",
+        "Total_Rev": "845"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "11/08/25",
+        "Last_Rev_Score": "3.9",
+        "Rev_Score": "4.2",
+        "Total_Rev": "100"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "28/06/25",
+        "Last_Rev_Score": "3.9",
+        "Rev_Score": "3.9",
+        "Total_Rev": "279"
+      }
+    }
+  },
+  {
+    "Listing_Name": "JBR - Studio #50",
+    "Area": "JBR",
+    "Room_Type": "Studio",
+    "Occupancy": {
+      "7_days": "56%",
+      "30_days": "70%",
+      "TM": "78%",
+      "NM": "63%"
+    },
+    "ADR": {
+      "TM": "404",
+      "NM": "389"
+    },
+    "RevPAR": {
+      "TM": "315",
+      "NM": "245"
+    },
+    "MPI": "87%",
+    "STLY_Var": {
+      "Occ": "74%",
+      "ADR": "102%",
+      "RevPAR": "133%"
+    },
+    "STLM_Var": {
+      "Occ": "-4%",
+      "ADR": "7%",
+      "RevPAR": "-6%"
+    },
+    "Pick_Up_Occ": {
+      "7_Days": "6%",
+      "14_Days": "8%",
+      "30_Days": "10%"
+    },
+    "Min_Rate_Threshold": "16%",
+    "BookingCom": {
+      "Genius": "No",
+      "Mobile": "No",
+      "Pref": "Yes",
+      "Weekly": "No",
+      "Monthly": "No",
+      "LM_Disc": "Yes"
+    },
+    "Airbnb": {
+      "Weekly": "Yes",
+      "Monthly": "Yes",
+      "Member": "No",
+      "LM_Disc": "No"
+    },
+    "VRBO": {
+      "Weekly": "No",
+      "Monthly": "Yes"
+    },
+    "CXL_Policy": {
+      "Booking": "7 days 100%",
+      "Airbnb": "7 days 100%",
+      "VRBO": "7 days 100%"
+    },
+    "Adult_Child_Config": {
+      "Booking": "2+2",
+      "Airbnb": "4",
+      "VRBO": "3"
+    },
+    "Reviews": {
+      "Booking": {
+        "Last_Rev_Dt": "28/07/25",
+        "Last_Rev_Score": "6",
+        "Rev_Score": "10",
+        "Total_Rev": "705"
+      },
+      "Airbnb": {
+        "Last_Rev_Dt": "29/06/25",
+        "Last_Rev_Score": "3.8",
+        "Rev_Score": "4.2",
+        "Total_Rev": "66"
+      },
+      "VRBO": {
+        "Last_Rev_Dt": "21/07/25",
+        "Last_Rev_Score": "4.7",
+        "Rev_Score": "4.5",
+        "Total_Rev": "13"
+      }
+    }
+  }
+]

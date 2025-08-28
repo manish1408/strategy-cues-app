@@ -1,0 +1,588 @@
+<div class="property-details" *ngIf="property">
+  <!-- Header Section -->
+  <div class="details-header">
+    <div class="container-fluid">
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <div class="property-title">
+            <button class="btn btn-outline-secondary me-3" (click)="goBack()">
+              <i class="fas fa-arrow-left"></i> Back to Revenue
+            </button>
+            <div class="title-info">
+              <h1 class="mb-1">{{ property.Listing_Name }}</h1>
+              <div class="property-meta">
+                <span class="badge bg-light text-dark me-2">{{ property.Area }}</span>
+                <span class="badge" [ngClass]="getRoomTypeClass(property.Room_Type)">
+                  {{ property.Room_Type }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 text-end">
+          <div class="key-metrics">
+            <div class="metric">
+              <span class="metric-label">MPI</span>
+              <span class="metric-value">{{ property.MPI }}</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">RevPAR (TM)</span>
+              <span class="metric-value">${{ property.RevPAR.TM }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Tabs -->
+  <div class="details-nav">
+    <div class="container-fluid">
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link" [class.active]="activeTab === 'overview'" 
+             (click)="switchTab('overview')">
+            <i class="fas fa-chart-line me-2"></i>Overview
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [class.active]="activeTab === 'performance'" 
+             (click)="switchTab('performance')">
+            <i class="fas fa-trending-up me-2"></i>Performance
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [class.active]="activeTab === 'platforms'" 
+             (click)="switchTab('platforms')">
+            <i class="fas fa-globe me-2"></i>Platforms
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [class.active]="activeTab === 'reviews'" 
+             (click)="switchTab('reviews')">
+            <i class="fas fa-star me-2"></i>Reviews
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Tab Content -->
+  <div class="details-content">
+    <div class="container-fluid">
+      
+      <!-- Overview Tab -->
+      <div *ngIf="activeTab === 'overview'" class="tab-pane">
+        <div class="row">
+          <!-- Occupancy Section -->
+          <div class="col-lg-6 mb-4">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-calendar-alt me-2"></i>Occupancy Metrics</h5>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-6">
+                    <div class="metric-card">
+                      <div class="metric-label">This Month</div>
+                      <div class="metric-value large">{{ property.Occupancy.TM }}</div>
+                      <div class="progress mt-2" style="height: 8px;">
+                        <div class="progress-bar" [ngClass]="getOccupancyClass(property.Occupancy.TM)"
+                             [style.width.%]="property.Occupancy.TM.replace('%', '')"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="metric-card">
+                      <div class="metric-label">Next Month</div>
+                      <div class="metric-value large">{{ property.Occupancy.NM }}</div>
+                      <div class="progress mt-2" style="height: 8px;">
+                        <div class="progress-bar" [ngClass]="getOccupancyClass(property.Occupancy.NM)"
+                             [style.width.%]="property.Occupancy.NM.replace('%', '')"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col-6">
+                    <div class="metric-card small">
+                      <div class="metric-label">7 Days</div>
+                      <div class="metric-value">{{ property.Occupancy['7_days'] }}</div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="metric-card small">
+                      <div class="metric-label">30 Days</div>
+                      <div class="metric-value">{{ property.Occupancy['30_days'] }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Revenue Section -->
+          <div class="col-lg-6 mb-4">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-dollar-sign me-2"></i>Revenue Metrics</h5>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-6">
+                    <div class="metric-card">
+                      <div class="metric-label">ADR (TM)</div>
+                      <div class="metric-value large">${{ property.ADR.TM }}</div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="metric-card">
+                      <div class="metric-label">ADR (NM)</div>
+                      <div class="metric-value large">${{ property.ADR.NM }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col-6">
+                    <div class="metric-card">
+                      <div class="metric-label">RevPAR (TM)</div>
+                      <div class="metric-value large">${{ property.RevPAR.TM }}</div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="metric-card">
+                      <div class="metric-label">RevPAR (NM)</div>
+                      <div class="metric-value large">${{ property.RevPAR.NM }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pick Up Occupancy -->
+        <div class="row">
+          <div class="col-12 mb-4">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Pick Up Occupancy</h5>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="metric-card">
+                      <div class="metric-label">7 Days</div>
+                      <div class="metric-value">{{ property.Pick_Up_Occ['7_Days'] }}</div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="metric-card">
+                      <div class="metric-label">14 Days</div>
+                      <div class="metric-value">{{ property.Pick_Up_Occ['14_Days'] }}</div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="metric-card">
+                      <div class="metric-label">30 Days</div>
+                      <div class="metric-value">{{ property.Pick_Up_Occ['30_Days'] }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col-md-6">
+                    <div class="metric-card">
+                      <div class="metric-label">MPI</div>
+                      <div class="metric-value large">{{ property.MPI }}</div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="metric-card">
+                      <div class="metric-label">Min Rate Threshold</div>
+                      <div class="metric-value large">{{ property.Min_Rate_Threshold }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Performance Tab -->
+      <div *ngIf="activeTab === 'performance'" class="tab-pane">
+        <div class="row">
+          <div class="col-lg-6 mb-4">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-calendar-check me-2"></i>Same Time Last Year (STLY)</h5>
+              </div>
+              <div class="card-body">
+                <div class="performance-metric">
+                  <div class="metric-row">
+                    <span class="metric-name">Occupancy</span>
+                    <span class="metric-value" [ngClass]="getPerformanceClass(property.STLY_Var.Occ)">
+                      {{ property.STLY_Var.Occ }}
+                    </span>
+                  </div>
+                  <div class="metric-row">
+                    <span class="metric-name">ADR</span>
+                    <span class="metric-value" [ngClass]="getPerformanceClass(property.STLY_Var.ADR)">
+                      {{ property.STLY_Var.ADR }}
+                    </span>
+                  </div>
+                  <div class="metric-row">
+                    <span class="metric-name">RevPAR</span>
+                    <span class="metric-value" [ngClass]="getPerformanceClass(property.STLY_Var.RevPAR)">
+                      {{ property.STLY_Var.RevPAR }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-lg-6 mb-4">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-calendar-minus me-2"></i>Same Time Last Month (STLM)</h5>
+              </div>
+              <div class="card-body">
+                <div class="performance-metric">
+                  <div class="metric-row">
+                    <span class="metric-name">Occupancy</span>
+                    <span class="metric-value" [ngClass]="getPerformanceClass(property.STLM_Var.Occ)">
+                      {{ property.STLM_Var.Occ }}
+                    </span>
+                  </div>
+                  <div class="metric-row">
+                    <span class="metric-name">ADR</span>
+                    <span class="metric-value" [ngClass]="getPerformanceClass(property.STLM_Var.ADR)">
+                      {{ property.STLM_Var.ADR }}
+                    </span>
+                  </div>
+                  <div class="metric-row">
+                    <span class="metric-name">RevPAR</span>
+                    <span class="metric-value" [ngClass]="getPerformanceClass(property.STLM_Var.RevPAR)">
+                      {{ property.STLM_Var.RevPAR }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Platforms Tab -->
+      <div *ngIf="activeTab === 'platforms'" class="tab-pane">
+        <div class="row">
+          <!-- Booking.com -->
+          <div class="col-lg-4 mb-4">
+            <div class="card platform-card">
+              <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-bed me-2"></i>Booking.com</h5>
+              </div>
+              <div class="card-body">
+                <div class="platform-features">
+                  <div class="feature-item">
+                    <span class="feature-name">Genius Program</span>
+                    <span class="feature-status" [ngClass]="isFeatureEnabled(property.BookingCom.Genius) ? 'enabled' : 'disabled'">
+                      <i class="fas" [ngClass]="isFeatureEnabled(property.BookingCom.Genius) ? 'fa-check-circle' : 'fa-times-circle'"></i>
+                      {{ property.BookingCom.Genius }}
+                    </span>
+                  </div>
+                  <div class="feature-item">
+                    <span class="feature-name">Mobile Discount</span>
+                    <span class="feature-status" [ngClass]="isFeatureEnabled(property.BookingCom.Mobile) ? 'enabled' : 'disabled'">
+                      <i class="fas" [ngClass]="isFeatureEnabled(property.BookingCom.Mobile) ? 'fa-check-circle' : 'fa-times-circle'"></i>
+                      {{ property.BookingCom.Mobile }}
+                    </span>
+                  </div>
+                  <div class="feature-item">
+                    <span class="feature-name">Preferred Partner</span>
+                    <span class="feature-status" [ngClass]="isFeatureEnabled(property.BookingCom.Pref) ? 'enabled' : 'disabled'">
+                      <i class="fas" [ngClass]="isFeatureEnabled(property.BookingCom.Pref) ? 'fa-check-circle' : 'fa-times-circle'"></i>
+                      {{ property.BookingCom.Pref }}
+                    </span>
+                  </div>
+                  <div class="feature-item">
+                    <span class="feature-name">Weekly Discount</span>
+                    <span class="feature-status" [ngClass]="isFeatureEnabled(property.BookingCom.Weekly) ? 'enabled' : 'disabled'">
+                      <i class="fas" [ngClass]="isFeatureEnabled(property.BookingCom.Weekly) ? 'fa-check-circle' : 'fa-times-circle'"></i>
+                      {{ property.BookingCom.Weekly }}
+                    </span>
+                  </div>
+                  <div class="feature-item">
+                    <span class="feature-name">Monthly Discount</span>
+                    <span class="feature-status" [ngClass]="isFeatureEnabled(property.BookingCom.Monthly) ? 'enabled' : 'disabled'">
+                      <i class="fas" [ngClass]="isFeatureEnabled(property.BookingCom.Monthly) ? 'fa-check-circle' : 'fa-times-circle'"></i>
+                      {{ property.BookingCom.Monthly }}
+                    </span>
+                  </div>
+                  <div class="feature-item">
+                    <span class="feature-name">Last Minute Discount</span>
+                    <span class="feature-status" [ngClass]="isFeatureEnabled(property.BookingCom.LM_Disc) ? 'enabled' : 'disabled'">
+                      <i class="fas" [ngClass]="isFeatureEnabled(property.BookingCom.LM_Disc) ? 'fa-check-circle' : 'fa-times-circle'"></i>
+                      {{ property.BookingCom.LM_Disc }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Airbnb -->
+          <div class="col-lg-4 mb-4">
+            <div class="card platform-card">
+              <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="fas fa-home me-2"></i>Airbnb</h5>
+              </div>
+              <div class="card-body">
+                <div class="platform-features">
+                  <div class="feature-item">
+                    <span class="feature-name">Weekly Discount</span>
+                    <span class="feature-status" [ngClass]="isFeatureEnabled(property.Airbnb.Weekly) ? 'enabled' : 'disabled'">
+                      <i class="fas" [ngClass]="isFeatureEnabled(property.Airbnb.Weekly) ? 'fa-check-circle' : 'fa-times-circle'"></i>
+                      {{ property.Airbnb.Weekly }}
+                    </span>
+                  </div>
+                  <div class="feature-item">
+                    <span class="feature-name">Monthly Discount</span>
+                    <span class="feature-status" [ngClass]="isFeatureEnabled(property.Airbnb.Monthly) ? 'enabled' : 'disabled'">
+                      <i class="fas" [ngClass]="isFeatureEnabled(property.Airbnb.Monthly) ? 'fa-check-circle' : 'fa-times-circle'"></i>
+                      {{ property.Airbnb.Monthly }}
+                    </span>
+                  </div>
+                  <div class="feature-item">
+                    <span class="feature-name">Member Discount</span>
+                    <span class="feature-status" [ngClass]="isFeatureEnabled(property.Airbnb.Member) ? 'enabled' : 'disabled'">
+                      <i class="fas" [ngClass]="isFeatureEnabled(property.Airbnb.Member) ? 'fa-check-circle' : 'fa-times-circle'"></i>
+                      {{ property.Airbnb.Member }}
+                    </span>
+                  </div>
+                  <div class="feature-item">
+                    <span class="feature-name">Last Minute Discount</span>
+                    <span class="feature-status" [ngClass]="isFeatureEnabled(property.Airbnb.LM_Disc) ? 'enabled' : 'disabled'">
+                      <i class="fas" [ngClass]="isFeatureEnabled(property.Airbnb.LM_Disc) ? 'fa-check-circle' : 'fa-times-circle'"></i>
+                      {{ property.Airbnb.LM_Disc }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- VRBO -->
+          <div class="col-lg-4 mb-4">
+            <div class="card platform-card">
+              <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0"><i class="fas fa-building me-2"></i>VRBO</h5>
+              </div>
+              <div class="card-body">
+                <div class="platform-features">
+                  <div class="feature-item">
+                    <span class="feature-name">Weekly Discount</span>
+                    <span class="feature-status" [ngClass]="isFeatureEnabled(property.VRBO.Weekly) ? 'enabled' : 'disabled'">
+                      <i class="fas" [ngClass]="isFeatureEnabled(property.VRBO.Weekly) ? 'fa-check-circle' : 'fa-times-circle'"></i>
+                      {{ property.VRBO.Weekly }}
+                    </span>
+                  </div>
+                  <div class="feature-item">
+                    <span class="feature-name">Monthly Discount</span>
+                    <span class="feature-status" [ngClass]="isFeatureEnabled(property.VRBO.Monthly) ? 'enabled' : 'disabled'">
+                      <i class="fas" [ngClass]="isFeatureEnabled(property.VRBO.Monthly) ? 'fa-check-circle' : 'fa-times-circle'"></i>
+                      {{ property.VRBO.Monthly }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cancellation Policies -->
+        <div class="row">
+          <div class="col-12 mb-4">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-shield-alt me-2"></i>Cancellation Policies & Configuration</h5>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <h6>Cancellation Policies</h6>
+                    <div class="policy-list">
+                      <div class="policy-item">
+                        <span class="platform-name">Booking.com:</span>
+                        <span class="policy-value">{{ property.CXL_Policy.Booking }}</span>
+                      </div>
+                      <div class="policy-item">
+                        <span class="platform-name">Airbnb:</span>
+                        <span class="policy-value">{{ property.CXL_Policy.Airbnb }}</span>
+                      </div>
+                      <div class="policy-item">
+                        <span class="platform-name">VRBO:</span>
+                        <span class="policy-value">{{ property.CXL_Policy.VRBO }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <h6>Adult/Child Configuration</h6>
+                    <div class="policy-list">
+                      <div class="policy-item">
+                        <span class="platform-name">Booking.com:</span>
+                        <span class="policy-value">{{ property.Adult_Child_Config.Booking }}</span>
+                      </div>
+                      <div class="policy-item">
+                        <span class="platform-name">Airbnb:</span>
+                        <span class="policy-value">{{ property.Adult_Child_Config.Airbnb }}</span>
+                      </div>
+                      <div class="policy-item">
+                        <span class="platform-name">VRBO:</span>
+                        <span class="policy-value">{{ property.Adult_Child_Config.VRBO }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reviews Tab -->
+      <div *ngIf="activeTab === 'reviews'" class="tab-pane">
+        <div class="row">
+          <!-- Booking.com Reviews -->
+          <div class="col-lg-4 mb-4">
+            <div class="card review-card">
+              <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-bed me-2"></i>Booking.com Reviews</h5>
+              </div>
+              <div class="card-body">
+                <div class="review-summary">
+                  <div class="score-display">
+                    <span class="score-value" [ngClass]="getReviewScoreClass(property.Reviews.Booking.Rev_Score)">
+                      {{ property.Reviews.Booking.Rev_Score }}
+                    </span>
+                    <div class="score-stars">
+                      <i class="fas fa-star" *ngFor="let star of [1,2,3,4,5]; let i = index" 
+                         [ngClass]="i < Math.floor(+property.Reviews.Booking.Rev_Score) ? 'text-warning' : 'text-muted'"></i>
+                    </div>
+                  </div>
+                  <div class="review-details">
+                    <div class="detail-item">
+                      <span class="label">Total Reviews:</span>
+                      <span class="value">{{ property.Reviews.Booking.Total_Rev }}</span>
+                    </div>
+                    <div class="detail-item">
+                      <span class="label">Last Review Date:</span>
+                      <span class="value">{{ property.Reviews.Booking.Last_Rev_Dt }}</span>
+                    </div>
+                    <div class="detail-item">
+                      <span class="label">Last Review Score:</span>
+                      <span class="value">{{ property.Reviews.Booking.Last_Rev_Score }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Airbnb Reviews -->
+          <div class="col-lg-4 mb-4">
+            <div class="card review-card">
+              <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="fas fa-home me-2"></i>Airbnb Reviews</h5>
+              </div>
+              <div class="card-body">
+                <div class="review-summary">
+                  <div class="score-display">
+                    <span class="score-value" [ngClass]="getReviewScoreClass(property.Reviews.Airbnb.Rev_Score)">
+                      {{ property.Reviews.Airbnb.Rev_Score }}
+                    </span>
+                    <div class="score-stars">
+                      <i class="fas fa-star" *ngFor="let star of [1,2,3,4,5]; let i = index" 
+                         [ngClass]="i < Math.floor(+property.Reviews.Airbnb.Rev_Score) ? 'text-warning' : 'text-muted'"></i>
+                    </div>
+                  </div>
+                  <div class="review-details">
+                    <div class="detail-item">
+                      <span class="label">Total Reviews:</span>
+                      <span class="value">{{ property.Reviews.Airbnb.Total_Rev }}</span>
+                    </div>
+                    <div class="detail-item">
+                      <span class="label">Last Review Date:</span>
+                      <span class="value">{{ property.Reviews.Airbnb.Last_Rev_Dt }}</span>
+                    </div>
+                    <div class="detail-item">
+                      <span class="label">Last Review Score:</span>
+                      <span class="value">{{ property.Reviews.Airbnb.Last_Rev_Score }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- VRBO Reviews -->
+          <div class="col-lg-4 mb-4">
+            <div class="card review-card">
+              <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0"><i class="fas fa-building me-2"></i>VRBO Reviews</h5>
+              </div>
+              <div class="card-body">
+                <div class="review-summary">
+                  <div class="score-display">
+                    <span class="score-value" [ngClass]="getReviewScoreClass(property.Reviews.VRBO.Rev_Score)">
+                      {{ property.Reviews.VRBO.Rev_Score }}
+                    </span>
+                    <div class="score-stars">
+                      <i class="fas fa-star" *ngFor="let star of [1,2,3,4,5]; let i = index" 
+                         [ngClass]="i < Math.floor(+property.Reviews.VRBO.Rev_Score) ? 'text-warning' : 'text-muted'"></i>
+                    </div>
+                  </div>
+                  <div class="review-details">
+                    <div class="detail-item">
+                      <span class="label">Total Reviews:</span>
+                      <span class="value">{{ property.Reviews.VRBO.Total_Rev }}</span>
+                    </div>
+                    <div class="detail-item">
+                      <span class="label">Last Review Date:</span>
+                      <span class="value">{{ property.Reviews.VRBO.Last_Rev_Dt }}</span>
+                    </div>
+                    <div class="detail-item">
+                      <span class="label">Last Review Score:</span>
+                      <span class="value">{{ property.Reviews.VRBO.Last_Rev_Score }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Property Not Found -->
+<div *ngIf="!property" class="property-not-found">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-md-6 text-center">
+        <div class="card">
+          <div class="card-body py-5">
+            <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+            <h3>Property Not Found</h3>
+            <p class="text-muted mb-4">The requested property could not be found.</p>
+            <button class="btn btn-primary" (click)="goBack()">
+              <i class="fas fa-arrow-left me-2"></i>Back to Revenue Dashboard
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
