@@ -236,10 +236,7 @@
   font-weight: 400;
   line-height: 20px;
 }
-.dropdown-item:hover {
-  border-radius: 4px !important;
-  background: var(--Light-grey, #dfe9f2) !important;
-}
+
 .profile-dropdown {
   display: flex;
   justify-content: flex-end;
@@ -320,12 +317,7 @@
   background: none;
 }
 
-.dropdown-item:hover {
-  border-radius: 0px !important;
-  background: #FCDF46 !important;
-  overflow: hidden;
-  color: #101828 !important;
-}
+
 
 .footer-text {
   text-align: center;

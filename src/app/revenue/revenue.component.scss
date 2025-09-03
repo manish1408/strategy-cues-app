@@ -157,6 +157,10 @@ $transition: all 0.3s ease;
             color: $dark-color;
             padding: 1rem 0.75rem;
             white-space: nowrap;
+            
+            &:first-child {
+              max-width: 260px;
+            }
 
             &.sortable {
               cursor: pointer;
@@ -189,14 +193,30 @@ $transition: all 0.3s ease;
               padding: 1rem 0.75rem;
               vertical-align: middle;
               border-bottom: 1px solid #e9ecef;
+              
+              &:first-child {
+                max-width: 260px;
+              }
             }
           }
         }
 
         .property-name {
+          max-width: 260px;
+          
           strong {
             color: $dark-color;
             font-weight: 600;
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+          
+          .property-details {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
         }
 
@@ -698,7 +718,7 @@ $transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
-    align-items: center;
+    align-items: flex-start;
 
     .badge {
       font-size: 0.75rem;

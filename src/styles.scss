@@ -151,12 +151,6 @@ input:checked + .slider:before {
   line-height: 20px;
 }
 
-.dropdown-item:hover {
-  border-radius: 0px !important;
-  background: #FCDF46 !important;
-  overflow: hidden;
-  color: #101828 !important;
-}
 
 .dropdown-item.active,
 .dropdown-item:active {

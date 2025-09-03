@@ -2,156 +2,152 @@
   <!-- Controls Section -->
   <div class="row mb-4">
     <div class="col-12">
-        <div class="row align-items-end">
-          <div class="col-md-6">
-            <label class="form-label">Search Properties</label>
-            <div class="input-group">
-              <span class="input-group-text"><i class="fas fa-search"></i></span>
-              <input type="text" class="form-control" placeholder="Search by name, area, or room type..." 
-                     [(ngModel)]="searchTerm" (input)="filterData()">
-            </div>
+      <div class="row align-items-end">
+        <div class="col-md-6">
+          <label class="form-label">Search Properties</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-search"></i></span>
+            <input type="text" class="form-control" placeholder="Search by name, area, or room type..."
+              [(ngModel)]="searchTerm" (input)="filterData()">
           </div>
-          <div class="col-md-3">
-            <button class="btn btn-outline-secondary" (click)="openFilterModal()" 
-                    [class.btn-primary]="hasActiveFilters()" 
-                    [class.text-white]="hasActiveFilters()">
-              <i class="fas fa-filter me-2"></i>
-              Filters
-              <span *ngIf="getActiveFilterCount() > 0" class="badge bg-white text-primary ms-2">
-                {{ getActiveFilterCount() }}
-              </span>
+        </div>
+        <div class="col-md-3">
+          <button class="btn btn-outline-secondary" (click)="openFilterModal()" [class.btn-primary]="hasActiveFilters()"
+            [class.text-white]="hasActiveFilters()">
+            <i class="fas fa-filter me-2"></i>
+            Filters
+            <span *ngIf="getActiveFilterCount() > 0" class="badge bg-white text-primary ms-2">
+              {{ getActiveFilterCount() }}
+            </span>
+          </button>
+        </div>
+        <div class="col-md-3">
+          <div class="dropdown float-end">
+            <button class="btn btn-outline-info dropdown-toggle" type="button" id="columnVisibilityDropdown"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-columns me-2"></i>
+              Columns ({{ getVisibleColumnsCount() }})
             </button>
-          </div>
-          <div class="col-md-3">
-            <div class="dropdown">
-              <button class="btn btn-outline-info dropdown-toggle" type="button" 
-                      id="columnVisibilityDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fas fa-columns me-2"></i>
-                Columns ({{ getVisibleColumnsCount() }})
-              </button>
-              <div class="dropdown-menu dropdown-menu-end column-visibility-dropdown" 
-                   aria-labelledby="columnVisibilityDropdown">
-                <div class="dropdown-header">
-                  <strong>Show/Hide Columns</strong>
+            <div class="dropdown-menu dropdown-menu-end column-visibility-dropdown"
+              aria-labelledby="columnVisibilityDropdown">
+              <div class="dropdown-header">
+                <strong>Show/Hide Columns</strong>
+              </div>
+
+              <!-- Quick Actions -->
+              <div class="dropdown-item-text px-3 py-2 border-bottom">
+                <div class="btn-group btn-group-sm w-100" role="group">
+                  <button type="button" class="btn btn-outline-secondary" (click)="resetToDefaultColumns()">
+                    Default
+                  </button>
+                  <button type="button" class="btn btn-outline-success" (click)="showAllColumns()">
+                    All
+                  </button>
+                  <button type="button" class="btn btn-outline-danger" (click)="hideAllColumns()">
+                    None
+                  </button>
                 </div>
-                
-                <!-- Quick Actions -->
-                <div class="dropdown-item-text px-3 py-2 border-bottom">
-                  <div class="btn-group btn-group-sm w-100" role="group">
-                    <button type="button" class="btn btn-outline-secondary" (click)="resetToDefaultColumns()">
-                      Default
-                    </button>
-                    <button type="button" class="btn btn-outline-success" (click)="showAllColumns()">
-                      All
-                    </button>
-                    <button type="button" class="btn btn-outline-danger" (click)="hideAllColumns()">
-                      None
-                    </button>
-                  </div>
+              </div>
+
+              <!-- Column Checkboxes -->
+              <div class="column-checkboxes px-3">
+                <div class="form-check dropdown-item">
+                  <input class="form-check-input" type="checkbox" id="col-propertyName"
+                    [(ngModel)]="columnVisibility.propertyName" disabled>
+                  <label class="form-check-label" for="col-propertyName">
+                    Property Name
+                  </label>
                 </div>
 
-                <!-- Column Checkboxes -->
-                <div class="column-checkboxes">
-                  <div class="form-check dropdown-item">
-                    <input class="form-check-input" type="checkbox" id="col-propertyName" 
-                           [(ngModel)]="columnVisibility.propertyName" disabled>
-                    <label class="form-check-label" for="col-propertyName">
-                      Property Name
-                    </label>
-                  </div>
-                  
-                  <div class="form-check dropdown-item">
-                    <input class="form-check-input" type="checkbox" id="col-occupancy" 
-                           [(ngModel)]="columnVisibility.occupancy">
-                    <label class="form-check-label" for="col-occupancy">
-                      Occupancy
-                    </label>
-                  </div>
-                  
-                  <div class="form-check dropdown-item">
-                    <input class="form-check-input" type="checkbox" id="col-adr" 
-                           [(ngModel)]="columnVisibility.adr">
-                    <label class="form-check-label" for="col-adr">
-                      ADR
-                    </label>
-                  </div>
-                  
-                  <div class="form-check dropdown-item">
-                    <input class="form-check-input" type="checkbox" id="col-revpar" 
-                           [(ngModel)]="columnVisibility.revpar">
-                    <label class="form-check-label" for="col-revpar">
-                      RevPAR
-                    </label>
-                  </div>
-                  
-                  <div class="form-check dropdown-item">
-                    <input class="form-check-input" type="checkbox" id="col-mpi" 
-                           [(ngModel)]="columnVisibility.mpi">
-                    <label class="form-check-label" for="col-mpi">
-                      MPI
-                    </label>
-                  </div>
-                  
-                  <div class="form-check dropdown-item">
-                    <input class="form-check-input" type="checkbox" id="col-reviews" 
-                           [(ngModel)]="columnVisibility.reviews">
-                    <label class="form-check-label" for="col-reviews">
-                      Reviews
-                    </label>
-                  </div>
-                  
-                  <div class="form-check dropdown-item">
-                    <input class="form-check-input" type="checkbox" id="col-cxlPolicy" 
-                           [(ngModel)]="columnVisibility.cxlPolicy">
-                    <label class="form-check-label" for="col-cxlPolicy">
-                      CXL Policy
-                    </label>
-                  </div>
-                  
-                  <div class="form-check dropdown-item">
-                    <input class="form-check-input" type="checkbox" id="col-adultChildConfig" 
-                           [(ngModel)]="columnVisibility.adultChildConfig">
-                    <label class="form-check-label" for="col-adultChildConfig">
-                      Adult Child Config
-                    </label>
-                  </div>
-                  
-                  <div class="form-check dropdown-item">
-                    <input class="form-check-input" type="checkbox" id="col-pickupOcc" 
-                           [(ngModel)]="columnVisibility.pickupOcc">
-                    <label class="form-check-label" for="col-pickupOcc">
-                      Pick up Occ
-                    </label>
-                  </div>
-                  
-                  <div class="form-check dropdown-item">
-                    <input class="form-check-input" type="checkbox" id="col-minRateThreshold" 
-                           [(ngModel)]="columnVisibility.minRateThreshold">
-                    <label class="form-check-label" for="col-minRateThreshold">
-                      Min Rate Threshold
-                    </label>
-                  </div>
-                  
-                  <div class="form-check dropdown-item">
-                    <input class="form-check-input" type="checkbox" id="col-stlyVar" 
-                           [(ngModel)]="columnVisibility.stlyVar">
-                    <label class="form-check-label" for="col-stlyVar">
-                      STLY Var
-                    </label>
-                  </div>
-                  
-                  <div class="form-check dropdown-item">
-                    <input class="form-check-input" type="checkbox" id="col-actions" 
-                           [(ngModel)]="columnVisibility.actions" disabled>
-                    <label class="form-check-label" for="col-actions">
-                      Actions
-                    </label>
-                  </div>
+                <div class="form-check dropdown-item">
+                  <input class="form-check-input" type="checkbox" id="col-occupancy"
+                    [(ngModel)]="columnVisibility.occupancy">
+                  <label class="form-check-label" for="col-occupancy">
+                    Occupancy
+                  </label>
+                </div>
+
+                <div class="form-check dropdown-item">
+                  <input class="form-check-input" type="checkbox" id="col-adr" [(ngModel)]="columnVisibility.adr">
+                  <label class="form-check-label" for="col-adr">
+                    ADR
+                  </label>
+                </div>
+
+                <div class="form-check dropdown-item">
+                  <input class="form-check-input" type="checkbox" id="col-revpar" [(ngModel)]="columnVisibility.revpar">
+                  <label class="form-check-label" for="col-revpar">
+                    RevPAR
+                  </label>
+                </div>
+
+                <div class="form-check dropdown-item">
+                  <input class="form-check-input" type="checkbox" id="col-mpi" [(ngModel)]="columnVisibility.mpi">
+                  <label class="form-check-label" for="col-mpi">
+                    MPI
+                  </label>
+                </div>
+
+                <div class="form-check dropdown-item">
+                  <input class="form-check-input" type="checkbox" id="col-reviews"
+                    [(ngModel)]="columnVisibility.reviews">
+                  <label class="form-check-label" for="col-reviews">
+                    Reviews
+                  </label>
+                </div>
+
+                <div class="form-check dropdown-item">
+                  <input class="form-check-input" type="checkbox" id="col-cxlPolicy"
+                    [(ngModel)]="columnVisibility.cxlPolicy">
+                  <label class="form-check-label" for="col-cxlPolicy">
+                    CXL Policy
+                  </label>
+                </div>
+
+                <div class="form-check dropdown-item">
+                  <input class="form-check-input" type="checkbox" id="col-adultChildConfig"
+                    [(ngModel)]="columnVisibility.adultChildConfig">
+                  <label class="form-check-label" for="col-adultChildConfig">
+                    Adult Child Config
+                  </label>
+                </div>
+
+                <div class="form-check dropdown-item">
+                  <input class="form-check-input" type="checkbox" id="col-pickupOcc"
+                    [(ngModel)]="columnVisibility.pickupOcc">
+                  <label class="form-check-label" for="col-pickupOcc">
+                    Pick up Occ
+                  </label>
+                </div>
+
+                <div class="form-check dropdown-item">
+                  <input class="form-check-input" type="checkbox" id="col-minRateThreshold"
+                    [(ngModel)]="columnVisibility.minRateThreshold">
+                  <label class="form-check-label" for="col-minRateThreshold">
+                    Min Rate Threshold
+                  </label>
+                </div>
+
+                <div class="form-check dropdown-item">
+                  <input class="form-check-input" type="checkbox" id="col-stlyVar"
+                    [(ngModel)]="columnVisibility.stlyVar">
+                  <label class="form-check-label" for="col-stlyVar">
+                    STLY Var
+                  </label>
+                </div>
+
+                <div class="form-check dropdown-item">
+                  <input class="form-check-input" type="checkbox" id="col-actions"
+                    [(ngModel)]="columnVisibility.actions" disabled>
+                  <label class="form-check-label" for="col-actions">
+                    Actions
+                  </label>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
     </div>
   </div>
 
@@ -167,9 +163,7 @@
         </button>
       </div>
       <div class="filters-badges">
-        <span *ngFor="let filter of getAppliedFilters()" 
-              class="filter-badge" 
-              [ngClass]="'filter-' + filter.type">
+        <span *ngFor="let filter of getAppliedFilters()" class="filter-badge" [ngClass]="'filter-' + filter.type">
           <span class="filter-label">{{ filter.label }}:</span>
           <span class="filter-value">{{ filter.value }}</span>
           <button class="remove-filter" (click)="removeFilter(filter.key)" title="Remove filter">
@@ -187,7 +181,7 @@
         <table class="table table-hover">
           <thead>
             <tr>
-              <th *ngIf="columnVisibility.propertyName">Property Name</th>
+              <th style="width: 250px;" *ngIf="columnVisibility.propertyName">Property Name</th>
               <th *ngIf="columnVisibility.occupancy">Occupancy</th>
               <th *ngIf="columnVisibility.adr">ADR</th>
               <th *ngIf="columnVisibility.revpar">RevPAR</th>
@@ -198,7 +192,7 @@
               <th *ngIf="columnVisibility.pickupOcc">Pick up Occ</th>
               <th *ngIf="columnVisibility.minRateThreshold">Min Rate Threshold</th>
               <th *ngIf="columnVisibility.stlyVar">STLY Var</th>
-              <th *ngIf="columnVisibility.actions">Actions</th>
+              <th *ngIf="columnVisibility.actions"></th>
             </tr>
           </thead>
           <tbody>
@@ -217,7 +211,7 @@
                     <span class="occupancy-label">TM:</span>
                     <div class="progress" style="height: 6px;">
                       <div class="progress-bar" [ngClass]="getOccupancyClass(property.Occupancy.TM)"
-                           [style.width.%]="property.Occupancy.TM.replace('%', '')"></div>
+                        [style.width.%]="property.Occupancy.TM.replace('%', '')"></div>
                     </div>
                     <small class="occupancy-value">{{ property.Occupancy.TM }}</small>
                   </div>
@@ -225,7 +219,7 @@
                     <span class="occupancy-label">NM:</span>
                     <div class="progress" style="height: 6px;">
                       <div class="progress-bar" [ngClass]="getOccupancyClass(property.Occupancy.NM)"
-                           [style.width.%]="property.Occupancy.NM.replace('%', '')"></div>
+                        [style.width.%]="property.Occupancy.NM.replace('%', '')"></div>
                     </div>
                     <small class="occupancy-value">{{ property.Occupancy.NM }}</small>
                   </div>
@@ -258,37 +252,34 @@
               <td *ngIf="columnVisibility.reviews">
                 <div class="reviews-cell-compact">
                   <!-- Booking.com Reviews -->
-                  <div class="review-item" *ngIf="property.Reviews.Booking.Rev_Score" 
-                       title="Booking.com: {{ property.Reviews.Booking.Rev_Score }}/10 ({{ property.Reviews.Booking.Total_Rev }} reviews)">
-                    <i class="fab fa-booking text-primary"></i>
+                  <div class="review-item" *ngIf="property.Reviews.Booking.Rev_Score"
+                    title="Booking.com: {{ property.Reviews.Booking.Rev_Score }}/10 ({{ property.Reviews.Booking.Total_Rev }} reviews)">
+                    <i class="fas fa-bed text-primary"></i>
                     <div class="stars">
-                      <i *ngFor="let star of getStarArray(property.Reviews.Booking.Rev_Score, 10)" 
-                         class="fas fa-star" 
-                         [ngClass]="star.filled ? 'star-filled' : 'star-empty'"></i>
+                      <i *ngFor="let star of getStarArray(property.Reviews.Booking.Rev_Score, 10)" class="fas fa-star"
+                        [ngClass]="star.filled ? 'star-filled' : 'star-empty'"></i>
                     </div>
                     <span class="rating-text">{{ property.Reviews.Booking.Rev_Score }}</span>
                   </div>
 
                   <!-- Airbnb Reviews -->
                   <div class="review-item" *ngIf="property.Reviews.Airbnb.Rev_Score"
-                       title="Airbnb: {{ property.Reviews.Airbnb.Rev_Score }}/5 ({{ property.Reviews.Airbnb.Total_Rev }} reviews)">
+                    title="Airbnb: {{ property.Reviews.Airbnb.Rev_Score }}/5 ({{ property.Reviews.Airbnb.Total_Rev }} reviews)">
                     <i class="fab fa-airbnb text-danger"></i>
                     <div class="stars">
-                      <i *ngFor="let star of getStarArray(property.Reviews.Airbnb.Rev_Score, 5)" 
-                         class="fas fa-star" 
-                         [ngClass]="star.filled ? 'star-filled' : 'star-empty'"></i>
+                      <i *ngFor="let star of getStarArray(property.Reviews.Airbnb.Rev_Score, 5)" class="fas fa-star"
+                        [ngClass]="star.filled ? 'star-filled' : 'star-empty'"></i>
                     </div>
                     <span class="rating-text">{{ property.Reviews.Airbnb.Rev_Score }}</span>
                   </div>
 
                   <!-- VRBO Reviews -->
                   <div class="review-item" *ngIf="property.Reviews.VRBO.Rev_Score"
-                       title="VRBO: {{ property.Reviews.VRBO.Rev_Score }}/5 ({{ property.Reviews.VRBO.Total_Rev }} reviews)">
+                    title="VRBO: {{ property.Reviews.VRBO.Rev_Score }}/5 ({{ property.Reviews.VRBO.Total_Rev }} reviews)">
                     <i class="fas fa-home text-warning"></i>
                     <div class="stars">
-                      <i *ngFor="let star of getStarArray(property.Reviews.VRBO.Rev_Score, 5)" 
-                         class="fas fa-star" 
-                         [ngClass]="star.filled ? 'star-filled' : 'star-empty'"></i>
+                      <i *ngFor="let star of getStarArray(property.Reviews.VRBO.Rev_Score, 5)" class="fas fa-star"
+                        [ngClass]="star.filled ? 'star-filled' : 'star-empty'"></i>
                     </div>
                     <span class="rating-text">{{ property.Reviews.VRBO.Rev_Score }}</span>
                   </div>
@@ -297,7 +288,7 @@
               <td *ngIf="columnVisibility.cxlPolicy">
                 <div class="cxl-policy-cell">
                   <div class="policy-item" *ngIf="property.CXL_Policy.Booking">
-                    <i class="fab fa-booking text-primary"></i>
+                    <i class="fas fa-bed text-primary"></i>
                     <span class="policy-text">{{ property.CXL_Policy.Booking }}</span>
                   </div>
                   <div class="policy-item" *ngIf="property.CXL_Policy.Airbnb">
@@ -313,7 +304,7 @@
               <td *ngIf="columnVisibility.adultChildConfig">
                 <div class="adult-child-config-cell">
                   <div class="config-item" *ngIf="property.Adult_Child_Config.Booking">
-                    <i class="fab fa-booking text-primary"></i>
+                    <i class="fas fa-bed text-primary"></i>
                     <span class="config-text">{{ property.Adult_Child_Config.Booking }}</span>
                   </div>
                   <div class="config-item" *ngIf="property.Adult_Child_Config.Airbnb">
@@ -362,9 +353,9 @@
                   <button class="btn btn-outline-primary btn-sm" (click)="viewDetails(property)">
                     <i class="fas fa-eye"></i>
                   </button>
-                  <button class="btn btn-outline-info btn-sm" (click)="compareProperty(property)">
+                  <!-- <button class="btn btn-outline-info btn-sm" (click)="compareProperty(property)">
                     <i class="fas fa-balance-scale"></i>
-                  </button>
+                  </button> -->
                 </div>
               </td>
             </tr>
@@ -379,8 +370,7 @@
             <li class="page-item" [class.disabled]="currentPage === 1">
               <a class="page-link" (click)="changePage(currentPage - 1)">Previous</a>
             </li>
-            <li class="page-item" *ngFor="let page of getPageNumbers()" 
-                [class.active]="page === currentPage">
+            <li class="page-item" *ngFor="let page of getPageNumbers()" [class.active]="page === currentPage">
               <a class="page-link" (click)="changePage(page)">{{ page }}</a>
             </li>
             <li class="page-item" [class.disabled]="currentPage === totalPages">
@@ -406,24 +396,24 @@
           <!-- Filter Tabs -->
           <ul class="nav nav-tabs mb-3" id="filterTabs" role="tablist">
             <li class="nav-item" role="presentation">
-              <button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic" 
-                      type="button" role="tab" aria-controls="basic" aria-selected="true">Basic</button>
+              <button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic" type="button"
+                role="tab" aria-controls="basic" aria-selected="true">Basic</button>
             </li>
             <li class="nav-item" role="presentation">
-              <button class="nav-link" id="occupancy-tab" data-bs-toggle="tab" data-bs-target="#occupancy" 
-                      type="button" role="tab" aria-controls="occupancy" aria-selected="false">Occupancy</button>
+              <button class="nav-link" id="occupancy-tab" data-bs-toggle="tab" data-bs-target="#occupancy" type="button"
+                role="tab" aria-controls="occupancy" aria-selected="false">Occupancy</button>
             </li>
             <li class="nav-item" role="presentation">
-              <button class="nav-link" id="performance-tab" data-bs-toggle="tab" data-bs-target="#performance" 
-                      type="button" role="tab" aria-controls="performance" aria-selected="false">Performance</button>
+              <button class="nav-link" id="performance-tab" data-bs-toggle="tab" data-bs-target="#performance"
+                type="button" role="tab" aria-controls="performance" aria-selected="false">Performance</button>
             </li>
             <li class="nav-item" role="presentation">
-              <button class="nav-link" id="platforms-tab" data-bs-toggle="tab" data-bs-target="#platforms" 
-                      type="button" role="tab" aria-controls="platforms" aria-selected="false">Platforms</button>
+              <button class="nav-link" id="platforms-tab" data-bs-toggle="tab" data-bs-target="#platforms" type="button"
+                role="tab" aria-controls="platforms" aria-selected="false">Platforms</button>
             </li>
             <li class="nav-item" role="presentation">
-              <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" 
-                      type="button" role="tab" aria-controls="reviews" aria-selected="false">Reviews</button>
+              <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button"
+                role="tab" aria-controls="reviews" aria-selected="false">Reviews</button>
             </li>
 
           </ul>
@@ -440,7 +430,7 @@
                     <option *ngFor="let area of areas" [value]="area">{{ area }}</option>
                   </select>
                 </div>
-                
+
                 <!-- Room Type Filter -->
                 <div class="col-md-6 mb-3">
                   <label class="form-label">Room Type</label>
@@ -449,7 +439,7 @@
                     <option *ngFor="let type of roomTypes" [value]="type">{{ type }}</option>
                   </select>
                 </div>
-                
+
                 <!-- ADR Range Filter -->
                 <div class="col-md-6 mb-3">
                   <label class="form-label">ADR Range (TM)</label>
@@ -459,22 +449,14 @@
                       <span class="max-value">${{ tempAdrMax || adrMaxRange }}</span>
                     </div>
                     <div class="dual-range-slider">
-                      <input type="range" 
-                             [min]="adrMinRange" 
-                             [max]="adrMaxRange" 
-                             [value]="tempAdrMin || adrMinRange"
-                             (input)="onAdrMinChange($event)" 
-                             class="range-min">
-                      <input type="range" 
-                             [min]="adrMinRange" 
-                             [max]="adrMaxRange" 
-                             [value]="tempAdrMax || adrMaxRange"
-                             (input)="onAdrMaxChange($event)" 
-                             class="range-max">
+                      <input type="range" [min]="adrMinRange" [max]="adrMaxRange" [value]="tempAdrMin || adrMinRange"
+                        (input)="onAdrMinChange($event)" class="range-min">
+                      <input type="range" [min]="adrMinRange" [max]="adrMaxRange" [value]="tempAdrMax || adrMaxRange"
+                        (input)="onAdrMaxChange($event)" class="range-max">
                     </div>
                   </div>
                 </div>
-                
+
                 <!-- RevPAR Range Filter -->
                 <div class="col-md-6 mb-3">
                   <label class="form-label">RevPAR Range (TM)</label>
@@ -484,18 +466,10 @@
                       <span class="max-value">${{ tempRevparMax || revparMaxRange }}</span>
                     </div>
                     <div class="dual-range-slider">
-                      <input type="range" 
-                             [min]="revparMinRange" 
-                             [max]="revparMaxRange" 
-                             [value]="tempRevparMin || revparMinRange"
-                             (input)="onRevparMinChange($event)" 
-                             class="range-min">
-                      <input type="range" 
-                             [min]="revparMinRange" 
-                             [max]="revparMaxRange" 
-                             [value]="tempRevparMax || revparMaxRange"
-                             (input)="onRevparMaxChange($event)" 
-                             class="range-max">
+                      <input type="range" [min]="revparMinRange" [max]="revparMaxRange"
+                        [value]="tempRevparMin || revparMinRange" (input)="onRevparMinChange($event)" class="range-min">
+                      <input type="range" [min]="revparMinRange" [max]="revparMaxRange"
+                        [value]="tempRevparMax || revparMaxRange" (input)="onRevparMaxChange($event)" class="range-max">
                     </div>
                   </div>
                 </div>
@@ -509,18 +483,10 @@
                       <span class="max-value">{{ tempMpiMax || mpiMaxRange }}%</span>
                     </div>
                     <div class="dual-range-slider">
-                      <input type="range" 
-                             [min]="mpiMinRange" 
-                             [max]="mpiMaxRange" 
-                             [value]="tempMpiMin || mpiMinRange"
-                             (input)="onMpiMinChange($event)" 
-                             class="range-min">
-                      <input type="range" 
-                             [min]="mpiMinRange" 
-                             [max]="mpiMaxRange" 
-                             [value]="tempMpiMax || mpiMaxRange"
-                             (input)="onMpiMaxChange($event)" 
-                             class="range-max">
+                      <input type="range" [min]="mpiMinRange" [max]="mpiMaxRange" [value]="tempMpiMin || mpiMinRange"
+                        (input)="onMpiMinChange($event)" class="range-min">
+                      <input type="range" [min]="mpiMinRange" [max]="mpiMaxRange" [value]="tempMpiMax || mpiMaxRange"
+                        (input)="onMpiMaxChange($event)" class="range-max">
                     </div>
                   </div>
                 </div>
@@ -534,18 +500,10 @@
                       <span class="max-value">{{ tempMinRateThresholdMax || 100 }}%</span>
                     </div>
                     <div class="dual-range-slider">
-                      <input type="range" 
-                             min="0" 
-                             max="100" 
-                             [value]="tempMinRateThresholdMin || 0"
-                             (input)="onMinRateThresholdMinChange($event)" 
-                             class="range-min">
-                      <input type="range" 
-                             min="0" 
-                             max="100" 
-                             [value]="tempMinRateThresholdMax || 100"
-                             (input)="onMinRateThresholdMaxChange($event)" 
-                             class="range-max">
+                      <input type="range" min="0" max="100" [value]="tempMinRateThresholdMin || 0"
+                        (input)="onMinRateThresholdMinChange($event)" class="range-min">
+                      <input type="range" min="0" max="100" [value]="tempMinRateThresholdMax || 100"
+                        (input)="onMinRateThresholdMaxChange($event)" class="range-max">
                     </div>
                   </div>
                 </div>
@@ -565,18 +523,10 @@
                       <span class="max-value">{{ tempOccupancyTMMax || 100 }}%</span>
                     </div>
                     <div class="dual-range-slider">
-                      <input type="range" 
-                             min="0" 
-                             max="100" 
-                             [value]="tempOccupancyTMMin || 0"
-                             (input)="onOccupancyTMMinChange($event)" 
-                             class="range-min">
-                      <input type="range" 
-                             min="0" 
-                             max="100" 
-                             [value]="tempOccupancyTMMax || 100"
-                             (input)="onOccupancyTMMaxChange($event)" 
-                             class="range-max">
+                      <input type="range" min="0" max="100" [value]="tempOccupancyTMMin || 0"
+                        (input)="onOccupancyTMMinChange($event)" class="range-min">
+                      <input type="range" min="0" max="100" [value]="tempOccupancyTMMax || 100"
+                        (input)="onOccupancyTMMaxChange($event)" class="range-max">
                     </div>
                   </div>
                 </div>
@@ -590,18 +540,10 @@
                       <span class="max-value">{{ occupancyNMMax || 100 }}%</span>
                     </div>
                     <div class="dual-range-slider">
-                      <input type="range" 
-                             min="0" 
-                             max="100" 
-                             [value]="occupancyNMMin || 0"
-                             (input)="onOccupancyNMMinChange($event)" 
-                             class="range-min">
-                      <input type="range" 
-                             min="0" 
-                             max="100" 
-                             [value]="occupancyNMMax || 100"
-                             (input)="onOccupancyNMMaxChange($event)" 
-                             class="range-max">
+                      <input type="range" min="0" max="100" [value]="occupancyNMMin || 0"
+                        (input)="onOccupancyNMMinChange($event)" class="range-min">
+                      <input type="range" min="0" max="100" [value]="occupancyNMMax || 100"
+                        (input)="onOccupancyNMMaxChange($event)" class="range-max">
                     </div>
                   </div>
                 </div>
@@ -615,18 +557,10 @@
                       <span class="max-value">{{ occupancy7DaysMax || 100 }}%</span>
                     </div>
                     <div class="dual-range-slider">
-                      <input type="range" 
-                             min="0" 
-                             max="100" 
-                             [value]="occupancy7DaysMin || 0"
-                             (input)="onOccupancy7DaysMinChange($event)" 
-                             class="range-min">
-                      <input type="range" 
-                             min="0" 
-                             max="100" 
-                             [value]="occupancy7DaysMax || 100"
-                             (input)="onOccupancy7DaysMaxChange($event)" 
-                             class="range-max">
+                      <input type="range" min="0" max="100" [value]="occupancy7DaysMin || 0"
+                        (input)="onOccupancy7DaysMinChange($event)" class="range-min">
+                      <input type="range" min="0" max="100" [value]="occupancy7DaysMax || 100"
+                        (input)="onOccupancy7DaysMaxChange($event)" class="range-max">
                     </div>
                   </div>
                 </div>
@@ -640,18 +574,10 @@
                       <span class="max-value">{{ occupancy30DaysMax || 100 }}%</span>
                     </div>
                     <div class="dual-range-slider">
-                      <input type="range" 
-                             min="0" 
-                             max="100" 
-                             [value]="occupancy30DaysMin || 0"
-                             (input)="onOccupancy30DaysMinChange($event)" 
-                             class="range-min">
-                      <input type="range" 
-                             min="0" 
-                             max="100" 
-                             [value]="occupancy30DaysMax || 100"
-                             (input)="onOccupancy30DaysMaxChange($event)" 
-                             class="range-max">
+                      <input type="range" min="0" max="100" [value]="occupancy30DaysMin || 0"
+                        (input)="onOccupancy30DaysMinChange($event)" class="range-min">
+                      <input type="range" min="0" max="100" [value]="occupancy30DaysMax || 100"
+                        (input)="onOccupancy30DaysMaxChange($event)" class="range-max">
                     </div>
                   </div>
                 </div>
@@ -665,18 +591,10 @@
                       <span class="max-value">{{ pickUpOcc7DaysMax || 100 }}%</span>
                     </div>
                     <div class="dual-range-slider">
-                      <input type="range" 
-                             min="0" 
-                             max="100" 
-                             [value]="pickUpOcc7DaysMin || 0"
-                             (input)="onPickUpOcc7DaysMinChange($event)" 
-                             class="range-min">
-                      <input type="range" 
-                             min="0" 
-                             max="100" 
-                             [value]="pickUpOcc7DaysMax || 100"
-                             (input)="onPickUpOcc7DaysMaxChange($event)" 
-                             class="range-max">
+                      <input type="range" min="0" max="100" [value]="pickUpOcc7DaysMin || 0"
+                        (input)="onPickUpOcc7DaysMinChange($event)" class="range-min">
+                      <input type="range" min="0" max="100" [value]="pickUpOcc7DaysMax || 100"
+                        (input)="onPickUpOcc7DaysMaxChange($event)" class="range-max">
                     </div>
                   </div>
                 </div>
@@ -690,18 +608,10 @@
                       <span class="max-value">{{ pickUpOcc14DaysMax || 100 }}%</span>
                     </div>
                     <div class="dual-range-slider">
-                      <input type="range" 
-                             min="0" 
-                             max="100" 
-                             [value]="pickUpOcc14DaysMin || 0"
-                             (input)="onPickUpOcc14DaysMinChange($event)" 
-                             class="range-min">
-                      <input type="range" 
-                             min="0" 
-                             max="100" 
-                             [value]="pickUpOcc14DaysMax || 100"
-                             (input)="onPickUpOcc14DaysMaxChange($event)" 
-                             class="range-max">
+                      <input type="range" min="0" max="100" [value]="pickUpOcc14DaysMin || 0"
+                        (input)="onPickUpOcc14DaysMinChange($event)" class="range-min">
+                      <input type="range" min="0" max="100" [value]="pickUpOcc14DaysMax || 100"
+                        (input)="onPickUpOcc14DaysMaxChange($event)" class="range-max">
                     </div>
                   </div>
                 </div>
@@ -715,18 +625,10 @@
                       <span class="max-value">{{ pickUpOcc30DaysMax || 100 }}%</span>
                     </div>
                     <div class="dual-range-slider">
-                      <input type="range" 
-                             min="0" 
-                             max="100" 
-                             [value]="pickUpOcc30DaysMin || 0"
-                             (input)="onPickUpOcc30DaysMinChange($event)" 
-                             class="range-min">
-                      <input type="range" 
-                             min="0" 
-                             max="100" 
-                             [value]="pickUpOcc30DaysMax || 100"
-                             (input)="onPickUpOcc30DaysMaxChange($event)" 
-                             class="range-max">
+                      <input type="range" min="0" max="100" [value]="pickUpOcc30DaysMin || 0"
+                        (input)="onPickUpOcc30DaysMinChange($event)" class="range-min">
+                      <input type="range" min="0" max="100" [value]="pickUpOcc30DaysMax || 100"
+                        (input)="onPickUpOcc30DaysMaxChange($event)" class="range-max">
                     </div>
                   </div>
                 </div>
@@ -745,18 +647,12 @@
                       <span class="max-value">{{ stlyVarOccMax || stlyVarOccMaxRange }}%</span>
                     </div>
                     <div class="dual-range-slider">
-                      <input type="range" 
-                             [min]="stlyVarOccMinRange" 
-                             [max]="stlyVarOccMaxRange" 
-                             [value]="stlyVarOccMin || stlyVarOccMinRange"
-                             (input)="onStlyVarOccMinChange($event)" 
-                             class="range-min">
-                      <input type="range" 
-                             [min]="stlyVarOccMinRange" 
-                             [max]="stlyVarOccMaxRange" 
-                             [value]="stlyVarOccMax || stlyVarOccMaxRange"
-                             (input)="onStlyVarOccMaxChange($event)" 
-                             class="range-max">
+                      <input type="range" [min]="stlyVarOccMinRange" [max]="stlyVarOccMaxRange"
+                        [value]="stlyVarOccMin || stlyVarOccMinRange" (input)="onStlyVarOccMinChange($event)"
+                        class="range-min">
+                      <input type="range" [min]="stlyVarOccMinRange" [max]="stlyVarOccMaxRange"
+                        [value]="stlyVarOccMax || stlyVarOccMaxRange" (input)="onStlyVarOccMaxChange($event)"
+                        class="range-max">
                     </div>
                   </div>
                 </div>
@@ -770,18 +666,12 @@
                       <span class="max-value">{{ stlyVarADRMax || stlyVarADRMaxRange }}%</span>
                     </div>
                     <div class="dual-range-slider">
-                      <input type="range" 
-                             [min]="stlyVarADRMinRange" 
-                             [max]="stlyVarADRMaxRange" 
-                             [value]="stlyVarADRMin || stlyVarADRMinRange"
-                             (input)="onStlyVarADRMinChange($event)" 
-                             class="range-min">
-                      <input type="range" 
-                             [min]="stlyVarADRMinRange" 
-                             [max]="stlyVarADRMaxRange" 
-                             [value]="stlyVarADRMax || stlyVarADRMaxRange"
-                             (input)="onStlyVarADRMaxChange($event)" 
-                             class="range-max">
+                      <input type="range" [min]="stlyVarADRMinRange" [max]="stlyVarADRMaxRange"
+                        [value]="stlyVarADRMin || stlyVarADRMinRange" (input)="onStlyVarADRMinChange($event)"
+                        class="range-min">
+                      <input type="range" [min]="stlyVarADRMinRange" [max]="stlyVarADRMaxRange"
+                        [value]="stlyVarADRMax || stlyVarADRMaxRange" (input)="onStlyVarADRMaxChange($event)"
+                        class="range-max">
                     </div>
                   </div>
                 </div>
@@ -795,18 +685,12 @@
                       <span class="max-value">{{ stlyVarRevPARMax || stlyVarRevPARMaxRange }}%</span>
                     </div>
                     <div class="dual-range-slider">
-                      <input type="range" 
-                             [min]="stlyVarRevPARMinRange" 
-                             [max]="stlyVarRevPARMaxRange" 
-                             [value]="stlyVarRevPARMin || stlyVarRevPARMinRange"
-                             (input)="onStlyVarRevPARMinChange($event)" 
-                             class="range-min">
-                      <input type="range" 
-                             [min]="stlyVarRevPARMinRange" 
-                             [max]="stlyVarRevPARMaxRange" 
-                             [value]="stlyVarRevPARMax || stlyVarRevPARMaxRange"
-                             (input)="onStlyVarRevPARMaxChange($event)" 
-                             class="range-max">
+                      <input type="range" [min]="stlyVarRevPARMinRange" [max]="stlyVarRevPARMaxRange"
+                        [value]="stlyVarRevPARMin || stlyVarRevPARMinRange" (input)="onStlyVarRevPARMinChange($event)"
+                        class="range-min">
+                      <input type="range" [min]="stlyVarRevPARMinRange" [max]="stlyVarRevPARMaxRange"
+                        [value]="stlyVarRevPARMax || stlyVarRevPARMaxRange" (input)="onStlyVarRevPARMaxChange($event)"
+                        class="range-max">
                     </div>
                   </div>
                 </div>
@@ -820,18 +704,12 @@
                       <span class="max-value">{{ stlmVarOccMax || stlmVarOccMaxRange }}%</span>
                     </div>
                     <div class="dual-range-slider">
-                      <input type="range" 
-                             [min]="stlmVarOccMinRange" 
-                             [max]="stlmVarOccMaxRange" 
-                             [value]="stlmVarOccMin || stlmVarOccMinRange"
-                             (input)="onStlmVarOccMinChange($event)" 
-                             class="range-min">
-                      <input type="range" 
-                             [min]="stlmVarOccMinRange" 
-                             [max]="stlmVarOccMaxRange" 
-                             [value]="stlmVarOccMax || stlmVarOccMaxRange"
-                             (input)="onStlmVarOccMaxChange($event)" 
-                             class="range-max">
+                      <input type="range" [min]="stlmVarOccMinRange" [max]="stlmVarOccMaxRange"
+                        [value]="stlmVarOccMin || stlmVarOccMinRange" (input)="onStlmVarOccMinChange($event)"
+                        class="range-min">
+                      <input type="range" [min]="stlmVarOccMinRange" [max]="stlmVarOccMaxRange"
+                        [value]="stlmVarOccMax || stlmVarOccMaxRange" (input)="onStlmVarOccMaxChange($event)"
+                        class="range-max">
                     </div>
                   </div>
                 </div>
@@ -845,18 +723,12 @@
                       <span class="max-value">{{ stlmVarADRMax || stlmVarADRMaxRange }}%</span>
                     </div>
                     <div class="dual-range-slider">
-                      <input type="range" 
-                             [min]="stlmVarADRMinRange" 
-                             [max]="stlmVarADRMaxRange" 
-                             [value]="stlmVarADRMin || stlmVarADRMinRange"
-                             (input)="onStlmVarADRMinChange($event)" 
-                             class="range-min">
-                      <input type="range" 
-                             [min]="stlmVarADRMinRange" 
-                             [max]="stlmVarADRMaxRange" 
-                             [value]="stlmVarADRMax || stlmVarADRMaxRange"
-                             (input)="onStlmVarADRMaxChange($event)" 
-                             class="range-max">
+                      <input type="range" [min]="stlmVarADRMinRange" [max]="stlmVarADRMaxRange"
+                        [value]="stlmVarADRMin || stlmVarADRMinRange" (input)="onStlmVarADRMinChange($event)"
+                        class="range-min">
+                      <input type="range" [min]="stlmVarADRMinRange" [max]="stlmVarADRMaxRange"
+                        [value]="stlmVarADRMax || stlmVarADRMaxRange" (input)="onStlmVarADRMaxChange($event)"
+                        class="range-max">
                     </div>
                   </div>
                 </div>
@@ -870,18 +742,12 @@
                       <span class="max-value">{{ stlmVarRevPARMax || stlmVarRevPARMaxRange }}%</span>
                     </div>
                     <div class="dual-range-slider">
-                      <input type="range" 
-                             [min]="stlmVarRevPARMinRange" 
-                             [max]="stlmVarRevPARMaxRange" 
-                             [value]="stlmVarRevPARMin || stlmVarRevPARMinRange"
-                             (input)="onStlmVarRevPARMinChange($event)" 
-                             class="range-min">
-                      <input type="range" 
-                             [min]="stlmVarRevPARMinRange" 
-                             [max]="stlmVarRevPARMaxRange" 
-                             [value]="stlmVarRevPARMax || stlmVarRevPARMaxRange"
-                             (input)="onStlmVarRevPARMaxChange($event)" 
-                             class="range-max">
+                      <input type="range" [min]="stlmVarRevPARMinRange" [max]="stlmVarRevPARMaxRange"
+                        [value]="stlmVarRevPARMin || stlmVarRevPARMinRange" (input)="onStlmVarRevPARMinChange($event)"
+                        class="range-min">
+                      <input type="range" [min]="stlmVarRevPARMinRange" [max]="stlmVarRevPARMaxRange"
+                        [value]="stlmVarRevPARMax || stlmVarRevPARMaxRange" (input)="onStlmVarRevPARMaxChange($event)"
+                        class="range-max">
                     </div>
                   </div>
                 </div>
@@ -897,8 +763,8 @@
                 </div>
                 <div class="col-md-4 mb-3">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="bookingGenius" 
-                           [(ngModel)]="tempBookingGeniusFilter" (change)="filterData()">
+                    <input class="form-check-input" type="checkbox" id="bookingGenius"
+                      [(ngModel)]="tempBookingGeniusFilter" (change)="filterData()">
                     <label class="form-check-label" for="bookingGenius">
                       Genius Program
                     </label>
@@ -906,8 +772,8 @@
                 </div>
                 <div class="col-md-4 mb-3">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="bookingMobile" 
-                           [(ngModel)]="tempBookingMobileFilter" (change)="filterData()">
+                    <input class="form-check-input" type="checkbox" id="bookingMobile"
+                      [(ngModel)]="tempBookingMobileFilter" (change)="filterData()">
                     <label class="form-check-label" for="bookingMobile">
                       Mobile Deals
                     </label>
@@ -915,8 +781,8 @@
                 </div>
                 <div class="col-md-4 mb-3">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="bookingPref" 
-                           [(ngModel)]="tempBookingPrefFilter" (change)="filterData()">
+                    <input class="form-check-input" type="checkbox" id="bookingPref" [(ngModel)]="tempBookingPrefFilter"
+                      (change)="filterData()">
                     <label class="form-check-label" for="bookingPref">
                       Preferred Partner
                     </label>
@@ -924,8 +790,8 @@
                 </div>
                 <div class="col-md-4 mb-3">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="bookingWeekly" 
-                           [(ngModel)]="tempBookingWeeklyFilter" (change)="filterData()">
+                    <input class="form-check-input" type="checkbox" id="bookingWeekly"
+                      [(ngModel)]="tempBookingWeeklyFilter" (change)="filterData()">
                     <label class="form-check-label" for="bookingWeekly">
                       Weekly Discounts
                     </label>
@@ -933,8 +799,8 @@
                 </div>
                 <div class="col-md-4 mb-3">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="bookingMonthly" 
-                           [(ngModel)]="tempBookingMonthlyFilter" (change)="filterData()">
+                    <input class="form-check-input" type="checkbox" id="bookingMonthly"
+                      [(ngModel)]="tempBookingMonthlyFilter" (change)="filterData()">
                     <label class="form-check-label" for="bookingMonthly">
                       Monthly Discounts
                     </label>
@@ -942,8 +808,8 @@
                 </div>
                 <div class="col-md-4 mb-3">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="bookingLMDisc" 
-                           [(ngModel)]="tempBookingLMDiscFilter" (change)="filterData()">
+                    <input class="form-check-input" type="checkbox" id="bookingLMDisc"
+                      [(ngModel)]="tempBookingLMDiscFilter" (change)="filterData()">
                     <label class="form-check-label" for="bookingLMDisc">
                       Last Minute Discount
                     </label>
@@ -956,8 +822,8 @@
                 </div>
                 <div class="col-md-3 mb-3">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="airbnbWeekly" 
-                           [(ngModel)]="tempAirbnbWeeklyFilter" (change)="filterData()">
+                    <input class="form-check-input" type="checkbox" id="airbnbWeekly"
+                      [(ngModel)]="tempAirbnbWeeklyFilter" (change)="filterData()">
                     <label class="form-check-label" for="airbnbWeekly">
                       Weekly Discounts
                     </label>
@@ -965,8 +831,8 @@
                 </div>
                 <div class="col-md-3 mb-3">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="airbnbMonthly" 
-                           [(ngModel)]="tempAirbnbMonthlyFilter" (change)="filterData()">
+                    <input class="form-check-input" type="checkbox" id="airbnbMonthly"
+                      [(ngModel)]="tempAirbnbMonthlyFilter" (change)="filterData()">
                     <label class="form-check-label" for="airbnbMonthly">
                       Monthly Discounts
                     </label>
@@ -974,8 +840,8 @@
                 </div>
                 <div class="col-md-3 mb-3">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="airbnbMember" 
-                           [(ngModel)]="tempAirbnbMemberFilter" (change)="filterData()">
+                    <input class="form-check-input" type="checkbox" id="airbnbMember"
+                      [(ngModel)]="tempAirbnbMemberFilter" (change)="filterData()">
                     <label class="form-check-label" for="airbnbMember">
                       Member Discount
                     </label>
@@ -983,8 +849,8 @@
                 </div>
                 <div class="col-md-3 mb-3">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="airbnbLMDisc" 
-                           [(ngModel)]="tempAirbnbLMDiscFilter" (change)="filterData()">
+                    <input class="form-check-input" type="checkbox" id="airbnbLMDisc"
+                      [(ngModel)]="tempAirbnbLMDiscFilter" (change)="filterData()">
                     <label class="form-check-label" for="airbnbLMDisc">
                       Last Minute Discount
                     </label>
@@ -997,8 +863,8 @@
                 </div>
                 <div class="col-md-6 mb-3">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="vrboWeekly" 
-                           [(ngModel)]="tempVrboWeeklyFilter" (change)="filterData()">
+                    <input class="form-check-input" type="checkbox" id="vrboWeekly" [(ngModel)]="tempVrboWeeklyFilter"
+                      (change)="filterData()">
                     <label class="form-check-label" for="vrboWeekly">
                       Weekly Discounts
                     </label>
@@ -1006,8 +872,8 @@
                 </div>
                 <div class="col-md-6 mb-3">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="vrboMonthly" 
-                           [(ngModel)]="tempVrboMonthlyFilter" (change)="filterData()">
+                    <input class="form-check-input" type="checkbox" id="vrboMonthly" [(ngModel)]="tempVrboMonthlyFilter"
+                      (change)="filterData()">
                     <label class="form-check-label" for="vrboMonthly">
                       Monthly Discounts
                     </label>
@@ -1031,20 +897,10 @@
                       <span class="max-value">{{ tempBookingRevScoreMax || 10 }}</span>
                     </div>
                     <div class="dual-range-slider">
-                      <input type="range" 
-                             min="0" 
-                             max="10" 
-                             step="0.1"
-                             [value]="tempBookingRevScoreMin || 0"
-                             (input)="onBookingRevScoreMinChange($event)" 
-                             class="range-min">
-                      <input type="range" 
-                             min="0" 
-                             max="10" 
-                             step="0.1"
-                             [value]="tempBookingRevScoreMax || 10"
-                             (input)="onBookingRevScoreMaxChange($event)" 
-                             class="range-max">
+                      <input type="range" min="0" max="10" step="0.1" [value]="tempBookingRevScoreMin || 0"
+                        (input)="onBookingRevScoreMinChange($event)" class="range-min">
+                      <input type="range" min="0" max="10" step="0.1" [value]="tempBookingRevScoreMax || 10"
+                        (input)="onBookingRevScoreMaxChange($event)" class="range-max">
                     </div>
                   </div>
                 </div>
@@ -1056,18 +912,12 @@
                       <span class="max-value">{{ tempBookingTotalRevMax || bookingTotalRevMaxRange }}</span>
                     </div>
                     <div class="dual-range-slider">
-                      <input type="range" 
-                             [min]="bookingTotalRevMinRange" 
-                             [max]="bookingTotalRevMaxRange" 
-                             [value]="tempBookingTotalRevMin || bookingTotalRevMinRange"
-                             (input)="onBookingTotalRevMinChange($event)" 
-                             class="range-min">
-                      <input type="range" 
-                             [min]="bookingTotalRevMinRange" 
-                             [max]="bookingTotalRevMaxRange" 
-                             [value]="tempBookingTotalRevMax || bookingTotalRevMaxRange"
-                             (input)="onBookingTotalRevMaxChange($event)" 
-                             class="range-max">
+                      <input type="range" [min]="bookingTotalRevMinRange" [max]="bookingTotalRevMaxRange"
+                        [value]="tempBookingTotalRevMin || bookingTotalRevMinRange"
+                        (input)="onBookingTotalRevMinChange($event)" class="range-min">
+                      <input type="range" [min]="bookingTotalRevMinRange" [max]="bookingTotalRevMaxRange"
+                        [value]="tempBookingTotalRevMax || bookingTotalRevMaxRange"
+                        (input)="onBookingTotalRevMaxChange($event)" class="range-max">
                     </div>
                   </div>
                 </div>
@@ -1084,20 +934,10 @@
                       <span class="max-value">{{ tempAirbnbRevScoreMax || 5 }}</span>
                     </div>
                     <div class="dual-range-slider">
-                      <input type="range" 
-                             min="0" 
-                             max="5" 
-                             step="0.1"
-                             [value]="tempAirbnbRevScoreMin || 0"
-                             (input)="onAirbnbRevScoreMinChange($event)" 
-                             class="range-min">
-                      <input type="range" 
-                             min="0" 
-                             max="5" 
-                             step="0.1"
-                             [value]="tempAirbnbRevScoreMax || 5"
-                             (input)="onAirbnbRevScoreMaxChange($event)" 
-                             class="range-max">
+                      <input type="range" min="0" max="5" step="0.1" [value]="tempAirbnbRevScoreMin || 0"
+                        (input)="onAirbnbRevScoreMinChange($event)" class="range-min">
+                      <input type="range" min="0" max="5" step="0.1" [value]="tempAirbnbRevScoreMax || 5"
+                        (input)="onAirbnbRevScoreMaxChange($event)" class="range-max">
                     </div>
                   </div>
                 </div>
@@ -1109,18 +949,12 @@
                       <span class="max-value">{{ tempAirbnbTotalRevMax || airbnbTotalRevMaxRange }}</span>
                     </div>
                     <div class="dual-range-slider">
-                      <input type="range" 
-                             [min]="airbnbTotalRevMinRange" 
-                             [max]="airbnbTotalRevMaxRange" 
-                             [value]="tempAirbnbTotalRevMin || airbnbTotalRevMinRange"
-                             (input)="onAirbnbTotalRevMinChange($event)" 
-                             class="range-min">
-                      <input type="range" 
-                             [min]="airbnbTotalRevMinRange" 
-                             [max]="airbnbTotalRevMaxRange" 
-                             [value]="tempAirbnbTotalRevMax || airbnbTotalRevMaxRange"
-                             (input)="onAirbnbTotalRevMaxChange($event)" 
-                             class="range-max">
+                      <input type="range" [min]="airbnbTotalRevMinRange" [max]="airbnbTotalRevMaxRange"
+                        [value]="tempAirbnbTotalRevMin || airbnbTotalRevMinRange"
+                        (input)="onAirbnbTotalRevMinChange($event)" class="range-min">
+                      <input type="range" [min]="airbnbTotalRevMinRange" [max]="airbnbTotalRevMaxRange"
+                        [value]="tempAirbnbTotalRevMax || airbnbTotalRevMaxRange"
+                        (input)="onAirbnbTotalRevMaxChange($event)" class="range-max">
                     </div>
                   </div>
                 </div>
@@ -1137,20 +971,10 @@
                       <span class="max-value">{{ tempVrboRevScoreMax || 5 }}</span>
                     </div>
                     <div class="dual-range-slider">
-                      <input type="range" 
-                             min="0" 
-                             max="5" 
-                             step="0.1"
-                             [value]="tempVrboRevScoreMin || 0"
-                             (input)="onVrboRevScoreMinChange($event)" 
-                             class="range-min">
-                      <input type="range" 
-                             min="0" 
-                             max="5" 
-                             step="0.1"
-                             [value]="tempVrboRevScoreMax || 5"
-                             (input)="onVrboRevScoreMaxChange($event)" 
-                             class="range-max">
+                      <input type="range" min="0" max="5" step="0.1" [value]="tempVrboRevScoreMin || 0"
+                        (input)="onVrboRevScoreMinChange($event)" class="range-min">
+                      <input type="range" min="0" max="5" step="0.1" [value]="tempVrboRevScoreMax || 5"
+                        (input)="onVrboRevScoreMaxChange($event)" class="range-max">
                     </div>
                   </div>
                 </div>
@@ -1162,18 +986,12 @@
                       <span class="max-value">{{ tempVrboTotalRevMax || vrboTotalRevMaxRange }}</span>
                     </div>
                     <div class="dual-range-slider">
-                      <input type="range" 
-                             [min]="vrboTotalRevMinRange" 
-                             [max]="vrboTotalRevMaxRange" 
-                             [value]="tempVrboTotalRevMin || vrboTotalRevMinRange"
-                             (input)="onVrboTotalRevMinChange($event)" 
-                             class="range-min">
-                      <input type="range" 
-                             [min]="vrboTotalRevMinRange" 
-                             [max]="vrboTotalRevMaxRange" 
-                             [value]="tempVrboTotalRevMax || vrboTotalRevMaxRange"
-                             (input)="onVrboTotalRevMaxChange($event)" 
-                             class="range-max">
+                      <input type="range" [min]="vrboTotalRevMinRange" [max]="vrboTotalRevMaxRange"
+                        [value]="tempVrboTotalRevMin || vrboTotalRevMinRange" (input)="onVrboTotalRevMinChange($event)"
+                        class="range-min">
+                      <input type="range" [min]="vrboTotalRevMinRange" [max]="vrboTotalRevMaxRange"
+                        [value]="tempVrboTotalRevMax || vrboTotalRevMaxRange" (input)="onVrboTotalRevMaxChange($event)"
+                        class="range-max">
                     </div>
                   </div>
                 </div>
