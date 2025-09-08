@@ -517,19 +517,19 @@ $transition: all 0.3s ease;
     font-weight: 600;
 
     .min-value {
-      color: #007bff;
-      background: #e3f2fd;
+      color: #000000;
+      background: #eee;
       padding: 0.25rem 0.5rem;
       border-radius: 0.25rem;
-      border: 1px solid #bbdefb;
+      border: 1px solid #ccc;
     }
 
     .max-value {
-      color: #007bff;
-      background: #e3f2fd;
+      color: #000000;
+      background: #eee;
       padding: 0.25rem 0.5rem;
       border-radius: 0.25rem;
-      border: 1px solid #bbdefb;
+      border: 1px solid #ccc;
     }
   }
 
@@ -556,7 +556,7 @@ $transition: all 0.3s ease;
         height: 18px;
         width: 18px;
         border-radius: 50%;
-        background: #007bff;
+        background: #000000;
         cursor: pointer;
         pointer-events: all;
         border: 2px solid #fff;
@@ -564,7 +564,7 @@ $transition: all 0.3s ease;
         transition: all 0.2s ease;
 
         &:hover {
-          background: #0056b3;
+          background: #000000;
           transform: scale(1.1);
           box-shadow: 0 3px 8px rgba(0, 123, 255, 0.4);
         }
@@ -574,7 +574,7 @@ $transition: all 0.3s ease;
         height: 18px;
         width: 18px;
         border-radius: 50%;
-        background: #007bff;
+        background: #000000;
         cursor: pointer;
         pointer-events: all;
         border: 2px solid #fff;
@@ -582,7 +582,7 @@ $transition: all 0.3s ease;
         transition: all 0.2s ease;
 
         &:hover {
-          background: #0056b3;
+          background: #000000;
           transform: scale(1.1);
           box-shadow: 0 3px 8px rgba(0, 123, 255, 0.4);
         }
@@ -629,7 +629,7 @@ $transition: all 0.3s ease;
       content: '';
       position: absolute;
       height: 6px;
-      background: #007bff;
+      background: #000000;
       border-radius: 3px;
       z-index: 0;
       left: 0;
@@ -798,12 +798,12 @@ $transition: all 0.3s ease;
         }
 
         &.filter-basic {
-          border-color: #007bff;
+          border-color: #000000;
           background: #e3f2fd;
           color: #0d47a1;
 
           .filter-label {
-            color: #1976d2;
+            color: #000000;
           }
         }
 
@@ -1615,6 +1615,135 @@ $transition: all 0.3s ease;
       .form-check-label {
         font-size: 0.75rem;
       }
+    }
+  }
+}
+
+// Three-point slider styles
+.three-point-slider {
+  position: relative;
+  height: 25px;
+  width: 90px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: $transition;
+
+
+  .slider-track {
+    position: absolute;
+    width: 100%;
+    height: 25px;
+    background: #e9ecef;
+    border-radius: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 23px;
+  }
+
+  .slider-thumb {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    background: white;
+    border: 3px solid $primary-color;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: $transition;
+    z-index: 2;
+    top: 50%;
+    transform: translateY(-50%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: #fff;
+    font-size: 9px;
+    line-height: 17px;
+    text-align: center;
+
+    &.not-present {
+      left: 4px;
+      background: #6c757d;
+      border-color: #6c757d;
+    }
+
+    &.no {
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%);
+      background: $danger-color;
+      border-color: $danger-color;
+
+      &:hover {
+        transform: translateX(-50%) translateY(-50%) scale(1.1);
+      }
+    }
+
+    &.yes {
+      right: 4px;
+      background: $success-color;
+      border-color: $success-color;
+    }
+  }
+
+  .slider-labels {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    z-index: 1;
+
+    .label {
+      color: #6c757d;
+      transition: $transition;
+      cursor: pointer;
+
+      &.active {
+        color: white;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+      }
+
+      &.not-present.active {
+        color: white;
+      }
+
+      &.no.active {
+        color: white;
+      }
+
+      &.yes.active {
+        color: white;
+      }
+    }
+  }
+}
+
+.slider-container {
+  margin-bottom: 1rem;
+
+  .slider-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: $dark-color;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .current-value {
+    font-size: 0.8rem;
+    color: $secondary-color;
+    margin-top: 0.25rem;
+    text-align: center;
+
+    &.not-present {
+      color: #6c757d;
+    }
+
+    &.no {
+      color: $danger-color;
+    }
+
+    &.yes {
+      color: $success-color;
     }
   }
 }

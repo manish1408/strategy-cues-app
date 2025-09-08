@@ -826,57 +826,107 @@
                   <h6 class="fw-bold text-primary">Booking.com Features</h6>
                 </div>
                 <div class="col-md-4 mb-3">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="bookingGenius"
-                      [(ngModel)]="tempBookingGeniusFilter" (change)="filterData()">
-                    <label class="form-check-label">
-                      Genius Program
-                    </label>
+                  <div class="slider-container">
+                    <label class="slider-label">Genius Program</label>
+                    <div class="three-point-slider" (click)="onThreePointSliderChange('bookingGenius', getNextSliderValue(tempBookingGeniusFilter))">
+                      <div class="slider-track"></div>
+                      <div class="slider-thumb" [class]="tempBookingGeniusFilter">
+                        {{ getSliderDisplayValue(tempBookingGeniusFilter) }}
+                      </div>
+                      <div class="slider-labels">
+                        <span class="label not-present" [class.active]="tempBookingGeniusFilter === 'not-present'" 
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingGenius', 'not-present')"></span>
+                        <span class="label no" [class.active]="tempBookingGeniusFilter === 'no'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingGenius', 'no')"></span>
+                        <span class="label yes" [class.active]="tempBookingGeniusFilter === 'yes'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingGenius', 'yes')"></span>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-4 mb-3">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="bookingMobile"
-                      [(ngModel)]="tempBookingMobileFilter" (change)="filterData()">
-                    <label class="form-check-label">
-                      Mobile Deals
-                    </label>
+                  <div class="slider-container">
+                    <label class="slider-label">Mobile Deals</label>
+                    <div class="three-point-slider" (click)="onThreePointSliderChange('bookingMobile', getNextSliderValue(tempBookingMobileFilter))">
+                      <div class="slider-track"></div>
+                      <div class="slider-thumb" [class]="tempBookingMobileFilter">{{ getSliderDisplayValue(tempBookingMobileFilter) }}</div>
+                      <div class="slider-labels">
+                        <span class="label not-present" [class.active]="tempBookingMobileFilter === 'not-present'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingMobile', 'not-present')"></span>
+                        <span class="label no" [class.active]="tempBookingMobileFilter === 'no'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingMobile', 'no')"></span>
+                        <span class="label yes" [class.active]="tempBookingMobileFilter === 'yes'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingMobile', 'yes')"></span>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-4 mb-3">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="bookingPref" [(ngModel)]="tempBookingPrefFilter"
-                      (change)="filterData()">
-                    <label class="form-check-label">
-                      Preferred Partner
-                    </label>
+                  <div class="slider-container">
+                    <label class="slider-label">Preferred Partner</label>
+                    <div class="three-point-slider" (click)="onThreePointSliderChange('bookingPref', getNextSliderValue(tempBookingPrefFilter))">
+                      <div class="slider-track"></div>
+                      <div class="slider-thumb" [class]="tempBookingPrefFilter">{{ getSliderDisplayValue(tempBookingPrefFilter) }}</div>
+                      <div class="slider-labels">
+                        <span class="label not-present" [class.active]="tempBookingPrefFilter === 'not-present'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingPref', 'not-present')"></span>
+                        <span class="label no" [class.active]="tempBookingPrefFilter === 'no'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingPref', 'no')"></span>
+                        <span class="label yes" [class.active]="tempBookingPrefFilter === 'yes'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingPref', 'yes')"></span>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-4 mb-3">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="bookingWeekly"
-                      [(ngModel)]="tempBookingWeeklyFilter" (change)="filterData()">
-                    <label class="form-check-label">
-                      Weekly Discounts
-                    </label>
+                  <div class="slider-container">
+                    <label class="slider-label">Weekly Discounts</label>
+                    <div class="three-point-slider" (click)="onThreePointSliderChange('bookingWeekly', getNextSliderValue(tempBookingWeeklyFilter))">
+                      <div class="slider-track"></div>
+                      <div class="slider-thumb" [class]="tempBookingWeeklyFilter">{{ getSliderDisplayValue(tempBookingWeeklyFilter) }}</div>
+                      <div class="slider-labels">
+                        <span class="label not-present" [class.active]="tempBookingWeeklyFilter === 'not-present'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingWeekly', 'not-present')"></span>
+                        <span class="label no" [class.active]="tempBookingWeeklyFilter === 'no'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingWeekly', 'no')"></span>
+                        <span class="label yes" [class.active]="tempBookingWeeklyFilter === 'yes'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingWeekly', 'yes')"></span>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-4 mb-3">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="bookingMonthly"
-                      [(ngModel)]="tempBookingMonthlyFilter" (change)="filterData()">
-                    <label class="form-check-label">
-                      Monthly Discounts
-                    </label>
+                  <div class="slider-container">
+                    <label class="slider-label">Monthly Discounts</label>
+                    <div class="three-point-slider" (click)="onThreePointSliderChange('bookingMonthly', getNextSliderValue(tempBookingMonthlyFilter))">
+                      <div class="slider-track"></div>
+                      <div class="slider-thumb" [class]="tempBookingMonthlyFilter">{{ getSliderDisplayValue(tempBookingMonthlyFilter) }}</div>
+                      <div class="slider-labels">
+                        <span class="label not-present" [class.active]="tempBookingMonthlyFilter === 'not-present'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingMonthly', 'not-present')"></span>
+                        <span class="label no" [class.active]="tempBookingMonthlyFilter === 'no'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingMonthly', 'no')"></span>
+                        <span class="label yes" [class.active]="tempBookingMonthlyFilter === 'yes'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingMonthly', 'yes')"></span>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-4 mb-3">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="bookingLMDisc"
-                      [(ngModel)]="tempBookingLMDiscFilter" (change)="filterData()">
-                    <label class="form-check-label">
-                      Last Minute Discount
-                    </label>
+                  <div class="slider-container">
+                    <label class="slider-label">Last Minute Discount</label>
+                    <div class="three-point-slider" (click)="onThreePointSliderChange('bookingLMDisc', getNextSliderValue(tempBookingLMDiscFilter))">
+                      <div class="slider-track"></div>
+                      <div class="slider-thumb" [class]="tempBookingLMDiscFilter">{{ getSliderDisplayValue(tempBookingLMDiscFilter) }}</div>
+                      <div class="slider-labels">
+                        <span class="label not-present" [class.active]="tempBookingLMDiscFilter === 'not-present'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingLMDisc', 'not-present')"></span>
+                        <span class="label no" [class.active]="tempBookingLMDiscFilter === 'no'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingLMDisc', 'no')"></span>
+                        <span class="label yes" [class.active]="tempBookingLMDiscFilter === 'yes'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingLMDisc', 'yes')"></span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -885,39 +935,71 @@
                   <h6 class="fw-bold text-danger">Airbnb Features</h6>
                 </div>
                 <div class="col-md-3 mb-3">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="airbnbWeekly"
-                      [(ngModel)]="tempAirbnbWeeklyFilter" (change)="filterData()">
-                    <label class="form-check-label">
-                      Weekly Discounts
-                    </label>
+                  <div class="slider-container">
+                    <label class="slider-label">Weekly Discounts</label>
+                    <div class="three-point-slider" (click)="onThreePointSliderChange('airbnbWeekly', getNextSliderValue(tempAirbnbWeeklyFilter))">
+                      <div class="slider-track"></div>
+                      <div class="slider-thumb" [class]="tempAirbnbWeeklyFilter">{{ getSliderDisplayValue(tempAirbnbWeeklyFilter) }}</div>
+                      <div class="slider-labels">
+                        <span class="label not-present" [class.active]="tempAirbnbWeeklyFilter === 'not-present'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbWeekly', 'not-present')"></span>
+                        <span class="label no" [class.active]="tempAirbnbWeeklyFilter === 'no'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbWeekly', 'no')"></span>
+                        <span class="label yes" [class.active]="tempAirbnbWeeklyFilter === 'yes'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbWeekly', 'yes')"></span>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-3 mb-3">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="airbnbMonthly"
-                      [(ngModel)]="tempAirbnbMonthlyFilter" (change)="filterData()">
-                    <label class="form-check-label">
-                      Monthly Discounts
-                    </label>
+                  <div class="slider-container">
+                    <label class="slider-label">Monthly Discounts</label>
+                    <div class="three-point-slider" (click)="onThreePointSliderChange('airbnbMonthly', getNextSliderValue(tempAirbnbMonthlyFilter))">
+                      <div class="slider-track"></div>
+                      <div class="slider-thumb" [class]="tempAirbnbMonthlyFilter">{{ getSliderDisplayValue(tempAirbnbMonthlyFilter) }}</div>
+                      <div class="slider-labels">
+                        <span class="label not-present" [class.active]="tempAirbnbMonthlyFilter === 'not-present'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbMonthly', 'not-present')"></span>
+                        <span class="label no" [class.active]="tempAirbnbMonthlyFilter === 'no'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbMonthly', 'no')"></span>
+                        <span class="label yes" [class.active]="tempAirbnbMonthlyFilter === 'yes'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbMonthly', 'yes')"></span>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-3 mb-3">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="airbnbMember"
-                      [(ngModel)]="tempAirbnbMemberFilter" (change)="filterData()">
-                    <label class="form-check-label">
-                      Member Discount
-                    </label>
+                  <div class="slider-container">
+                    <label class="slider-label">Member Discount</label>
+                    <div class="three-point-slider" (click)="onThreePointSliderChange('airbnbMember', getNextSliderValue(tempAirbnbMemberFilter))">
+                      <div class="slider-track"></div>
+                      <div class="slider-thumb" [class]="tempAirbnbMemberFilter">{{ getSliderDisplayValue(tempAirbnbMemberFilter) }}</div>
+                      <div class="slider-labels">
+                        <span class="label not-present" [class.active]="tempAirbnbMemberFilter === 'not-present'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbMember', 'not-present')"></span>
+                        <span class="label no" [class.active]="tempAirbnbMemberFilter === 'no'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbMember', 'no')"></span>
+                        <span class="label yes" [class.active]="tempAirbnbMemberFilter === 'yes'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbMember', 'yes')"></span>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-3 mb-3">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="airbnbLMDisc"
-                      [(ngModel)]="tempAirbnbLMDiscFilter" (change)="filterData()">
-                    <label class="form-check-label">
-                      Last Minute Discount
-                    </label>
+                  <div class="slider-container">
+                    <label class="slider-label">Last Minute Discount</label>
+                    <div class="three-point-slider" (click)="onThreePointSliderChange('airbnbLMDisc', getNextSliderValue(tempAirbnbLMDiscFilter))">
+                      <div class="slider-track"></div>
+                      <div class="slider-thumb" [class]="tempAirbnbLMDiscFilter">{{ getSliderDisplayValue(tempAirbnbLMDiscFilter) }}</div>
+                      <div class="slider-labels">
+                        <span class="label not-present" [class.active]="tempAirbnbLMDiscFilter === 'not-present'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbLMDisc', 'not-present')"></span>
+                        <span class="label no" [class.active]="tempAirbnbLMDiscFilter === 'no'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbLMDisc', 'no')"></span>
+                        <span class="label yes" [class.active]="tempAirbnbLMDiscFilter === 'yes'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbLMDisc', 'yes')"></span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -926,21 +1008,37 @@
                   <h6 class="fw-bold text-warning">VRBO Features</h6>
                 </div>
                 <div class="col-md-6 mb-3">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="vrboWeekly" [(ngModel)]="tempVrboWeeklyFilter"
-                      (change)="filterData()">
-                    <label class="form-check-label">
-                      Weekly Discounts
-                    </label>
+                  <div class="slider-container">
+                    <label class="slider-label">Weekly Discounts</label>
+                    <div class="three-point-slider" (click)="onThreePointSliderChange('vrboWeekly', getNextSliderValue(tempVrboWeeklyFilter))">
+                      <div class="slider-track"></div>
+                      <div class="slider-thumb" [class]="tempVrboWeeklyFilter">{{ getSliderDisplayValue(tempVrboWeeklyFilter) }}</div>
+                      <div class="slider-labels">
+                        <span class="label not-present" [class.active]="tempVrboWeeklyFilter === 'not-present'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('vrboWeekly', 'not-present')"></span>
+                        <span class="label no" [class.active]="tempVrboWeeklyFilter === 'no'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('vrboWeekly', 'no')"></span>
+                        <span class="label yes" [class.active]="tempVrboWeeklyFilter === 'yes'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('vrboWeekly', 'yes')"></span>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-6 mb-3">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="vrboMonthly" [(ngModel)]="tempVrboMonthlyFilter"
-                      (change)="filterData()">
-                    <label class="form-check-label">
-                      Monthly Discounts
-                    </label>
+                  <div class="slider-container">
+                    <label class="slider-label">Monthly Discounts</label>
+                    <div class="three-point-slider" (click)="onThreePointSliderChange('vrboMonthly', getNextSliderValue(tempVrboMonthlyFilter))">
+                      <div class="slider-track"></div>
+                      <div class="slider-thumb" [class]="tempVrboMonthlyFilter">{{ getSliderDisplayValue(tempVrboMonthlyFilter) }}</div>
+                      <div class="slider-labels">
+                        <span class="label not-present" [class.active]="tempVrboMonthlyFilter === 'not-present'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('vrboMonthly', 'not-present')"></span>
+                        <span class="label no" [class.active]="tempVrboMonthlyFilter === 'no'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('vrboMonthly', 'no')"></span>
+                        <span class="label yes" [class.active]="tempVrboMonthlyFilter === 'yes'"
+                              (click)="$event.stopPropagation(); onThreePointSliderChange('vrboMonthly', 'yes')"></span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

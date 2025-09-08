@@ -162,23 +162,23 @@ export class RevenueComponent implements OnInit {
   stlmVarRevPARMin: number | null = null;
   stlmVarRevPARMax: number | null = null;
 
-  // Platform filter properties - Booking.com
-  bookingGeniusFilter: boolean = false;
-  bookingMobileFilter: boolean = false;
-  bookingPrefFilter: boolean = false;
-  bookingWeeklyFilter: boolean = false;
-  bookingMonthlyFilter: boolean = false;
-  bookingLMDiscFilter: boolean = false;
+  // Platform filter properties - Booking.com (three-state: 'not-present', 'yes', 'no')
+  bookingGeniusFilter: string = 'not-present';
+  bookingMobileFilter: string = 'not-present';
+  bookingPrefFilter: string = 'not-present';
+  bookingWeeklyFilter: string = 'not-present';
+  bookingMonthlyFilter: string = 'not-present';
+  bookingLMDiscFilter: string = 'not-present';
 
-  // Platform filter properties - Airbnb
-  airbnbWeeklyFilter: boolean = false;
-  airbnbMonthlyFilter: boolean = false;
-  airbnbMemberFilter: boolean = false;
-  airbnbLMDiscFilter: boolean = false;
+  // Platform filter properties - Airbnb (three-state: 'not-present', 'yes', 'no')
+  airbnbWeeklyFilter: string = 'not-present';
+  airbnbMonthlyFilter: string = 'not-present';
+  airbnbMemberFilter: string = 'not-present';
+  airbnbLMDiscFilter: string = 'not-present';
 
-  // Platform filter properties - VRBO
-  vrboWeeklyFilter: boolean = false;
-  vrboMonthlyFilter: boolean = false;
+  // Platform filter properties - VRBO (three-state: 'not-present', 'yes', 'no')
+  vrboWeeklyFilter: string = 'not-present';
+  vrboMonthlyFilter: string = 'not-present';
 
   // Reviews filter properties - Booking.com
   bookingRevScoreMin: number | null = null;
@@ -244,23 +244,23 @@ export class RevenueComponent implements OnInit {
   tempStlmVarRevPARMin: number | null = null;
   tempStlmVarRevPARMax: number | null = null;
 
-  // Temporary Platform filter properties - Booking.com
-  tempBookingGeniusFilter: boolean = false;
-  tempBookingMobileFilter: boolean = false;
-  tempBookingPrefFilter: boolean = false;
-  tempBookingWeeklyFilter: boolean = false;
-  tempBookingMonthlyFilter: boolean = false;
-  tempBookingLMDiscFilter: boolean = false;
+  // Temporary Platform filter properties - Booking.com (three-state: 'not-present', 'yes', 'no')
+  tempBookingGeniusFilter: string = 'not-present';
+  tempBookingMobileFilter: string = 'not-present';
+  tempBookingPrefFilter: string = 'not-present';
+  tempBookingWeeklyFilter: string = 'not-present';
+  tempBookingMonthlyFilter: string = 'not-present';
+  tempBookingLMDiscFilter: string = 'not-present';
 
-  // Temporary Platform filter properties - Airbnb
-  tempAirbnbWeeklyFilter: boolean = false;
-  tempAirbnbMonthlyFilter: boolean = false;
-  tempAirbnbMemberFilter: boolean = false;
-  tempAirbnbLMDiscFilter: boolean = false;
+  // Temporary Platform filter properties - Airbnb (three-state: 'not-present', 'yes', 'no')
+  tempAirbnbWeeklyFilter: string = 'not-present';
+  tempAirbnbMonthlyFilter: string = 'not-present';
+  tempAirbnbMemberFilter: string = 'not-present';
+  tempAirbnbLMDiscFilter: string = 'not-present';
 
-  // Temporary Platform filter properties - VRBO
-  tempVrboWeeklyFilter: boolean = false;
-  tempVrboMonthlyFilter: boolean = false;
+  // Temporary Platform filter properties - VRBO (three-state: 'not-present', 'yes', 'no')
+  tempVrboWeeklyFilter: string = 'not-present';
+  tempVrboMonthlyFilter: string = 'not-present';
 
   // Temporary Reviews filter properties - Booking.com
   tempBookingRevScoreMin: number | null = null;
@@ -597,23 +597,23 @@ export class RevenueComponent implements OnInit {
       const matchesStlmVarRevPARMin = this.stlmVarRevPARMin === null || stlmVarRevPAR >= this.stlmVarRevPARMin;
       const matchesStlmVarRevPARMax = this.stlmVarRevPARMax === null || stlmVarRevPAR <= this.stlmVarRevPARMax;
 
-      // Platform filters - Booking.com
-      const matchesBookingGenius = !this.bookingGeniusFilter || item.BookingCom.Genius === 'Yes';
-      const matchesBookingMobile = !this.bookingMobileFilter || item.BookingCom.Mobile === 'Yes';
-      const matchesBookingPref = !this.bookingPrefFilter || item.BookingCom.Pref === 'Yes';
-      const matchesBookingWeekly = !this.bookingWeeklyFilter || item.BookingCom.Weekly === 'Yes';
-      const matchesBookingMonthly = !this.bookingMonthlyFilter || item.BookingCom.Monthly === 'Yes';
-      const matchesBookingLMDisc = !this.bookingLMDiscFilter || item.BookingCom.LM_Disc === 'Yes';
+      // Platform filters - Booking.com (three-state filtering)
+      const matchesBookingGenius = this.matchesThreeStateFilter(this.bookingGeniusFilter, item.BookingCom.Genius);
+      const matchesBookingMobile = this.matchesThreeStateFilter(this.bookingMobileFilter, item.BookingCom.Mobile);
+      const matchesBookingPref = this.matchesThreeStateFilter(this.bookingPrefFilter, item.BookingCom.Pref);
+      const matchesBookingWeekly = this.matchesThreeStateFilter(this.bookingWeeklyFilter, item.BookingCom.Weekly);
+      const matchesBookingMonthly = this.matchesThreeStateFilter(this.bookingMonthlyFilter, item.BookingCom.Monthly);
+      const matchesBookingLMDisc = this.matchesThreeStateFilter(this.bookingLMDiscFilter, item.BookingCom.LM_Disc);
 
-      // Platform filters - Airbnb
-      const matchesAirbnbWeekly = !this.airbnbWeeklyFilter || item.Airbnb.Weekly === 'Yes';
-      const matchesAirbnbMonthly = !this.airbnbMonthlyFilter || item.Airbnb.Monthly === 'Yes';
-      const matchesAirbnbMember = !this.airbnbMemberFilter || item.Airbnb.Member === 'Yes';
-      const matchesAirbnbLMDisc = !this.airbnbLMDiscFilter || item.Airbnb.LM_Disc === 'Yes';
+      // Platform filters - Airbnb (three-state filtering)
+      const matchesAirbnbWeekly = this.matchesThreeStateFilter(this.airbnbWeeklyFilter, item.Airbnb.Weekly);
+      const matchesAirbnbMonthly = this.matchesThreeStateFilter(this.airbnbMonthlyFilter, item.Airbnb.Monthly);
+      const matchesAirbnbMember = this.matchesThreeStateFilter(this.airbnbMemberFilter, item.Airbnb.Member);
+      const matchesAirbnbLMDisc = this.matchesThreeStateFilter(this.airbnbLMDiscFilter, item.Airbnb.LM_Disc);
 
-      // Platform filters - VRBO
-      const matchesVrboWeekly = !this.vrboWeeklyFilter || item.VRBO.Weekly === 'Yes';
-      const matchesVrboMonthly = !this.vrboMonthlyFilter || item.VRBO.Monthly === 'Yes';
+      // Platform filters - VRBO (three-state filtering)
+      const matchesVrboWeekly = this.matchesThreeStateFilter(this.vrboWeeklyFilter, item.VRBO.Weekly);
+      const matchesVrboMonthly = this.matchesThreeStateFilter(this.vrboMonthlyFilter, item.VRBO.Monthly);
 
       // Reviews filters - Booking.com
       const matchesBookingRevScoreMin = this.bookingRevScoreMin === null || bookingRevScore >= this.bookingRevScoreMin;
@@ -1028,6 +1028,20 @@ export class RevenueComponent implements OnInit {
     return stringValue;
   }
   
+  // Helper method for three-state filtering
+  private matchesThreeStateFilter(filterValue: string, itemValue: string): boolean {
+    if (filterValue === 'not-present') {
+      return true; // No filter applied, show all
+    }
+    if (filterValue === 'yes') {
+      return itemValue === 'Yes';
+    }
+    if (filterValue === 'no') {
+      return itemValue === 'No';
+    }
+    return true;
+  }
+
   // Helper methods for templates
   getPaginatedData(): PropertyData[] {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
@@ -1084,11 +1098,11 @@ export class RevenueComponent implements OnInit {
               this.stlmVarOccMin !== null || this.stlmVarOccMax !== null ||
               this.stlmVarADRMin !== null || this.stlmVarADRMax !== null ||
               this.stlmVarRevPARMin !== null || this.stlmVarRevPARMax !== null ||
-              // Platform filters
-              this.bookingGeniusFilter || this.bookingMobileFilter || this.bookingPrefFilter ||
-              this.bookingWeeklyFilter || this.bookingMonthlyFilter || this.bookingLMDiscFilter ||
-              this.airbnbWeeklyFilter || this.airbnbMonthlyFilter || this.airbnbMemberFilter || this.airbnbLMDiscFilter ||
-              this.vrboWeeklyFilter || this.vrboMonthlyFilter ||
+              // Platform filters (check if any are not 'not-present')
+              this.bookingGeniusFilter !== 'not-present' || this.bookingMobileFilter !== 'not-present' || this.bookingPrefFilter !== 'not-present' ||
+              this.bookingWeeklyFilter !== 'not-present' || this.bookingMonthlyFilter !== 'not-present' || this.bookingLMDiscFilter !== 'not-present' ||
+              this.airbnbWeeklyFilter !== 'not-present' || this.airbnbMonthlyFilter !== 'not-present' || this.airbnbMemberFilter !== 'not-present' || this.airbnbLMDiscFilter !== 'not-present' ||
+              this.vrboWeeklyFilter !== 'not-present' || this.vrboMonthlyFilter !== 'not-present' ||
               // Reviews filters
               this.bookingRevScoreMin !== null || this.bookingRevScoreMax !== null ||
               this.bookingTotalRevMin !== null || this.bookingTotalRevMax !== null ||
@@ -1125,19 +1139,19 @@ export class RevenueComponent implements OnInit {
     if (this.stlmVarADRMin !== null || this.stlmVarADRMax !== null) count++;
     if (this.stlmVarRevPARMin !== null || this.stlmVarRevPARMax !== null) count++;
     
-    // Platform filters
-    if (this.bookingGeniusFilter) count++;
-    if (this.bookingMobileFilter) count++;
-    if (this.bookingPrefFilter) count++;
-    if (this.bookingWeeklyFilter) count++;
-    if (this.bookingMonthlyFilter) count++;
-    if (this.bookingLMDiscFilter) count++;
-    if (this.airbnbWeeklyFilter) count++;
-    if (this.airbnbMonthlyFilter) count++;
-    if (this.airbnbMemberFilter) count++;
-    if (this.airbnbLMDiscFilter) count++;
-    if (this.vrboWeeklyFilter) count++;
-    if (this.vrboMonthlyFilter) count++;
+    // Platform filters (count non-'not-present' values)
+    if (this.bookingGeniusFilter !== 'not-present') count++;
+    if (this.bookingMobileFilter !== 'not-present') count++;
+    if (this.bookingPrefFilter !== 'not-present') count++;
+    if (this.bookingWeeklyFilter !== 'not-present') count++;
+    if (this.bookingMonthlyFilter !== 'not-present') count++;
+    if (this.bookingLMDiscFilter !== 'not-present') count++;
+    if (this.airbnbWeeklyFilter !== 'not-present') count++;
+    if (this.airbnbMonthlyFilter !== 'not-present') count++;
+    if (this.airbnbMemberFilter !== 'not-present') count++;
+    if (this.airbnbLMDiscFilter !== 'not-present') count++;
+    if (this.vrboWeeklyFilter !== 'not-present') count++;
+    if (this.vrboMonthlyFilter !== 'not-present') count++;
     
     // Reviews filters
     if (this.bookingRevScoreMin !== null || this.bookingRevScoreMax !== null) count++;
@@ -1340,6 +1354,81 @@ export class RevenueComponent implements OnInit {
     this.tempVrboTotalRevMax = parseFloat(event.target.value);
   }
 
+  // Three-point slider change handlers
+  onThreePointSliderChange(filterName: string, value: string): void {
+    switch (filterName) {
+      // Booking.com filters
+      case 'bookingGenius':
+        this.tempBookingGeniusFilter = value;
+        break;
+      case 'bookingMobile':
+        this.tempBookingMobileFilter = value;
+        break;
+      case 'bookingPref':
+        this.tempBookingPrefFilter = value;
+        break;
+      case 'bookingWeekly':
+        this.tempBookingWeeklyFilter = value;
+        break;
+      case 'bookingMonthly':
+        this.tempBookingMonthlyFilter = value;
+        break;
+      case 'bookingLMDisc':
+        this.tempBookingLMDiscFilter = value;
+        break;
+      // Airbnb filters
+      case 'airbnbWeekly':
+        this.tempAirbnbWeeklyFilter = value;
+        break;
+      case 'airbnbMonthly':
+        this.tempAirbnbMonthlyFilter = value;
+        break;
+      case 'airbnbMember':
+        this.tempAirbnbMemberFilter = value;
+        break;
+      case 'airbnbLMDisc':
+        this.tempAirbnbLMDiscFilter = value;
+        break;
+      // VRBO filters
+      case 'vrboWeekly':
+        this.tempVrboWeeklyFilter = value;
+        break;
+      case 'vrboMonthly':
+        this.tempVrboMonthlyFilter = value;
+        break;
+    }
+    // Apply filters immediately for real-time feedback
+    this.filterData();
+  }
+
+  // Helper method to get the next slider value (for clicking on slider track)
+  getNextSliderValue(currentValue: string): string {
+    switch (currentValue) {
+      case 'not-present':
+        return 'no';
+      case 'no':
+        return 'yes';
+      case 'yes':
+        return 'not-present';
+      default:
+        return 'not-present';
+    }
+  }
+
+  // Helper method to get display value for slider
+  getSliderDisplayValue(value: string): string {
+    switch (value) {
+      case 'not-present':
+        return 'NA';
+      case 'yes':
+        return 'Yes';
+      case 'no':
+        return 'No';
+      default:
+        return 'NA';
+    }
+  }
+
   // Apply filters method
   applyFilters(): void {
     // Copy temporary values to active filters
@@ -1478,18 +1567,42 @@ export class RevenueComponent implements OnInit {
       filters.push({type: 'range', label: 'STLY Var RevPAR', value: value, key: 'stlyVarRevPAR'});
     }
 
-    // Platform filters
-    if (this.bookingGeniusFilter) {
-      filters.push({type: 'platform', label: 'Booking Genius', value: 'Yes', key: 'bookingGenius'});
+    // Platform filters (show non-'not-present' values)
+    if (this.bookingGeniusFilter !== 'not-present') {
+      filters.push({type: 'platform', label: 'Booking Genius', value: this.bookingGeniusFilter === 'yes' ? 'Yes' : 'No', key: 'bookingGenius'});
     }
-    if (this.bookingMobileFilter) {
-      filters.push({type: 'platform', label: 'Booking Mobile', value: 'Yes', key: 'bookingMobile'});
+    if (this.bookingMobileFilter !== 'not-present') {
+      filters.push({type: 'platform', label: 'Booking Mobile', value: this.bookingMobileFilter === 'yes' ? 'Yes' : 'No', key: 'bookingMobile'});
     }
-    if (this.airbnbWeeklyFilter) {
-      filters.push({type: 'platform', label: 'Airbnb Weekly', value: 'Yes', key: 'airbnbWeekly'});
+    if (this.bookingPrefFilter !== 'not-present') {
+      filters.push({type: 'platform', label: 'Booking Preferred', value: this.bookingPrefFilter === 'yes' ? 'Yes' : 'No', key: 'bookingPref'});
     }
-    if (this.vrboWeeklyFilter) {
-      filters.push({type: 'platform', label: 'VRBO Weekly', value: 'Yes', key: 'vrboWeekly'});
+    if (this.bookingWeeklyFilter !== 'not-present') {
+      filters.push({type: 'platform', label: 'Booking Weekly', value: this.bookingWeeklyFilter === 'yes' ? 'Yes' : 'No', key: 'bookingWeekly'});
+    }
+    if (this.bookingMonthlyFilter !== 'not-present') {
+      filters.push({type: 'platform', label: 'Booking Monthly', value: this.bookingMonthlyFilter === 'yes' ? 'Yes' : 'No', key: 'bookingMonthly'});
+    }
+    if (this.bookingLMDiscFilter !== 'not-present') {
+      filters.push({type: 'platform', label: 'Booking LM Discount', value: this.bookingLMDiscFilter === 'yes' ? 'Yes' : 'No', key: 'bookingLMDisc'});
+    }
+    if (this.airbnbWeeklyFilter !== 'not-present') {
+      filters.push({type: 'platform', label: 'Airbnb Weekly', value: this.airbnbWeeklyFilter === 'yes' ? 'Yes' : 'No', key: 'airbnbWeekly'});
+    }
+    if (this.airbnbMonthlyFilter !== 'not-present') {
+      filters.push({type: 'platform', label: 'Airbnb Monthly', value: this.airbnbMonthlyFilter === 'yes' ? 'Yes' : 'No', key: 'airbnbMonthly'});
+    }
+    if (this.airbnbMemberFilter !== 'not-present') {
+      filters.push({type: 'platform', label: 'Airbnb Member', value: this.airbnbMemberFilter === 'yes' ? 'Yes' : 'No', key: 'airbnbMember'});
+    }
+    if (this.airbnbLMDiscFilter !== 'not-present') {
+      filters.push({type: 'platform', label: 'Airbnb LM Discount', value: this.airbnbLMDiscFilter === 'yes' ? 'Yes' : 'No', key: 'airbnbLMDisc'});
+    }
+    if (this.vrboWeeklyFilter !== 'not-present') {
+      filters.push({type: 'platform', label: 'VRBO Weekly', value: this.vrboWeeklyFilter === 'yes' ? 'Yes' : 'No', key: 'vrboWeekly'});
+    }
+    if (this.vrboMonthlyFilter !== 'not-present') {
+      filters.push({type: 'platform', label: 'VRBO Monthly', value: this.vrboMonthlyFilter === 'yes' ? 'Yes' : 'No', key: 'vrboMonthly'});
     }
 
     // Reviews filters
@@ -1583,20 +1696,52 @@ export class RevenueComponent implements OnInit {
         this.tempStlyVarRevPARMax = null;
         break;
       case 'bookingGenius':
-        this.bookingGeniusFilter = false;
-        this.tempBookingGeniusFilter = false;
+        this.bookingGeniusFilter = 'not-present';
+        this.tempBookingGeniusFilter = 'not-present';
         break;
       case 'bookingMobile':
-        this.bookingMobileFilter = false;
-        this.tempBookingMobileFilter = false;
+        this.bookingMobileFilter = 'not-present';
+        this.tempBookingMobileFilter = 'not-present';
+        break;
+      case 'bookingPref':
+        this.bookingPrefFilter = 'not-present';
+        this.tempBookingPrefFilter = 'not-present';
+        break;
+      case 'bookingWeekly':
+        this.bookingWeeklyFilter = 'not-present';
+        this.tempBookingWeeklyFilter = 'not-present';
+        break;
+      case 'bookingMonthly':
+        this.bookingMonthlyFilter = 'not-present';
+        this.tempBookingMonthlyFilter = 'not-present';
+        break;
+      case 'bookingLMDisc':
+        this.bookingLMDiscFilter = 'not-present';
+        this.tempBookingLMDiscFilter = 'not-present';
         break;
       case 'airbnbWeekly':
-        this.airbnbWeeklyFilter = false;
-        this.tempAirbnbWeeklyFilter = false;
+        this.airbnbWeeklyFilter = 'not-present';
+        this.tempAirbnbWeeklyFilter = 'not-present';
+        break;
+      case 'airbnbMonthly':
+        this.airbnbMonthlyFilter = 'not-present';
+        this.tempAirbnbMonthlyFilter = 'not-present';
+        break;
+      case 'airbnbMember':
+        this.airbnbMemberFilter = 'not-present';
+        this.tempAirbnbMemberFilter = 'not-present';
+        break;
+      case 'airbnbLMDisc':
+        this.airbnbLMDiscFilter = 'not-present';
+        this.tempAirbnbLMDiscFilter = 'not-present';
         break;
       case 'vrboWeekly':
-        this.vrboWeeklyFilter = false;
-        this.tempVrboWeeklyFilter = false;
+        this.vrboWeeklyFilter = 'not-present';
+        this.tempVrboWeeklyFilter = 'not-present';
+        break;
+      case 'vrboMonthly':
+        this.vrboMonthlyFilter = 'not-present';
+        this.tempVrboMonthlyFilter = 'not-present';
         break;
       case 'bookingRevScore':
         this.bookingRevScoreMin = null;
@@ -1659,18 +1804,18 @@ export class RevenueComponent implements OnInit {
     this.stlmVarRevPARMax = null;
     
     // Platform filters
-    this.bookingGeniusFilter = false;
-    this.bookingMobileFilter = false;
-    this.bookingPrefFilter = false;
-    this.bookingWeeklyFilter = false;
-    this.bookingMonthlyFilter = false;
-    this.bookingLMDiscFilter = false;
-    this.airbnbWeeklyFilter = false;
-    this.airbnbMonthlyFilter = false;
-    this.airbnbMemberFilter = false;
-    this.airbnbLMDiscFilter = false;
-    this.vrboWeeklyFilter = false;
-    this.vrboMonthlyFilter = false;
+    this.bookingGeniusFilter = 'not-present';
+    this.bookingMobileFilter = 'not-present';
+    this.bookingPrefFilter = 'not-present';
+    this.bookingWeeklyFilter = 'not-present';
+    this.bookingMonthlyFilter = 'not-present';
+    this.bookingLMDiscFilter = 'not-present';
+    this.airbnbWeeklyFilter = 'not-present';
+    this.airbnbMonthlyFilter = 'not-present';
+    this.airbnbMemberFilter = 'not-present';
+    this.airbnbLMDiscFilter = 'not-present';
+    this.vrboWeeklyFilter = 'not-present';
+    this.vrboMonthlyFilter = 'not-present';
     
     // Reviews filters
     this.bookingRevScoreMin = null;
