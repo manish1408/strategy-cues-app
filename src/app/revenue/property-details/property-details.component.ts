@@ -85,6 +85,11 @@ interface PropertyData {
       Total_Rev: string;
     };
   };
+  Property_URLs: {
+    Booking: string;
+    Airbnb: string;
+    VRBO: string;
+  };
 }
 
 @Component({
@@ -171,5 +176,12 @@ export class PropertyDetailsComponent implements OnInit {
   // Helper method to check if a platform feature is enabled
   isFeatureEnabled(value: string): boolean {
     return value.toLowerCase() === 'yes';
+  }
+
+  // Methods to handle booking platform links
+  openBookingLink(platform: 'Booking' | 'Airbnb' | 'VRBO'): void {
+    if (this.property?.Property_URLs?.[platform]) {
+      window.open(this.property.Property_URLs[platform], '_blank');
+    }
   }
 }

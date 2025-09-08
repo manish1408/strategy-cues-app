@@ -5,14 +5,14 @@
       <div class="row align-items-center">
         <div class="col-md-8">
           <div class="property-title">
-            <button class="btn btn-outline-secondary me-3" (click)="goBack()">
+            <button class="btn btn-outline-secondary me-3" (click)="goBack()"> 
               <i class="fas fa-arrow-left"></i> Back to Revenue
             </button>
             <div class="title-info">
               <h1 class="mb-1">{{ property.Listing_Name }}</h1>
               <div class="property-meta">
                 <span class="badge bg-light text-dark me-2">{{ property.Area }}</span>
-                <span class="badge" [ngClass]="getRoomTypeClass(property.Room_Type)">
+                <span class="badge" [ngClass]="getRoomTypeClass(property.Room_Type)"> 
                   {{ property.Room_Type }}
                 </span>
               </div>
@@ -29,6 +29,29 @@
               <span class="metric-label">RevPAR (TM)</span>
               <span class="metric-value">${{ property.RevPAR.TM }}</span>
             </div>
+          </div>
+          <div class="booking-buttons mt-3">
+            <button 
+              class="btn btn-booking me-2" 
+              (click)="openBookingLink('Booking')"
+              [disabled]="!property?.Property_URLs?.Booking"
+              title="Book on Booking.com">
+              <i class="fas fa-bed"></i> Booking.com
+            </button>
+            <button 
+              class="btn btn-airbnb me-2" 
+              (click)="openBookingLink('Airbnb')"
+              [disabled]="!property?.Property_URLs?.Airbnb"
+              title="Book on Airbnb">
+              <i class="fas fa-home"></i> Airbnb
+            </button>
+            <button 
+              class="btn btn-vrbo" 
+              (click)="openBookingLink('VRBO')"
+              [disabled]="!property?.Property_URLs?.VRBO"
+              title="Book on VRBO">
+              <i class="fas fa-key"></i> VRBO
+            </button>
           </div>
         </div>
       </div>
