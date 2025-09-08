@@ -57,7 +57,7 @@
       "Airbnb": "7 days 100%",
       "VRBO": "3 days 100%"
     },
-    "Adult_Child_Config": { 
+    "Adult_Child_Config": {
       "Booking": "2",
       "Airbnb": "3",
       "VRBO": "2"
@@ -84,6 +84,11 @@
         "Total_Rev": "190",
         "Last_Review_Date": "25/08/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/jlt-studio-01.html",
+      "Airbnb": "https://www.airbnb.com/rooms/jlt-studio-01",
+      "VRBO": "https://www.vrbo.com/jlt-studio-01"
     }
   },
   {
@@ -171,6 +176,11 @@
         "Total_Rev": "292",
         "Last_Review_Date": "05/07/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/jlt-studio-02.html",
+      "Airbnb": "https://www.airbnb.com/rooms/jlt-studio-02",
+      "VRBO": "https://www.vrbo.com/jlt-studio-02"
     }
   },
   {
@@ -258,6 +268,11 @@
         "Total_Rev": "87",
         "Last_Review_Date": "23/02/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/jlt-loft-03.html",
+      "Airbnb": "https://www.airbnb.com/rooms/jlt-loft-03",
+      "VRBO": "https://www.vrbo.com/jlt-loft-03"
     }
   },
   {
@@ -345,6 +360,11 @@
         "Total_Rev": "21",
         "Last_Review_Date": "09/01/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/palm-jumeirah-studio-04.html",
+      "Airbnb": "https://www.airbnb.com/rooms/palm-jumeirah-studio-04",
+      "VRBO": "https://www.vrbo.com/palm-jumeirah-studio-04"
     }
   },
   {
@@ -432,6 +452,11 @@
         "Total_Rev": "213",
         "Last_Review_Date": "07/06/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/dubai-marina-loft-05.html",
+      "Airbnb": "https://www.airbnb.com/rooms/dubai-marina-loft-05",
+      "VRBO": "https://www.vrbo.com/dubai-marina-loft-05"
     }
   },
   {
@@ -519,6 +544,11 @@
         "Total_Rev": "165",
         "Last_Review_Date": "16/01/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/jbr-3br-06.html",
+      "Airbnb": "https://www.airbnb.com/rooms/jbr-3br-06",
+      "VRBO": "https://www.vrbo.com/jbr-3br-06"
     }
   },
   {
@@ -606,6 +636,11 @@
         "Total_Rev": "133",
         "Last_Review_Date": "10/06/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/business-bay-1br-07.html",
+      "Airbnb": "https://www.airbnb.com/rooms/business-bay-1br-07",
+      "VRBO": "https://www.vrbo.com/business-bay-1br-07"
     }
   },
   {
@@ -693,6 +728,11 @@
         "Total_Rev": "215",
         "Last_Review_Date": "11/01/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/dubai-marina-townhouse-08.html",
+      "Airbnb": "https://www.airbnb.com/rooms/dubai-marina-townhouse-08",
+      "VRBO": "https://www.vrbo.com/dubai-marina-townhouse-08"
     }
   },
   {
@@ -780,6 +820,11 @@
         "Total_Rev": "280",
         "Last_Review_Date": "29/03/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/dubai-creek-harbour-townhouse-09.html",
+      "Airbnb": "https://www.airbnb.com/rooms/dubai-creek-harbour-townhouse-09",
+      "VRBO": "https://www.vrbo.com/dubai-creek-harbour-townhouse-09"
     }
   },
   {
@@ -867,6 +912,11 @@
         "Total_Rev": "163",
         "Last_Review_Date": "20/02/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/jlt-townhouse-10.html",
+      "Airbnb": "https://www.airbnb.com/rooms/jlt-townhouse-10",
+      "VRBO": "https://www.vrbo.com/jlt-townhouse-10"
     }
   },
   {
@@ -954,6 +1004,11 @@
         "Total_Rev": "86",
         "Last_Review_Date": "04/02/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/jbr-1br-11.html",
+      "Airbnb": "https://www.airbnb.com/rooms/jbr-1br-11",
+      "VRBO": "https://www.vrbo.com/jbr-1br-11"
     }
   },
   {
@@ -1041,6 +1096,11 @@
         "Total_Rev": "19",
         "Last_Review_Date": "07/05/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/business-bay-3br-12.html",
+      "Airbnb": "https://www.airbnb.com/rooms/business-bay-3br-12",
+      "VRBO": "https://www.vrbo.com/business-bay-3br-12"
     }
   },
   {
@@ -1128,6 +1188,11 @@
         "Total_Rev": "136",
         "Last_Review_Date": "02/02/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/jlt-townhouse-13.html",
+      "Airbnb": "https://www.airbnb.com/rooms/jlt-townhouse-13",
+      "VRBO": "https://www.vrbo.com/jlt-townhouse-13"
     }
   },
   {
@@ -1215,6 +1280,11 @@
         "Total_Rev": "252",
         "Last_Review_Date": "05/01/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/jbr-loft-14.html",
+      "Airbnb": "https://www.airbnb.com/rooms/jbr-loft-14",
+      "VRBO": "https://www.vrbo.com/jbr-loft-14"
     }
   },
   {
@@ -1302,6 +1372,11 @@
         "Total_Rev": "286",
         "Last_Review_Date": "11/05/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/dubai-creek-harbour-townhouse-15.html",
+      "Airbnb": "https://www.airbnb.com/rooms/dubai-creek-harbour-townhouse-15",
+      "VRBO": "https://www.vrbo.com/dubai-creek-harbour-townhouse-15"
     }
   },
   {
@@ -1389,6 +1464,11 @@
         "Total_Rev": "42",
         "Last_Review_Date": "21/06/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/jlt-3br-16.html",
+      "Airbnb": "https://www.airbnb.com/rooms/jlt-3br-16",
+      "VRBO": "https://www.vrbo.com/jlt-3br-16"
     }
   },
   {
@@ -1476,6 +1556,11 @@
         "Total_Rev": "106",
         "Last_Review_Date": "30/05/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/jlt-studio-17.html",
+      "Airbnb": "https://www.airbnb.com/rooms/jlt-studio-17",
+      "VRBO": "https://www.vrbo.com/jlt-studio-17"
     }
   },
   {
@@ -1563,6 +1648,11 @@
         "Total_Rev": "58",
         "Last_Review_Date": "28/03/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/palm-jumeirah-1br-18.html",
+      "Airbnb": "https://www.airbnb.com/rooms/palm-jumeirah-1br-18",
+      "VRBO": "https://www.vrbo.com/palm-jumeirah-1br-18"
     }
   },
   {
@@ -1650,6 +1740,11 @@
         "Total_Rev": "83",
         "Last_Review_Date": "03/01/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/downtown-dubai-3br-19.html",
+      "Airbnb": "https://www.airbnb.com/rooms/downtown-dubai-3br-19",
+      "VRBO": "https://www.vrbo.com/downtown-dubai-3br-19"
     }
   },
   {
@@ -1737,6 +1832,11 @@
         "Total_Rev": "82",
         "Last_Review_Date": "19/08/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/downtown-dubai-loft-20.html",
+      "Airbnb": "https://www.airbnb.com/rooms/downtown-dubai-loft-20",
+      "VRBO": "https://www.vrbo.com/downtown-dubai-loft-20"
     }
   },
   {
@@ -1824,6 +1924,11 @@
         "Total_Rev": "225",
         "Last_Review_Date": "06/02/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/jbr-loft-21.html",
+      "Airbnb": "https://www.airbnb.com/rooms/jbr-loft-21",
+      "VRBO": "https://www.vrbo.com/jbr-loft-21"
     }
   },
   {
@@ -1911,6 +2016,11 @@
         "Total_Rev": "30",
         "Last_Review_Date": "29/04/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/palm-jumeirah-3br-22.html",
+      "Airbnb": "https://www.airbnb.com/rooms/palm-jumeirah-3br-22",
+      "VRBO": "https://www.vrbo.com/palm-jumeirah-3br-22"
     }
   },
   {
@@ -1998,6 +2108,11 @@
         "Total_Rev": "207",
         "Last_Review_Date": "29/03/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/business-bay-2br-23.html",
+      "Airbnb": "https://www.airbnb.com/rooms/business-bay-2br-23",
+      "VRBO": "https://www.vrbo.com/business-bay-2br-23"
     }
   },
   {
@@ -2085,6 +2200,11 @@
         "Total_Rev": "125",
         "Last_Review_Date": "06/01/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/palm-jumeirah-studio-24.html",
+      "Airbnb": "https://www.airbnb.com/rooms/palm-jumeirah-studio-24",
+      "VRBO": "https://www.vrbo.com/palm-jumeirah-studio-24"
     }
   },
   {
@@ -2172,6 +2292,11 @@
         "Total_Rev": "220",
         "Last_Review_Date": "14/05/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/dubai-marina-townhouse-25.html",
+      "Airbnb": "https://www.airbnb.com/rooms/dubai-marina-townhouse-25",
+      "VRBO": "https://www.vrbo.com/dubai-marina-townhouse-25"
     }
   },
   {
@@ -2259,6 +2384,11 @@
         "Total_Rev": "217",
         "Last_Review_Date": "09/08/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/jlt-studio-26.html",
+      "Airbnb": "https://www.airbnb.com/rooms/jlt-studio-26",
+      "VRBO": "https://www.vrbo.com/jlt-studio-26"
     }
   },
   {
@@ -2346,6 +2476,11 @@
         "Total_Rev": "290",
         "Last_Review_Date": "07/08/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/downtown-dubai-3br-27.html",
+      "Airbnb": "https://www.airbnb.com/rooms/downtown-dubai-3br-27",
+      "VRBO": "https://www.vrbo.com/downtown-dubai-3br-27"
     }
   },
   {
@@ -2433,6 +2568,11 @@
         "Total_Rev": "254",
         "Last_Review_Date": "08/08/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/jlt-townhouse-28.html",
+      "Airbnb": "https://www.airbnb.com/rooms/jlt-townhouse-28",
+      "VRBO": "https://www.vrbo.com/jlt-townhouse-28"
     }
   },
   {
@@ -2520,6 +2660,11 @@
         "Total_Rev": "210",
         "Last_Review_Date": "11/07/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/downtown-dubai-studio-29.html",
+      "Airbnb": "https://www.airbnb.com/rooms/downtown-dubai-studio-29",
+      "VRBO": "https://www.vrbo.com/downtown-dubai-studio-29"
     }
   },
   {
@@ -2607,6 +2752,11 @@
         "Total_Rev": "44",
         "Last_Review_Date": "18/05/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/business-bay-2br-30.html",
+      "Airbnb": "https://www.airbnb.com/rooms/business-bay-2br-30",
+      "VRBO": "https://www.vrbo.com/business-bay-2br-30"
     }
   },
   {
@@ -2694,6 +2844,11 @@
         "Total_Rev": "81",
         "Last_Review_Date": "27/06/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/dubai-creek-harbour-studio-31.html",
+      "Airbnb": "https://www.airbnb.com/rooms/dubai-creek-harbour-studio-31",
+      "VRBO": "https://www.vrbo.com/dubai-creek-harbour-studio-31"
     }
   },
   {
@@ -2781,6 +2936,11 @@
         "Total_Rev": "126",
         "Last_Review_Date": "13/01/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/palm-jumeirah-townhouse-32.html",
+      "Airbnb": "https://www.airbnb.com/rooms/palm-jumeirah-townhouse-32",
+      "VRBO": "https://www.vrbo.com/palm-jumeirah-townhouse-32"
     }
   },
   {
@@ -2868,6 +3028,11 @@
         "Total_Rev": "125",
         "Last_Review_Date": "16/02/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/downtown-dubai-townhouse-33.html",
+      "Airbnb": "https://www.airbnb.com/rooms/downtown-dubai-townhouse-33",
+      "VRBO": "https://www.vrbo.com/downtown-dubai-townhouse-33"
     }
   },
   {
@@ -2955,6 +3120,11 @@
         "Total_Rev": "48",
         "Last_Review_Date": "03/06/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/downtown-dubai-1br-34.html",
+      "Airbnb": "https://www.airbnb.com/rooms/downtown-dubai-1br-34",
+      "VRBO": "https://www.vrbo.com/downtown-dubai-1br-34"
     }
   },
   {
@@ -3042,6 +3212,11 @@
         "Total_Rev": "134",
         "Last_Review_Date": "10/03/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/dubai-marina-loft-35.html",
+      "Airbnb": "https://www.airbnb.com/rooms/dubai-marina-loft-35",
+      "VRBO": "https://www.vrbo.com/dubai-marina-loft-35"
     }
   },
   {
@@ -3129,6 +3304,11 @@
         "Total_Rev": "34",
         "Last_Review_Date": "15/04/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/jlt-1br-36.html",
+      "Airbnb": "https://www.airbnb.com/rooms/jlt-1br-36",
+      "VRBO": "https://www.vrbo.com/jlt-1br-36"
     }
   },
   {
@@ -3216,6 +3396,11 @@
         "Total_Rev": "236",
         "Last_Review_Date": "19/01/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/jlt-3br-37.html",
+      "Airbnb": "https://www.airbnb.com/rooms/jlt-3br-37",
+      "VRBO": "https://www.vrbo.com/jlt-3br-37"
     }
   },
   {
@@ -3303,6 +3488,11 @@
         "Total_Rev": "71",
         "Last_Review_Date": "04/08/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/business-bay-studio-38.html",
+      "Airbnb": "https://www.airbnb.com/rooms/business-bay-studio-38",
+      "VRBO": "https://www.vrbo.com/business-bay-studio-38"
     }
   },
   {
@@ -3390,6 +3580,11 @@
         "Total_Rev": "212",
         "Last_Review_Date": "15/04/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/dubai-creek-harbour-studio-39.html",
+      "Airbnb": "https://www.airbnb.com/rooms/dubai-creek-harbour-studio-39",
+      "VRBO": "https://www.vrbo.com/dubai-creek-harbour-studio-39"
     }
   },
   {
@@ -3477,6 +3672,11 @@
         "Total_Rev": "149",
         "Last_Review_Date": "25/08/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/dubai-marina-townhouse-40.html",
+      "Airbnb": "https://www.airbnb.com/rooms/dubai-marina-townhouse-40",
+      "VRBO": "https://www.vrbo.com/dubai-marina-townhouse-40"
     }
   },
   {
@@ -3564,6 +3764,11 @@
         "Total_Rev": "268",
         "Last_Review_Date": "06/06/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/dubai-creek-harbour-townhouse-41.html",
+      "Airbnb": "https://www.airbnb.com/rooms/dubai-creek-harbour-townhouse-41",
+      "VRBO": "https://www.vrbo.com/dubai-creek-harbour-townhouse-41"
     }
   },
   {
@@ -3651,6 +3856,11 @@
         "Total_Rev": "219",
         "Last_Review_Date": "01/04/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/palm-jumeirah-2br-42.html",
+      "Airbnb": "https://www.airbnb.com/rooms/palm-jumeirah-2br-42",
+      "VRBO": "https://www.vrbo.com/palm-jumeirah-2br-42"
     }
   },
   {
@@ -3738,6 +3948,11 @@
         "Total_Rev": "283",
         "Last_Review_Date": "12/02/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/jlt-1br-43.html",
+      "Airbnb": "https://www.airbnb.com/rooms/jlt-1br-43",
+      "VRBO": "https://www.vrbo.com/jlt-1br-43"
     }
   },
   {
@@ -3825,6 +4040,11 @@
         "Total_Rev": "24",
         "Last_Review_Date": "09/07/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/dubai-creek-harbour-2br-44.html",
+      "Airbnb": "https://www.airbnb.com/rooms/dubai-creek-harbour-2br-44",
+      "VRBO": "https://www.vrbo.com/dubai-creek-harbour-2br-44"
     }
   },
   {
@@ -3912,6 +4132,11 @@
         "Total_Rev": "138",
         "Last_Review_Date": "31/05/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/dubai-creek-harbour-1br-45.html",
+      "Airbnb": "https://www.airbnb.com/rooms/dubai-creek-harbour-1br-45",
+      "VRBO": "https://www.vrbo.com/dubai-creek-harbour-1br-45"
     }
   },
   {
@@ -3999,6 +4224,11 @@
         "Total_Rev": "108",
         "Last_Review_Date": "14/08/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/business-bay-2br-46.html",
+      "Airbnb": "https://www.airbnb.com/rooms/business-bay-2br-46",
+      "VRBO": "https://www.vrbo.com/business-bay-2br-46"
     }
   },
   {
@@ -4086,6 +4316,11 @@
         "Total_Rev": "281",
         "Last_Review_Date": "31/07/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/jbr-1br-47.html",
+      "Airbnb": "https://www.airbnb.com/rooms/jbr-1br-47",
+      "VRBO": "https://www.vrbo.com/jbr-1br-47"
     }
   },
   {
@@ -4173,6 +4408,11 @@
         "Total_Rev": "299",
         "Last_Review_Date": "04/02/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/dubai-creek-harbour-2br-48.html",
+      "Airbnb": "https://www.airbnb.com/rooms/dubai-creek-harbour-2br-48",
+      "VRBO": "https://www.vrbo.com/dubai-creek-harbour-2br-48"
     }
   },
   {
@@ -4260,6 +4500,11 @@
         "Total_Rev": "279",
         "Last_Review_Date": "07/08/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/palm-jumeirah-townhouse-49.html",
+      "Airbnb": "https://www.airbnb.com/rooms/palm-jumeirah-townhouse-49",
+      "VRBO": "https://www.vrbo.com/palm-jumeirah-townhouse-49"
     }
   },
   {
@@ -4347,6 +4592,11 @@
         "Total_Rev": "13",
         "Last_Review_Date": "28/05/25"
       }
+    },
+    "Property_URLs": {
+      "Booking": "https://www.booking.com/hotel/ae/jbr-studio-50.html",
+      "Airbnb": "https://www.airbnb.com/rooms/jbr-studio-50",
+      "VRBO": "https://www.vrbo.com/jbr-studio-50"
     }
   }
 ]

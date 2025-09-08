@@ -1880,4 +1880,13 @@ export class RevenueComponent implements OnInit {
       }
     });
   }
+
+  openPropertyUrl(property: any, platform: 'Booking' | 'Airbnb' | 'VRBO'): void {
+    if (property.Property_URLs && property.Property_URLs[platform]) {
+      const url = property.Property_URLs[platform];
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } else {
+      console.warn(`No URL found for ${platform} platform for property: ${property.Listing_Name}`);
+    }
+  }
 }

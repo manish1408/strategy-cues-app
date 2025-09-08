@@ -280,8 +280,9 @@
               <td *ngIf="columnVisibility.reviews">
                 <div class="reviews-cell-compact">
                   <!-- Booking.com Reviews -->
-                  <div class="review-item" *ngIf="property.Reviews.Booking.Rev_Score"
-                    title="Booking.com: {{ property.Reviews.Booking.Rev_Score }}/10 ({{ property.Reviews.Booking.Total_Rev }} reviews)">
+                  <div class="review-item clickable" *ngIf="property.Reviews.Booking.Rev_Score"
+                    title="Booking.com: {{ property.Reviews.Booking.Rev_Score }}/10 ({{ property.Reviews.Booking.Total_Rev }} reviews) - Click to visit property"
+                    (click)="openPropertyUrl(property, 'Booking')">
                     <i class="fas fa-bed text-primary"></i>
                     <div class="stars">
                       <i *ngFor="let star of getStarArray(property.Reviews.Booking.Rev_Score, 10)" class="fas fa-star"
@@ -291,8 +292,9 @@
                   </div>
 
                   <!-- Airbnb Reviews -->
-                  <div class="review-item" *ngIf="property.Reviews.Airbnb.Rev_Score"
-                    title="Airbnb: {{ property.Reviews.Airbnb.Rev_Score }}/5 ({{ property.Reviews.Airbnb.Total_Rev }} reviews)">
+                  <div class="review-item clickable" *ngIf="property.Reviews.Airbnb.Rev_Score"
+                    title="Airbnb: {{ property.Reviews.Airbnb.Rev_Score }}/5 ({{ property.Reviews.Airbnb.Total_Rev }} reviews) - Click to visit property"
+                    (click)="openPropertyUrl(property, 'Airbnb')">
                     <i class="fab fa-airbnb text-danger"></i>
                     <div class="stars">
                       <i *ngFor="let star of getStarArray(property.Reviews.Airbnb.Rev_Score, 5)" class="fas fa-star"
@@ -302,8 +304,9 @@
                   </div>
 
                   <!-- VRBO Reviews -->
-                  <div class="review-item" *ngIf="property.Reviews.VRBO.Rev_Score"
-                    title="VRBO: {{ property.Reviews.VRBO.Rev_Score }}/5 ({{ property.Reviews.VRBO.Total_Rev }} reviews)">
+                  <div class="review-item clickable" *ngIf="property.Reviews.VRBO.Rev_Score"
+                    title="VRBO: {{ property.Reviews.VRBO.Rev_Score }}/5 ({{ property.Reviews.VRBO.Total_Rev }} reviews) - Click to visit property"
+                    (click)="openPropertyUrl(property, 'VRBO')">
                     <i class="fas fa-home text-warning"></i>
                     <div class="stars">
                       <i *ngFor="let star of getStarArray(property.Reviews.VRBO.Rev_Score, 5)" class="fas fa-star"
@@ -382,15 +385,21 @@
               </td>
               <td *ngIf="columnVisibility.lastReviewScore">
                 <div class="review-score-cell">
-                  <div class="review-item">
+                  <div class="review-item clickable" 
+                    title="Click to visit Booking.com property page"
+                    (click)="openPropertyUrl(property, 'Booking')">
                     <i class="fas fa-bed text-primary"></i>
                     <span class="score-value">{{ property.Reviews.Booking.Last_Rev_Score }}</span>
                   </div>
-                  <div class="review-item">
+                  <div class="review-item clickable"
+                    title="Click to visit Airbnb property page"
+                    (click)="openPropertyUrl(property, 'Airbnb')">
                     <i class="fab fa-airbnb text-danger"></i>
                     <span class="score-value">{{ property.Reviews.Airbnb.Last_Rev_Score }}</span>
                   </div>
-                  <div class="review-item">
+                  <div class="review-item clickable"
+                    title="Click to visit VRBO property page"
+                    (click)="openPropertyUrl(property, 'VRBO')">
                     <i class="fas fa-home text-warning"></i>
                     <span class="score-value">{{ property.Reviews.VRBO.Last_Rev_Score }}</span>
                   </div>
