@@ -34,7 +34,7 @@
         <div class="form-wrapper">
           <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="user-form">
             <div class="input-field mb-3">
-              <label for="name" class="form-label">Enter name</label>
+              <label class="form-label">Enter name</label>
               <input type="text" class="form-control" id="name" placeholder="Enter your name" formControlName="name"
                 [ngClass]="{ 'is-invalid': hasError('name') }" />
 
@@ -48,14 +48,14 @@
               </div>
             </div>
             <div class="input-field mb-3">
-              <label for="email" class="form-label">Email address</label>
+              <label class="form-label">Email address</label>
               <input type="email" class="form-control" id="email" placeholder="Enter your email address"
                 formControlName="email" [ngClass]="{ 'is-invalid': hasError('email') }" />
 
               <div class="invalid-feedback text-start">Email is required</div>
             </div>
             <div class="input-field position-relative mb-3">
-              <label for="password" class="form-label">Password</label>
+              <label class="form-label">Password</label>
               <input [type]="passwordType" class="form-control" id="password" placeholder="Enter your password"
                 formControlName="password" [ngClass]="{ 'is-invalid': hasError('password') }" />
 
@@ -71,7 +71,7 @@
               </div>
             </div>
             <div class="input-field">
-              <label for="phone" class="form-label">Phone number</label>
+              <label class="form-label">Phone number</label>
               <div style="display: flex;" class="d-flex align-items-start gap-0">
                 <!-- <app-phone-dropdown (countrySelected)="onCountrySelected($event)" [selectedCountry]="selectedCountry" [loadingIp]="loadingIp"></app-phone-dropdown> -->
                 <div class="w-100">
@@ -90,7 +90,7 @@
                 formControlName="terms"
                 [ngClass]="{ 'is-invalid': hasError('terms') }"
               /> -->
-              <label for="d-policy">If you proceed with signup, you agree to the <span><a href="https://miloassistant.ai/terms" target="_blank">terms and
+              <label>If you proceed with signup, you agree to the <span><a href="https://miloassistant.ai/terms" target="_blank">terms and
                     conditions.</a></span></label>
 
             </div>

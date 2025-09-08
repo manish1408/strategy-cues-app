@@ -74,18 +74,21 @@ interface PropertyData {
       Last_Rev_Score: string;
       Rev_Score: string;
       Total_Rev: string;
+      Last_Review_Date: string;
     };
     Airbnb: {
       Last_Rev_Dt: string;
       Last_Rev_Score: string;
       Rev_Score: string;
       Total_Rev: string;
+      Last_Review_Date: string;
     };
     VRBO: {
       Last_Rev_Dt: string;
       Last_Rev_Score: string;
       Rev_Score: string;
       Total_Rev: string;
+      Last_Review_Date: string;
     };
   };
 }
@@ -301,7 +304,10 @@ export class RevenueComponent implements OnInit {
     adultChildConfig: false,
     pickupOcc: false,
     minRateThreshold: false,
-    stlyVar: false,
+    stlyVarOcc: false,
+    stlyVarRevPAR: false,
+    lastReviewScore: false,
+    lastRevenueDate: false,
     actions: true
   };
   
@@ -844,6 +850,182 @@ export class RevenueComponent implements OnInit {
   exportData(): void {
     console.log('Export data');
     // Implement export logic
+  }
+
+  exportToCSV(): void {
+    const dataToExport = this.filteredData;
+    
+    if (dataToExport.length === 0) {
+      alert('No data to export. Please adjust your filters or search criteria.');
+      return;
+    }
+
+    // Define CSV headers based on visible columns
+    const headers: string[] = [];
+    const csvRows: string[] = [];
+
+    // Add headers based on column visibility
+    if (this.columnVisibility.propertyName) headers.push('Property Name');
+    if (this.columnVisibility.occupancy) {
+      headers.push('Occupancy TM', 'Occupancy NM', 'Occupancy 7 Days', 'Occupancy 30 Days');
+    }
+    if (this.columnVisibility.adr) {
+      headers.push('ADR TM', 'ADR NM');
+    }
+    if (this.columnVisibility.revpar) {
+      headers.push('RevPAR TM', 'RevPAR NM');
+    }
+    if (this.columnVisibility.mpi) {
+      headers.push('MPI');
+    }
+    if (this.columnVisibility.reviews) {
+      headers.push('Booking Review Score', 'Booking Total Reviews', 'Airbnb Review Score', 'Airbnb Total Reviews', 'VRBO Review Score', 'VRBO Total Reviews');
+    }
+    if (this.columnVisibility.cxlPolicy) {
+      headers.push('Booking CXL Policy', 'Airbnb CXL Policy', 'VRBO CXL Policy');
+    }
+    if (this.columnVisibility.adultChildConfig) {
+      headers.push('Booking Adult Child Config', 'Airbnb Adult Child Config', 'VRBO Adult Child Config');
+    }
+    if (this.columnVisibility.pickupOcc) {
+      headers.push('Pick Up Occ 7 Days', 'Pick Up Occ 14 Days', 'Pick Up Occ 30 Days');
+    }
+    if (this.columnVisibility.minRateThreshold) {
+      headers.push('Min Rate Threshold');
+    }
+    if (this.columnVisibility.stlyVarOcc) {
+      headers.push('STLY Var Occ');
+    }
+    if (this.columnVisibility.stlyVarRevPAR) {
+      headers.push('STLY Var RevPAR');
+    }
+    if (this.columnVisibility.lastReviewScore) {
+      headers.push('Booking Last Review Score', 'Airbnb Last Review Score', 'VRBO Last Review Score');
+    }
+    if (this.columnVisibility.lastRevenueDate) {
+      headers.push('Booking Last Review Date', 'Airbnb Last Review Date', 'VRBO Last Review Date');
+    }
+
+    // Add additional fields for comprehensive export
+    headers.push('Area', 'Room Type');
+
+    // Add header row
+    csvRows.push(headers.join(','));
+
+    // Add data rows
+    dataToExport.forEach(property => {
+      const row: string[] = [];
+
+      // Add data based on column visibility
+      if (this.columnVisibility.propertyName) {
+        row.push(`"${this.escapeCSV(property.Listing_Name)}"`);
+      }
+      if (this.columnVisibility.occupancy) {
+        row.push(property.Occupancy.TM, property.Occupancy.NM, property.Occupancy['7_days'], property.Occupancy['30_days']);
+      }
+      if (this.columnVisibility.adr) {
+        row.push(property.ADR.TM, property.ADR.NM);
+      }
+      if (this.columnVisibility.revpar) {
+        row.push(property.RevPAR.TM, property.RevPAR.NM);
+      }
+      if (this.columnVisibility.mpi) {
+        row.push(property.MPI);
+      }
+      if (this.columnVisibility.reviews) {
+        row.push(
+          property.Reviews.Booking.Rev_Score || '',
+          property.Reviews.Booking.Total_Rev || '',
+          property.Reviews.Airbnb.Rev_Score || '',
+          property.Reviews.Airbnb.Total_Rev || '',
+          property.Reviews.VRBO.Rev_Score || '',
+          property.Reviews.VRBO.Total_Rev || ''
+        );
+      }
+      if (this.columnVisibility.cxlPolicy) {
+        row.push(
+          `"${this.escapeCSV(property.CXL_Policy.Booking || '')}"`,
+          `"${this.escapeCSV(property.CXL_Policy.Airbnb || '')}"`,
+          `"${this.escapeCSV(property.CXL_Policy.VRBO || '')}"`
+        );
+      }
+      if (this.columnVisibility.adultChildConfig) {
+        row.push(
+          `"${this.escapeCSV(property.Adult_Child_Config.Booking || '')}"`,
+          `"${this.escapeCSV(property.Adult_Child_Config.Airbnb || '')}"`,
+          `"${this.escapeCSV(property.Adult_Child_Config.VRBO || '')}"`
+        );
+      }
+      if (this.columnVisibility.pickupOcc) {
+        row.push(
+          property.Pick_Up_Occ['7_Days'],
+          property.Pick_Up_Occ['14_Days'],
+          property.Pick_Up_Occ['30_Days']
+        );
+      }
+      if (this.columnVisibility.minRateThreshold) {
+        row.push(property.Min_Rate_Threshold);
+      }
+      if (this.columnVisibility.stlyVarOcc) {
+        row.push(property.STLY_Var.Occ);
+      }
+      if (this.columnVisibility.stlyVarRevPAR) {
+        row.push(property.STLY_Var.RevPAR);
+      }
+      if (this.columnVisibility.lastReviewScore) {
+        row.push(
+          property.Reviews.Booking.Last_Rev_Score || '',
+          property.Reviews.Airbnb.Last_Rev_Score || '',
+          property.Reviews.VRBO.Last_Rev_Score || ''
+        );
+      }
+      if (this.columnVisibility.lastRevenueDate) {
+        row.push(
+          property.Reviews.Booking.Last_Review_Date || '',
+          property.Reviews.Airbnb.Last_Review_Date || '',
+          property.Reviews.VRBO.Last_Review_Date || ''
+        );
+      }
+
+      // Add additional fields
+      row.push(`"${this.escapeCSV(property.Area)}"`, `"${this.escapeCSV(property.Room_Type)}"`);
+
+      csvRows.push(row.join(','));
+    });
+
+    // Create CSV content
+    const csvContent = csvRows.join('\n');
+
+    // Create and download file
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    
+    // Generate filename with current date and applied filters info
+    const currentDate = new Date().toISOString().split('T')[0];
+    const filterInfo = this.hasActiveFilters() ? '_filtered' : '_all';
+    const filename = `revenue_properties_${currentDate}${filterInfo}.csv`;
+    
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    console.log(`Exported ${dataToExport.length} properties to CSV`);
+  }
+
+  private escapeCSV(value: string): string {
+    if (value === null || value === undefined) {
+      return '';
+    }
+    // Escape double quotes by doubling them and wrap in quotes if contains comma, quote, or newline
+    const stringValue = String(value);
+    if (stringValue.includes(',') || stringValue.includes('"') || stringValue.includes('\n')) {
+      return stringValue.replace(/"/g, '""');
+    }
+    return stringValue;
   }
   
   // Helper methods for templates
@@ -1531,7 +1713,10 @@ export class RevenueComponent implements OnInit {
       adultChildConfig: false,
       pickupOcc: false,
       minRateThreshold: false,
-      stlyVar: false,
+      stlyVarOcc: false,
+      stlyVarRevPAR: false,
+      lastReviewScore: false,
+      lastRevenueDate: false,
       actions: true
     };
   }

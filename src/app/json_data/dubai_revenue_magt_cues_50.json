@@ -57,7 +57,7 @@
       "Airbnb": "7 days 100%",
       "VRBO": "3 days 100%"
     },
-    "Adult_Child_Config": {
+    "Adult_Child_Config": { 
       "Booking": "2",
       "Airbnb": "3",
       "VRBO": "2"
@@ -67,19 +67,22 @@
         "Last_Rev_Dt": "04/08/25",
         "Last_Rev_Score": "8",
         "Rev_Score": "9",
-        "Total_Rev": "138"
+        "Total_Rev": "138",
+        "Last_Review_Date": "12/08/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "11/07/25",
         "Last_Rev_Score": "4.2",
         "Rev_Score": "3.9",
-        "Total_Rev": "407"
+        "Total_Rev": "407",
+        "Last_Review_Date": "18/07/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "21/08/25",
         "Last_Rev_Score": "4.1",
         "Rev_Score": "4.7",
-        "Total_Rev": "190"
+        "Total_Rev": "190",
+        "Last_Review_Date": "25/08/25"
       }
     }
   },
@@ -151,19 +154,22 @@
         "Last_Rev_Dt": "22/08/25",
         "Last_Rev_Score": "7",
         "Rev_Score": "9",
-        "Total_Rev": "485"
+        "Total_Rev": "485",
+        "Last_Review_Date": "11/01/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "16/07/25",
         "Last_Rev_Score": "4.2",
         "Rev_Score": "4.9",
-        "Total_Rev": "678"
+        "Total_Rev": "678",
+        "Last_Review_Date": "12/06/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "28/07/25",
         "Last_Rev_Score": "3.3",
         "Rev_Score": "3.5",
-        "Total_Rev": "292"
+        "Total_Rev": "292",
+        "Last_Review_Date": "05/07/25"
       }
     }
   },
@@ -235,19 +241,22 @@
         "Last_Rev_Dt": "11/07/25",
         "Last_Rev_Score": "8",
         "Rev_Score": "8",
-        "Total_Rev": "1089"
+        "Total_Rev": "1089",
+        "Last_Review_Date": "22/06/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "29/06/25",
         "Last_Rev_Score": "3.7",
         "Rev_Score": "4.6",
-        "Total_Rev": "674"
+        "Total_Rev": "674",
+        "Last_Review_Date": "24/06/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "25/07/25",
         "Last_Rev_Score": "4.2",
         "Rev_Score": "3.5",
-        "Total_Rev": "87"
+        "Total_Rev": "87",
+        "Last_Review_Date": "23/02/25"
       }
     }
   },
@@ -319,19 +328,22 @@
         "Last_Rev_Dt": "22/08/25",
         "Last_Rev_Score": "8",
         "Rev_Score": "7",
-        "Total_Rev": "1184"
+        "Total_Rev": "1184",
+        "Last_Review_Date": "26/08/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "12/08/25",
         "Last_Rev_Score": "4.4",
         "Rev_Score": "3.8",
-        "Total_Rev": "744"
+        "Total_Rev": "744",
+        "Last_Review_Date": "09/07/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "17/07/25",
         "Last_Rev_Score": "3.1",
         "Rev_Score": "3.3",
-        "Total_Rev": "21"
+        "Total_Rev": "21",
+        "Last_Review_Date": "09/01/25"
       }
     }
   },
@@ -403,19 +415,22 @@
         "Last_Rev_Dt": "29/07/25",
         "Last_Rev_Score": "10",
         "Rev_Score": "7",
-        "Total_Rev": "153"
+        "Total_Rev": "153",
+        "Last_Review_Date": "06/05/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "16/07/25",
         "Last_Rev_Score": "5.0",
         "Rev_Score": "4.8",
-        "Total_Rev": "115"
+        "Total_Rev": "115",
+        "Last_Review_Date": "27/04/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "28/06/25",
         "Last_Rev_Score": "4.5",
         "Rev_Score": "3.6",
-        "Total_Rev": "213"
+        "Total_Rev": "213",
+        "Last_Review_Date": "07/06/25"
       }
     }
   },
@@ -487,19 +502,22 @@
         "Last_Rev_Dt": "20/07/25",
         "Last_Rev_Score": "10",
         "Rev_Score": "7",
-        "Total_Rev": "217"
+        "Total_Rev": "217",
+        "Last_Review_Date": "13/08/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "31/07/25",
         "Last_Rev_Score": "4.5",
         "Rev_Score": "4.5",
-        "Total_Rev": "343"
+        "Total_Rev": "343",
+        "Last_Review_Date": "19/04/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "28/06/25",
         "Last_Rev_Score": "3.5",
         "Rev_Score": "4.4",
-        "Total_Rev": "165"
+        "Total_Rev": "165",
+        "Last_Review_Date": "16/01/25"
       }
     }
   },
@@ -571,19 +589,22 @@
         "Last_Rev_Dt": "22/07/25",
         "Last_Rev_Score": "7",
         "Rev_Score": "9",
-        "Total_Rev": "627"
+        "Total_Rev": "627",
+        "Last_Review_Date": "26/03/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "19/07/25",
         "Last_Rev_Score": "3.8",
         "Rev_Score": "4.2",
-        "Total_Rev": "723"
+        "Total_Rev": "723",
+        "Last_Review_Date": "06/08/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "17/07/25",
         "Last_Rev_Score": "4.7",
         "Rev_Score": "4.1",
-        "Total_Rev": "133"
+        "Total_Rev": "133",
+        "Last_Review_Date": "10/06/25"
       }
     }
   },
@@ -655,19 +676,22 @@
         "Last_Rev_Dt": "18/07/25",
         "Last_Rev_Score": "7",
         "Rev_Score": "8",
-        "Total_Rev": "382"
+        "Total_Rev": "382",
+        "Last_Review_Date": "23/03/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "06/07/25",
         "Last_Rev_Score": "4.7",
         "Rev_Score": "4.9",
-        "Total_Rev": "45"
+        "Total_Rev": "45",
+        "Last_Review_Date": "27/07/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "15/08/25",
         "Last_Rev_Score": "4.5",
         "Rev_Score": "3.8",
-        "Total_Rev": "215"
+        "Total_Rev": "215",
+        "Last_Review_Date": "11/01/25"
       }
     }
   },
@@ -739,19 +763,22 @@
         "Last_Rev_Dt": "04/08/25",
         "Last_Rev_Score": "8",
         "Rev_Score": "10",
-        "Total_Rev": "1097"
+        "Total_Rev": "1097",
+        "Last_Review_Date": "18/02/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "19/08/25",
         "Last_Rev_Score": "4.1",
         "Rev_Score": "4.5",
-        "Total_Rev": "280"
+        "Total_Rev": "280",
+        "Last_Review_Date": "19/03/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "24/08/25",
         "Last_Rev_Score": "4.4",
         "Rev_Score": "3.2",
-        "Total_Rev": "280"
+        "Total_Rev": "280",
+        "Last_Review_Date": "29/03/25"
       }
     }
   },
@@ -823,19 +850,22 @@
         "Last_Rev_Dt": "25/07/25",
         "Last_Rev_Score": "9",
         "Rev_Score": "8",
-        "Total_Rev": "223"
+        "Total_Rev": "223",
+        "Last_Review_Date": "18/04/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "08/08/25",
         "Last_Rev_Score": "4.3",
         "Rev_Score": "4.6",
-        "Total_Rev": "363"
+        "Total_Rev": "363",
+        "Last_Review_Date": "11/05/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "21/08/25",
         "Last_Rev_Score": "4.6",
         "Rev_Score": "4.6",
-        "Total_Rev": "163"
+        "Total_Rev": "163",
+        "Last_Review_Date": "20/02/25"
       }
     }
   },
@@ -907,19 +937,22 @@
         "Last_Rev_Dt": "22/07/25",
         "Last_Rev_Score": "10",
         "Rev_Score": "9",
-        "Total_Rev": "956"
+        "Total_Rev": "956",
+        "Last_Review_Date": "11/03/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "18/07/25",
         "Last_Rev_Score": "4.7",
         "Rev_Score": "4.9",
-        "Total_Rev": "456"
+        "Total_Rev": "456",
+        "Last_Review_Date": "22/06/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "04/07/25",
         "Last_Rev_Score": "4.8",
         "Rev_Score": "4.0",
-        "Total_Rev": "86"
+        "Total_Rev": "86",
+        "Last_Review_Date": "04/02/25"
       }
     }
   },
@@ -991,19 +1024,22 @@
         "Last_Rev_Dt": "09/07/25",
         "Last_Rev_Score": "9",
         "Rev_Score": "10",
-        "Total_Rev": "1152"
+        "Total_Rev": "1152",
+        "Last_Review_Date": "18/07/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "10/07/25",
         "Last_Rev_Score": "4.6",
         "Rev_Score": "4.8",
-        "Total_Rev": "245"
+        "Total_Rev": "245",
+        "Last_Review_Date": "23/01/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "26/07/25",
         "Last_Rev_Score": "3.4",
         "Rev_Score": "4.0",
-        "Total_Rev": "19"
+        "Total_Rev": "19",
+        "Last_Review_Date": "07/05/25"
       }
     }
   },
@@ -1075,19 +1111,22 @@
         "Last_Rev_Dt": "27/06/25",
         "Last_Rev_Score": "7",
         "Rev_Score": "8",
-        "Total_Rev": "91"
+        "Total_Rev": "91",
+        "Last_Review_Date": "05/01/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "18/07/25",
         "Last_Rev_Score": "3.7",
         "Rev_Score": "4.0",
-        "Total_Rev": "705"
+        "Total_Rev": "705",
+        "Last_Review_Date": "11/03/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "19/08/25",
         "Last_Rev_Score": "4.1",
         "Rev_Score": "3.6",
-        "Total_Rev": "136"
+        "Total_Rev": "136",
+        "Last_Review_Date": "02/02/25"
       }
     }
   },
@@ -1159,19 +1198,22 @@
         "Last_Rev_Dt": "03/08/25",
         "Last_Rev_Score": "9",
         "Rev_Score": "8",
-        "Total_Rev": "941"
+        "Total_Rev": "941",
+        "Last_Review_Date": "19/07/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "15/08/25",
         "Last_Rev_Score": "4.6",
         "Rev_Score": "5.0",
-        "Total_Rev": "296"
+        "Total_Rev": "296",
+        "Last_Review_Date": "17/06/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "18/07/25",
         "Last_Rev_Score": "4.6",
         "Rev_Score": "4.2",
-        "Total_Rev": "252"
+        "Total_Rev": "252",
+        "Last_Review_Date": "05/01/25"
       }
     }
   },
@@ -1243,19 +1285,22 @@
         "Last_Rev_Dt": "08/08/25",
         "Last_Rev_Score": "7",
         "Rev_Score": "10",
-        "Total_Rev": "548"
+        "Total_Rev": "548",
+        "Last_Review_Date": "06/04/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "07/08/25",
         "Last_Rev_Score": "4.5",
         "Rev_Score": "4.2",
-        "Total_Rev": "586"
+        "Total_Rev": "586",
+        "Last_Review_Date": "11/05/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "24/07/25",
         "Last_Rev_Score": "3.7",
         "Rev_Score": "5.0",
-        "Total_Rev": "286"
+        "Total_Rev": "286",
+        "Last_Review_Date": "11/05/25"
       }
     }
   },
@@ -1327,19 +1372,22 @@
         "Last_Rev_Dt": "27/07/25",
         "Last_Rev_Score": "9",
         "Rev_Score": "10",
-        "Total_Rev": "747"
+        "Total_Rev": "747",
+        "Last_Review_Date": "19/02/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "15/08/25",
         "Last_Rev_Score": "4.9",
         "Rev_Score": "4.1",
-        "Total_Rev": "509"
+        "Total_Rev": "509",
+        "Last_Review_Date": "07/06/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "19/08/25",
         "Last_Rev_Score": "4.6",
         "Rev_Score": "3.9",
-        "Total_Rev": "42"
+        "Total_Rev": "42",
+        "Last_Review_Date": "21/06/25"
       }
     }
   },
@@ -1411,19 +1459,22 @@
         "Last_Rev_Dt": "19/07/25",
         "Last_Rev_Score": "9",
         "Rev_Score": "9",
-        "Total_Rev": "116"
+        "Total_Rev": "116",
+        "Last_Review_Date": "07/01/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "12/08/25",
         "Last_Rev_Score": "3.9",
         "Rev_Score": "4.1",
-        "Total_Rev": "484"
+        "Total_Rev": "484",
+        "Last_Review_Date": "09/02/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "22/08/25",
         "Last_Rev_Score": "4.4",
         "Rev_Score": "4.9",
-        "Total_Rev": "106"
+        "Total_Rev": "106",
+        "Last_Review_Date": "30/05/25"
       }
     }
   },
@@ -1495,19 +1546,22 @@
         "Last_Rev_Dt": "16/07/25",
         "Last_Rev_Score": "9",
         "Rev_Score": "9",
-        "Total_Rev": "421"
+        "Total_Rev": "421",
+        "Last_Review_Date": "21/08/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "20/07/25",
         "Last_Rev_Score": "4.2",
         "Rev_Score": "4.8",
-        "Total_Rev": "113"
+        "Total_Rev": "113",
+        "Last_Review_Date": "17/07/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "27/07/25",
         "Last_Rev_Score": "3.7",
         "Rev_Score": "3.8",
-        "Total_Rev": "58"
+        "Total_Rev": "58",
+        "Last_Review_Date": "28/03/25"
       }
     }
   },
@@ -1579,19 +1633,22 @@
         "Last_Rev_Dt": "12/07/25",
         "Last_Rev_Score": "7",
         "Rev_Score": "9",
-        "Total_Rev": "1178"
+        "Total_Rev": "1178",
+        "Last_Review_Date": "31/05/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "26/08/25",
         "Last_Rev_Score": "4.3",
         "Rev_Score": "3.9",
-        "Total_Rev": "136"
+        "Total_Rev": "136",
+        "Last_Review_Date": "31/07/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "28/07/25",
         "Last_Rev_Score": "4.9",
         "Rev_Score": "4.4",
-        "Total_Rev": "83"
+        "Total_Rev": "83",
+        "Last_Review_Date": "03/01/25"
       }
     }
   },
@@ -1663,19 +1720,22 @@
         "Last_Rev_Dt": "21/07/25",
         "Last_Rev_Score": "9",
         "Rev_Score": "8",
-        "Total_Rev": "891"
+        "Total_Rev": "891",
+        "Last_Review_Date": "22/06/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "24/08/25",
         "Last_Rev_Score": "4.0",
         "Rev_Score": "4.4",
-        "Total_Rev": "410"
+        "Total_Rev": "410",
+        "Last_Review_Date": "16/06/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "02/08/25",
         "Last_Rev_Score": "5.0",
         "Rev_Score": "4.6",
-        "Total_Rev": "82"
+        "Total_Rev": "82",
+        "Last_Review_Date": "19/08/25"
       }
     }
   },
@@ -1747,19 +1807,22 @@
         "Last_Rev_Dt": "12/07/25",
         "Last_Rev_Score": "6",
         "Rev_Score": "10",
-        "Total_Rev": "390"
+        "Total_Rev": "390",
+        "Last_Review_Date": "10/08/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "13/07/25",
         "Last_Rev_Score": "3.9",
         "Rev_Score": "3.8",
-        "Total_Rev": "352"
+        "Total_Rev": "352",
+        "Last_Review_Date": "14/07/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "07/07/25",
         "Last_Rev_Score": "3.1",
         "Rev_Score": "3.8",
-        "Total_Rev": "225"
+        "Total_Rev": "225",
+        "Last_Review_Date": "06/02/25"
       }
     }
   },
@@ -1831,19 +1894,22 @@
         "Last_Rev_Dt": "11/08/25",
         "Last_Rev_Score": "9",
         "Rev_Score": "9",
-        "Total_Rev": "655"
+        "Total_Rev": "655",
+        "Last_Review_Date": "17/08/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "13/07/25",
         "Last_Rev_Score": "3.9",
         "Rev_Score": "5.0",
-        "Total_Rev": "694"
+        "Total_Rev": "694",
+        "Last_Review_Date": "27/02/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "01/08/25",
         "Last_Rev_Score": "3.5",
         "Rev_Score": "4.2",
-        "Total_Rev": "30"
+        "Total_Rev": "30",
+        "Last_Review_Date": "29/04/25"
       }
     }
   },
@@ -1915,19 +1981,22 @@
         "Last_Rev_Dt": "28/07/25",
         "Last_Rev_Score": "6",
         "Rev_Score": "8",
-        "Total_Rev": "512"
+        "Total_Rev": "512",
+        "Last_Review_Date": "28/01/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "02/07/25",
         "Last_Rev_Score": "4.5",
         "Rev_Score": "4.6",
-        "Total_Rev": "426"
+        "Total_Rev": "426",
+        "Last_Review_Date": "26/07/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "03/07/25",
         "Last_Rev_Score": "4.6",
         "Rev_Score": "3.9",
-        "Total_Rev": "207"
+        "Total_Rev": "207",
+        "Last_Review_Date": "29/03/25"
       }
     }
   },
@@ -1999,19 +2068,22 @@
         "Last_Rev_Dt": "17/08/25",
         "Last_Rev_Score": "9",
         "Rev_Score": "7",
-        "Total_Rev": "1052"
+        "Total_Rev": "1052",
+        "Last_Review_Date": "29/07/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "18/07/25",
         "Last_Rev_Score": "4.1",
         "Rev_Score": "4.9",
-        "Total_Rev": "53"
+        "Total_Rev": "53",
+        "Last_Review_Date": "08/02/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "13/07/25",
         "Last_Rev_Score": "3.7",
         "Rev_Score": "4.0",
-        "Total_Rev": "125"
+        "Total_Rev": "125",
+        "Last_Review_Date": "06/01/25"
       }
     }
   },
@@ -2083,19 +2155,22 @@
         "Last_Rev_Dt": "02/07/25",
         "Last_Rev_Score": "6",
         "Rev_Score": "8",
-        "Total_Rev": "80"
+        "Total_Rev": "80",
+        "Last_Review_Date": "14/01/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "04/08/25",
         "Last_Rev_Score": "4.7",
         "Rev_Score": "4.1",
-        "Total_Rev": "351"
+        "Total_Rev": "351",
+        "Last_Review_Date": "09/07/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "25/08/25",
         "Last_Rev_Score": "3.3",
         "Rev_Score": "3.3",
-        "Total_Rev": "220"
+        "Total_Rev": "220",
+        "Last_Review_Date": "14/05/25"
       }
     }
   },
@@ -2167,19 +2242,22 @@
         "Last_Rev_Dt": "30/07/25",
         "Last_Rev_Score": "6",
         "Rev_Score": "7",
-        "Total_Rev": "1179"
+        "Total_Rev": "1179",
+        "Last_Review_Date": "02/03/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "11/07/25",
         "Last_Rev_Score": "4.8",
         "Rev_Score": "4.3",
-        "Total_Rev": "253"
+        "Total_Rev": "253",
+        "Last_Review_Date": "02/03/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "31/07/25",
         "Last_Rev_Score": "3.7",
         "Rev_Score": "4.0",
-        "Total_Rev": "217"
+        "Total_Rev": "217",
+        "Last_Review_Date": "09/08/25"
       }
     }
   },
@@ -2251,19 +2329,22 @@
         "Last_Rev_Dt": "03/07/25",
         "Last_Rev_Score": "10",
         "Rev_Score": "9",
-        "Total_Rev": "285"
+        "Total_Rev": "285",
+        "Last_Review_Date": "31/07/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "09/07/25",
         "Last_Rev_Score": "3.9",
         "Rev_Score": "4.1",
-        "Total_Rev": "459"
+        "Total_Rev": "459",
+        "Last_Review_Date": "16/02/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "03/07/25",
         "Last_Rev_Score": "4.1",
         "Rev_Score": "4.6",
-        "Total_Rev": "290"
+        "Total_Rev": "290",
+        "Last_Review_Date": "07/08/25"
       }
     }
   },
@@ -2335,19 +2416,22 @@
         "Last_Rev_Dt": "26/07/25",
         "Last_Rev_Score": "10",
         "Rev_Score": "10",
-        "Total_Rev": "898"
+        "Total_Rev": "898",
+        "Last_Review_Date": "24/02/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "09/08/25",
         "Last_Rev_Score": "3.8",
         "Rev_Score": "4.4",
-        "Total_Rev": "373"
+        "Total_Rev": "373",
+        "Last_Review_Date": "08/05/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "30/07/25",
         "Last_Rev_Score": "3.2",
         "Rev_Score": "4.4",
-        "Total_Rev": "254"
+        "Total_Rev": "254",
+        "Last_Review_Date": "08/08/25"
       }
     }
   },
@@ -2419,19 +2503,22 @@
         "Last_Rev_Dt": "25/08/25",
         "Last_Rev_Score": "8",
         "Rev_Score": "8",
-        "Total_Rev": "992"
+        "Total_Rev": "992",
+        "Last_Review_Date": "12/04/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "04/07/25",
         "Last_Rev_Score": "4.5",
         "Rev_Score": "4.2",
-        "Total_Rev": "467"
+        "Total_Rev": "467",
+        "Last_Review_Date": "28/06/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "03/07/25",
         "Last_Rev_Score": "3.2",
         "Rev_Score": "4.0",
-        "Total_Rev": "210"
+        "Total_Rev": "210",
+        "Last_Review_Date": "11/07/25"
       }
     }
   },
@@ -2503,19 +2590,22 @@
         "Last_Rev_Dt": "29/07/25",
         "Last_Rev_Score": "8",
         "Rev_Score": "9",
-        "Total_Rev": "165"
+        "Total_Rev": "165",
+        "Last_Review_Date": "22/05/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "04/08/25",
         "Last_Rev_Score": "4.3",
         "Rev_Score": "4.2",
-        "Total_Rev": "482"
+        "Total_Rev": "482",
+        "Last_Review_Date": "06/03/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "24/08/25",
         "Last_Rev_Score": "3.1",
         "Rev_Score": "4.7",
-        "Total_Rev": "44"
+        "Total_Rev": "44",
+        "Last_Review_Date": "18/05/25"
       }
     }
   },
@@ -2587,19 +2677,22 @@
         "Last_Rev_Dt": "07/07/25",
         "Last_Rev_Score": "8",
         "Rev_Score": "7",
-        "Total_Rev": "725"
+        "Total_Rev": "725",
+        "Last_Review_Date": "13/08/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "20/08/25",
         "Last_Rev_Score": "4.3",
         "Rev_Score": "4.3",
-        "Total_Rev": "278"
+        "Total_Rev": "278",
+        "Last_Review_Date": "23/02/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "11/07/25",
         "Last_Rev_Score": "4.7",
         "Rev_Score": "4.9",
-        "Total_Rev": "81"
+        "Total_Rev": "81",
+        "Last_Review_Date": "27/06/25"
       }
     }
   },
@@ -2671,19 +2764,22 @@
         "Last_Rev_Dt": "02/08/25",
         "Last_Rev_Score": "7",
         "Rev_Score": "8",
-        "Total_Rev": "420"
+        "Total_Rev": "420",
+        "Last_Review_Date": "16/07/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "04/07/25",
         "Last_Rev_Score": "4.5",
         "Rev_Score": "4.5",
-        "Total_Rev": "189"
+        "Total_Rev": "189",
+        "Last_Review_Date": "27/06/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "11/07/25",
         "Last_Rev_Score": "3.9",
         "Rev_Score": "3.9",
-        "Total_Rev": "126"
+        "Total_Rev": "126",
+        "Last_Review_Date": "13/01/25"
       }
     }
   },
@@ -2755,19 +2851,22 @@
         "Last_Rev_Dt": "04/07/25",
         "Last_Rev_Score": "9",
         "Rev_Score": "7",
-        "Total_Rev": "504"
+        "Total_Rev": "504",
+        "Last_Review_Date": "28/08/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "05/07/25",
         "Last_Rev_Score": "4.2",
         "Rev_Score": "4.2",
-        "Total_Rev": "47"
+        "Total_Rev": "47",
+        "Last_Review_Date": "08/01/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "31/07/25",
         "Last_Rev_Score": "3.1",
         "Rev_Score": "4.1",
-        "Total_Rev": "125"
+        "Total_Rev": "125",
+        "Last_Review_Date": "16/02/25"
       }
     }
   },
@@ -2839,19 +2938,22 @@
         "Last_Rev_Dt": "25/08/25",
         "Last_Rev_Score": "10",
         "Rev_Score": "8",
-        "Total_Rev": "344"
+        "Total_Rev": "344",
+        "Last_Review_Date": "12/03/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "08/08/25",
         "Last_Rev_Score": "4.1",
         "Rev_Score": "4.5",
-        "Total_Rev": "266"
+        "Total_Rev": "266",
+        "Last_Review_Date": "21/02/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "21/07/25",
         "Last_Rev_Score": "3.8",
         "Rev_Score": "4.4",
-        "Total_Rev": "48"
+        "Total_Rev": "48",
+        "Last_Review_Date": "03/06/25"
       }
     }
   },
@@ -2923,19 +3025,22 @@
         "Last_Rev_Dt": "08/08/25",
         "Last_Rev_Score": "7",
         "Rev_Score": "7",
-        "Total_Rev": "458"
+        "Total_Rev": "458",
+        "Last_Review_Date": "27/04/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "01/07/25",
         "Last_Rev_Score": "3.6",
         "Rev_Score": "4.9",
-        "Total_Rev": "547"
+        "Total_Rev": "547",
+        "Last_Review_Date": "27/07/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "01/08/25",
         "Last_Rev_Score": "5.0",
         "Rev_Score": "4.2",
-        "Total_Rev": "134"
+        "Total_Rev": "134",
+        "Last_Review_Date": "10/03/25"
       }
     }
   },
@@ -3007,19 +3112,22 @@
         "Last_Rev_Dt": "16/08/25",
         "Last_Rev_Score": "9",
         "Rev_Score": "9",
-        "Total_Rev": "965"
+        "Total_Rev": "965",
+        "Last_Review_Date": "26/02/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "24/08/25",
         "Last_Rev_Score": "4.6",
         "Rev_Score": "4.9",
-        "Total_Rev": "649"
+        "Total_Rev": "649",
+        "Last_Review_Date": "20/05/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "30/07/25",
         "Last_Rev_Score": "3.5",
         "Rev_Score": "5.0",
-        "Total_Rev": "34"
+        "Total_Rev": "34",
+        "Last_Review_Date": "15/04/25"
       }
     }
   },
@@ -3091,19 +3199,22 @@
         "Last_Rev_Dt": "08/07/25",
         "Last_Rev_Score": "8",
         "Rev_Score": "10",
-        "Total_Rev": "489"
+        "Total_Rev": "489",
+        "Last_Review_Date": "17/05/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "18/07/25",
         "Last_Rev_Score": "3.9",
         "Rev_Score": "4.9",
-        "Total_Rev": "522"
+        "Total_Rev": "522",
+        "Last_Review_Date": "10/04/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "14/08/25",
         "Last_Rev_Score": "3.2",
         "Rev_Score": "4.7",
-        "Total_Rev": "236"
+        "Total_Rev": "236",
+        "Last_Review_Date": "19/01/25"
       }
     }
   },
@@ -3175,19 +3286,22 @@
         "Last_Rev_Dt": "06/08/25",
         "Last_Rev_Score": "6",
         "Rev_Score": "10",
-        "Total_Rev": "1004"
+        "Total_Rev": "1004",
+        "Last_Review_Date": "19/03/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "14/07/25",
         "Last_Rev_Score": "4.3",
         "Rev_Score": "4.0",
-        "Total_Rev": "584"
+        "Total_Rev": "584",
+        "Last_Review_Date": "10/07/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "17/07/25",
         "Last_Rev_Score": "4.2",
         "Rev_Score": "4.6",
-        "Total_Rev": "71"
+        "Total_Rev": "71",
+        "Last_Review_Date": "04/08/25"
       }
     }
   },
@@ -3259,19 +3373,22 @@
         "Last_Rev_Dt": "16/07/25",
         "Last_Rev_Score": "7",
         "Rev_Score": "10",
-        "Total_Rev": "112"
+        "Total_Rev": "112",
+        "Last_Review_Date": "05/05/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "26/07/25",
         "Last_Rev_Score": "4.8",
         "Rev_Score": "4.5",
-        "Total_Rev": "677"
+        "Total_Rev": "677",
+        "Last_Review_Date": "15/01/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "07/08/25",
         "Last_Rev_Score": "4.0",
         "Rev_Score": "4.6",
-        "Total_Rev": "212"
+        "Total_Rev": "212",
+        "Last_Review_Date": "15/04/25"
       }
     }
   },
@@ -3343,19 +3460,22 @@
         "Last_Rev_Dt": "26/07/25",
         "Last_Rev_Score": "8",
         "Rev_Score": "10",
-        "Total_Rev": "97"
+        "Total_Rev": "97",
+        "Last_Review_Date": "21/02/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "21/08/25",
         "Last_Rev_Score": "4.9",
         "Rev_Score": "4.4",
-        "Total_Rev": "266"
+        "Total_Rev": "266",
+        "Last_Review_Date": "29/01/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "13/08/25",
         "Last_Rev_Score": "4.2",
         "Rev_Score": "3.3",
-        "Total_Rev": "149"
+        "Total_Rev": "149",
+        "Last_Review_Date": "25/08/25"
       }
     }
   },
@@ -3427,19 +3547,22 @@
         "Last_Rev_Dt": "01/08/25",
         "Last_Rev_Score": "10",
         "Rev_Score": "7",
-        "Total_Rev": "142"
+        "Total_Rev": "142",
+        "Last_Review_Date": "08/04/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "24/08/25",
         "Last_Rev_Score": "3.7",
         "Rev_Score": "4.2",
-        "Total_Rev": "505"
+        "Total_Rev": "505",
+        "Last_Review_Date": "27/06/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "24/07/25",
         "Last_Rev_Score": "3.9",
         "Rev_Score": "4.3",
-        "Total_Rev": "268"
+        "Total_Rev": "268",
+        "Last_Review_Date": "06/06/25"
       }
     }
   },
@@ -3511,19 +3634,22 @@
         "Last_Rev_Dt": "11/07/25",
         "Last_Rev_Score": "10",
         "Rev_Score": "10",
-        "Total_Rev": "352"
+        "Total_Rev": "352",
+        "Last_Review_Date": "09/06/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "05/07/25",
         "Last_Rev_Score": "4.5",
         "Rev_Score": "3.8",
-        "Total_Rev": "737"
+        "Total_Rev": "737",
+        "Last_Review_Date": "09/08/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "19/08/25",
         "Last_Rev_Score": "3.4",
         "Rev_Score": "4.0",
-        "Total_Rev": "219"
+        "Total_Rev": "219",
+        "Last_Review_Date": "01/04/25"
       }
     }
   },
@@ -3595,19 +3721,22 @@
         "Last_Rev_Dt": "13/07/25",
         "Last_Rev_Score": "9",
         "Rev_Score": "9",
-        "Total_Rev": "1032"
+        "Total_Rev": "1032",
+        "Last_Review_Date": "28/01/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "04/08/25",
         "Last_Rev_Score": "4.3",
         "Rev_Score": "4.9",
-        "Total_Rev": "758"
+        "Total_Rev": "758",
+        "Last_Review_Date": "11/02/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "09/08/25",
         "Last_Rev_Score": "3.6",
         "Rev_Score": "4.2",
-        "Total_Rev": "283"
+        "Total_Rev": "283",
+        "Last_Review_Date": "12/02/25"
       }
     }
   },
@@ -3679,19 +3808,22 @@
         "Last_Rev_Dt": "27/07/25",
         "Last_Rev_Score": "7",
         "Rev_Score": "9",
-        "Total_Rev": "707"
+        "Total_Rev": "707",
+        "Last_Review_Date": "15/08/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "08/08/25",
         "Last_Rev_Score": "4.5",
         "Rev_Score": "4.9",
-        "Total_Rev": "111"
+        "Total_Rev": "111",
+        "Last_Review_Date": "04/01/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "16/07/25",
         "Last_Rev_Score": "4.1",
         "Rev_Score": "4.2",
-        "Total_Rev": "24"
+        "Total_Rev": "24",
+        "Last_Review_Date": "09/07/25"
       }
     }
   },
@@ -3763,19 +3895,22 @@
         "Last_Rev_Dt": "05/07/25",
         "Last_Rev_Score": "9",
         "Rev_Score": "9",
-        "Total_Rev": "227"
+        "Total_Rev": "227",
+        "Last_Review_Date": "02/05/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "01/08/25",
         "Last_Rev_Score": "4.5",
         "Rev_Score": "4.0",
-        "Total_Rev": "163"
+        "Total_Rev": "163",
+        "Last_Review_Date": "24/05/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "27/07/25",
         "Last_Rev_Score": "3.6",
         "Rev_Score": "3.6",
-        "Total_Rev": "138"
+        "Total_Rev": "138",
+        "Last_Review_Date": "31/05/25"
       }
     }
   },
@@ -3847,19 +3982,22 @@
         "Last_Rev_Dt": "02/07/25",
         "Last_Rev_Score": "6",
         "Rev_Score": "10",
-        "Total_Rev": "1131"
+        "Total_Rev": "1131",
+        "Last_Review_Date": "25/02/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "12/07/25",
         "Last_Rev_Score": "4.0",
         "Rev_Score": "4.9",
-        "Total_Rev": "134"
+        "Total_Rev": "134",
+        "Last_Review_Date": "16/08/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "23/08/25",
         "Last_Rev_Score": "4.7",
         "Rev_Score": "4.8",
-        "Total_Rev": "108"
+        "Total_Rev": "108",
+        "Last_Review_Date": "14/08/25"
       }
     }
   },
@@ -3931,19 +4069,22 @@
         "Last_Rev_Dt": "15/08/25",
         "Last_Rev_Score": "7",
         "Rev_Score": "10",
-        "Total_Rev": "816"
+        "Total_Rev": "816",
+        "Last_Review_Date": "24/01/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "30/06/25",
         "Last_Rev_Score": "4.1",
         "Rev_Score": "4.8",
-        "Total_Rev": "406"
+        "Total_Rev": "406",
+        "Last_Review_Date": "16/06/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "02/08/25",
         "Last_Rev_Score": "3.2",
         "Rev_Score": "4.9",
-        "Total_Rev": "281"
+        "Total_Rev": "281",
+        "Last_Review_Date": "31/07/25"
       }
     }
   },
@@ -4015,19 +4156,22 @@
         "Last_Rev_Dt": "01/08/25",
         "Last_Rev_Score": "9",
         "Rev_Score": "8",
-        "Total_Rev": "1155"
+        "Total_Rev": "1155",
+        "Last_Review_Date": "03/01/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "13/08/25",
         "Last_Rev_Score": "4.6",
         "Rev_Score": "4.7",
-        "Total_Rev": "163"
+        "Total_Rev": "163",
+        "Last_Review_Date": "24/03/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "25/07/25",
         "Last_Rev_Score": "5.0",
         "Rev_Score": "3.6",
-        "Total_Rev": "299"
+        "Total_Rev": "299",
+        "Last_Review_Date": "04/02/25"
       }
     }
   },
@@ -4099,19 +4243,22 @@
         "Last_Rev_Dt": "31/07/25",
         "Last_Rev_Score": "10",
         "Rev_Score": "8",
-        "Total_Rev": "845"
+        "Total_Rev": "845",
+        "Last_Review_Date": "03/04/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "11/08/25",
         "Last_Rev_Score": "3.9",
         "Rev_Score": "4.2",
-        "Total_Rev": "100"
+        "Total_Rev": "100",
+        "Last_Review_Date": "06/07/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "28/06/25",
         "Last_Rev_Score": "3.9",
         "Rev_Score": "3.9",
-        "Total_Rev": "279"
+        "Total_Rev": "279",
+        "Last_Review_Date": "07/08/25"
       }
     }
   },
@@ -4183,19 +4330,22 @@
         "Last_Rev_Dt": "28/07/25",
         "Last_Rev_Score": "6",
         "Rev_Score": "10",
-        "Total_Rev": "705"
+        "Total_Rev": "705",
+        "Last_Review_Date": "29/01/25"
       },
       "Airbnb": {
         "Last_Rev_Dt": "29/06/25",
         "Last_Rev_Score": "3.8",
         "Rev_Score": "4.2",
-        "Total_Rev": "66"
+        "Total_Rev": "66",
+        "Last_Review_Date": "10/05/25"
       },
       "VRBO": {
         "Last_Rev_Dt": "21/07/25",
         "Last_Rev_Score": "4.7",
         "Rev_Score": "4.5",
-        "Total_Rev": "13"
+        "Total_Rev": "13",
+        "Last_Review_Date": "28/05/25"
       }
     }
   }

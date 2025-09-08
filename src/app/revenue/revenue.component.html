@@ -2,9 +2,8 @@
   <!-- Controls Section -->
   <div class="row mb-4">
     <div class="col-12">
-      <div class="row align-items-end">
+      <div class="row align-items-end mb-2">
         <div class="col-md-6">
-          <label class="form-label">Search Properties</label>
           <div class="input-group">
             <span class="input-group-text"><i class="fas fa-search"></i></span>
             <input type="text" class="form-control" placeholder="Search by name, area, or room type..."
@@ -22,12 +21,17 @@
           </button>
         </div>
         <div class="col-md-3">
-          <div class="dropdown float-end">
-            <button class="btn btn-outline-info dropdown-toggle" type="button" id="columnVisibilityDropdown"
-              data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="fas fa-columns me-2"></i>
-              Columns ({{ getVisibleColumnsCount() }})
+          <div class="d-flex gap-2 float-end">
+            <button class="btn btn-outline-success" (click)="exportToCSV()" title="Export to CSV">
+              <i class="fas fa-download me-2"></i>
+              Export CSV
             </button>
+            <div class="dropdown">
+              <button class="btn btn-outline-info dropdown-toggle" type="button" id="columnVisibilityDropdown"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-columns me-2"></i>
+                Columns ({{ getVisibleColumnsCount() }})
+              </button>
             <div class="dropdown-menu dropdown-menu-end column-visibility-dropdown"
               aria-labelledby="columnVisibilityDropdown">
               <div class="dropdown-header">
@@ -35,7 +39,7 @@
               </div>
 
               <!-- Quick Actions -->
-              <div class="dropdown-item-text px-3 py-2 border-bottom">
+              <div class="dropdown-item-text px-3 py-2 border-bottom" (click)="$event.stopPropagation()">
                 <div class="btn-group btn-group-sm w-100" role="group">
                   <button type="button" class="btn btn-outline-secondary" (click)="resetToDefaultColumns()">
                     Default
@@ -51,95 +55,119 @@
 
               <!-- Column Checkboxes -->
               <div class="column-checkboxes px-3">
-                <div class="form-check dropdown-item">
+                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
                   <input class="form-check-input" type="checkbox" id="col-propertyName"
                     [(ngModel)]="columnVisibility.propertyName" disabled>
-                  <label class="form-check-label" for="col-propertyName">
+                  <label class="form-check-label">
                     Property Name
                   </label>
                 </div>
 
-                <div class="form-check dropdown-item">
+                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
                   <input class="form-check-input" type="checkbox" id="col-occupancy"
                     [(ngModel)]="columnVisibility.occupancy">
-                  <label class="form-check-label" for="col-occupancy">
+                  <label class="form-check-label">
                     Occupancy
                   </label>
                 </div>
 
-                <div class="form-check dropdown-item">
+                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
                   <input class="form-check-input" type="checkbox" id="col-adr" [(ngModel)]="columnVisibility.adr">
-                  <label class="form-check-label" for="col-adr">
+                  <label class="form-check-label">
                     ADR
                   </label>
                 </div>
 
-                <div class="form-check dropdown-item">
+                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
                   <input class="form-check-input" type="checkbox" id="col-revpar" [(ngModel)]="columnVisibility.revpar">
-                  <label class="form-check-label" for="col-revpar">
+                  <label class="form-check-label">
                     RevPAR
                   </label>
                 </div>
 
-                <div class="form-check dropdown-item">
+                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
                   <input class="form-check-input" type="checkbox" id="col-mpi" [(ngModel)]="columnVisibility.mpi">
-                  <label class="form-check-label" for="col-mpi">
+                  <label class="form-check-label">
                     MPI
                   </label>
                 </div>
 
-                <div class="form-check dropdown-item">
+                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
                   <input class="form-check-input" type="checkbox" id="col-reviews"
                     [(ngModel)]="columnVisibility.reviews">
-                  <label class="form-check-label" for="col-reviews">
+                  <label class="form-check-label">
                     Reviews
                   </label>
                 </div>
 
-                <div class="form-check dropdown-item">
+                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
                   <input class="form-check-input" type="checkbox" id="col-cxlPolicy"
                     [(ngModel)]="columnVisibility.cxlPolicy">
-                  <label class="form-check-label" for="col-cxlPolicy">
+                  <label class="form-check-label">
                     CXL Policy
                   </label>
                 </div>
 
-                <div class="form-check dropdown-item">
+                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
                   <input class="form-check-input" type="checkbox" id="col-adultChildConfig"
                     [(ngModel)]="columnVisibility.adultChildConfig">
-                  <label class="form-check-label" for="col-adultChildConfig">
+                  <label class="form-check-label">
                     Adult Child Config
                   </label>
                 </div>
 
-                <div class="form-check dropdown-item">
+                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
                   <input class="form-check-input" type="checkbox" id="col-pickupOcc"
                     [(ngModel)]="columnVisibility.pickupOcc">
-                  <label class="form-check-label" for="col-pickupOcc">
+                  <label class="form-check-label">
                     Pick up Occ
                   </label>
                 </div>
 
-                <div class="form-check dropdown-item">
+                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
                   <input class="form-check-input" type="checkbox" id="col-minRateThreshold"
                     [(ngModel)]="columnVisibility.minRateThreshold">
-                  <label class="form-check-label" for="col-minRateThreshold">
+                  <label class="form-check-label">
                     Min Rate Threshold
                   </label>
                 </div>
 
-                <div class="form-check dropdown-item">
-                  <input class="form-check-input" type="checkbox" id="col-stlyVar"
-                    [(ngModel)]="columnVisibility.stlyVar">
-                  <label class="form-check-label" for="col-stlyVar">
-                    STLY Var
+                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
+                  <input class="form-check-input" type="checkbox" id="col-stlyVarOcc"
+                    [(ngModel)]="columnVisibility.stlyVarOcc">
+                  <label class="form-check-label">
+                    STLY Var Occ
                   </label>
                 </div>
 
-                <div class="form-check dropdown-item">
+                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
+                  <input class="form-check-input" type="checkbox" id="col-stlyVarRevPAR"
+                    [(ngModel)]="columnVisibility.stlyVarRevPAR">
+                  <label class="form-check-label">
+                    STLY Var RevPAR
+                  </label>
+                </div>
+
+                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
+                  <input class="form-check-input" type="checkbox" id="col-lastReviewScore"
+                    [(ngModel)]="columnVisibility.lastReviewScore">
+                  <label class="form-check-label">
+                    Last Review Score
+                  </label>
+                </div>
+
+                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
+                  <input class="form-check-input" type="checkbox" id="col-lastRevenueDate"
+                    [(ngModel)]="columnVisibility.lastRevenueDate">
+                  <label class="form-check-label">
+                    Last Revenue Date
+                  </label>
+                </div>
+
+                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
                   <input class="form-check-input" type="checkbox" id="col-actions"
                     [(ngModel)]="columnVisibility.actions" disabled>
-                  <label class="form-check-label" for="col-actions">
+                  <label class="form-check-label">
                     Actions
                   </label>
                 </div>
@@ -181,17 +209,20 @@
         <table class="table table-hover">
           <thead>
             <tr>
-              <th style="width: 250px;" *ngIf="columnVisibility.propertyName">Property Name</th>
+              <th style="min-width: 200px;" *ngIf="columnVisibility.propertyName">Property Name</th>
               <th *ngIf="columnVisibility.occupancy">Occupancy</th>
               <th *ngIf="columnVisibility.adr">ADR</th>
               <th *ngIf="columnVisibility.revpar">RevPAR</th>
               <th *ngIf="columnVisibility.mpi">MPI</th>
               <th *ngIf="columnVisibility.reviews">Reviews</th>
               <th *ngIf="columnVisibility.cxlPolicy">CXL Policy</th>
-              <th *ngIf="columnVisibility.adultChildConfig">Adult Child Config</th>
+              <th *ngIf="columnVisibility.adultChildConfig">Adult Child</th>
               <th *ngIf="columnVisibility.pickupOcc">Pick up Occ</th>
-              <th *ngIf="columnVisibility.minRateThreshold">Min Rate Threshold</th>
-              <th *ngIf="columnVisibility.stlyVar">STLY Var</th>
+              <th *ngIf="columnVisibility.minRateThreshold">Min Rate <br/> Threshold</th>
+              <th *ngIf="columnVisibility.stlyVarOcc">STLY <br/>Var Occ</th>
+              <th *ngIf="columnVisibility.stlyVarRevPAR">STLY Var <br/> RevPAR</th>
+              <th *ngIf="columnVisibility.lastReviewScore">Last Review <br/> Score</th>
+              <th *ngIf="columnVisibility.lastRevenueDate">Last Revenue <br/> Date</th>
               <th *ngIf="columnVisibility.actions"></th>
             </tr>
           </thead>
@@ -200,9 +231,6 @@
               <td *ngIf="columnVisibility.propertyName">
                 <div class="property-name">
                   <strong>{{ property.Listing_Name }}</strong>
-                  <div class="property-details">
-                    <small class="text-muted">{{ property.Area }} • {{ property.Room_Type }}</small>
-                  </div>
                 </div>
               </td>
               <td *ngIf="columnVisibility.occupancy">
@@ -228,24 +256,24 @@
               <td *ngIf="columnVisibility.adr">
                 <div class="dual-value-cell">
                   <div class="value-pair">
-                    <span class="badge bg-primary text-white me-1">TM: ${{ property.ADR.TM }}</span>
-                    <span class="badge bg-secondary text-white">NM: ${{ property.ADR.NM }}</span>
+                    <span class="badge bg-black text-white me-1">TM: ${{ property.ADR.TM }}</span>
+                    <span class="badge bg-black text-white">NM: ${{ property.ADR.NM }}</span>
                   </div>
                 </div>
               </td>
               <td *ngIf="columnVisibility.revpar">
                 <div class="dual-value-cell">
                   <div class="value-pair">
-                    <span class="badge bg-primary text-white me-1">TM: ${{ property.RevPAR.TM }}</span>
-                    <span class="badge bg-secondary text-white">NM: ${{ property.RevPAR.NM }}</span>
+                    <span class="badge bg-black text-white me-1">TM: ${{ property.RevPAR.TM }}</span>
+                    <span class="badge bg-black text-white">NM: ${{ property.RevPAR.NM }}</span>
                   </div>
                 </div>
               </td>
               <td *ngIf="columnVisibility.mpi">
                 <div class="dual-value-cell">
                   <div class="value-pair">
-                    <span class="badge bg-primary text-white me-1">TM: {{ getMPITM(property) }}</span>
-                    <span class="badge bg-secondary text-white">NM: {{ getMPINM(property) }}</span>
+                    <span class="badge bg-black text-white me-1">TM: {{ getMPITM(property) }}</span>
+                    <span class="badge bg-black text-white">NM: {{ getMPINM(property) }}</span>
                   </div>
                 </div>
               </td>
@@ -338,14 +366,50 @@
                   <span class="threshold-value">{{ property.Min_Rate_Threshold }}</span>
                 </div>
               </td>
-              <td *ngIf="columnVisibility.stlyVar">
-                <div class="stly-vars">
-                  <small class="d-block" [ngClass]="getPerformanceClass(property.STLY_Var.Occ)">
-                    Occ: {{ property.STLY_Var.Occ }}
-                  </small>
-                  <small class="d-block" [ngClass]="getPerformanceClass(property.STLY_Var.RevPAR)">
-                    RevPAR: {{ property.STLY_Var.RevPAR }}
-                  </small>
+              <td *ngIf="columnVisibility.stlyVarOcc">
+                <div class="stly-var-single-cell">
+                  <span class="badge" [ngClass]="getPerformanceClass(property.STLY_Var.Occ)">
+                    {{ property.STLY_Var.Occ }}
+                  </span>
+                </div>
+              </td>
+              <td *ngIf="columnVisibility.stlyVarRevPAR">
+                <div class="stly-var-single-cell">
+                  <span class="badge" [ngClass]="getPerformanceClass(property.STLY_Var.RevPAR)">
+                    {{ property.STLY_Var.RevPAR }}
+                  </span>
+                </div>
+              </td>
+              <td *ngIf="columnVisibility.lastReviewScore">
+                <div class="review-score-cell">
+                  <div class="review-item">
+                    <i class="fas fa-bed text-primary"></i>
+                    <span class="score-value">{{ property.Reviews.Booking.Last_Rev_Score }}</span>
+                  </div>
+                  <div class="review-item">
+                    <i class="fab fa-airbnb text-danger"></i>
+                    <span class="score-value">{{ property.Reviews.Airbnb.Last_Rev_Score }}</span>
+                  </div>
+                  <div class="review-item">
+                    <i class="fas fa-home text-warning"></i>
+                    <span class="score-value">{{ property.Reviews.VRBO.Last_Rev_Score }}</span>
+                  </div>
+                </div>
+              </td>
+              <td *ngIf="columnVisibility.lastRevenueDate">
+                <div class="revenue-date-cell">
+                  <div class="date-item">
+                    <i class="fas fa-bed text-primary"></i>
+                    <span class="date-value">{{ property.Reviews.Booking.Last_Review_Date }}</span>
+                  </div>
+                  <div class="date-item">
+                    <i class="fab fa-airbnb text-danger"></i>
+                    <span class="date-value">{{ property.Reviews.Airbnb.Last_Review_Date }}</span>
+                  </div>
+                  <div class="date-item">
+                    <i class="fas fa-home text-warning"></i>
+                    <span class="date-value">{{ property.Reviews.VRBO.Last_Review_Date }}</span>
+                  </div>
                 </div>
               </td>
               <td *ngIf="columnVisibility.actions">
@@ -765,7 +829,7 @@
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="bookingGenius"
                       [(ngModel)]="tempBookingGeniusFilter" (change)="filterData()">
-                    <label class="form-check-label" for="bookingGenius">
+                    <label class="form-check-label">
                       Genius Program
                     </label>
                   </div>
@@ -774,7 +838,7 @@
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="bookingMobile"
                       [(ngModel)]="tempBookingMobileFilter" (change)="filterData()">
-                    <label class="form-check-label" for="bookingMobile">
+                    <label class="form-check-label">
                       Mobile Deals
                     </label>
                   </div>
@@ -783,7 +847,7 @@
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="bookingPref" [(ngModel)]="tempBookingPrefFilter"
                       (change)="filterData()">
-                    <label class="form-check-label" for="bookingPref">
+                    <label class="form-check-label">
                       Preferred Partner
                     </label>
                   </div>
@@ -792,7 +856,7 @@
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="bookingWeekly"
                       [(ngModel)]="tempBookingWeeklyFilter" (change)="filterData()">
-                    <label class="form-check-label" for="bookingWeekly">
+                    <label class="form-check-label">
                       Weekly Discounts
                     </label>
                   </div>
@@ -801,7 +865,7 @@
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="bookingMonthly"
                       [(ngModel)]="tempBookingMonthlyFilter" (change)="filterData()">
-                    <label class="form-check-label" for="bookingMonthly">
+                    <label class="form-check-label">
                       Monthly Discounts
                     </label>
                   </div>
@@ -810,7 +874,7 @@
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="bookingLMDisc"
                       [(ngModel)]="tempBookingLMDiscFilter" (change)="filterData()">
-                    <label class="form-check-label" for="bookingLMDisc">
+                    <label class="form-check-label">
                       Last Minute Discount
                     </label>
                   </div>
@@ -824,7 +888,7 @@
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="airbnbWeekly"
                       [(ngModel)]="tempAirbnbWeeklyFilter" (change)="filterData()">
-                    <label class="form-check-label" for="airbnbWeekly">
+                    <label class="form-check-label">
                       Weekly Discounts
                     </label>
                   </div>
@@ -833,7 +897,7 @@
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="airbnbMonthly"
                       [(ngModel)]="tempAirbnbMonthlyFilter" (change)="filterData()">
-                    <label class="form-check-label" for="airbnbMonthly">
+                    <label class="form-check-label">
                       Monthly Discounts
                     </label>
                   </div>
@@ -842,7 +906,7 @@
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="airbnbMember"
                       [(ngModel)]="tempAirbnbMemberFilter" (change)="filterData()">
-                    <label class="form-check-label" for="airbnbMember">
+                    <label class="form-check-label">
                       Member Discount
                     </label>
                   </div>
@@ -851,7 +915,7 @@
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="airbnbLMDisc"
                       [(ngModel)]="tempAirbnbLMDiscFilter" (change)="filterData()">
-                    <label class="form-check-label" for="airbnbLMDisc">
+                    <label class="form-check-label">
                       Last Minute Discount
                     </label>
                   </div>
@@ -865,7 +929,7 @@
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="vrboWeekly" [(ngModel)]="tempVrboWeeklyFilter"
                       (change)="filterData()">
-                    <label class="form-check-label" for="vrboWeekly">
+                    <label class="form-check-label">
                       Weekly Discounts
                     </label>
                   </div>
@@ -874,7 +938,7 @@
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="vrboMonthly" [(ngModel)]="tempVrboMonthlyFilter"
                       (change)="filterData()">
-                    <label class="form-check-label" for="vrboMonthly">
+                    <label class="form-check-label">
                       Monthly Discounts
                     </label>
                   </div>
