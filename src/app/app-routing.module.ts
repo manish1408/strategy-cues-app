@@ -1,36 +1,36 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-// import { AuthGuard } from "./_guards/auth.guard";
+import { AuthGuard } from "./_guards/auth.guard";
 // import { ChatbotGuard } from "./_guards/chatbot.guard";
 // import { OnboardGuard } from "./_guards/onboard.guard";
 
 const routes: Routes = [
-  // { path: '', redirectTo: 'signin', pathMatch: 'full' },
+  { path: '', redirectTo: 'signin', pathMatch: 'full' },
   {
     path: "",
     loadChildren: () =>
       import("./dashboard/dashboard.module").then((m) => m.DashboardModule),
-    // canActivate: [AuthGuard, ChatbotGuard],
+    canActivate: [AuthGuard],
   },
 
   {
     path: "dashboard",
     loadChildren: () =>
       import("./dashboard/dashboard.module").then((m) => m.DashboardModule),
-    // canActivate: [AuthGuard, ChatbotGuard],
+    canActivate: [AuthGuard],
   },
 
   {
     path: "theme",
     loadChildren: () =>
       import("./theme/theme.module").then((m) => m.ThemeModule),
-    // canActivate: [AuthGuard, ChatbotGuard],
+    canActivate: [AuthGuard],
   },
   {
     path: "profile",
     loadChildren: () =>
       import("./settings/settings.module").then((m) => m.SettingsModule),
-    //  canActivate: [AuthGuard, ChatbotGuard],
+    canActivate: [AuthGuard],
   },
 
   {
@@ -68,25 +68,25 @@ const routes: Routes = [
     path: "revenue",
     loadChildren: () =>
       import("./revenue/revenue.module").then((m) => m.RevenueModule),
-    // canActivate: [AuthGuard, ChatbotGuard],
+    canActivate: [AuthGuard],
   },
   {
     path: "content",
     loadChildren: () =>
       import("./content/content.module").then((m) => m.ContentModule),
-    // canActivate: [AuthGuard, ChatbotGuard],
+    canActivate: [AuthGuard],
   },
   {
     path: "deployment",
     loadChildren: () =>
       import("./deployment/deployment.module").then((m) => m.DeploymentModule),
-    // canActivate: [AuthGuard, ChatbotGuard],
+    canActivate: [AuthGuard],
   },
   {
     path: "status",
     loadChildren: () =>
       import("./status/status.module").then((m) => m.StatusModule),
-    // canActivate: [AuthGuard, ChatbotGuard],
+    canActivate: [AuthGuard],
   },
 ];
 

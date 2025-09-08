@@ -9,8 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { PHONE_BOOK } from '../shared/component/phone-dropdown/phone-codes';
 import { Title } from '@angular/platform-browser';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { GoogleAuthProvider } from '@angular/fire/auth';
+import { AuthenticationService } from '../_services/authentication.service';
 
 @Component({
   selector: 'app-signup',
@@ -31,7 +30,7 @@ export class SignupComponent {
     private fb: FormBuilder,
     private toastr: ToastrService,
     private titleService: Title,
-    //  private afAuth: AngularFireAuth,
+    private authService: AuthenticationService
   ) {
     this.titleService.setTitle('Sign Up: Strategy Cues');
   }
@@ -40,7 +39,7 @@ export class SignupComponent {
    
 
     this.signupForm = this.fb.group({
-      name: ['', [Validators.required,Validators.minLength(3)]],
+      fullName: ['', [Validators.required,Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', Validators.required],
       password: [
@@ -111,16 +110,20 @@ export class SignupComponent {
     if (this.signupForm.valid) {
       this.loading = true;
       const reqObj = {
-        name: this.signupForm.value.name,
+        fullName: this.signupForm.value.fullName,
         email: this.signupForm.value.email,
         // phone: `${this.selectedCountry?.phone[0]} ${this.signupForm.value.phone}`,
         phone: this.signupForm.value.phone,
         password: this.signupForm.value.password,
       };
       console.log('Form submitted with:', reqObj);
-      this.toastr.success('Sign up successful!');
-      this.router.navigate(['/signin']);
-      this.loading = false;
+      this.authService.signup(reqObj).subscribe((res: any) => {
+        console.log('Sign up response:', res);
+        this.toastr.success('Sign up successful!');
+        this.router.navigate(['/signin']);
+        this.loading = false;
+      });
+     
     } else {
       console.log('Form is invalid');
     }
@@ -134,33 +137,13 @@ export class SignupComponent {
     };
   }
 
-  // async signInWithGoogle() {
-  //   try {
-  //     this.loading = true;
-  //     const provider = new GoogleAuthProvider();
-  //     const result = await this.afAuth.signInWithPopup(provider).catch(error => {
-  //       this.loading = false;
-  //       throw error;
-  //     });
-  //     const user = result.user;
-  //     if (!user) throw new Error('No user returned');
-
-  //     const userData = {
-  //       uid: user.uid,
-  //       email: user.email,
-  //       name: user.displayName || '',
-  //       idToken: await user.getIdToken(),
-  //     };
-  //     console.log('User data:', userData);
-  //     // Simulate a successful Google sign-in
-  //     setTimeout(() => {
-  //       this.toastr.success('Google sign-in successful!');
-  //       this.loading = false;
-  //       this.router.navigate(['/dashboard']);
-  //     }, 1000);
-  //   } catch (error) {
-  //     console.error('Google sign-in error:', error);
+  // signInWithGoogle() {
+  //   this.loading = true;
+  //   // Simulate Google sign-in
+  //   setTimeout(() => {
+  //     this.toastr.success('Google sign-in successful!');
   //     this.loading = false;
-  //   }
+  //     this.router.navigate(['/signin']);
+  //   }, 1000);
   // }
 }

@@ -9,15 +9,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { JwtInterceptor } from './_guards/jwt.interceptor';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
-// import { EventService } from './_services/event.service';
+import { EventService } from './_services/event.service';
 import { SharedModule } from './shared/sharedModule';
 // import { SharedPipesModule } from './_pipes/shared.pipe';
 import { ReactiveFormsModule } from '@angular/forms';
 // import 'event-source-polyfill';
 import { SelectDropDownModule } from "ngx-select-dropdown";
-import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFireAuthModule } from '@angular/fire/compat/auth';
-import { environment } from '../environments/environment';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -35,13 +32,11 @@ import { environment } from '../environments/environment';
     ReactiveFormsModule,    
     SharedModule,
     // SharedPipesModule,
-    SelectDropDownModule,
-    // AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFireAuthModule
+    SelectDropDownModule
   ],
   providers: [
-    HttpClientModule,
-    // EventService,
+    HttpClientModule, 
+    EventService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,

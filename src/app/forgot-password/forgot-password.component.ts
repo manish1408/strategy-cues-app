@@ -20,6 +20,7 @@ export class ForgotPasswordComponent {
   isVideoPlaying = false;
   loading: boolean = false;
   otpSuccess: boolean = false;
+  passwordType: string = "password";
   forgotForm!: FormGroup;
   resetForm!: FormGroup;
   code: FormControl = new FormControl('', [Validators.required]);
@@ -56,17 +57,12 @@ export class ForgotPasswordComponent {
     });
     this.resetForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      newPassword: ['', [Validators.required]],
+      new_password: ['', [Validators.required]],
     });
     this.titleService.setTitle('Reset Password: MiloAssistant.ai');
   }
 
   ngOnInit(): void {
-    // const isLoggedIn = this.authService.isAuthenticated();
-
-    // if (isLoggedIn) {
-    //   this.router.navigate(["/dashboard"]);
-    // }
   }
   playVideo(): void {
     this.isVideoPlaying = true;
@@ -83,7 +79,12 @@ export class ForgotPasswordComponent {
       this.resetForm.controls[controlName].touched
     );
   }
-  onOtpChange(otp: any) {}
+  onOtpChange(otp: any) {
+    this.code.setValue(otp);
+    if (otp && otp.length === 6) {
+      this.code.markAsTouched();
+    }
+  }
   onSubmit(): void {
     this.forgotForm.markAllAsTouched();
     if (this.forgotForm.valid) {
@@ -92,62 +93,83 @@ export class ForgotPasswordComponent {
         email: this.forgotForm.value.email,
       };
 
-        // this.authService
-        //   .forgotPassword(reqObj) // TODO: Implement forgot password API
-        //   .pipe(finalize(() => (this.loading = false)))
-        //   .subscribe({
-        //     next: (res) => {
-        //       if (res.result) {
-        //         this.otpSuccess = true;
-        //         this.resetForm.patchValue({
-        //           email: this.forgotForm.value.email,
-        //         });
-        //         this.toastr.success('Otp sent success');
-        //       } else {
-        //         this.toastr.error(res.msg);
-        //       }
-        //     },
-        //     error: (err) => {
-        //       console.log(err);
-        //       this.toastr.error(err.error.msg);
-        //     },
-        //   });
+      this.authService
+        .forgotPassword(reqObj)
+        .pipe(finalize(() => (this.loading = false)))
+        .subscribe({
+          next: (res) => {
+            console.log('Forgot password response:', res);
+         
+            if (res.result || res.success || res.status === 'success' || (res.data && res.data.success)) {
+              this.otpSuccess = true;
+              this.resetForm.patchValue({
+                email: this.forgotForm.value.email,
+              });
+              this.toastr.success('OTP sent successfully!');
+            } else {
+              this.toastr.error(res.error?.details || res.message || 'Failed to send OTP. Please try again.');
+            }
+          },
+          error: (err) => {
+            console.error('Forgot password error:', err);
+            this.toastr.error(
+              err.error?.details || 
+              err.error?.message || 
+              'An error occurred. Please try again.'
+            );
+          },
+        });
     } else {
       console.log('Form is invalid');
     }
   }
   onSubmitReset(): void {
     this.resetForm.markAllAsTouched();
-    if (this.resetForm.valid) {
-      if (!this.code.value) {
-        this.toastr.error('Otp is required');
-      }
+    this.code.markAsTouched();
+    
+    if (this.resetForm.valid && this.code.valid) {
       this.loading = true;
       const reqObj = {
         email: this.resetForm.value.email,
         otp: this.code.value,
-        newPassword: this.resetForm.value.newPassword,
+        new_password: this.resetForm.value.new_password,
       };
 
-      // this.authService
-      //   .resetPassword(reqObj)
-      //   .pipe(finalize(() => (this.loading = false)))
-      //   .subscribe({
-      //     next: (res) => {
-      //       if (res.result) {
-      //         this.toastr.success('Password Changed Success');
-      //         this.router.navigate(['/login']);
-      //       } else {
-      //         this.toastr.error(res.msg);
-      //       }
-      //     },
-      //     error: (err) => {
-      //       console.log(err);
-      //       this.toastr.error(err.error.msg);
-      //     },
-      //   });
+      console.log('Reset password request:', reqObj);
+
+   
+      this.authService
+        .resetPassword(reqObj)
+        .pipe(finalize(() => (this.loading = false)))
+        .subscribe({
+          next: (res) => {
+            console.log('Reset password response:', res);
+            // Check for different possible response structures
+            if (res.result || res.success || res.status === 'success' || (res.data && res.data.success)) {
+              this.toastr.success('Password changed successfully!');
+              this.router.navigate(['/signin']);
+            } else {
+              this.toastr.error(res.error?.details || res.message || 'Failed to reset password. Please try again.');
+            }
+          },
+          error: (err) => {
+            console.error('Reset password error:', err);
+            this.toastr.error(
+              err.error?.details || 
+              err.error?.message || 
+              'An error occurred. Please try again.'
+            );
+          },
+        });
     } else {
+      if (!this.code.value) {
+        this.toastr.error('OTP is required');
+      }
       console.log('Form is invalid');
     }
+  }
+  
+  showPassword(type: string) {
+    this.passwordType = type === "password" ? "text" : "password";
   }
 }

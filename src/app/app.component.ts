@@ -4,6 +4,9 @@ import { AuthenticationService } from "./_services/authentication.service";
 import { Subject, finalize, takeUntil } from "rxjs";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
+import { routeUrls } from "./constant/shared-constant";
+import { EventService } from "./_services/event.service";
+import { UserService } from "./_services/user.service";
 
 @Component({
   selector: "app-root",
@@ -29,44 +32,48 @@ export class AppComponent {
     private router: Router,
     private authService: AuthenticationService,
     private fb: FormBuilder,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private eventService: EventService<any>,
+    private userService: UserService
   ) {
-    // this.router.events.subscribe(() => {
-    //   this.isChatbotPage = this.router.url.includes('/milo-chatbot');
-    // });
-    // this.eventService.events.pipe(
-    //   takeUntil(this.$destroyWatching)
-    // ).subscribe((e: any) => {
-    //   if (e.type === "PROFILE_UPDATED") {
-    //     this.user = this.userService.getUserDetails();
-    //   }
-    // });
-    // router.events.forEach((event) => {
-    //   if (event instanceof NavigationStart) {
-    //     this.isChatbotPage = event.url.includes('/milo-chatbot');
-    //     this.isLoggedIn = this.authService.isAuthenticated();
-    //   } else if (event instanceof NavigationEnd) {
-    //     if (routeUrls.includes(event.urlAfterRedirects)) {
-    //       this.isLoggedIn = false;
-    //       this.authService.signOut();
-    //     }
-    //   }
-    // });
+    
+    this.eventService.events.pipe(
+      takeUntil(this.$destroyWatching)
+    ).subscribe((e: any) => {
+      if (e.type === "PROFILE_UPDATED") {
+        this.user = this.userService.getUserDetails();
+      }
+    });
+    router.events.forEach((event) => {
+       if (event instanceof NavigationEnd) {
+        if (routeUrls.includes(event.urlAfterRedirects)) {
+          this.isLoggedIn = false;
+          this.authService.signOut();
+        }
+      }
+    });
   }
 
   async ngOnInit() {
     this.createChatbotForm = this.fb.group({
-      chatbotName: ["", Validators.required],
+      operatorName: ["", Validators.required],
     });
-    // this.isLoggedIn = this.authService.isAuthenticated();
+    this.isLoggedIn = this.authService.isAuthenticated();
     if (this.isLoggedIn) {
-      this.getAllOperators();
+      // this.getAllOperators();
     }
     this.startWatchingAppEvents();
 
-    const user_: any = localStorage.getItem("MILO-USER");
-    const user = JSON.parse(user_);
-    this.avatar = user?.profilePic;
+    const user_: any = localStorage.getItem("STRATEGY-CUES-USER");
+    if (user_) {
+      try {
+        const user = JSON.parse(user_);
+        this.avatar = user?.profilePic || this.avatar;
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+        this.avatar = "https://milodocs.blob.core.windows.net/public-docs/profile-picture.webp";
+      }
+    }
   }
   getAllOperators(refresh = false) {
     // this.chatService.getAllChatbots(refresh).subscribe((res: any) => {
@@ -96,44 +103,56 @@ export class AppComponent {
   }
 
   startWatchingAppEvents() {
-    // this.eventService.events
-    //   .pipe(takeUntil(this.$destroyWatching))
-    //   .subscribe((e: any) => {
-    //     if (e.type === "LOGIN_CHANGE") {
-    //       const user_:any = localStorage.getItem('MILO-USER');
-    //       const user = JSON.parse(user_);
-    //       this.avatar = user?.profilePic;
-    //       this.getAllChatbots();
-    //       this.isLoggedIn = this.authService.isAuthenticated();
-    //     }
-    //     if ( e.type === "PROFILE_UPDATED") {
-    //       const user_:any = localStorage.getItem('MILO-USER');
-    //       const user = JSON.parse(user_);
-    //       this.avatar = user?.profilePic;
-    //       this.getAllChatbots(true);
-    //       this.isLoggedIn = this.authService.isAuthenticated();
-    //     }
-    //     // if (e.type === 'LOGIN_CHANGE' || e.type === 'PROFILE_UPDATED') {
-    //     //   console.log('check app user ', this.user);
-    //     //   this.getAllChatbots();
-    //     //   this.isLoggedIn = this.authService.isAuthenticated();
-    //     //   this.user = this.userService.getUserDetails();
-    //     //   const storedChatbot = localStorage.getItem('selectedChatbot');
-    //     //   if (storedChatbot) {
-    //     //     this.selectedChatbot = JSON.parse(storedChatbot);
-    //     //   } else {
-    //     //     this.selectedChatbot = this.user?.chatbots[0] ?? null;
-    //     //   }
-    //     // }
-    //   });
+    this.eventService.events
+      .pipe(takeUntil(this.$destroyWatching))
+      .subscribe((e: any) => {
+        if (e.type === "LOGIN_CHANGE") {
+          const user_:any = localStorage.getItem('STRATEGY-CUES-USER');
+          if (user_) {
+            try {
+              const user = JSON.parse(user_);
+              this.avatar = user?.profilePic || this.avatar;
+            } catch (error) {
+              console.error('Error parsing user data:', error);
+            }
+          }
+          // this.getAllOperators();
+          this.isLoggedIn = this.authService.isAuthenticated();
+        }
+        if ( e.type === "PROFILE_UPDATED") {
+          const user_:any = localStorage.getItem('STRATEGY-CUES-USER');
+          if (user_) {
+            try {
+              const user = JSON.parse(user_);
+              this.avatar = user?.profilePic || this.avatar;
+            } catch (error) {
+              console.error('Error parsing user data:', error);
+            }
+          }
+          // this.getAllOperators(true);
+          this.isLoggedIn = this.authService.isAuthenticated();
+        }
+        if (e.type === 'LOGIN_CHANGE' || e.type === 'PROFILE_UPDATED') {
+          console.log('check app user ', this.user);
+          // this.getAllOperators();
+          this.isLoggedIn = this.authService.isAuthenticated();
+          this.user = this.userService.getUserDetails();
+          // const storedOperator = localStorage.getItem('selectedOperator');
+          // if (storedOperator) {
+          //   this.selectedOperator = JSON.parse(storedOperator);
+          // } else {
+          //   this.selectedOperator = this.user?.operators[0] ?? null;
+          // }
+        }
+      });
   }
 
   async signOut(): Promise<void> {
     this.isLoggedIn = false;
-    // setTimeout(()=>{
-    // this.authService.signOut();
-    this.router.navigate(["/login"]);
-    // },0)
+    setTimeout(()=>{ 
+    this.authService.signOut();
+    this.router.navigate(["/signin"]);
+    },0)
   }
 
   toggleSidebar() {

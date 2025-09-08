@@ -35,16 +35,16 @@
           <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="user-form">
             <div class="input-field mb-3">
               <label class="form-label">Enter name</label>
-              <input type="text" class="form-control" id="name" placeholder="Enter your name" formControlName="name"
-                [ngClass]="{ 'is-invalid': hasError('name') }" />
+              <input type="text" class="form-control" id="name" placeholder="Enter your full name" formControlName="fullName"
+                [ngClass]="{ 'is-invalid': hasError('fullName') }" />
 
               <div class="invalid-feedback text-start"
-                *ngIf="signupForm.get('name')?.hasError('required') && signupForm.get('name')?.touched">
-                Name is required
+                *ngIf="signupForm.get('fullName')?.hasError('required') && signupForm.get('fullName')?.touched">
+                Full name is required
               </div>
               <div class="invalid-feedback text-start"
-                *ngIf="signupForm.get('name')?.hasError('minlength') && signupForm.get('name')?.touched">
-                Name must be more than 3 characters
+                *ngIf="signupForm.get('fullName')?.hasError('minlength') && signupForm.get('fullName')?.touched">
+                Full name must be more than 3 characters
               </div>
             </div>
             <div class="input-field mb-3">
@@ -120,7 +120,7 @@
 
             <p class="note">
               Already have a account?
-              <a routerLink="/login">Login Here!</a>
+                <a routerLink="/signin">Login Here!</a>
             </p>
         </div>
       </div>

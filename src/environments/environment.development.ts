@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
+  APIUrl: 'http://127.0.0.1:8000/api/v1/',
   // APIUrl: 'https://api.miloassistant.ai/api/v1',
   // APIUrlFollowUp: 'https://be.miloassistant.ai/api/v1',
   // // APIUrl: 'https://milo-backend-dev.azurewebsites.net/api/v1',
