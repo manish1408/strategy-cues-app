@@ -18,7 +18,7 @@
   width: 100%;
   overflow: hidden;
 }
-.milo-logo{
+.brand-logo{
   width: 100px;
 }
 #sidebar {
@@ -27,7 +27,7 @@
   transition: all 0.35s ease-in-out;
   box-shadow: 0 0 1px 0 rgba(49, 57, 66, 0.5);
   z-index: 1060;
-  background-color: #000002;
+  background-color: var(--brand-black);
   position: fixed;
   left: 0;
   height: 100vh;
@@ -157,8 +157,8 @@
 }
 
 .active-link {
-  background-color: #1a1a1b;
-  color: #ffffff !important;
+  background-color: var(--brand-yellow);
+  color: var(--brand-black) !important;
   border-radius: 8px;
 }
 

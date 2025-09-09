@@ -45,7 +45,24 @@ export class AuthenticationService {
 
   isAuthenticated() {
     const token = this.localStorageService.getItem('STRATEGY-CUES-USER-TOKEN');
-    const user = JSON.parse(this.localStorageService.getItem('STRATEGY-CUES-USER') || '{}');
+    const userStr = this.localStorageService.getItem('STRATEGY-CUES-USER');
+    console.log('AuthenticationService.isAuthenticated - token:', token, 'user:', userStr);
+    
+    if (!token) {
+      console.log('No token found');
+      return false;
+    }
+    
+    // Only check user data if it exists, don't require it for authentication
+    if (userStr && userStr !== 'undefined') {
+      try {
+        const user = JSON.parse(userStr);
+        console.log('User parsed successfully:', user);
+      } catch (error) {
+        console.error('Error parsing user data in isAuthenticated:', error);
+      }
+    }
+    
     return !!token;
   }
 

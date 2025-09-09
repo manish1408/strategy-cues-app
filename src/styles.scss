@@ -1,3 +1,14 @@
+/* Brand Colors */
+:root {
+  --brand-yellow: #ffd116; /* Primary CTA */
+  --brand-yellow-accent: #FCDF46; /* Secondary highlight */
+  --brand-black: #0a0a0b;
+  --brand-yellow-light: #fff4b3;
+  --brand-yellow-dark: #e6bc0a;
+  --brand-black-light: #1a1a1b;
+  --brand-black-lighter: #2a2a2b;
+}
+
 *,
 ::after,
 ::before {
@@ -104,7 +115,7 @@ input:checked + .slider:before {
 .title {
   font-size: 24px;
   font-weight: 700;
-  color: #101828;
+  color: var(--brand-black);
   line-height: 28px;
   margin: 0;
 }
@@ -117,7 +128,7 @@ input:checked + .slider:before {
 
 .nav-pills .nav-link {
   border-radius: 32px;
-  color: #072032;
+  color: var(--brand-black);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -126,8 +137,8 @@ input:checked + .slider:before {
 
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {
-  color: #072032;
-  background-color: #FCDF46;
+  color: var(--brand-black);
+  background-color: var(--brand-yellow);
 }
 .dropdown-menu {
   border-radius: 12px;
@@ -154,9 +165,9 @@ input:checked + .slider:before {
 
 .dropdown-item.active,
 .dropdown-item:active {
-  color: #344054;
+  color: var(--brand-black);
   text-decoration: none;
-  background-color: #FCDF46 !important;
+  background-color: var(--brand-yellow) !important;
 }
 
 
@@ -196,7 +207,7 @@ input:checked + .slider:before {
   padding: 10px;
   text-align: left;
   vertical-align: middle;
-  color: #072032;
+  color: var(--brand-black);
   font-size: 14px;
   font-weight: 500;
 }
@@ -277,9 +288,9 @@ input:checked + .slider:before {
 
 #tabs .nav-tabs .nav-item.show .nav-link,
 .nav-tabs .nav-link.active {
-  color: #FCDF46;
+  color: var(--brand-yellow);
   background-color: transparent;
-  border-color: transparent transparent #FCDF46;
+  border-color: transparent transparent var(--brand-yellow);
   border-bottom: 2px solid !important;
   font-size: 14px;
   font-weight: 500;
@@ -307,14 +318,14 @@ input:checked + .slider:before {
 .nav-tabs .nav-link:hover {
   isolation: isolate;
   border: 2px solid transparent;
-  border-bottom: 2px solid #FCDF46 !important;
+  border-bottom: 2px solid var(--brand-yellow) !important;
 }
 
 
 
 .text-bg-primary {
-  color: #FFFFFF !important;
-  background-color: #FCDF46 !important;
+  color: var(--brand-black) !important;
+  background-color: var(--brand-yellow) !important;
 }
 
 .switch {
@@ -337,7 +348,7 @@ input:checked + .slider:before {
 }
 
 input:checked + .slider {
-  background-color: #FCDF46;
+  background-color: var(--brand-yellow);
 }
 .vh-90 {
   height: 90vh;
@@ -356,8 +367,8 @@ input:checked + .slider {
 }
 
 .form-check-input:checked {
-  background-color: #FCDF46;
-  border-color: #FCDF46;
+  background-color: var(--brand-yellow);
+  border-color: var(--brand-yellow);
 }
 
 .w-60 {
@@ -610,10 +621,10 @@ input:checked + .slider {
 }
 
 .button-style-2.disabled, .button-style-2:disabled, fieldset:disabled .button-style-2 {
-  color: #07203276;
+  color: var(--brand-black);
   pointer-events: none;
-  background-color: #07203276;
-  border-color: #07203276;
+  background-color: var(--brand-black);
+  border-color: var(--brand-black);
   opacity: .65;
 }
 
@@ -624,7 +635,7 @@ input:checked + .slider {
 }
 
 .divider-text {
-  color: #000000;
+  color: var(--brand-black);
   font-size: 14px;
   font-weight: 400;
   margin: 0;
@@ -710,24 +721,101 @@ margin-bottom: 0px !important;
 
 
 .custom-tooltip .tooltip-inner {
-  background-color: #e4e6e7; 
-  color: #072032; 
+  background-color: var(--brand-yellow-light); 
+  color: var(--brand-black); 
   font-size: 12px;
 }
 
 /* Optional: Change tooltip arrow color */
 .custom-tooltip.bs-tooltip-end .tooltip-arrow::before {
-  border-right-color: #e4e6e7; /* Match background */
+  border-right-color: var(--brand-yellow-light); /* Match background */
 }
 
 .custom-tooltip.bs-tooltip-start .tooltip-arrow::before {
-  border-left-color: #e4e6e7;
+  border-left-color: var(--brand-yellow-light);
 }
 
 .custom-tooltip.bs-tooltip-top .tooltip-arrow::before {
-  border-top-color: #e4e6e7;
+  border-top-color: var(--brand-yellow-light);
 }
 
 .custom-tooltip.bs-tooltip-bottom .tooltip-arrow::before {
-  border-bottom-color: #e4e6e7;
+  border-bottom-color: var(--brand-yellow-light);
+}
+
+/* Brand-specific button styles */
+.btn-primary {
+  background-color: var(--brand-yellow) !important;
+  border-color: var(--brand-yellow) !important;
+  color: var(--brand-black) !important;
+}
+
+.btn-primary:hover {
+  background-color: var(--brand-yellow-dark) !important;
+  border-color: var(--brand-yellow-dark) !important;
+  color: var(--brand-black) !important;
+}
+
+.btn-outline-primary {
+  color: var(--brand-yellow) !important;
+  border-color: var(--brand-yellow) !important;
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--brand-yellow) !important;
+  border-color: var(--brand-yellow) !important;
+  color: var(--brand-black) !important;
+}
+
+/* Brand-specific form controls */
+.form-control:focus {
+  border-color: var(--brand-yellow) !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 209, 22, 0.25) !important;
+}
+
+/* Brand-specific card styles */
+.card {
+  border: 1px solid rgba(10, 10, 11, 0.1);
+}
+
+.card-header {
+  background-color: var(--brand-black-light);
+  color: white;
+  border-bottom: 1px solid var(--brand-yellow);
+}
+
+/* Brand-specific alert styles */
+.alert-primary {
+  background-color: var(--brand-yellow-light);
+  border-color: var(--brand-yellow);
+  color: var(--brand-black);
+}
+
+/* Brand-specific badge styles */
+.badge-primary {
+  background-color: var(--brand-yellow);
+  color: var(--brand-black);
+}
+
+/* Brand-specific progress bar */
+.progress-bar {
+  background-color: var(--brand-yellow);
+}
+
+/* Brand-specific pagination */
+.page-link {
+  color: var(--brand-black);
+  border-color: var(--brand-yellow);
+}
+
+.page-link:hover {
+  color: var(--brand-black);
+  background-color: var(--brand-yellow-light);
+  border-color: var(--brand-yellow);
+}
+
+.page-item.active .page-link {
+  background-color: var(--brand-yellow);
+  border-color: var(--brand-yellow);
+  color: var(--brand-black);
 }

@@ -65,6 +65,12 @@ const routes: Routes = [
       ),
   },
   {
+    path: "all-operators",
+    loadChildren: () =>
+      import("./all-operators/all-operators.module").then((m) => m.AllOperatorsModule),
+    canActivate: [AuthGuard],
+  },
+  {
     path: "revenue",
     loadChildren: () =>
       import("./revenue/revenue.module").then((m) => m.RevenueModule),

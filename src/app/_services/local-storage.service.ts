@@ -11,7 +11,9 @@ export class LocalStorageService {
   }
 
   public getItem(key: string): any {
-    return localStorage.getItem(key);
+    const value = localStorage.getItem(key);
+    // Return null instead of null string for consistency
+    return value === null ? null : value;
   }
 
   public removeItem(key:string): void  {

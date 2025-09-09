@@ -1,0 +1,247 @@
+<div class="row">
+    <div class="col-12">
+      <button
+        class="btn btn-primary float-end"
+        data-bs-toggle="modal"
+        data-bs-target="#addOperator"
+      >
+        Add Operator
+      </button>
+    </div>
+  </div>
+  
+  <div *ngIf="apiLoading" class="mt-5 d-flex justify-content-center">
+    <div class="spinner-border text-dark" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  
+  <ng-container *ngIf="!apiLoading">
+    
+     
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Operator Name</th>
+                  <th scope="col">PriceLabs API</th>
+                  <th scope="col">Platforms</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let operator of allOperatorList; let i = index">
+                  <th scope="row">{{ i + 1 }}</th>
+                  <td>{{ operator?.name }}</td>
+                  <td>{{ operator?.priceLabsApiKey ? 'Configured' : 'Not Set' }}</td>
+                  <td>
+                    <span class="badge text-bg-success me-1" *ngIf="operator?.bookingUsername">Booking.com</span>
+                    <span class="badge text-bg-info me-1" *ngIf="operator?.airbnbUsername">Airbnb</span>
+                    <span class="badge text-bg-warning me-1" *ngIf="operator?.vrboUsername">VRBO</span>
+                    <span class="badge text-bg-secondary" *ngIf="!operator?.bookingUsername && !operator?.airbnbUsername && !operator?.vrboUsername">No Platforms</span>
+                  </td>
+                  <!-- <td>
+                  <label class="switch">
+                      <input type="checkbox" checked>
+                      <span class="slider round"></span>
+                  </label>
+              </td> -->
+                  <td>
+                    <img
+                      src="assets/icons/edit.svg"
+                      class="cursor-pointer me-2"
+                      data-bs-toggle="modal"
+                      data-bs-target="#addOperator"
+                      (click)="editOperator(operator)"
+                    />
+                    <img
+                      src="assets/icons/trash.svg"
+                      (click)="deleteOperator(operator?._id)"
+                      class="cursor-pointer"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- Add Form Modal -->
+      <div
+        class="modal fade"
+        id="addOperator"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+        style="background: none"
+        (hidden.bs.modal)="resetForm()"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content" style="background: white">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">
+                {{ isEdit ? "Update" : "Create" }} Operator
+              </h5>
+              <i class="fa-solid fa-xmark" data-bs-dismiss="modal"></i>
+            </div>
+            <div class="modal-body">
+              <form [formGroup]="addOperatorForm">
+                <div class="mb-3">
+                  <label for="name" class="form-label">Operator Name</label>
+                  <input
+                    type="text"
+                    id="name"
+                    formControlName="name"
+                    [ngClass]="{ 'is-invalid': hasError('name') }"
+                    class="form-control"
+                    placeholder="Enter operator name"
+                  />
+                  <div class="invalid-feedback">Operator name is required</div>
+                </div>
+                
+                <div class="mb-3">
+                  <label for="priceLabsApiKey" class="form-label">PriceLabs API Key</label>
+                  <input
+                    type="text"
+                    id="priceLabsApiKey"
+                    formControlName="priceLabsApiKey"
+                    class="form-control"
+                    placeholder="Enter PriceLabs API key"
+                  />
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <h6 class="text-muted">Booking.com</h6>
+                    <div class="mb-3">
+                      <label for="bookingUsername" class="form-label">Username</label>
+                      <input
+                        type="text"
+                        id="bookingUsername"
+                        formControlName="bookingUsername"
+                        class="form-control"
+                        placeholder="Booking.com username"
+                      />
+                    </div>
+                    <div class="mb-3">
+                      <label for="bookingPassword" class="form-label">Password</label>
+                      <input
+                        type="password"
+                        id="bookingPassword"
+                        formControlName="bookingPassword"
+                        class="form-control"
+                        placeholder="Booking.com password"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-6">
+                    <h6 class="text-muted">Airbnb</h6>
+                    <div class="mb-3">
+                      <label for="airbnbUsername" class="form-label">Username</label>
+                      <input
+                        type="text"
+                        id="airbnbUsername"
+                        formControlName="airbnbUsername"
+                        class="form-control"
+                        placeholder="Airbnb username"
+                      />
+                    </div>
+                    <div class="mb-3">
+                      <label for="airbnbPassword" class="form-label">Password</label>
+                      <input
+                        type="password"
+                        id="airbnbPassword"
+                        formControlName="airbnbPassword"
+                        class="form-control"
+                        placeholder="Airbnb password"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <h6 class="text-muted">VRBO</h6>
+                    <div class="mb-3">
+                      <label for="vrboUsername" class="form-label">Username</label>
+                      <input
+                        type="text"
+                        id="vrboUsername"
+                        formControlName="vrboUsername"
+                        class="form-control"
+                        placeholder="VRBO username"
+                      />
+                    </div>
+                    <div class="mb-3">
+                      <label for="vrboPassword" class="form-label">Password</label>
+                      <input
+                        type="password"
+                        id="vrboPassword"
+                        formControlName="vrboPassword"
+                        class="form-control"
+                        placeholder="VRBO password"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <!-- <div class="mb-3">
+                  <label for="exampleFormControlTextarea1" class="form-label"
+                    >Role</label
+                  >
+                  <select
+                    formControlName="role"
+                    [ngClass]="{ 'is-invalid': hasError('role') }"
+                    class="form-control"
+                  >
+                    <option [value]="user?.role">{{ user.role }}</option>
+                  </select>
+                  <div class="invalid-feedback">Role is required</div>
+                </div> -->
+                <!-- <div class="mb-3">
+                  <label for="exampleFormControlTextarea1" class="form-label"
+                    >Assigned Chatbots</label
+                  >
+                  <select
+                    formControlName="chatbotId"
+                    [ngClass]="{ 'is-invalid': hasError('chatbotId') }"
+                    class="form-control"
+                  >
+                    <option
+                      *ngFor="let userChatBot of operator?.chatbots"
+                      [value]="operatorChatBot.chatbotId"
+                    >
+                      {{ operatorChatBot.chatbotName }}
+                    </option>
+                  </select>
+                  <div class="invalid-feedback">ChatBot is required</div>
+                </div> -->
+              </form>
+              <div></div>
+            </div>
+            <div class="modal-footer d-flex justify-content-end">
+              <button
+                #closeButton
+                data-bs-dismiss="modal"
+                class="btn btn-outline-secondary"
+                (click)="resetForm()"
+              >
+                Cancel
+              </button>
+              <button type="submit" class="btn btn-primary" (click)="onSubmit()" [disabled]="loading">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                <span *ngIf="!loading">{{ isEdit ? 'Update' : 'Create' }}</span>
+                <span *ngIf="loading">{{ isEdit ? 'Updating...' : 'Creating...' }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+   
+  </ng-container>
+  

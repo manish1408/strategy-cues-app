@@ -8,17 +8,26 @@ import { environment } from '../../environments/environment.development';
 @Injectable({
   providedIn: 'root',
 })
-export class UserService {
-  private _url = `${environment['APIUrl']}/users`;
+export class ProfileService {
+    private _url = environment.APIUrl + "profile";
   constructor(
     private http: HttpClient,
 private localStorageService: LocalStorageService
   ) {}
 
   getUserDetails(): any {
-    const result = this.localStorageService.getItem('STRATEGY-CUES-USER');
-    const user = result ? JSON.parse(result) : null;
-    return user;
+    try {
+      const result = this.localStorageService.getItem('STRATEGY-CUES-USER');
+      if (result && result !== 'undefined') {
+        const userData = JSON.parse(result);
+        // Handle nested user structure: {user: {...}} -> {...}
+        return userData.user || userData;
+      }
+      return null;
+    } catch (error) {
+      console.error('Error getting user details:', error);
+      return null;
+    }
   }
 
   isLoggedIn(): boolean {
@@ -29,20 +38,14 @@ private localStorageService: LocalStorageService
     return false;
   }
 
-  getAllUser(accountId:string){
-    return this.http.get(`${this._url}/get-all-users?accountId=${accountId}`);
-  }
-  createUser(data: any) {
-    return this.http.post<any>(`${this._url}/create-user`, data);
-  }
+ 
+ 
   updateUser(data: any) {
-    return this.http.put<any>(`${this._url}/update-user`, data);
+    return this.http.put<any>(`${this._url}/update-user-info`, data);
   }
-  deleteUser(userId:string) {
-    return this.http.delete<any>(`${this._url}/delete-user?userId=${userId}`);
-  }
+ 
 
   fetchUserDetail(){
-    return this.http.get<any>(`${this._url}/get-my-details`);
+    return this.http.get<any>(`${this._url}/me`);
   }
 }

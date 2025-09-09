@@ -1,9 +1,9 @@
 <div *ngIf="showLoginForm">
-  <nav class="navbar navbar-expand-lg bg-white">
+  <nav class="navbar navbar-expand-lg bg-black">
     <div class="container">
       <a class="navbar-brand" href="#" class="text-dark fs-2">
-        Strategy Cues
-        <!-- <img src="assets/icons/milo-logo.svg" style="height: 30px;" alt="Logo" class="d-inline-block align-text-top" /> -->
+       
+        <img style="height: 30px;" src="https://strategycues.com/wp-content/uploads/2025/02/Asset-2-8.png" />
       </a>
       <button class="btn btn-primary" routerLink="/signup">SIGN UP</button>
     </div>
@@ -12,16 +12,9 @@
 
 <div *ngIf="showLoginForm" class="container">
   <div class="vh-90 row justify-content-center align-items-center">
-    <div class="d-none d-lg-block col-lg-8">
-      <div class="d-flex flex-column justify-content-center align-items-start gap-3 left-section">
-        <h2>
-          Grow your Ecommerce<br />
-          sales with <span>AI agents</span>
-        </h2>
-      </div>
-    </div>
-    <div class="col-12 col-lg-4">
-      <div class="right-section">
+   
+    <div class="col-12 col-lg-6 ">
+      <div class="right-section bg-black text-white">
         <!-- <img
           class="logo-img"
           src="assets/icons/milo-logo.svg"
@@ -32,7 +25,7 @@
           <p class="desc">Enter your credential to view all insights</p>
         </div> -->
 
-        <div class="form-wrapper">
+        <div class="form-wrapper ">
           <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="user-form">
             <div class="input-field mb-3">
               <label for="email" class="form-label">Email address</label>
@@ -61,14 +54,14 @@
                 </a>
               </div>
             </div>
-            <div class="policy-field mb-3">
+            <div class="policy-field mb-3 text-white">
               <!-- <input
                 id="d-policy"
                 type="checkbox"
                 formControlName="terms"
                 [ngClass]="{ 'is-invalid': hasError('terms') }"
               /> -->
-              <label for="d-policy">If you proceed with signin, you agree to the <span><a
+              <label for="d-policy text-white">If you proceed with signin, you agree to the <span><a
                     href="https://miloassistant.ai/terms" target="_blank">terms and conditions.</a></span></label>
 
             </div>

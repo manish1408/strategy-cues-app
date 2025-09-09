@@ -7,6 +7,7 @@ import { LocalStorageService } from "../_services/local-storage.service";
 import { finalize } from "rxjs";
 import { AuthenticationService } from "../_services/authentication.service";
 import { EventService } from "../_services/event.service";
+import { ProfileService } from "../_services/profile.service";
 
 
 @Component({
@@ -29,7 +30,8 @@ export class SigninComponent implements OnDestroy {
     private titleService: Title,
     private localStorageService: LocalStorageService,
     private authService: AuthenticationService,
-    private eventService: EventService<any>
+    private eventService: EventService<any>,
+    private profileService: ProfileService
   ) {
     this.titleService.setTitle("Sign In: Strategy Cues");
   }
@@ -72,17 +74,51 @@ export class SigninComponent implements OnDestroy {
         .pipe(finalize(() => (this.loading = false)))
         .subscribe({
           next: (response: any) => {
+            console.log('Signin response:', response);
+            console.log('Response structure:', {
+              success: response.success,
+              data: response.data,
+              token: response.data?.token,
+              user: response.data?.user
+            });
+            
             if (response.success) {
-              this.localStorageService.setItem(
-                "STRATEGY-CUES-USER-TOKEN",
-                response.data.token
-              );
-              this.localStorageService.setItem(
-                "STRATEGY-CUES-USER",
-                JSON.stringify(response.data.user)
-              );
-
+              console.log('Login successful, storing data...');
+              
+              // Store token
+              if (response.data?.token) {
+                this.localStorageService.setItem(
+                  "STRATEGY-CUES-USER-TOKEN",
+                  response.data.token
+                );
+                console.log('Token stored:', response.data.token);
+              } else {
+                console.error('No token found in response');
+              }
+              
+              // Store user data
+              if (response.data?.user) {
+                this.localStorageService.setItem(
+                  "STRATEGY-CUES-USER",
+                  JSON.stringify(response.data.user)
+                );
+                console.log('User data stored:', response.data.user);
+              } else {
+                console.error('No user data found in response');
+                console.log('Available response keys:', Object.keys(response));
+                console.log('Full response data:', response.data);
+              }
+              
+              console.log('Data stored, dispatching LOGIN_CHANGE event...');
               this.eventService.dispatchEvent({ type: 'LOGIN_CHANGE' });
+              
+              // If no user data in response, fetch it from profile API
+              if (!response.data?.user) {
+                console.log('No user data in signin response, fetching from profile API...');
+                this.fetchUserProfile();
+              }
+              
+              console.log('Navigating to dashboard...');
               this.router.navigate(["/dashboard"]);
               this.toastr.success("Login successful!");
             } else {
@@ -132,5 +168,27 @@ export class SigninComponent implements OnDestroy {
         this.loading = false;
       }
     }, 1000);
+  }
+
+  fetchUserProfile() {
+    console.log('Fetching user profile from API...');
+    this.profileService.fetchUserDetail().subscribe({
+      next: (response: any) => {
+        console.log('Profile API response:', response);
+        if (response.success && response.data) {
+          this.localStorageService.setItem(
+            "STRATEGY-CUES-USER",
+            JSON.stringify(response.data)
+          );
+          console.log('User profile stored:', response.data);
+          this.eventService.dispatchEvent({ type: 'LOGIN_CHANGE' });
+        } else {
+          console.error('Failed to fetch user profile:', response);
+        }
+      },
+      error: (error: any) => {
+        console.error('Error fetching user profile:', error);
+      }
+    });
   }
 }

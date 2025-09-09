@@ -6,7 +6,9 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
 import { routeUrls } from "./constant/shared-constant";
 import { EventService } from "./_services/event.service";
-import { UserService } from "./_services/user.service";
+import { ProfileService } from "./_services/profile.service";
+import { LocalStorageService } from "./_services/local-storage.service";
+import { OperatorService } from "./_services/operator.service";
 
 @Component({
   selector: "app-root",
@@ -15,7 +17,7 @@ import { UserService } from "./_services/user.service";
 })
 export class AppComponent {
   isCollapsed = false;
-  isLoggedIn = true;
+  isLoggedIn = false;
   user: any;
   operators: any;
   selectedOperator: any;
@@ -23,10 +25,10 @@ export class AppComponent {
   avatar =
     "https://milodocs.blob.core.windows.net/public-docs/profile-picture.webp";
   $destroyWatching: Subject<any> = new Subject();
-  createChatbotForm: FormGroup | any;
+  createOperatorForm: FormGroup | any;
   formLoading: boolean = false;
 
-  isChatbotPage = false;
+  isOperatorPage = false;
 
   constructor(
     private router: Router,
@@ -34,14 +36,16 @@ export class AppComponent {
     private fb: FormBuilder,
     private toastr: ToastrService,
     private eventService: EventService<any>,
-    private userService: UserService
+    private profileService: ProfileService,
+    private localStorageService: LocalStorageService,
+    private operatorService: OperatorService
   ) {
     
     this.eventService.events.pipe(
       takeUntil(this.$destroyWatching)
     ).subscribe((e: any) => {
       if (e.type === "PROFILE_UPDATED") {
-        this.user = this.userService.getUserDetails();
+        this.user = this.profileService.getUserDetails();
       }
     });
     router.events.forEach((event) => {
@@ -55,94 +59,130 @@ export class AppComponent {
   }
 
   async ngOnInit() {
-    this.createChatbotForm = this.fb.group({
+    console.log('AppComponent ngOnInit called');
+    
+    this.createOperatorForm = this.fb.group({
       operatorName: ["", Validators.required],
     });
+    
+    // Check authentication status
     this.isLoggedIn = this.authService.isAuthenticated();
+    console.log('Initial isLoggedIn status:', this.isLoggedIn);
+    
+    // Load user data if logged in
     if (this.isLoggedIn) {
-      // this.getAllOperators();
+      this.user = this.profileService.getUserDetails();
+      console.log('User loaded from ProfileService:', this.user);
+      
+      // If no user data found, fetch from API
+      if (!this.user) {
+        console.log('No user data in localStorage, fetching from profile API...');
+        this.fetchUserProfile();
+      }
+      // Only call getAllOperators once here
+      this.getAllOperators();
     }
+    
     this.startWatchingAppEvents();
 
+    // Load user data from localStorage
     const user_: any = localStorage.getItem("STRATEGY-CUES-USER");
-    if (user_) {
+    console.log('User data from localStorage:', user_);
+    if (user_ && user_ !== 'undefined') {
       try {
-        const user = JSON.parse(user_);
-        this.avatar = user?.profilePic || this.avatar;
+        const userData = JSON.parse(user_);
+        // Handle nested user structure: {user: {...}} -> {...}
+        this.user = userData.user || userData;
+          this.avatar = this.user?.profilePicture || this.avatar;
+        console.log('User parsed and set:', this.user);
+        console.log('Avatar set to:', this.avatar);
       } catch (error) {
         console.error('Error parsing user data:', error);
         this.avatar = "https://milodocs.blob.core.windows.net/public-docs/profile-picture.webp";
       }
+    } else {
+      console.log('No user data found in localStorage');
     }
+    
+    console.log('Final state - isLoggedIn:', this.isLoggedIn, 'user:', this.user);
   }
-  getAllOperators(refresh = false) {
-    // this.chatService.getAllChatbots(refresh).subscribe((res: any) => {
-    //   console.log("All chat",res.data);
-    //   this.chatbots = res.data.data;
-    //   this.user = this.userService.getUserDetails();
-    //   if (res.data.data.length > 0) {
-    //     const storedChatbot = localStorage.getItem("selectedChatbot");
-    //       if (storedChatbot) {
-    //         this.selectedChatbot = JSON.parse(storedChatbot);
-    //       } else {
-    //         this.selectedChatbot = {
-    //           chatbotId: res.data.data.at(-1)?._id,
-    //           chatbotName: res.data.data.at(-1)?.themeDetails?.chatbotName,
-    //         };
-    //         localStorage.setItem(
-    //           "selectedChatbot",
-    //           JSON.stringify(this.selectedChatbot)
-    //         );
-    //       }
-    //     localStorage.setItem('chatbotPresent', 'true');
-    //   } else {
-    //     localStorage.setItem('chatbotPresent', 'false');
-    //     this.selectedChatbot=null
-    //   }
-    // });
+  getAllOperators() {
+    this.operatorService.getAllOperator().subscribe((res: any) => {
+      console.log("All operators", res.data); 
+      this.operators = res.data?.operators || [];
+      this.user = this.profileService.getUserDetails();
+      if (this.operators.length > 0) {
+        const storedOperator = localStorage.getItem("selectedOperator");
+          if (storedOperator) {
+            this.selectedOperator = JSON.parse(storedOperator);
+          } else {
+            this.selectedOperator = {
+              _id: this.operators.at(-1)?._id,
+              name: this.operators.at(-1)?.name,
+            };
+            localStorage.setItem(
+              "selectedOperator",
+              JSON.stringify(this.selectedOperator)
+            );
+          }
+        localStorage.setItem('operatorPresent', 'true');
+      } else {
+        localStorage.setItem('operatorPresent', 'false');
+        this.selectedOperator = null;
+      }
+    });
   }
 
   startWatchingAppEvents() {
+    console.log('Starting to watch app events');
     this.eventService.events
       .pipe(takeUntil(this.$destroyWatching))
       .subscribe((e: any) => {
+        console.log('Event received:', e);
+
         if (e.type === "LOGIN_CHANGE") {
+          console.log('LOGIN_CHANGE event received');
           const user_:any = localStorage.getItem('STRATEGY-CUES-USER');
-          if (user_) {
+          console.log('User data from localStorage in LOGIN_CHANGE:', user_);
+          if (user_ && user_ !== 'undefined') {
             try {
-              const user = JSON.parse(user_);
-              this.avatar = user?.profilePic || this.avatar;
+              const userData = JSON.parse(user_);
+              // Handle nested user structure: {user: {...}} -> {...}
+              this.user = userData.user || userData;
+              this.avatar = this.user?.profilePicture || this.avatar;
+              console.log('User set in LOGIN_CHANGE:', this.user);
             } catch (error) {
               console.error('Error parsing user data:', error);
             }
+          } else {
+            console.log('No user data found in LOGIN_CHANGE');
           }
-          // this.getAllOperators();
+          // Only call getAllOperators if not already called in ngOnInit
+          if (!this.operators) {
+            this.getAllOperators();
+          }
           this.isLoggedIn = this.authService.isAuthenticated();
+          console.log('isLoggedIn set to:', this.isLoggedIn);
         }
         if ( e.type === "PROFILE_UPDATED") {
+          console.log('PROFILE_UPDATED event received');
           const user_:any = localStorage.getItem('STRATEGY-CUES-USER');
-          if (user_) {
+          if (user_ && user_ !== 'undefined') {
             try {
-              const user = JSON.parse(user_);
-              this.avatar = user?.profilePic || this.avatar;
+              const userData = JSON.parse(user_);
+              // Handle nested user structure: {user: {...}} -> {...}
+              this.user = userData.user || userData;
+              this.avatar = this.user?.profilePicture || this.avatar;
+              console.log('User set in PROFILE_UPDATED:', this.user);
             } catch (error) {
               console.error('Error parsing user data:', error);
             }
+          } else {
+            console.log('No user data found in PROFILE_UPDATED');
           }
-          // this.getAllOperators(true);
+          this.getAllOperators();
           this.isLoggedIn = this.authService.isAuthenticated();
-        }
-        if (e.type === 'LOGIN_CHANGE' || e.type === 'PROFILE_UPDATED') {
-          console.log('check app user ', this.user);
-          // this.getAllOperators();
-          this.isLoggedIn = this.authService.isAuthenticated();
-          this.user = this.userService.getUserDetails();
-          // const storedOperator = localStorage.getItem('selectedOperator');
-          // if (storedOperator) {
-          //   this.selectedOperator = JSON.parse(storedOperator);
-          // } else {
-          //   this.selectedOperator = this.user?.operators[0] ?? null;
-          // }
+          console.log('isLoggedIn set to:', this.isLoggedIn);
         }
       });
   }
@@ -157,5 +197,28 @@ export class AppComponent {
 
   toggleSidebar() {
     this.isCollapsed = !this.isCollapsed;
+  }
+
+  fetchUserProfile() {
+    console.log('AppComponent: Fetching user profile from API...');
+    this.profileService.fetchUserDetail().subscribe({
+      next: (response: any) => {
+        console.log('AppComponent: Profile API response:', response);
+        if (response.success && response.data) {
+          this.localStorageService.setItem(
+            "STRATEGY-CUES-USER",
+            JSON.stringify(response.data)
+          );
+          this.user = response.data;
+          console.log('AppComponent: User profile stored and set:', response.data);
+          this.eventService.dispatchEvent({ type: 'PROFILE_UPDATED' });
+        } else {
+          console.error('AppComponent: Failed to fetch user profile:', response);
+        }
+      },
+      error: (error: any) => {
+        console.error('AppComponent: Error fetching user profile:', error);
+      }
+    });
   }
 }

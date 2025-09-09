@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WarningModalComponent } from './warning-modal.component';
+import { AllOperatorsComponent } from './all-operators.component';
 
-describe('WarningModalComponent', () => {
-  let component: WarningModalComponent;
-  let fixture: ComponentFixture<WarningModalComponent>;
+describe('AllOperatorsComponent', () => {
+  let component: AllOperatorsComponent;
+  let fixture: ComponentFixture<AllOperatorsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [WarningModalComponent]
+      declarations: [AllOperatorsComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(WarningModalComponent);
+    fixture = TestBed.createComponent(AllOperatorsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

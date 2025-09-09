@@ -22,23 +22,23 @@
         <label for="tax" class="form-label">Profile Image</label>
         <div class="form-control">
           <img class="avatar-img cursor-pointer" [src]="profileImage" (click)="fileInput.click()" />
-          <input type="file" #fileInput class="d-none" (change)="onFileSelected($event, 'profilePic')" accept="image/*" />
+          <input type="file" #fileInput class="d-none" (change)="onFileSelected($event, 'profilePicture')" accept="image/*" />
         </div>
       </div>
     </div>
     <div class="col-12 col-md-6">
       <div class="mb-3">
-        <label for="name" class="form-label">Name</label>
+        <label for="fullName" class="form-label">Name</label>
         <input
           type="text"
           class="form-control"
-          id="name"
+          id="fullName"
           [maxlength]="100"
-          placeholder="Name"
-          formControlName="name"
-          [ngClass]="{ 'is-invalid': hasError('name') }"
+          placeholder="Full Name"
+          formControlName="fullName"
+          [ngClass]="{ 'is-invalid': hasError('fullName') }"
         />
-        <div class="invalid-feedback">Name is required</div>
+        <div class="invalid-feedback">Full Name is required</div>
       </div>
     <!-- </div>
     <div class="col-12 col-md-6"> -->
@@ -76,33 +76,16 @@
 
     <div class="col-12 col-md-6">
       <div class="mb-3">
-        <label for="company" class="form-label">Company Name</label>
+        <label for="city" class="form-label">City</label>
         <input
           type="text"
           class="form-control"
-          id="company"
+          id="city"
           [maxlength]="100"
-          placeholder="Company name"
-          formControlName="companyName"
-          [ngClass]="{ 'is-invalid': hasError('companyName') }"
+          placeholder="City name"
+          formControlName="city"
+          [ngClass]="{ 'is-invalid': hasError('city') }"
         />
-        <div class="invalid-feedback">Company name is required</div>
-      </div>
-    </div>
-
-    <div class="col-12 col-md-6">
-      <div class="mb-3">
-        <label for="state" class="form-label">State</label>
-        <input
-          type="text"
-          class="form-control"
-          id="state"
-          [maxlength]="100"
-          placeholder="State name"
-          formControlName="state"
-          [ngClass]="{ 'is-invalid': hasError('state') }"
-        />
-        <div class="invalid-feedback">State Name is required</div>
       </div>
     </div>
 
@@ -128,7 +111,6 @@
           formControlName="country"
           [ngClass]="{ 'is-invalid': hasError('country') }"
         />
-        <div class="invalid-feedback">Country Name is required</div>
       </div>
     </div>
 
@@ -148,21 +130,6 @@
       </div>
     </div>
 
-    <div class="col-12 col-md-6">
-      <div class="mb-3">
-        <label for="tax" class="form-label">Tax Id</label>
-        <input
-          type="text"
-          class="form-control"
-          id="tax"
-          [maxlength]="100"
-          placeholder="Tax Id"
-          formControlName="taxId"
-          [ngClass]="{ 'is-invalid': hasError('taxId') }"
-        />
-        <div class="invalid-feedback">Tax Id is required</div>
-      </div>
-    </div>
 
     <div class="col-12 col-md-6">
       <div class="mb-3">
@@ -178,7 +145,6 @@
           [ngClass]="{ 'is-invalid': hasError('address') }"
         >
         </textarea>
-        <div class="invalid-feedback">Address is required</div>
       </div>
     </div>
 
@@ -209,7 +175,7 @@
       <div class="bg-choser">
         <div class="form-group">
           <img class="avatar-img cursor-pointer" [src]="profileImage" (click)="fileInput.click()" />
-          <input type="file" #fileInput class="d-none" (change)="onFileSelected($event, 'profilePic')" accept="image/*" />
+          <input type="file" #fileInput class="d-none" (change)="onFileSelected($event, 'profilePicture')" accept="image/*" />
         </div>
         <div class="text">Profile Image</div>
       </div>

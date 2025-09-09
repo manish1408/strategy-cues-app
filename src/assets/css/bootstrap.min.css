@@ -583,7 +583,7 @@ progress {
   padding-left: calc(var(--bs-gutter-x) * 0.5);
   margin-right: auto;
   margin-left: auto;
-  border: ;
+  border: none;
 }
 @media (min-width: 576px) {
   .container,
@@ -2799,20 +2799,25 @@ fieldset:disabled .btn {
 }
 .btn-primary {
   --bs-btn-color: #fff;
-  --bs-btn-bg: #198754;
-  --bs-btn-border-color: #198754;
+  --bs-btn-bg: #000002;          /* Base */
+  --bs-btn-border-color: #000002;
+
   --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: #157347;
-  --bs-btn-hover-border-color: #146c43;
-  --bs-btn-focus-shadow-rgb: 60, 153, 110;
+  --bs-btn-hover-bg: #1a1a1c;    /* Slightly lighter black */
+  --bs-btn-hover-border-color: #1a1a1c;
+
+  --bs-btn-focus-shadow-rgb: 26, 26, 28; /* matches hover shade */
+
   --bs-btn-active-color: #fff;
-  --bs-btn-active-bg: #146c43;
-  --bs-btn-active-border-color: #13653f;
-  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-active-bg: #333333;   /* More visible dark gray */
+  --bs-btn-active-border-color: #333333;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.25);
+
   --bs-btn-disabled-color: #fff;
-  --bs-btn-disabled-bg: #198754;
-  --bs-btn-disabled-border-color: #198754;
+  --bs-btn-disabled-bg: #000002;
+  --bs-btn-disabled-border-color: #000002;
 }
+
 .btn-info {
   --bs-btn-color: #000;
   --bs-btn-bg: #0dcaf0;
@@ -2924,20 +2929,26 @@ fieldset:disabled .btn {
   --bs-gradient: none;
 }
 .btn-outline-success {
-  --bs-btn-color: #198754;
-  --bs-btn-border-color: #198754;
-  --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: #198754;
-  --bs-btn-hover-border-color: #198754;
-  --bs-btn-focus-shadow-rgb: 25, 135, 84;
-  --bs-btn-active-color: #fff;
-  --bs-btn-active-bg: #198754;
-  --bs-btn-active-border-color: #198754;
-  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  --bs-btn-disabled-color: #198754;
+  --bs-btn-color: #000002;             /* Base text color */
+  --bs-btn-border-color: #000002;      /* Border */
+  
+  --bs-btn-hover-color: #fff;          /* Text turns white on hover */
+  --bs-btn-hover-bg: #000002;          /* Background fills with dark */
+  --bs-btn-hover-border-color: #000002;
+
+  --bs-btn-focus-shadow-rgb: 0, 0, 2;  /* Focus shadow based on #000002 */
+
+  --bs-btn-active-color: #fff;         
+  --bs-btn-active-bg: #1a1a1c;         /* Slightly lighter for active state */
+  --bs-btn-active-border-color: #1a1a1c;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.25);
+
+  --bs-btn-disabled-color: #000002;    /* Disabled = gray border & text */
   --bs-btn-disabled-bg: transparent;
+
   --bs-gradient: none;
 }
+
 .btn-outline-info {
   --bs-btn-color: #0dcaf0;
   --bs-btn-border-color: #0dcaf0;

@@ -19,7 +19,6 @@ import { SelectDropDownModule } from "ngx-select-dropdown";
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,

@@ -5,6 +5,9 @@ import { Route, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
 import { PHONE_BOOK } from '../shared/component/phone-dropdown/phone-codes';
+import { ProfileService } from '../_services/profile.service';
+import { LocalStorageService } from '../_services/local-storage.service';
+import { EventService } from '../_services/event.service';
 
 @Component({
   selector: 'app-settings',
@@ -26,46 +29,73 @@ export class SettingsComponent {
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    private authService: AuthenticationService,
+    private profileService: ProfileService,
     private toastr: ToastrService,
+    private localStorageService: LocalStorageService,
+    private eventService: EventService<any>
   ) {
     this.settingsForm = this.fb.group({
-      name: ['', Validators.required],
+      fullName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', Validators.required],
-      companyName: ['', Validators.required],
-      country: ['India', Validators.required],
       address: [''],
-      state: [''],
+      city: [''],
+      country: [''],
       zip: [''],
-      taxId: [''],
-      profilePic: [''],
+      profilePicture: [''],
     });
   }
 
-  ngOnInit() {
+  ngOnInit() {  
     this.loadUser();
   }
 
   loadUser() {
-    this.patchForm();
+    this.user = this.profileService.getUserDetails();
+    console.log('Loaded user data:', this.user);
+    if (this.user) {
+      this.patchForm();
+    } else {
+      // If no user data in localStorage, fetch from API
+      this.fetchUserProfile();
+    }
+  }
+
+  fetchUserProfile() {
+    console.log('Fetching user profile from API...');
+    this.profileService.fetchUserDetail().subscribe({
+      next: (response: any) => {
+        console.log('Profile API response:', response);
+        if (response.success && response.data) {
+          this.user = response.data;
+          this.localStorageService.setItem(
+            "STRATEGY-CUES-USER",
+            JSON.stringify({ user: response.data })
+          );
+          this.patchForm();
+        } else {
+          this.toastr.error('Failed to load user profile');
+        }
+      },
+      error: (error: any) => {
+        console.error('Error fetching user profile:', error);
+        this.toastr.error('Error loading user profile');
+      }
+    });
   }
 
   patchForm() {
     this.settingsForm.patchValue({
-      name: this.user.name,
-      email: this.user.email,
-      phone: this.user.phone,
-      companyName: this.user.companyName,
-      address: this.user.address,
-      state: this.user.state,
-      country: this.user.country,
-      zip: this.user.zip,
-      taxId: this.user.taxId,
-      profilePic:this.user.profilePic,
-     
+      fullName: this.user.fullName || '',
+      email: this.user.email || '',
+      phone: this.user.phone || '',
+      address: this.user.address || '',
+      city: this.user.city || '',
+      country: this.user.country || '',
+      zip: this.user.zip || '',
+      profilePicture: this.user.profilePicture || this.profileImage,
     });
-    this.profileImage = this.user.profilePic;
+    this.profileImage = this.user.profilePicture || this.profileImage;
   }
 
   hasError(controlName: keyof typeof this.settingsForm.controls) {
@@ -107,63 +137,59 @@ export class SettingsComponent {
 
   saveUserDetails() {
     const reqObj = {
-      name: this.settingsForm.value.name,
+      fullName: this.settingsForm.value.fullName,
+      email: this.settingsForm.value.email,
       phone: this.settingsForm.value.phone,
-      companyName: this.settingsForm.value.companyName,
       address: this.settingsForm.value.address,
-      state: this.settingsForm.value.state,
+      city: this.settingsForm.value.city,
       country: this.settingsForm.value.country,
       zip: this.settingsForm.value.zip,
-      taxId: this.settingsForm.value.taxId,
-      profilePic: this.profileImage || '',
+      profilePicture: this.profileImage || this.settingsForm.value.profilePicture,
     };
-    // TODO: Implement update profile API
-    // this.authService
-    // .updateProfile(reqObj)
-    // .pipe(finalize(() => (this.loading = false)))
-    // .subscribe({
-    //   next: (res) => {
-    //     if (res.result) {
-    //       this.localStorageService.setItem(
-    //         'MILO-USER',
-    //         JSON.stringify(res.data)
-    //       );
-    //       this.eventService.dispatchEvent({ type: 'PROFILE_UPDATED' });
-    //       this.toastr.success('Profile Updated Successfully');
-    //       this.loadUser();
-    //     } else {
-    //       this.toastr.error(res.msg);
-    //     }
-    //   },
-    //   error: (err) => {
-    //     console.log(err);
-    //     this.toastr.error(err.error.msg);
-    //   },
-    // });
+    
+    console.log('Updating user profile with:', reqObj);
+    
+    this.profileService.updateUser(reqObj)
+      .pipe(finalize(() => (this.loading = false)))
+      .subscribe({
+        next: (res) => {
+          console.log('Update profile response:', res);
+          if (res.success) {
+            // Update localStorage with new user data
+            const updatedUser = { ...this.user, ...reqObj };
+            this.localStorageService.setItem(
+              'STRATEGY-CUES-USER',
+              JSON.stringify({ user: updatedUser })
+            );
+            
+            // Dispatch event to update app component
+            this.eventService.dispatchEvent({ type: 'PROFILE_UPDATED' });
+            
+            this.toastr.success('Profile Updated Successfully');
+            this.user = updatedUser;
+          } else {
+            this.toastr.error(res.error?.detail || res.message || 'Failed to update profile');
+          }
+        },
+        error: (err) => {
+          console.error('Update profile error:', err);
+          this.toastr.error(
+            err.error?.detail || 
+            err.error?.message || 
+            'An error occurred while updating profile'
+          );
+        },
+      });
   }
 
 
   updateProfile() {
     this.loading = true;
     if (this.imgFiles.length > 0) {
-      console.log('this.imgFiles.length: ', this.imgFiles.length);
-      const filesToAdd = this.imgFiles.filter((file) => file);
-      let fd = new FormData();
-      filesToAdd.forEach((f) => {
-        fd.append('files', f.file);
-        fd.append('types', f.type);
-      });
-      fd.append('userId', this.user._id);
-      // this.authService
-      //   .saveProfileImage(fd)
-      //   .pipe(finalize(() => (this.loading = false)))
-      //   .subscribe((res: any) => {
-
-      //     if (res?.data?.profilePic) {
-      //       this.profileImage = res.data.profilePic
-      //       this.saveUserDetails();
-      //     }
-      //   });
+      console.log('Image files to upload:', this.imgFiles.length);
+      // For now, we'll save the profile with the base64 image
+      // In a real implementation, you'd upload the image first and get a URL
+      this.saveUserDetails();
     } else {
       this.saveUserDetails();
     }
@@ -186,7 +212,7 @@ export class SettingsComponent {
 			}
 			const reader = new FileReader();
 			reader.onload = (e: any) => {
-				if (type === 'profilePic') {
+				if (type === 'profilePicture') {
 					this.profileImage = e.target.result;
 				}
 			

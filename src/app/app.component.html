@@ -1,5 +1,5 @@
 <!-- Only chatbot content -->
-<ng-container *ngIf="isChatbotPage;else mainContent">
+<ng-container *ngIf="isOperatorPage;else mainContent">
   <router-outlet></router-outlet>
 </ng-container>
 <ng-template #mainContent>
@@ -17,7 +17,7 @@
           <!-- Sidebar Navigation -->
 
           <div class="d-flex align-items-center justify-content-between">
-            <img class="milo-logo img-fluid" src="https://strategycues.com/wp-content/uploads/2025/02/Asset-2-8.png" />
+            <img class="brand-logo img-fluid" src="https://strategycues.com/wp-content/uploads/2025/02/Asset-2-8.png" />
 
             <img src="assets/icons/arrow-square-left.svg" (click)="toggleSidebar()" class="cursor-pointer" />
           </div>
@@ -73,18 +73,18 @@
               <button type="button" class="btn chat-drop-btn dropdown-toggle" data-bs-toggle="dropdown"
                 aria-expanded="false">
                 {{
-                (selectedOperator?.chatbotName ) || "Select Operator"
+                (selectedOperator?.name ) || "Select Operator"
                 }}
               </button>
 
               <ul class="dropdown-menu chat-drop p-0">
                 <li>
-                  <a routerLink="/all-chatbots" class="dropdown-item">
+                  <a routerLink="/all-operators" class="dropdown-item">
                     All Operators</a>
                 </li>
-                <li *ngFor="let cb of selectedOperator?.chatbots">
-                  <a role="button" class="dropdown-item" (click)="selectedOperator = cb">{{
-                    cb?.themeDetails?.chatbotName
+                <li *ngFor="let operator of operators">
+                  <a role="button" class="dropdown-item" (click)="selectedOperator = operator">{{
+                    operator?.name
                     }}</a>
                 </li>
               </ul>
@@ -94,9 +94,14 @@
             <div class="dropdown">
               <button class="btn dropdown-toggle profile-dropdown m-0" type="button" id="dropdownMenuButton1"
                 data-bs-toggle="dropdown" aria-expanded="false">
-                <img [src]="user && user?.profilePic ? user?.profilePic : avatar" class="avatar-img" />
-                <h4 *ngIf="user?.name">
-                  {{ user?.name }}
+                <img 
+                  [src]="user && user?.profilePicture ? user?.profilePicture : avatar" 
+                  class="avatar-img" 
+                  
+                  [alt]="user?.fullName || 'User'"
+                />
+                <h4 *ngIf="user?.fullName">
+                  {{ user?.fullName }}
                 </h4>
                 <img class="down-icon" src="assets/icons/arrow-down.svg" />
               </button>
@@ -108,15 +113,15 @@
               " />
                     Profile</a>
                 </li>
-                <li *ngIf="!user?.authType && user?.authType !=='google'">
+                <!-- <li *ngIf="!user?.authType && user?.authType !=='google'">
                   <a class="dropdown-item" routerLink="/change-password">
                     <img src="assets/icons/lock.svg
               " />
                     Change Password</a>
-                </li>
+                </li> -->
 
                 <li>
-                  <a class="dropdown-item" routerLink="/all-chatbots">
+                  <a class="dropdown-item" routerLink="/all-operators">
                     <img src="assets/icons/bot.svg
                 " />
                     All Operators</a>
