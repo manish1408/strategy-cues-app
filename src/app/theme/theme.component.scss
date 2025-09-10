@@ -220,12 +220,12 @@ a.add img {
 .chat-area .nav-tabs .nav-link.active {
   color: #222;
   background-color: #fff;
-  border-color: transparent transparent #000;
+  border-color: transparent transparent #1e1e1e;
 }
 
 .chat-area .nav-tabs .nav-link:focus,
 .chat-area .nav-tabs .nav-link:hover {
-  border-color: transparent transparent #000;
+  border-color: transparent transparent #1e1e1e;
   isolation: isolate;
 }
 
@@ -287,7 +287,7 @@ a.add img {
 .msg-head {
   padding: 15px;
   border-bottom: 1px solid #ccc;
-  background-color: #000002;
+  background-color: #1e1e1e;
 }
 
 .moreoption {
@@ -335,7 +335,7 @@ a.add img {
   flex-direction: column;
 }
 .msg-body ul li.sender h3 {
-  color: #000000;
+  color: #1e1e1e;
   font-size: 14px;
   line-height: 1.5;
   font-weight: 500;
@@ -376,7 +376,7 @@ a.add img {
 }
 
 .msg-body ul li.repaly p {
-  color: #000000;
+  color: #1e1e1e;
   font-size: 14px;
   line-height: 1.5;
   font-weight: 300;
@@ -407,7 +407,7 @@ a.add img {
 
 .time {
   display: block;
-  color: #000;
+  color: #1e1e1e;
   font-size: 12px;
   line-height: 1.5;
   font-weight: 400;

@@ -64,7 +64,7 @@
       </div> -->
       </aside>
       <!-- Main Component -->
-      <div class="main">
+      <div class="main" >
         <nav class="navbar navbar-expand px-3 justify-content-between top-nav">
           <div class="d-flex align-items-center justify-content-between">
             <img *ngIf="isCollapsed" src="assets/icons/arrow-square-left.svg" (click)="toggleSidebar()"
@@ -82,10 +82,15 @@
                   <a routerLink="/all-operators" class="dropdown-item">
                     All Operators</a>
                 </li>
+               
                 <li *ngFor="let operator of operators">
-                  <a role="button" class="dropdown-item" (click)="selectedOperator = operator">{{
+                  <a role="button" class="dropdown-item" (click)="selectOperator(operator)">{{
                     operator?.name
                     }}</a>
+                </li>
+                <!-- Show message if no operators -->
+                <li *ngIf="!operators || operators.length === 0" class="dropdown-item text-muted">
+                  No operators found
                 </li>
               </ul>
             </div>

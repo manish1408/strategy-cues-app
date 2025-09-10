@@ -1,8 +1,8 @@
 /* Brand Colors */
 :root {
-  --brand-yellow: #ffd116; /* Primary CTA */
+  --brand-yellow: #fad119; /* Primary CTA */
   --brand-yellow-accent: #FCDF46; /* Secondary highlight */
-  --brand-black: #0a0a0b;
+  --brand-black: #1e1e1e;
   --brand-yellow-light: #fff4b3;
   --brand-yellow-dark: #e6bc0a;
   --brand-black-light: #1a1a1b;
@@ -122,7 +122,7 @@ input:checked + .slider:before {
 .desc {
   font-size: 14px;
   font-weight: 400;
-  color: #a1a1a2;
+  color: #1e1e1e;
   margin: 0;
 }
 
@@ -309,7 +309,7 @@ input:checked + .slider:before {
   border: var(--bs-nav-tabs-border-width) solid transparent;
   border-top-left-radius: var(--bs-nav-tabs-border-radius);
   border-top-right-radius: var(--bs-nav-tabs-border-radius);
-  color: #000000;
+  color: #1e1e1e;
   font-size: 14px;
   font-weight: 500;
 }
@@ -701,8 +701,8 @@ input:checked + .slider {
 
 .eye-wrapper{
   position: absolute;
-  top: 30px !important;
-  right: 9px !important;
+  top: 27px !important;
+    right: 10px !important;
   cursor: pointer;
  img{
     width: 16px !important;
@@ -711,7 +711,7 @@ input:checked + .slider {
 }
 
 .selected-country{
-  height: 35px !important;
+  height: 34.5px !important;
 }
 
 label {
@@ -745,32 +745,41 @@ margin-bottom: 0px !important;
 
 /* Brand-specific button styles */
 .btn-primary {
-  background-color: var(--brand-yellow) !important;
-  border-color: var(--brand-yellow) !important;
+  background-color: #fcdf46 !important;
+  border-color: #fcdf46 !important;
   color: var(--brand-black) !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border-radius: 8px;
 }
 
 .btn-primary:hover {
-  background-color: var(--brand-yellow-dark) !important;
-  border-color: var(--brand-yellow-dark) !important;
+  background-color: #fbbf24 !important;
+  border-color: #fbbf24 !important;
   color: var(--brand-black) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(252, 223, 70, 0.3);
 }
 
 .btn-outline-primary {
-  color: var(--brand-yellow) !important;
-  border-color: var(--brand-yellow) !important;
+  color: #fcdf46 !important;
+  border-color: #fcdf46 !important;
+  background-color: transparent;
+  font-weight: 500;
+  border-radius: 8px;
 }
 
 .btn-outline-primary:hover {
-  background-color: var(--brand-yellow) !important;
-  border-color: var(--brand-yellow) !important;
+  background-color: #fcdf46 !important;
+  border-color: #fcdf46 !important;
   color: var(--brand-black) !important;
+  transform: translateY(-1px);
 }
 
 /* Brand-specific form controls */
 .form-control:focus {
-  border-color: var(--brand-yellow) !important;
-  box-shadow: 0 0 0 0.2rem rgba(255, 209, 22, 0.25) !important;
+  border-color: #fcdf46 !important;
+  box-shadow: 0 0 0 0.2rem rgba(252, 223, 70, 0.25) !important;
 }
 
 /* Brand-specific card styles */
@@ -781,41 +790,41 @@ margin-bottom: 0px !important;
 .card-header {
   background-color: var(--brand-black-light);
   color: white;
-  border-bottom: 1px solid var(--brand-yellow);
+  border-bottom: 1px solid #fcdf46;
 }
 
 /* Brand-specific alert styles */
 .alert-primary {
-  background-color: var(--brand-yellow-light);
-  border-color: var(--brand-yellow);
+  background-color: rgba(252, 223, 70, 0.1);
+  border-color: #fcdf46;
   color: var(--brand-black);
 }
 
 /* Brand-specific badge styles */
 .badge-primary {
-  background-color: var(--brand-yellow);
+  background-color: #fcdf46;
   color: var(--brand-black);
 }
 
 /* Brand-specific progress bar */
 .progress-bar {
-  background-color: var(--brand-yellow);
+  background-color: #fcdf46;
 }
 
 /* Brand-specific pagination */
 .page-link {
   color: var(--brand-black);
-  border-color: var(--brand-yellow);
+  border-color: #fcdf46;
 }
 
 .page-link:hover {
   color: var(--brand-black);
-  background-color: var(--brand-yellow-light);
-  border-color: var(--brand-yellow);
+  background-color: rgba(252, 223, 70, 0.1);
+  border-color: #fcdf46;
 }
 
 .page-item.active .page-link {
-  background-color: var(--brand-yellow);
-  border-color: var(--brand-yellow);
+  background-color: #fcdf46;
+  border-color: #fcdf46;
   color: var(--brand-black);
 }

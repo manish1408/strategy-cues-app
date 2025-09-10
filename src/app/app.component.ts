@@ -107,14 +107,39 @@ export class AppComponent {
     console.log('Final state - isLoggedIn:', this.isLoggedIn, 'user:', this.user);
   }
   getAllOperators() {
-    this.operatorService.getAllOperator().subscribe((res: any) => {
-      console.log("All operators", res.data); 
-      this.operators = res.data?.operators || [];
-      this.user = this.profileService.getUserDetails();
-      if (this.operators.length > 0) {
-        const storedOperator = localStorage.getItem("selectedOperator");
+    this.operatorService.getAllOperator().subscribe({
+      next: (res: any) => {
+        console.log("All operators API response:", res); 
+        console.log("res.data:", res.data);
+        console.log("res.data?.operators:", res.data?.operators);
+        this.operators = res.data?.operators || [];
+        console.log("Final operators array:", this.operators);
+        console.log("Operators length:", this.operators.length);
+        this.user = this.profileService.getUserDetails();
+        if (this.operators.length > 0) {
+          const storedOperator = localStorage.getItem("selectedOperator");
           if (storedOperator) {
-            this.selectedOperator = JSON.parse(storedOperator);
+            const parsedOperator = JSON.parse(storedOperator);
+            // Check if the stored operator still exists in the current operators list
+            const operatorExists = this.operators.find((op: any) => op._id === parsedOperator._id);
+            console.log('Stored operator:', parsedOperator);
+            console.log('Operator exists in list:', !!operatorExists);
+            if (operatorExists) {
+              this.selectedOperator = parsedOperator;
+              console.log('Using stored operator:', this.selectedOperator);
+            } else {
+              // Selected operator no longer exists, select the last one
+              console.log('Selected operator no longer exists, selecting last operator');
+              this.selectedOperator = {
+                _id: this.operators.at(-1)?._id,
+                name: this.operators.at(-1)?.name,
+              };
+              console.log('New selected operator:', this.selectedOperator);
+              localStorage.setItem(
+                "selectedOperator",
+                JSON.stringify(this.selectedOperator)
+              );
+            }
           } else {
             this.selectedOperator = {
               _id: this.operators.at(-1)?._id,
@@ -125,12 +150,26 @@ export class AppComponent {
               JSON.stringify(this.selectedOperator)
             );
           }
-        localStorage.setItem('operatorPresent', 'true');
-      } else {
-        localStorage.setItem('operatorPresent', 'false');
+          localStorage.setItem('operatorPresent', 'true');
+        } else {
+          localStorage.setItem('operatorPresent', 'false');
+          this.selectedOperator = null;
+          localStorage.removeItem("selectedOperator");
+        }
+      },
+      error: (error: any) => {
+        console.error('Error loading operators in app component:', error);
+        this.operators = [];
         this.selectedOperator = null;
+        localStorage.setItem('operatorPresent', 'false');
       }
     });
+  }
+
+  selectOperator(operator: any) {
+    this.selectedOperator = operator;
+    localStorage.setItem("selectedOperator", JSON.stringify(operator));
+    console.log('Operator selected:', operator);
   }
 
   startWatchingAppEvents() {
@@ -183,6 +222,10 @@ export class AppComponent {
           this.getAllOperators();
           this.isLoggedIn = this.authService.isAuthenticated();
           console.log('isLoggedIn set to:', this.isLoggedIn);
+        }
+        if (e.type === "OPERATORS_UPDATED") {
+          console.log('OPERATORS_UPDATED event received');
+          this.getAllOperators();
         }
       });
   }

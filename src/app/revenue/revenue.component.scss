@@ -517,7 +517,7 @@ $transition: all 0.3s ease;
     font-weight: 600;
 
     .min-value {
-      color: #000000;
+      color: #1e1e1e;
       background: #eee;
       padding: 0.25rem 0.5rem;
       border-radius: 0.25rem;
@@ -525,7 +525,7 @@ $transition: all 0.3s ease;
     }
 
     .max-value {
-      color: #000000;
+      color: #1e1e1e;
       background: #eee;
       padding: 0.25rem 0.5rem;
       border-radius: 0.25rem;
@@ -556,7 +556,7 @@ $transition: all 0.3s ease;
         height: 18px;
         width: 18px;
         border-radius: 50%;
-        background: #000000;
+        background: #1e1e1e;
         cursor: pointer;
         pointer-events: all;
         border: 2px solid #fff;
@@ -564,7 +564,7 @@ $transition: all 0.3s ease;
         transition: all 0.2s ease;
 
         &:hover {
-          background: #000000;
+          background: #1e1e1e;
           transform: scale(1.1);
           box-shadow: 0 3px 8px rgba(0, 123, 255, 0.4);
         }
@@ -574,7 +574,7 @@ $transition: all 0.3s ease;
         height: 18px;
         width: 18px;
         border-radius: 50%;
-        background: #000000;
+        background: #1e1e1e;
         cursor: pointer;
         pointer-events: all;
         border: 2px solid #fff;
@@ -582,7 +582,7 @@ $transition: all 0.3s ease;
         transition: all 0.2s ease;
 
         &:hover {
-          background: #000000;
+          background: #1e1e1e;
           transform: scale(1.1);
           box-shadow: 0 3px 8px rgba(0, 123, 255, 0.4);
         }
@@ -629,7 +629,7 @@ $transition: all 0.3s ease;
       content: '';
       position: absolute;
       height: 6px;
-      background: #000000;
+      background: #1e1e1e;
       border-radius: 3px;
       z-index: 0;
       left: 0;
@@ -798,12 +798,12 @@ $transition: all 0.3s ease;
         }
 
         &.filter-basic {
-          border-color: #000000;
+          border-color: #1e1e1e;
           background: #e3f2fd;
           color: #0d47a1;
 
           .filter-label {
-            color: #000000;
+            color: #1e1e1e;
           }
         }
 

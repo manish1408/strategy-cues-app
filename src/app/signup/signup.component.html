@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-black">
+<nav class="navbar navbar-expand-lg" style="background-color: #1e1e1e;">
   <div class="container">
     <a class="navbar-brand" href="#" class="text-dark fs-2">
       <img style="height: 30px;" src="https://strategycues.com/wp-content/uploads/2025/02/Asset-2-8.png" />
@@ -8,18 +8,22 @@
 </nav>
 
 <div class="container">
-  <div class="vh-90 row justify-content-center align-items-center">
-    <div class="col-12 col-lg-6">
-      <div class="right-section bg-black text-white">
-        <!-- <img
-          class="logo-img"
-          src="assets/icons/milo-logo.svg"
-          alt="Milo Logo"
-        />
+  <div class="vh-100 row justify-content-center align-items-center">
+    <div class="d-none d-lg-block col-lg-8">
+      <div class="d-flex flex-column justify-content-center align-items-start gap-3 left-section">
+        <p class="desc">Result Oriented Strategy</p>
+          <h2 class="title">Smart Revenue and <br> Operations for Hospitality Brands</h2>
+          <p class="subtitle">Achieve stronger results with our bespoke, data-driven approach to revenue, distribution and operations.</p>
+      </div>
+    </div>
+    <div class="col-12 col-lg-4">
+      <div class="right-section" style="background-color: #ffffff; color: #1e1e1e;">
+       
+        
         <div class="title-wrapper">
-          <h2 class="title">Start your journey with us</h2>
-          <p class="desc">Enter your credential to view all insights</p>
-        </div> -->
+          <h2 class="title">Join Strategy Cues</h2>
+          <p class="desc">Create your account to start optimizing your hospitality revenue</p>
+        </div>
 
         <div class="form-wrapper">
           <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="user-form">
@@ -63,7 +67,7 @@
             <div class="input-field">
               <label class="form-label">Phone number</label>
               <div style="display: flex;" class="d-flex align-items-start gap-0">
-                <!-- <app-phone-dropdown (countrySelected)="onCountrySelected($event)" [selectedCountry]="selectedCountry" [loadingIp]="loadingIp"></app-phone-dropdown> -->
+                <app-phone-dropdown (countrySelected)="onCountrySelected($event)" [selectedCountry]="selectedCountry" [loadingIp]="loadingIp"></app-phone-dropdown>
                 <div class="w-100">
                   <input id="phone" type="text" placeholder="Enter phone number" formControlName="phone"
                     [ngClass]="{ 'is-invalid': hasError('phone') }" class="form-control phone-input" />
@@ -80,7 +84,7 @@
                 formControlName="terms"
                 [ngClass]="{ 'is-invalid': hasError('terms') }"
               /> -->
-              <label>If you proceed with signup, you agree to the <span><a href="https://miloassistant.ai/terms" target="_blank">terms and
+              <label>If you proceed with signup, you agree to the <span><a href="https://strategycues.com/terms-and-conditions/" target="_blank">terms and
                     conditions.</a></span></label>
 
             </div>

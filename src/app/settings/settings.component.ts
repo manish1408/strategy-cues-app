@@ -8,6 +8,7 @@ import { PHONE_BOOK } from '../shared/component/phone-dropdown/phone-codes';
 import { ProfileService } from '../_services/profile.service';
 import { LocalStorageService } from '../_services/local-storage.service';
 import { EventService } from '../_services/event.service';
+import { CommonService } from '../_services/common.service';
 
 @Component({
   selector: 'app-settings',
@@ -25,6 +26,7 @@ export class SettingsComponent {
   widgetImageDetail:any;
   countries: any = PHONE_BOOK;  
   profileImage = 'https://milodocs.blob.core.windows.net/public-docs/profile-picture.webp';
+  initialFormValues: any = {}; // Store initial form values
 
   constructor(
     private router: Router,
@@ -32,7 +34,8 @@ export class SettingsComponent {
     private profileService: ProfileService,
     private toastr: ToastrService,
     private localStorageService: LocalStorageService,
-    private eventService: EventService<any>
+    private eventService: EventService<any>,
+    private commonService: CommonService
   ) {
     this.settingsForm = this.fb.group({
       fullName: ['', Validators.required],
@@ -53,9 +56,12 @@ export class SettingsComponent {
   loadUser() {
     this.user = this.profileService.getUserDetails();
     console.log('Loaded user data:', this.user);
-    if (this.user) {
+    console.log('User ID:', this.user?.id);
+    
+    if (this.user && this.user.id) {
       this.patchForm();
     } else {
+      console.log('No user data or missing user ID, fetching from API...');
       // If no user data in localStorage, fetch from API
       this.fetchUserProfile();
     }
@@ -67,13 +73,17 @@ export class SettingsComponent {
       next: (response: any) => {
         console.log('Profile API response:', response);
         if (response.success && response.data) {
-          this.user = response.data;
+          this.user = response.data.user;
+          console.log('Fetched user data:', this.user);
+          console.log('Fetched user ID:', this.user.id);
+          
           this.localStorageService.setItem(
             "STRATEGY-CUES-USER",
             JSON.stringify({ user: response.data })
           );
           this.patchForm();
         } else {
+          console.error('Failed to load user profile - no data in response');
           this.toastr.error('Failed to load user profile');
         }
       },
@@ -85,7 +95,7 @@ export class SettingsComponent {
   }
 
   patchForm() {
-    this.settingsForm.patchValue({
+    const formData = {
       fullName: this.user.fullName || '',
       email: this.user.email || '',
       phone: this.user.phone || '',
@@ -94,8 +104,14 @@ export class SettingsComponent {
       country: this.user.country || '',
       zip: this.user.zip || '',
       profilePicture: this.user.profilePicture || this.profileImage,
-    });
+    };
+    
+    this.settingsForm.patchValue(formData);
     this.profileImage = this.user.profilePicture || this.profileImage;
+    
+    // Store initial form values for comparison
+    this.initialFormValues = { ...formData };
+    this.initialFormValues.profilePicture = this.profileImage; // Store the actual profile image
   }
 
   hasError(controlName: keyof typeof this.settingsForm.controls) {
@@ -104,10 +120,58 @@ export class SettingsComponent {
       this.settingsForm.controls[controlName].touched
     );
   }
+
+  hasFormChanges(currentValues: any): boolean {
+    // Compare each field with initial values
+    for (const key in currentValues) {
+      if (currentValues.hasOwnProperty(key)) {
+        const currentValue = currentValues[key] || '';
+        const initialValue = this.initialFormValues[key] || '';
+        
+        // Handle profile picture comparison (URLs might be different but same image)
+        if (key === 'profilePicture') {
+          // If both are default images or both are custom URLs, consider them same
+          const isCurrentDefault = currentValue === 'https://milodocs.blob.core.windows.net/public-docs/profile-picture.webp';
+          const isInitialDefault = initialValue === 'https://milodocs.blob.core.windows.net/public-docs/profile-picture.webp';
+          
+          if (isCurrentDefault && isInitialDefault) {
+            continue; // Both are default, no change
+          }
+          if (isCurrentDefault !== isInitialDefault) {
+            return true; // One is default, other is custom - change detected
+          }
+          // Both are custom URLs, compare them
+          if (currentValue !== initialValue) {
+            return true; // Different URLs - change detected
+          }
+        } else {
+          // For other fields, simple string comparison
+          if (currentValue !== initialValue) {
+            return true; // Change detected
+          }
+        }
+      }
+    }
+    return false; // No changes detected
+  }
   onSubmit(): void {
     console.log(this.settingsForm)
     this.settingsForm.markAllAsTouched();
+    
     if (this.settingsForm.valid) {
+      // Check if any changes were made
+      const currentValues = {
+        ...this.settingsForm.value,
+        profilePicture: this.profileImage
+      };
+      
+      const hasChanges = this.hasFormChanges(currentValues);
+      
+      if (!hasChanges) {
+        this.toastr.info('No changes made');
+        return;
+      }
+      
       this.loading = true;
       this.updateProfile();
     } else {
@@ -115,25 +179,7 @@ export class SettingsComponent {
     }
   }
 
-  changePasswordRequest(reqObj:any){
-    
-    // this.authService
-    // .changePassword(reqObj)
-    // .pipe(finalize(() => (this.loading = false)))
-    // .subscribe({
-    //   next: (res) => {
-    //     if (res.result) {
-    //       this.updateProfile();
-    //     } else {
-    //       this.toastr.error(res.msg);
-    //     }
-    //   },
-    //   error: (err) => {
-    //     console.log(err);
-    //     this.toastr.error(err.error.msg);
-    //   },
-    // });
-  }
+  
 
   saveUserDetails() {
     const reqObj = {
@@ -167,6 +213,9 @@ export class SettingsComponent {
             
             this.toastr.success('Profile Updated Successfully');
             this.user = updatedUser;
+            
+            // Update initial form values to current values after successful save
+            this.initialFormValues = { ...reqObj };
           } else {
             this.toastr.error(res.error?.detail || res.message || 'Failed to update profile');
           }
@@ -186,10 +235,65 @@ export class SettingsComponent {
   updateProfile() {
     this.loading = true;
     if (this.imgFiles.length > 0) {
-      console.log('Image files to upload:', this.imgFiles.length);
-      // For now, we'll save the profile with the base64 image
-      // In a real implementation, you'd upload the image first and get a URL
-      this.saveUserDetails();
+      console.log('this.imgFiles.length: ', this.imgFiles.length);
+      const filesToAdd = this.imgFiles.filter((file) => file);
+      let fd = new FormData();
+      
+      console.log('Files to upload:', filesToAdd);
+      console.log('User ID:', this.user.id);
+      console.log('User object:', this.user);
+      
+      // The API expects a single 'file' field according to the documentation
+      filesToAdd.forEach((f) => {
+        fd.append('file', f.file);  // Single file field as per API docs
+        console.log('Appending file:', f.file.name, 'Type:', f.type);
+      });
+      
+      // Only append userId if it exists
+      if (this.user.id) {
+        fd.append('userId', this.user.id);
+        console.log('Appended userId:', this.user.id);
+      } else {
+        console.error('User ID is undefined! Cannot upload file.');
+        this.toastr.error('User ID not found. Please refresh and try again.');
+        this.loading = false;
+        return;
+      }
+      this.commonService
+        .uploadFile(fd)
+        .pipe(finalize(() => (this.loading = false)))
+        .subscribe({
+          next: (res: any) => {
+            console.log('File upload response:', res);
+            
+            // API returns: { "data": "https://...", "success": true }
+            if (res?.success && res?.data) {
+              console.log('Upload successful, data:', res.data);
+              
+              // The API returns the file URL directly in the data field
+              const fileUrl = res.data;
+              
+              if (fileUrl) {
+                console.log('File URL received:', fileUrl);
+                this.profileImage = fileUrl;
+                // Update initial form values to reflect the new profile image
+                this.initialFormValues.profilePicture = fileUrl;
+                this.saveUserDetails();
+              } else {
+                console.log('No file URL in response, but upload was successful');
+                // Even if no URL, proceed to save user details
+                this.saveUserDetails();
+              }
+            } else {
+              console.error('Upload failed:', res);
+              this.toastr.error('Failed to upload profile image: ' + (res?.error || 'Unknown error'));
+            }
+          },
+          error: (err: any) => {
+            console.error('File upload error:', err);
+            this.toastr.error('Error uploading profile image: ' + (err.error?.message || err.message || 'Unknown error'));
+          }
+        });
     } else {
       this.saveUserDetails();
     }

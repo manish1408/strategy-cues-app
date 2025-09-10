@@ -1,6 +1,6 @@
 <div appClickOutside (clickOutside)="closeDropdown()">
   <div class="main-container"  [ngStyle]="{ width: fullWidth ? '100%' : 'fit-content' }" (click)="toggleDropdown()">
-    <div class="selected-country justify-content-center"
+    <div class="selected-country justify-content-space-between"
     [ngClass]="{ 'full-width': fullWidth }"
     [ngStyle]="{ width: fullWidth ? '100%' : '100px' }">
     <div class="d-flex align-items-center" *ngIf="loadingIp">

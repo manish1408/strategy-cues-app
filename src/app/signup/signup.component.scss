@@ -70,7 +70,7 @@ a {
   border: none !important;
 }
 .btn-close {
-  color: black !important;
+  color: #1e1e1e !important;
   font-size: 10px;
 
   position: absolute;
@@ -133,8 +133,8 @@ a {
 
 .eye-wrapper {
   position: absolute;
-  top: 30px !important;
-  right: 9px !important;
+  top: 27px !important;
+  right: 10px !important;
   cursor: pointer;
   img {
     width: 20px;
@@ -184,8 +184,8 @@ a {
   }
 }
 .right-section {
-  background-color: var(--brand-black);
-  color: #ffffff;
+  background-color: #f3f5f2;
+  color: #1e1e1e;
   border: 1px solid rgba(255,255,255,.08);
   border-radius: 16px;
   padding: 28px;
@@ -208,19 +208,27 @@ a {
     .title {
       font-size: 24px;
       font-weight: 700;
-      color: #ffffff;
+      color: #1e1e1e;
       line-height: 28px;
       margin-bottom: 8px;
     }
     .desc {
       font-size: 12px;
       font-weight: 400;
-      color: #c9cdd3;
+      color: #1e1e1e;
       margin: 0;
     }
   }
+  
+  .subtitle {
+    font-size: 16px;
+    font-weight: 400;
+    color: #6b7280;
+    line-height: 24px;
+    margin-top: 16px;
+  }
   .note {
-    color: #ffffff;
+    color: #1e1e1e;
     font-size: 14px;
     font-weight: 400;
     margin: 0;
@@ -236,7 +244,7 @@ a {
     align-items: center;
     gap: 5px;
     label {
-      color: #ffffff;
+      color: #1e1e1e;
       font-size: 12px;
       font-weight: 400;
       margin: 0;

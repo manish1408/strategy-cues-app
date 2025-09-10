@@ -1,5 +1,10 @@
 <div class="row">
-    <div class="col-12">
+    <div class="col-12 d-flex justify-content-between align-items-center">
+      <div>
+        <h4 class="title">Operators</h4>
+        <p class="desc">Manage your operators here</p>
+      </div>
+     
       <button
         class="btn btn-primary float-end"
         data-bs-toggle="modal"
@@ -16,9 +21,11 @@
     </div>
   </div>
   
+ 
+  
   <ng-container *ngIf="!apiLoading">
-    
-     
+    <!-- Show table when operators exist -->
+    <div *ngIf="allOperatorList && allOperatorList.length > 0">
       <div class="row mt-4">
         <div class="col-12">
           <div class="table-responsive">
@@ -69,7 +76,21 @@
           </div>
         </div>
       </div>
-      <!-- Add Form Modal -->
+    </div>
+    
+    <!-- Show empty state when no operators -->
+    <div *ngIf="!allOperatorList || allOperatorList.length === 0" class="mt-5 text-center">
+      <div class="">
+        <div class="card-body">
+          <h5 class="card-title mb-3">No Operators Found</h5>
+          <p class="card-text">No operators found yet. Click on "Add Operator" to add a new operator.</p>
+          
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  
+  <!-- Add Form Modal -->
       <div
         class="modal fade"
         id="addOperator"
@@ -233,15 +254,15 @@
               >
                 Cancel
               </button>
-              <button type="submit" class="btn btn-primary" (click)="onSubmit()" [disabled]="loading">
-                <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                <span *ngIf="!loading">{{ isEdit ? 'Update' : 'Create' }}</span>
-                <span *ngIf="loading">{{ isEdit ? 'Updating...' : 'Creating...' }}</span>
+              <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center gap-2" (click)="onSubmit()" [disabled]="loading">
+                <div *ngIf="loading" class="spinner-border spinner-border-sm" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+                {{ isEdit ? 'Update' : 'Create' }}
               </button>
             </div>
           </div>
         </div>
       </div>
-   
-  </ng-container>
+
   

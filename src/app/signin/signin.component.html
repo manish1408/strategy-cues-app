@@ -1,5 +1,5 @@
 <div *ngIf="showLoginForm">
-  <nav class="navbar navbar-expand-lg bg-black">
+  <nav class="navbar navbar-expand-lg" style="background-color: #1e1e1e;">
     <div class="container">
       <a class="navbar-brand" href="#" class="text-dark fs-2">
        
@@ -11,19 +11,21 @@
 </div>
 
 <div *ngIf="showLoginForm" class="container">
-  <div class="vh-90 row justify-content-center align-items-center">
-   
-    <div class="col-12 col-lg-6 ">
-      <div class="right-section bg-black text-white">
-        <!-- <img
-          class="logo-img"
-          src="assets/icons/milo-logo.svg"
-          alt="Milo Logo"
-        />
+  <div class="vh-100 row justify-content-center align-items-center">
+    <div class="d-none d-lg-block col-lg-8">
+      <div class="d-flex flex-column justify-content-center align-items-start gap-3 left-section">
+        <p class="desc">Result Oriented Strategy</p>
+          <h2 class="title">Smart Revenue and <br> Operations for Hospitality Brands</h2>
+          <p class="subtitle">Achieve stronger results with our bespoke, data-driven approach to revenue, distribution and operations.</p>
+      </div>
+    </div>
+    <div class="col-12 col-lg-4 ">
+      <div class="right-section" style="background-color: #ffffff; color: #1e1e1e;">
+      
         <div class="title-wrapper">
-          <h2 class="title">Start your journey with us</h2>
-          <p class="desc">Enter your credential to view all insights</p>
-        </div> -->
+          <h2 class="title">Welcome Back</h2>
+          <p class="desc">Sign in to access your revenue management dashboard</p>
+        </div>
 
         <div class="form-wrapper ">
           <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="user-form">
@@ -62,7 +64,7 @@
                 [ngClass]="{ 'is-invalid': hasError('terms') }"
               /> -->
               <label for="d-policy text-white">If you proceed with signin, you agree to the <span><a
-                    href="https://miloassistant.ai/terms" target="_blank">terms and conditions.</a></span></label>
+                    href="https://strategycues.com/terms-and-conditions/" target="_blank">terms and conditions.</a></span></label>
 
             </div>
 

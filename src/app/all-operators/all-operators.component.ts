@@ -4,6 +4,7 @@ import { OperatorService } from '../_services/operator.service';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
 import { ToastService } from '../_services/toast.service';
+import { EventService } from '../_services/event.service';
 
 @Component({
   selector: 'app-all-operators',
@@ -26,7 +27,8 @@ export class AllOperatorsComponent {
     private operatorService: OperatorService, 
     private toastr: ToastrService,
     private fb: FormBuilder,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private eventService: EventService<any>
   ) {
     this.addOperatorForm = this.fb.group({
       name: ['', Validators.required],
@@ -52,6 +54,8 @@ export class AllOperatorsComponent {
         next: (res: any) => {
           console.log('Operators loaded:', res);
           this.allOperatorList = res.data?.operators || [];
+          console.log('allOperatorList after assignment:', this.allOperatorList);
+          console.log('allOperatorList length:', this.allOperatorList.length);
         },
         error: (error: any) => {
           console.error('Error loading operators:', error);
@@ -88,16 +92,18 @@ export class AllOperatorsComponent {
           .pipe(finalize(() => (this.loading = false)))
           .subscribe({
             next: (res: any) => {
-              if (res.result) {
+              if (res.success) {
                 this.toastr.success('Operator Deleted Successfully');
                 this.loadOperators();
+                // Dispatch event to update app component dropdown
+                this.eventService.dispatchEvent({ type: 'OPERATORS_UPDATED' });
               } else {
-                this.toastr.error(res.msg);
+                this.toastr.error(res.detail);
               }
             },
             error: (err) => {
               console.log(err);
-              this.toastr.error(err.error.msg);
+              this.toastr.error(err.error.detail);
             },
           });
       },
@@ -128,6 +134,8 @@ export class AllOperatorsComponent {
               this.loadOperators(); // Reload the list
               this.resetForm();
               this.closeModal();
+              // Dispatch event to update app component dropdown
+              this.eventService.dispatchEvent({ type: 'OPERATORS_UPDATED' });
             },
             error: (error: any) => {
               console.error('Error updating operator:', error);
@@ -144,6 +152,8 @@ export class AllOperatorsComponent {
               this.loadOperators(); // Reload the list
               this.resetForm();
               this.closeModal();
+              // Dispatch event to update app component dropdown
+              this.eventService.dispatchEvent({ type: 'OPERATORS_UPDATED' });
             },
             error: (error: any) => {
               console.error('Error creating operator:', error);
