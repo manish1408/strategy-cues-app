@@ -41,7 +41,7 @@ export class SignupComponent {
     this.signupForm = this.fb.group({
       fullName: ['', [Validators.required,Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', Validators.required],
+      // phone: ['', Validators.required],
       password: [
         '',
         [Validators.required, Validators.minLength(8), this.passwordValidator],
@@ -113,7 +113,7 @@ export class SignupComponent {
         fullName: this.signupForm.value.fullName,
         email: this.signupForm.value.email,
         // phone: `${this.selectedCountry?.phone[0]} ${this.signupForm.value.phone}`,
-        phone: this.signupForm.value.phone,
+        // phone: this.signupForm.value.phone,
         password: this.signupForm.value.password,
       };
       console.log('Form submitted with:', reqObj);
