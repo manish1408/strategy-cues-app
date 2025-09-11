@@ -1,0 +1,246 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12 d-flex justify-content-between align-items-center">
+      <div>
+        <h4 class="title">Listings</h4>
+        <p class="desc">Manage your property listings here</p>
+      </div>
+     
+      <button
+        class="btn btn-primary float-end"
+        data-bs-toggle="modal"
+        data-bs-target="#addListing"
+      >
+        Add Listing
+      </button>
+    </div>
+  </div>
+  
+  <div *ngIf="apiLoading" class="mt-5 d-flex justify-content-center">
+    <div class="spinner-border text-dark" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  
+  <ng-container *ngIf="!apiLoading">
+    <!-- Show table when listings exist -->
+    <div *ngIf="allListingList && allListingList.length > 0">
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Property Name</th>
+                  <th scope="col">Location</th>
+                  <th scope="col">Platforms</th>
+                  <th scope="col">Status</th>
+                  <th scope="col" [width]="'100px'">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let listing of allListingList; let i = index">
+                  <th scope="row">{{ i + 1 }}</th>
+                  <td>{{ listing?.name }}</td>
+                  <td>{{ listing?.location }}</td>
+                  <td>
+                    <span class="badge text-bg-primary me-1" *ngIf="listing?.bookingCom">Booking.com</span>
+                    <span class="badge text-bg-info me-1" *ngIf="listing?.airbnb">Airbnb</span>
+                    <span class="badge text-bg-warning me-1" *ngIf="listing?.vrbo">VRBO</span>
+                    <span class="badge text-bg-secondary" *ngIf="!listing?.bookingCom && !listing?.airbnb && !listing?.vrbo">No Platforms</span>
+                  </td>
+                  <td>
+                    <span class="badge" 
+                          [ngClass]="{
+                            'text-bg-success': listing?.status === 'active',
+                            'text-bg-secondary': listing?.status === 'inactive',
+                            'text-bg-warning': listing?.status === 'pending',
+                            'text-bg-danger': listing?.status === 'suspended'
+                          }">
+                      {{ listing?.status || 'active' | titlecase }}
+                    </span>
+                  </td>
+                  <td>
+                    <img
+                      src="assets/icons/edit.svg"
+                      class="cursor-pointer me-2"
+                      data-bs-toggle="modal"
+                      data-bs-target="#addListing"
+                      (click)="editListing(listing)"
+                    />
+                    <img
+                      src="assets/icons/trash.svg"
+                      (click)="deleteListing(listing?._id)"
+                      class="cursor-pointer"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Show empty state when no listings -->
+    <div *ngIf="!allListingList || allListingList.length === 0" class="mt-5 text-center">
+      <div class="">
+        <div class="card-body">
+          <h5 class="card-title mb-3">No Listings Found</h5>
+          <p class="card-text">No listings found yet. Click on "Add Listing" to add a new listing.</p>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  
+  <!-- Add Form Modal -->
+  <div
+    class="modal fade"
+    id="addListing"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+    style="background: none"
+    (hidden.bs.modal)="resetForm()"
+  >
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content" style="background: white">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">
+            {{ isEdit ? "Update" : "Create" }} Listing
+          </h5>
+          <i class="fa-solid fa-xmark" data-bs-dismiss="modal"></i>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="addListingForm">
+            <div class="mb-3">
+              <label for="name" class="form-label">Property Name</label>
+              <input
+                type="text"
+                id="name"
+                formControlName="name"
+                [ngClass]="{ 'is-invalid': hasError('name') }"
+                class="form-control"
+                placeholder="Enter property name"
+              />
+              <div class="invalid-feedback">Property name is required</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="location" class="form-label">Location</label>
+              <input
+                type="text"
+                id="location"
+                formControlName="location"
+                class="form-control"
+                placeholder="Enter property location"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="description" class="form-label">Description</label>
+              <textarea
+                id="description"
+                formControlName="description"
+                class="form-control"
+                rows="3"
+                placeholder="Enter property description"
+              ></textarea>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="price" class="form-label">Price per Night</label>
+                  <input
+                    type="number"
+                    id="price"
+                    formControlName="price"
+                    class="form-control"
+                    placeholder="Enter price per night"
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="status" class="form-label">Status</label>
+                  <select
+                    id="status"
+                    formControlName="status"
+                    class="form-select"
+                  >
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                    <option value="pending">Pending</option>
+                    <option value="suspended">Suspended</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Platforms</label>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="bookingCom"
+                  formControlName="bookingCom"
+                />
+                <label class="form-check-label" for="bookingCom">
+                  Booking.com
+                </label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="airbnb"
+                  formControlName="airbnb"
+                />
+                <label class="form-check-label" for="airbnb">
+                  Airbnb
+                </label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="vrbo"
+                  formControlName="vrbo"
+                />
+                <label class="form-check-label" for="vrbo">
+                  VRBO
+                </label>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer d-flex justify-content-end">
+          <button
+            #closeButton
+            data-bs-dismiss="modal"
+            class="btn btn-outline-secondary"
+            (click)="resetForm()"
+          >
+            Cancel
+          </button>
+          <button 
+            type="submit" 
+            class="btn btn-primary d-flex align-items-center justify-content-center gap-2" 
+            (click)="onSubmit()" 
+            [disabled]="loading"
+          >
+            <div *ngIf="loading" class="spinner-border spinner-border-sm" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            {{ isEdit ? 'Update' : 'Create' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

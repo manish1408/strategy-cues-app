@@ -1,97 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import revenueData from '../json_data/dubai_revenue_magt_cues_50.json';
+import { PropertiesService, PropertyData } from '../_services/properties.service';
 
 // Declare global variables for jQuery and Bootstrap
 declare var $: any;
 declare var bootstrap: any;
-
-interface PropertyData {
-  Listing_Name: string;
-  Area: string;
-  Room_Type: string;
-  Occupancy: {
-    '7_days': string;
-    '30_days': string;
-    TM: string;
-    NM: string;
-  };
-  ADR: {
-    TM: string;
-    NM: string;
-  };
-  RevPAR: {
-    TM: string;
-    NM: string;
-  };
-  MPI: string;
-  STLY_Var: {
-    Occ: string;
-    ADR: string;
-    RevPAR: string;
-  };
-  STLM_Var: {
-    Occ: string;
-    ADR: string;
-    RevPAR: string;
-  };
-  Pick_Up_Occ: {
-    '7_Days': string;
-    '14_Days': string;
-    '30_Days': string;
-  };
-  Min_Rate_Threshold: string;
-  BookingCom: {
-    Genius: string;
-    Mobile: string;
-    Pref: string;
-    Weekly: string;
-    Monthly: string;
-    LM_Disc: string;
-  };
-  Airbnb: {
-    Weekly: string;
-    Monthly: string;
-    Member: string;
-    LM_Disc: string;
-  };
-  VRBO: {
-    Weekly: string;
-    Monthly: string;
-  };
-  CXL_Policy: {
-    Booking: string;
-    Airbnb: string;
-    VRBO: string;
-  };
-  Adult_Child_Config: {
-    Booking: string;
-    Airbnb: string;
-    VRBO: string;
-  };
-  Reviews: {
-    Booking: {
-      Last_Rev_Dt: string;
-      Last_Rev_Score: string;
-      Rev_Score: string;
-      Total_Rev: string;
-      Last_Review_Date: string;
-    };
-    Airbnb: {
-      Last_Rev_Dt: string;
-      Last_Rev_Score: string;
-      Rev_Score: string;
-      Total_Rev: string;
-      Last_Review_Date: string;
-    };
-    VRBO: {
-      Last_Rev_Dt: string;
-      Last_Rev_Score: string;
-      Rev_Score: string;
-      Total_Rev: string;
-      Last_Review_Date: string;
-    };
-  };
-}
 
 @Component({
   selector: 'app-revenue',
@@ -100,9 +12,12 @@ interface PropertyData {
 })
 export class RevenueComponent implements OnInit {
   
-  // Data from JSON
-  propertyData: PropertyData[] = revenueData as PropertyData[];
-  filteredData: PropertyData[] = [...this.propertyData];
+  // Data from API
+  propertyData: PropertyData[] = [];
+  allPropertyData: PropertyData[] = []; // Complete dataset for range calculations
+  filteredData: PropertyData[] = [];
+  loading: boolean = false;
+  error: string | null = null;
   
   // View and tab management
   currentView: 'table' | 'cards' = 'table';
@@ -345,93 +260,217 @@ export class RevenueComponent implements OnInit {
   vrboTotalRevMinRange: number = 0;
   vrboTotalRevMaxRange: number = 1000;
 
-  constructor() { }
+  constructor(private propertiesService: PropertiesService) { }
+
+  // Helper methods to safely parse values that might be strings or numbers
+  safeParseNumber(value: any): number {
+    if (typeof value === 'number') {
+      return value;
+    }
+    if (typeof value === 'string') {
+      // Remove percentage signs and parse
+      return parseFloat(value.replace('%', '')) || 0;
+    }
+    return 0;
+  }
+
+  safeParseString(value: any): string {
+    if (typeof value === 'string') {
+      return value;
+    }
+    if (typeof value === 'number') {
+      return value.toString();
+    }
+    return '';
+  }
 
   ngOnInit(): void {
-    this.calculateSummaryData();
-    this.extractFilterOptions();
-    this.calculateRangeValues();
-    this.initializeTempFilters();
-    this.updatePagination();
+    this.loadProperties();
+  }
+
+  loadProperties(): void {
+    this.loading = true;
+    this.error = null;
+    
+    // Load current page data first
+    this.loadCurrentPageData();
+  }
+
+  loadCurrentPageData(): void {
+    // Load current page data for display
+    this.propertiesService.getProperties(this.currentPage, this.itemsPerPage).subscribe({
+      next: (response) => {
+        console.log('API Response:', response); // Debug log to see actual structure
+        if (response.success) {
+          this.propertyData = PropertiesService.extractPropertiesArray(response);
+          this.filteredData = [...this.propertyData];
+          
+          // If this is the first load, also load additional data for range calculations
+          if (this.currentPage === 1 && this.allPropertyData.length === 0) {
+            this.loadDataForRanges();
+          }
+          
+          this.calculateSummaryData();
+          this.updatePagination();
+        } else {
+          this.error = response.message || 'Failed to load properties data';
+        }
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error loading current page:', error);
+        this.error = 'Error loading properties. Please try again.';
+        this.loading = false;
+      }
+    });
+  }
+
+  loadDataForRanges(): void {
+    // Load additional pages to get a better sample for range calculations and filtering
+    // Use a reasonable limit that the API can handle
+    this.propertiesService.getProperties(1, 50).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.allPropertyData = PropertiesService.extractPropertiesArray(response);
+          this.calculateRangeValues();
+          this.extractFilterOptions();
+          this.initializeTempFilters();
+          
+          // Apply current filters to the complete dataset
+          this.filterData();
+        }
+      },
+      error: (error) => {
+        console.warn('Could not load data for ranges, using current page data:', error);
+        // Fallback to using current page data for ranges
+        this.allPropertyData = [...this.propertyData];
+        this.calculateRangeValues();
+        this.extractFilterOptions();
+        this.initializeTempFilters();
+        
+        // Apply current filters to the available data
+        this.filterData();
+      }
+    });
   }
   
   calculateSummaryData(): void {
-    this.totalListings = this.propertyData.length;
+    // Use filtered data for summary calculations to show accurate totals
+    const dataSource = (this.filteredData && this.filteredData.length > 0) 
+      ? this.filteredData 
+      : this.propertyData;
+      
+    if (!Array.isArray(dataSource) || dataSource.length === 0) {
+      this.totalListings = 0;
+      this.totalRevenueTM = 0;
+      this.totalRevenueNM = 0;
+      this.averageOccupancy = 0;
+      return;
+    }
+
+    this.totalListings = dataSource.length;
     
-    this.totalRevenueTM = this.propertyData.reduce((sum, item) => {
-      return sum + parseFloat(item.RevPAR.TM);
+    this.totalRevenueTM = dataSource.reduce((sum, item) => {
+      return sum + this.safeParseNumber(item.RevPAR.TM);
     }, 0);
     
-    this.totalRevenueNM = this.propertyData.reduce((sum, item) => {
-      return sum + parseFloat(item.RevPAR.NM);
+    this.totalRevenueNM = dataSource.reduce((sum, item) => {
+      return sum + this.safeParseNumber(item.RevPAR.NM);
     }, 0);
     
-    this.averageOccupancy = this.propertyData.reduce((sum, item) => {
-      return sum + parseFloat(item.Occupancy.TM.replace('%', ''));
+    this.averageOccupancy = dataSource.reduce((sum, item) => {
+      return sum + this.safeParseNumber(item.Occupancy.TM);
     }, 0) / this.totalListings;
   }
   
   extractFilterOptions(): void {
-    this.areas = [...new Set(this.propertyData.map(item => item.Area))];
-    this.roomTypes = [...new Set(this.propertyData.map(item => item.Room_Type))];
+    // Use allPropertyData if available, otherwise fallback to current page data
+    const dataSource = (this.allPropertyData && this.allPropertyData.length > 0) 
+      ? this.allPropertyData 
+      : this.propertyData;
+      
+    if (!Array.isArray(dataSource) || dataSource.length === 0) {
+      this.areas = [];
+      this.roomTypes = [];
+      return;
+    }
+    
+    this.areas = [...new Set(dataSource.map(item => item.Area))];
+    this.roomTypes = [...new Set(dataSource.map(item => item.Room_Type))];
   }
   
   calculateRangeValues(): void {
-    // Calculate ADR ranges
-    const adrValues = this.propertyData.map(item => parseFloat(item.ADR.TM));
+    // Use allPropertyData if available, otherwise fallback to current page data
+    const dataSource = (this.allPropertyData && this.allPropertyData.length > 0) 
+      ? this.allPropertyData 
+      : this.propertyData;
+      
+    if (!Array.isArray(dataSource) || dataSource.length === 0) {
+      // Set default ranges if no data
+      this.adrMinRange = 0;
+      this.adrMaxRange = 1000;
+      this.revparMinRange = 0;
+      this.revparMaxRange = 1000;
+      this.mpiMinRange = 0;
+      this.mpiMaxRange = 200;
+      return;
+    }
+
+    // Calculate ADR ranges from data source
+    const adrValues = dataSource.map(item => this.safeParseNumber(item.ADR.TM));
     this.adrMinRange = Math.floor(Math.min(...adrValues));
     this.adrMaxRange = Math.ceil(Math.max(...adrValues));
     
-    // Calculate RevPAR ranges
-    const revparValues = this.propertyData.map(item => parseFloat(item.RevPAR.TM));
+    // Calculate RevPAR ranges from data source
+    const revparValues = dataSource.map(item => this.safeParseNumber(item.RevPAR.TM));
     this.revparMinRange = Math.floor(Math.min(...revparValues));
     this.revparMaxRange = Math.ceil(Math.max(...revparValues));
     
-    // Calculate MPI ranges
-    const mpiValues = this.propertyData.map(item => parseFloat(item.MPI.replace('%', '')));
+    // Calculate MPI ranges from data source
+    const mpiValues = dataSource.map(item => this.safeParseNumber(item.MPI));
     this.mpiMinRange = Math.floor(Math.min(...mpiValues));
     this.mpiMaxRange = Math.ceil(Math.max(...mpiValues));
     
-    // Calculate STLY Var ranges
-    const stlyOccValues = this.propertyData.map(item => parseFloat(item.STLY_Var.Occ.replace('%', '')));
+    // Calculate STLY Var ranges from data source
+    const stlyOccValues = dataSource.map(item => this.safeParseNumber(item.STLY_Var.Occ));
     this.stlyVarOccMinRange = Math.floor(Math.min(...stlyOccValues));
     this.stlyVarOccMaxRange = Math.ceil(Math.max(...stlyOccValues));
     
-    const stlyADRValues = this.propertyData.map(item => parseFloat(item.STLY_Var.ADR.replace('%', '')));
+    const stlyADRValues = dataSource.map(item => this.safeParseNumber(item.STLY_Var.ADR));
     this.stlyVarADRMinRange = Math.floor(Math.min(...stlyADRValues));
     this.stlyVarADRMaxRange = Math.ceil(Math.max(...stlyADRValues));
     
-    const stlyRevPARValues = this.propertyData.map(item => parseFloat(item.STLY_Var.RevPAR.replace('%', '')));
+    const stlyRevPARValues = dataSource.map(item => this.safeParseNumber(item.STLY_Var.RevPAR));
     this.stlyVarRevPARMinRange = Math.floor(Math.min(...stlyRevPARValues));
     this.stlyVarRevPARMaxRange = Math.ceil(Math.max(...stlyRevPARValues));
     
-    // Calculate STLM Var ranges
-    const stlmOccValues = this.propertyData.map(item => parseFloat(item.STLM_Var.Occ.replace('%', '')));
+    // Calculate STLM Var ranges from data source
+    const stlmOccValues = dataSource.map(item => this.safeParseNumber(item.STLM_Var.Occ));
     this.stlmVarOccMinRange = Math.floor(Math.min(...stlmOccValues));
     this.stlmVarOccMaxRange = Math.ceil(Math.max(...stlmOccValues));
     
-    const stlmADRValues = this.propertyData.map(item => parseFloat(item.STLM_Var.ADR.replace('%', '')));
+    const stlmADRValues = dataSource.map(item => this.safeParseNumber(item.STLM_Var.ADR));
     this.stlmVarADRMinRange = Math.floor(Math.min(...stlmADRValues));
     this.stlmVarADRMaxRange = Math.ceil(Math.max(...stlmADRValues));
     
-    const stlmRevPARValues = this.propertyData.map(item => parseFloat(item.STLM_Var.RevPAR.replace('%', '')));
+    const stlmRevPARValues = dataSource.map(item => this.safeParseNumber(item.STLM_Var.RevPAR));
     this.stlmVarRevPARMinRange = Math.floor(Math.min(...stlmRevPARValues));
     this.stlmVarRevPARMaxRange = Math.ceil(Math.max(...stlmRevPARValues));
     
-    // Calculate Review ranges
-    const bookingTotalRevValues = this.propertyData.map(item => parseFloat(item.Reviews.Booking.Total_Rev)).filter(val => !isNaN(val));
+    // Calculate Review ranges from data source
+    const bookingTotalRevValues = dataSource.map(item => this.safeParseNumber(item.Reviews.Booking.Total_Rev)).filter(val => !isNaN(val));
     if (bookingTotalRevValues.length > 0) {
       this.bookingTotalRevMinRange = Math.floor(Math.min(...bookingTotalRevValues));
       this.bookingTotalRevMaxRange = Math.ceil(Math.max(...bookingTotalRevValues));
     }
     
-    const airbnbTotalRevValues = this.propertyData.map(item => parseFloat(item.Reviews.Airbnb.Total_Rev)).filter(val => !isNaN(val));
+    const airbnbTotalRevValues = dataSource.map(item => this.safeParseNumber(item.Reviews.Airbnb.Total_Rev)).filter(val => !isNaN(val));
     if (airbnbTotalRevValues.length > 0) {
       this.airbnbTotalRevMinRange = Math.floor(Math.min(...airbnbTotalRevValues));
       this.airbnbTotalRevMaxRange = Math.ceil(Math.max(...airbnbTotalRevValues));
     }
     
-    const vrboTotalRevValues = this.propertyData.map(item => parseFloat(item.Reviews.VRBO.Total_Rev)).filter(val => !isNaN(val));
+    const vrboTotalRevValues = dataSource.map(item => this.safeParseNumber(item.Reviews.VRBO.Total_Rev)).filter(val => !isNaN(val));
     if (vrboTotalRevValues.length > 0) {
       this.vrboTotalRevMinRange = Math.floor(Math.min(...vrboTotalRevValues));
       this.vrboTotalRevMaxRange = Math.ceil(Math.max(...vrboTotalRevValues));
@@ -512,9 +551,25 @@ export class RevenueComponent implements OnInit {
     this.tempVrboTotalRevMax = this.vrboTotalRevMax;
   }
 
+  // Refresh data from API
+  refreshData(): void {
+    this.loadProperties();
+  }
+
   // Filter data based on search term, area, room type, and all range filters
   filterData(): void {
-    this.filteredData = this.propertyData.filter(item => {
+    // Use complete dataset for filtering if available, otherwise use current page data
+    const dataSource = (this.allPropertyData && this.allPropertyData.length > 0) 
+      ? this.allPropertyData 
+      : this.propertyData;
+      
+    if (!Array.isArray(dataSource) || dataSource.length === 0) {
+      this.filteredData = [];
+      this.updatePagination();
+      return;
+    }
+    
+    this.filteredData = dataSource.filter(item => {
       // Basic search and category filters
       const matchesSearch = !this.searchTerm || 
         item.Listing_Name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
@@ -524,36 +579,36 @@ export class RevenueComponent implements OnInit {
       const matchesArea = !this.selectedArea || item.Area === this.selectedArea;
       const matchesRoomType = !this.selectedRoomType || item.Room_Type === this.selectedRoomType;
 
-      // Parse numeric values for filtering
-      const adrTM = parseFloat(item.ADR.TM);
-      const revparTM = parseFloat(item.RevPAR.TM);
-      const mpi = parseFloat(item.MPI.replace('%', ''));
-      const minRateThreshold = parseFloat(item.Min_Rate_Threshold.replace('%', ''));
+      // Parse numeric values for filtering using safe parsing
+      const adrTM = this.safeParseNumber(item.ADR.TM);
+      const revparTM = this.safeParseNumber(item.RevPAR.TM);
+      const mpi = this.safeParseNumber(item.MPI);
+      const minRateThreshold = this.safeParseNumber(item.Min_Rate_Threshold);
 
       // Occupancy values
-      const occupancyTM = parseFloat(item.Occupancy.TM.replace('%', ''));
-      const occupancyNM = parseFloat(item.Occupancy.NM.replace('%', ''));
-      const occupancy7Days = parseFloat(item.Occupancy['7_days'].replace('%', ''));
-      const occupancy30Days = parseFloat(item.Occupancy['30_days'].replace('%', ''));
-      const pickUpOcc7Days = parseFloat(item.Pick_Up_Occ['7_Days'].replace('%', ''));
-      const pickUpOcc14Days = parseFloat(item.Pick_Up_Occ['14_Days'].replace('%', ''));
-      const pickUpOcc30Days = parseFloat(item.Pick_Up_Occ['30_Days'].replace('%', ''));
+      const occupancyTM = this.safeParseNumber(item.Occupancy.TM);
+      const occupancyNM = this.safeParseNumber(item.Occupancy.NM);
+      const occupancy7Days = this.safeParseNumber(item.Occupancy['7_days']);
+      const occupancy30Days = this.safeParseNumber(item.Occupancy['30_days']);
+      const pickUpOcc7Days = this.safeParseNumber(item.Pick_Up_Occ['7_Days']);
+      const pickUpOcc14Days = this.safeParseNumber(item.Pick_Up_Occ['14_Days']);
+      const pickUpOcc30Days = this.safeParseNumber(item.Pick_Up_Occ['30_Days']);
 
       // Performance values
-      const stlyVarOcc = parseFloat(item.STLY_Var.Occ.replace('%', ''));
-      const stlyVarADR = parseFloat(item.STLY_Var.ADR.replace('%', ''));
-      const stlyVarRevPAR = parseFloat(item.STLY_Var.RevPAR.replace('%', ''));
-      const stlmVarOcc = parseFloat(item.STLM_Var.Occ.replace('%', ''));
-      const stlmVarADR = parseFloat(item.STLM_Var.ADR.replace('%', ''));
-      const stlmVarRevPAR = parseFloat(item.STLM_Var.RevPAR.replace('%', ''));
+      const stlyVarOcc = this.safeParseNumber(item.STLY_Var.Occ);
+      const stlyVarADR = this.safeParseNumber(item.STLY_Var.ADR);
+      const stlyVarRevPAR = this.safeParseNumber(item.STLY_Var.RevPAR);
+      const stlmVarOcc = this.safeParseNumber(item.STLM_Var.Occ);
+      const stlmVarADR = this.safeParseNumber(item.STLM_Var.ADR);
+      const stlmVarRevPAR = this.safeParseNumber(item.STLM_Var.RevPAR);
 
       // Reviews values
-      const bookingRevScore = parseFloat(item.Reviews.Booking.Rev_Score);
-      const bookingTotalRev = parseFloat(item.Reviews.Booking.Total_Rev);
-      const airbnbRevScore = parseFloat(item.Reviews.Airbnb.Rev_Score);
-      const airbnbTotalRev = parseFloat(item.Reviews.Airbnb.Total_Rev);
-      const vrboRevScore = parseFloat(item.Reviews.VRBO.Rev_Score);
-      const vrboTotalRev = parseFloat(item.Reviews.VRBO.Total_Rev);
+      const bookingRevScore = this.safeParseNumber(item.Reviews.Booking.Rev_Score);
+      const bookingTotalRev = this.safeParseNumber(item.Reviews.Booking.Total_Rev);
+      const airbnbRevScore = this.safeParseNumber(item.Reviews.Airbnb.Rev_Score);
+      const airbnbTotalRev = this.safeParseNumber(item.Reviews.Airbnb.Total_Rev);
+      const vrboRevScore = this.safeParseNumber(item.Reviews.VRBO.Rev_Score);
+      const vrboTotalRev = this.safeParseNumber(item.Reviews.VRBO.Total_Rev);
 
       // Basic range filters
       const matchesAdrMin = this.adrMin === null || adrTM >= this.adrMin;
@@ -670,6 +725,7 @@ export class RevenueComponent implements OnInit {
 
     this.currentPage = 1;
     this.updatePagination();
+    this.calculateSummaryData(); // Recalculate summary data based on filtered results
   }
 
   // Sort data by field
@@ -688,20 +744,20 @@ export class RevenueComponent implements OnInit {
       // Handle nested object properties
       switch (field) {
         case 'occupancyTM':
-          aVal = parseFloat(a.Occupancy.TM.replace('%', ''));
-          bVal = parseFloat(b.Occupancy.TM.replace('%', ''));
+          aVal = this.safeParseNumber(a.Occupancy.TM);
+          bVal = this.safeParseNumber(b.Occupancy.TM);
           break;
         case 'adrTM':
-          aVal = parseFloat(a.ADR.TM);
-          bVal = parseFloat(b.ADR.TM);
+          aVal = this.safeParseNumber(a.ADR.TM);
+          bVal = this.safeParseNumber(b.ADR.TM);
           break;
         case 'revparTM':
-          aVal = parseFloat(a.RevPAR.TM);
-          bVal = parseFloat(b.RevPAR.TM);
+          aVal = this.safeParseNumber(a.RevPAR.TM);
+          bVal = this.safeParseNumber(b.RevPAR.TM);
           break;
         case 'mpi':
-          aVal = parseFloat(a.MPI.replace('%', ''));
-          bVal = parseFloat(b.MPI.replace('%', ''));
+          aVal = this.safeParseNumber(a.MPI);
+          bVal = this.safeParseNumber(b.MPI);
           break;
         default:
           aVal = (a as any)[field];
@@ -725,12 +781,15 @@ export class RevenueComponent implements OnInit {
 
   // Pagination methods
   updatePagination(): void {
+    // For API-based pagination, we'll need to get total count from the API response
+    // For now, using filtered data length as fallback
     this.totalPages = Math.ceil(this.filteredData.length / this.itemsPerPage);
   }
 
   changePage(page: number): void {
-    if (page >= 1 && page <= this.totalPages) {
+    if (page >= 1 && page !== this.currentPage && page <= this.totalPages) {
       this.currentPage = page;
+      // No need to load new data since we're using client-side pagination with filtered data
     }
   }
 
@@ -776,15 +835,15 @@ export class RevenueComponent implements OnInit {
     }
   }
   
-  getPerformanceClass(value: string): string {
-    const numValue = parseFloat(value.replace('%', ''));
+  getPerformanceClass(value: any): string {
+    const numValue = this.safeParseNumber(value);
     if (numValue > 0) return 'text-success';
     if (numValue < 0) return 'text-danger';
     return 'text-muted';
   }
   
-  getOccupancyClass(occupancy: string): string {
-    const numValue = parseFloat(occupancy.replace('%', ''));
+  getOccupancyClass(occupancy: any): string {
+    const numValue = this.safeParseNumber(occupancy);
     if (numValue >= 80) return 'bg-success';
     if (numValue >= 60) return 'bg-warning';
     return 'bg-danger';
@@ -921,25 +980,30 @@ export class RevenueComponent implements OnInit {
         row.push(`"${this.escapeCSV(property.Listing_Name)}"`);
       }
       if (this.columnVisibility.occupancy) {
-        row.push(property.Occupancy.TM, property.Occupancy.NM, property.Occupancy['7_days'], property.Occupancy['30_days']);
+        row.push(
+          this.safeParseString(property.Occupancy.TM), 
+          this.safeParseString(property.Occupancy.NM), 
+          this.safeParseString(property.Occupancy['7_days']), 
+          this.safeParseString(property.Occupancy['30_days'])
+        );
       }
       if (this.columnVisibility.adr) {
-        row.push(property.ADR.TM, property.ADR.NM);
+        row.push(this.safeParseString(property.ADR.TM), this.safeParseString(property.ADR.NM));
       }
       if (this.columnVisibility.revpar) {
-        row.push(property.RevPAR.TM, property.RevPAR.NM);
+        row.push(this.safeParseString(property.RevPAR.TM), this.safeParseString(property.RevPAR.NM));
       }
       if (this.columnVisibility.mpi) {
-        row.push(property.MPI);
+        row.push(this.safeParseString(property.MPI));
       }
       if (this.columnVisibility.reviews) {
         row.push(
-          property.Reviews.Booking.Rev_Score || '',
-          property.Reviews.Booking.Total_Rev || '',
-          property.Reviews.Airbnb.Rev_Score || '',
-          property.Reviews.Airbnb.Total_Rev || '',
-          property.Reviews.VRBO.Rev_Score || '',
-          property.Reviews.VRBO.Total_Rev || ''
+          this.safeParseString(property.Reviews.Booking.Rev_Score),
+          this.safeParseString(property.Reviews.Booking.Total_Rev),
+          this.safeParseString(property.Reviews.Airbnb.Rev_Score),
+          this.safeParseString(property.Reviews.Airbnb.Total_Rev),
+          this.safeParseString(property.Reviews.VRBO.Rev_Score),
+          this.safeParseString(property.Reviews.VRBO.Total_Rev)
         );
       }
       if (this.columnVisibility.cxlPolicy) {
@@ -958,25 +1022,25 @@ export class RevenueComponent implements OnInit {
       }
       if (this.columnVisibility.pickupOcc) {
         row.push(
-          property.Pick_Up_Occ['7_Days'],
-          property.Pick_Up_Occ['14_Days'],
-          property.Pick_Up_Occ['30_Days']
+          this.safeParseString(property.Pick_Up_Occ['7_Days']),
+          this.safeParseString(property.Pick_Up_Occ['14_Days']),
+          this.safeParseString(property.Pick_Up_Occ['30_Days'])
         );
       }
       if (this.columnVisibility.minRateThreshold) {
-        row.push(property.Min_Rate_Threshold);
+        row.push(this.safeParseString(property.Min_Rate_Threshold));
       }
       if (this.columnVisibility.stlyVarOcc) {
-        row.push(property.STLY_Var.Occ);
+        row.push(this.safeParseString(property.STLY_Var.Occ));
       }
       if (this.columnVisibility.stlyVarRevPAR) {
-        row.push(property.STLY_Var.RevPAR);
+        row.push(this.safeParseString(property.STLY_Var.RevPAR));
       }
       if (this.columnVisibility.lastReviewScore) {
         row.push(
-          property.Reviews.Booking.Last_Rev_Score || '',
-          property.Reviews.Airbnb.Last_Rev_Score || '',
-          property.Reviews.VRBO.Last_Rev_Score || ''
+          this.safeParseString(property.Reviews.Booking.Last_Rev_Score),
+          this.safeParseString(property.Reviews.Airbnb.Last_Rev_Score),
+          this.safeParseString(property.Reviews.VRBO.Last_Rev_Score)
         );
       }
       if (this.columnVisibility.lastRevenueDate) {
@@ -1051,14 +1115,14 @@ export class RevenueComponent implements OnInit {
 
   // Helper method to get MPI TM value (using the current MPI value)
   getMPITM(property: PropertyData): string {
-    return property.MPI;
+    return this.safeParseString(property.MPI);
   }
 
   // Helper method to get MPI NM value (for now, using same as TM - can be updated with actual data later)
   getMPINM(property: PropertyData): string {
     // For now, using the same value as TM
     // This can be updated when actual NM MPI data is available
-    return property.MPI;
+    return this.safeParseString(property.MPI);
   }
 
   // Modal and filter methods

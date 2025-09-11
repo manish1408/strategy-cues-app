@@ -22,6 +22,7 @@ export class AllOperatorsComponent {
   
   addOperatorForm: FormGroup;
   showPassword: boolean = false;
+  activeTab: string = 'pricelabs';
 
   constructor(
     private operatorService: OperatorService, 
@@ -33,12 +34,21 @@ export class AllOperatorsComponent {
     this.addOperatorForm = this.fb.group({
       name: ['', Validators.required],
       priceLabsApiKey: [''],
+      priceLabsUsername: [''],
+      priceLabsPassword: [''],
+      priceLabsCookies: [''],
+      bookingApiKey: [''],
       bookingUsername: [''],
       bookingPassword: [''],
+      bookingCookies: [''],
+      airbnbApiKey: [''],
       airbnbUsername: [''],
       airbnbPassword: [''],
+      airbnbCookies: [''],
+      vrboApiKey: [''],
       vrboUsername: [''],
-      vrboPassword: ['']
+      vrboPassword: [''],
+      vrboCookies: ['']
     });
   }
 
@@ -70,12 +80,21 @@ export class AllOperatorsComponent {
     this.addOperatorForm.patchValue({
       name: operator.name,
       priceLabsApiKey: operator.priceLabsApiKey || '',
+      priceLabsUsername: operator.priceLabsUsername || '',
+      priceLabsPassword: operator.priceLabsPassword || '',
+      priceLabsCookies: operator.priceLabsCookies || '',
+      bookingApiKey: operator.bookingApiKey || '',
       bookingUsername: operator.bookingUsername || '',
       bookingPassword: operator.bookingPassword || '',
+      bookingCookies: operator.bookingCookies || '',
+      airbnbApiKey: operator.airbnbApiKey || '',
       airbnbUsername: operator.airbnbUsername || '',
       airbnbPassword: operator.airbnbPassword || '',
+      airbnbCookies: operator.airbnbCookies || '',
+      vrboApiKey: operator.vrboApiKey || '',
       vrboUsername: operator.vrboUsername || '',
-      vrboPassword: operator.vrboPassword || ''
+      vrboPassword: operator.vrboPassword || '',
+      vrboCookies: operator.vrboCookies || ''
     });
   }
 
@@ -169,6 +188,11 @@ export class AllOperatorsComponent {
     this.isEdit = false;
     this.editingOperatorId = null;
     this.showPassword = false;
+    this.activeTab = 'pricelabs';
+  }
+
+  setActiveTab(tab: string) {
+    this.activeTab = tab;
   }
 
   togglePasswordVisibility() {

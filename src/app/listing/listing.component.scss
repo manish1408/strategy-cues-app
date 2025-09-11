@@ -1,0 +1,155 @@
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.title {
+  color: #1e1e1e;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.desc {
+  color: #6c757d;
+  margin-bottom: 0;
+}
+
+.table {
+  th {
+    background-color: #f8f9fa;
+    border-top: none;
+    font-weight: 600;
+    color: #1e1e1e;
+  }
+  
+  td {
+    vertical-align: middle;
+  }
+}
+
+.badge {
+  font-size: 0.75rem;
+  padding: 0.375rem 0.75rem;
+}
+
+.btn-primary {
+  background-color: #fcdf46;
+  border-color: #fcdf46;
+  color: #1e1e1e;
+  font-weight: 500;
+  
+  &:hover {
+    background-color: #fbbf24;
+    border-color: #fbbf24;
+    color: #1e1e1e;
+  }
+  
+  &:disabled {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    opacity: 0.65;
+  }
+}
+
+.btn-outline-secondary {
+  color: #6c757d;
+  border-color: #6c757d;
+  
+  &:hover {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: white;
+  }
+}
+
+.modal-content {
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+  border-bottom: 1px solid #e9ecef;
+  padding: 1.5rem;
+  
+  .modal-title {
+    color: #1e1e1e;
+    font-weight: 600;
+  }
+  
+  .fa-xmark {
+    cursor: pointer;
+    color: #6c757d;
+    font-size: 1.25rem;
+    
+    &:hover {
+      color: #1e1e1e;
+    }
+  }
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-footer {
+  border-top: 1px solid #e9ecef;
+  padding: 1.5rem;
+}
+
+.form-label {
+  color: #1e1e1e;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.form-control, .form-select {
+  border: 1px solid #ced4da;
+  border-radius: 0.375rem;
+  
+  &:focus {
+    border-color: #fcdf46;
+    box-shadow: 0 0 0 0.2rem rgba(252, 223, 70, 0.25);
+  }
+}
+
+.form-check-input {
+  &:checked {
+    background-color: #fcdf46;
+    border-color: #fcdf46;
+  }
+  
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(252, 223, 70, 0.25);
+  }
+}
+
+.invalid-feedback {
+  color: #dc3545;
+  font-size: 0.875rem;
+}
+
+.is-invalid {
+  border-color: #dc3545;
+  
+  &:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+  }
+}
+
+.spinner-border {
+  color: #fcdf46;
+}
+
+.card-body {
+  padding: 2rem;
+  
+  .card-title {
+    color: #1e1e1e;
+    font-weight: 600;
+  }
+  
+  .card-text {
+    color: #6c757d;
+  }
+}

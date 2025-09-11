@@ -160,6 +160,12 @@
   background-color: #fcdf46;
   color: var(--brand-black) !important;
   border-radius: 8px;
+  width: -webkit-fill-available;
+    padding: 6px;
+&:hover{
+  text-decoration: none !important;
+
+}
 }
 
 .avatar-img {
@@ -405,6 +411,11 @@
       cursor: pointer;
       color: #ffffff;
     }
+    // &:focus{
+    //   text-decoration: none;
+    //   cursor: pointer;
+    //   color: #ffffff;
+    // }
   }
   
   

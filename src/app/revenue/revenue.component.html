@@ -22,6 +22,10 @@
         </div>
         <div class="col-md-3">
           <div class="d-flex gap-2 float-end">
+            <!-- <button class="btn btn-outline-primary" (click)="refreshData()" title="Refresh Data" [disabled]="loading">
+              <i class="fas fa-refresh me-2" [class.fa-spin]="loading"></i>
+              Refresh
+            </button> -->
             <button class="btn btn-outline-success" (click)="exportToCSV()" title="Export to CSV">
               <i class="fas fa-download me-2"></i>
               Export CSV
@@ -202,8 +206,26 @@
     </div>
   </div>
 
+  <!-- Loading State -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-3">Loading properties...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="alert alert-danger" role="alert">
+    <h4 class="alert-heading">Error!</h4>
+    <p>{{ error }}</p>
+    <hr>
+    <button class="btn btn-outline-danger" (click)="refreshData()">
+      <i class="fas fa-refresh me-2"></i>Try Again
+    </button>
+  </div>
+
   <!-- Table View -->
-  <div class="table-view">
+  <div class="table-view" *ngIf="!loading && !error">
     <div class="table-card">
       <div class="table-responsive">
         <table class="table table-hover">
@@ -239,17 +261,17 @@
                     <span class="occupancy-label">TM:</span>
                     <div class="progress" style="height: 6px;">
                       <div class="progress-bar" [ngClass]="getOccupancyClass(property.Occupancy.TM)"
-                        [style.width.%]="property.Occupancy.TM.replace('%', '')"></div>
+                        [style.width.%]="safeParseNumber(property.Occupancy.TM)"></div>
                     </div>
-                    <small class="occupancy-value">{{ property.Occupancy.TM }}</small>
+                    <small class="occupancy-value">{{ safeParseNumber(property.Occupancy.TM) }}%</small>
                   </div>
                   <div class="occupancy-row">
                     <span class="occupancy-label">NM:</span>
                     <div class="progress" style="height: 6px;">
                       <div class="progress-bar" [ngClass]="getOccupancyClass(property.Occupancy.NM)"
-                        [style.width.%]="property.Occupancy.NM.replace('%', '')"></div>
+                        [style.width.%]="safeParseNumber(property.Occupancy.NM)"></div>
                     </div>
-                    <small class="occupancy-value">{{ property.Occupancy.NM }}</small>
+                    <small class="occupancy-value">{{ safeParseNumber(property.Occupancy.NM) }}%</small>
                   </div>
                 </div>
               </td>
