@@ -36,6 +36,7 @@
                   <th scope="col">Operator Name</th>
                   <th scope="col">PriceLabs API</th>
                   <th scope="col">Platforms</th>
+                  <!-- <th scope="col">Status</th> -->
                   <th scope="col" [width]="'100px'">Action</th>
                 </tr>
               </thead>
@@ -43,20 +44,15 @@
                 <tr *ngFor="let operator of allOperatorList; let i = index">
                   <th scope="row">{{ i + 1 }}</th>
                   <td>{{ operator?.name }}</td>
-                  <td>{{ operator?.priceLabsApiKey ? 'Configured' : 'Not Set' }}</td>
+                  <td>{{ operator?.priceLabs?.apiKey ? 'Configured' : 'Not Set' }}</td>
                   <td>
-                    <span class="badge text-bg-primary me-1" *ngIf="operator?.priceLabsApiKey || operator?.priceLabsUsername">Price Labs</span>
-                    <span class="badge text-bg-success me-1" *ngIf="operator?.bookingUsername">Booking.com</span>
-                    <span class="badge text-bg-info me-1" *ngIf="operator?.airbnbUsername">Airbnb</span>
-                    <span class="badge text-bg-warning me-1" *ngIf="operator?.vrboUsername">VRBO</span>
-                    <span class="badge text-bg-secondary" *ngIf="!operator?.priceLabsApiKey && !operator?.priceLabsUsername && !operator?.bookingUsername && !operator?.airbnbUsername && !operator?.vrboUsername">No Platforms</span>
+                    <span class="badge text-bg-primary me-1" *ngIf="operator?.priceLabs?.apiKey || operator?.priceLabs?.userName">Price Labs</span>
+                    <span class="badge text-bg-success me-1" *ngIf="operator?.booking?.userName">Booking.com</span>
+                    <span class="badge text-bg-info me-1" *ngIf="operator?.airbnb?.userName">Airbnb</span>
+                    <span class="badge text-bg-warning me-1" *ngIf="operator?.vrbo?.userName">VRBO</span>
+                    <span class="badge text-bg-secondary" *ngIf="!operator?.priceLabs?.apiKey && !operator?.priceLabs?.userName && !operator?.booking?.userName && !operator?.airbnb?.userName && !operator?.vrbo?.userName">No Platforms</span>
                   </td>
-                  <!-- <td>
-                  <label class="switch">
-                      <input type="checkbox" checked>
-                      <span class="slider round"></span>
-                  </label>
-              </td> -->
+               <!-- <td>{{ operator?.status }}</td> -->
                   <td>
                     <img
                       src="assets/icons/edit.svg"
@@ -176,17 +172,16 @@
 
                 <!-- Tab Content -->
                 <div class="tab-content mt-3" id="operatorTabContent">
-                  
                   <!-- Price Labs Tab -->
                   <div class="tab-pane fade" [class.show]="activeTab === 'pricelabs'" [class.active]="activeTab === 'pricelabs'" role="tabpanel">
                     <div class="row">
-                      <div class="col-12">
+                      <div class="col-12" [formGroupName]="'priceLabs'">
                         <div class="mb-3">
                           <label for="priceLabsApiKey" class="form-label">PriceLabs API Key</label>
                           <input
                             type="text"
                             id="priceLabsApiKey"
-                            formControlName="priceLabsApiKey"
+                            formControlName="apiKey"
                             class="form-control"
                             placeholder="Enter PriceLabs API key"
                           />
@@ -196,7 +191,7 @@
                           <input
                             type="text"
                             id="priceLabsUsername"
-                            formControlName="priceLabsUsername"
+                            formControlName="userName"
                             class="form-control"
                             placeholder="PriceLabs username"
                           />
@@ -206,40 +201,25 @@
                           <input
                             type="password"
                             id="priceLabsPassword"
-                            formControlName="priceLabsPassword"
+                            formControlName="password"
                             class="form-control"
                             placeholder="PriceLabs password"
                           />
                         </div>
-                        <div>
-                          <label for="priceLabsCookies" class="form-label">Cookies</label>
-                          <textarea name="" id="priceLabsCookies" cols="30" rows="10" formControlName="priceLabsCookies" class="form-control" placeholder="PriceLabs cookies"></textarea>
-                         
-                        </div>
                       </div>
                     </div>
                   </div>
-
+                
                   <!-- Booking.com Tab -->
                   <div class="tab-pane fade" [class.show]="activeTab === 'booking'" [class.active]="activeTab === 'booking'" role="tabpanel">
                     <div class="row">
-                      <div class="col-12">
-                        <div class="mb-3">
-                          <label for="priceLabsApiKey" class="form-label">Booking.com API Key</label>
-                          <input
-                            type="text"
-                            id="bookingApiKey"
-                            formControlName="bookingApiKey"
-                            class="form-control"
-                            placeholder="Enter Booking.com API key"
-                          />
-                        </div>
+                      <div class="col-12" [formGroupName]="'booking'">
                         <div class="mb-3">
                           <label for="bookingUsername" class="form-label">Username</label>
                           <input
                             type="text"
                             id="bookingUsername"
-                            formControlName="bookingUsername"
+                            formControlName="userName"
                             class="form-control"
                             placeholder="Booking.com username"
                           />
@@ -249,40 +229,25 @@
                           <input
                             type="password"
                             id="bookingPassword"
-                            formControlName="bookingPassword"
+                            formControlName="password"
                             class="form-control"
                             placeholder="Booking.com password"
                           />
                         </div>
-                        <div>
-                          <label for="bookingCookies" class="form-label">Cookies</label>
-                          <textarea name="" id="bookingCookies" cols="30" rows="10" formControlName="bookingCookies" class="form-control" placeholder="Booking.com cookies"></textarea>
-                        </div>
                       </div>
                     </div>
                   </div>
-
+                
                   <!-- Airbnb Tab -->
                   <div class="tab-pane fade" [class.show]="activeTab === 'airbnb'" [class.active]="activeTab === 'airbnb'" role="tabpanel">
                     <div class="row">
-                      <div class="col-12">
-                        <div class="mb-3">
-                          <label for="priceLabsApiKey" class="form-label">Airbnb API Key</label>
-                          <input
-                          type="text"
-                          id="airbnbApiKey"
-                          formControlName="airbnbApiKey"
-                          class="form-control"
-                          placeholder="Enter Airbnb API key"
-                        />
-                        
-                        </div>
+                      <div class="col-12" [formGroupName]="'airbnb'">
                         <div class="mb-3">
                           <label for="airbnbUsername" class="form-label">Username</label>
                           <input
                             type="text"
                             id="airbnbUsername"
-                            formControlName="airbnbUsername"
+                            formControlName="userName"
                             class="form-control"
                             placeholder="Airbnb username"
                           />
@@ -292,39 +257,25 @@
                           <input
                             type="password"
                             id="airbnbPassword"
-                            formControlName="airbnbPassword"
+                            formControlName="password"
                             class="form-control"
                             placeholder="Airbnb password"
                           />
                         </div>
-                        <div>
-                          <label for="airbnbCookies" class="form-label">Cookies</label>
-                          <textarea name="" id="airbnbCookies" cols="30" rows="10" formControlName="airbnbCookies" class="form-control" placeholder="Airbnb cookies"></textarea>
-                        </div>
                       </div>
                     </div>
                   </div>
-
+                
                   <!-- VRBO Tab -->
                   <div class="tab-pane fade" [class.show]="activeTab === 'vrbo'" [class.active]="activeTab === 'vrbo'" role="tabpanel">
                     <div class="row">
-                      <div class="col-12">
-                        <div class="mb-3">
-                          <label for="priceLabsApiKey" class="form-label">VRBO API Key</label>
-                          <input
-                            type="text"
-                            id="vrboApiKey"
-                            formControlName="vrboApiKey"
-                            class="form-control"
-                            placeholder="Enter VRBO API key"
-                          />
-                        </div>
+                      <div class="col-12" [formGroupName]="'vrbo'">
                         <div class="mb-3">
                           <label for="vrboUsername" class="form-label">Username</label>
                           <input
                             type="text"
                             id="vrboUsername"
-                            formControlName="vrboUsername"
+                            formControlName="userName"
                             class="form-control"
                             placeholder="VRBO username"
                           />
@@ -334,19 +285,14 @@
                           <input
                             type="password"
                             id="vrboPassword"
-                            formControlName="vrboPassword"
+                            formControlName="password"
                             class="form-control"
                             placeholder="VRBO password"
                           />
                         </div>
-                        <div>
-                          <label for="vrboCookies" class="form-label">Cookies</label>
-                          <textarea name="" id="vrboCookies" cols="30" rows="10" formControlName="vrboCookies" class="form-control" placeholder="VRBO cookies"></textarea>
-                        </div>
                       </div>
                     </div>
                   </div>
-
                 </div>
                
               </form>

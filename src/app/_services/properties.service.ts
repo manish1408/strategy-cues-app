@@ -121,6 +121,10 @@ export class PropertiesService {
     return this.http.get<ApiResponse<PropertyData[]>>(`${this._url}/get-properties`, { params });
   }
 
+  // getProperties(page: number, limit: number) {
+  //   return this.http.get(`/api/properties?page=${page}&limit=${limit}`);
+  // }
+
   // Helper method to extract properties array from different response structures
   static extractPropertiesArray(response: any): PropertyData[] {
     if (!response || !response.success) {

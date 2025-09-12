@@ -33,22 +33,35 @@ export class AllOperatorsComponent {
   ) {
     this.addOperatorForm = this.fb.group({
       name: ['', Validators.required],
-      priceLabsApiKey: [''],
-      priceLabsUsername: [''],
-      priceLabsPassword: [''],
-      priceLabsCookies: [''],
-      bookingApiKey: [''],
-      bookingUsername: [''],
-      bookingPassword: [''],
-      bookingCookies: [''],
-      airbnbApiKey: [''],
-      airbnbUsername: [''],
-      airbnbPassword: [''],
-      airbnbCookies: [''],
-      vrboApiKey: [''],
-      vrboUsername: [''],
-      vrboPassword: [''],
-      vrboCookies: ['']
+      priceLabs: this.fb.group({
+        userName: '',
+        password: '',
+        apiKey: '',
+        status: 'PENDING',
+        cookies: this.fb.array([]),
+      }),
+      booking: this.fb.group({
+        userName: '',
+        password: '',
+        apiKey: '',
+        status: 'PENDING',
+        cookies: this.fb.array([]),
+        session_id: '',
+      }),
+      airbnb: this.fb.group({
+        userName: '',
+        password: '',
+        apiKey: '',
+        status: 'PENDING',
+        cookies: this.fb.array([]),
+      }),
+      vrbo: this.fb.group({
+        userName: '',
+        password: '',
+        apiKey: '',
+        status: 'PENDING',
+        cookies: this.fb.array([]),
+      })
     });
   }
 
@@ -63,7 +76,39 @@ export class AllOperatorsComponent {
       .subscribe({
         next: (res: any) => {
           console.log('Operators loaded:', res);
-          this.allOperatorList = res.data?.operators || [];
+          this.allOperatorList = res.data?.operators.map((operator: any) => ({
+            _id: operator._id,
+            name: operator.name,
+            priceLabs: {
+              userName: operator.priceLabs?.userName || '',
+              password: operator.priceLabs?.password || '',
+              apiKey: operator.priceLabs?.apiKey || '',
+              status: operator.priceLabs?.status || 'PENDING',
+              cookies: operator.priceLabs?.cookies || [],
+            },
+            booking: {
+              userName: operator.booking?.userName || '',
+              password: operator.booking?.password || '',
+              apiKey: operator.booking?.apiKey || '',
+              status: operator.booking?.status || 'PENDING',
+              cookies: operator.booking?.cookies || [],
+              session_id: operator.booking?.session_id || '',
+            },
+            airbnb: {
+              userName: operator.airbnb?.userName || '',
+              password: operator.airbnb?.password || '',
+              apiKey: operator.airbnb?.apiKey || '',
+              status: operator.airbnb?.status || 'PENDING',
+              cookies: operator.airbnb?.cookies || [],
+            },
+            vrbo: {
+              userName: operator.vrbo?.userName || '',
+              password: operator.vrbo?.password || '',
+              apiKey: operator.vrbo?.apiKey || '',
+              status: operator.vrbo?.status || 'PENDING',
+              cookies: operator.vrbo?.cookies || [],
+            }
+          })) || [];
           console.log('allOperatorList after assignment:', this.allOperatorList);
           console.log('allOperatorList length:', this.allOperatorList.length);
         },
@@ -75,27 +120,35 @@ export class AllOperatorsComponent {
   }
 
   editOperator(operator: any) {
+    if (operator && operator._id) {
+    console.log('Editing Operator:', operator);
     this.isEdit = true;
     this.editingOperatorId = operator._id;
+    console.log('Editing Operator ID:', this.editingOperatorId);
     this.addOperatorForm.patchValue({
       name: operator.name,
-      priceLabsApiKey: operator.priceLabsApiKey || '',
-      priceLabsUsername: operator.priceLabsUsername || '',
-      priceLabsPassword: operator.priceLabsPassword || '',
-      priceLabsCookies: operator.priceLabsCookies || '',
-      bookingApiKey: operator.bookingApiKey || '',
-      bookingUsername: operator.bookingUsername || '',
-      bookingPassword: operator.bookingPassword || '',
-      bookingCookies: operator.bookingCookies || '',
-      airbnbApiKey: operator.airbnbApiKey || '',
-      airbnbUsername: operator.airbnbUsername || '',
-      airbnbPassword: operator.airbnbPassword || '',
-      airbnbCookies: operator.airbnbCookies || '',
-      vrboApiKey: operator.vrboApiKey || '',
-      vrboUsername: operator.vrboUsername || '',
-      vrboPassword: operator.vrboPassword || '',
-      vrboCookies: operator.vrboCookies || ''
+
+      priceLabs: {
+        userName: operator.priceLabs?.userName || '',
+        password: operator.priceLabs?.password || '',
+        apiKey: operator.priceLabs?.apiKey || '',
+      },
+      booking: {
+        userName: operator.booking?.userName || '',
+        password: operator.booking?.password || '',
+      },
+      airbnb: {
+        userName: operator.airbnb?.userName || '',
+        password: operator.airbnb?.password || '',
+      },
+      vrbo: {
+        userName: operator.vrbo?.userName || '',
+        password: operator.vrbo?.password || '',
+      }
     });
+  } else {
+    console.error('Invalid operator object:', operator);
+    }
   }
 
   
@@ -138,11 +191,12 @@ export class AllOperatorsComponent {
   }
 
   onSubmit() {
+    console.log('Form Data:', this.addOperatorForm.value);
     this.addOperatorForm.markAllAsTouched();
     if (this.addOperatorForm.valid) {
       this.loading = true;
       const formData = this.addOperatorForm.value;
-      
+      console.log('Form Data:', formData);
       if (this.isEdit && this.editingOperatorId) {
         // Update existing operator
         this.operatorService.updateOperator(formData, this.editingOperatorId)

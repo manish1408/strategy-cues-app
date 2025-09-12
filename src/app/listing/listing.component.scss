@@ -137,9 +137,7 @@
   }
 }
 
-.spinner-border {
-  color: #fcdf46;
-}
+
 
 .card-body {
   padding: 2rem;
@@ -151,5 +149,60 @@
   
   .card-text {
     color: #6c757d;
+  }
+}
+.pagination-section {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  .pagination {
+    margin: 0;
+
+    .page-link {
+      color: #0d6efd;
+      border-color: #dee2e6;
+    }
+  }
+}
+
+.table-view {
+  .table-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e9ecef;
+    overflow: hidden;
+
+    .table-header {
+      padding: 1.5rem;
+      background: linear-gradient(135deg, #0d6efd 0%, #0d6efd 100%);
+      color: white;
+      display: flex;
+      justify-content: between;
+      align-items: center;
+
+      h5 {
+        margin: 0;
+        font-weight: 600;
+      }
+
+      .badge {
+        font-size: 0.8rem;
+      }
+    }
+
+    .table-responsive {
+      .table {
+        margin: 0;
+
+        thead th {
+          background-color: #f8f9fa;
+          border-bottom: 2px solid #dee2e6;
+          font-weight: 600;
+        }
+      }
+    }
   }
 }
