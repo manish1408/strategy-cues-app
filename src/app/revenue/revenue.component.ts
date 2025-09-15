@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PropertiesService, PropertyData } from '../_services/properties.service';
 import { LocalStorageService } from '../_services/local-storage.service';
+import { Router } from '@angular/router';
 
 // Declare global variables for jQuery and Bootstrap
 declare var $: any;
@@ -262,7 +263,7 @@ export class RevenueComponent implements OnInit {
   vrboTotalRevMinRange: number = 0;
   vrboTotalRevMaxRange: number = 1000;
 
-  constructor(private propertiesService: PropertiesService, private localStorageService: LocalStorageService) { 
+  constructor(private propertiesService: PropertiesService, private localStorageService: LocalStorageService, private router: Router) { 
     this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
   }
 
@@ -300,6 +301,8 @@ export class RevenueComponent implements OnInit {
     // Load current page data first
     this.loadCurrentPageData();
   }
+
+ 
 
   loadCurrentPageData(): void {
 
@@ -896,18 +899,13 @@ export class RevenueComponent implements OnInit {
   }
 
   // Action methods
-  viewDetails(item: PropertyData): void {
-    // Find the index of the property in the original data array
-    const propertyIndex = this.propertyData.findIndex(prop => 
-      prop.Listing_Name === item.Listing_Name && prop.Area === item.Area
-    );
-    
-    if (propertyIndex !== -1) {
-      // Open the details page in a new tab
-      const url = `/revenue/details/${propertyIndex}`;
-      window.open(url, '_blank');
-    }
+ viewDetails(propertyId: string) {
+  if (!propertyId) {
+    console.error('Property ID is undefined');
+    return;
   }
+  this.router.navigate(['/revenue/property-details', propertyId]);
+}
 
   compareProperty(item: PropertyData): void {
     console.log('Compare property:', item);

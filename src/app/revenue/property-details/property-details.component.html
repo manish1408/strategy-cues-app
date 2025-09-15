@@ -34,21 +34,21 @@
             <button 
               class="btn btn-booking me-2" 
               (click)="openBookingLink('Booking')"
-              [disabled]="!property?.Property_URLs?.Booking"
+              [disabled]="!property.Property_URLs.Booking"
               title="Book on Booking.com">
               <i class="fas fa-bed"></i> Booking.com
             </button>
             <button 
               class="btn btn-airbnb me-2" 
               (click)="openBookingLink('Airbnb')"
-              [disabled]="!property?.Property_URLs?.Airbnb"
+              [disabled]="!property.Property_URLs.Airbnb"
               title="Book on Airbnb">
               <i class="fas fa-home"></i> Airbnb
             </button>
             <button 
               class="btn btn-vrbo" 
               (click)="openBookingLink('VRBO')"
-              [disabled]="!property?.Property_URLs?.VRBO"
+              [disabled]="!property.Property_URLs.VRBO"
               title="Book on VRBO">
               <i class="fas fa-key"></i> VRBO
             </button>
@@ -108,20 +108,20 @@
                   <div class="col-6">
                     <div class="metric-card">
                       <div class="metric-label">This Month</div>
-                      <div class="metric-value large">{{ property.Occupancy.TM }}</div>
+                      <div class="metric-value large">{{ property.Occupancy.TM || '' }}</div>
                       <div class="progress mt-2" style="height: 8px;">
                         <div class="progress-bar" [ngClass]="getOccupancyClass(property.Occupancy.TM)"
-                             [style.width.%]="property.Occupancy.TM.replace('%', '')"></div>
+                        [style.width.%]="property.Occupancy.TM.toString()"></div>
                       </div>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="metric-card">
                       <div class="metric-label">Next Month</div>
-                      <div class="metric-value large">{{ property.Occupancy.NM }}</div>
+                      <div class="metric-value large">{{ property.Occupancy.NM || '' }}</div>
                       <div class="progress mt-2" style="height: 8px;">
                         <div class="progress-bar" [ngClass]="getOccupancyClass(property.Occupancy.NM)"
-                             [style.width.%]="property.Occupancy.NM.replace('%', '')"></div>
+                        [style.width.%]="property.Occupancy.NM.toString()"></div>
                       </div>
                     </div>
                   </div>

@@ -10,7 +10,7 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
 @NgModule({
   declarations: [
     RevenueComponent,
-    PropertyDetailsComponent
+    // PropertyDetailsComponent
   ],
   imports: [
     CommonModule,

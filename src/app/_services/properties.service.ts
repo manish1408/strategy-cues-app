@@ -17,6 +17,7 @@ export interface ApiResponse<T> {
 }
 
 export interface PropertyData {
+  _id: string;
   Listing_Name: string;
   Area: string;
   Room_Type: string;
@@ -175,5 +176,10 @@ export class PropertiesService {
   deleteProperty(listingId: string, operatorId: string): Observable<any> {
     const params = new HttpParams().set('operator_id', operatorId);
     return this.http.delete(`${this._url}/delete-property/${listingId}`, { params });
+  }
+
+  getProperty(propertyId: string, operatorId: string): Observable<ApiResponse<PropertyData>> {
+    const params = new HttpParams().set('operator_id', operatorId);
+    return this.http.get<ApiResponse<PropertyData>>(`${this._url}/get-property/${propertyId}`, { params });
   }
 }

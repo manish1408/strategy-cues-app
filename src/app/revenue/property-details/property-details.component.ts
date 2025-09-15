@@ -1,42 +1,46 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import revenueData from '../../json_data/dubai_revenue_magt_cues_50.json';
+import { PropertiesService } from '../../_services/properties.service';
+import { LocalStorageService } from '../../_services/local-storage.service';
 
 interface PropertyData {
+  _id: string;
+  operator_id: string;
   Listing_Name: string;
   Area: string;
   Room_Type: string;
   Occupancy: {
-    '7_days': string;
-    '30_days': string;
-    TM: string;
-    NM: string;
+    '7_days': number;
+    '30_days': number;
+    TM: number;
+    NM: number;
   };
   ADR: {
-    TM: string;
-    NM: string;
+    TM: number;
+    NM: number;
   };
   RevPAR: {
-    TM: string;
-    NM: string;
+    TM: number;
+    NM: number;
   };
-  MPI: string;
+  MPI: number;
   STLY_Var: {
-    Occ: string;
-    ADR: string;
-    RevPAR: string;
+    Occ: number;
+    ADR: number;
+    RevPAR: number;
   };
   STLM_Var: {
-    Occ: string;
-    ADR: string;
-    RevPAR: string;
+    Occ: number;
+    ADR: number;
+    RevPAR: number;
   };
   Pick_Up_Occ: {
-    '7_Days': string;
-    '14_Days': string;
-    '30_Days': string;
+    '7_Days': number;
+    '14_Days': number;
+    '30_Days': number;
   };
-  Min_Rate_Threshold: string;
+  Min_Rate_Threshold: number;
   BookingCom: {
     Genius: string;
     Mobile: string;
@@ -61,28 +65,28 @@ interface PropertyData {
     VRBO: string;
   };
   Adult_Child_Config: {
-    Booking: string;
-    Airbnb: string;
-    VRBO: string;
+    Booking: number;
+    Airbnb: number;
+    VRBO: number;
   };
   Reviews: {
     Booking: {
       Last_Rev_Dt: string;
-      Last_Rev_Score: string;
-      Rev_Score: string;
-      Total_Rev: string;
+      Last_Rev_Score: number;
+      Rev_Score: number;
+      Total_Rev: number;
     };
     Airbnb: {
       Last_Rev_Dt: string;
-      Last_Rev_Score: string;
-      Rev_Score: string;
-      Total_Rev: string;
+      Last_Rev_Score: number;
+      Rev_Score: number;
+      Total_Rev: number;
     };
     VRBO: {
       Last_Rev_Dt: string;
-      Last_Rev_Score: string;
-      Rev_Score: string;
-      Total_Rev: string;
+      Last_Rev_Score: number;
+      Rev_Score: number;
+      Total_Rev: number;
     };
   };
   Property_URLs: {
@@ -101,33 +105,44 @@ export class PropertyDetailsComponent implements OnInit {
   property: PropertyData | null = null;
   propertyId: string = '';
   activeTab: 'overview' | 'performance' | 'platforms' | 'reviews' = 'overview';
-  
+  operatorId: string = '';
   // Utility property for template
   Math = Math;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private propertyService: PropertiesService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.propertyId = params['id'];
+      this.operatorId = this.localStorageService.getSelectedOperatorId() || '';
+      console.log(this.operatorId);
+      if (this.propertyId) {
       this.loadPropertyData();
+      }
     });
   }
 
   loadPropertyData(): void {
-    const propertyData: PropertyData[] = revenueData as PropertyData[];
+
+    this.propertyService.getProperty(this.propertyId, this.operatorId).subscribe((res: any) => {
+      this.property = res.data;
+      console.log(this.property);
+    });
+    // const propertyData: PropertyData[] = revenueData as PropertyData[];
     
-    // Find property by index (using ID as index)
-    const index = parseInt(this.propertyId);
-    if (index >= 0 && index < propertyData.length) {
-      this.property = propertyData[index];
-    } else {
-      // Property not found, redirect back to revenue page
-      this.router.navigate(['/revenue']);
-    }
+    // // Find property by index (using ID as index)
+    // const index = parseInt(this.propertyId);
+    // if (index >= 0 && index < propertyData.length) {
+    //   this.property = propertyData[index];
+    // } else {
+    //   // Property not found, redirect back to revenue page
+    //   this.router.navigate(['/revenue']);
+    // }
   }
 
   switchTab(tab: 'overview' | 'performance' | 'platforms' | 'reviews'): void {
@@ -151,22 +166,22 @@ export class PropertyDetailsComponent implements OnInit {
     }
   }
 
-  getPerformanceClass(value: string): string {
-    const numValue = parseFloat(value.replace('%', ''));
+  getPerformanceClass(value: number): string {
+    const numValue = parseFloat(value.toString().replace('%', ''));
     if (numValue > 0) return 'text-success';
     if (numValue < 0) return 'text-danger';
     return 'text-muted';
   }
 
-  getOccupancyClass(occupancy: string): string {
-    const numValue = parseFloat(occupancy.replace('%', ''));
+  getOccupancyClass(occupancy: number): string {
+    const numValue = parseFloat(occupancy.toString().replace('%', ''));
     if (numValue >= 80) return 'bg-success';
     if (numValue >= 60) return 'bg-warning';
     return 'bg-danger';
   }
 
-  getReviewScoreClass(score: string): string {
-    const numValue = parseFloat(score);
+  getReviewScoreClass(score: number): string {
+    const numValue = parseFloat(score.toString());
     if (numValue >= 4.5) return 'text-success';
     if (numValue >= 4.0) return 'text-warning';
     if (numValue >= 3.0) return 'text-info';
