@@ -22,8 +22,8 @@
         </div>
         <div class="col-md-3">
           <div class="d-flex gap-2 float-end">
-          
-         
+
+
             <button class="btn btn-outline-success" (click)="exportToCSV()" title="Export to CSV">
               <i class="fas fa-download me-2"></i>
               Export CSV
@@ -34,144 +34,146 @@
                 <i class="fas fa-columns me-2"></i>
                 Columns ({{ getVisibleColumnsCount() }})
               </button>
-            <div class="dropdown-menu dropdown-menu-end column-visibility-dropdown"
-              aria-labelledby="columnVisibilityDropdown">
-              <div class="dropdown-header">
-                <strong>Show/Hide Columns</strong>
-              </div>
-
-              <!-- Quick Actions -->
-              <div class="dropdown-item-text px-3 py-2 border-bottom" (click)="$event.stopPropagation()">
-                <div class="btn-group btn-group-sm w-100" role="group">
-                  <button type="button" class="btn btn-outline-secondary" (click)="resetToDefaultColumns()">
-                    Default
-                  </button>
-                  <button type="button" class="btn btn-outline-success" (click)="showAllColumns()">
-                    All
-                  </button>
-                  <button type="button" class="btn btn-outline-danger" (click)="hideAllColumns()">
-                    None
-                  </button>
-                </div>
-              </div>
-
-              <!-- Column Checkboxes -->
-              <div class="column-checkboxes px-3">
-                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
-                  <input class="form-check-input" type="checkbox" id="col-propertyName"
-                    [(ngModel)]="columnVisibility.propertyName" disabled>
-                  <label class="form-check-label">
-                    Property Name
-                  </label>
+              <div class="dropdown-menu dropdown-menu-end column-visibility-dropdown"
+                aria-labelledby="columnVisibilityDropdown">
+                <div class="dropdown-header">
+                  <strong>Show/Hide Columns</strong>
                 </div>
 
-                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
-                  <input class="form-check-input" type="checkbox" id="col-occupancy"
-                    [(ngModel)]="columnVisibility.occupancy">
-                  <label class="form-check-label">
-                    Occupancy
-                  </label>
+                <!-- Quick Actions -->
+                <div class="dropdown-item-text px-3 py-2 border-bottom" (click)="$event.stopPropagation()">
+                  <div class="btn-group btn-group-sm w-100" role="group">
+                    <button type="button" class="btn btn-outline-secondary" (click)="resetToDefaultColumns()">
+                      Default
+                    </button>
+                    <button type="button" class="btn btn-outline-success" (click)="showAllColumns()">
+                      All
+                    </button>
+                    <button type="button" class="btn btn-outline-danger" (click)="hideAllColumns()">
+                      None
+                    </button>
+                  </div>
                 </div>
 
-                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
-                  <input class="form-check-input" type="checkbox" id="col-adr" [(ngModel)]="columnVisibility.adr">
-                  <label class="form-check-label">
-                    ADR
-                  </label>
-                </div>
+                <!-- Column Checkboxes -->
+                <div class="column-checkboxes px-3">
+                  <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
+                    <input class="form-check-input" type="checkbox" id="col-propertyName"
+                      [(ngModel)]="columnVisibility.propertyName" disabled>
+                    <label class="form-check-label">
+                      Property Name
+                    </label>
+                  </div>
 
-                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
-                  <input class="form-check-input" type="checkbox" id="col-revpar" [(ngModel)]="columnVisibility.revpar">
-                  <label class="form-check-label">
-                    RevPAR
-                  </label>
-                </div>
+                  <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
+                    <input class="form-check-input" type="checkbox" id="col-occupancy"
+                      [(ngModel)]="columnVisibility.occupancy">
+                    <label class="form-check-label">
+                      Occupancy
+                    </label>
+                  </div>
 
-                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
-                  <input class="form-check-input" type="checkbox" id="col-mpi" [(ngModel)]="columnVisibility.mpi">
-                  <label class="form-check-label">
-                    MPI
-                  </label>
-                </div>
+                  <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
+                    <input class="form-check-input" type="checkbox" id="col-adr" [(ngModel)]="columnVisibility.adr">
+                    <label class="form-check-label">
+                      ADR
+                    </label>
+                  </div>
 
-                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
-                  <input class="form-check-input" type="checkbox" id="col-reviews"
-                    [(ngModel)]="columnVisibility.reviews">
-                  <label class="form-check-label">
-                    Reviews
-                  </label>
-                </div>
+                  <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
+                    <input class="form-check-input" type="checkbox" id="col-revpar"
+                      [(ngModel)]="columnVisibility.revpar">
+                    <label class="form-check-label">
+                      RevPAR
+                    </label>
+                  </div>
 
-                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
-                  <input class="form-check-input" type="checkbox" id="col-cxlPolicy"
-                    [(ngModel)]="columnVisibility.cxlPolicy">
-                  <label class="form-check-label">
-                    CXL Policy
-                  </label>
-                </div>
+                  <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
+                    <input class="form-check-input" type="checkbox" id="col-mpi" [(ngModel)]="columnVisibility.mpi">
+                    <label class="form-check-label">
+                      MPI
+                    </label>
+                  </div>
 
-                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
-                  <input class="form-check-input" type="checkbox" id="col-adultChildConfig"
-                    [(ngModel)]="columnVisibility.adultChildConfig">
-                  <label class="form-check-label">
-                    Adult Child Config
-                  </label>
-                </div>
+                  <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
+                    <input class="form-check-input" type="checkbox" id="col-reviews"
+                      [(ngModel)]="columnVisibility.reviews">
+                    <label class="form-check-label">
+                      Reviews
+                    </label>
+                  </div>
 
-                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
-                  <input class="form-check-input" type="checkbox" id="col-pickupOcc"
-                    [(ngModel)]="columnVisibility.pickupOcc">
-                  <label class="form-check-label">
-                    Pick up Occ
-                  </label>
-                </div>
+                  <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
+                    <input class="form-check-input" type="checkbox" id="col-cxlPolicy"
+                      [(ngModel)]="columnVisibility.cxlPolicy">
+                    <label class="form-check-label">
+                      CXL Policy
+                    </label>
+                  </div>
 
-                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
-                  <input class="form-check-input" type="checkbox" id="col-minRateThreshold"
-                    [(ngModel)]="columnVisibility.minRateThreshold">
-                  <label class="form-check-label">
-                    Min Rate Threshold
-                  </label>
-                </div>
+                  <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
+                    <input class="form-check-input" type="checkbox" id="col-adultChildConfig"
+                      [(ngModel)]="columnVisibility.adultChildConfig">
+                    <label class="form-check-label">
+                      Adult Child Config
+                    </label>
+                  </div>
 
-                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
-                  <input class="form-check-input" type="checkbox" id="col-stlyVarOcc"
-                    [(ngModel)]="columnVisibility.stlyVarOcc">
-                  <label class="form-check-label">
-                    STLY Var Occ
-                  </label>
-                </div>
+                  <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
+                    <input class="form-check-input" type="checkbox" id="col-pickupOcc"
+                      [(ngModel)]="columnVisibility.pickupOcc">
+                    <label class="form-check-label">
+                      Pick up Occ
+                    </label>
+                  </div>
 
-                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
-                  <input class="form-check-input" type="checkbox" id="col-stlyVarRevPAR"
-                    [(ngModel)]="columnVisibility.stlyVarRevPAR">
-                  <label class="form-check-label">
-                    STLY Var RevPAR
-                  </label>
-                </div>
+                  <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
+                    <input class="form-check-input" type="checkbox" id="col-minRateThreshold"
+                      [(ngModel)]="columnVisibility.minRateThreshold">
+                    <label class="form-check-label">
+                      Min Rate Threshold
+                    </label>
+                  </div>
 
-                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
-                  <input class="form-check-input" type="checkbox" id="col-lastReviewScore"
-                    [(ngModel)]="columnVisibility.lastReviewScore">
-                  <label class="form-check-label">
-                    Last Review Score
-                  </label>
-                </div>
+                  <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
+                    <input class="form-check-input" type="checkbox" id="col-stlyVarOcc"
+                      [(ngModel)]="columnVisibility.stlyVarOcc">
+                    <label class="form-check-label">
+                      STLY Var Occ
+                    </label>
+                  </div>
 
-                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
-                  <input class="form-check-input" type="checkbox" id="col-lastRevenueDate"
-                    [(ngModel)]="columnVisibility.lastRevenueDate">
-                  <label class="form-check-label">
-                    Last Revenue Date
-                  </label>
-                </div>
+                  <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
+                    <input class="form-check-input" type="checkbox" id="col-stlyVarRevPAR"
+                      [(ngModel)]="columnVisibility.stlyVarRevPAR">
+                    <label class="form-check-label">
+                      STLY Var RevPAR
+                    </label>
+                  </div>
 
-                <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
-                  <input class="form-check-input" type="checkbox" id="col-actions"
-                    [(ngModel)]="columnVisibility.actions" disabled>
-                  <label class="form-check-label">
-                    Actions
-                  </label>
+                  <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
+                    <input class="form-check-input" type="checkbox" id="col-lastReviewScore"
+                      [(ngModel)]="columnVisibility.lastReviewScore">
+                    <label class="form-check-label">
+                      Last Review Score
+                    </label>
+                  </div>
+
+                  <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
+                    <input class="form-check-input" type="checkbox" id="col-lastRevenueDate"
+                      [(ngModel)]="columnVisibility.lastRevenueDate">
+                    <label class="form-check-label">
+                      Last Revenue Date
+                    </label>
+                  </div>
+
+                  <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
+                    <input class="form-check-input" type="checkbox" id="col-actions"
+                      [(ngModel)]="columnVisibility.actions" disabled>
+                    <label class="form-check-label">
+                      Actions
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
@@ -179,1028 +181,1058 @@
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Applied Filters Section -->
-  <div class="applied-filters-section" *ngIf="getAppliedFilters().length > 0">
-    <div class="applied-filters-card">
-      <div class="filters-header">
-        <h6 class="mb-0">
-          <i class="fas fa-filter me-2"></i>Applied Filters ({{ getAppliedFilters().length }})
-        </h6>
-        <button class="btn btn-sm btn-outline-danger" (click)="clearAllFilters()">
-          <i class="fas fa-times me-1"></i>Clear All
-        </button>
-      </div>
-      <div class="filters-badges">
-        <span *ngFor="let filter of getAppliedFilters()" class="filter-badge" [ngClass]="'filter-' + filter.type">
-          <span class="filter-label">{{ filter.label }}:</span>
-          <span class="filter-value">{{ filter.value }}</span>
-          <button class="remove-filter" (click)="removeFilter(filter.key)" title="Remove filter">
-            <i class="fas fa-times"></i>
+    <!-- Applied Filters Section -->
+    <div class="applied-filters-section" *ngIf="getAppliedFilters().length > 0">
+      <div class="applied-filters-card">
+        <div class="filters-header">
+          <h6 class="mb-0">
+            <i class="fas fa-filter me-2"></i>Applied Filters ({{ getAppliedFilters().length }})
+          </h6>
+          <button class="btn btn-sm btn-outline-danger" (click)="clearAllFilters()">
+            <i class="fas fa-times me-1"></i>Clear All
           </button>
-        </span>
+        </div>
+        <div class="filters-badges">
+          <span *ngFor="let filter of getAppliedFilters()" class="filter-badge" [ngClass]="'filter-' + filter.type">
+            <span class="filter-label">{{ filter.label }}:</span>
+            <span class="filter-value">{{ filter.value }}</span>
+            <button class="remove-filter" (click)="removeFilter(filter.key)" title="Remove filter">
+              <i class="fas fa-times"></i>
+            </button>
+          </span>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Loading State -->
-  <div *ngIf="loading" class="text-center py-5">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Loading...</span>
+    <!-- Loading State -->
+    <div *ngIf="loading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-3">Loading properties...</p>
     </div>
-    <p class="mt-3">Loading properties...</p>
-  </div>
 
-  <!-- Error State -->
-  <div *ngIf="error && !loading" class="alert alert-danger" role="alert">
-    <h4 class="alert-heading">Error!</h4>
-    <p>{{ error }}</p>
-    <hr>
-    <button class="btn btn-outline-danger" (click)="refreshData()">
-      <i class="fas fa-refresh me-2"></i>Try Again
-    </button>
-  </div>
+    <!-- Error State -->
+    <div *ngIf="error && !loading" class="alert alert-danger" role="alert">
+      <h4 class="alert-heading">Error!</h4>
+      <p>{{ error }}</p>
+      <hr>
+      <button class="btn btn-outline-danger" (click)="refreshData()">
+        <i class="fas fa-refresh me-2"></i>Try Again
+      </button>
+    </div>
 
-  <!-- Table View -->
-  <div class="table-view" *ngIf="!loading && !error">
-    <div class="table-card">
-      <div class="table-responsive">
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th style="min-width: 200px;" *ngIf="columnVisibility.propertyName">Property Name</th>
-              <th *ngIf="columnVisibility.occupancy">Occupancy</th>
-              <th *ngIf="columnVisibility.adr">ADR</th>
-              <th *ngIf="columnVisibility.revpar">RevPAR</th>
-              <th *ngIf="columnVisibility.mpi">MPI</th>
-              <th *ngIf="columnVisibility.reviews">Reviews</th>
-              <th *ngIf="columnVisibility.cxlPolicy">CXL Policy</th>
-              <th *ngIf="columnVisibility.adultChildConfig">Adult Child</th>
-              <th *ngIf="columnVisibility.pickupOcc">Pick up Occ</th>
-              <th *ngIf="columnVisibility.minRateThreshold">Min Rate <br/> Threshold</th>
-              <th *ngIf="columnVisibility.stlyVarOcc">STLY <br/>Var Occ</th>
-              <th *ngIf="columnVisibility.stlyVarRevPAR">STLY Var <br/> RevPAR</th>
-              <th *ngIf="columnVisibility.lastReviewScore">Last Review <br/> Score</th>
-              <th *ngIf="columnVisibility.lastRevenueDate">Last Revenue <br/> Date</th>
-              <th *ngIf="columnVisibility.actions"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let property of getPaginatedData()">
-              <td *ngIf="columnVisibility.propertyName">
-                <div class="property-name">
-                  <strong>{{ property.Listing_Name }}</strong>
-                </div>
-              </td>
-              <td *ngIf="columnVisibility.occupancy">
-                <div class="dual-occupancy-cell">
-                  <div class="occupancy-row">
-                    <span class="occupancy-label">TM:</span>
-                    <div class="progress" style="height: 6px;">
-                      <div class="progress-bar" [ngClass]="getOccupancyClass(property.Occupancy.TM)"
-                        [style.width.%]="safeParseNumber(property.Occupancy.TM)"></div>
+
+    <!-- Table View -->
+    <div class="table-view" *ngIf="!loading && !error && allPropertyData && allPropertyData.length > 0">
+      <div class="table-card">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th style="min-width: 200px;" *ngIf="columnVisibility.propertyName">Property Name</th>
+                <th *ngIf="columnVisibility.occupancy">Occupancy</th>
+                <th *ngIf="columnVisibility.adr">ADR</th>
+                <th *ngIf="columnVisibility.revpar">RevPAR</th>
+                <th *ngIf="columnVisibility.mpi">MPI</th>
+                <th *ngIf="columnVisibility.reviews">Reviews</th>
+                <th *ngIf="columnVisibility.cxlPolicy">CXL Policy</th>
+                <th *ngIf="columnVisibility.adultChildConfig">Adult Child</th>
+                <th *ngIf="columnVisibility.pickupOcc">Pick up Occ</th>
+                <th *ngIf="columnVisibility.minRateThreshold">Min Rate <br /> Threshold</th>
+                <th *ngIf="columnVisibility.stlyVarOcc">STLY <br />Var Occ</th>
+                <th *ngIf="columnVisibility.stlyVarRevPAR">STLY Var <br /> RevPAR</th>
+                <th *ngIf="columnVisibility.lastReviewScore">Last Review <br /> Score</th>
+                <th *ngIf="columnVisibility.lastRevenueDate">Last Revenue <br /> Date</th>
+                <th *ngIf="columnVisibility.actions"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let property of getPaginatedData()">
+                <td *ngIf="columnVisibility.propertyName">
+                  <div class="property-name">
+                    <strong>{{ property.Listing_Name }}</strong>
+                  </div>
+                </td>
+                <td *ngIf="columnVisibility.occupancy">
+                  <div class="dual-occupancy-cell">
+                    <div class="occupancy-row">
+                      <span class="occupancy-label">TM:</span>
+                      <circle-progress [percent]="safeParseNumber(property.Occupancy.TM)" [radius]="15"
+                        [outerStrokeWidth]="6" [innerStrokeWidth]="0" [outerStrokeColor]="'#78C000'"
+                        [innerStrokeColor]="'#C7E596'" [animation]="true" [animationDuration]="300" [showUnits]="false"
+                        [showSubtitle]="false" [title]="safeParseNumber(property.Occupancy.TM) + '%'"
+                        [titleFontSize]="'8px'" [titleColor]="'#78C000'" [titleFontWeight]="'900'">
+                      </circle-progress>
                     </div>
-                    <small class="occupancy-value">{{ safeParseNumber(property.Occupancy.TM) }}%</small>
-                  </div>
-                  <div class="occupancy-row">
-                    <span class="occupancy-label">NM:</span>
-                    <div class="progress" style="height: 6px;">
-                      <div class="progress-bar" [ngClass]="getOccupancyClass(property.Occupancy.NM)"
-                        [style.width.%]="safeParseNumber(property.Occupancy.NM)"></div>
+                    <div class="occupancy-row">
+                      <span class="occupancy-label">NM:</span>
+                      <circle-progress [percent]="safeParseNumber(property.Occupancy.NM)" [radius]="15"
+                        [outerStrokeWidth]="6" [innerStrokeWidth]="0" [outerStrokeColor]="'#FF6347'"
+                        [innerStrokeColor]="'#FFC0CB'" [animation]="true" [animationDuration]="300" [showUnits]="false"
+                        [showSubtitle]="false" [title]="safeParseNumber(property.Occupancy.NM) + '%'"
+                        [titleFontSize]="'8px'" [titleColor]="'#FF6347'" [titleFontWeight]="'900'">
+                      </circle-progress>
                     </div>
-                    <small class="occupancy-value">{{ safeParseNumber(property.Occupancy.NM) }}%</small>
                   </div>
-                </div>
-              </td>
-              <td *ngIf="columnVisibility.adr">
-                <div class="dual-value-cell">
-                  <div class="value-pair">
-                    <span class="badge text-white me-1" style="background-color: #1e1e1e;">TM: ${{ property.ADR.TM }}</span>
-                    <span class="badge text-white" style="background-color: #1e1e1e;">NM: ${{ property.ADR.NM }}</span>
-                  </div>
-                </div>
-              </td>
-              <td *ngIf="columnVisibility.revpar">
-                <div class="dual-value-cell">
-                  <div class="value-pair">
-                    <span class="badge text-white me-1" style="background-color: #1e1e1e;">TM: ${{ property.RevPAR.TM }}</span>
-                    <span class="badge text-white" style="background-color: #1e1e1e;">NM: ${{ property.RevPAR.NM }}</span>
-                  </div>
-                </div>
-              </td>
-              <td *ngIf="columnVisibility.mpi">
-                <div class="dual-value-cell">
-                  <div class="value-pair">
-                    <span class="badge text-white me-1" style="background-color: #1e1e1e;">TM: {{ getMPITM(property) }}</span>
-                    <span class="badge text-white" style="background-color: #1e1e1e;">NM: {{ getMPINM(property) }}</span>
-                  </div>
-                </div>
-              </td>
-              <td *ngIf="columnVisibility.reviews">
-                <div class="reviews-cell-compact">
-                  <!-- Booking.com Reviews -->
-                  <div class="review-item clickable" *ngIf="property.Reviews.Booking.Rev_Score"
-                    title="Booking.com: {{ property.Reviews.Booking.Rev_Score }}/10 ({{ property.Reviews.Booking.Total_Rev }} reviews) - Click to visit property"
-                    (click)="openPropertyUrl(property, 'Booking')">
-                    <i class="fas fa-bed text-primary"></i>
-                    <div class="stars">
-                      <i *ngFor="let star of getStarArray(property.Reviews.Booking.Rev_Score, 10)" class="fas fa-star"
-                        [ngClass]="star.filled ? 'star-filled' : 'star-empty'"></i>
+                </td>
+                <td *ngIf="columnVisibility.adr">
+                  <div class="dual-value-cell">
+                    <div class="value-pair">
+                      <span class="badge text-white me-1" style="background-color: #1e1e1e;">TM: ${{ property.ADR.TM
+                        }}</span>
+                      <span class="badge text-white" style="background-color: #1e1e1e;">NM: ${{ property.ADR.NM
+                        }}</span>
                     </div>
-                    <span class="rating-text">{{ property.Reviews.Booking.Rev_Score }}</span>
+                  </div>
+                </td>
+                <td *ngIf="columnVisibility.revpar">
+                  <div class="dual-value-cell">
+                    <div class="value-pair">
+                      <span class="badge text-white me-1" style="background-color: #1e1e1e;">TM: ${{ property.RevPAR.TM
+                        }}</span>
+                      <span class="badge text-white" style="background-color: #1e1e1e;">NM: ${{ property.RevPAR.NM
+                        }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td *ngIf="columnVisibility.mpi">
+                  <div class="dual-value-cell">
+                    <div class="value-pair">
+                      <span class="badge text-white me-1" style="background-color: #1e1e1e;">TM: {{ getMPITM(property)
+                        }}</span>
+                      <span class="badge text-white" style="background-color: #1e1e1e;">NM: {{ getMPINM(property)
+                        }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td *ngIf="columnVisibility.reviews">
+                  <div class="reviews-cell-compact">
+                    <!-- Booking.com Reviews -->
+                    <div class="review-item clickable" *ngIf="property.Reviews.Booking.Rev_Score"
+                      title="Booking.com: {{ property.Reviews.Booking.Rev_Score }}/10 ({{ property.Reviews.Booking.Total_Rev }} reviews) - Click to visit property"
+                      (click)="openPropertyUrl(property, 'Booking')">
+                      <i class="fas fa-bed text-primary"></i>
+                      <div class="stars">
+                        <i *ngFor="let star of getStarArray(property.Reviews.Booking.Rev_Score, 10)" class="fas fa-star"
+                          [ngClass]="star.filled ? 'star-filled' : 'star-empty'"></i>
+                      </div>
+                      <span class="rating-text">{{ property.Reviews.Booking.Rev_Score }}</span>
+                    </div>
+
+                    <!-- Airbnb Reviews -->
+                    <div class="review-item clickable" *ngIf="property.Reviews.Airbnb.Rev_Score"
+                      title="Airbnb: {{ property.Reviews.Airbnb.Rev_Score }}/5 ({{ property.Reviews.Airbnb.Total_Rev }} reviews) - Click to visit property"
+                      (click)="openPropertyUrl(property, 'Airbnb')">
+                      <i class="fab fa-airbnb text-danger"></i>
+                      <div class="stars">
+                        <i *ngFor="let star of getStarArray(property.Reviews.Airbnb.Rev_Score, 5)" class="fas fa-star"
+                          [ngClass]="star.filled ? 'star-filled' : 'star-empty'"></i>
+                      </div>
+                      <span class="rating-text">{{ property.Reviews.Airbnb.Rev_Score }}</span>
+                    </div>
+
+                    <!-- VRBO Reviews -->
+                    <div class="review-item clickable" *ngIf="property.Reviews.VRBO.Rev_Score"
+                      title="VRBO: {{ property.Reviews.VRBO.Rev_Score }}/5 ({{ property.Reviews.VRBO.Total_Rev }} reviews) - Click to visit property"
+                      (click)="openPropertyUrl(property, 'VRBO')">
+                      <i class="fas fa-home text-warning"></i>
+                      <div class="stars">
+                        <i *ngFor="let star of getStarArray(property.Reviews.VRBO.Rev_Score, 5)" class="fas fa-star"
+                          [ngClass]="star.filled ? 'star-filled' : 'star-empty'"></i>
+                      </div>
+                      <span class="rating-text">{{ property.Reviews.VRBO.Rev_Score }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td *ngIf="columnVisibility.cxlPolicy">
+                  <div class="cxl-policy-cell">
+                    <div class="policy-item" *ngIf="property.CXL_Policy.Booking">
+                      <i class="fas fa-bed text-primary"></i>
+                      <span class="policy-text">{{ property.CXL_Policy.Booking }}</span>
+                    </div>
+                    <div class="policy-item" *ngIf="property.CXL_Policy.Airbnb">
+                      <i class="fab fa-airbnb text-danger"></i>
+                      <span class="policy-text">{{ property.CXL_Policy.Airbnb }}</span>
+                    </div>
+                    <div class="policy-item" *ngIf="property.CXL_Policy.VRBO">
+                      <i class="fas fa-home text-warning"></i>
+                      <span class="policy-text">{{ property.CXL_Policy.VRBO }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td *ngIf="columnVisibility.adultChildConfig">
+                  <div class="adult-child-config-cell">
+                    <div class="config-item" *ngIf="property.Adult_Child_Config.Booking">
+                      <i class="fas fa-bed text-primary"></i>
+                      <span class="config-text">{{ property.Adult_Child_Config.Booking }}</span>
+                    </div>
+                    <div class="config-item" *ngIf="property.Adult_Child_Config.Airbnb">
+                      <i class="fab fa-airbnb text-danger"></i>
+                      <span class="config-text">{{ property.Adult_Child_Config.Airbnb }}</span>
+                    </div>
+                    <div class="config-item" *ngIf="property.Adult_Child_Config.VRBO">
+                      <i class="fas fa-home text-warning"></i>
+                      <span class="config-text">{{ property.Adult_Child_Config.VRBO }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td *ngIf="columnVisibility.pickupOcc">
+                  <div class="pickup-occ-cell">
+                    <div class="pickup-item">
+                      <span class="pickup-label">7D:</span>
+                      <span class="pickup-value">{{ property.Pick_Up_Occ['7_Days'] }}</span>
+                    </div>
+                    <div class="pickup-item">
+                      <span class="pickup-label">14D:</span>
+                      <span class="pickup-value">{{ property.Pick_Up_Occ['14_Days'] }}</span>
+                    </div>
+                    <div class="pickup-item">
+                      <span class="pickup-label">30D:</span>
+                      <span class="pickup-value">{{ property.Pick_Up_Occ['30_Days'] }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td *ngIf="columnVisibility.minRateThreshold">
+                  <div class="min-rate-threshold-cell">
+                    <span class="threshold-value">{{ property.Min_Rate_Threshold }}</span>
+                  </div>
+                </td>
+                <td *ngIf="columnVisibility.stlyVarOcc">
+                  <div class="stly-var-single-cell">
+                    <span class="badge" [ngClass]="getPerformanceClass(property.STLY_Var.Occ)">
+                      {{ property.STLY_Var.Occ }}
+                    </span>
+                  </div>
+                </td>
+                <td *ngIf="columnVisibility.stlyVarRevPAR">
+                  <div class="stly-var-single-cell">
+                    <span class="badge" [ngClass]="getPerformanceClass(property.STLY_Var.RevPAR)">
+                      {{ property.STLY_Var.RevPAR }}
+                    </span>
+                  </div>
+                </td>
+                <td *ngIf="columnVisibility.lastReviewScore">
+                  <div class="review-score-cell">
+                    <div class="review-item clickable" title="Click to visit Booking.com property page"
+                      (click)="openPropertyUrl(property, 'Booking')">
+                      <i class="fas fa-bed text-primary"></i>
+                      <span class="score-value">{{ property.Reviews.Booking.Last_Rev_Score }}</span>
+                    </div>
+                    <div class="review-item clickable" title="Click to visit Airbnb property page"
+                      (click)="openPropertyUrl(property, 'Airbnb')">
+                      <i class="fab fa-airbnb text-danger"></i>
+                      <span class="score-value">{{ property.Reviews.Airbnb.Last_Rev_Score }}</span>
+                    </div>
+                    <div class="review-item clickable" title="Click to visit VRBO property page"
+                      (click)="openPropertyUrl(property, 'VRBO')">
+                      <i class="fas fa-home text-warning"></i>
+                      <span class="score-value">{{ property.Reviews.VRBO.Last_Rev_Score }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td *ngIf="columnVisibility.lastRevenueDate">
+                  <div class="revenue-date-cell">
+                    <div class="date-item">
+                      <i class="fas fa-bed text-primary"></i>
+                      <span class="date-value">{{ property.Reviews.Booking.Last_Review_Date }}</span>
+                    </div>
+                    <div class="date-item">
+                      <i class="fab fa-airbnb text-danger"></i>
+                      <span class="date-value">{{ property.Reviews.Airbnb.Last_Review_Date }}</span>
+                    </div>
+                    <div class="date-item">
+                      <i class="fas fa-home text-warning"></i>
+                      <span class="date-value">{{ property.Reviews.VRBO.Last_Review_Date }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td *ngIf="columnVisibility.actions">
+                  <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-primary btn-sm" (click)="viewDetails(property)">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <!-- <button class="btn btn-outline-info btn-sm" (click)="compareProperty(property)">
+                    <i class="fas fa-balance-scale"></i>
+                  </button> -->
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+      </div>
+      <!-- Pagination -->
+      <div class="pagination-section" *ngIf="totalPages > 1">
+        <nav>
+          <ul class="pagination justify-content-center">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <a class="page-link" (click)="changePage(currentPage - 1)">Previous</a>
+            </li>
+            <li class="page-item" *ngFor="let page of getPageNumbers()" [class.active]="page === currentPage">
+              <a class="page-link" (click)="changePage(page)">{{ page }}</a>
+            </li>
+            <li class="page-item" [class.disabled]="currentPage === totalPages">
+              <a class="page-link" (click)="changePage(currentPage + 1)">Next</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Filter Modal -->
+    <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="filterModalLabel">
+              <i class="fas fa-filter me-2"></i>Filter Properties
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <!-- Filter Tabs -->
+            <ul class="nav nav-tabs mb-3" id="filterTabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic"
+                  type="button" role="tab" aria-controls="basic" aria-selected="true">Basic</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="occupancy-tab" data-bs-toggle="tab" data-bs-target="#occupancy"
+                  type="button" role="tab" aria-controls="occupancy" aria-selected="false">Occupancy</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="performance-tab" data-bs-toggle="tab" data-bs-target="#performance"
+                  type="button" role="tab" aria-controls="performance" aria-selected="false">Performance</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="platforms-tab" data-bs-toggle="tab" data-bs-target="#platforms"
+                  type="button" role="tab" aria-controls="platforms" aria-selected="false">Platforms</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button"
+                  role="tab" aria-controls="reviews" aria-selected="false">Reviews</button>
+              </li>
+
+            </ul>
+
+            <div class="tab-content" id="filterTabsContent">
+              <!-- Basic Filters Tab -->
+              <div class="tab-pane fade show active" id="basic" role="tabpanel" aria-labelledby="basic-tab">
+                <div class="row">
+                  <!-- Area Filter -->
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Area</label>
+                    <select class="form-select" [(ngModel)]="tempSelectedArea">
+                      <option value="">All Areas</option>
+                      <option *ngFor="let area of areas" [value]="area">{{ area }}</option>
+                    </select>
+                  </div>
+
+                  <!-- Room Type Filter -->
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Room Type</label>
+                    <select class="form-select" [(ngModel)]="tempSelectedRoomType">
+                      <option value="">All Types</option>
+                      <option *ngFor="let type of roomTypes" [value]="type">{{ type }}</option>
+                    </select>
+                  </div>
+
+                  <!-- ADR Range Filter -->
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">ADR Range (TM)</label>
+                    <div class="range-slider-container">
+                      <div class="range-values">
+                        <span class="min-value">${{ tempAdrMin || adrMinRange }}</span>
+                        <span class="max-value">${{ tempAdrMax || adrMaxRange }}</span>
+                      </div>
+                      <div class="dual-range-slider">
+                        <input type="range" [min]="adrMinRange" [max]="adrMaxRange" [value]="tempAdrMin || adrMinRange"
+                          (input)="onAdrMinChange($event)" class="range-min">
+                        <input type="range" [min]="adrMinRange" [max]="adrMaxRange" [value]="tempAdrMax || adrMaxRange"
+                          (input)="onAdrMaxChange($event)" class="range-max">
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- RevPAR Range Filter -->
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">RevPAR Range (TM)</label>
+                    <div class="range-slider-container">
+                      <div class="range-values">
+                        <span class="min-value">${{ tempRevparMin || revparMinRange }}</span>
+                        <span class="max-value">${{ tempRevparMax || revparMaxRange }}</span>
+                      </div>
+                      <div class="dual-range-slider">
+                        <input type="range" [min]="revparMinRange" [max]="revparMaxRange"
+                          [value]="tempRevparMin || revparMinRange" (input)="onRevparMinChange($event)"
+                          class="range-min">
+                        <input type="range" [min]="revparMinRange" [max]="revparMaxRange"
+                          [value]="tempRevparMax || revparMaxRange" (input)="onRevparMaxChange($event)"
+                          class="range-max">
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- MPI Range Filter -->
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">MPI Range</label>
+                    <div class="range-slider-container">
+                      <div class="range-values">
+                        <span class="min-value">{{ tempMpiMin || mpiMinRange }}%</span>
+                        <span class="max-value">{{ tempMpiMax || mpiMaxRange }}%</span>
+                      </div>
+                      <div class="dual-range-slider">
+                        <input type="range" [min]="mpiMinRange" [max]="mpiMaxRange" [value]="tempMpiMin || mpiMinRange"
+                          (input)="onMpiMinChange($event)" class="range-min">
+                        <input type="range" [min]="mpiMinRange" [max]="mpiMaxRange" [value]="tempMpiMax || mpiMaxRange"
+                          (input)="onMpiMaxChange($event)" class="range-max">
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Min Rate Threshold Filter -->
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Min Rate Threshold</label>
+                    <div class="range-slider-container">
+                      <div class="range-values">
+                        <span class="min-value">{{ tempMinRateThresholdMin || 0 }}%</span>
+                        <span class="max-value">{{ tempMinRateThresholdMax || 100 }}%</span>
+                      </div>
+                      <div class="dual-range-slider">
+                        <input type="range" min="0" max="100" [value]="tempMinRateThresholdMin || 0"
+                          (input)="onMinRateThresholdMinChange($event)" class="range-min">
+                        <input type="range" min="0" max="100" [value]="tempMinRateThresholdMax || 100"
+                          (input)="onMinRateThresholdMaxChange($event)" class="range-max">
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- Occupancy Filters Tab -->
+              <div class="tab-pane fade" id="occupancy" role="tabpanel" aria-labelledby="occupancy-tab">
+                <div class="row">
+                  <!-- Occupancy TM Range -->
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Occupancy TM Range</label>
+                    <div class="range-slider-container">
+                      <div class="range-values">
+                        <span class="min-value">{{ tempOccupancyTMMin || 0 }}%</span>
+                        <span class="max-value">{{ tempOccupancyTMMax || 100 }}%</span>
+                      </div>
+                      <div class="dual-range-slider">
+                        <input type="range" min="0" max="100" [value]="tempOccupancyTMMin || 0"
+                          (input)="onOccupancyTMMinChange($event)" class="range-min">
+                        <input type="range" min="0" max="100" [value]="tempOccupancyTMMax || 100"
+                          (input)="onOccupancyTMMaxChange($event)" class="range-max">
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Occupancy NM Range -->
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Occupancy NM Range</label>
+                    <div class="range-slider-container">
+                      <div class="range-values">
+                        <span class="min-value">{{ occupancyNMMin || 0 }}%</span>
+                        <span class="max-value">{{ occupancyNMMax || 100 }}%</span>
+                      </div>
+                      <div class="dual-range-slider">
+                        <input type="range" min="0" max="100" [value]="occupancyNMMin || 0"
+                          (input)="onOccupancyNMMinChange($event)" class="range-min">
+                        <input type="range" min="0" max="100" [value]="occupancyNMMax || 100"
+                          (input)="onOccupancyNMMaxChange($event)" class="range-max">
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Occupancy 7 Days Range -->
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Occupancy 7 Days Range</label>
+                    <div class="range-slider-container">
+                      <div class="range-values">
+                        <span class="min-value">{{ occupancy7DaysMin || 0 }}%</span>
+                        <span class="max-value">{{ occupancy7DaysMax || 100 }}%</span>
+                      </div>
+                      <div class="dual-range-slider">
+                        <input type="range" min="0" max="100" [value]="occupancy7DaysMin || 0"
+                          (input)="onOccupancy7DaysMinChange($event)" class="range-min">
+                        <input type="range" min="0" max="100" [value]="occupancy7DaysMax || 100"
+                          (input)="onOccupancy7DaysMaxChange($event)" class="range-max">
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Occupancy 30 Days Range -->
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Occupancy 30 Days Range</label>
+                    <div class="range-slider-container">
+                      <div class="range-values">
+                        <span class="min-value">{{ occupancy30DaysMin || 0 }}%</span>
+                        <span class="max-value">{{ occupancy30DaysMax || 100 }}%</span>
+                      </div>
+                      <div class="dual-range-slider">
+                        <input type="range" min="0" max="100" [value]="occupancy30DaysMin || 0"
+                          (input)="onOccupancy30DaysMinChange($event)" class="range-min">
+                        <input type="range" min="0" max="100" [value]="occupancy30DaysMax || 100"
+                          (input)="onOccupancy30DaysMaxChange($event)" class="range-max">
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Pick Up Occupancy 7 Days -->
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Pick Up Occ 7 Days Range</label>
+                    <div class="range-slider-container">
+                      <div class="range-values">
+                        <span class="min-value">{{ pickUpOcc7DaysMin || 0 }}%</span>
+                        <span class="max-value">{{ pickUpOcc7DaysMax || 100 }}%</span>
+                      </div>
+                      <div class="dual-range-slider">
+                        <input type="range" min="0" max="100" [value]="pickUpOcc7DaysMin || 0"
+                          (input)="onPickUpOcc7DaysMinChange($event)" class="range-min">
+                        <input type="range" min="0" max="100" [value]="pickUpOcc7DaysMax || 100"
+                          (input)="onPickUpOcc7DaysMaxChange($event)" class="range-max">
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Pick Up Occupancy 14 Days -->
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Pick Up Occ 14 Days Range</label>
+                    <div class="range-slider-container">
+                      <div class="range-values">
+                        <span class="min-value">{{ pickUpOcc14DaysMin || 0 }}%</span>
+                        <span class="max-value">{{ pickUpOcc14DaysMax || 100 }}%</span>
+                      </div>
+                      <div class="dual-range-slider">
+                        <input type="range" min="0" max="100" [value]="pickUpOcc14DaysMin || 0"
+                          (input)="onPickUpOcc14DaysMinChange($event)" class="range-min">
+                        <input type="range" min="0" max="100" [value]="pickUpOcc14DaysMax || 100"
+                          (input)="onPickUpOcc14DaysMaxChange($event)" class="range-max">
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Pick Up Occupancy 30 Days -->
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Pick Up Occ 30 Days Range</label>
+                    <div class="range-slider-container">
+                      <div class="range-values">
+                        <span class="min-value">{{ pickUpOcc30DaysMin || 0 }}%</span>
+                        <span class="max-value">{{ pickUpOcc30DaysMax || 100 }}%</span>
+                      </div>
+                      <div class="dual-range-slider">
+                        <input type="range" min="0" max="100" [value]="pickUpOcc30DaysMin || 0"
+                          (input)="onPickUpOcc30DaysMinChange($event)" class="range-min">
+                        <input type="range" min="0" max="100" [value]="pickUpOcc30DaysMax || 100"
+                          (input)="onPickUpOcc30DaysMaxChange($event)" class="range-max">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Performance Filters Tab -->
+              <div class="tab-pane fade" id="performance" role="tabpanel" aria-labelledby="performance-tab">
+                <div class="row">
+                  <!-- STLY Var Occupancy -->
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">STLY Var Occupancy Range</label>
+                    <div class="range-slider-container">
+                      <div class="range-values">
+                        <span class="min-value">{{ stlyVarOccMin || stlyVarOccMinRange }}%</span>
+                        <span class="max-value">{{ stlyVarOccMax || stlyVarOccMaxRange }}%</span>
+                      </div>
+                      <div class="dual-range-slider">
+                        <input type="range" [min]="stlyVarOccMinRange" [max]="stlyVarOccMaxRange"
+                          [value]="stlyVarOccMin || stlyVarOccMinRange" (input)="onStlyVarOccMinChange($event)"
+                          class="range-min">
+                        <input type="range" [min]="stlyVarOccMinRange" [max]="stlyVarOccMaxRange"
+                          [value]="stlyVarOccMax || stlyVarOccMaxRange" (input)="onStlyVarOccMaxChange($event)"
+                          class="range-max">
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- STLY Var ADR -->
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">STLY Var ADR Range</label>
+                    <div class="range-slider-container">
+                      <div class="range-values">
+                        <span class="min-value">{{ stlyVarADRMin || stlyVarADRMinRange }}%</span>
+                        <span class="max-value">{{ stlyVarADRMax || stlyVarADRMaxRange }}%</span>
+                      </div>
+                      <div class="dual-range-slider">
+                        <input type="range" [min]="stlyVarADRMinRange" [max]="stlyVarADRMaxRange"
+                          [value]="stlyVarADRMin || stlyVarADRMinRange" (input)="onStlyVarADRMinChange($event)"
+                          class="range-min">
+                        <input type="range" [min]="stlyVarADRMinRange" [max]="stlyVarADRMaxRange"
+                          [value]="stlyVarADRMax || stlyVarADRMaxRange" (input)="onStlyVarADRMaxChange($event)"
+                          class="range-max">
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- STLY Var RevPAR -->
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">STLY Var RevPAR Range</label>
+                    <div class="range-slider-container">
+                      <div class="range-values">
+                        <span class="min-value">{{ stlyVarRevPARMin || stlyVarRevPARMinRange }}%</span>
+                        <span class="max-value">{{ stlyVarRevPARMax || stlyVarRevPARMaxRange }}%</span>
+                      </div>
+                      <div class="dual-range-slider">
+                        <input type="range" [min]="stlyVarRevPARMinRange" [max]="stlyVarRevPARMaxRange"
+                          [value]="stlyVarRevPARMin || stlyVarRevPARMinRange" (input)="onStlyVarRevPARMinChange($event)"
+                          class="range-min">
+                        <input type="range" [min]="stlyVarRevPARMinRange" [max]="stlyVarRevPARMaxRange"
+                          [value]="stlyVarRevPARMax || stlyVarRevPARMaxRange" (input)="onStlyVarRevPARMaxChange($event)"
+                          class="range-max">
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- STLM Var Occupancy -->
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">STLM Var Occupancy Range</label>
+                    <div class="range-slider-container">
+                      <div class="range-values">
+                        <span class="min-value">{{ stlmVarOccMin || stlmVarOccMinRange }}%</span>
+                        <span class="max-value">{{ stlmVarOccMax || stlmVarOccMaxRange }}%</span>
+                      </div>
+                      <div class="dual-range-slider">
+                        <input type="range" [min]="stlmVarOccMinRange" [max]="stlmVarOccMaxRange"
+                          [value]="stlmVarOccMin || stlmVarOccMinRange" (input)="onStlmVarOccMinChange($event)"
+                          class="range-min">
+                        <input type="range" [min]="stlmVarOccMinRange" [max]="stlmVarOccMaxRange"
+                          [value]="stlmVarOccMax || stlmVarOccMaxRange" (input)="onStlmVarOccMaxChange($event)"
+                          class="range-max">
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- STLM Var ADR -->
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">STLM Var ADR Range</label>
+                    <div class="range-slider-container">
+                      <div class="range-values">
+                        <span class="min-value">{{ stlmVarADRMin || stlmVarADRMinRange }}%</span>
+                        <span class="max-value">{{ stlmVarADRMax || stlmVarADRMaxRange }}%</span>
+                      </div>
+                      <div class="dual-range-slider">
+                        <input type="range" [min]="stlmVarADRMinRange" [max]="stlmVarADRMaxRange"
+                          [value]="stlmVarADRMin || stlmVarADRMinRange" (input)="onStlmVarADRMinChange($event)"
+                          class="range-min">
+                        <input type="range" [min]="stlmVarADRMinRange" [max]="stlmVarADRMaxRange"
+                          [value]="stlmVarADRMax || stlmVarADRMaxRange" (input)="onStlmVarADRMaxChange($event)"
+                          class="range-max">
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- STLM Var RevPAR -->
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">STLM Var RevPAR Range</label>
+                    <div class="range-slider-container">
+                      <div class="range-values">
+                        <span class="min-value">{{ stlmVarRevPARMin || stlmVarRevPARMinRange }}%</span>
+                        <span class="max-value">{{ stlmVarRevPARMax || stlmVarRevPARMaxRange }}%</span>
+                      </div>
+                      <div class="dual-range-slider">
+                        <input type="range" [min]="stlmVarRevPARMinRange" [max]="stlmVarRevPARMaxRange"
+                          [value]="stlmVarRevPARMin || stlmVarRevPARMinRange" (input)="onStlmVarRevPARMinChange($event)"
+                          class="range-min">
+                        <input type="range" [min]="stlmVarRevPARMinRange" [max]="stlmVarRevPARMaxRange"
+                          [value]="stlmVarRevPARMax || stlmVarRevPARMaxRange" (input)="onStlmVarRevPARMaxChange($event)"
+                          class="range-max">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Platform Filters Tab -->
+              <div class="tab-pane fade" id="platforms" role="tabpanel" aria-labelledby="platforms-tab">
+                <div class="row">
+                  <!-- Booking.com Filters -->
+                  <div class="col-12 mb-3">
+                    <h6 class="fw-bold text-primary">Booking.com Features</h6>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <div class="slider-container">
+                      <label class="slider-label">Genius Program</label>
+                      <div class="three-point-slider"
+                        (click)="onThreePointSliderChange('bookingGenius', getNextSliderValue(tempBookingGeniusFilter))">
+                        <div class="slider-track"></div>
+                        <div class="slider-thumb" [class]="tempBookingGeniusFilter">
+                          {{ getSliderDisplayValue(tempBookingGeniusFilter) }}
+                        </div>
+                        <div class="slider-labels">
+                          <span class="label not-present" [class.active]="tempBookingGeniusFilter === 'not-present'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('bookingGenius', 'not-present')"></span>
+                          <span class="label no" [class.active]="tempBookingGeniusFilter === 'no'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('bookingGenius', 'no')"></span>
+                          <span class="label yes" [class.active]="tempBookingGeniusFilter === 'yes'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('bookingGenius', 'yes')"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <div class="slider-container">
+                      <label class="slider-label">Mobile Deals</label>
+                      <div class="three-point-slider"
+                        (click)="onThreePointSliderChange('bookingMobile', getNextSliderValue(tempBookingMobileFilter))">
+                        <div class="slider-track"></div>
+                        <div class="slider-thumb" [class]="tempBookingMobileFilter">{{
+                          getSliderDisplayValue(tempBookingMobileFilter) }}</div>
+                        <div class="slider-labels">
+                          <span class="label not-present" [class.active]="tempBookingMobileFilter === 'not-present'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('bookingMobile', 'not-present')"></span>
+                          <span class="label no" [class.active]="tempBookingMobileFilter === 'no'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('bookingMobile', 'no')"></span>
+                          <span class="label yes" [class.active]="tempBookingMobileFilter === 'yes'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('bookingMobile', 'yes')"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <div class="slider-container">
+                      <label class="slider-label">Preferred Partner</label>
+                      <div class="three-point-slider"
+                        (click)="onThreePointSliderChange('bookingPref', getNextSliderValue(tempBookingPrefFilter))">
+                        <div class="slider-track"></div>
+                        <div class="slider-thumb" [class]="tempBookingPrefFilter">{{
+                          getSliderDisplayValue(tempBookingPrefFilter) }}</div>
+                        <div class="slider-labels">
+                          <span class="label not-present" [class.active]="tempBookingPrefFilter === 'not-present'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('bookingPref', 'not-present')"></span>
+                          <span class="label no" [class.active]="tempBookingPrefFilter === 'no'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('bookingPref', 'no')"></span>
+                          <span class="label yes" [class.active]="tempBookingPrefFilter === 'yes'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('bookingPref', 'yes')"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <div class="slider-container">
+                      <label class="slider-label">Weekly Discounts</label>
+                      <div class="three-point-slider"
+                        (click)="onThreePointSliderChange('bookingWeekly', getNextSliderValue(tempBookingWeeklyFilter))">
+                        <div class="slider-track"></div>
+                        <div class="slider-thumb" [class]="tempBookingWeeklyFilter">{{
+                          getSliderDisplayValue(tempBookingWeeklyFilter) }}</div>
+                        <div class="slider-labels">
+                          <span class="label not-present" [class.active]="tempBookingWeeklyFilter === 'not-present'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('bookingWeekly', 'not-present')"></span>
+                          <span class="label no" [class.active]="tempBookingWeeklyFilter === 'no'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('bookingWeekly', 'no')"></span>
+                          <span class="label yes" [class.active]="tempBookingWeeklyFilter === 'yes'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('bookingWeekly', 'yes')"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <div class="slider-container">
+                      <label class="slider-label">Monthly Discounts</label>
+                      <div class="three-point-slider"
+                        (click)="onThreePointSliderChange('bookingMonthly', getNextSliderValue(tempBookingMonthlyFilter))">
+                        <div class="slider-track"></div>
+                        <div class="slider-thumb" [class]="tempBookingMonthlyFilter">{{
+                          getSliderDisplayValue(tempBookingMonthlyFilter) }}</div>
+                        <div class="slider-labels">
+                          <span class="label not-present" [class.active]="tempBookingMonthlyFilter === 'not-present'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('bookingMonthly', 'not-present')"></span>
+                          <span class="label no" [class.active]="tempBookingMonthlyFilter === 'no'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('bookingMonthly', 'no')"></span>
+                          <span class="label yes" [class.active]="tempBookingMonthlyFilter === 'yes'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('bookingMonthly', 'yes')"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <div class="slider-container">
+                      <label class="slider-label">Last Minute Discount</label>
+                      <div class="three-point-slider"
+                        (click)="onThreePointSliderChange('bookingLMDisc', getNextSliderValue(tempBookingLMDiscFilter))">
+                        <div class="slider-track"></div>
+                        <div class="slider-thumb" [class]="tempBookingLMDiscFilter">{{
+                          getSliderDisplayValue(tempBookingLMDiscFilter) }}</div>
+                        <div class="slider-labels">
+                          <span class="label not-present" [class.active]="tempBookingLMDiscFilter === 'not-present'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('bookingLMDisc', 'not-present')"></span>
+                          <span class="label no" [class.active]="tempBookingLMDiscFilter === 'no'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('bookingLMDisc', 'no')"></span>
+                          <span class="label yes" [class.active]="tempBookingLMDiscFilter === 'yes'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('bookingLMDisc', 'yes')"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Airbnb Filters -->
+                  <div class="col-12 mb-3 mt-4">
+                    <h6 class="fw-bold text-danger">Airbnb Features</h6>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <div class="slider-container">
+                      <label class="slider-label">Weekly Discounts</label>
+                      <div class="three-point-slider"
+                        (click)="onThreePointSliderChange('airbnbWeekly', getNextSliderValue(tempAirbnbWeeklyFilter))">
+                        <div class="slider-track"></div>
+                        <div class="slider-thumb" [class]="tempAirbnbWeeklyFilter">{{
+                          getSliderDisplayValue(tempAirbnbWeeklyFilter) }}</div>
+                        <div class="slider-labels">
+                          <span class="label not-present" [class.active]="tempAirbnbWeeklyFilter === 'not-present'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbWeekly', 'not-present')"></span>
+                          <span class="label no" [class.active]="tempAirbnbWeeklyFilter === 'no'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbWeekly', 'no')"></span>
+                          <span class="label yes" [class.active]="tempAirbnbWeeklyFilter === 'yes'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbWeekly', 'yes')"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <div class="slider-container">
+                      <label class="slider-label">Monthly Discounts</label>
+                      <div class="three-point-slider"
+                        (click)="onThreePointSliderChange('airbnbMonthly', getNextSliderValue(tempAirbnbMonthlyFilter))">
+                        <div class="slider-track"></div>
+                        <div class="slider-thumb" [class]="tempAirbnbMonthlyFilter">{{
+                          getSliderDisplayValue(tempAirbnbMonthlyFilter) }}</div>
+                        <div class="slider-labels">
+                          <span class="label not-present" [class.active]="tempAirbnbMonthlyFilter === 'not-present'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbMonthly', 'not-present')"></span>
+                          <span class="label no" [class.active]="tempAirbnbMonthlyFilter === 'no'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbMonthly', 'no')"></span>
+                          <span class="label yes" [class.active]="tempAirbnbMonthlyFilter === 'yes'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbMonthly', 'yes')"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <div class="slider-container">
+                      <label class="slider-label">Member Discount</label>
+                      <div class="three-point-slider"
+                        (click)="onThreePointSliderChange('airbnbMember', getNextSliderValue(tempAirbnbMemberFilter))">
+                        <div class="slider-track"></div>
+                        <div class="slider-thumb" [class]="tempAirbnbMemberFilter">{{
+                          getSliderDisplayValue(tempAirbnbMemberFilter) }}</div>
+                        <div class="slider-labels">
+                          <span class="label not-present" [class.active]="tempAirbnbMemberFilter === 'not-present'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbMember', 'not-present')"></span>
+                          <span class="label no" [class.active]="tempAirbnbMemberFilter === 'no'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbMember', 'no')"></span>
+                          <span class="label yes" [class.active]="tempAirbnbMemberFilter === 'yes'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbMember', 'yes')"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <div class="slider-container">
+                      <label class="slider-label">Last Minute Discount</label>
+                      <div class="three-point-slider"
+                        (click)="onThreePointSliderChange('airbnbLMDisc', getNextSliderValue(tempAirbnbLMDiscFilter))">
+                        <div class="slider-track"></div>
+                        <div class="slider-thumb" [class]="tempAirbnbLMDiscFilter">{{
+                          getSliderDisplayValue(tempAirbnbLMDiscFilter) }}</div>
+                        <div class="slider-labels">
+                          <span class="label not-present" [class.active]="tempAirbnbLMDiscFilter === 'not-present'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbLMDisc', 'not-present')"></span>
+                          <span class="label no" [class.active]="tempAirbnbLMDiscFilter === 'no'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbLMDisc', 'no')"></span>
+                          <span class="label yes" [class.active]="tempAirbnbLMDiscFilter === 'yes'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbLMDisc', 'yes')"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- VRBO Filters -->
+                  <div class="col-12 mb-3 mt-4">
+                    <h6 class="fw-bold text-warning">VRBO Features</h6>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <div class="slider-container">
+                      <label class="slider-label">Weekly Discounts</label>
+                      <div class="three-point-slider"
+                        (click)="onThreePointSliderChange('vrboWeekly', getNextSliderValue(tempVrboWeeklyFilter))">
+                        <div class="slider-track"></div>
+                        <div class="slider-thumb" [class]="tempVrboWeeklyFilter">{{
+                          getSliderDisplayValue(tempVrboWeeklyFilter) }}</div>
+                        <div class="slider-labels">
+                          <span class="label not-present" [class.active]="tempVrboWeeklyFilter === 'not-present'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('vrboWeekly', 'not-present')"></span>
+                          <span class="label no" [class.active]="tempVrboWeeklyFilter === 'no'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('vrboWeekly', 'no')"></span>
+                          <span class="label yes" [class.active]="tempVrboWeeklyFilter === 'yes'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('vrboWeekly', 'yes')"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <div class="slider-container">
+                      <label class="slider-label">Monthly Discounts</label>
+                      <div class="three-point-slider"
+                        (click)="onThreePointSliderChange('vrboMonthly', getNextSliderValue(tempVrboMonthlyFilter))">
+                        <div class="slider-track"></div>
+                        <div class="slider-thumb" [class]="tempVrboMonthlyFilter">{{
+                          getSliderDisplayValue(tempVrboMonthlyFilter) }}</div>
+                        <div class="slider-labels">
+                          <span class="label not-present" [class.active]="tempVrboMonthlyFilter === 'not-present'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('vrboMonthly', 'not-present')"></span>
+                          <span class="label no" [class.active]="tempVrboMonthlyFilter === 'no'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('vrboMonthly', 'no')"></span>
+                          <span class="label yes" [class.active]="tempVrboMonthlyFilter === 'yes'"
+                            (click)="$event.stopPropagation(); onThreePointSliderChange('vrboMonthly', 'yes')"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Reviews Filters Tab -->
+              <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+                <div class="row">
+                  <!-- Booking Reviews -->
+                  <div class="col-12 mb-3">
+                    <h6 class="fw-bold text-primary">Booking.com Reviews</h6>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Review Score Range</label>
+                    <div class="range-slider-container">
+                      <div class="range-values">
+                        <span class="min-value">{{ tempBookingRevScoreMin || 0 }}</span>
+                        <span class="max-value">{{ tempBookingRevScoreMax || 10 }}</span>
+                      </div>
+                      <div class="dual-range-slider">
+                        <input type="range" min="0" max="10" step="0.1" [value]="tempBookingRevScoreMin || 0"
+                          (input)="onBookingRevScoreMinChange($event)" class="range-min">
+                        <input type="range" min="0" max="10" step="0.1" [value]="tempBookingRevScoreMax || 10"
+                          (input)="onBookingRevScoreMaxChange($event)" class="range-max">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Total Reviews Range</label>
+                    <div class="range-slider-container">
+                      <div class="range-values">
+                        <span class="min-value">{{ tempBookingTotalRevMin || bookingTotalRevMinRange }}</span>
+                        <span class="max-value">{{ tempBookingTotalRevMax || bookingTotalRevMaxRange }}</span>
+                      </div>
+                      <div class="dual-range-slider">
+                        <input type="range" [min]="bookingTotalRevMinRange" [max]="bookingTotalRevMaxRange"
+                          [value]="tempBookingTotalRevMin || bookingTotalRevMinRange"
+                          (input)="onBookingTotalRevMinChange($event)" class="range-min">
+                        <input type="range" [min]="bookingTotalRevMinRange" [max]="bookingTotalRevMaxRange"
+                          [value]="tempBookingTotalRevMax || bookingTotalRevMaxRange"
+                          (input)="onBookingTotalRevMaxChange($event)" class="range-max">
+                      </div>
+                    </div>
                   </div>
 
                   <!-- Airbnb Reviews -->
-                  <div class="review-item clickable" *ngIf="property.Reviews.Airbnb.Rev_Score"
-                    title="Airbnb: {{ property.Reviews.Airbnb.Rev_Score }}/5 ({{ property.Reviews.Airbnb.Total_Rev }} reviews) - Click to visit property"
-                    (click)="openPropertyUrl(property, 'Airbnb')">
-                    <i class="fab fa-airbnb text-danger"></i>
-                    <div class="stars">
-                      <i *ngFor="let star of getStarArray(property.Reviews.Airbnb.Rev_Score, 5)" class="fas fa-star"
-                        [ngClass]="star.filled ? 'star-filled' : 'star-empty'"></i>
+                  <div class="col-12 mb-3 mt-4">
+                    <h6 class="fw-bold text-danger">Airbnb Reviews</h6>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Review Score Range</label>
+                    <div class="range-slider-container">
+                      <div class="range-values">
+                        <span class="min-value">{{ tempAirbnbRevScoreMin || 0 }}</span>
+                        <span class="max-value">{{ tempAirbnbRevScoreMax || 5 }}</span>
+                      </div>
+                      <div class="dual-range-slider">
+                        <input type="range" min="0" max="5" step="0.1" [value]="tempAirbnbRevScoreMin || 0"
+                          (input)="onAirbnbRevScoreMinChange($event)" class="range-min">
+                        <input type="range" min="0" max="5" step="0.1" [value]="tempAirbnbRevScoreMax || 5"
+                          (input)="onAirbnbRevScoreMaxChange($event)" class="range-max">
+                      </div>
                     </div>
-                    <span class="rating-text">{{ property.Reviews.Airbnb.Rev_Score }}</span>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Total Reviews Range</label>
+                    <div class="range-slider-container">
+                      <div class="range-values">
+                        <span class="min-value">{{ tempAirbnbTotalRevMin || airbnbTotalRevMinRange }}</span>
+                        <span class="max-value">{{ tempAirbnbTotalRevMax || airbnbTotalRevMaxRange }}</span>
+                      </div>
+                      <div class="dual-range-slider">
+                        <input type="range" [min]="airbnbTotalRevMinRange" [max]="airbnbTotalRevMaxRange"
+                          [value]="tempAirbnbTotalRevMin || airbnbTotalRevMinRange"
+                          (input)="onAirbnbTotalRevMinChange($event)" class="range-min">
+                        <input type="range" [min]="airbnbTotalRevMinRange" [max]="airbnbTotalRevMaxRange"
+                          [value]="tempAirbnbTotalRevMax || airbnbTotalRevMaxRange"
+                          (input)="onAirbnbTotalRevMaxChange($event)" class="range-max">
+                      </div>
+                    </div>
                   </div>
 
                   <!-- VRBO Reviews -->
-                  <div class="review-item clickable" *ngIf="property.Reviews.VRBO.Rev_Score"
-                    title="VRBO: {{ property.Reviews.VRBO.Rev_Score }}/5 ({{ property.Reviews.VRBO.Total_Rev }} reviews) - Click to visit property"
-                    (click)="openPropertyUrl(property, 'VRBO')">
-                    <i class="fas fa-home text-warning"></i>
-                    <div class="stars">
-                      <i *ngFor="let star of getStarArray(property.Reviews.VRBO.Rev_Score, 5)" class="fas fa-star"
-                        [ngClass]="star.filled ? 'star-filled' : 'star-empty'"></i>
-                    </div>
-                    <span class="rating-text">{{ property.Reviews.VRBO.Rev_Score }}</span>
+                  <div class="col-12 mb-3 mt-4">
+                    <h6 class="fw-bold text-warning">VRBO Reviews</h6>
                   </div>
-                </div>
-              </td>
-              <td *ngIf="columnVisibility.cxlPolicy">
-                <div class="cxl-policy-cell">
-                  <div class="policy-item" *ngIf="property.CXL_Policy.Booking">
-                    <i class="fas fa-bed text-primary"></i>
-                    <span class="policy-text">{{ property.CXL_Policy.Booking }}</span>
-                  </div>
-                  <div class="policy-item" *ngIf="property.CXL_Policy.Airbnb">
-                    <i class="fab fa-airbnb text-danger"></i>
-                    <span class="policy-text">{{ property.CXL_Policy.Airbnb }}</span>
-                  </div>
-                  <div class="policy-item" *ngIf="property.CXL_Policy.VRBO">
-                    <i class="fas fa-home text-warning"></i>
-                    <span class="policy-text">{{ property.CXL_Policy.VRBO }}</span>
-                  </div>
-                </div>
-              </td>
-              <td *ngIf="columnVisibility.adultChildConfig">
-                <div class="adult-child-config-cell">
-                  <div class="config-item" *ngIf="property.Adult_Child_Config.Booking">
-                    <i class="fas fa-bed text-primary"></i>
-                    <span class="config-text">{{ property.Adult_Child_Config.Booking }}</span>
-                  </div>
-                  <div class="config-item" *ngIf="property.Adult_Child_Config.Airbnb">
-                    <i class="fab fa-airbnb text-danger"></i>
-                    <span class="config-text">{{ property.Adult_Child_Config.Airbnb }}</span>
-                  </div>
-                  <div class="config-item" *ngIf="property.Adult_Child_Config.VRBO">
-                    <i class="fas fa-home text-warning"></i>
-                    <span class="config-text">{{ property.Adult_Child_Config.VRBO }}</span>
-                  </div>
-                </div>
-              </td>
-              <td *ngIf="columnVisibility.pickupOcc">
-                <div class="pickup-occ-cell">
-                  <div class="pickup-item">
-                    <span class="pickup-label">7D:</span>
-                    <span class="pickup-value">{{ property.Pick_Up_Occ['7_Days'] }}</span>
-                  </div>
-                  <div class="pickup-item">
-                    <span class="pickup-label">14D:</span>
-                    <span class="pickup-value">{{ property.Pick_Up_Occ['14_Days'] }}</span>
-                  </div>
-                  <div class="pickup-item">
-                    <span class="pickup-label">30D:</span>
-                    <span class="pickup-value">{{ property.Pick_Up_Occ['30_Days'] }}</span>
-                  </div>
-                </div>
-              </td>
-              <td *ngIf="columnVisibility.minRateThreshold">
-                <div class="min-rate-threshold-cell">
-                  <span class="threshold-value">{{ property.Min_Rate_Threshold }}</span>
-                </div>
-              </td>
-              <td *ngIf="columnVisibility.stlyVarOcc">
-                <div class="stly-var-single-cell">
-                  <span class="badge" [ngClass]="getPerformanceClass(property.STLY_Var.Occ)">
-                    {{ property.STLY_Var.Occ }}
-                  </span>
-                </div>
-              </td>
-              <td *ngIf="columnVisibility.stlyVarRevPAR">
-                <div class="stly-var-single-cell">
-                  <span class="badge" [ngClass]="getPerformanceClass(property.STLY_Var.RevPAR)">
-                    {{ property.STLY_Var.RevPAR }}
-                  </span>
-                </div>
-              </td>
-              <td *ngIf="columnVisibility.lastReviewScore">
-                <div class="review-score-cell">
-                  <div class="review-item clickable" 
-                    title="Click to visit Booking.com property page"
-                    (click)="openPropertyUrl(property, 'Booking')">
-                    <i class="fas fa-bed text-primary"></i>
-                    <span class="score-value">{{ property.Reviews.Booking.Last_Rev_Score }}</span>
-                  </div>
-                  <div class="review-item clickable"
-                    title="Click to visit Airbnb property page"
-                    (click)="openPropertyUrl(property, 'Airbnb')">
-                    <i class="fab fa-airbnb text-danger"></i>
-                    <span class="score-value">{{ property.Reviews.Airbnb.Last_Rev_Score }}</span>
-                  </div>
-                  <div class="review-item clickable"
-                    title="Click to visit VRBO property page"
-                    (click)="openPropertyUrl(property, 'VRBO')">
-                    <i class="fas fa-home text-warning"></i>
-                    <span class="score-value">{{ property.Reviews.VRBO.Last_Rev_Score }}</span>
-                  </div>
-                </div>
-              </td>
-              <td *ngIf="columnVisibility.lastRevenueDate">
-                <div class="revenue-date-cell">
-                  <div class="date-item">
-                    <i class="fas fa-bed text-primary"></i>
-                    <span class="date-value">{{ property.Reviews.Booking.Last_Review_Date }}</span>
-                  </div>
-                  <div class="date-item">
-                    <i class="fab fa-airbnb text-danger"></i>
-                    <span class="date-value">{{ property.Reviews.Airbnb.Last_Review_Date }}</span>
-                  </div>
-                  <div class="date-item">
-                    <i class="fas fa-home text-warning"></i>
-                    <span class="date-value">{{ property.Reviews.VRBO.Last_Review_Date }}</span>
-                  </div>
-                </div>
-              </td>
-              <td *ngIf="columnVisibility.actions">
-                <div class="btn-group btn-group-sm">
-                  <button class="btn btn-outline-primary btn-sm" (click)="viewDetails(property)">
-                    <i class="fas fa-eye"></i>
-                  </button>
-                  <!-- <button class="btn btn-outline-info btn-sm" (click)="compareProperty(property)">
-                    <i class="fas fa-balance-scale"></i>
-                  </button> -->
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-     
-  </div>
-   <!-- Pagination -->
-   <div class="pagination-section" *ngIf="totalPages > 1">
-    <nav>
-      <ul class="pagination justify-content-center">
-        <li class="page-item" [class.disabled]="currentPage === 1">
-          <a class="page-link" (click)="changePage(currentPage - 1)">Previous</a>
-        </li>
-        <li class="page-item" *ngFor="let page of getPageNumbers()" [class.active]="page === currentPage">
-          <a class="page-link" (click)="changePage(page)">{{ page }}</a>
-        </li>
-        <li class="page-item" [class.disabled]="currentPage === totalPages">
-          <a class="page-link" (click)="changePage(currentPage + 1)">Next</a>
-        </li>
-      </ul>
-    </nav>
-  </div>
-</div>
-
-  <!-- Filter Modal -->
-  <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="filterModalLabel">
-            <i class="fas fa-filter me-2"></i>Filter Properties
-          </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <!-- Filter Tabs -->
-          <ul class="nav nav-tabs mb-3" id="filterTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-              <button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic" type="button"
-                role="tab" aria-controls="basic" aria-selected="true">Basic</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="occupancy-tab" data-bs-toggle="tab" data-bs-target="#occupancy" type="button"
-                role="tab" aria-controls="occupancy" aria-selected="false">Occupancy</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="performance-tab" data-bs-toggle="tab" data-bs-target="#performance"
-                type="button" role="tab" aria-controls="performance" aria-selected="false">Performance</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="platforms-tab" data-bs-toggle="tab" data-bs-target="#platforms" type="button"
-                role="tab" aria-controls="platforms" aria-selected="false">Platforms</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button"
-                role="tab" aria-controls="reviews" aria-selected="false">Reviews</button>
-            </li>
-
-          </ul>
-
-          <div class="tab-content" id="filterTabsContent">
-            <!-- Basic Filters Tab -->
-            <div class="tab-pane fade show active" id="basic" role="tabpanel" aria-labelledby="basic-tab">
-              <div class="row">
-                <!-- Area Filter -->
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Area</label>
-                  <select class="form-select" [(ngModel)]="tempSelectedArea">
-                    <option value="">All Areas</option>
-                    <option *ngFor="let area of areas" [value]="area">{{ area }}</option>
-                  </select>
-                </div>
-
-                <!-- Room Type Filter -->
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Room Type</label>
-                  <select class="form-select" [(ngModel)]="tempSelectedRoomType">
-                    <option value="">All Types</option>
-                    <option *ngFor="let type of roomTypes" [value]="type">{{ type }}</option>
-                  </select>
-                </div>
-
-                <!-- ADR Range Filter -->
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">ADR Range (TM)</label>
-                  <div class="range-slider-container">
-                    <div class="range-values">
-                      <span class="min-value">${{ tempAdrMin || adrMinRange }}</span>
-                      <span class="max-value">${{ tempAdrMax || adrMaxRange }}</span>
-                    </div>
-                    <div class="dual-range-slider">
-                      <input type="range" [min]="adrMinRange" [max]="adrMaxRange" [value]="tempAdrMin || adrMinRange"
-                        (input)="onAdrMinChange($event)" class="range-min">
-                      <input type="range" [min]="adrMinRange" [max]="adrMaxRange" [value]="tempAdrMax || adrMaxRange"
-                        (input)="onAdrMaxChange($event)" class="range-max">
-                    </div>
-                  </div>
-                </div>
-
-                <!-- RevPAR Range Filter -->
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">RevPAR Range (TM)</label>
-                  <div class="range-slider-container">
-                    <div class="range-values">
-                      <span class="min-value">${{ tempRevparMin || revparMinRange }}</span>
-                      <span class="max-value">${{ tempRevparMax || revparMaxRange }}</span>
-                    </div>
-                    <div class="dual-range-slider">
-                      <input type="range" [min]="revparMinRange" [max]="revparMaxRange"
-                        [value]="tempRevparMin || revparMinRange" (input)="onRevparMinChange($event)" class="range-min">
-                      <input type="range" [min]="revparMinRange" [max]="revparMaxRange"
-                        [value]="tempRevparMax || revparMaxRange" (input)="onRevparMaxChange($event)" class="range-max">
-                    </div>
-                  </div>
-                </div>
-
-                <!-- MPI Range Filter -->
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">MPI Range</label>
-                  <div class="range-slider-container">
-                    <div class="range-values">
-                      <span class="min-value">{{ tempMpiMin || mpiMinRange }}%</span>
-                      <span class="max-value">{{ tempMpiMax || mpiMaxRange }}%</span>
-                    </div>
-                    <div class="dual-range-slider">
-                      <input type="range" [min]="mpiMinRange" [max]="mpiMaxRange" [value]="tempMpiMin || mpiMinRange"
-                        (input)="onMpiMinChange($event)" class="range-min">
-                      <input type="range" [min]="mpiMinRange" [max]="mpiMaxRange" [value]="tempMpiMax || mpiMaxRange"
-                        (input)="onMpiMaxChange($event)" class="range-max">
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Min Rate Threshold Filter -->
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Min Rate Threshold</label>
-                  <div class="range-slider-container">
-                    <div class="range-values">
-                      <span class="min-value">{{ tempMinRateThresholdMin || 0 }}%</span>
-                      <span class="max-value">{{ tempMinRateThresholdMax || 100 }}%</span>
-                    </div>
-                    <div class="dual-range-slider">
-                      <input type="range" min="0" max="100" [value]="tempMinRateThresholdMin || 0"
-                        (input)="onMinRateThresholdMinChange($event)" class="range-min">
-                      <input type="range" min="0" max="100" [value]="tempMinRateThresholdMax || 100"
-                        (input)="onMinRateThresholdMaxChange($event)" class="range-max">
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
-            <!-- Occupancy Filters Tab -->
-            <div class="tab-pane fade" id="occupancy" role="tabpanel" aria-labelledby="occupancy-tab">
-              <div class="row">
-                <!-- Occupancy TM Range -->
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Occupancy TM Range</label>
-                  <div class="range-slider-container">
-                    <div class="range-values">
-                      <span class="min-value">{{ tempOccupancyTMMin || 0 }}%</span>
-                      <span class="max-value">{{ tempOccupancyTMMax || 100 }}%</span>
-                    </div>
-                    <div class="dual-range-slider">
-                      <input type="range" min="0" max="100" [value]="tempOccupancyTMMin || 0"
-                        (input)="onOccupancyTMMinChange($event)" class="range-min">
-                      <input type="range" min="0" max="100" [value]="tempOccupancyTMMax || 100"
-                        (input)="onOccupancyTMMaxChange($event)" class="range-max">
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Occupancy NM Range -->
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Occupancy NM Range</label>
-                  <div class="range-slider-container">
-                    <div class="range-values">
-                      <span class="min-value">{{ occupancyNMMin || 0 }}%</span>
-                      <span class="max-value">{{ occupancyNMMax || 100 }}%</span>
-                    </div>
-                    <div class="dual-range-slider">
-                      <input type="range" min="0" max="100" [value]="occupancyNMMin || 0"
-                        (input)="onOccupancyNMMinChange($event)" class="range-min">
-                      <input type="range" min="0" max="100" [value]="occupancyNMMax || 100"
-                        (input)="onOccupancyNMMaxChange($event)" class="range-max">
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Occupancy 7 Days Range -->
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Occupancy 7 Days Range</label>
-                  <div class="range-slider-container">
-                    <div class="range-values">
-                      <span class="min-value">{{ occupancy7DaysMin || 0 }}%</span>
-                      <span class="max-value">{{ occupancy7DaysMax || 100 }}%</span>
-                    </div>
-                    <div class="dual-range-slider">
-                      <input type="range" min="0" max="100" [value]="occupancy7DaysMin || 0"
-                        (input)="onOccupancy7DaysMinChange($event)" class="range-min">
-                      <input type="range" min="0" max="100" [value]="occupancy7DaysMax || 100"
-                        (input)="onOccupancy7DaysMaxChange($event)" class="range-max">
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Occupancy 30 Days Range -->
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Occupancy 30 Days Range</label>
-                  <div class="range-slider-container">
-                    <div class="range-values">
-                      <span class="min-value">{{ occupancy30DaysMin || 0 }}%</span>
-                      <span class="max-value">{{ occupancy30DaysMax || 100 }}%</span>
-                    </div>
-                    <div class="dual-range-slider">
-                      <input type="range" min="0" max="100" [value]="occupancy30DaysMin || 0"
-                        (input)="onOccupancy30DaysMinChange($event)" class="range-min">
-                      <input type="range" min="0" max="100" [value]="occupancy30DaysMax || 100"
-                        (input)="onOccupancy30DaysMaxChange($event)" class="range-max">
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Pick Up Occupancy 7 Days -->
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Pick Up Occ 7 Days Range</label>
-                  <div class="range-slider-container">
-                    <div class="range-values">
-                      <span class="min-value">{{ pickUpOcc7DaysMin || 0 }}%</span>
-                      <span class="max-value">{{ pickUpOcc7DaysMax || 100 }}%</span>
-                    </div>
-                    <div class="dual-range-slider">
-                      <input type="range" min="0" max="100" [value]="pickUpOcc7DaysMin || 0"
-                        (input)="onPickUpOcc7DaysMinChange($event)" class="range-min">
-                      <input type="range" min="0" max="100" [value]="pickUpOcc7DaysMax || 100"
-                        (input)="onPickUpOcc7DaysMaxChange($event)" class="range-max">
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Pick Up Occupancy 14 Days -->
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Pick Up Occ 14 Days Range</label>
-                  <div class="range-slider-container">
-                    <div class="range-values">
-                      <span class="min-value">{{ pickUpOcc14DaysMin || 0 }}%</span>
-                      <span class="max-value">{{ pickUpOcc14DaysMax || 100 }}%</span>
-                    </div>
-                    <div class="dual-range-slider">
-                      <input type="range" min="0" max="100" [value]="pickUpOcc14DaysMin || 0"
-                        (input)="onPickUpOcc14DaysMinChange($event)" class="range-min">
-                      <input type="range" min="0" max="100" [value]="pickUpOcc14DaysMax || 100"
-                        (input)="onPickUpOcc14DaysMaxChange($event)" class="range-max">
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Pick Up Occupancy 30 Days -->
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Pick Up Occ 30 Days Range</label>
-                  <div class="range-slider-container">
-                    <div class="range-values">
-                      <span class="min-value">{{ pickUpOcc30DaysMin || 0 }}%</span>
-                      <span class="max-value">{{ pickUpOcc30DaysMax || 100 }}%</span>
-                    </div>
-                    <div class="dual-range-slider">
-                      <input type="range" min="0" max="100" [value]="pickUpOcc30DaysMin || 0"
-                        (input)="onPickUpOcc30DaysMinChange($event)" class="range-min">
-                      <input type="range" min="0" max="100" [value]="pickUpOcc30DaysMax || 100"
-                        (input)="onPickUpOcc30DaysMaxChange($event)" class="range-max">
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Performance Filters Tab -->
-            <div class="tab-pane fade" id="performance" role="tabpanel" aria-labelledby="performance-tab">
-              <div class="row">
-                <!-- STLY Var Occupancy -->
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">STLY Var Occupancy Range</label>
-                  <div class="range-slider-container">
-                    <div class="range-values">
-                      <span class="min-value">{{ stlyVarOccMin || stlyVarOccMinRange }}%</span>
-                      <span class="max-value">{{ stlyVarOccMax || stlyVarOccMaxRange }}%</span>
-                    </div>
-                    <div class="dual-range-slider">
-                      <input type="range" [min]="stlyVarOccMinRange" [max]="stlyVarOccMaxRange"
-                        [value]="stlyVarOccMin || stlyVarOccMinRange" (input)="onStlyVarOccMinChange($event)"
-                        class="range-min">
-                      <input type="range" [min]="stlyVarOccMinRange" [max]="stlyVarOccMaxRange"
-                        [value]="stlyVarOccMax || stlyVarOccMaxRange" (input)="onStlyVarOccMaxChange($event)"
-                        class="range-max">
-                    </div>
-                  </div>
-                </div>
-
-                <!-- STLY Var ADR -->
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">STLY Var ADR Range</label>
-                  <div class="range-slider-container">
-                    <div class="range-values">
-                      <span class="min-value">{{ stlyVarADRMin || stlyVarADRMinRange }}%</span>
-                      <span class="max-value">{{ stlyVarADRMax || stlyVarADRMaxRange }}%</span>
-                    </div>
-                    <div class="dual-range-slider">
-                      <input type="range" [min]="stlyVarADRMinRange" [max]="stlyVarADRMaxRange"
-                        [value]="stlyVarADRMin || stlyVarADRMinRange" (input)="onStlyVarADRMinChange($event)"
-                        class="range-min">
-                      <input type="range" [min]="stlyVarADRMinRange" [max]="stlyVarADRMaxRange"
-                        [value]="stlyVarADRMax || stlyVarADRMaxRange" (input)="onStlyVarADRMaxChange($event)"
-                        class="range-max">
-                    </div>
-                  </div>
-                </div>
-
-                <!-- STLY Var RevPAR -->
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">STLY Var RevPAR Range</label>
-                  <div class="range-slider-container">
-                    <div class="range-values">
-                      <span class="min-value">{{ stlyVarRevPARMin || stlyVarRevPARMinRange }}%</span>
-                      <span class="max-value">{{ stlyVarRevPARMax || stlyVarRevPARMaxRange }}%</span>
-                    </div>
-                    <div class="dual-range-slider">
-                      <input type="range" [min]="stlyVarRevPARMinRange" [max]="stlyVarRevPARMaxRange"
-                        [value]="stlyVarRevPARMin || stlyVarRevPARMinRange" (input)="onStlyVarRevPARMinChange($event)"
-                        class="range-min">
-                      <input type="range" [min]="stlyVarRevPARMinRange" [max]="stlyVarRevPARMaxRange"
-                        [value]="stlyVarRevPARMax || stlyVarRevPARMaxRange" (input)="onStlyVarRevPARMaxChange($event)"
-                        class="range-max">
-                    </div>
-                  </div>
-                </div>
-
-                <!-- STLM Var Occupancy -->
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">STLM Var Occupancy Range</label>
-                  <div class="range-slider-container">
-                    <div class="range-values">
-                      <span class="min-value">{{ stlmVarOccMin || stlmVarOccMinRange }}%</span>
-                      <span class="max-value">{{ stlmVarOccMax || stlmVarOccMaxRange }}%</span>
-                    </div>
-                    <div class="dual-range-slider">
-                      <input type="range" [min]="stlmVarOccMinRange" [max]="stlmVarOccMaxRange"
-                        [value]="stlmVarOccMin || stlmVarOccMinRange" (input)="onStlmVarOccMinChange($event)"
-                        class="range-min">
-                      <input type="range" [min]="stlmVarOccMinRange" [max]="stlmVarOccMaxRange"
-                        [value]="stlmVarOccMax || stlmVarOccMaxRange" (input)="onStlmVarOccMaxChange($event)"
-                        class="range-max">
-                    </div>
-                  </div>
-                </div>
-
-                <!-- STLM Var ADR -->
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">STLM Var ADR Range</label>
-                  <div class="range-slider-container">
-                    <div class="range-values">
-                      <span class="min-value">{{ stlmVarADRMin || stlmVarADRMinRange }}%</span>
-                      <span class="max-value">{{ stlmVarADRMax || stlmVarADRMaxRange }}%</span>
-                    </div>
-                    <div class="dual-range-slider">
-                      <input type="range" [min]="stlmVarADRMinRange" [max]="stlmVarADRMaxRange"
-                        [value]="stlmVarADRMin || stlmVarADRMinRange" (input)="onStlmVarADRMinChange($event)"
-                        class="range-min">
-                      <input type="range" [min]="stlmVarADRMinRange" [max]="stlmVarADRMaxRange"
-                        [value]="stlmVarADRMax || stlmVarADRMaxRange" (input)="onStlmVarADRMaxChange($event)"
-                        class="range-max">
-                    </div>
-                  </div>
-                </div>
-
-                <!-- STLM Var RevPAR -->
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">STLM Var RevPAR Range</label>
-                  <div class="range-slider-container">
-                    <div class="range-values">
-                      <span class="min-value">{{ stlmVarRevPARMin || stlmVarRevPARMinRange }}%</span>
-                      <span class="max-value">{{ stlmVarRevPARMax || stlmVarRevPARMaxRange }}%</span>
-                    </div>
-                    <div class="dual-range-slider">
-                      <input type="range" [min]="stlmVarRevPARMinRange" [max]="stlmVarRevPARMaxRange"
-                        [value]="stlmVarRevPARMin || stlmVarRevPARMinRange" (input)="onStlmVarRevPARMinChange($event)"
-                        class="range-min">
-                      <input type="range" [min]="stlmVarRevPARMinRange" [max]="stlmVarRevPARMaxRange"
-                        [value]="stlmVarRevPARMax || stlmVarRevPARMaxRange" (input)="onStlmVarRevPARMaxChange($event)"
-                        class="range-max">
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Platform Filters Tab -->
-            <div class="tab-pane fade" id="platforms" role="tabpanel" aria-labelledby="platforms-tab">
-              <div class="row">
-                <!-- Booking.com Filters -->
-                <div class="col-12 mb-3">
-                  <h6 class="fw-bold text-primary">Booking.com Features</h6>
-                </div>
-                <div class="col-md-4 mb-3">
-                  <div class="slider-container">
-                    <label class="slider-label">Genius Program</label>
-                    <div class="three-point-slider" (click)="onThreePointSliderChange('bookingGenius', getNextSliderValue(tempBookingGeniusFilter))">
-                      <div class="slider-track"></div>
-                      <div class="slider-thumb" [class]="tempBookingGeniusFilter">
-                        {{ getSliderDisplayValue(tempBookingGeniusFilter) }}
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Review Score Range</label>
+                    <div class="range-slider-container">
+                      <div class="range-values">
+                        <span class="min-value">{{ tempVrboRevScoreMin || 0 }}</span>
+                        <span class="max-value">{{ tempVrboRevScoreMax || 5 }}</span>
                       </div>
-                      <div class="slider-labels">
-                        <span class="label not-present" [class.active]="tempBookingGeniusFilter === 'not-present'" 
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingGenius', 'not-present')"></span>
-                        <span class="label no" [class.active]="tempBookingGeniusFilter === 'no'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingGenius', 'no')"></span>
-                        <span class="label yes" [class.active]="tempBookingGeniusFilter === 'yes'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingGenius', 'yes')"></span>
+                      <div class="dual-range-slider">
+                        <input type="range" min="0" max="5" step="0.1" [value]="tempVrboRevScoreMin || 0"
+                          (input)="onVrboRevScoreMinChange($event)" class="range-min">
+                        <input type="range" min="0" max="5" step="0.1" [value]="tempVrboRevScoreMax || 5"
+                          (input)="onVrboRevScoreMaxChange($event)" class="range-max">
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                  <div class="slider-container">
-                    <label class="slider-label">Mobile Deals</label>
-                    <div class="three-point-slider" (click)="onThreePointSliderChange('bookingMobile', getNextSliderValue(tempBookingMobileFilter))">
-                      <div class="slider-track"></div>
-                      <div class="slider-thumb" [class]="tempBookingMobileFilter">{{ getSliderDisplayValue(tempBookingMobileFilter) }}</div>
-                      <div class="slider-labels">
-                        <span class="label not-present" [class.active]="tempBookingMobileFilter === 'not-present'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingMobile', 'not-present')"></span>
-                        <span class="label no" [class.active]="tempBookingMobileFilter === 'no'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingMobile', 'no')"></span>
-                        <span class="label yes" [class.active]="tempBookingMobileFilter === 'yes'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingMobile', 'yes')"></span>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Total Reviews Range</label>
+                    <div class="range-slider-container">
+                      <div class="range-values">
+                        <span class="min-value">{{ tempVrboTotalRevMin || vrboTotalRevMinRange }}</span>
+                        <span class="max-value">{{ tempVrboTotalRevMax || vrboTotalRevMaxRange }}</span>
                       </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                  <div class="slider-container">
-                    <label class="slider-label">Preferred Partner</label>
-                    <div class="three-point-slider" (click)="onThreePointSliderChange('bookingPref', getNextSliderValue(tempBookingPrefFilter))">
-                      <div class="slider-track"></div>
-                      <div class="slider-thumb" [class]="tempBookingPrefFilter">{{ getSliderDisplayValue(tempBookingPrefFilter) }}</div>
-                      <div class="slider-labels">
-                        <span class="label not-present" [class.active]="tempBookingPrefFilter === 'not-present'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingPref', 'not-present')"></span>
-                        <span class="label no" [class.active]="tempBookingPrefFilter === 'no'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingPref', 'no')"></span>
-                        <span class="label yes" [class.active]="tempBookingPrefFilter === 'yes'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingPref', 'yes')"></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                  <div class="slider-container">
-                    <label class="slider-label">Weekly Discounts</label>
-                    <div class="three-point-slider" (click)="onThreePointSliderChange('bookingWeekly', getNextSliderValue(tempBookingWeeklyFilter))">
-                      <div class="slider-track"></div>
-                      <div class="slider-thumb" [class]="tempBookingWeeklyFilter">{{ getSliderDisplayValue(tempBookingWeeklyFilter) }}</div>
-                      <div class="slider-labels">
-                        <span class="label not-present" [class.active]="tempBookingWeeklyFilter === 'not-present'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingWeekly', 'not-present')"></span>
-                        <span class="label no" [class.active]="tempBookingWeeklyFilter === 'no'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingWeekly', 'no')"></span>
-                        <span class="label yes" [class.active]="tempBookingWeeklyFilter === 'yes'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingWeekly', 'yes')"></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                  <div class="slider-container">
-                    <label class="slider-label">Monthly Discounts</label>
-                    <div class="three-point-slider" (click)="onThreePointSliderChange('bookingMonthly', getNextSliderValue(tempBookingMonthlyFilter))">
-                      <div class="slider-track"></div>
-                      <div class="slider-thumb" [class]="tempBookingMonthlyFilter">{{ getSliderDisplayValue(tempBookingMonthlyFilter) }}</div>
-                      <div class="slider-labels">
-                        <span class="label not-present" [class.active]="tempBookingMonthlyFilter === 'not-present'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingMonthly', 'not-present')"></span>
-                        <span class="label no" [class.active]="tempBookingMonthlyFilter === 'no'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingMonthly', 'no')"></span>
-                        <span class="label yes" [class.active]="tempBookingMonthlyFilter === 'yes'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingMonthly', 'yes')"></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                  <div class="slider-container">
-                    <label class="slider-label">Last Minute Discount</label>
-                    <div class="three-point-slider" (click)="onThreePointSliderChange('bookingLMDisc', getNextSliderValue(tempBookingLMDiscFilter))">
-                      <div class="slider-track"></div>
-                      <div class="slider-thumb" [class]="tempBookingLMDiscFilter">{{ getSliderDisplayValue(tempBookingLMDiscFilter) }}</div>
-                      <div class="slider-labels">
-                        <span class="label not-present" [class.active]="tempBookingLMDiscFilter === 'not-present'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingLMDisc', 'not-present')"></span>
-                        <span class="label no" [class.active]="tempBookingLMDiscFilter === 'no'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingLMDisc', 'no')"></span>
-                        <span class="label yes" [class.active]="tempBookingLMDiscFilter === 'yes'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('bookingLMDisc', 'yes')"></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Airbnb Filters -->
-                <div class="col-12 mb-3 mt-4">
-                  <h6 class="fw-bold text-danger">Airbnb Features</h6>
-                </div>
-                <div class="col-md-3 mb-3">
-                  <div class="slider-container">
-                    <label class="slider-label">Weekly Discounts</label>
-                    <div class="three-point-slider" (click)="onThreePointSliderChange('airbnbWeekly', getNextSliderValue(tempAirbnbWeeklyFilter))">
-                      <div class="slider-track"></div>
-                      <div class="slider-thumb" [class]="tempAirbnbWeeklyFilter">{{ getSliderDisplayValue(tempAirbnbWeeklyFilter) }}</div>
-                      <div class="slider-labels">
-                        <span class="label not-present" [class.active]="tempAirbnbWeeklyFilter === 'not-present'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbWeekly', 'not-present')"></span>
-                        <span class="label no" [class.active]="tempAirbnbWeeklyFilter === 'no'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbWeekly', 'no')"></span>
-                        <span class="label yes" [class.active]="tempAirbnbWeeklyFilter === 'yes'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbWeekly', 'yes')"></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                  <div class="slider-container">
-                    <label class="slider-label">Monthly Discounts</label>
-                    <div class="three-point-slider" (click)="onThreePointSliderChange('airbnbMonthly', getNextSliderValue(tempAirbnbMonthlyFilter))">
-                      <div class="slider-track"></div>
-                      <div class="slider-thumb" [class]="tempAirbnbMonthlyFilter">{{ getSliderDisplayValue(tempAirbnbMonthlyFilter) }}</div>
-                      <div class="slider-labels">
-                        <span class="label not-present" [class.active]="tempAirbnbMonthlyFilter === 'not-present'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbMonthly', 'not-present')"></span>
-                        <span class="label no" [class.active]="tempAirbnbMonthlyFilter === 'no'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbMonthly', 'no')"></span>
-                        <span class="label yes" [class.active]="tempAirbnbMonthlyFilter === 'yes'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbMonthly', 'yes')"></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                  <div class="slider-container">
-                    <label class="slider-label">Member Discount</label>
-                    <div class="three-point-slider" (click)="onThreePointSliderChange('airbnbMember', getNextSliderValue(tempAirbnbMemberFilter))">
-                      <div class="slider-track"></div>
-                      <div class="slider-thumb" [class]="tempAirbnbMemberFilter">{{ getSliderDisplayValue(tempAirbnbMemberFilter) }}</div>
-                      <div class="slider-labels">
-                        <span class="label not-present" [class.active]="tempAirbnbMemberFilter === 'not-present'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbMember', 'not-present')"></span>
-                        <span class="label no" [class.active]="tempAirbnbMemberFilter === 'no'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbMember', 'no')"></span>
-                        <span class="label yes" [class.active]="tempAirbnbMemberFilter === 'yes'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbMember', 'yes')"></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                  <div class="slider-container">
-                    <label class="slider-label">Last Minute Discount</label>
-                    <div class="three-point-slider" (click)="onThreePointSliderChange('airbnbLMDisc', getNextSliderValue(tempAirbnbLMDiscFilter))">
-                      <div class="slider-track"></div>
-                      <div class="slider-thumb" [class]="tempAirbnbLMDiscFilter">{{ getSliderDisplayValue(tempAirbnbLMDiscFilter) }}</div>
-                      <div class="slider-labels">
-                        <span class="label not-present" [class.active]="tempAirbnbLMDiscFilter === 'not-present'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbLMDisc', 'not-present')"></span>
-                        <span class="label no" [class.active]="tempAirbnbLMDiscFilter === 'no'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbLMDisc', 'no')"></span>
-                        <span class="label yes" [class.active]="tempAirbnbLMDiscFilter === 'yes'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('airbnbLMDisc', 'yes')"></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- VRBO Filters -->
-                <div class="col-12 mb-3 mt-4">
-                  <h6 class="fw-bold text-warning">VRBO Features</h6>
-                </div>
-                <div class="col-md-6 mb-3">
-                  <div class="slider-container">
-                    <label class="slider-label">Weekly Discounts</label>
-                    <div class="three-point-slider" (click)="onThreePointSliderChange('vrboWeekly', getNextSliderValue(tempVrboWeeklyFilter))">
-                      <div class="slider-track"></div>
-                      <div class="slider-thumb" [class]="tempVrboWeeklyFilter">{{ getSliderDisplayValue(tempVrboWeeklyFilter) }}</div>
-                      <div class="slider-labels">
-                        <span class="label not-present" [class.active]="tempVrboWeeklyFilter === 'not-present'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('vrboWeekly', 'not-present')"></span>
-                        <span class="label no" [class.active]="tempVrboWeeklyFilter === 'no'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('vrboWeekly', 'no')"></span>
-                        <span class="label yes" [class.active]="tempVrboWeeklyFilter === 'yes'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('vrboWeekly', 'yes')"></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 mb-3">
-                  <div class="slider-container">
-                    <label class="slider-label">Monthly Discounts</label>
-                    <div class="three-point-slider" (click)="onThreePointSliderChange('vrboMonthly', getNextSliderValue(tempVrboMonthlyFilter))">
-                      <div class="slider-track"></div>
-                      <div class="slider-thumb" [class]="tempVrboMonthlyFilter">{{ getSliderDisplayValue(tempVrboMonthlyFilter) }}</div>
-                      <div class="slider-labels">
-                        <span class="label not-present" [class.active]="tempVrboMonthlyFilter === 'not-present'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('vrboMonthly', 'not-present')"></span>
-                        <span class="label no" [class.active]="tempVrboMonthlyFilter === 'no'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('vrboMonthly', 'no')"></span>
-                        <span class="label yes" [class.active]="tempVrboMonthlyFilter === 'yes'"
-                              (click)="$event.stopPropagation(); onThreePointSliderChange('vrboMonthly', 'yes')"></span>
+                      <div class="dual-range-slider">
+                        <input type="range" [min]="vrboTotalRevMinRange" [max]="vrboTotalRevMaxRange"
+                          [value]="tempVrboTotalRevMin || vrboTotalRevMinRange"
+                          (input)="onVrboTotalRevMinChange($event)" class="range-min">
+                        <input type="range" [min]="vrboTotalRevMinRange" [max]="vrboTotalRevMaxRange"
+                          [value]="tempVrboTotalRevMax || vrboTotalRevMaxRange"
+                          (input)="onVrboTotalRevMaxChange($event)" class="range-max">
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+
             </div>
-
-            <!-- Reviews Filters Tab -->
-            <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
-              <div class="row">
-                <!-- Booking Reviews -->
-                <div class="col-12 mb-3">
-                  <h6 class="fw-bold text-primary">Booking.com Reviews</h6>
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Review Score Range</label>
-                  <div class="range-slider-container">
-                    <div class="range-values">
-                      <span class="min-value">{{ tempBookingRevScoreMin || 0 }}</span>
-                      <span class="max-value">{{ tempBookingRevScoreMax || 10 }}</span>
-                    </div>
-                    <div class="dual-range-slider">
-                      <input type="range" min="0" max="10" step="0.1" [value]="tempBookingRevScoreMin || 0"
-                        (input)="onBookingRevScoreMinChange($event)" class="range-min">
-                      <input type="range" min="0" max="10" step="0.1" [value]="tempBookingRevScoreMax || 10"
-                        (input)="onBookingRevScoreMaxChange($event)" class="range-max">
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Total Reviews Range</label>
-                  <div class="range-slider-container">
-                    <div class="range-values">
-                      <span class="min-value">{{ tempBookingTotalRevMin || bookingTotalRevMinRange }}</span>
-                      <span class="max-value">{{ tempBookingTotalRevMax || bookingTotalRevMaxRange }}</span>
-                    </div>
-                    <div class="dual-range-slider">
-                      <input type="range" [min]="bookingTotalRevMinRange" [max]="bookingTotalRevMaxRange"
-                        [value]="tempBookingTotalRevMin || bookingTotalRevMinRange"
-                        (input)="onBookingTotalRevMinChange($event)" class="range-min">
-                      <input type="range" [min]="bookingTotalRevMinRange" [max]="bookingTotalRevMaxRange"
-                        [value]="tempBookingTotalRevMax || bookingTotalRevMaxRange"
-                        (input)="onBookingTotalRevMaxChange($event)" class="range-max">
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Airbnb Reviews -->
-                <div class="col-12 mb-3 mt-4">
-                  <h6 class="fw-bold text-danger">Airbnb Reviews</h6>
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Review Score Range</label>
-                  <div class="range-slider-container">
-                    <div class="range-values">
-                      <span class="min-value">{{ tempAirbnbRevScoreMin || 0 }}</span>
-                      <span class="max-value">{{ tempAirbnbRevScoreMax || 5 }}</span>
-                    </div>
-                    <div class="dual-range-slider">
-                      <input type="range" min="0" max="5" step="0.1" [value]="tempAirbnbRevScoreMin || 0"
-                        (input)="onAirbnbRevScoreMinChange($event)" class="range-min">
-                      <input type="range" min="0" max="5" step="0.1" [value]="tempAirbnbRevScoreMax || 5"
-                        (input)="onAirbnbRevScoreMaxChange($event)" class="range-max">
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Total Reviews Range</label>
-                  <div class="range-slider-container">
-                    <div class="range-values">
-                      <span class="min-value">{{ tempAirbnbTotalRevMin || airbnbTotalRevMinRange }}</span>
-                      <span class="max-value">{{ tempAirbnbTotalRevMax || airbnbTotalRevMaxRange }}</span>
-                    </div>
-                    <div class="dual-range-slider">
-                      <input type="range" [min]="airbnbTotalRevMinRange" [max]="airbnbTotalRevMaxRange"
-                        [value]="tempAirbnbTotalRevMin || airbnbTotalRevMinRange"
-                        (input)="onAirbnbTotalRevMinChange($event)" class="range-min">
-                      <input type="range" [min]="airbnbTotalRevMinRange" [max]="airbnbTotalRevMaxRange"
-                        [value]="tempAirbnbTotalRevMax || airbnbTotalRevMaxRange"
-                        (input)="onAirbnbTotalRevMaxChange($event)" class="range-max">
-                    </div>
-                  </div>
-                </div>
-
-                <!-- VRBO Reviews -->
-                <div class="col-12 mb-3 mt-4">
-                  <h6 class="fw-bold text-warning">VRBO Reviews</h6>
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Review Score Range</label>
-                  <div class="range-slider-container">
-                    <div class="range-values">
-                      <span class="min-value">{{ tempVrboRevScoreMin || 0 }}</span>
-                      <span class="max-value">{{ tempVrboRevScoreMax || 5 }}</span>
-                    </div>
-                    <div class="dual-range-slider">
-                      <input type="range" min="0" max="5" step="0.1" [value]="tempVrboRevScoreMin || 0"
-                        (input)="onVrboRevScoreMinChange($event)" class="range-min">
-                      <input type="range" min="0" max="5" step="0.1" [value]="tempVrboRevScoreMax || 5"
-                        (input)="onVrboRevScoreMaxChange($event)" class="range-max">
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Total Reviews Range</label>
-                  <div class="range-slider-container">
-                    <div class="range-values">
-                      <span class="min-value">{{ tempVrboTotalRevMin || vrboTotalRevMinRange }}</span>
-                      <span class="max-value">{{ tempVrboTotalRevMax || vrboTotalRevMaxRange }}</span>
-                    </div>
-                    <div class="dual-range-slider">
-                      <input type="range" [min]="vrboTotalRevMinRange" [max]="vrboTotalRevMaxRange"
-                        [value]="tempVrboTotalRevMin || vrboTotalRevMinRange" (input)="onVrboTotalRevMinChange($event)"
-                        class="range-min">
-                      <input type="range" [min]="vrboTotalRevMinRange" [max]="vrboTotalRevMaxRange"
-                        [value]="tempVrboTotalRevMax || vrboTotalRevMaxRange" (input)="onVrboTotalRevMaxChange($event)"
-                        class="range-max">
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
           </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" (click)="clearAllFilters()">
-            <i class="fas fa-times me-2"></i>Clear All
-          </button>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="applyFilters()">
-            <i class="fas fa-check me-2"></i>Apply Filters
-          </button>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" (click)="clearAllFilters()">
+              <i class="fas fa-times me-2"></i>Clear All
+            </button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="applyFilters()">
+              <i class="fas fa-check me-2"></i>Apply Filters
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>

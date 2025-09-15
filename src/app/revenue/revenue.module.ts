@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { RevenueRoutingModule } from './revenue-routing.module';
 import { RevenueComponent } from './revenue.component';
 import { PropertyDetailsComponent } from './property-details/property-details.component';
+import { NgCircleProgressModule } from 'ng-circle-progress';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,9 @@ import { PropertyDetailsComponent } from './property-details/property-details.co
   imports: [
     CommonModule,
     FormsModule,
-    RevenueRoutingModule
+    RevenueRoutingModule,
+
+    NgCircleProgressModule.forRoot()
   ]
 })
 export class RevenueModule { }

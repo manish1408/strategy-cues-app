@@ -116,7 +116,7 @@
     object-fit: cover;
   }
   &:hover{
-    text-decoration: underline;
+    // text-decoration: underline;
     cursor: pointer;
     color: #ffffff;
   }
@@ -161,11 +161,9 @@
   color: var(--brand-black) !important;
   border-radius: 8px;
   width: -webkit-fill-available;
-    padding: 6px;
-&:hover{
-  text-decoration: none !important;
+  padding: 6px;
+  
 
-}
 }
 
 .avatar-img {
@@ -394,8 +392,7 @@
 }
 .sidebar-menu-item{
   position: relative;
-  padding: 0.625rem 0rem;
-
+  // padding: 6px;
   font-size: 14px;
   font-weight: 500;
   display: flex;
@@ -404,18 +401,15 @@
   gap: 8px;
   white-space: nowrap;
   a{
+    padding: 6px;
     text-decoration: none;
     color: #a5a5a5;
     &:hover{
-      text-decoration: underline;
+ 
       cursor: pointer;
       color: #ffffff;
     }
-    // &:focus{
-    //   text-decoration: none;
-    //   cursor: pointer;
-    //   color: #ffffff;
-    // }
+
   }
   
   

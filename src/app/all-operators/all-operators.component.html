@@ -186,6 +186,9 @@
                             placeholder="Enter PriceLabs API key"
                           />
                         </div>
+                        <div *ngIf="addOperatorForm.get('priceLabs')?.errors?.['apiKeyRequired'] && addOperatorForm.get('priceLabs')?.touched">
+                          <span class="text-danger">{{ addOperatorForm.get('priceLabs')?.errors?.['apiKeyRequired'] }}</span>
+                        </div>
                         <div class="mb-3">
                           <label for="priceLabsUsername" class="form-label">Username</label>
                           <input
@@ -195,6 +198,9 @@
                             class="form-control"
                             placeholder="PriceLabs username"
                           />
+                        </div>
+                        <div *ngIf="addOperatorForm.get('priceLabs')?.errors?.['userNameRequired'] && addOperatorForm.get('priceLabs')?.touched">
+                          <span class="text-danger">{{ addOperatorForm.get('priceLabs')?.errors?.['userNameRequired'] }}</span>
                         </div>
                         <div class="mb-3">
                           <label for="priceLabsPassword" class="form-label">Password</label>
@@ -206,6 +212,10 @@
                             placeholder="PriceLabs password"
                           />
                         </div>
+                        <div *ngIf="addOperatorForm.get('priceLabs')?.errors?.['passwordRequired'] && addOperatorForm.get('priceLabs')?.touched">
+                          <span class="text-danger">{{ addOperatorForm.get('priceLabs')?.errors?.['passwordRequired'] }}</span>
+                        </div>
+                      
                       </div>
                     </div>
                   </div>
@@ -224,6 +234,9 @@
                             placeholder="Booking.com username"
                           />
                         </div>
+                        <div *ngIf="addOperatorForm.get('booking')?.errors?.['userNameRequired'] && addOperatorForm.get('booking')?.touched">
+                          <span class="text-danger">{{ addOperatorForm.get('booking')?.errors?.['userNameRequired'] }}</span>
+                        </div>
                         <div class="mb-3">
                           <label for="bookingPassword" class="form-label">Password</label>
                           <input
@@ -234,6 +247,10 @@
                             placeholder="Booking.com password"
                           />
                         </div>
+                        <div *ngIf="addOperatorForm.get('booking')?.errors?.['passwordRequired'] && addOperatorForm.get('booking')?.touched">
+                          <span class="text-danger">{{ addOperatorForm.get('booking')?.errors?.['passwordRequired'] }}</span>
+                        </div>
+                       
                       </div>
                     </div>
                   </div>
@@ -252,6 +269,9 @@
                             placeholder="Airbnb username"
                           />
                         </div>
+                        <div *ngIf="addOperatorForm.get('airbnb')?.errors?.['userNameRequired'] && addOperatorForm.get('airbnb')?.touched">
+                          <span class="text-danger">{{ addOperatorForm.get('airbnb')?.errors?.['userNameRequired'] }}</span>
+                        </div>
                         <div class="mb-3">
                           <label for="airbnbPassword" class="form-label">Password</label>
                           <input
@@ -262,6 +282,10 @@
                             placeholder="Airbnb password"
                           />
                         </div>
+                        <div *ngIf="addOperatorForm.get('airbnb')?.errors?.['passwordRequired'] && addOperatorForm.get('airbnb')?.touched">
+                          <span class="text-danger">{{ addOperatorForm.get('airbnb')?.errors?.['passwordRequired'] }}</span>
+                        </div>
+                      
                       </div>
                     </div>
                   </div>
@@ -280,6 +304,9 @@
                             placeholder="VRBO username"
                           />
                         </div>
+                        <div *ngIf="addOperatorForm.get('vrbo')?.errors?.['userNameRequired'] && addOperatorForm.get('vrbo')?.touched">
+                          <span class="text-danger">{{ addOperatorForm.get('vrbo')?.errors?.['userNameRequired'] }}</span>
+                        </div>
                         <div class="mb-3">
                           <label for="vrboPassword" class="form-label">Password</label>
                           <input
@@ -289,6 +316,9 @@
                             class="form-control"
                             placeholder="VRBO password"
                           />
+                        </div>
+                        <div *ngIf="addOperatorForm.get('vrbo')?.errors?.['passwordRequired'] && addOperatorForm.get('vrbo')?.touched">
+                          <span class="text-danger">{{ addOperatorForm.get('vrbo')?.errors?.['passwordRequired'] }}</span>
                         </div>
                       </div>
                     </div>

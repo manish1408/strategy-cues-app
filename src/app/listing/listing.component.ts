@@ -104,6 +104,8 @@ export class ListingComponent implements OnInit {
           }
   
           // Update pagination data
+
+          // this.updatePagination();
           this.totalPages = res.data.pagination.total_pages;
           this.currentPage = res.data.pagination.page;
           this.itemsPerPage = res.data.pagination.limit;
@@ -159,26 +161,7 @@ export class ListingComponent implements OnInit {
     );
   }
 
- 
 
-  // deleteListing(listingId: string) {
-  //   if (confirm("Are you sure you want to delete this listing?")) {
-  //     this.loading = true;
-  //     this.propertiesService
-  //       .deleteProperty(listingId)
-  //       .pipe(finalize(() => (this.loading = false)))
-  //       .subscribe({
-  //         next: (res: any) => {
-  //           this.toastr.success("Listing deleted successfully");
-  //           this.loadListings();
-  //         },
-  //         error: (error: any) => {
-  //           console.error("Error deleting listing:", error);
-  //           this.toastr.error("Failed to delete listing");
-  //         },
-  //       });
-  //   }
-  // }
 
   hasError(controlName: string) {
     const control = this.addListingForm.get(controlName);
@@ -277,6 +260,11 @@ export class ListingComponent implements OnInit {
   }
 
  
+  // Pagination methods
+  updatePagination(): void {
+    // For API-based pagination, we'll need to get total count from the API response
+    this.totalPages = Math.ceil(this.allListingList.length / this.itemsPerPage);
+  }
 
   changePage(page: number): void {
     if (page >= 1 && page !== this.currentPage && page <= this.totalPages) {
@@ -293,7 +281,6 @@ export class ListingComponent implements OnInit {
     for (let i = startPage; i <= endPage; i++) {
       pages.push(i);
     }
-    console.log("Pages:", pages);
     return pages;
   }
 

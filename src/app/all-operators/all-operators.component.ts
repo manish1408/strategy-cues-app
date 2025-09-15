@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { OperatorService } from '../_services/operator.service';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
@@ -39,7 +39,7 @@ export class AllOperatorsComponent {
         apiKey: '',
         status: 'PENDING',
         cookies: this.fb.array([]),
-      }),
+      }, { validators: priceLabsValidator }),
       booking: this.fb.group({
         userName: '',
         password: '',
@@ -47,21 +47,21 @@ export class AllOperatorsComponent {
         status: 'PENDING',
         cookies: this.fb.array([]),
         session_id: '',
-      }),
+      }, { validators: platformValidator }),
       airbnb: this.fb.group({
         userName: '',
         password: '',
         apiKey: '',
         status: 'PENDING',
         cookies: this.fb.array([]),
-      }),
+      }, { validators: platformValidator }),
       vrbo: this.fb.group({
         userName: '',
         password: '',
         apiKey: '',
         status: 'PENDING',
         cookies: this.fb.array([]),
-      })
+      }, { validators: platformValidator })
     });
   }
 
@@ -269,4 +269,61 @@ export class AllOperatorsComponent {
       }
     }
   }
+
+  
 }
+
+export const priceLabsValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  const apiKey = control.get('apiKey')?.value;
+  const userName = control.get('userName')?.value;
+  const password = control.get('password')?.value;
+
+  const errors: ValidationErrors = {};
+
+  if (apiKey && (!userName || !password)) {
+    if (!userName) {
+      errors['userNameRequired'] = 'Username is required if API key is provided.';
+    }
+    if (!password) {
+      errors['passwordRequired'] = 'Password is required if API key is provided.';
+    }
+  }
+
+  if (userName && (!apiKey || !password)) {
+    if (!apiKey) {
+      errors['apiKeyRequired'] = 'API key is required if username is provided.';
+    }
+    if (!password) {
+      errors['passwordRequired'] = 'Password is required if username is provided.';
+    }
+  }
+
+  if (password && (!apiKey || !userName)) {
+    if (!apiKey) {
+      errors['apiKeyRequired'] = 'API key is required if password is provided.';
+    }
+    if (!userName) {
+      errors['userNameRequired'] = 'Username is required if password is provided.';
+    }
+  }
+
+  return Object.keys(errors).length ? errors : null;
+};
+
+// Validator for other platforms
+export const platformValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  const userName = control.get('userName')?.value;
+  const password = control.get('password')?.value;
+
+  const errors: ValidationErrors = {};
+
+  if (userName && !password) {
+    errors['passwordRequired'] = 'Password is required if username is provided.';
+  }
+
+  if (password && !userName) {
+    errors['userNameRequired'] = 'Username is required if password is provided.';
+  }
+
+  return Object.keys(errors).length ? errors : null;
+};

@@ -1,8 +1,8 @@
-<div class="container-fluid">
+<div class="container-fluid listing-dashboard">
   <div class="row">
     <div class="col-12 d-flex justify-content-between align-items-center">
       <div>
-        <h4 class="title">Listings</h4>
+        <h4 class="title text-dark">Listings</h4>
         <p class="desc">Manage your property listings here</p>
       </div>
       <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#addListing">
@@ -47,6 +47,22 @@
           </table>
         </div>
       </div>
+       <!-- Pagination -->
+   <div class="pagination-section" *ngIf="totalPages > 1">
+    <nav>
+      <ul class="pagination justify-content-center">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <a class="page-link" (click)="changePage(currentPage - 1)">Previous</a>
+        </li>
+        <li class="page-item" *ngFor="let page of getPageNumbers()" [class.active]="page === currentPage">
+          <a class="page-link" (click)="changePage(page)">{{ page }}</a>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <a class="page-link" (click)="changePage(currentPage + 1)">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
     </div>
 
     <!-- Show empty state when no listings -->
@@ -58,14 +74,7 @@
   </div>
 
 
-    <!-- Pagination -->
-    <div class="pagination-section" *ngIf="totalPages > 1">
-      <div class="pagination justify-content-center">
-        <div class="page-item"><button class="page-link" (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">Previous</button></div>
-        <div class="page-item"><span class="page-link">{{ currentPage }}</span></div>
-        <div class="page-item"><button class="page-link" (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button></div>
-      </div>
-    </div>
+   
   </div>
 
   
