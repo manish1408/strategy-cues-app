@@ -35,9 +35,9 @@
             <tbody>
               <tr *ngFor="let listing of allListingList; let i = index">
                 <th scope="row">{{ (currentPage - 1) * itemsPerPage + i + 1 }}</th>
-                <td>{{ listing?.propertyUrls?.Booking }}</td>
-                <td>{{ listing?.propertyUrls?.Airbnb }}</td>
-                <td>{{ listing?.propertyUrls?.VRBO }}</td>
+                <td>{{ listing?.property_urls?.Booking }}</td>
+                <td>{{ listing?.property_urls?.Airbnb }}</td>
+                <td>{{ listing?.property_urls?.VRBO }}</td>
                 <td>
                   <img src="assets/icons/edit.svg" class="cursor-pointer me-2" data-bs-toggle="modal" data-bs-target="#addListing" (click)="editListing(listing)" />
                   <img src="assets/icons/trash.svg" (click)="deleteListing(listing?.id)" class="cursor-pointer" />

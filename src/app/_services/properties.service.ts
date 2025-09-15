@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment.development';
 
 export interface ApiResponse<T> {
@@ -113,13 +114,19 @@ export class PropertiesService {
     private http: HttpClient,
   ) {}
 
-  getProperties(page: number = 1, limit: number = 10): Observable<ApiResponse<PropertyData[]>> {
+  getProperties(page: number = 1, limit: number = 10, operatorId: string, sortOrder: string): Observable<ApiResponse<PropertyData[]>> {
     const params = new HttpParams()
-      .set('page', page.toString())
-      .set('limit', limit.toString());
+    .set('operator_id', operatorId)
+    .set('page', page.toString())
+    .set('limit', limit.toString())
+    .set('sort_order', sortOrder);
     
     return this.http.get<ApiResponse<PropertyData[]>>(`${this._url}/get-properties`, { params });
   }
+
+  // getPropertiesByOperatorId(operatorId: string) {
+  //   return this.http.get<ApiResponse<PropertyData[]>>(`${this._url}/get-properties-by-operator-id?operator_id=${operatorId}`);
+  // }
 
   // getProperties(page: number, limit: number) {
   //   return this.http.get(`/api/properties?page=${page}&limit=${limit}`);
@@ -155,10 +162,18 @@ export class PropertiesService {
   }
 
   updateProperty(propertyData: any, propertyId: string): Observable<ApiResponse<any>> {
-    return this.http.put<ApiResponse<any>>(`${this._url}/update-property/${propertyId}`, propertyData);
+    console.log('Updating property with ID:', propertyId);
+    console.log('Property data:', propertyData);
+    return this.http.put<ApiResponse<any>>(`${this._url}/update-property/${propertyId}`, propertyData).pipe(
+      catchError((error) => {
+        console.error('Error updating property:', error);
+        return throwError(() => new Error('Failed to update property'));
+      })
+    );
   }
 
-  deleteProperty(propertyId: string): Observable<ApiResponse<any>> {
-    return this.http.delete<ApiResponse<any>>(`${this._url}/delete-property/${propertyId}`);
+  deleteProperty(listingId: string, operatorId: string): Observable<any> {
+    const params = new HttpParams().set('operator_id', operatorId);
+    return this.http.delete(`${this._url}/delete-property/${listingId}`, { params });
   }
 }

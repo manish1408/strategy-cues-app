@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PropertiesService, PropertyData } from '../_services/properties.service';
+import { LocalStorageService } from '../_services/local-storage.service';
 
 // Declare global variables for jQuery and Bootstrap
 declare var $: any;
@@ -18,7 +19,8 @@ export class RevenueComponent implements OnInit {
   filteredData: PropertyData[] = [];
   loading: boolean = false;
   error: string | null = null;
-  
+  operatorId: string | null = null;
+  sortOrder = 'desc';
   // View and tab management
   currentView: 'table' | 'cards' = 'table';
   activeTab: 'booking' | 'airbnb' | 'vrbo' = 'booking'; // Keep for backward compatibility
@@ -260,7 +262,9 @@ export class RevenueComponent implements OnInit {
   vrboTotalRevMinRange: number = 0;
   vrboTotalRevMaxRange: number = 1000;
 
-  constructor(private propertiesService: PropertiesService) { }
+  constructor(private propertiesService: PropertiesService, private localStorageService: LocalStorageService) { 
+    this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
+  }
 
   // Helper methods to safely parse values that might be strings or numbers
   safeParseNumber(value: any): number {
@@ -286,6 +290,7 @@ export class RevenueComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadProperties();
+    this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
   }
 
   loadProperties(): void {
@@ -297,9 +302,13 @@ export class RevenueComponent implements OnInit {
   }
 
   loadCurrentPageData(): void {
+
+
+    console.log('operatorId: ', this.operatorId || null);
+    console.log('sortOrder: ', this.sortOrder);
     // Load current page data for display
-    this.propertiesService.getProperties(this.currentPage, this.itemsPerPage).subscribe({
-      next: (response) => {
+      this.propertiesService.getProperties(this.currentPage, this.itemsPerPage, this.operatorId || '', this.sortOrder).subscribe({
+      next: (response: any) => {
         console.log('API Response:', response); // Debug log to see actual structure
         if (response.success) {
           this.propertyData = PropertiesService.extractPropertiesArray(response);
@@ -317,7 +326,7 @@ export class RevenueComponent implements OnInit {
         }
         this.loading = false;
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error loading current page:', error);
         this.error = 'Error loading properties. Please try again.';
         this.loading = false;
@@ -328,9 +337,9 @@ export class RevenueComponent implements OnInit {
   loadDataForRanges(): void {
     // Load additional pages to get a better sample for range calculations and filtering
     // Use a reasonable limit that the API can handle
-    this.propertiesService.getProperties(1, 50).subscribe({
-      next: (response) => {
-        if (response.success) {
+      this.propertiesService.getProperties(1, 50, this.operatorId || '', this.sortOrder).subscribe({
+      next: (response: any) => {
+        if (response.success) { 
           this.allPropertyData = PropertiesService.extractPropertiesArray(response);
           this.calculateRangeValues();
           this.extractFilterOptions();
@@ -340,7 +349,7 @@ export class RevenueComponent implements OnInit {
           this.filterData();
         }
       },
-      error: (error) => {
+      error: (error: any) => {
         console.warn('Could not load data for ranges, using current page data:', error);
         // Fallback to using current page data for ranges
         this.allPropertyData = [...this.propertyData];

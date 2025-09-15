@@ -6,6 +6,7 @@ import { PropertiesService } from "../_services/properties.service";
 import { LocalStorageService } from "../_services/local-storage.service";
 import { ToastService } from "../_services/toast.service";
 import { EventService } from "../_services/event.service";
+import { ListingService } from "../_services/listing.service";
 
 @Component({
   selector: "app-listing",
@@ -15,6 +16,7 @@ import { EventService } from "../_services/event.service";
 })
 export class ListingComponent implements OnInit {
   @ViewChild("closeButton") closeButton!: ElementRef;
+
   currentPage: number = 1;
   itemsPerPage: number = 10;
   totalPages: number = 0;
@@ -23,16 +25,17 @@ export class ListingComponent implements OnInit {
   allListingList: any[] = [];
   isEdit: boolean = false;
   editingListingId: string | null = null;
-  operatorId: string = "";
+  operatorId: string | null = null;
   addListingForm: FormGroup;
-
+  sortOrder: string = 'desc';
   constructor(
     private toastr: ToastrService,
     private fb: FormBuilder,
     private propertiesService: PropertiesService,
     private localStorageService: LocalStorageService,
     private toastService: ToastService,
-    private eventService: EventService<any>
+    private eventService: EventService<any>,
+    private listingService: ListingService
   ) {
     this.addListingForm = this.fb.group({
       bookingComUrl: [
@@ -45,78 +48,42 @@ export class ListingComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
+    console.log('Operator ID from localStorage:', this.operatorId);
     this.loadListings();
-    this.getOperatorId();
   }
-  getOperatorId(): void {
-    try {
-      const selectedOperator =
-        this.localStorageService.getItem("selectedOperator");
-      if (selectedOperator) {
-        const operator = JSON.parse(selectedOperator);
-        this.operatorId = operator._id || "";
-        console.log("Operator ID from localStorage:", this.operatorId);
-      } else {
-        console.warn("No selected operator found in localStorage");
-        this.toastr.warning(
-          "No operator selected. Please select an operator first."
-        );
-      }
-    } catch (error) {
-      console.error("Error getting operator ID from localStorage:", error);
-      this.toastr.error("Error getting operator information");
-    }
-  }
+ 
 
  
 
   loadListings() {
     this.apiLoading = true;
-  
-    this.propertiesService.getProperties(this.currentPage, this.itemsPerPage).subscribe(
-      (res: any) => {
-        console.log('API Response:', res);
-        if (res.success) {
-          // Ensure properties is an array
-          if (Array.isArray(res.data.properties)) {
-            this.allListingList = res.data.properties.map((listing: any) => ({
-            id: listing._id,
-            operatorId: listing.operator_id,
-            name: listing.Listing_Name,
-            area: listing.Area,
-            roomType: listing.Room_Type,
-            occupancy: listing.Occupancy,
-            adr: listing.ADR,
-            revpar: listing.RevPAR,
-            mpi: listing.MPI,
-            stlyVar: listing.STLY_Var,
-            stlmVar: listing.STLM_Var,
-            pickUpOcc: listing.Pick_Up_Occ,
-            minRateThreshold: listing.Min_Rate_Threshold,
-            bookingCom: listing.BookingCom,
-            airbnb: listing.Airbnb,
-            vrbo: listing.VRBO,
-            cxlPolicy: listing.CXL_Policy,
-            adultChildConfig: listing.Adult_Child_Config,
-            reviews: listing.Reviews,
-            propertyUrls: listing.Property_URLs,
-            }));
-          }
-  
-          // Update pagination data
-
-          // this.updatePagination();
-          this.totalPages = res.data.pagination.total_pages;
-          this.currentPage = res.data.pagination.page;
-          this.itemsPerPage = res.data.pagination.limit;
+   
+    this.listingService.getListings(this.currentPage, this.itemsPerPage, this.operatorId || '', this.sortOrder)
+  .subscribe(
+    (res: any) => {
+      console.log('API Response:', res);
+      if (res.success) {
+        // Ensure properties is an array
+        if (Array.isArray(res.data.properties)) {
+          this.allListingList = res.data.properties.map((listing: any) => ({
+            id: listing.id,
+            property_urls: listing.urls,
+          }));
         }
-        this.apiLoading = false;
-      },
-      (error) => {
-        console.error('Error loading listings:', error);
-        this.apiLoading = false;
+
+        // Update pagination data
+        this.totalPages = res.data.pagination.total_pages;
+        this.currentPage = res.data.pagination.page;
+        this.itemsPerPage = res.data.pagination.limit;
       }
-    );
+      this.apiLoading = false;
+    },
+    (error: any) => {
+      console.error('Error loading listings:', error);
+      this.apiLoading = false;
+    }
+  );
   }
 
   editListing(listing: any) {
@@ -125,9 +92,9 @@ export class ListingComponent implements OnInit {
       this.editingListingId = listing.id;
       console.log('Editing Listing ID:', this.editingListingId);
       this.addListingForm.patchValue({
-        bookingComUrl: listing.propertyUrls?.Booking || "",
-        airbnbUrl: listing.propertyUrls?.Airbnb || "",
-        vrboUrl: listing.propertyUrls?.VRBO || "",
+        bookingComUrl: listing.property_urls?.Booking || "",
+        airbnbUrl: listing.property_urls?.Airbnb || "",
+        vrboUrl: listing.property_urls?.VRBO || "",
       });
     } else {
       console.error('Invalid listing object:', listing);
@@ -135,28 +102,32 @@ export class ListingComponent implements OnInit {
   }
 
   deleteListing(listingId: string) {
+    console.log('Attempting to delete listing with ID:', listingId);
+    console.log('Operator ID:', this.operatorId);
+  
     this.toastService.showConfirm(
       'Are you sure?',
-      'Delete the selected property?',
+      'Delete the selected listing?',
       'Yes, delete it!',
       'No, cancel',
       () => {
         this.propertiesService
-              .deleteProperty(listingId)
-              .pipe(finalize(() => (this.loading = false)))
-              .subscribe({
-                next: (res: any) => {
-                  this.toastr.success("Property deleted successfully");
-                  this.loadListings();
-                },
-                error: (error: any) => {
-                  console.error("Error deleting property:", error);
-                  this.toastr.error("Failed to delete property");
-                },
-              });
+          .deleteProperty(listingId, this.operatorId || '') // Ensure operatorId is passed
+          .pipe(finalize(() => (this.loading = false)))
+          .subscribe({
+            next: (res: any) => {
+              console.log('Delete response:', res);
+              this.toastr.success("Listing deleted successfully");
+              this.loadListings();
+            },
+            error: (error: any) => {
+              console.error("Error deleting listing:", error);
+              this.toastr.error("Failed to delete listing");
+            },
+          });
       },
       () => {
-        // Cancel callback
+        console.log('Delete action cancelled');
       }
     );
   }
@@ -171,10 +142,12 @@ export class ListingComponent implements OnInit {
   onSubmit() {
     console.log('isEdit:', this.isEdit);
     console.log('editingListingId:', this.editingListingId);
+    console.log('operatorId:', this.operatorId);
+  
     this.addListingForm.markAllAsTouched();
     const { bookingComUrl, airbnbUrl, vrboUrl } = this.addListingForm.value;
     if (!bookingComUrl && !airbnbUrl && !vrboUrl) {
-      this.toastr.error("At least one property URL must be provided.");
+      this.toastr.error("At least one listing URL must be provided.");
       return;
     }
     if (this.addListingForm.valid) {
@@ -189,7 +162,6 @@ export class ListingComponent implements OnInit {
       };
   
       if (this.isEdit && this.editingListingId) {
-        // Update existing listing
         console.log('Updating Listing');
         this.propertiesService
           .updateProperty(formData, this.editingListingId)
@@ -207,7 +179,6 @@ export class ListingComponent implements OnInit {
             },
           });
       } else {
-        // Create new listing
         console.log('Creating Listing');
         this.propertiesService
           .createProperty(formData)

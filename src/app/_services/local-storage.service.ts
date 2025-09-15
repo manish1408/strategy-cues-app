@@ -23,4 +23,18 @@ export class LocalStorageService {
   public clear(): void {
     localStorage.clear();
   }
+
+  getSelectedOperatorId(): string | null {
+    const selectedOperator = localStorage.getItem('selectedOperator');
+    if (selectedOperator) {
+      try {
+        const operator = JSON.parse(selectedOperator);
+        return operator._id || null;
+      } catch (error) {
+        console.error('Error parsing selectedOperator:', error);
+        return null;
+      }
+    }
+    return null;
+  }
 }
