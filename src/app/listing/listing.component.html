@@ -19,7 +19,7 @@
 
   <div *ngIf="!apiLoading">
     <!-- Show table when listings exist -->
-    <div class="table-view" *ngIf="allListingList && allListingList.length > 0">
+    <div class="table-view mt-3" *ngIf="allListingList && allListingList.length > 0">
       <div class="table-card">
         <div class="table-responsive">
           <table class="table table-hover">
@@ -49,6 +49,15 @@
       </div>
     </div>
 
+    <!-- Show empty state when no listings -->
+  <div *ngIf="!allListingList || allListingList.length === 0" class="mt-5 text-center">
+    <div class="card-body">
+      <h5 class="card-title mb-3">No Listings Found</h5>
+      <p class="card-text">No listings found yet. Click on "Add Listing" to add a new listing.</p>
+    </div>
+  </div>
+
+
     <!-- Pagination -->
     <div class="pagination-section" *ngIf="totalPages > 1">
       <div class="pagination justify-content-center">
@@ -59,13 +68,7 @@
     </div>
   </div>
 
-  <!-- Show empty state when no listings -->
-  <div *ngIf="!allListingList || allListingList.length === 0" class="mt-5 text-center">
-    <div class="card-body">
-      <h5 class="card-title mb-3">No Listings Found</h5>
-      <p class="card-text">No listings found yet. Click on "Add Listing" to add a new listing.</p>
-    </div>
-  </div>
+  
 </div>
 <!-- Add Form Modal -->
 <div
