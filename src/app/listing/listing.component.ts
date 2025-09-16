@@ -42,12 +42,18 @@ export class ListingComponent implements OnInit {
     private listingService: ListingService
   ) {
     this.addListingForm = this.fb.group({
-      bookingComUrl: [
-        "",
-        [Validators.required, Validators.pattern("https?://.+")],
-      ],
-      airbnbUrl: [""],
-      vrboUrl: [""],
+      bookingCom: this.fb.group({
+        url: [""],
+        id: [""],
+      }),
+      airbnb: this.fb.group({
+        url: [""],
+        id: [""],
+      }),
+      vrbo: this.fb.group({
+        url: [""],
+        id: [""],
+      }),
     });
   }
 
@@ -93,9 +99,18 @@ export class ListingComponent implements OnInit {
       this.isEdit = true;
       this.editingListingId = listing.id;
       this.addListingForm.patchValue({
-        bookingComUrl: listing.property_urls?.Booking.url || "",
-        airbnbUrl: listing.property_urls?.Airbnb.url || "",
-        vrboUrl: listing.property_urls?.VRBO.url || "",
+        bookingCom: {
+          url: listing.property_urls?.Booking.url || "",
+          id: listing.property_urls?.Booking.id || "",
+        },
+        airbnb: {
+          url: listing.property_urls?.Airbnb.url || "",
+          id: listing.property_urls?.Airbnb.id || "",
+        },
+        vrbo: {
+          url: listing.property_urls?.VRBO.url || "",
+          id: listing.property_urls?.VRBO.id || "",
+        },
       });
     } else {
       console.error('Invalid listing object:', listing);
@@ -146,27 +161,32 @@ export class ListingComponent implements OnInit {
     console.log('operatorId:', this.operatorId);
   
     this.addListingForm.markAllAsTouched();
-    const { bookingComUrl, airbnbUrl, vrboUrl } = this.addListingForm.value;
-    if (!bookingComUrl && !airbnbUrl && !vrboUrl) {
-      this.toastr.error("At least one listing URL must be provided.");
+    const { bookingCom, airbnb, vrbo } = this.addListingForm.value;
+    if ((bookingCom.url && !bookingCom.id) || (airbnb.url && !airbnb.id) || (vrbo.url && !vrbo.id)) {
+      this.toastr.error("Please provide an ID for each URL you entered.");
       return;
     }
+    if (!bookingCom.id && !airbnb.id && !vrbo.id) {
+      this.toastr.error("At least one listing ID must be provided.");
+      return;
+    }
+  
     if (this.addListingForm.valid) {
       this.loading = true;
       const formData = {
         operator_id: this.operatorId,
         Property_URLs: {
           Booking: {
-            url: bookingComUrl,
-            id: this.bookingComId || '',
+            url: bookingCom.url,
+            id: bookingCom.id || '',
           },
           Airbnb: {
-            url: airbnbUrl,
-            id: this.airbnbId || '',
+            url: airbnb.url,
+            id: airbnb.id || '',
           },
           VRBO: {
-            url: vrboUrl,
-            id: this.vrboId || '',
+            url: vrbo.url,
+            id: vrbo.id || '',
           },
           Pricelab: this.pricelab || '',
         },
@@ -215,9 +235,18 @@ export class ListingComponent implements OnInit {
     this.addListingForm.patchValue({
       operator_id: this.operatorId,
       Property_URLs: {
-        bookingComUrl: "",
-        airbnbUrl: "",
-        vrboUrl: "",
+        bookingCom: {
+          url: "",
+          id: "",
+        },
+        airbnb: {
+          url: "",
+          id: "",
+        },
+        vrbo: {
+          url: "",
+          id: "",
+        },
       },
     });
     this.isEdit = false;
