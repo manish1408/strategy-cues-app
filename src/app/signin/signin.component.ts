@@ -8,6 +8,7 @@ import { finalize } from "rxjs";
 import { AuthenticationService } from "../_services/authentication.service";
 import { EventService } from "../_services/event.service";
 import { ProfileService } from "../_services/profile.service";
+import { OperatorService } from "../_services/operator.service";
 
 
 @Component({
@@ -31,7 +32,8 @@ export class SigninComponent implements OnDestroy {
     private localStorageService: LocalStorageService,
     private authService: AuthenticationService,
     private eventService: EventService<any>,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private operatorService: OperatorService
   ) {
     this.titleService.setTitle("Sign In: Strategy Cues");
   }
@@ -105,7 +107,8 @@ export class SigninComponent implements OnDestroy {
                 this.fetchUserProfile();
               }
               
-              this.router.navigate(["/dashboard"]);
+              // Check for operators and handle redirection
+              this.checkOperatorsAndRedirect();
               this.toastr.success("Login successful!");
             } else {
               this.toastr.error(response.error?.detail || "Login failed. Please try again.");
@@ -145,7 +148,9 @@ export class SigninComponent implements OnDestroy {
 
         this.eventService.dispatchEvent({ type: 'LOGIN_CHANGE' });
         this.toastr.success("Google sign-in successful!");
-        this.router.navigate(["/dashboard"]);
+        
+        // Check for operators and handle redirection
+        this.checkOperatorsAndRedirect();
       } catch (error) {
         console.error('Google sign-in error:', error);
         this.toastr.error("Google sign-in failed. Please try again.");
@@ -170,6 +175,47 @@ export class SigninComponent implements OnDestroy {
       },
       error: (error: any) => {
         console.error('Error fetching user profile:', error);
+      }
+    });
+  }
+
+  checkOperatorsAndRedirect() {
+    this.operatorService.getAllOperator().subscribe({
+      next: (response: any) => {
+        if (response.success && response.data?.operators) {
+          const operators = response.data.operators;
+          
+          // Store operators in localStorage
+          this.localStorageService.setItem(
+            "STRATEGY-CUES-OPERATORS",
+            JSON.stringify(operators)
+          );
+          
+          if (operators.length === 0) {
+            // No operators found, redirect to all-operators page
+            this.router.navigate(["/all-operators"]);
+          } else {
+            // Operators exist, set first one as selected and go to dashboard
+            const firstOperator = operators[0];
+            this.localStorageService.setItem(
+              "selectedOperator",
+              JSON.stringify(firstOperator)
+            );
+            
+            // Dispatch event to update app component dropdown
+            this.eventService.dispatchEvent({ type: 'OPERATORS_UPDATED' });
+            
+            this.router.navigate(["/revenue"]);
+          }
+        } else {
+          // No operators data, redirect to all-operators page
+          this.router.navigate(["/all-operators"]);
+        }
+      },
+      error: (error: any) => {
+        console.error('Error fetching operators:', error);
+        // On error, redirect to all-operators page
+        this.router.navigate(["/all-operators"]);
       }
     });
   }
