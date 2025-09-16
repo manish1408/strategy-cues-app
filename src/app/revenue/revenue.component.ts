@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { PropertiesService, PropertyData } from '../_services/properties.service';
 import { LocalStorageService } from '../_services/local-storage.service';
+import { FilterPresetService } from '../_services/filter-preset.service';
+import { FilterPreset } from '../_models/filter-preset.interface';
 import { Router } from '@angular/router';
 
 // Declare global variables for jQuery and Bootstrap
@@ -263,7 +265,21 @@ export class RevenueComponent implements OnInit {
   vrboTotalRevMinRange: number = 0;
   vrboTotalRevMaxRange: number = 1000;
 
-  constructor(private propertiesService: PropertiesService, private localStorageService: LocalStorageService, private router: Router) { 
+  // Filter preset properties
+  filterPresets: FilterPreset[] = [];
+  selectedPresetId: string = '';
+  showSavePresetForm: boolean = false;
+  newPresetName: string = '';
+  newPresetDescription: string = '';
+  presetSaveError: string = '';
+  showPresetManagement: boolean = false;
+
+  constructor(
+    private propertiesService: PropertiesService, 
+    private localStorageService: LocalStorageService, 
+    private filterPresetService: FilterPresetService,
+    private router: Router
+  ) { 
     this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
   }
 
@@ -292,6 +308,7 @@ export class RevenueComponent implements OnInit {
   ngOnInit(): void {
     this.loadProperties();
     this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
+    this.loadFilterPresets();
   }
 
   loadProperties(): void {
@@ -383,15 +400,15 @@ export class RevenueComponent implements OnInit {
     this.totalListings = dataSource.length;
     
     this.totalRevenueTM = dataSource.reduce((sum, item) => {
-      return sum + this.safeParseNumber(item.RevPAR.TM);
+      return sum + this.safeParseNumber(item.RevPAR?.TM);
     }, 0);
     
     this.totalRevenueNM = dataSource.reduce((sum, item) => {
-      return sum + this.safeParseNumber(item.RevPAR.NM);
+      return sum + this.safeParseNumber(item.RevPAR?.NM);
     }, 0);
     
     this.averageOccupancy = dataSource.reduce((sum, item) => {
-      return sum + this.safeParseNumber(item.Occupancy.TM);
+      return sum + this.safeParseNumber(item.Occupancy?.TM);
     }, 0) / this.totalListings;
   }
   
@@ -1959,5 +1976,285 @@ export class RevenueComponent implements OnInit {
     } else {
       console.warn(`No URL found for ${platform} platform for property: ${property.Listing_Name}`);
     }
+  }
+
+  // Filter Preset Methods
+  loadFilterPresets(): void {
+    this.filterPresetService.presets$.subscribe(presets => {
+      this.filterPresets = presets;
+    });
+  }
+
+  getCurrentFilters(): FilterPreset['filters'] {
+    return {
+      // Basic filters
+      selectedArea: this.selectedArea || undefined,
+      selectedRoomType: this.selectedRoomType || undefined,
+      
+      // Range filters
+      adrMin: this.adrMin,
+      adrMax: this.adrMax,
+      revparMin: this.revparMin,
+      revparMax: this.revparMax,
+      mpiMin: this.mpiMin,
+      mpiMax: this.mpiMax,
+      minRateThresholdMin: this.minRateThresholdMin,
+      minRateThresholdMax: this.minRateThresholdMax,
+      
+      // Occupancy filters
+      occupancyTMMin: this.occupancyTMMin,
+      occupancyTMMax: this.occupancyTMMax,
+      occupancyNMMin: this.occupancyNMMin,
+      occupancyNMMax: this.occupancyNMMax,
+      occupancy7DaysMin: this.occupancy7DaysMin,
+      occupancy7DaysMax: this.occupancy7DaysMax,
+      occupancy30DaysMin: this.occupancy30DaysMin,
+      occupancy30DaysMax: this.occupancy30DaysMax,
+      pickUpOcc7DaysMin: this.pickUpOcc7DaysMin,
+      pickUpOcc7DaysMax: this.pickUpOcc7DaysMax,
+      pickUpOcc14DaysMin: this.pickUpOcc14DaysMin,
+      pickUpOcc14DaysMax: this.pickUpOcc14DaysMax,
+      pickUpOcc30DaysMin: this.pickUpOcc30DaysMin,
+      pickUpOcc30DaysMax: this.pickUpOcc30DaysMax,
+      
+      // Performance filters
+      stlyVarOccMin: this.stlyVarOccMin,
+      stlyVarOccMax: this.stlyVarOccMax,
+      stlyVarADRMin: this.stlyVarADRMin,
+      stlyVarADRMax: this.stlyVarADRMax,
+      stlyVarRevPARMin: this.stlyVarRevPARMin,
+      stlyVarRevPARMax: this.stlyVarRevPARMax,
+      stlmVarOccMin: this.stlmVarOccMin,
+      stlmVarOccMax: this.stlmVarOccMax,
+      stlmVarADRMin: this.stlmVarADRMin,
+      stlmVarADRMax: this.stlmVarADRMax,
+      stlmVarRevPARMin: this.stlmVarRevPARMin,
+      stlmVarRevPARMax: this.stlmVarRevPARMax,
+      
+      // Platform filters
+      bookingGeniusFilter: this.bookingGeniusFilter !== 'not-present' ? this.bookingGeniusFilter : undefined,
+      bookingMobileFilter: this.bookingMobileFilter !== 'not-present' ? this.bookingMobileFilter : undefined,
+      bookingPrefFilter: this.bookingPrefFilter !== 'not-present' ? this.bookingPrefFilter : undefined,
+      bookingWeeklyFilter: this.bookingWeeklyFilter !== 'not-present' ? this.bookingWeeklyFilter : undefined,
+      bookingMonthlyFilter: this.bookingMonthlyFilter !== 'not-present' ? this.bookingMonthlyFilter : undefined,
+      bookingLMDiscFilter: this.bookingLMDiscFilter !== 'not-present' ? this.bookingLMDiscFilter : undefined,
+      airbnbWeeklyFilter: this.airbnbWeeklyFilter !== 'not-present' ? this.airbnbWeeklyFilter : undefined,
+      airbnbMonthlyFilter: this.airbnbMonthlyFilter !== 'not-present' ? this.airbnbMonthlyFilter : undefined,
+      airbnbMemberFilter: this.airbnbMemberFilter !== 'not-present' ? this.airbnbMemberFilter : undefined,
+      airbnbLMDiscFilter: this.airbnbLMDiscFilter !== 'not-present' ? this.airbnbLMDiscFilter : undefined,
+      vrboWeeklyFilter: this.vrboWeeklyFilter !== 'not-present' ? this.vrboWeeklyFilter : undefined,
+      vrboMonthlyFilter: this.vrboMonthlyFilter !== 'not-present' ? this.vrboMonthlyFilter : undefined,
+      
+      // Reviews filters
+      bookingRevScoreMin: this.bookingRevScoreMin,
+      bookingRevScoreMax: this.bookingRevScoreMax,
+      bookingTotalRevMin: this.bookingTotalRevMin,
+      bookingTotalRevMax: this.bookingTotalRevMax,
+      airbnbRevScoreMin: this.airbnbRevScoreMin,
+      airbnbRevScoreMax: this.airbnbRevScoreMax,
+      airbnbTotalRevMin: this.airbnbTotalRevMin,
+      airbnbTotalRevMax: this.airbnbTotalRevMax,
+      vrboRevScoreMin: this.vrboRevScoreMin,
+      vrboRevScoreMax: this.vrboRevScoreMax,
+      vrboTotalRevMin: this.vrboTotalRevMin,
+      vrboTotalRevMax: this.vrboTotalRevMax
+    };
+  }
+
+  applyPresetFilters(filters: FilterPreset['filters']): void {
+    // Basic filters
+    this.selectedArea = filters.selectedArea || '';
+    this.selectedRoomType = filters.selectedRoomType || '';
+    
+    // Range filters
+    this.adrMin = filters.adrMin || null;
+    this.adrMax = filters.adrMax || null;
+    this.revparMin = filters.revparMin || null;
+    this.revparMax = filters.revparMax || null;
+    this.mpiMin = filters.mpiMin || null;
+    this.mpiMax = filters.mpiMax || null;
+    this.minRateThresholdMin = filters.minRateThresholdMin || null;
+    this.minRateThresholdMax = filters.minRateThresholdMax || null;
+    
+    // Occupancy filters
+    this.occupancyTMMin = filters.occupancyTMMin || null;
+    this.occupancyTMMax = filters.occupancyTMMax || null;
+    this.occupancyNMMin = filters.occupancyNMMin || null;
+    this.occupancyNMMax = filters.occupancyNMMax || null;
+    this.occupancy7DaysMin = filters.occupancy7DaysMin || null;
+    this.occupancy7DaysMax = filters.occupancy7DaysMax || null;
+    this.occupancy30DaysMin = filters.occupancy30DaysMin || null;
+    this.occupancy30DaysMax = filters.occupancy30DaysMax || null;
+    this.pickUpOcc7DaysMin = filters.pickUpOcc7DaysMin || null;
+    this.pickUpOcc7DaysMax = filters.pickUpOcc7DaysMax || null;
+    this.pickUpOcc14DaysMin = filters.pickUpOcc14DaysMin || null;
+    this.pickUpOcc14DaysMax = filters.pickUpOcc14DaysMax || null;
+    this.pickUpOcc30DaysMin = filters.pickUpOcc30DaysMin || null;
+    this.pickUpOcc30DaysMax = filters.pickUpOcc30DaysMax || null;
+    
+    // Performance filters
+    this.stlyVarOccMin = filters.stlyVarOccMin || null;
+    this.stlyVarOccMax = filters.stlyVarOccMax || null;
+    this.stlyVarADRMin = filters.stlyVarADRMin || null;
+    this.stlyVarADRMax = filters.stlyVarADRMax || null;
+    this.stlyVarRevPARMin = filters.stlyVarRevPARMin || null;
+    this.stlyVarRevPARMax = filters.stlyVarRevPARMax || null;
+    this.stlmVarOccMin = filters.stlmVarOccMin || null;
+    this.stlmVarOccMax = filters.stlmVarOccMax || null;
+    this.stlmVarADRMin = filters.stlmVarADRMin || null;
+    this.stlmVarADRMax = filters.stlmVarADRMax || null;
+    this.stlmVarRevPARMin = filters.stlmVarRevPARMin || null;
+    this.stlmVarRevPARMax = filters.stlmVarRevPARMax || null;
+    
+    // Platform filters
+    this.bookingGeniusFilter = filters.bookingGeniusFilter || 'not-present';
+    this.bookingMobileFilter = filters.bookingMobileFilter || 'not-present';
+    this.bookingPrefFilter = filters.bookingPrefFilter || 'not-present';
+    this.bookingWeeklyFilter = filters.bookingWeeklyFilter || 'not-present';
+    this.bookingMonthlyFilter = filters.bookingMonthlyFilter || 'not-present';
+    this.bookingLMDiscFilter = filters.bookingLMDiscFilter || 'not-present';
+    this.airbnbWeeklyFilter = filters.airbnbWeeklyFilter || 'not-present';
+    this.airbnbMonthlyFilter = filters.airbnbMonthlyFilter || 'not-present';
+    this.airbnbMemberFilter = filters.airbnbMemberFilter || 'not-present';
+    this.airbnbLMDiscFilter = filters.airbnbLMDiscFilter || 'not-present';
+    this.vrboWeeklyFilter = filters.vrboWeeklyFilter || 'not-present';
+    this.vrboMonthlyFilter = filters.vrboMonthlyFilter || 'not-present';
+    
+    // Reviews filters
+    this.bookingRevScoreMin = filters.bookingRevScoreMin || null;
+    this.bookingRevScoreMax = filters.bookingRevScoreMax || null;
+    this.bookingTotalRevMin = filters.bookingTotalRevMin || null;
+    this.bookingTotalRevMax = filters.bookingTotalRevMax || null;
+    this.airbnbRevScoreMin = filters.airbnbRevScoreMin || null;
+    this.airbnbRevScoreMax = filters.airbnbRevScoreMax || null;
+    this.airbnbTotalRevMin = filters.airbnbTotalRevMin || null;
+    this.airbnbTotalRevMax = filters.airbnbTotalRevMax || null;
+    this.vrboRevScoreMin = filters.vrboRevScoreMin || null;
+    this.vrboRevScoreMax = filters.vrboRevScoreMax || null;
+    this.vrboTotalRevMin = filters.vrboTotalRevMin || null;
+    this.vrboTotalRevMax = filters.vrboTotalRevMax || null;
+    
+    // Update temporary filters to match
+    this.initializeTempFilters();
+    
+    // Apply the filters
+    this.filterData();
+  }
+
+  onPresetSelectionChange(): void {
+    if (this.selectedPresetId) {
+      const preset = this.filterPresetService.getPresetById(this.selectedPresetId);
+      if (preset) {
+        this.applyPresetFilters(preset.filters);
+      }
+    }
+  }
+
+  showSavePresetDialog(): void {
+    if (!this.hasActiveFilters()) {
+      alert('No active filters to save. Please apply some filters first.');
+      return;
+    }
+    this.showSavePresetForm = true;
+    this.newPresetName = '';
+    this.newPresetDescription = '';
+    this.presetSaveError = '';
+  }
+
+  cancelSavePreset(): void {
+    this.showSavePresetForm = false;
+    this.newPresetName = '';
+    this.newPresetDescription = '';
+    this.presetSaveError = '';
+  }
+
+  saveCurrentFiltersAsPreset(): void {
+    if (!this.newPresetName.trim()) {
+      this.presetSaveError = 'Please enter a preset name';
+      return;
+    }
+
+    try {
+      const currentFilters = this.getCurrentFilters();
+      this.filterPresetService.savePreset(
+        this.newPresetName.trim(),
+        currentFilters,
+        this.newPresetDescription.trim() || undefined
+      );
+      
+      this.cancelSavePreset();
+      alert(`Filter preset "${this.newPresetName}" saved successfully!`);
+    } catch (error: any) {
+      this.presetSaveError = error.message || 'Failed to save preset';
+    }
+  }
+
+  deletePreset(presetId: string): void {
+    const preset = this.filterPresetService.getPresetById(presetId);
+    if (preset && confirm(`Are you sure you want to delete the preset "${preset.name}"?`)) {
+      this.filterPresetService.deletePreset(presetId);
+      if (this.selectedPresetId === presetId) {
+        this.selectedPresetId = '';
+      }
+    }
+  }
+
+  duplicatePreset(presetId: string): void {
+    const preset = this.filterPresetService.getPresetById(presetId);
+    if (preset) {
+      const newName = prompt(`Enter name for the duplicate preset:`, `${preset.name} (Copy)`);
+      if (newName && newName.trim()) {
+        try {
+          this.filterPresetService.duplicatePreset(presetId, newName.trim());
+          alert(`Preset duplicated as "${newName}"`);
+        } catch (error: any) {
+          alert(error.message || 'Failed to duplicate preset');
+        }
+      }
+    }
+  }
+
+  getPresetSummary(preset: FilterPreset): string[] {
+    return this.filterPresetService.getPresetSummary(preset);
+  }
+
+  togglePresetManagement(): void {
+    this.showPresetManagement = !this.showPresetManagement;
+  }
+
+  exportPresets(): void {
+    try {
+      const data = this.filterPresetService.exportPresets();
+      const blob = new Blob([data], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `filter_presets_${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      alert('Failed to export presets');
+    }
+  }
+
+  importPresets(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const jsonData = e.target?.result as string;
+          const importedCount = this.filterPresetService.importPresets(jsonData, false);
+          alert(`Successfully imported ${importedCount} preset(s)`);
+        } catch (error: any) {
+          alert(error.message || 'Failed to import presets');
+        }
+      };
+      reader.readAsText(file);
+    }
+    // Reset file input
+    event.target.value = '';
   }
 }

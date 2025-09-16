@@ -11,14 +11,73 @@
           </div>
         </div>
         <div class="col-md-3">
-          <button class="btn btn-outline-secondary" (click)="openFilterModal()" [class.btn-primary]="hasActiveFilters()"
-            [class.text-white]="hasActiveFilters()">
-            <i class="fas fa-filter me-2"></i>
-            Filters
-            <span *ngIf="getActiveFilterCount() > 0" class="badge bg-white text-primary ms-2">
-              {{ getActiveFilterCount() }}
-            </span>
-          </button>
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-secondary" (click)="openFilterModal()" [class.btn-primary]="hasActiveFilters()"
+              [class.text-white]="hasActiveFilters()">
+              <i class="fas fa-filter me-2"></i>
+              Filters
+              <span *ngIf="getActiveFilterCount() > 0" class="badge bg-white text-primary ms-2">
+                {{ getActiveFilterCount() }}
+              </span>
+            </button>
+            
+            <!-- Filter Presets Dropdown -->
+            <div class="dropdown">
+              <button class="btn btn-outline-info dropdown-toggle" type="button" id="filterPresetsDropdown"
+                data-bs-toggle="dropdown" aria-expanded="false" title="Filter Presets">
+                <i class="fas fa-bookmark me-1"></i>
+                Presets
+              </button>
+              <div class="dropdown-menu dropdown-menu-end filter-presets-dropdown" aria-labelledby="filterPresetsDropdown">
+                <div class="dropdown-header">
+                  <strong>Filter Presets</strong>
+                </div>
+                
+                <!-- Quick Apply Presets -->
+                <div *ngIf="filterPresets.length > 0" class="preset-list">
+                  <div *ngFor="let preset of filterPresets" class="dropdown-item preset-item" (click)="$event.stopPropagation()">
+                    <div class="preset-info">
+                      <div class="preset-name" (click)="selectedPresetId = preset.id; onPresetSelectionChange()">
+                        <i class="fas fa-bookmark text-primary me-2"></i>
+                        {{ preset.name }}
+                      </div>
+                      <div class="preset-summary">
+                        <small class="text-muted">{{ getPresetSummary(preset).slice(0, 2).join(', ') }}
+                          <span *ngIf="getPresetSummary(preset).length > 2">...</span>
+                        </small>
+                      </div>
+                    </div>
+                    <div class="preset-actions">
+                      <button class="btn btn-sm btn-outline-danger" (click)="deletePreset(preset.id)" 
+                        title="Delete preset">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                
+                <div *ngIf="filterPresets.length === 0" class="dropdown-item-text text-muted">
+                  No saved presets
+                </div>
+                
+                <div class="dropdown-divider"></div>
+                
+                <!-- Preset Management Actions -->
+                <div class="dropdown-item-text px-3 py-2">
+                  <div class="btn-group btn-group-sm w-100" role="group">
+                    <button type="button" class="btn btn-outline-success" (click)="showSavePresetDialog()" 
+                      [disabled]="!hasActiveFilters()" title="Save current filters as preset">
+                      <i class="fas fa-save me-1"></i>Save
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" (click)="togglePresetManagement()"
+                      title="Manage presets">
+                      <i class="fas fa-cog me-1"></i>Manage
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="col-md-3">
           <div class="d-flex gap-2 float-end">
@@ -189,9 +248,15 @@
           <h6 class="mb-0">
             <i class="fas fa-filter me-2"></i>Applied Filters ({{ getAppliedFilters().length }})
           </h6>
-          <button class="btn btn-sm btn-outline-danger" (click)="clearAllFilters()">
-            <i class="fas fa-times me-1"></i>Clear All
-          </button>
+          <div class="filter-actions">
+            <button class="btn btn-sm btn-outline-success me-2" (click)="showSavePresetDialog()" 
+              title="Save current filters as preset">
+              <i class="fas fa-bookmark me-1"></i>Save as Preset
+            </button>
+            <button class="btn btn-sm btn-outline-danger" (click)="clearAllFilters()">
+              <i class="fas fa-times me-1"></i>Clear All
+            </button>
+          </div>
         </div>
         <div class="filters-badges">
           <span *ngFor="let filter of getAppliedFilters()" class="filter-badge" [ngClass]="'filter-' + filter.type">
@@ -1234,5 +1299,155 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Save Preset Modal -->
+    <div class="modal fade" id="savePresetModal" tabindex="-1" aria-labelledby="savePresetModalLabel" aria-hidden="true"
+      [class.show]="showSavePresetForm" [style.display]="showSavePresetForm ? 'block' : 'none'">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="savePresetModalLabel">
+              <i class="fas fa-bookmark me-2"></i>Save Filter Preset
+            </h5>
+            <button type="button" class="btn-close" (click)="cancelSavePreset()" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form (ngSubmit)="saveCurrentFiltersAsPreset()" #presetForm="ngForm">
+              <div class="mb-3">
+                <label for="presetName" class="form-label">Preset Name *</label>
+                <input type="text" class="form-control" id="presetName" [(ngModel)]="newPresetName" 
+                  name="presetName" required maxlength="50" placeholder="Enter a name for this preset">
+              </div>
+              <div class="mb-3">
+                <label for="presetDescription" class="form-label">Description (Optional)</label>
+                <textarea class="form-control" id="presetDescription" [(ngModel)]="newPresetDescription" 
+                  name="presetDescription" rows="3" maxlength="200" 
+                  placeholder="Add a description to help you remember what this preset is for"></textarea>
+              </div>
+              
+              <!-- Current Filters Preview -->
+              <div class="mb-3">
+                <label class="form-label">Current Filters to Save:</label>
+                <div class="current-filters-preview">
+                  <div class="filters-badges">
+                    <span *ngFor="let filter of getAppliedFilters().slice(0, 5)" 
+                      class="filter-badge filter-preview">
+                      {{ filter.label }}: {{ filter.value }}
+                    </span>
+                    <span *ngIf="getAppliedFilters().length > 5" class="filter-badge filter-preview">
+                      +{{ getAppliedFilters().length - 5 }} more
+                    </span>
+                  </div>
+                </div>
+              </div>
+              
+              <div *ngIf="presetSaveError" class="alert alert-danger">
+                {{ presetSaveError }}
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="cancelSavePreset()">Cancel</button>
+            <button type="button" class="btn btn-success" (click)="saveCurrentFiltersAsPreset()" 
+              [disabled]="!newPresetName.trim()">
+              <i class="fas fa-save me-2"></i>Save Preset
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Preset Management Modal -->
+    <div class="modal fade" id="presetManagementModal" tabindex="-1" aria-labelledby="presetManagementModalLabel" aria-hidden="true"
+      [class.show]="showPresetManagement" [style.display]="showPresetManagement ? 'block' : 'none'">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="presetManagementModalLabel">
+              <i class="fas fa-cog me-2"></i>Manage Filter Presets
+            </h5>
+            <button type="button" class="btn-close" (click)="togglePresetManagement()" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <h6>Total Presets: {{ filterPresets.length }}</h6>
+              </div>
+              <div class="col-md-6 text-end">
+                <div class="btn-group btn-group-sm">
+                  <button class="btn btn-outline-primary" (click)="exportPresets()" 
+                    title="Export all presets">
+                    <i class="fas fa-download me-1"></i>Export
+                  </button>
+                  <label class="btn btn-outline-secondary" title="Import presets">
+                    <i class="fas fa-upload me-1"></i>Import
+                    <input type="file" accept=".json" (change)="importPresets($event)" 
+                      style="display: none;">
+                  </label>
+                </div>
+              </div>
+            </div>
+            
+            <div *ngIf="filterPresets.length === 0" class="text-center py-4 text-muted">
+              <i class="fas fa-bookmark fa-3x mb-3"></i>
+              <p>No filter presets saved yet.</p>
+              <p>Apply some filters and click "Save as Preset" to get started!</p>
+            </div>
+            
+            <div *ngIf="filterPresets.length > 0" class="preset-management-list">
+              <div *ngFor="let preset of filterPresets" class="preset-management-item">
+                <div class="preset-card">
+                  <div class="preset-header">
+                    <div class="preset-title">
+                      <h6 class="mb-1">{{ preset.name }}</h6>
+                      <small class="text-muted">
+                        Created: {{ preset.createdAt | date:'short' }}
+                        <span *ngIf="preset.updatedAt > preset.createdAt">
+                          | Updated: {{ preset.updatedAt | date:'short' }}
+                        </span>
+                      </small>
+                    </div>
+                    <div class="preset-actions">
+                      <button class="btn btn-sm btn-outline-primary me-1" 
+                        (click)="selectedPresetId = preset.id; onPresetSelectionChange(); togglePresetManagement()"
+                        title="Apply this preset">
+                        <i class="fas fa-play"></i>
+                      </button>
+                      <button class="btn btn-sm btn-outline-secondary me-1" 
+                        (click)="duplicatePreset(preset.id)" title="Duplicate preset">
+                        <i class="fas fa-copy"></i>
+                      </button>
+                      <button class="btn btn-sm btn-outline-danger" 
+                        (click)="deletePreset(preset.id)" title="Delete preset">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div *ngIf="preset.description" class="preset-description">
+                    <small class="text-muted">{{ preset.description }}</small>
+                  </div>
+                  <div class="preset-summary">
+                    <div class="filters-summary">
+                      <span *ngFor="let summary of getPresetSummary(preset)" 
+                        class="badge bg-light text-dark me-1 mb-1">{{ summary }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="togglePresetManagement()">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Modal backdrop for custom modals -->
+    <div class="modal-backdrop fade" 
+      [class.show]="showSavePresetForm || showPresetManagement" 
+      *ngIf="showSavePresetForm || showPresetManagement"
+      (click)="showSavePresetForm ? cancelSavePreset() : togglePresetManagement()">
     </div>
   </div>
