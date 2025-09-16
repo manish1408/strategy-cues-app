@@ -75,7 +75,6 @@ export class AllOperatorsComponent {
       .pipe(finalize(() => this.apiLoading = false))
       .subscribe({
         next: (res: any) => {
-          console.log('Operators loaded:', res);
           this.allOperatorList = res.data?.operators.map((operator: any) => ({
             _id: operator._id,
             name: operator.name,
@@ -109,11 +108,8 @@ export class AllOperatorsComponent {
               cookies: operator.vrbo?.cookies || [],
             }
           })) || [];
-          console.log('allOperatorList after assignment:', this.allOperatorList);
-          console.log('allOperatorList length:', this.allOperatorList.length);
         },
         error: (error: any) => {
-          console.error('Error loading operators:', error);
           this.toastr.error('Failed to load operators');
         }
       });
@@ -121,10 +117,8 @@ export class AllOperatorsComponent {
 
   editOperator(operator: any) {
     if (operator && operator._id) {
-    console.log('Editing Operator:', operator);
     this.isEdit = true;
     this.editingOperatorId = operator._id;
-    console.log('Editing Operator ID:', this.editingOperatorId);
     this.addOperatorForm.patchValue({
       name: operator.name,
 
@@ -174,7 +168,6 @@ export class AllOperatorsComponent {
               }
             },
             error: (err) => {
-              console.log(err);
               this.toastr.error(err.error.detail);
             },
           });
@@ -191,12 +184,10 @@ export class AllOperatorsComponent {
   }
 
   onSubmit() {
-    console.log('Form Data:', this.addOperatorForm.value);
     this.addOperatorForm.markAllAsTouched();
     if (this.addOperatorForm.valid) {
       this.loading = true;
       const formData = this.addOperatorForm.value;
-      console.log('Form Data:', formData);
       if (this.isEdit && this.editingOperatorId) {
         // Update existing operator
         this.operatorService.updateOperator(formData, this.editingOperatorId)
@@ -211,7 +202,6 @@ export class AllOperatorsComponent {
               this.eventService.dispatchEvent({ type: 'OPERATORS_UPDATED' });
             },
             error: (error: any) => {
-              console.error('Error updating operator:', error);
               this.toastr.error('Failed to update operator');
             }
           });
@@ -229,7 +219,6 @@ export class AllOperatorsComponent {
               this.eventService.dispatchEvent({ type: 'OPERATORS_UPDATED' });
             },
             error: (error: any) => {
-              console.error('Error creating operator:', error);
               this.toastr.error('Failed to create operator');
             }
           });

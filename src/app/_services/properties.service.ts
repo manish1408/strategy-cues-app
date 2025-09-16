@@ -163,8 +163,6 @@ export class PropertiesService {
   }
 
   updateProperty(propertyData: any, propertyId: string): Observable<ApiResponse<any>> {
-    console.log('Updating property with ID:', propertyId);
-    console.log('Property data:', propertyData);
     return this.http.put<ApiResponse<any>>(`${this._url}/update-property/${propertyId}`, propertyData).pipe(
       catchError((error) => {
         console.error('Error updating property:', error);

@@ -98,8 +98,6 @@ export class ForgotPasswordComponent {
         .pipe(finalize(() => (this.loading = false)))
         .subscribe({
           next: (res) => {
-            console.log('Forgot password response:', res);
-         
             if (res.result || res.success || res.status === 'success' || (res.data && res.data.success)) {
               this.otpSuccess = true;
               this.resetForm.patchValue({
@@ -111,7 +109,6 @@ export class ForgotPasswordComponent {
             }
           },
           error: (err) => {
-            console.error('Forgot password error:', err);
             this.toastr.error(
               err.error?.details || 
               err.error?.message || 
@@ -119,8 +116,6 @@ export class ForgotPasswordComponent {
             );
           },
         });
-    } else {
-      console.log('Form is invalid');
     }
   }
   onSubmitReset(): void {
@@ -135,16 +130,11 @@ export class ForgotPasswordComponent {
         new_password: this.resetForm.value.new_password,
       };
 
-      console.log('Reset password request:', reqObj);
-
-   
       this.authService
         .resetPassword(reqObj)
         .pipe(finalize(() => (this.loading = false)))
         .subscribe({
           next: (res) => {
-            console.log('Reset password response:', res);
-            // Check for different possible response structures
             if (res.result || res.success || res.status === 'success' || (res.data && res.data.success)) {
               this.toastr.success('Password changed successfully!');
               this.router.navigate(['/signin']);
@@ -153,7 +143,6 @@ export class ForgotPasswordComponent {
             }
           },
           error: (err) => {
-            console.error('Reset password error:', err);
             this.toastr.error(
               err.error?.details || 
               err.error?.message || 
@@ -165,7 +154,6 @@ export class ForgotPasswordComponent {
       if (!this.code.value) {
         this.toastr.error('OTP is required');
       }
-      console.log('Form is invalid');
     }
   }
   

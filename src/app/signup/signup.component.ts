@@ -116,16 +116,12 @@ export class SignupComponent {
         // phone: this.signupForm.value.phone,
         password: this.signupForm.value.password,
       };
-      console.log('Form submitted with:', reqObj);
       this.authService.signup(reqObj).subscribe((res: any) => {
-        console.log('Sign up response:', res);
         this.toastr.success('Sign up successful!');
         this.router.navigate(['/signin']);
         this.loading = false;
       });
      
-    } else {
-      console.log('Form is invalid');
     }
   }
 

@@ -55,27 +55,20 @@ export class SettingsComponent {
 
   loadUser() {
     this.user = this.profileService.getUserDetails();
-    console.log('Loaded user data:', this.user);
-    console.log('User ID:', this.user?.id);
     
     if (this.user && this.user.id) {
       this.patchForm();
     } else {
-      console.log('No user data or missing user ID, fetching from API...');
       // If no user data in localStorage, fetch from API
       this.fetchUserProfile();
     }
   }
 
   fetchUserProfile() {
-    console.log('Fetching user profile from API...');
     this.profileService.fetchUserDetail().subscribe({
       next: (response: any) => {
-        console.log('Profile API response:', response);
         if (response.success && response.data) {
           this.user = response.data.user;
-          console.log('Fetched user data:', this.user);
-          console.log('Fetched user ID:', this.user.id);
           
           this.localStorageService.setItem(
             "STRATEGY-CUES-USER",
@@ -155,7 +148,6 @@ export class SettingsComponent {
     return false; // No changes detected
   }
   onSubmit(): void {
-    console.log(this.settingsForm)
     this.settingsForm.markAllAsTouched();
     
     if (this.settingsForm.valid) {
@@ -175,7 +167,7 @@ export class SettingsComponent {
       this.loading = true;
       this.updateProfile();
     } else {
-      console.log('Form is invalid');
+      // console.log('Form is invalid');
     }
   }
 
@@ -193,13 +185,13 @@ export class SettingsComponent {
       profilePicture: this.profileImage || this.settingsForm.value.profilePicture,
     };
     
-    console.log('Updating user profile with:', reqObj);
+    // console.log('Updating user profile with:', reqObj);
     
     this.profileService.updateUser(reqObj)
       .pipe(finalize(() => (this.loading = false)))
       .subscribe({
         next: (res) => {
-          console.log('Update profile response:', res);
+          // console.log('Update profile response:', res);
           if (res.success) {
             // Update localStorage with new user data
             const updatedUser = { ...this.user, ...reqObj };
@@ -235,24 +227,16 @@ export class SettingsComponent {
   updateProfile() {
     this.loading = true;
     if (this.imgFiles.length > 0) {
-      console.log('this.imgFiles.length: ', this.imgFiles.length);
       const filesToAdd = this.imgFiles.filter((file) => file);
       let fd = new FormData();
       
-      console.log('Files to upload:', filesToAdd);
-      console.log('User ID:', this.user.id);
-      console.log('User object:', this.user);
-      
-      // The API expects a single 'file' field according to the documentation
       filesToAdd.forEach((f) => {
         fd.append('file', f.file);  // Single file field as per API docs
-        console.log('Appending file:', f.file.name, 'Type:', f.type);
       });
       
       // Only append userId if it exists
       if (this.user.id) {
         fd.append('userId', this.user.id);
-        console.log('Appended userId:', this.user.id);
       } else {
         console.error('User ID is undefined! Cannot upload file.');
         this.toastr.error('User ID not found. Please refresh and try again.');
@@ -264,23 +248,19 @@ export class SettingsComponent {
         .pipe(finalize(() => (this.loading = false)))
         .subscribe({
           next: (res: any) => {
-            console.log('File upload response:', res);
             
             // API returns: { "data": "https://...", "success": true }
             if (res?.success && res?.data) {
-              console.log('Upload successful, data:', res.data);
               
               // The API returns the file URL directly in the data field
               const fileUrl = res.data;
               
               if (fileUrl) {
-                console.log('File URL received:', fileUrl);
                 this.profileImage = fileUrl;
                 // Update initial form values to reflect the new profile image
                 this.initialFormValues.profilePicture = fileUrl;
                 this.saveUserDetails();
               } else {
-                console.log('No file URL in response, but upload was successful');
                 // Even if no URL, proceed to save user details
                 this.saveUserDetails();
               }

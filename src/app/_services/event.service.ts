@@ -5,7 +5,6 @@ export class EventService<T> {
     public events = this.eventSubject.asObservable();
 
     dispatchEvent(event: any) {
-        console.log('EventService: Dispatching event:', event);
         this.eventSubject.next(event);
     }
 }

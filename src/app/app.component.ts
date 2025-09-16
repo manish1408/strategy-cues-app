@@ -59,7 +59,6 @@ export class AppComponent {
   }
 
   async ngOnInit() {
-    console.log('AppComponent ngOnInit called');
     
     this.createOperatorForm = this.fb.group({
       operatorName: ["", Validators.required],
@@ -67,16 +66,13 @@ export class AppComponent {
     
     // Check authentication status
     this.isLoggedIn = this.authService.isAuthenticated();
-    console.log('Initial isLoggedIn status:', this.isLoggedIn);
     
     // Load user data if logged in
     if (this.isLoggedIn) {
       this.user = this.profileService.getUserDetails();
-      console.log('User loaded from ProfileService:', this.user);
       
       // If no user data found, fetch from API
       if (!this.user) {
-        console.log('No user data in localStorage, fetching from profile API...');
         this.fetchUserProfile();
       }
       // Only call getAllOperators once here
@@ -87,54 +83,36 @@ export class AppComponent {
 
     // Load user data from localStorage
     const user_: any = localStorage.getItem("STRATEGY-CUES-USER");
-    console.log('User data from localStorage:', user_);
     if (user_ && user_ !== 'undefined') {
       try {
         const userData = JSON.parse(user_);
         // Handle nested user structure: {user: {...}} -> {...}
         this.user = userData.user || userData;
           this.avatar = this.user?.profilePicture || this.avatar;
-        console.log('User parsed and set:', this.user);
-        console.log('Avatar set to:', this.avatar);
       } catch (error) {
         console.error('Error parsing user data:', error);
         this.avatar = "https://milodocs.blob.core.windows.net/public-docs/profile-picture.webp";
       }
-    } else {
-      console.log('No user data found in localStorage');
     }
-    
-    console.log('Final state - isLoggedIn:', this.isLoggedIn, 'user:', this.user);
   }
   getAllOperators() {
     this.operatorService.getAllOperator().subscribe({
       next: (res: any) => {
-        console.log("All operators API response:", res); 
-        console.log("res.data:", res.data);
-        console.log("res.data?.operators:", res.data?.operators);
         this.operators = res.data?.operators || [];
-        console.log("Final operators array:", this.operators);
-        console.log("Operators length:", this.operators.length);
-        this.user = this.profileService.getUserDetails();
         if (this.operators.length > 0) {
           const storedOperator = localStorage.getItem("selectedOperator");
           if (storedOperator) {
             const parsedOperator = JSON.parse(storedOperator);
             // Check if the stored operator still exists in the current operators list
             const operatorExists = this.operators.find((op: any) => op._id === parsedOperator._id);
-            console.log('Stored operator:', parsedOperator);
-            console.log('Operator exists in list:', !!operatorExists);
             if (operatorExists) {
               this.selectedOperator = parsedOperator;
-              console.log('Using stored operator:', this.selectedOperator);
             } else {
               // Selected operator no longer exists, select the last one
-              console.log('Selected operator no longer exists, selecting last operator');
               this.selectedOperator = {
                 _id: this.operators.at(-1)?._id,
                 name: this.operators.at(-1)?.name,
               };
-              console.log('New selected operator:', this.selectedOperator);
               localStorage.setItem(
                 "selectedOperator",
                 JSON.stringify(this.selectedOperator)
@@ -169,42 +147,33 @@ export class AppComponent {
   selectOperator(operator: any) {
     this.selectedOperator = operator;
     localStorage.setItem("selectedOperator", JSON.stringify(operator));
-    console.log('Operator selected:', operator);
   }
 
   startWatchingAppEvents() {
-    console.log('Starting to watch app events');
     this.eventService.events
       .pipe(takeUntil(this.$destroyWatching))
       .subscribe((e: any) => {
-        console.log('Event received:', e);
 
         if (e.type === "LOGIN_CHANGE") {
-          console.log('LOGIN_CHANGE event received');
           const user_:any = localStorage.getItem('STRATEGY-CUES-USER');
-          console.log('User data from localStorage in LOGIN_CHANGE:', user_);
           if (user_ && user_ !== 'undefined') {
             try {
               const userData = JSON.parse(user_);
               // Handle nested user structure: {user: {...}} -> {...}
               this.user = userData.user || userData;
               this.avatar = this.user?.profilePicture || this.avatar;
-              console.log('User set in LOGIN_CHANGE:', this.user);
             } catch (error) {
               console.error('Error parsing user data:', error);
             }
           } else {
-            console.log('No user data found in LOGIN_CHANGE');
           }
           // Only call getAllOperators if not already called in ngOnInit
           if (!this.operators) {
             this.getAllOperators();
           }
           this.isLoggedIn = this.authService.isAuthenticated();
-          console.log('isLoggedIn set to:', this.isLoggedIn);
         }
         if ( e.type === "PROFILE_UPDATED") {
-          console.log('PROFILE_UPDATED event received');
           const user_:any = localStorage.getItem('STRATEGY-CUES-USER');
           if (user_ && user_ !== 'undefined') {
             try {
@@ -212,19 +181,15 @@ export class AppComponent {
               // Handle nested user structure: {user: {...}} -> {...}
               this.user = userData.user || userData;
               this.avatar = this.user?.profilePicture || this.avatar;
-              console.log('User set in PROFILE_UPDATED:', this.user);
             } catch (error) {
               console.error('Error parsing user data:', error);
             }
           } else {
-            console.log('No user data found in PROFILE_UPDATED');
           }
           this.getAllOperators();
           this.isLoggedIn = this.authService.isAuthenticated();
-          console.log('isLoggedIn set to:', this.isLoggedIn);
         }
         if (e.type === "OPERATORS_UPDATED") {
-          console.log('OPERATORS_UPDATED event received');
           this.getAllOperators();
         }
       });
@@ -243,17 +208,14 @@ export class AppComponent {
   }
 
   fetchUserProfile() {
-    console.log('AppComponent: Fetching user profile from API...');
     this.profileService.fetchUserDetail().subscribe({
       next: (response: any) => {
-        console.log('AppComponent: Profile API response:', response);
         if (response.success && response.data) {
           this.localStorageService.setItem(
             "STRATEGY-CUES-USER",
             JSON.stringify(response.data)
           );
           this.user = response.data;
-          console.log('AppComponent: User profile stored and set:', response.data);
           this.eventService.dispatchEvent({ type: 'PROFILE_UPDATED' });
         } else {
           console.error('AppComponent: Failed to fetch user profile:', response);

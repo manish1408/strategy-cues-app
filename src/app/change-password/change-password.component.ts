@@ -62,12 +62,9 @@ export class ChangePasswordComponent {
       //       }
       //     },
       //     error: (err) => {
-      //       console.log(err);
       //       this.toastr.error(err.error.msg);
       //     },
       //   });
-    } else {
-      console.log("Form is invalid");
     }
   }
   async signOut(): Promise<void> {

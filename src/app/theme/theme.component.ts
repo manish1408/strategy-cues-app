@@ -91,7 +91,7 @@ export class ThemeComponent {
     //       this.setValues(res.data);
     //     },
     //     error: (err) => {
-    //       console.log('error: get user themes ', err);
+    //       // console.log('error: get user themes ', err);
     //     },
     //   });
   }
@@ -102,10 +102,10 @@ export class ThemeComponent {
     //   .getStats(this.selectedChatBotId)
     //   .pipe(finalize(() => (this.loading = false)))
     //   .subscribe((res) => {
-    //     console.log(res.data[0]); 
+    //     // console.log(res.data[0]); 
     //     // this.stats = res.data;
     //     this.conversation=res.data[0].latestMessage.message;
-    //     console.log("here",res.data[0].latestMessage.message)
+    //     // console.log("here",res.data[0].latestMessage.message)
     //     // this.receiverId=res.data.receiverId;
     //   });
   }
@@ -218,11 +218,11 @@ export class ThemeComponent {
 			// 					}
 			// 				},
 			// 				error: (err) => {
-			// 					console.log(err);
+			// 					// console.log(err);
 			// 					this.toastr.error(err.error.msg);
 			// 				},
 			// 			});
-			// 		console.log('res  image', res);
+			// 		// console.log('res  image', res);
 			// 	});
 		} else {
 			this.userTheme.removeBranding = this.removeBranding;
@@ -246,7 +246,7 @@ export class ThemeComponent {
 			// 			}
 			// 		},
 			// 		error: (err) => {
-			// 			console.log(err);
+			// 			// console.log(err);
 			// 			this.toastr.error(err.error.msg);
 			// 		},
 			// 	});

@@ -49,7 +49,6 @@ export class ListingComponent implements OnInit {
 
   ngOnInit(): void {
     this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
-    console.log('Operator ID from localStorage:', this.operatorId);
     this.loadListings();
   }
  
@@ -62,7 +61,6 @@ export class ListingComponent implements OnInit {
     this.listingService.getListings(this.currentPage, this.itemsPerPage, this.operatorId || '', this.sortOrder)
   .subscribe(
     (res: any) => {
-      console.log('API Response:', res);
       if (res.success) {
         // Ensure properties is an array
         if (Array.isArray(res.data.properties)) {
@@ -90,7 +88,6 @@ export class ListingComponent implements OnInit {
     if (listing && listing.id) {
       this.isEdit = true;
       this.editingListingId = listing.id;
-      console.log('Editing Listing ID:', this.editingListingId);
       this.addListingForm.patchValue({
         bookingComUrl: listing.property_urls?.Booking || "",
         airbnbUrl: listing.property_urls?.Airbnb || "",

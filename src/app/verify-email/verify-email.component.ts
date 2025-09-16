@@ -71,7 +71,6 @@ export class VerifyEmailComponent {
         //   .pipe(
         //     tap(() => (this.isCheckingOTP = true)),
         //     switchMap((res) => {
-        //       console.log('RES', res);
         //       if (!res.result) {
         //         this.toastr.error(res.msg);
         //         throw new Error('Login validation failed');
@@ -85,7 +84,6 @@ export class VerifyEmailComponent {
 
         //       return this.authService.onboardUser({ userId }).pipe(
         //         tap((_res) => {
-        //           console.log('OnboardRes', _res);
         //           if (_res.result) {
         //             this.localStorageService.setItem(
         //               'MILO-USER',
@@ -105,7 +103,6 @@ export class VerifyEmailComponent {
         //   )
         //   .subscribe({
         //     error: (err) => {
-        //       console.error(err);
         //       this.ngOtpInputRef.otpForm.enable();
         //       if (err.message !== 'Login validation failed') {
         //         this.toastr.error(err.error?.msg ?? 'An error occurred');
@@ -188,25 +185,25 @@ export class VerifyEmailComponent {
     //   .subscribe({
     //     next: (res) => {
     //       if (res) {
-    //         console.log('this.chatbots: ', res.data.data);
-    //         if (res.data.data.length > 0) {
-    //           const chatbot = {
-    //             chatbotId: res?.data?.data[0]?._id,
-    //             chatbotName: res?.data?.data[0]?.themeDetails?.chatbotName
-    //         }
-    //         localStorage.setItem(
-    //           'selectedChatbot',
-    //           JSON.stringify(chatbot ?? {})
-    //         );
-    //           localStorage.setItem('chatbotPresent', 'true');
-    //         } else {
-    //           localStorage.setItem('chatbotPresent', 'false');
-    //         }
-    //       }
-    //     },
-    //     error: (err) => {
-    //       this.toastr.error(err.error.msg);
-    //     },
-    //   });
+        // console.log('this.chatbots: ', res.data.data);
+        // if (res.data.data.length > 0) {
+        //   const chatbot = {
+        //     chatbotId: res?.data?.data[0]?._id,
+        //     chatbotName: res?.data?.data[0]?.themeDetails?.chatbotName
+        // }
+        // localStorage.setItem(
+        //   'selectedChatbot',
+        //   JSON.stringify(chatbot ?? {})
+        // );
+        //   localStorage.setItem('chatbotPresent', 'true');
+        // } else {
+        //   localStorage.setItem('chatbotPresent', 'false');
+        // }
+      // }
+    //   },
+    //   error: (err) => {
+    //     this.toastr.error(err.error.msg);
+    //   },
+    // });
   }
 }

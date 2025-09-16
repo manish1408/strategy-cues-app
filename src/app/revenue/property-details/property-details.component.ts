@@ -120,7 +120,6 @@ export class PropertyDetailsComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.propertyId = params['id'];
       this.operatorId = this.localStorageService.getSelectedOperatorId() || '';
-      console.log(this.operatorId);
       if (this.propertyId) {
       this.loadPropertyData();
       }
@@ -131,7 +130,6 @@ export class PropertyDetailsComponent implements OnInit {
 
     this.propertyService.getProperty(this.propertyId, this.operatorId).subscribe((res: any) => {
       this.property = res.data;
-      console.log(this.property);
     });
     // const propertyData: PropertyData[] = revenueData as PropertyData[];
     
