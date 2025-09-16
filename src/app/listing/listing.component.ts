@@ -28,6 +28,10 @@ export class ListingComponent implements OnInit {
   operatorId: string | null = null;
   addListingForm: FormGroup;
   sortOrder: string = 'desc';
+  bookingComId: string | null = null;
+  airbnbId: string | null = null;
+  vrboId: string | null = null;
+  pricelab: string | null = null;
   constructor(
     private toastr: ToastrService,
     private fb: FormBuilder,
@@ -89,9 +93,9 @@ export class ListingComponent implements OnInit {
       this.isEdit = true;
       this.editingListingId = listing.id;
       this.addListingForm.patchValue({
-        bookingComUrl: listing.property_urls?.Booking || "",
-        airbnbUrl: listing.property_urls?.Airbnb || "",
-        vrboUrl: listing.property_urls?.VRBO || "",
+        bookingComUrl: listing.property_urls?.Booking.url || "",
+        airbnbUrl: listing.property_urls?.Airbnb.url || "",
+        vrboUrl: listing.property_urls?.VRBO.url || "",
       });
     } else {
       console.error('Invalid listing object:', listing);
@@ -152,9 +156,19 @@ export class ListingComponent implements OnInit {
       const formData = {
         operator_id: this.operatorId,
         Property_URLs: {
-          Booking: bookingComUrl,
-          Airbnb: airbnbUrl,
-          VRBO: vrboUrl,
+          Booking: {
+            url: bookingComUrl,
+            id: this.bookingComId || '',
+          },
+          Airbnb: {
+            url: airbnbUrl,
+            id: this.airbnbId || '',
+          },
+          VRBO: {
+            url: vrboUrl,
+            id: this.vrboId || '',
+          },
+          Pricelab: this.pricelab || '',
         },
       };
   
