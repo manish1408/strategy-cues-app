@@ -88,7 +88,13 @@ export class AppComponent {
         const userData = JSON.parse(user_);
         // Handle nested user structure: {user: {...}} -> {...}
         this.user = userData.user || userData;
-          this.avatar = this.user?.profilePicture || this.avatar;
+        
+        // ✅ Properly handle profile picture - use default if null/undefined
+        if (this.user?.profilePicture) {
+          this.avatar = this.user.profilePicture;
+        } else {
+          this.avatar = "https://milodocs.blob.core.windows.net/public-docs/profile-picture.webp";
+        }
       } catch (error) {
         console.error('Error parsing user data:', error);
         this.avatar = "https://milodocs.blob.core.windows.net/public-docs/profile-picture.webp";
@@ -155,17 +161,32 @@ export class AppComponent {
       .subscribe((e: any) => {
 
         if (e.type === "LOGIN_CHANGE") {
+          console.log("🔄 LOGIN_CHANGE event received");
           const user_:any = localStorage.getItem('STRATEGY-CUES-USER');
+          console.log("👤 User data from localStorage:", user_);
           if (user_ && user_ !== 'undefined') {
             try {
               const userData = JSON.parse(user_);
+              console.log("📋 Parsed user data:", userData);
               // Handle nested user structure: {user: {...}} -> {...}
               this.user = userData.user || userData;
-              this.avatar = this.user?.profilePicture || this.avatar;
+              console.log("✅ Final user object:", this.user);
+              
+              // ✅ Properly handle profile picture - use default if null/undefined
+              if (this.user?.profilePicture) {
+                this.avatar = this.user.profilePicture;
+                console.log("🖼️ Profile picture set:", this.avatar);
+              } else {
+                this.avatar = "https://milodocs.blob.core.windows.net/public-docs/profile-picture.webp";
+                console.log("🖼️ Using default profile picture");
+              }
             } catch (error) {
-              console.error('Error parsing user data:', error);
+              console.error('❌ Error parsing user data:', error);
+              this.avatar = "https://milodocs.blob.core.windows.net/public-docs/profile-picture.webp";
             }
           } else {
+            console.log("⚠️ No user data found in localStorage");
+            this.avatar = "https://milodocs.blob.core.windows.net/public-docs/profile-picture.webp";
           }
           // Only call getAllOperators if not already called in ngOnInit
           if (!this.operators) {
@@ -180,17 +201,30 @@ export class AppComponent {
               const userData = JSON.parse(user_);
               // Handle nested user structure: {user: {...}} -> {...}
               this.user = userData.user || userData;
-              this.avatar = this.user?.profilePicture || this.avatar;
+              
+              // ✅ Properly handle profile picture - use default if null/undefined
+              if (this.user?.profilePicture) {
+                this.avatar = this.user.profilePicture;
+              } else {
+                this.avatar = "https://milodocs.blob.core.windows.net/public-docs/profile-picture.webp";
+              }
             } catch (error) {
               console.error('Error parsing user data:', error);
+              this.avatar = "https://milodocs.blob.core.windows.net/public-docs/profile-picture.webp";
             }
           } else {
+            this.avatar = "https://milodocs.blob.core.windows.net/public-docs/profile-picture.webp";
           }
           this.getAllOperators();
           this.isLoggedIn = this.authService.isAuthenticated();
         }
         if (e.type === "OPERATORS_UPDATED") {
           this.getAllOperators();
+        }
+        if (e.type === "PROFILE_CLEARED") {
+          console.log("🧹 Profile cleared event received - resetting avatar");
+          this.avatar = "https://milodocs.blob.core.windows.net/public-docs/profile-picture.webp";
+          this.user = null;
         }
       });
   }

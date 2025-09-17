@@ -6,7 +6,7 @@ import {
 import { LocalStorageService } from "../_services/local-storage.service";
 import { FilterPresetService } from '../_services/filter-preset.service';
 import { FilterPreset } from '../_models/filter-preset.interface';
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { ExportService } from "../_services/export.service";
 import { ToastrService } from "ngx-toastr";
 
@@ -279,14 +279,11 @@ export class RevenueComponent implements OnInit {
   showPresetManagement: boolean = false;
 
   constructor(
-    
     private propertiesService: PropertiesService, 
-   
     private localStorageService: LocalStorageService, 
     private filterPresetService: FilterPresetService,
-   
-    private router: Router
-  ,
+    private router: Router,
+    private route: ActivatedRoute,
     private exportService: ExportService,
     private toastr: ToastrService
   ) {
@@ -316,9 +313,21 @@ export class RevenueComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
-    console.log('Revenue ngOnInit - operatorId:', this.operatorId);
-    this.loadProperties();
+    // First try to get operatorId from query parameters
+    this.route.queryParams.subscribe(params => {
+      if (params['operatorId']) {
+        this.operatorId = params['operatorId'];
+        console.log('Revenue ngOnInit - operatorId from query params:', this.operatorId);
+      } else {
+        // Fallback to localStorage
+        this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
+        console.log('Revenue ngOnInit - operatorId from localStorage:', this.operatorId);
+      }
+      
+      // Load properties with the operatorId
+      this.loadProperties();
+    });
+    
     this.loadFilterPresets();
   }
 

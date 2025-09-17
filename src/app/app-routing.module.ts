@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { AuthGuard } from "./_guards/auth.guard";
-// import { ChatbotGuard } from "./_guards/chatbot.guard";
+import { OperatorGuard } from "./_guards/operator.guard";
 // import { OnboardGuard } from "./_guards/onboard.guard";
 
 const routes: Routes = [
@@ -74,37 +74,37 @@ const routes: Routes = [
     path: "listing",
     loadChildren: () =>
       import("./listing/listing.module").then((m) => m.ListingModule),
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard,OperatorGuard],
   },
   {
     path: "revenue",
     loadChildren: () =>
       import("./revenue/revenue.module").then((m) => m.RevenueModule),
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard,OperatorGuard],
   },
   {
     path: "revenue/property-details/:id",
     loadChildren: () =>
       import("./revenue/property-details/property-details.module").then((m) => m.PropertyDetailsModule),
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard,OperatorGuard],
   },
   {
     path: "content",
     loadChildren: () =>
       import("./content/content.module").then((m) => m.ContentModule),
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard,OperatorGuard],
   },
   {
     path: "deployment",
     loadChildren: () =>
       import("./deployment/deployment.module").then((m) => m.DeploymentModule),
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard,OperatorGuard],
   },
   {
     path: "status",
     loadChildren: () =>
       import("./status/status.module").then((m) => m.StatusModule),
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard,OperatorGuard],
   },
 ];
 

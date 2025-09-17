@@ -13,7 +13,7 @@ import { TypeaheadModule } from "ngx-bootstrap/typeahead";
 import { MarkdownModule, MARKED_OPTIONS, MarkedRenderer } from "ngx-markdown";
 import { NgxEditorModule } from "ngx-editor";
 import { PhoneDropdownComponent } from "./component/phone-dropdown/phone-dropdown.component";
-// import { PhoneDropdownMiloComponent } from "./component/phone-dropdown-milo/phone-dropdown-milo.component";
+import { WarningModalComponent } from "./component/warning-modal/warning-modal.component";
 
 const renderer = new MarkedRenderer();
 renderer.link = (href: string, title: string, text: string) => {
@@ -49,14 +49,14 @@ renderer.link = (href: string, title: string, text: string) => {
     PhoneDropdownComponent,
     ClickOutsideDirective,
     MultiFilterComponent,
-    // PhoneDropdownMiloComponent
+    WarningModalComponent
   ],
   providers: [],
   exports: [
     PhoneDropdownComponent,
     ClickOutsideDirective,
     MultiFilterComponent,
-    // PhoneDropdownMiloComponent,
+    WarningModalComponent
    
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
