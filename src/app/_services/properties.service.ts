@@ -122,6 +122,16 @@ export class PropertiesService {
     .set('limit', limit.toString())
     .set('sort_order', sortOrder);
     
+    console.log('PropertiesService.getProperties called with:', {
+      url: `${this._url}/get-properties`,
+      params: {
+        operator_id: operatorId,
+        page: page.toString(),
+        limit: limit.toString(),
+        sort_order: sortOrder
+      }
+    });
+    
     return this.http.get<ApiResponse<PropertyData[]>>(`${this._url}/get-properties`, { params });
   }
 
@@ -135,21 +145,136 @@ export class PropertiesService {
 
   // Helper method to extract properties array from different response structures
   static extractPropertiesArray(response: any): PropertyData[] {
+    console.log('PropertiesService.extractPropertiesArray called with:', response);
+    
     if (!response || !response.success) {
+      console.warn('API response not successful:', response);
       return [];
     }
 
+    console.log('Response data structure:', response.data);
+    console.log('Is response.data an array?', Array.isArray(response.data));
+    console.log('Does response.data.properties exist?', response.data && response.data.properties);
+    console.log('Is response.data.properties an array?', response.data && Array.isArray(response.data.properties));
+
     // Handle different possible response structures
     if (Array.isArray(response.data)) {
+      console.log('Using response.data directly (array)');
       return response.data;
     } else if (response.data && Array.isArray(response.data.properties)) {
-      return response.data.properties;
+      console.log('Using response.data.properties (new API structure)');
+      // Map the new API response structure to PropertyData interface
+      const mappedProperties = response.data.properties.map((property: any) => ({
+        _id: property._id,
+        Listing_Name: property.Listing_Name,
+        Area: property.Area,
+        Room_Type: property.Room_Type,
+        Occupancy: property.Occupancy || {
+          '7_days': null,
+          '30_days': null,
+          TM: null,
+          NM: null
+        },
+        ADR: property.ADR || {
+          TM: null,
+          NM: null
+        },
+        RevPAR: property.RevPAR || {
+          TM: null,
+          NM: null
+        },
+        MPI: property.MPI || null,
+        STLY_Var: property.STLY_Var || {
+          Occ: null,
+          ADR: null,
+          RevPAR: null
+        },
+        STLM_Var: property.STLM_Var || {
+          Occ: null,
+          ADR: null,
+          RevPAR: null
+        },
+        Pick_Up_Occ: property.Pick_Up_Occ || {
+          '7_Days': null,
+          '14_Days': null,
+          '30_Days': null
+        },
+        Min_Rate_Threshold: property.Min_Rate_Threshold || null,
+        BookingCom: property.BookingCom || {
+          Genius: null,
+          Mobile: null,
+          Pref: null,
+          Weekly: null,
+          Monthly: null,
+          LM_Disc: null
+        },
+        Airbnb: property.Airbnb || {
+          Weekly: null,
+          Monthly: null,
+          Member: null,
+          LM_Disc: null
+        },
+        VRBO: property.VRBO || {
+          Weekly: null,
+          Monthly: null
+        },
+        CXL_Policy: property.CXL_Policy || {
+          Booking: null,
+          Airbnb: null,
+          VRBO: null
+        },
+        Adult_Child_Config: property.Adult_Child_Config || {
+          Booking: null,
+          Airbnb: null,
+          VRBO: null
+        },
+        Reviews: property.Reviews || {
+          Booking: {
+            Last_Rev_Dt: null,
+            Last_Rev_Score: null,
+            Rev_Score: null,
+            Total_Rev: null,
+            Last_Review_Date: null
+          },
+          Airbnb: {
+            Last_Rev_Dt: null,
+            Last_Rev_Score: null,
+            Rev_Score: null,
+            Total_Rev: null,
+            Last_Review_Date: null
+          },
+          VRBO: {
+            Last_Rev_Dt: null,
+            Last_Rev_Score: null,
+            Rev_Score: null,
+            Total_Rev: null,
+            Last_Review_Date: null
+          }
+        },
+        Property_URLs: property.Property_URLs || {
+          Booking: { url: null, id: null },
+          Airbnb: { url: null, id: null },
+          VRBO: { url: null, id: null },
+          Pricelab: null
+        },
+        operator_id: property.operator_id,
+        createdAt: property.createdAt
+      }));
+      console.log('Mapped properties:', mappedProperties);
+      return mappedProperties;
     } else if (response.data && Array.isArray(response.data.data)) {
+      console.log('Using response.data.data');
       return response.data.data;
     } else if (response.data && Array.isArray(response.data.results)) {
+      console.log('Using response.data.results');
       return response.data.results;
     } else {
       console.warn('Unexpected API response structure:', response);
+      console.log('Attempting to return response.data directly as fallback');
+      // Fallback: try to return response.data directly if it exists
+      if (response.data) {
+        return Array.isArray(response.data) ? response.data : [response.data];
+      }
       return [];
     }
   }

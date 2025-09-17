@@ -26,35 +26,35 @@
 
             <!-- New Pages -->
             <li class="sidebar-menu-item">
-              <a routerLink="/revenue" routerLinkActive="active-link" class="sidebar-link">
+              <a routerLink="/revenue" [queryParams]="{ id: selectedOperator?._id }" routerLinkActive="active-link" class="sidebar-link">
                 <i class="fas fa-chart-line me-2"></i>
                 Revenue
               </a>
             </li>
 
             <li class="sidebar-menu-item">
-              <a routerLink="/content" routerLinkActive="active-link" class="sidebar-link">
+              <a routerLink="/content" [queryParams]="{ id: selectedOperator?._id }" routerLinkActive="active-link" class="sidebar-link">
                 <i class="fas fa-file-alt me-2"></i>
                 Content
               </a>
             </li>
 
             <li class="sidebar-menu-item">
-              <a routerLink="/deployment" routerLinkActive="active-link" class="sidebar-link">
+              <a routerLink="/deployment" [queryParams]="{ id: selectedOperator?._id }" routerLinkActive="active-link" class="sidebar-link">
                 <i class="fas fa-rocket me-2"></i>
                 Deployment
               </a>
             </li>
 
             <li class="sidebar-menu-item">
-              <a routerLink="/status" routerLinkActive="active-link" class="sidebar-link">
+              <a routerLink="/status" [queryParams]="{ id: selectedOperator?._id }" routerLinkActive="active-link" class="sidebar-link">
                 <i class="fas fa-heartbeat me-2"></i>
                 Status
               </a>
             </li>
 
             <li class="sidebar-menu-item">
-              <a routerLink="/listing" routerLinkActive="active-link" class="sidebar-link">
+              <a routerLink="/listing" [queryParams]="{ id: selectedOperator?._id }" routerLinkActive="active-link" class="sidebar-link">
                 <i class="fas fa-list me-2"></i>
                 Listing
               </a>

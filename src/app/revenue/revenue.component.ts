@@ -316,12 +316,14 @@ export class RevenueComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadProperties();
     this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
+    console.log('Revenue ngOnInit - operatorId:', this.operatorId);
+    this.loadProperties();
     this.loadFilterPresets();
   }
 
   loadProperties(): void {
+    console.log('loadProperties called - setting loading to true');
     this.loading = true;
     this.error = null;
 
@@ -330,6 +332,13 @@ export class RevenueComponent implements OnInit {
   }
 
   loadCurrentPageData(): void {
+    console.log('loadCurrentPageData called with:', {
+      currentPage: this.currentPage,
+      itemsPerPage: this.itemsPerPage,
+      operatorId: this.operatorId,
+      sortOrder: this.sortOrder
+    });
+    
     // Load current page data for display
     this.propertiesService
       .getProperties(
@@ -340,10 +349,18 @@ export class RevenueComponent implements OnInit {
       )
       .subscribe({
         next: (response: any) => {
+          console.log('Revenue API Response:', response);
+          console.log('Response success:', response.success);
+          console.log('Response data:', response.data);
+          
           if (response.success) {
             this.propertyData =
               PropertiesService.extractPropertiesArray(response);
+            console.log('Extracted Property Data:', this.propertyData);
+            console.log('Property Data Length:', this.propertyData.length);
+            
             this.filteredData = [...this.propertyData];
+            console.log('Filtered Data Length:', this.filteredData.length);
 
             // If this is the first load, also load additional data for range calculations
             if (this.currentPage === 1 && this.allPropertyData.length === 0) {
@@ -353,14 +370,27 @@ export class RevenueComponent implements OnInit {
             this.calculateSummaryData();
             this.updatePagination();
           } else {
+            console.error('API Response not successful:', response);
             this.error = response.message || "Failed to load properties data";
           }
+          console.log('Setting loading to false');
           this.loading = false;
         },
         error: (error: any) => {
+          console.error('Revenue API Error:', error);
           this.error = "Error loading properties. Please try again.";
           this.loading = false;
         },
+        complete: () => {
+          console.log('Revenue API call completed');
+          // Ensure loading is set to false even if there's an issue
+          setTimeout(() => {
+            if (this.loading) {
+              console.log('Forcing loading to false after timeout');
+              this.loading = false;
+            }
+          }, 1000);
+        }
       });
   }
 
@@ -422,7 +452,7 @@ export class RevenueComponent implements OnInit {
 
     this.averageOccupancy =
       dataSource.reduce((sum, item) => {
-        return sum + this.safeParseNumber(item.Occupancy.TM);
+        return sum + this.safeParseNumber(item.Occupancy?.TM);
       }, 0) / this.totalListings;
   }
 
@@ -463,64 +493,65 @@ export class RevenueComponent implements OnInit {
 
     // Calculate ADR ranges from data source
     const adrValues = dataSource.map((item) =>
-      this.safeParseNumber(item.ADR.TM)
-    );
-    this.adrMinRange = Math.floor(Math.min(...adrValues));
-    this.adrMaxRange = Math.ceil(Math.max(...adrValues));
+      this.safeParseNumber(item.ADR?.TM)
+    ).filter(val => val !== null && val !== undefined);
+    this.adrMinRange = adrValues.length > 0 ? Math.floor(Math.min(...adrValues)) : 0;
+    this.adrMaxRange = adrValues.length > 0 ? Math.ceil(Math.max(...adrValues)) : 1000;
 
     // Calculate RevPAR ranges from data source
     const revparValues = dataSource.map((item) =>
-      this.safeParseNumber(item.RevPAR.TM)
-    );
-    this.revparMinRange = Math.floor(Math.min(...revparValues));
-    this.revparMaxRange = Math.ceil(Math.max(...revparValues));
+      this.safeParseNumber(item.RevPAR?.TM)
+    ).filter(val => val !== null && val !== undefined);
+    this.revparMinRange = revparValues.length > 0 ? Math.floor(Math.min(...revparValues)) : 0;
+    this.revparMaxRange = revparValues.length > 0 ? Math.ceil(Math.max(...revparValues)) : 1000;
 
     // Calculate MPI ranges from data source
-    const mpiValues = dataSource.map((item) => this.safeParseNumber(item.MPI));
-    this.mpiMinRange = Math.floor(Math.min(...mpiValues));
-    this.mpiMaxRange = Math.ceil(Math.max(...mpiValues));
+    const mpiValues = dataSource.map((item) => this.safeParseNumber(item.MPI))
+      .filter(val => val !== null && val !== undefined);
+    this.mpiMinRange = mpiValues.length > 0 ? Math.floor(Math.min(...mpiValues)) : 0;
+    this.mpiMaxRange = mpiValues.length > 0 ? Math.ceil(Math.max(...mpiValues)) : 200;
 
     // Calculate STLY Var ranges from data source
     const stlyOccValues = dataSource.map((item) =>
-      this.safeParseNumber(item.STLY_Var.Occ)
-    );
-    this.stlyVarOccMinRange = Math.floor(Math.min(...stlyOccValues));
-    this.stlyVarOccMaxRange = Math.ceil(Math.max(...stlyOccValues));
+      this.safeParseNumber(item.STLY_Var?.Occ)
+    ).filter(val => val !== null && val !== undefined);
+    this.stlyVarOccMinRange = stlyOccValues.length > 0 ? Math.floor(Math.min(...stlyOccValues)) : 0;
+    this.stlyVarOccMaxRange = stlyOccValues.length > 0 ? Math.ceil(Math.max(...stlyOccValues)) : 100;
 
     const stlyADRValues = dataSource.map((item) =>
-      this.safeParseNumber(item.STLY_Var.ADR)
-    );
-    this.stlyVarADRMinRange = Math.floor(Math.min(...stlyADRValues));
-    this.stlyVarADRMaxRange = Math.ceil(Math.max(...stlyADRValues));
+      this.safeParseNumber(item.STLY_Var?.ADR)
+    ).filter(val => val !== null && val !== undefined);
+    this.stlyVarADRMinRange = stlyADRValues.length > 0 ? Math.floor(Math.min(...stlyADRValues)) : 0;
+    this.stlyVarADRMaxRange = stlyADRValues.length > 0 ? Math.ceil(Math.max(...stlyADRValues)) : 100;
 
     const stlyRevPARValues = dataSource.map((item) =>
-      this.safeParseNumber(item.STLY_Var.RevPAR)
-    );
-    this.stlyVarRevPARMinRange = Math.floor(Math.min(...stlyRevPARValues));
-    this.stlyVarRevPARMaxRange = Math.ceil(Math.max(...stlyRevPARValues));
+      this.safeParseNumber(item.STLY_Var?.RevPAR)
+    ).filter(val => val !== null && val !== undefined);
+    this.stlyVarRevPARMinRange = stlyRevPARValues.length > 0 ? Math.floor(Math.min(...stlyRevPARValues)) : 0;
+    this.stlyVarRevPARMaxRange = stlyRevPARValues.length > 0 ? Math.ceil(Math.max(...stlyRevPARValues)) : 100;
 
     // Calculate STLM Var ranges from data source
     const stlmOccValues = dataSource.map((item) =>
-      this.safeParseNumber(item.STLM_Var.Occ)
-    );
-    this.stlmVarOccMinRange = Math.floor(Math.min(...stlmOccValues));
-    this.stlmVarOccMaxRange = Math.ceil(Math.max(...stlmOccValues));
+      this.safeParseNumber(item.STLM_Var?.Occ)
+    ).filter(val => val !== null && val !== undefined);
+    this.stlmVarOccMinRange = stlmOccValues.length > 0 ? Math.floor(Math.min(...stlmOccValues)) : 0;
+    this.stlmVarOccMaxRange = stlmOccValues.length > 0 ? Math.ceil(Math.max(...stlmOccValues)) : 100;
 
     const stlmADRValues = dataSource.map((item) =>
-      this.safeParseNumber(item.STLM_Var.ADR)
-    );
-    this.stlmVarADRMinRange = Math.floor(Math.min(...stlmADRValues));
-    this.stlmVarADRMaxRange = Math.ceil(Math.max(...stlmADRValues));
+      this.safeParseNumber(item.STLM_Var?.ADR)
+    ).filter(val => val !== null && val !== undefined);
+    this.stlmVarADRMinRange = stlmADRValues.length > 0 ? Math.floor(Math.min(...stlmADRValues)) : 0;
+    this.stlmVarADRMaxRange = stlmADRValues.length > 0 ? Math.ceil(Math.max(...stlmADRValues)) : 100;
 
     const stlmRevPARValues = dataSource.map((item) =>
-      this.safeParseNumber(item.STLM_Var.RevPAR)
-    );
-    this.stlmVarRevPARMinRange = Math.floor(Math.min(...stlmRevPARValues));
-    this.stlmVarRevPARMaxRange = Math.ceil(Math.max(...stlmRevPARValues));
+      this.safeParseNumber(item.STLM_Var?.RevPAR)
+    ).filter(val => val !== null && val !== undefined);
+    this.stlmVarRevPARMinRange = stlmRevPARValues.length > 0 ? Math.floor(Math.min(...stlmRevPARValues)) : 0;
+    this.stlmVarRevPARMaxRange = stlmRevPARValues.length > 0 ? Math.ceil(Math.max(...stlmRevPARValues)) : 100;
 
     // Calculate Review ranges from data source
     const bookingTotalRevValues = dataSource
-      .map((item) => this.safeParseNumber(item.Reviews.Booking.Total_Rev))
+      .map((item) => this.safeParseNumber(item.Reviews?.Booking?.Total_Rev))
       .filter((val) => !isNaN(val));
     if (bookingTotalRevValues.length > 0) {
       this.bookingTotalRevMinRange = Math.floor(
