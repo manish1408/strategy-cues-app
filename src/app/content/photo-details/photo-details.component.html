@@ -1,0 +1,283 @@
+<div class="photo-details-container">
+  <!-- Header Section -->
+  <div class="details-header">
+    <div class="header-content">
+      <button class="back-btn" (click)="goBack()">
+        <i class="fas fa-arrow-left"></i>
+        Back to Properties
+      </button>
+      <div class="property-title">
+        <h1>{{propertyData?.property_title}}</h1>
+        <span class="listing-id">{{propertyData?.listing_id}}</span>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-outline-primary" (click)="exportPropertyData()">
+          <i class="fas fa-download"></i>
+          Export Data
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Navigation Cards -->
+  <div class="top-navigation" *ngIf="propertyData?.competitor && propertyData.competitor.length > 0">
+    <button class="nav-arrow prev" (click)="previousCompetitor()">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <div class="nav-cards">
+      <div class="nav-card" [class.active]="selectedCompetitorIndex === -1" (click)="selectCompetitor(-1)">
+        <div class="nav-card-image">
+          <img [src]="getMainImage()" [alt]="propertyData.property_title">
+        </div>
+        <div class="nav-card-content">
+          <h4>Your Photos</h4>
+          <span class="photo-count">{{propertyData.num_photos}} photos</span>
+          <span class="gap-indicator">Your property</span>
+        </div>
+        <div class="nav-card-links">
+          <i class="fas fa-link"></i>
+        </div>
+      </div>
+      <div class="nav-card" 
+           *ngFor="let comp of propertyData.competitor; let i = index" 
+           [class.active]="selectedCompetitorIndex === i" 
+           (click)="selectCompetitor(i)">
+        <div class="nav-card-image">
+          <img [src]="comp.photos && comp.photos.length > 0 ? comp.photos[0].url : 'assets/images/placeholder.jpg'" [alt]="comp.name">
+        </div>
+        <div class="nav-card-content">
+          <h4>{{comp.name}}</h4>
+          <span class="photo-count">{{comp.num_photos}} photos</span>
+          <span class="gap-indicator" [ngClass]="getGapClass(comp.num_photos - propertyData.num_photos)">
+            {{comp.num_photos - propertyData.num_photos > 0 ? '+' : ''}}{{comp.num_photos - propertyData.num_photos}} {{comp.num_photos - propertyData.num_photos > 0 ? 'more than you' : 'less than you'}}
+          </span>
+        </div>
+        <div class="nav-card-links">
+          <i class="fas fa-link"></i>
+        </div>
+      </div>
+    </div>
+    <button class="nav-arrow next" (click)="nextCompetitor()">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
+
+  <!-- Main Comparison Layout -->
+  <div class="comparison-layout" *ngIf="propertyData">
+    <!-- Your Photos Section -->
+    <div class="comparison-section your-photos">
+      <div class="section-header">
+        <h2>Your photos</h2>
+        <div class="review-summary">
+          <span class="review-count">{{getReviewCount()}} reviews:</span>
+          <div class="review-scores">
+            <span class="score-item">
+              <i class="fas fa-shower"></i>
+              {{getReviewScore('cleanliness')}} cleanliness
+            </span>
+            <span class="score-item">
+              <i class="fas fa-check"></i>
+              {{getReviewScore('accuracy')}} accuracy
+            </span>
+            <span class="score-item">
+              <i class="fas fa-user-check"></i>
+              {{getReviewScore('checkin')}} check-in
+            </span>
+            <span class="score-item">
+              <i class="fas fa-comments"></i>
+              {{getReviewScore('communication')}} communication
+            </span>
+            <span class="score-item">
+              <i class="fas fa-map-marker-alt"></i>
+              {{getReviewScore('location')}} location
+            </span>
+            <span class="score-item">
+              {{getReviewScore('value')}} value
+            </span>
+          </div>
+        </div>
+        <div class="photo-count">{{propertyData.num_photos}} photos</div>
+      </div>
+      
+      <div class="main-image-container">
+        <img [src]="getCurrentImage()" [alt]="propertyData.property_title" class="main-image">
+        <div class="image-badges">
+          <div class="best-photo-badge" *ngIf="isBestPhoto()">
+            <i class="fas fa-star"></i>
+            BEST PHOTO
+          </div>
+        </div>
+        <div class="image-navigation">
+          <button class="nav-btn prev" (click)="previousImage()" *ngIf="currentImageIndex > 0">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button class="nav-btn next" (click)="nextImage()" *ngIf="currentImageIndex < getTotalImages() - 1">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+      
+      <div class="image-footer" *ngIf="!hasCurrentImageCaption()">
+        <i class="fas fa-exclamation-triangle"></i>
+        No caption set for this photo
+      </div>
+    </div>
+
+    <!-- Competitor Photos Section -->
+    <div class="comparison-section competitor-photos" *ngIf="getCurrentCompetitor()">
+      <div class="section-header">
+        <h2>{{getCurrentCompetitor().name}}</h2>
+        <div class="review-summary">
+          <span class="review-count">{{getCurrentCompetitor().reviews_count}} reviews:</span>
+          <div class="review-scores">
+            <span class="score-item">
+              <i class="fas fa-shower"></i>
+              {{getCurrentCompetitor().reviews_score}} cleanliness
+            </span>
+            <span class="score-item">
+              <i class="fas fa-check"></i>
+              {{getCurrentCompetitor().reviews_score}} accuracy
+            </span>
+            <span class="score-item">
+              <i class="fas fa-user-check"></i>
+              {{getCurrentCompetitor().reviews_score}} check-in
+            </span>
+            <span class="score-item">
+              <i class="fas fa-comments"></i>
+              {{getCurrentCompetitor().reviews_score}} communication
+            </span>
+            <span class="score-item">
+              <i class="fas fa-map-marker-alt"></i>
+              {{getCurrentCompetitor().reviews_score}} location
+            </span>
+            <span class="score-item">
+              {{getCurrentCompetitor().reviews_score}} value
+            </span>
+          </div>
+        </div>
+        <div class="photo-count">{{getCurrentCompetitor().num_photos}} photos</div>
+      </div>
+      
+      <div class="main-image-container">
+        <img [src]="getCurrentCompetitorImage()" [alt]="getCurrentCompetitor().name" class="main-image">
+        <div class="image-navigation">
+          <button class="nav-btn prev" (click)="previousCompetitorImage()" *ngIf="currentCompetitorImageIndex > 0">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button class="nav-btn next" (click)="nextCompetitorImage()" *ngIf="currentCompetitorImageIndex < getCurrentCompetitor().photos.length - 1">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+      
+      <div class="image-footer" *ngIf="!hasCurrentCompetitorImageCaption()">
+        <i class="fas fa-exclamation-triangle"></i>
+        No caption set for this photo
+      </div>
+    </div>
+  </div>
+
+  <!-- Competitor Comparison -->
+  <div class="competitor-section" *ngIf="propertyData?.competitor && propertyData.competitor.length > 0">
+    <h2>Competitor Comparison</h2>
+    <div class="competitor-grid">
+      <div class="competitor-card" *ngFor="let comp of propertyData.competitor">
+        <div class="competitor-header">
+          <h3>{{comp.name}}</h3>
+          <div class="competitor-rating">
+            <i class="fas fa-star"></i>
+            <span>{{comp.reviews_score}}</span>
+            <span class="reviews-count">({{comp.reviews_count}} reviews)</span>
+          </div>
+        </div>
+        <div class="competitor-stats">
+          <div class="stat-row">
+            <span class="label">Photos:</span>
+            <span class="value">{{comp.num_photos}}</span>
+          </div>
+          <div class="stat-row">
+            <span class="label">Photo Gap:</span>
+            <span class="value" [ngClass]="getGapClass(comp.num_photos - propertyData.num_photos)">
+              {{comp.num_photos - propertyData.num_photos > 0 ? '+' : ''}}{{comp.num_photos - propertyData.num_photos}}
+            </span>
+          </div>
+          <div class="stat-row">
+            <span class="label">Location Score:</span>
+            <span class="value">{{comp.location_score}}</span>
+          </div>
+        </div>
+        <div class="competitor-links">
+          <a [href]="comp.airbnb_link" target="_blank" class="platform-link airbnb">
+            <i class="fab fa-airbnb"></i>
+          </a>
+          <a [href]="comp.booking_link" target="_blank" class="platform-link booking">
+            <i class="fas fa-bed"></i>
+          </a>
+          <a [href]="comp.vrbo_link" target="_blank" class="platform-link vrbo">
+            <i class="fas fa-home"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Photo Gallery -->
+  <div class="photo-gallery" *ngIf="propertyData?.property_photos">
+    <h2>Photo Gallery</h2>
+    <div class="gallery-grid">
+      <div class="photo-item" *ngFor="let photo of propertyData.property_photos; let i = index" (click)="openPhotoModal(i)">
+        <img [src]="photo.url" [alt]="photo.caption || 'Property photo'">
+        <div class="photo-overlay">
+          <div class="photo-info">
+            <span class="photo-type">{{photo.type}}</span>
+            <span class="photo-caption" *ngIf="photo.caption">{{photo.caption}}</span>
+            <span class="no-caption" *ngIf="!photo.caption">
+              <i class="fas fa-exclamation-triangle"></i>
+              No Caption
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Missing Captions Section -->
+  <div class="missing-captions-section" *ngIf="propertyData?.missing_captions > 0">
+    <h2>Missing Captions</h2>
+    <div class="missing-list">
+      <div class="missing-item" *ngFor="let photoId of getMissingCaptionPhotos()">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span>Photo {{photoId}} needs a caption</span>
+        <button class="btn btn-sm btn-primary">Add Caption</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Photo Modal -->
+<div class="photo-modal" *ngIf="selectedPhotoIndex !== null" (click)="closePhotoModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="closePhotoModal()">
+      <i class="fas fa-times"></i>
+    </button>
+    <div class="modal-image">
+      <img [src]="getSelectedPhoto()?.url" [alt]="getSelectedPhoto()?.caption">
+    </div>
+    <div class="modal-info">
+      <h3>{{getSelectedPhoto()?.type}}</h3>
+      <p *ngIf="getSelectedPhoto()?.caption">{{getSelectedPhoto()?.caption}}</p>
+      <p *ngIf="!getSelectedPhoto()?.caption" class="no-caption">
+        <i class="fas fa-exclamation-triangle"></i>
+        This photo needs a caption
+      </p>
+    </div>
+    <div class="modal-navigation">
+      <button class="nav-btn prev" (click)="previousPhoto()" *ngIf="selectedPhotoIndex > 0">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <button class="nav-btn next" (click)="nextPhoto()" *ngIf="selectedPhotoIndex < propertyData.property_photos.length - 1">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+</div>

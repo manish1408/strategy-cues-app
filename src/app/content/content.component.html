@@ -31,408 +31,146 @@
 
       <!-- Tab Content -->
       <div class="tab-content">
-        <!-- Overview Tab -->
-        <div class="tab-pane" [class.active]="activeTab === 'overview'" *ngIf="activeTab === 'overview'">
-          <div class="row content-section">
-            <div class="col-md-4">
-              <div class="content-card">
-                <div class="card-icon">
-                  <i class="fas fa-camera"></i>
-                </div>
-                <h3>Photos </h3>
-                <p>AI-powered photo analysis and optimization for better property presentation</p>
-                <div class="content-stats">
-                  <span class="stat-number">24</span>
-                  <span class="stat-label">Photos Analyzed</span>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="content-card">
-                <div class="card-icon">
-                  <i class="fas fa-star"></i>
-                </div>
-                <h3>Reviews Analyser</h3>
-                <p>Comprehensive analysis of guest reviews to identify improvement opportunities</p>
-                <div class="content-stats">
-                  <span class="stat-number">156</span>
-                  <span class="stat-label">Reviews Processed</span>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="content-card">
-                <div class="card-icon">
-                  <i class="fas fa-list-ul"></i>
-                </div>
-                <h3>Amenities Analyser</h3>
-                <p>Optimize your amenity listings based on market trends and guest preferences</p>
-                <div class="content-stats">
-                  <span class="stat-number">32</span>
-                  <span class="stat-label">Amenities Tracked</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div class="row content-section">
-            <div class="col-md-8">
-              <div class="recent-content">
-                <h3>Recent Content Updates</h3>
-                <div class="content-list">
-                  <div class="content-item">
-                    <span class="content-type">Photo</span>
-                    <span class="content-title">Kitchen photo optimized</span>
-                    <span class="content-date">2 hours ago</span>
-                  </div>
-                  <div class="content-item">
-                    <span class="content-type">Review</span>
-                    <span class="content-title">Positive feedback analysis completed</span>
-                    <span class="content-date">1 day ago</span>
-                  </div>
-                  <div class="content-item">
-                    <span class="content-type">Amenity</span>
-                    <span class="content-title">WiFi description updated</span>
-                    <span class="content-date">2 days ago</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="content-calendar">
-                <h3>Content Calendar</h3>
-                <p>Schedule your next content optimization session</p>
-              </div>
-            </div>
-          </div>
-        </div>
 
         <!-- Photos Optimiser Tab -->
         <div class="tab-pane" [class.active]="activeTab === 'photos'" *ngIf="activeTab === 'photos'">
           <div class="content-section">
-          
-            
-            <!-- Competitor Cards -->
-            <div class="competitor-carousel-container">
-              <div class="competitor-cards">
-                <button class="carousel-nav prev" (click)="previousCompetitor()">
-                  <i class="fas fa-chevron-left"></i>
-                </button>
-                
-                <div class="competitor-card featured">
-                  <div class="property-image">
-                    <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="The Urban Pearl">
-                    <div class="photo-count-badge">
-                      <i class="fas fa-camera"></i>
-                      <span>52 photos</span>
-                    </div>
-                    <div class="property-overlay">
-                      <div class="property-rating">
-                        <i class="fas fa-star"></i>
-                        <span>4.9</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="property-info">
-                    <h4>The Urban Pearl | Modern 2BR | Hotel Touches</h4>
-                    <div class="comparison-stats">
-                      <span class="stat-highlight positive">21 more than you</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="competitor-card">
-                  <div class="property-image">
-                    <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Hollywood 2BHK">
-                    <div class="photo-count-badge">
-                      <i class="fas fa-camera"></i>
-                      <span>99 photos</span>
-                    </div>
-                    <div class="property-overlay">
-                      <div class="property-rating">
-                        <i class="fas fa-star"></i>
-                        <span>4.8</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="property-info">
-                    <h4>Hollywood 2BHK in Prime Location</h4>
-                    <div class="comparison-stats">
-                      <span class="stat-highlight positive">68 more than you</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="competitor-card">
-                  <div class="property-image">
-                    <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Stunning 2bdr apt">
-                    <div class="photo-count-badge">
-                      <i class="fas fa-camera"></i>
-                      <span>32 photos</span>
-                    </div>
-                    <div class="property-overlay">
-                      <div class="property-rating">
-                        <i class="fas fa-star"></i>
-                        <span>4.7</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="property-info">
-                    <h4>Stunning 2bdr apt in Central Location</h4>
-                    <div class="comparison-stats">
-                      <span class="stat-highlight positive">1 more than you</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <button class="carousel-nav next" (click)="nextCompetitor()">
-                  <i class="fas fa-chevron-right"></i>
-                </button>
-              </div>
-            </div>
-            
-            <!-- Photo Comparison Section -->
-            <div class="row mt-5">
-              <div class="col-md-6">
-                <div class="photo-comparison-panel">
-                  <div class="panel-header">
-                    <h3>Your photos</h3>
-                    <div class="photo-stats">
-                      <span class="photo-count">31 photos</span>
-                    </div>
-                  </div>
-                  
-                  <div class="rating-metrics">
-                    <div class="metric-row">
-                      <span class="metric-label">4 reviews:</span>
-                      <div class="metric-values">
-                        <div class="metric-item">
-                          <i class="fas fa-broom"></i>
-                          <span>4.75 cleanliness</span>
-                        </div>
-                        <div class="metric-item">
-                          <i class="fas fa-bullseye"></i>
-                          <span>5.0 accuracy</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="metric-row">
-                      <div class="metric-values">
-                        <div class="metric-item">
-                          <i class="fas fa-key"></i>
-                          <span>4.75 check-in</span>
-                        </div>
-                        <div class="metric-item">
-                          <i class="fas fa-comments"></i>
-                          <span>5.0 communication</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="metric-row">
-                      <div class="metric-values">
-                        <div class="metric-item">
-                          <i class="fas fa-map-marker-alt"></i>
-                          <span>4.75 location</span>
-                        </div>
-                        <div class="metric-item">
-                          <i class="fas fa-dollar-sign"></i>
-                          <span>4.25 value</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div class="photo-gallery">
-                    <div class="main-photo">
-                      <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Your property main photo">
-                      <div class="best-photo-badge">
-                        <i class="fas fa-star"></i>
-                        <span>BEST PHOTO</span>
-                      </div>
-                      <div class="photo-warning">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <span>No caption set for this photo</span>
-                      </div>
-                      <div class="photo-actions">
-                        <button class="action-btn edit">
-                          <i class="fas fa-edit"></i>
-                          <span>Edit Caption</span>
-                        </button>
-                        <button class="action-btn enhance">
-                          <i class="fas fa-magic"></i>
-                          <span>AI Enhance</span>
-                        </button>
-                      </div>
-                    </div>
-                    
-                    <div class="photo-thumbnails">
-                      <div class="thumbnail active">
-                        <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80" alt="Living Room">
-                        <span class="thumb-number">1</span>
-                        <div class="thumb-overlay">Living Room</div>
-                      </div>
-                      <div class="thumbnail">
-                        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80" alt="Kitchen">
-                        <span class="thumb-number">2</span>
-                        <div class="thumb-overlay">Kitchen</div>
-                      </div>
-                      <div class="thumbnail">
-                        <img src="https://images.unsplash.com/photo-1540932239986-30128078f3c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80" alt="Bedroom">
-                        <span class="thumb-number">3</span>
-                        <div class="thumb-overlay">Bedroom</div>
-                      </div>
-                      <div class="thumbnail">
-                        <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef64?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80" alt="Bathroom">
-                        <span class="thumb-number">4</span>
-                        <div class="thumb-overlay">Bathroom</div>
-                      </div>
-                      <button class="nav-thumb prev">
-                        <i class="fas fa-chevron-left"></i>
-                      </button>
-                      <button class="nav-thumb next">
-                        <i class="fas fa-chevron-right"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="col-md-6">
-                <div class="photo-comparison-panel">
-                  <div class="panel-header">
-                    <h3>The Urban Pearl | Modern 2BR | Hotel Touches</h3>
-                    <div class="photo-stats">
-                      <span class="photo-count">52 photos</span>
-                    </div>
-                  </div>
-                  
-                  <div class="rating-metrics">
-                    <div class="metric-row">
-                      <span class="metric-label">0 reviews:</span>
-                      <div class="metric-values">
-                        <div class="metric-item">
-                          <i class="fas fa-broom"></i>
-                          <span>0.0 cleanliness</span>
-                        </div>
-                        <div class="metric-item">
-                          <i class="fas fa-bullseye"></i>
-                          <span>0.0 accuracy</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="metric-row">
-                      <div class="metric-values">
-                        <div class="metric-item">
-                          <i class="fas fa-key"></i>
-                          <span>0.0 check-in</span>
-                        </div>
-                        <div class="metric-item">
-                          <i class="fas fa-comments"></i>
-                          <span>0.0 communication</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="metric-row">
-                      <div class="metric-values">
-                        <div class="metric-item">
-                          <i class="fas fa-map-marker-alt"></i>
-                          <span>0.0 location</span>
-                        </div>
-                        <div class="metric-item">
-                          <i class="fas fa-dollar-sign"></i>
-                          <span>0.0 value</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div class="photo-gallery">
-                    <div class="main-photo">
-                      <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Competitor property main photo">
-                      <div class="photo-warning">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <span>No caption set for this photo</span>
-                      </div>
-                      <div class="competitor-badge">
-                        <i class="fas fa-eye"></i>
-                        <span>Competitor Analysis</span>
-                      </div>
-                    </div>
-                    
-                    <div class="photo-thumbnails">
-                      <div class="thumbnail active">
-                        <img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80" alt="Competitor Living Room">
-                        <span class="thumb-number">1</span>
-                        <div class="thumb-overlay">Living Area</div>
-                      </div>
-                      <div class="thumbnail">
-                        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80" alt="Competitor Kitchen">
-                        <span class="thumb-number">2</span>
-                        <div class="thumb-overlay">Kitchen Space</div>
-                      </div>
-                      <div class="thumbnail">
-                        <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80" alt="Competitor Bedroom">
-                        <span class="thumb-number">3</span>
-                        <div class="thumb-overlay">Master Bedroom</div>
-                      </div>
-                      <div class="thumbnail">
-                        <img src="https://images.unsplash.com/photo-1507652313519-d4e9174996dd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80" alt="Competitor Balcony">
-                        <span class="thumb-number">4</span>
-                        <div class="thumb-overlay">Balcony View</div>
-                      </div>
-                      <button class="nav-thumb prev">
-                        <i class="fas fa-chevron-left"></i>
-                      </button>
-                      <button class="nav-thumb next">
-                        <i class="fas fa-chevron-right"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Additional Photo Suggestions -->
-            <div class="row mt-5">
+            <!-- Page Header -->
+         
+
+
+            <!-- Photo Comparison Table -->
+            <div class="row">
               <div class="col-12">
-                <div class="photo-suggestions-section">
-                  <div class="section-header">
-                    <h3>Additional photo suggestions</h3>
-                    <div class="help-icon">
-                      <i class="fas fa-question-circle"></i>
-                    </div>
+                <div class="search-section">
+                  <div class="search-input-group">
+                    <i class="fas fa-search"></i>
+                    <input 
+                      type="text" 
+                      class="search-input" 
+                      placeholder="Search properties, competitors, or photo types..."
+                      [(ngModel)]="searchTerm"
+                      (input)="onSearchChange()">
+                    <button class="clear-search" *ngIf="searchTerm" (click)="clearSearch()">
+                      <i class="fas fa-times"></i>
+                    </button>
                   </div>
-                  
-                  <div class="suggestions-grid">
-                    <div class="suggestion-item missing">
-                      <i class="fas fa-times-circle"></i>
-                      <span>Floor plan</span>
-                      <i class="fas fa-info-circle suggestion-info"></i>
-                    </div>
-                    
-                    <div class="suggestion-item available">
-                      <i class="fas fa-check-circle"></i>
-                      <span>Aerial photo</span>
-                      <i class="fas fa-info-circle suggestion-info"></i>
-                    </div>
-                    
-                    <div class="suggestion-item missing">
-                      <i class="fas fa-times-circle"></i>
-                      <span>Best reviews</span>
-                      <i class="fas fa-info-circle suggestion-info"></i>
-                    </div>
-                    
-                    <div class="suggestion-item missing">
-                      <i class="fas fa-times-circle"></i>
-                      <span>High speed internet</span>
-                      <i class="fas fa-info-circle suggestion-info"></i>
-                    </div>
-                    
-                    <div class="suggestion-item missing">
-                      <i class="fas fa-times-circle"></i>
-                      <span>Map with points of interest</span>
-                      <i class="fas fa-info-circle suggestion-info"></i>
-                    </div>
+                  <div class="search-results" *ngIf="searchTerm">
+                    <span>{{filteredData.length}} of {{photoComparisonData.length}} properties</span>
+                  </div>
+                </div>
+                <div class="export-section">
+                  <button class="btn btn-outline-primary export-btn" (click)="exportToCSV()">
+                    <i class="fas fa-download"></i>
+                    Export CSV
+                  </button>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="table-container">
+                  <div class="table-responsive">
+                    <table class="photo-comparison-table">
+                      <thead>
+                        <tr>
+                          <th>Property</th>
+                          <th>Your Photos</th>
+                          <th>Competitor</th>
+                          <th>Photo Gap</th>
+                          <th>Caption Status</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let property of getDisplayData()" class="table-row">
+                          <td class="property-cell">
+                            <div class="property-info">
+                              <div class="property-image">
+                                <img [src]="'assets/images/placeholder.jpg'" [alt]="property.property_title">
+                              </div>
+                              <div class="property-details">
+                                <h4>{{property.property_title}}</h4>
+                                <span class="property-id">{{property.listing_id}}</span>
+                                <div class="property-links">
+                                  <a [href]="property.airbnb_link" target="_blank" class="platform-link airbnb">
+                                    <i class="fab fa-airbnb"></i>
+                                  </a>
+                                  <a [href]="property.booking_link" target="_blank" class="platform-link booking">
+                                    <i class="fas fa-bed"></i>
+                                  </a>
+                                  <a [href]="property.vrbo_link" target="_blank" class="platform-link vrbo">
+                                    <i class="fas fa-home"></i>
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="photos-cell">
+                            <div class="photo-count-info">
+                              <span class="count-number">{{property.num_photos}}</span>
+                              <span class="count-label">photos</span>
+                              <div class="photo-types">
+                                <span class="type-badge" *ngFor="let type of getPhotoTypes(property.property_photos)">{{type}}</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="competitor-cell">
+                            <div class="competitor-info" *ngIf="property.competitor && property.competitor.length > 0">
+                              <div class="competitor-header">
+                                <span class="competitor-name">{{property.competitor[0].name}}</span>
+                                <div class="competitor-rating">
+                                  <i class="fas fa-star"></i>
+                                  <span>{{property.competitor[0].reviews_score}}</span>
+                                </div>
+                              </div>
+                              <div class="competitor-photos">
+                                <span class="competitor-count">{{property.competitor[0].num_photos}} photos</span>
+                                <span class="reviews-count">{{property.competitor[0].reviews_count}} reviews</span>
+                              </div>
+                              <div class="competitor-links">
+                                <a [href]="property.competitor[0].airbnb_link" target="_blank" class="platform-link airbnb">
+                                  <i class="fab fa-airbnb"></i>
+                                </a>
+                                <a [href]="property.competitor[0].booking_link" target="_blank" class="platform-link booking">
+                                  <i class="fas fa-bed"></i>
+                                </a>
+                                <a [href]="property.competitor[0].vrbo_link" target="_blank" class="platform-link vrbo">
+                                  <i class="fas fa-home"></i>
+                                </a>
+                              </div>
+                            </div>
+                            <div class="no-competitor" *ngIf="!property.competitor || property.competitor.length === 0">
+                              <i class="fas fa-info-circle"></i>
+                              <span>No competitor data</span>
+                            </div>
+                          </td>
+                          <td class="gap-cell">
+                            <div class="photo-gap" [ngClass]="getGapClass(getPhotoGap(property))">
+                              <span class="gap-number">{{Math.abs(getPhotoGap(property))}}</span>
+                              <span class="gap-direction">{{getPhotoGap(property) > 0 ? 'behind' : 'ahead'}}</span>
+                            </div>
+                          </td>
+                          <td class="caption-cell">
+                            <div class="caption-status">
+                              <div class="caption-progress">
+                                <div class="progress-bar">
+                                  <div class="progress-fill" [style.width.%]="getCaptionPercentage(property)"></div>
+                                </div>
+                                <span class="caption-text">{{property.captioned_count}}/{{property.num_photos}}</span>
+                              </div>
+                              <div class="missing-captions" *ngIf="property.missing_captions > 0">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span>{{property.missing_captions}} missing</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="actions-cell">
+                            <button class="btn btn-sm btn-primary view-btn" (click)="viewPhotoDetails(property.listing_id)">
+                              <i class="fas fa-eye"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
@@ -442,150 +180,12 @@
 
         <!-- Reviews Analyser Tab -->
         <div class="tab-pane" [class.active]="activeTab === 'reviews'" *ngIf="activeTab === 'reviews'">
-          <div class="content-section">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="content-card">
-                  <div class="card-icon">
-                    <i class="fas fa-chart-line"></i>
-                  </div>
-                  <h3>Review Analytics</h3>
-                  <div class="review-stats">
-                    <div class="stat-item">
-                      <span class="stat-number">4.8</span>
-                      <span class="stat-label">Average Rating</span>
-                    </div>
-                    <div class="stat-item">
-                      <span class="stat-number">156</span>
-                      <span class="stat-label">Total Reviews</span>
-                    </div>
-                    <div class="stat-item">
-                      <span class="stat-number">92%</span>
-                      <span class="stat-label">Positive Sentiment</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="content-card">
-                  <div class="card-icon">
-                    <i class="fas fa-exclamation-triangle"></i>
-                  </div>
-                  <h3>Areas for Improvement</h3>
-                  <div class="improvement-list">
-                    <div class="improvement-item">
-                      <span class="category">Cleanliness</span>
-                      <span class="frequency">Mentioned in 12% of reviews</span>
-                    </div>
-                    <div class="improvement-item">
-                      <span class="category">Check-in Process</span>
-                      <span class="frequency">Mentioned in 8% of reviews</span>
-                    </div>
-                    <div class="improvement-item">
-                      <span class="category">WiFi Speed</span>
-                      <span class="frequency">Mentioned in 5% of reviews</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row mt-4">
-              <div class="col-12">
-                <div class="content-card">
-                  <h3>Recent Reviews Analysis</h3>
-                  <div class="review-timeline">
-                    <div class="timeline-item positive">
-                      <div class="timeline-content">
-                        <h5>"Amazing stay with great amenities"</h5>
-                        <p>Positive mention of kitchen facilities and location</p>
-                        <span class="review-date">2 days ago</span>
-                      </div>
-                    </div>
-                    <div class="timeline-item neutral">
-                      <div class="timeline-content">
-                        <h5>"Good place but WiFi could be better"</h5>
-                        <p>Suggestion to improve internet connectivity</p>
-                        <span class="review-date">1 week ago</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        
         </div>
 
         <!-- Amenities Analyser Tab -->
         <div class="tab-pane" [class.active]="activeTab === 'amenities'" *ngIf="activeTab === 'amenities'">
-          <div class="content-section">
-            <div class="row">
-              <div class="col-md-8">
-                <div class="content-card">
-                  <div class="card-icon">
-                    <i class="fas fa-list-ul"></i>
-                  </div>
-                  <h3>Current Amenities</h3>
-                  <div class="amenities-grid">
-                    <div class="amenity-item featured">
-                      <i class="fas fa-wifi"></i>
-                      <span>Free WiFi</span>
-                      <div class="amenity-score">95%</div>
-                    </div>
-                    <div class="amenity-item featured">
-                      <i class="fas fa-car"></i>
-                      <span>Free Parking</span>
-                      <div class="amenity-score">88%</div>
-                    </div>
-                    <div class="amenity-item">
-                      <i class="fas fa-tv"></i>
-                      <span>Smart TV</span>
-                      <div class="amenity-score">75%</div>
-                    </div>
-                    <div class="amenity-item">
-                      <i class="fas fa-utensils"></i>
-                      <span>Full Kitchen</span>
-                      <div class="amenity-score">82%</div>
-                    </div>
-                    <div class="amenity-item">
-                      <i class="fas fa-dumbbell"></i>
-                      <span>Gym Access</span>
-                      <div class="amenity-score">45%</div>
-                    </div>
-                    <div class="amenity-item">
-                      <i class="fas fa-swimming-pool"></i>
-                      <span>Pool</span>
-                      <div class="amenity-score">92%</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="content-card">
-                  <div class="card-icon">
-                    <i class="fas fa-plus-circle"></i>
-                  </div>
-                  <h3>Suggested Amenities</h3>
-                  <div class="suggestion-list">
-                    <div class="suggestion-item">
-                      <i class="fas fa-coffee"></i>
-                      <span>Coffee Machine</span>
-                      <small>+15% booking rate</small>
-                    </div>
-                    <div class="suggestion-item">
-                      <i class="fas fa-baby"></i>
-                      <span>Baby Equipment</span>
-                      <small>+8% family bookings</small>
-                    </div>
-                    <div class="suggestion-item">
-                      <i class="fas fa-bicycle"></i>
-                      <span>Bike Rental</span>
-                      <small>+12% longer stays</small>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        
         </div>
       </div>
     </div>

@@ -1,0 +1,2959 @@
+[
+  {
+    "listing_id": "L-1000",
+    "property_title": "Decision Harbor View",
+    "airbnb_link": "https://www.airbnb.com/rooms/2390030630",
+    "booking_link": "https://www.booking.com/rooms/6895150143",
+    "vrbo_link": "https://www.vrbo.com/rooms/6411903877",
+    "num_photos": 36,
+    "captioned_count": 35,
+    "missing_captions": 1,
+    "competitor": [
+      {
+        "name": "Old Vista",
+        "num_photos": 47,
+        "airbnb_link": "https://www.airbnb.com/rooms/9959064362",
+        "booking_link": "https://www.booking.com/rooms/7966148694",
+        "vrbo_link": "https://www.vrbo.com/rooms/3525310309",
+        "photos": [
+          {
+            "photo_id": "L-1000-C1",
+            "url": "https://cdn.example.com/photos/L-1000-C1.jpg",
+            "sequence": 16,
+            "has_caption": true,
+            "caption": "Value school party visit fast particularly easy reach.",
+            "type": "bedroom"
+          },
+          {
+            "photo_id": "L-1000-C2",
+            "url": "https://cdn.example.com/photos/L-1000-C2.jpg",
+            "sequence": 19,
+            "has_caption": true,
+            "caption": "Decision single heavy hotel mean car.",
+            "type": "kitchen"
+          },
+          {
+            "photo_id": "L-1000-C3",
+            "url": "https://cdn.example.com/photos/L-1000-C3.jpg",
+            "sequence": 20,
+            "has_caption": false,
+            "caption": null,
+            "type": "bathroom"
+          }
+        ],
+        "reviews_count": 30,
+        "reviews_score": 4.88,
+        "location_score": 3.9
+      }
+    ],
+    "property_photos": [
+      {
+        "photo_id": "L-1000-1",
+        "url": "https://cdn.example.com/photos/L-1000-1.jpg",
+        "sequence": 13,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Cost sense occur let big company father ok near laugh fly probably.",
+        "alt_text": "Level read sure data worker.",
+        "type": "bedroom"
+      },
+      {
+        "photo_id": "L-1000-2",
+        "url": "https://cdn.example.com/photos/L-1000-2.jpg",
+        "sequence": 2,
+        "has_caption": true,
+        "caption": "Daughter different compare than show.",
+        "suggested_caption": "Continue natural already attention responsibility billion offer box hot.",
+        "alt_text": "Energy president mind.",
+        "type": "bathroom"
+      },
+      {
+        "photo_id": "L-1000-3",
+        "url": "https://cdn.example.com/photos/L-1000-3.jpg",
+        "sequence": 15,
+        "has_caption": true,
+        "caption": "Democrat challenge drive resource station stand everybody on.",
+        "suggested_caption": "Assume loss read right lay community government lose environmental enjoy opportunity pattern much.",
+        "alt_text": "New lawyer hope decision financial civil.",
+        "type": "bedroom"
+      },
+      {
+        "photo_id": "L-1000-4",
+        "url": "https://cdn.example.com/photos/L-1000-4.jpg",
+        "sequence": 10,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Out computer idea defense respond never leader point parent after difference interesting.",
+        "alt_text": "Will suddenly two need result surface.",
+        "type": "kitchen"
+      },
+      {
+        "photo_id": "L-1000-5",
+        "url": "https://cdn.example.com/photos/L-1000-5.jpg",
+        "sequence": 13,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Civil growth necessary somebody along stay push cause game PM even over.",
+        "alt_text": "Miss standard item public stand.",
+        "type": "kitchen"
+      }
+    ],
+    "property_photos_coverage": {
+      "rooms_present": [
+        "bedroom",
+        "exterior",
+        "kitchen"
+      ],
+      "rooms_missing": [
+        "floor_plan"
+      ],
+      "amenities_present": [
+        "sea_view",
+        "workspace",
+        "washer_dryer"
+      ],
+      "amenities_missing": [
+        "wifi",
+        "sea_view"
+      ]
+    },
+    "recommendations": [
+      {
+        "id": "rec1",
+        "title": "Add floor plan",
+        "impact": "high",
+        "effort": "low",
+        "details": "upload floor plan"
+      },
+      {
+        "id": "rec2",
+        "title": "Add aerial photo",
+        "impact": "medium",
+        "effort": "medium",
+        "details": "upload aerial"
+      }
+    ]
+  },
+  {
+    "listing_id": "L-1001",
+    "property_title": "Name Retreat",
+    "airbnb_link": "https://www.airbnb.com/rooms/5854597564",
+    "booking_link": "https://www.booking.com/rooms/6214719100",
+    "vrbo_link": "https://www.vrbo.com/rooms/9598923842",
+    "num_photos": 24,
+    "captioned_count": 14,
+    "missing_captions": 10,
+    "competitor": [
+      {
+        "name": "State Suites",
+        "num_photos": 46,
+        "airbnb_link": "https://www.airbnb.com/rooms/6731129002",
+        "booking_link": "https://www.booking.com/rooms/240523133",
+        "vrbo_link": "https://www.vrbo.com/rooms/7441036521",
+        "photos": [
+          {
+            "photo_id": "L-1001-C1",
+            "url": "https://cdn.example.com/photos/L-1001-C1.jpg",
+            "sequence": 5,
+            "has_caption": false,
+            "caption": null,
+            "type": "kitchen"
+          }
+        ],
+        "reviews_count": 131,
+        "reviews_score": 4.24,
+        "location_score": 3.96
+      }
+    ],
+    "property_photos": [
+      {
+        "photo_id": "L-1001-1",
+        "url": "https://cdn.example.com/photos/L-1001-1.jpg",
+        "sequence": 5,
+        "has_caption": true,
+        "caption": "Health worry western far me public hundred else spring.",
+        "suggested_caption": "Decide red show that the whole last order hundred sound eat.",
+        "alt_text": "None present address upon.",
+        "type": "bedroom"
+      },
+      {
+        "photo_id": "L-1001-2",
+        "url": "https://cdn.example.com/photos/L-1001-2.jpg",
+        "sequence": 11,
+        "has_caption": true,
+        "caption": "Behind economy debate language perhaps station.",
+        "suggested_caption": "Effect couple strategy live treat pay bar.",
+        "alt_text": "Mr chair society become.",
+        "type": "living_room"
+      },
+      {
+        "photo_id": "L-1001-3",
+        "url": "https://cdn.example.com/photos/L-1001-3.jpg",
+        "sequence": 6,
+        "has_caption": true,
+        "caption": "Popular discussion factor step degree.",
+        "suggested_caption": "Tree agent group agent cover college friend whether.",
+        "alt_text": "Several natural reason suddenly affect kind.",
+        "type": "living_room"
+      },
+      {
+        "photo_id": "L-1001-4",
+        "url": "https://cdn.example.com/photos/L-1001-4.jpg",
+        "sequence": 8,
+        "has_caption": true,
+        "caption": "These enter tonight marriage yourself tell Democrat child.",
+        "suggested_caption": "Skin special it site plan free production join possible world such.",
+        "alt_text": "Side conference after beat attack last stand compare.",
+        "type": "living_room"
+      },
+      {
+        "photo_id": "L-1001-5",
+        "url": "https://cdn.example.com/photos/L-1001-5.jpg",
+        "sequence": 16,
+        "has_caption": true,
+        "caption": "Mention cut wrong clear probably society perhaps.",
+        "suggested_caption": "Event change two hard kitchen wear for doctor.",
+        "alt_text": "Window by west general beyond.",
+        "type": "bedroom"
+      }
+    ],
+    "property_photos_coverage": {
+      "rooms_present": [
+        "kitchen",
+        "bathroom",
+        "balcony",
+        "exterior",
+        "living_room"
+      ],
+      "rooms_missing": [
+        "floor_plan"
+      ],
+      "amenities_present": [
+        "sea_view",
+        "gym",
+        "wifi"
+      ],
+      "amenities_missing": [
+        "smart_tv",
+        "wifi"
+      ]
+    },
+    "recommendations": [
+      {
+        "id": "rec1",
+        "title": "Add floor plan",
+        "impact": "high",
+        "effort": "low",
+        "details": "upload floor plan"
+      },
+      {
+        "id": "rec2",
+        "title": "Add aerial photo",
+        "impact": "medium",
+        "effort": "medium",
+        "details": "upload aerial"
+      }
+    ]
+  },
+  {
+    "listing_id": "L-1002",
+    "property_title": "Region Residences",
+    "airbnb_link": "https://www.airbnb.com/rooms/6732503245",
+    "booking_link": "https://www.booking.com/rooms/5541202614",
+    "vrbo_link": "https://www.vrbo.com/rooms/4556588854",
+    "num_photos": 31,
+    "captioned_count": 30,
+    "missing_captions": 1,
+    "competitor": [
+      {
+        "name": "Trade Suites",
+        "num_photos": 47,
+        "airbnb_link": "https://www.airbnb.com/rooms/901318697",
+        "booking_link": "https://www.booking.com/rooms/3068128109",
+        "vrbo_link": "https://www.vrbo.com/rooms/9335251291",
+        "photos": [
+          {
+            "photo_id": "L-1002-C1",
+            "url": "https://cdn.example.com/photos/L-1002-C1.jpg",
+            "sequence": 7,
+            "has_caption": true,
+            "caption": "Fact compare these write myself fall least top their old.",
+            "type": "bedroom"
+          }
+        ],
+        "reviews_count": 8,
+        "reviews_score": 4.71,
+        "location_score": 4.52
+      },
+      {
+        "name": "Soon Retreat",
+        "num_photos": 46,
+        "airbnb_link": "https://www.airbnb.com/rooms/737909933",
+        "booking_link": "https://www.booking.com/rooms/4178994894",
+        "vrbo_link": "https://www.vrbo.com/rooms/4426476929",
+        "photos": [
+          {
+            "photo_id": "L-1002-C1",
+            "url": "https://cdn.example.com/photos/L-1002-C1.jpg",
+            "sequence": 9,
+            "has_caption": true,
+            "caption": "Join crime air guy month man others.",
+            "type": "kitchen"
+          },
+          {
+            "photo_id": "L-1002-C2",
+            "url": "https://cdn.example.com/photos/L-1002-C2.jpg",
+            "sequence": 4,
+            "has_caption": true,
+            "caption": "Decide week well board there manager.",
+            "type": "bathroom"
+          },
+          {
+            "photo_id": "L-1002-C3",
+            "url": "https://cdn.example.com/photos/L-1002-C3.jpg",
+            "sequence": 8,
+            "has_caption": false,
+            "caption": null,
+            "type": "bedroom"
+          }
+        ],
+        "reviews_count": 257,
+        "reviews_score": 3.88,
+        "location_score": 3.81
+      }
+    ],
+    "property_photos": [
+      {
+        "photo_id": "L-1002-1",
+        "url": "https://cdn.example.com/photos/L-1002-1.jpg",
+        "sequence": 13,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Across continue north race police determine me watch middle national poor effort.",
+        "alt_text": "Region market visit glass TV.",
+        "type": "bedroom"
+      },
+      {
+        "photo_id": "L-1002-2",
+        "url": "https://cdn.example.com/photos/L-1002-2.jpg",
+        "sequence": 5,
+        "has_caption": true,
+        "caption": "Treat human picture tonight feeling middle allow.",
+        "suggested_caption": "Pull thousand brother bit father determine.",
+        "alt_text": "Including go how detail.",
+        "type": "bathroom"
+      },
+      {
+        "photo_id": "L-1002-3",
+        "url": "https://cdn.example.com/photos/L-1002-3.jpg",
+        "sequence": 3,
+        "has_caption": true,
+        "caption": "Address entire get provide down executive beautiful pressure.",
+        "suggested_caption": "Often result care raise drive fact have white fly adult practice car theory floor.",
+        "alt_text": "Environment create matter measure two.",
+        "type": "bedroom"
+      },
+      {
+        "photo_id": "L-1002-4",
+        "url": "https://cdn.example.com/photos/L-1002-4.jpg",
+        "sequence": 16,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Reveal accept degree also quickly key table raise bed sense six worry enter.",
+        "alt_text": "Large travel tree everyone shoulder PM generation American.",
+        "type": "living_room"
+      },
+      {
+        "photo_id": "L-1002-5",
+        "url": "https://cdn.example.com/photos/L-1002-5.jpg",
+        "sequence": 6,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Draw accept fire science knowledge play high sport forward we list popular program.",
+        "alt_text": "Defense summer such realize group animal culture.",
+        "type": "bedroom"
+      }
+    ],
+    "property_photos_coverage": {
+      "rooms_present": [
+        "living_room",
+        "bathroom",
+        "bedroom"
+      ],
+      "rooms_missing": [
+        "floor_plan"
+      ],
+      "amenities_present": [
+        "workspace",
+        "washer_dryer",
+        "smart_tv"
+      ],
+      "amenities_missing": [
+        "parking",
+        "sea_view"
+      ]
+    },
+    "recommendations": [
+      {
+        "id": "rec1",
+        "title": "Add floor plan",
+        "impact": "high",
+        "effort": "low",
+        "details": "upload floor plan"
+      },
+      {
+        "id": "rec2",
+        "title": "Add aerial photo",
+        "impact": "medium",
+        "effort": "medium",
+        "details": "upload aerial"
+      }
+    ]
+  },
+  {
+    "listing_id": "L-1003",
+    "property_title": "Summer Oasis",
+    "airbnb_link": "https://www.airbnb.com/rooms/526082193",
+    "booking_link": "https://www.booking.com/rooms/6720477693",
+    "vrbo_link": "https://www.vrbo.com/rooms/6445250422",
+    "num_photos": 25,
+    "captioned_count": 14,
+    "missing_captions": 11,
+    "competitor": [
+      {
+        "name": "Attorney Retreat",
+        "num_photos": 29,
+        "airbnb_link": "https://www.airbnb.com/rooms/163346633",
+        "booking_link": "https://www.booking.com/rooms/1467966735",
+        "vrbo_link": "https://www.vrbo.com/rooms/556198323",
+        "photos": [
+          {
+            "photo_id": "L-1003-C1",
+            "url": "https://cdn.example.com/photos/L-1003-C1.jpg",
+            "sequence": 15,
+            "has_caption": false,
+            "caption": null,
+            "type": "living_room"
+          },
+          {
+            "photo_id": "L-1003-C2",
+            "url": "https://cdn.example.com/photos/L-1003-C2.jpg",
+            "sequence": 11,
+            "has_caption": true,
+            "caption": "Trial involve bed close by.",
+            "type": "kitchen"
+          },
+          {
+            "photo_id": "L-1003-C3",
+            "url": "https://cdn.example.com/photos/L-1003-C3.jpg",
+            "sequence": 1,
+            "has_caption": false,
+            "caption": null,
+            "type": "bedroom"
+          }
+        ],
+        "reviews_count": 32,
+        "reviews_score": 4.02,
+        "location_score": 4.63
+      },
+      {
+        "name": "Buy Suites",
+        "num_photos": 44,
+        "airbnb_link": "https://www.airbnb.com/rooms/6062155154",
+        "booking_link": "https://www.booking.com/rooms/974900676",
+        "vrbo_link": "https://www.vrbo.com/rooms/1990833632",
+        "photos": [
+          {
+            "photo_id": "L-1003-C1",
+            "url": "https://cdn.example.com/photos/L-1003-C1.jpg",
+            "sequence": 2,
+            "has_caption": false,
+            "caption": null,
+            "type": "bathroom"
+          },
+          {
+            "photo_id": "L-1003-C2",
+            "url": "https://cdn.example.com/photos/L-1003-C2.jpg",
+            "sequence": 19,
+            "has_caption": false,
+            "caption": null,
+            "type": "living_room"
+          }
+        ],
+        "reviews_count": 177,
+        "reviews_score": 3.96,
+        "location_score": 4.71
+      }
+    ],
+    "property_photos": [
+      {
+        "photo_id": "L-1003-1",
+        "url": "https://cdn.example.com/photos/L-1003-1.jpg",
+        "sequence": 3,
+        "has_caption": true,
+        "caption": "Memory key star company share win.",
+        "suggested_caption": "Project position side successful city market control allow this image.",
+        "alt_text": "Like trip well day shake effort.",
+        "type": "living_room"
+      },
+      {
+        "photo_id": "L-1003-2",
+        "url": "https://cdn.example.com/photos/L-1003-2.jpg",
+        "sequence": 6,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Democratic might near job agree customer around.",
+        "alt_text": "Democrat service clearly new involve data doctor.",
+        "type": "bathroom"
+      },
+      {
+        "photo_id": "L-1003-3",
+        "url": "https://cdn.example.com/photos/L-1003-3.jpg",
+        "sequence": 15,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Detail enjoy interesting contain leg here west.",
+        "alt_text": "Herself any short.",
+        "type": "bedroom"
+      },
+      {
+        "photo_id": "L-1003-4",
+        "url": "https://cdn.example.com/photos/L-1003-4.jpg",
+        "sequence": 2,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Security ok him lay and though than respond.",
+        "alt_text": "Occur rock environmental to newspaper test.",
+        "type": "bedroom"
+      },
+      {
+        "photo_id": "L-1003-5",
+        "url": "https://cdn.example.com/photos/L-1003-5.jpg",
+        "sequence": 17,
+        "has_caption": true,
+        "caption": "Thus house red argue protect save ground risk space.",
+        "suggested_caption": "Mother work nature name really quality certainly loss upon population serious begin.",
+        "alt_text": "Force team girl.",
+        "type": "bathroom"
+      }
+    ],
+    "property_photos_coverage": {
+      "rooms_present": [
+        "balcony",
+        "bathroom",
+        "kitchen",
+        "exterior"
+      ],
+      "rooms_missing": [
+        "floor_plan"
+      ],
+      "amenities_present": [
+        "parking",
+        "washer_dryer",
+        "sea_view"
+      ],
+      "amenities_missing": [
+        "workspace",
+        "gym"
+      ]
+    },
+    "recommendations": [
+      {
+        "id": "rec1",
+        "title": "Add floor plan",
+        "impact": "high",
+        "effort": "low",
+        "details": "upload floor plan"
+      },
+      {
+        "id": "rec2",
+        "title": "Add aerial photo",
+        "impact": "medium",
+        "effort": "medium",
+        "details": "upload aerial"
+      }
+    ]
+  },
+  {
+    "listing_id": "L-1004",
+    "property_title": "Money Suites",
+    "airbnb_link": "https://www.airbnb.com/rooms/9374220031",
+    "booking_link": "https://www.booking.com/rooms/6902831875",
+    "vrbo_link": "https://www.vrbo.com/rooms/1237092825",
+    "num_photos": 36,
+    "captioned_count": 15,
+    "missing_captions": 21,
+    "competitor": [
+      {
+        "name": "Smile Marina",
+        "num_photos": 55,
+        "airbnb_link": "https://www.airbnb.com/rooms/8094482096",
+        "booking_link": "https://www.booking.com/rooms/4394978750",
+        "vrbo_link": "https://www.vrbo.com/rooms/9487028446",
+        "photos": [
+          {
+            "photo_id": "L-1004-C1",
+            "url": "https://cdn.example.com/photos/L-1004-C1.jpg",
+            "sequence": 17,
+            "has_caption": true,
+            "caption": "Likely computer assume development entire responsibility along.",
+            "type": "living_room"
+          },
+          {
+            "photo_id": "L-1004-C2",
+            "url": "https://cdn.example.com/photos/L-1004-C2.jpg",
+            "sequence": 9,
+            "has_caption": false,
+            "caption": null,
+            "type": "kitchen"
+          }
+        ],
+        "reviews_count": 217,
+        "reviews_score": 4.14,
+        "location_score": 4.94
+      },
+      {
+        "name": "Shake Marina",
+        "num_photos": 21,
+        "airbnb_link": "https://www.airbnb.com/rooms/4873840628",
+        "booking_link": "https://www.booking.com/rooms/7252851242",
+        "vrbo_link": "https://www.vrbo.com/rooms/7375075490",
+        "photos": [
+          {
+            "photo_id": "L-1004-C1",
+            "url": "https://cdn.example.com/photos/L-1004-C1.jpg",
+            "sequence": 16,
+            "has_caption": false,
+            "caption": null,
+            "type": "bedroom"
+          },
+          {
+            "photo_id": "L-1004-C2",
+            "url": "https://cdn.example.com/photos/L-1004-C2.jpg",
+            "sequence": 4,
+            "has_caption": true,
+            "caption": "Law teach behavior expert.",
+            "type": "bedroom"
+          },
+          {
+            "photo_id": "L-1004-C3",
+            "url": "https://cdn.example.com/photos/L-1004-C3.jpg",
+            "sequence": 15,
+            "has_caption": false,
+            "caption": null,
+            "type": "kitchen"
+          },
+          {
+            "photo_id": "L-1004-C4",
+            "url": "https://cdn.example.com/photos/L-1004-C4.jpg",
+            "sequence": 20,
+            "has_caption": true,
+            "caption": "Rise rest draw build quality right five truth people.",
+            "type": "bathroom"
+          }
+        ],
+        "reviews_count": 13,
+        "reviews_score": 4.78,
+        "location_score": 4.21
+      }
+    ],
+    "property_photos": [
+      {
+        "photo_id": "L-1004-1",
+        "url": "https://cdn.example.com/photos/L-1004-1.jpg",
+        "sequence": 17,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Own weight half sister clear daughter try garden behavior history where often.",
+        "alt_text": "Lot structure stop rate live particular.",
+        "type": "kitchen"
+      },
+      {
+        "photo_id": "L-1004-2",
+        "url": "https://cdn.example.com/photos/L-1004-2.jpg",
+        "sequence": 17,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Past beyond decision page huge knowledge that left.",
+        "alt_text": "Act available action turn authority.",
+        "type": "bedroom"
+      },
+      {
+        "photo_id": "L-1004-3",
+        "url": "https://cdn.example.com/photos/L-1004-3.jpg",
+        "sequence": 4,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Whole show low still lot their only meeting.",
+        "alt_text": "Become specific positive head require would.",
+        "type": "living_room"
+      },
+      {
+        "photo_id": "L-1004-4",
+        "url": "https://cdn.example.com/photos/L-1004-4.jpg",
+        "sequence": 16,
+        "has_caption": true,
+        "caption": "Me guess score old put change.",
+        "suggested_caption": "Spring scientist leader fight level reason agent bad ago than peace although.",
+        "alt_text": "Carry full yourself race.",
+        "type": "kitchen"
+      },
+      {
+        "photo_id": "L-1004-5",
+        "url": "https://cdn.example.com/photos/L-1004-5.jpg",
+        "sequence": 3,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Card whole here hit machine security find should sense.",
+        "alt_text": "Study back forward.",
+        "type": "living_room"
+      }
+    ],
+    "property_photos_coverage": {
+      "rooms_present": [
+        "living_room",
+        "kitchen",
+        "bathroom",
+        "balcony",
+        "bedroom"
+      ],
+      "rooms_missing": [
+        "floor_plan"
+      ],
+      "amenities_present": [
+        "parking",
+        "workspace",
+        "washer_dryer"
+      ],
+      "amenities_missing": [
+        "smart_tv",
+        "parking"
+      ]
+    },
+    "recommendations": [
+      {
+        "id": "rec1",
+        "title": "Add floor plan",
+        "impact": "high",
+        "effort": "low",
+        "details": "upload floor plan"
+      },
+      {
+        "id": "rec2",
+        "title": "Add aerial photo",
+        "impact": "medium",
+        "effort": "medium",
+        "details": "upload aerial"
+      }
+    ]
+  },
+  {
+    "listing_id": "L-1005",
+    "property_title": "Party Harbor View",
+    "airbnb_link": "https://www.airbnb.com/rooms/5234144818",
+    "booking_link": "https://www.booking.com/rooms/6977789568",
+    "vrbo_link": "https://www.vrbo.com/rooms/7371635902",
+    "num_photos": 23,
+    "captioned_count": 13,
+    "missing_captions": 10,
+    "competitor": [
+      {
+        "name": "Only Retreat",
+        "num_photos": 21,
+        "airbnb_link": "https://www.airbnb.com/rooms/859194834",
+        "booking_link": "https://www.booking.com/rooms/1984891429",
+        "vrbo_link": "https://www.vrbo.com/rooms/4074665629",
+        "photos": [
+          {
+            "photo_id": "L-1005-C1",
+            "url": "https://cdn.example.com/photos/L-1005-C1.jpg",
+            "sequence": 6,
+            "has_caption": true,
+            "caption": "Several here reflect natural land themselves fish.",
+            "type": "bedroom"
+          },
+          {
+            "photo_id": "L-1005-C2",
+            "url": "https://cdn.example.com/photos/L-1005-C2.jpg",
+            "sequence": 12,
+            "has_caption": false,
+            "caption": null,
+            "type": "living_room"
+          }
+        ],
+        "reviews_count": 232,
+        "reviews_score": 4.02,
+        "location_score": 3.96
+      },
+      {
+        "name": "Car Vista",
+        "num_photos": 58,
+        "airbnb_link": "https://www.airbnb.com/rooms/7389125311",
+        "booking_link": "https://www.booking.com/rooms/8227074096",
+        "vrbo_link": "https://www.vrbo.com/rooms/6076391685",
+        "photos": [
+          {
+            "photo_id": "L-1005-C1",
+            "url": "https://cdn.example.com/photos/L-1005-C1.jpg",
+            "sequence": 5,
+            "has_caption": false,
+            "caption": null,
+            "type": "kitchen"
+          },
+          {
+            "photo_id": "L-1005-C2",
+            "url": "https://cdn.example.com/photos/L-1005-C2.jpg",
+            "sequence": 19,
+            "has_caption": false,
+            "caption": null,
+            "type": "bedroom"
+          },
+          {
+            "photo_id": "L-1005-C3",
+            "url": "https://cdn.example.com/photos/L-1005-C3.jpg",
+            "sequence": 16,
+            "has_caption": false,
+            "caption": null,
+            "type": "kitchen"
+          },
+          {
+            "photo_id": "L-1005-C4",
+            "url": "https://cdn.example.com/photos/L-1005-C4.jpg",
+            "sequence": 20,
+            "has_caption": false,
+            "caption": null,
+            "type": "bathroom"
+          }
+        ],
+        "reviews_count": 181,
+        "reviews_score": 4.73,
+        "location_score": 4.2
+      }
+    ],
+    "property_photos": [
+      {
+        "photo_id": "L-1005-1",
+        "url": "https://cdn.example.com/photos/L-1005-1.jpg",
+        "sequence": 13,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Hit bank upon these treatment step baby family heart rock window speech pressure.",
+        "alt_text": "Try order man how draw theory treatment.",
+        "type": "kitchen"
+      },
+      {
+        "photo_id": "L-1005-2",
+        "url": "https://cdn.example.com/photos/L-1005-2.jpg",
+        "sequence": 3,
+        "has_caption": true,
+        "caption": "Heavy stay network agree share structure ever put add.",
+        "suggested_caption": "Anything soldier no at cold new quality whole similar travel.",
+        "alt_text": "Able performance job eight win two.",
+        "type": "bathroom"
+      },
+      {
+        "photo_id": "L-1005-3",
+        "url": "https://cdn.example.com/photos/L-1005-3.jpg",
+        "sequence": 11,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Adult defense accept art many against lead him too different.",
+        "alt_text": "Year avoid market decade report.",
+        "type": "bathroom"
+      },
+      {
+        "photo_id": "L-1005-4",
+        "url": "https://cdn.example.com/photos/L-1005-4.jpg",
+        "sequence": 20,
+        "has_caption": true,
+        "caption": "Environmental nation sister drive than well nation better.",
+        "suggested_caption": "Hundred step end chair peace whole development enough city take phone.",
+        "alt_text": "Across wonder out into participant prove floor.",
+        "type": "bathroom"
+      },
+      {
+        "photo_id": "L-1005-5",
+        "url": "https://cdn.example.com/photos/L-1005-5.jpg",
+        "sequence": 12,
+        "has_caption": true,
+        "caption": "Side better information continue write year great future today nearly.",
+        "suggested_caption": "Style where or really plan cover education PM.",
+        "alt_text": "Tv especially think offer box indicate very.",
+        "type": "kitchen"
+      }
+    ],
+    "property_photos_coverage": {
+      "rooms_present": [
+        "balcony",
+        "bathroom",
+        "living_room"
+      ],
+      "rooms_missing": [
+        "floor_plan"
+      ],
+      "amenities_present": [
+        "washer_dryer",
+        "sea_view",
+        "wifi"
+      ],
+      "amenities_missing": [
+        "sea_view",
+        "workspace"
+      ]
+    },
+    "recommendations": [
+      {
+        "id": "rec1",
+        "title": "Add floor plan",
+        "impact": "high",
+        "effort": "low",
+        "details": "upload floor plan"
+      },
+      {
+        "id": "rec2",
+        "title": "Add aerial photo",
+        "impact": "medium",
+        "effort": "medium",
+        "details": "upload aerial"
+      }
+    ]
+  },
+  {
+    "listing_id": "L-1006",
+    "property_title": "Democratic Retreat",
+    "airbnb_link": "https://www.airbnb.com/rooms/4735572067",
+    "booking_link": "https://www.booking.com/rooms/9721363590",
+    "vrbo_link": "https://www.vrbo.com/rooms/8546899180",
+    "num_photos": 47,
+    "captioned_count": 34,
+    "missing_captions": 13,
+    "competitor": [
+      {
+        "name": "Hand Retreat",
+        "num_photos": 30,
+        "airbnb_link": "https://www.airbnb.com/rooms/6559762154",
+        "booking_link": "https://www.booking.com/rooms/9331650874",
+        "vrbo_link": "https://www.vrbo.com/rooms/1755164070",
+        "photos": [
+          {
+            "photo_id": "L-1006-C1",
+            "url": "https://cdn.example.com/photos/L-1006-C1.jpg",
+            "sequence": 12,
+            "has_caption": true,
+            "caption": "Pass attention whom blood require fast eat hope budget lead she.",
+            "type": "kitchen"
+          }
+        ],
+        "reviews_count": 106,
+        "reviews_score": 4.06,
+        "location_score": 4.48
+      }
+    ],
+    "property_photos": [
+      {
+        "photo_id": "L-1006-1",
+        "url": "https://cdn.example.com/photos/L-1006-1.jpg",
+        "sequence": 11,
+        "has_caption": true,
+        "caption": "Realize explain old employee sell population affect available choice fill.",
+        "suggested_caption": "Main hospital Democrat help peace account society trial news.",
+        "alt_text": "Body statement Republican place present which.",
+        "type": "living_room"
+      },
+      {
+        "photo_id": "L-1006-2",
+        "url": "https://cdn.example.com/photos/L-1006-2.jpg",
+        "sequence": 1,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Lay company yet carry woman public serious little person road step police vote.",
+        "alt_text": "Letter side lawyer.",
+        "type": "living_room"
+      },
+      {
+        "photo_id": "L-1006-3",
+        "url": "https://cdn.example.com/photos/L-1006-3.jpg",
+        "sequence": 13,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Own than example center early back dinner.",
+        "alt_text": "Next least others kid more inside market issue.",
+        "type": "bedroom"
+      },
+      {
+        "photo_id": "L-1006-4",
+        "url": "https://cdn.example.com/photos/L-1006-4.jpg",
+        "sequence": 7,
+        "has_caption": true,
+        "caption": "Clearly provide require total spring single type.",
+        "suggested_caption": "Unit door building occur affect participant use cup which now.",
+        "alt_text": "Peace not box.",
+        "type": "kitchen"
+      },
+      {
+        "photo_id": "L-1006-5",
+        "url": "https://cdn.example.com/photos/L-1006-5.jpg",
+        "sequence": 10,
+        "has_caption": true,
+        "caption": "Movie consumer forward particular military business base.",
+        "suggested_caption": "Hospital everything another page pretty believe recently full join rise measure agreement box.",
+        "alt_text": "None continue away stuff find.",
+        "type": "bedroom"
+      }
+    ],
+    "property_photos_coverage": {
+      "rooms_present": [
+        "bathroom",
+        "kitchen",
+        "bedroom",
+        "exterior",
+        "balcony"
+      ],
+      "rooms_missing": [
+        "floor_plan"
+      ],
+      "amenities_present": [
+        "sea_view",
+        "gym",
+        "smart_tv"
+      ],
+      "amenities_missing": [
+        "parking",
+        "pool"
+      ]
+    },
+    "recommendations": [
+      {
+        "id": "rec1",
+        "title": "Add floor plan",
+        "impact": "high",
+        "effort": "low",
+        "details": "upload floor plan"
+      },
+      {
+        "id": "rec2",
+        "title": "Add aerial photo",
+        "impact": "medium",
+        "effort": "medium",
+        "details": "upload aerial"
+      }
+    ]
+  },
+  {
+    "listing_id": "L-1007",
+    "property_title": "Lot Residences",
+    "airbnb_link": "https://www.airbnb.com/rooms/7757978283",
+    "booking_link": "https://www.booking.com/rooms/2260224218",
+    "vrbo_link": "https://www.vrbo.com/rooms/1155541042",
+    "num_photos": 21,
+    "captioned_count": 21,
+    "missing_captions": 0,
+    "competitor": [
+      {
+        "name": "Spring Suites",
+        "num_photos": 41,
+        "airbnb_link": "https://www.airbnb.com/rooms/3909873801",
+        "booking_link": "https://www.booking.com/rooms/787103532",
+        "vrbo_link": "https://www.vrbo.com/rooms/1699007625",
+        "photos": [
+          {
+            "photo_id": "L-1007-C1",
+            "url": "https://cdn.example.com/photos/L-1007-C1.jpg",
+            "sequence": 2,
+            "has_caption": true,
+            "caption": "Business from law design specific.",
+            "type": "living_room"
+          },
+          {
+            "photo_id": "L-1007-C2",
+            "url": "https://cdn.example.com/photos/L-1007-C2.jpg",
+            "sequence": 8,
+            "has_caption": true,
+            "caption": "Possible break short election happen their available strong its.",
+            "type": "bedroom"
+          },
+          {
+            "photo_id": "L-1007-C3",
+            "url": "https://cdn.example.com/photos/L-1007-C3.jpg",
+            "sequence": 5,
+            "has_caption": false,
+            "caption": null,
+            "type": "kitchen"
+          }
+        ],
+        "reviews_count": 282,
+        "reviews_score": 4.31,
+        "location_score": 4.15
+      }
+    ],
+    "property_photos": [
+      {
+        "photo_id": "L-1007-1",
+        "url": "https://cdn.example.com/photos/L-1007-1.jpg",
+        "sequence": 13,
+        "has_caption": true,
+        "caption": "They certainly health rest begin provide second girl decide happen.",
+        "suggested_caption": "Remain stay second again yeah school out add so find figure board at.",
+        "alt_text": "Understand pattern avoid center example land.",
+        "type": "bedroom"
+      },
+      {
+        "photo_id": "L-1007-2",
+        "url": "https://cdn.example.com/photos/L-1007-2.jpg",
+        "sequence": 5,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Method media understand less mother then very north.",
+        "alt_text": "Make cultural energy wall.",
+        "type": "bathroom"
+      },
+      {
+        "photo_id": "L-1007-3",
+        "url": "https://cdn.example.com/photos/L-1007-3.jpg",
+        "sequence": 19,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Anything team material education return note long although side it strategy.",
+        "alt_text": "Blood lose simply opportunity.",
+        "type": "kitchen"
+      },
+      {
+        "photo_id": "L-1007-4",
+        "url": "https://cdn.example.com/photos/L-1007-4.jpg",
+        "sequence": 11,
+        "has_caption": true,
+        "caption": "Teacher onto report whole accept feel think.",
+        "suggested_caption": "Store wear actually imagine eat under pattern sound major smile three interview example general.",
+        "alt_text": "Knowledge little other national prevent tough.",
+        "type": "living_room"
+      },
+      {
+        "photo_id": "L-1007-5",
+        "url": "https://cdn.example.com/photos/L-1007-5.jpg",
+        "sequence": 17,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Card play help history Republican strong meet mouth perform important mention.",
+        "alt_text": "Myself budget live turn talk.",
+        "type": "living_room"
+      }
+    ],
+    "property_photos_coverage": {
+      "rooms_present": [
+        "bathroom",
+        "bedroom",
+        "balcony",
+        "living_room",
+        "kitchen"
+      ],
+      "rooms_missing": [
+        "floor_plan"
+      ],
+      "amenities_present": [
+        "pool",
+        "smart_tv",
+        "parking"
+      ],
+      "amenities_missing": [
+        "smart_tv",
+        "parking"
+      ]
+    },
+    "recommendations": [
+      {
+        "id": "rec1",
+        "title": "Add floor plan",
+        "impact": "high",
+        "effort": "low",
+        "details": "upload floor plan"
+      },
+      {
+        "id": "rec2",
+        "title": "Add aerial photo",
+        "impact": "medium",
+        "effort": "medium",
+        "details": "upload aerial"
+      }
+    ]
+  },
+  {
+    "listing_id": "L-1008",
+    "property_title": "Interview Oasis",
+    "airbnb_link": "https://www.airbnb.com/rooms/6819705663",
+    "booking_link": "https://www.booking.com/rooms/4228639543",
+    "vrbo_link": "https://www.vrbo.com/rooms/3821707824",
+    "num_photos": 31,
+    "captioned_count": 31,
+    "missing_captions": 0,
+    "competitor": [
+      {
+        "name": "Or Marina",
+        "num_photos": 45,
+        "airbnb_link": "https://www.airbnb.com/rooms/748922223",
+        "booking_link": "https://www.booking.com/rooms/6130513802",
+        "vrbo_link": "https://www.vrbo.com/rooms/786942432",
+        "photos": [
+          {
+            "photo_id": "L-1008-C1",
+            "url": "https://cdn.example.com/photos/L-1008-C1.jpg",
+            "sequence": 6,
+            "has_caption": false,
+            "caption": null,
+            "type": "living_room"
+          }
+        ],
+        "reviews_count": 220,
+        "reviews_score": 4.22,
+        "location_score": 4.31
+      }
+    ],
+    "property_photos": [
+      {
+        "photo_id": "L-1008-1",
+        "url": "https://cdn.example.com/photos/L-1008-1.jpg",
+        "sequence": 12,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Evening high out experience your coach land hot impact.",
+        "alt_text": "Miss high edge north small.",
+        "type": "kitchen"
+      },
+      {
+        "photo_id": "L-1008-2",
+        "url": "https://cdn.example.com/photos/L-1008-2.jpg",
+        "sequence": 5,
+        "has_caption": true,
+        "caption": "Page mouth PM ball other body when effect.",
+        "suggested_caption": "Price in bar during trade idea road treatment.",
+        "alt_text": "Scene crime agency.",
+        "type": "kitchen"
+      },
+      {
+        "photo_id": "L-1008-3",
+        "url": "https://cdn.example.com/photos/L-1008-3.jpg",
+        "sequence": 6,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Give speak television shake find her control Mrs realize age if add thank.",
+        "alt_text": "Peace need natural.",
+        "type": "bedroom"
+      },
+      {
+        "photo_id": "L-1008-4",
+        "url": "https://cdn.example.com/photos/L-1008-4.jpg",
+        "sequence": 1,
+        "has_caption": true,
+        "caption": "Couple heavy agent subject himself voice you night young.",
+        "suggested_caption": "Whole effect room enjoy organization about.",
+        "alt_text": "Involve provide that within sure.",
+        "type": "living_room"
+      },
+      {
+        "photo_id": "L-1008-5",
+        "url": "https://cdn.example.com/photos/L-1008-5.jpg",
+        "sequence": 14,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Doctor trouble rule offer camera church window radio argue picture.",
+        "alt_text": "Whatever thus stay read mean personal cultural.",
+        "type": "kitchen"
+      }
+    ],
+    "property_photos_coverage": {
+      "rooms_present": [
+        "kitchen",
+        "balcony",
+        "exterior",
+        "bedroom"
+      ],
+      "rooms_missing": [
+        "floor_plan"
+      ],
+      "amenities_present": [
+        "gym",
+        "washer_dryer",
+        "parking"
+      ],
+      "amenities_missing": [
+        "workspace",
+        "sea_view"
+      ]
+    },
+    "recommendations": [
+      {
+        "id": "rec1",
+        "title": "Add floor plan",
+        "impact": "high",
+        "effort": "low",
+        "details": "upload floor plan"
+      },
+      {
+        "id": "rec2",
+        "title": "Add aerial photo",
+        "impact": "medium",
+        "effort": "medium",
+        "details": "upload aerial"
+      }
+    ]
+  },
+  {
+    "listing_id": "L-1009",
+    "property_title": "Such Suites",
+    "airbnb_link": "https://www.airbnb.com/rooms/2378924723",
+    "booking_link": "https://www.booking.com/rooms/9528621227",
+    "vrbo_link": "https://www.vrbo.com/rooms/1693790369",
+    "num_photos": 41,
+    "captioned_count": 32,
+    "missing_captions": 9,
+    "competitor": [
+      {
+        "name": "Necessary Residences",
+        "num_photos": 21,
+        "airbnb_link": "https://www.airbnb.com/rooms/1482899487",
+        "booking_link": "https://www.booking.com/rooms/6604530654",
+        "vrbo_link": "https://www.vrbo.com/rooms/4815349185",
+        "photos": [
+          {
+            "photo_id": "L-1009-C1",
+            "url": "https://cdn.example.com/photos/L-1009-C1.jpg",
+            "sequence": 9,
+            "has_caption": false,
+            "caption": null,
+            "type": "bathroom"
+          },
+          {
+            "photo_id": "L-1009-C2",
+            "url": "https://cdn.example.com/photos/L-1009-C2.jpg",
+            "sequence": 19,
+            "has_caption": true,
+            "caption": "Now past than benefit listen sit during yard pull early.",
+            "type": "bedroom"
+          },
+          {
+            "photo_id": "L-1009-C3",
+            "url": "https://cdn.example.com/photos/L-1009-C3.jpg",
+            "sequence": 14,
+            "has_caption": false,
+            "caption": null,
+            "type": "bathroom"
+          },
+          {
+            "photo_id": "L-1009-C4",
+            "url": "https://cdn.example.com/photos/L-1009-C4.jpg",
+            "sequence": 13,
+            "has_caption": true,
+            "caption": "Season key oil simple show however statement standard.",
+            "type": "bedroom"
+          }
+        ],
+        "reviews_count": 230,
+        "reviews_score": 4.1,
+        "location_score": 4.52
+      },
+      {
+        "name": "Responsibility Retreat",
+        "num_photos": 20,
+        "airbnb_link": "https://www.airbnb.com/rooms/1376432890",
+        "booking_link": "https://www.booking.com/rooms/9981672190",
+        "vrbo_link": "https://www.vrbo.com/rooms/8881913611",
+        "photos": [
+          {
+            "photo_id": "L-1009-C1",
+            "url": "https://cdn.example.com/photos/L-1009-C1.jpg",
+            "sequence": 5,
+            "has_caption": true,
+            "caption": "Hold soon thought thank edge stand factor result.",
+            "type": "bedroom"
+          },
+          {
+            "photo_id": "L-1009-C2",
+            "url": "https://cdn.example.com/photos/L-1009-C2.jpg",
+            "sequence": 7,
+            "has_caption": false,
+            "caption": null,
+            "type": "kitchen"
+          }
+        ],
+        "reviews_count": 46,
+        "reviews_score": 4.36,
+        "location_score": 4.37
+      }
+    ],
+    "property_photos": [
+      {
+        "photo_id": "L-1009-1",
+        "url": "https://cdn.example.com/photos/L-1009-1.jpg",
+        "sequence": 2,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Respond great year herself field and high subject raise attack six young.",
+        "alt_text": "First agency easy like.",
+        "type": "bathroom"
+      },
+      {
+        "photo_id": "L-1009-2",
+        "url": "https://cdn.example.com/photos/L-1009-2.jpg",
+        "sequence": 7,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Risk key which town explain quickly million power discuss move behavior soon.",
+        "alt_text": "Admit alone cost Congress.",
+        "type": "bedroom"
+      },
+      {
+        "photo_id": "L-1009-3",
+        "url": "https://cdn.example.com/photos/L-1009-3.jpg",
+        "sequence": 7,
+        "has_caption": true,
+        "caption": "Various stay collection build message employee Mr idea wrong response.",
+        "suggested_caption": "Specific heavy business site against know news much.",
+        "alt_text": "Serious threat food stock.",
+        "type": "bedroom"
+      },
+      {
+        "photo_id": "L-1009-4",
+        "url": "https://cdn.example.com/photos/L-1009-4.jpg",
+        "sequence": 11,
+        "has_caption": true,
+        "caption": "Want road within reality type city where culture Republican local.",
+        "suggested_caption": "Which why read would push service pay short as safe page test visit.",
+        "alt_text": "Beautiful off teacher notice last finally professional recently.",
+        "type": "bathroom"
+      },
+      {
+        "photo_id": "L-1009-5",
+        "url": "https://cdn.example.com/photos/L-1009-5.jpg",
+        "sequence": 10,
+        "has_caption": true,
+        "caption": "Performance natural until people reality child care game.",
+        "suggested_caption": "Science writer wish weight continue rock though to blood.",
+        "alt_text": "Night attention figure voice hospital true.",
+        "type": "kitchen"
+      }
+    ],
+    "property_photos_coverage": {
+      "rooms_present": [
+        "kitchen",
+        "balcony",
+        "exterior",
+        "bathroom"
+      ],
+      "rooms_missing": [
+        "floor_plan"
+      ],
+      "amenities_present": [
+        "sea_view",
+        "pool",
+        "workspace"
+      ],
+      "amenities_missing": [
+        "parking",
+        "sea_view"
+      ]
+    },
+    "recommendations": [
+      {
+        "id": "rec1",
+        "title": "Add floor plan",
+        "impact": "high",
+        "effort": "low",
+        "details": "upload floor plan"
+      },
+      {
+        "id": "rec2",
+        "title": "Add aerial photo",
+        "impact": "medium",
+        "effort": "medium",
+        "details": "upload aerial"
+      }
+    ]
+  },
+  {
+    "listing_id": "L-1010",
+    "property_title": "Though Oasis",
+    "airbnb_link": "https://www.airbnb.com/rooms/6742514020",
+    "booking_link": "https://www.booking.com/rooms/6864823937",
+    "vrbo_link": "https://www.vrbo.com/rooms/7984219684",
+    "num_photos": 40,
+    "captioned_count": 35,
+    "missing_captions": 5,
+    "competitor": [
+      {
+        "name": "Public Marina",
+        "num_photos": 51,
+        "airbnb_link": "https://www.airbnb.com/rooms/2114165932",
+        "booking_link": "https://www.booking.com/rooms/9093592610",
+        "vrbo_link": "https://www.vrbo.com/rooms/8694865900",
+        "photos": [
+          {
+            "photo_id": "L-1010-C1",
+            "url": "https://cdn.example.com/photos/L-1010-C1.jpg",
+            "sequence": 16,
+            "has_caption": false,
+            "caption": null,
+            "type": "bathroom"
+          },
+          {
+            "photo_id": "L-1010-C2",
+            "url": "https://cdn.example.com/photos/L-1010-C2.jpg",
+            "sequence": 5,
+            "has_caption": true,
+            "caption": "Event born but thus make five yes.",
+            "type": "bathroom"
+          },
+          {
+            "photo_id": "L-1010-C3",
+            "url": "https://cdn.example.com/photos/L-1010-C3.jpg",
+            "sequence": 7,
+            "has_caption": true,
+            "caption": "Serious represent kind wall four including push finally.",
+            "type": "living_room"
+          }
+        ],
+        "reviews_count": 197,
+        "reviews_score": 4.74,
+        "location_score": 4.93
+      },
+      {
+        "name": "Newspaper Suites",
+        "num_photos": 36,
+        "airbnb_link": "https://www.airbnb.com/rooms/4784025014",
+        "booking_link": "https://www.booking.com/rooms/4097120527",
+        "vrbo_link": "https://www.vrbo.com/rooms/1353798435",
+        "photos": [
+          {
+            "photo_id": "L-1010-C1",
+            "url": "https://cdn.example.com/photos/L-1010-C1.jpg",
+            "sequence": 4,
+            "has_caption": true,
+            "caption": "Add TV add perform watch receive moment perform.",
+            "type": "living_room"
+          },
+          {
+            "photo_id": "L-1010-C2",
+            "url": "https://cdn.example.com/photos/L-1010-C2.jpg",
+            "sequence": 11,
+            "has_caption": false,
+            "caption": null,
+            "type": "bathroom"
+          },
+          {
+            "photo_id": "L-1010-C3",
+            "url": "https://cdn.example.com/photos/L-1010-C3.jpg",
+            "sequence": 10,
+            "has_caption": false,
+            "caption": null,
+            "type": "kitchen"
+          },
+          {
+            "photo_id": "L-1010-C4",
+            "url": "https://cdn.example.com/photos/L-1010-C4.jpg",
+            "sequence": 12,
+            "has_caption": true,
+            "caption": "Into design candidate remain hotel town she operation serious.",
+            "type": "living_room"
+          }
+        ],
+        "reviews_count": 213,
+        "reviews_score": 4.01,
+        "location_score": 4.64
+      }
+    ],
+    "property_photos": [
+      {
+        "photo_id": "L-1010-1",
+        "url": "https://cdn.example.com/photos/L-1010-1.jpg",
+        "sequence": 6,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Article beat course type remember value group particularly.",
+        "alt_text": "Act memory product show.",
+        "type": "living_room"
+      },
+      {
+        "photo_id": "L-1010-2",
+        "url": "https://cdn.example.com/photos/L-1010-2.jpg",
+        "sequence": 4,
+        "has_caption": true,
+        "caption": "Knowledge identify school catch those story.",
+        "suggested_caption": "Money or boy left these leader.",
+        "alt_text": "Ball gun blood half hundred.",
+        "type": "bedroom"
+      },
+      {
+        "photo_id": "L-1010-3",
+        "url": "https://cdn.example.com/photos/L-1010-3.jpg",
+        "sequence": 1,
+        "has_caption": true,
+        "caption": "Likely person material cup employee hand increase know.",
+        "suggested_caption": "Sing firm type in year blue police lose fine best north purpose whom.",
+        "alt_text": "Two should artist save section nearly.",
+        "type": "kitchen"
+      },
+      {
+        "photo_id": "L-1010-4",
+        "url": "https://cdn.example.com/photos/L-1010-4.jpg",
+        "sequence": 11,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Travel help bag top pressure throw success catch machine more.",
+        "alt_text": "Miss late drive enter without space.",
+        "type": "bedroom"
+      },
+      {
+        "photo_id": "L-1010-5",
+        "url": "https://cdn.example.com/photos/L-1010-5.jpg",
+        "sequence": 5,
+        "has_caption": true,
+        "caption": "Watch wind job create agree some choose last federal.",
+        "suggested_caption": "Trade bill get movement red writer.",
+        "alt_text": "Role language various fill.",
+        "type": "bathroom"
+      }
+    ],
+    "property_photos_coverage": {
+      "rooms_present": [
+        "kitchen",
+        "exterior",
+        "bedroom"
+      ],
+      "rooms_missing": [
+        "floor_plan"
+      ],
+      "amenities_present": [
+        "washer_dryer",
+        "smart_tv",
+        "parking"
+      ],
+      "amenities_missing": [
+        "gym",
+        "workspace"
+      ]
+    },
+    "recommendations": [
+      {
+        "id": "rec1",
+        "title": "Add floor plan",
+        "impact": "high",
+        "effort": "low",
+        "details": "upload floor plan"
+      },
+      {
+        "id": "rec2",
+        "title": "Add aerial photo",
+        "impact": "medium",
+        "effort": "medium",
+        "details": "upload aerial"
+      }
+    ]
+  },
+  {
+    "listing_id": "L-1011",
+    "property_title": "Nothing Suites",
+    "airbnb_link": "https://www.airbnb.com/rooms/8849532351",
+    "booking_link": "https://www.booking.com/rooms/7949216982",
+    "vrbo_link": "https://www.vrbo.com/rooms/5849788376",
+    "num_photos": 34,
+    "captioned_count": 24,
+    "missing_captions": 10,
+    "competitor": [
+      {
+        "name": "Sister Vista",
+        "num_photos": 26,
+        "airbnb_link": "https://www.airbnb.com/rooms/8487285370",
+        "booking_link": "https://www.booking.com/rooms/1499892193",
+        "vrbo_link": "https://www.vrbo.com/rooms/590682462",
+        "photos": [
+          {
+            "photo_id": "L-1011-C1",
+            "url": "https://cdn.example.com/photos/L-1011-C1.jpg",
+            "sequence": 6,
+            "has_caption": false,
+            "caption": null,
+            "type": "bathroom"
+          },
+          {
+            "photo_id": "L-1011-C2",
+            "url": "https://cdn.example.com/photos/L-1011-C2.jpg",
+            "sequence": 6,
+            "has_caption": false,
+            "caption": null,
+            "type": "bathroom"
+          }
+        ],
+        "reviews_count": 204,
+        "reviews_score": 4.33,
+        "location_score": 4.86
+      },
+      {
+        "name": "Child Vista",
+        "num_photos": 51,
+        "airbnb_link": "https://www.airbnb.com/rooms/8385391496",
+        "booking_link": "https://www.booking.com/rooms/2085935361",
+        "vrbo_link": "https://www.vrbo.com/rooms/1419421767",
+        "photos": [
+          {
+            "photo_id": "L-1011-C1",
+            "url": "https://cdn.example.com/photos/L-1011-C1.jpg",
+            "sequence": 5,
+            "has_caption": true,
+            "caption": "Benefit itself husband through computer others talk wear as.",
+            "type": "bathroom"
+          }
+        ],
+        "reviews_count": 285,
+        "reviews_score": 4.45,
+        "location_score": 4.24
+      }
+    ],
+    "property_photos": [
+      {
+        "photo_id": "L-1011-1",
+        "url": "https://cdn.example.com/photos/L-1011-1.jpg",
+        "sequence": 13,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Do else success receive run stay from civil time government sister almost.",
+        "alt_text": "A challenge seem worry worker fine.",
+        "type": "kitchen"
+      },
+      {
+        "photo_id": "L-1011-2",
+        "url": "https://cdn.example.com/photos/L-1011-2.jpg",
+        "sequence": 15,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Buy public relate actually front data.",
+        "alt_text": "Conference likely fire role soldier town company.",
+        "type": "kitchen"
+      },
+      {
+        "photo_id": "L-1011-3",
+        "url": "https://cdn.example.com/photos/L-1011-3.jpg",
+        "sequence": 9,
+        "has_caption": true,
+        "caption": "Wall authority knowledge green whom just night three lose.",
+        "suggested_caption": "Already month table order another see bit mean especially task.",
+        "alt_text": "Agree score yourself reduce although economic economy however.",
+        "type": "living_room"
+      },
+      {
+        "photo_id": "L-1011-4",
+        "url": "https://cdn.example.com/photos/L-1011-4.jpg",
+        "sequence": 1,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Brother church according play office sell perform shake agency order actually add draw.",
+        "alt_text": "Local key rock parent.",
+        "type": "bedroom"
+      },
+      {
+        "photo_id": "L-1011-5",
+        "url": "https://cdn.example.com/photos/L-1011-5.jpg",
+        "sequence": 6,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Without question safe car speak war.",
+        "alt_text": "Doctor occur that only weight report.",
+        "type": "living_room"
+      }
+    ],
+    "property_photos_coverage": {
+      "rooms_present": [
+        "balcony",
+        "living_room",
+        "bathroom",
+        "exterior",
+        "bedroom"
+      ],
+      "rooms_missing": [
+        "floor_plan"
+      ],
+      "amenities_present": [
+        "wifi",
+        "smart_tv",
+        "washer_dryer"
+      ],
+      "amenities_missing": [
+        "smart_tv",
+        "washer_dryer"
+      ]
+    },
+    "recommendations": [
+      {
+        "id": "rec1",
+        "title": "Add floor plan",
+        "impact": "high",
+        "effort": "low",
+        "details": "upload floor plan"
+      },
+      {
+        "id": "rec2",
+        "title": "Add aerial photo",
+        "impact": "medium",
+        "effort": "medium",
+        "details": "upload aerial"
+      }
+    ]
+  },
+  {
+    "listing_id": "L-1012",
+    "property_title": "Get Retreat",
+    "airbnb_link": "https://www.airbnb.com/rooms/3105446045",
+    "booking_link": "https://www.booking.com/rooms/7364527526",
+    "vrbo_link": "https://www.vrbo.com/rooms/2869289294",
+    "num_photos": 21,
+    "captioned_count": 20,
+    "missing_captions": 1,
+    "competitor": [
+      {
+        "name": "Some Marina",
+        "num_photos": 47,
+        "airbnb_link": "https://www.airbnb.com/rooms/4979646943",
+        "booking_link": "https://www.booking.com/rooms/510194719",
+        "vrbo_link": "https://www.vrbo.com/rooms/4501274347",
+        "photos": [
+          {
+            "photo_id": "L-1012-C1",
+            "url": "https://cdn.example.com/photos/L-1012-C1.jpg",
+            "sequence": 17,
+            "has_caption": false,
+            "caption": null,
+            "type": "living_room"
+          },
+          {
+            "photo_id": "L-1012-C2",
+            "url": "https://cdn.example.com/photos/L-1012-C2.jpg",
+            "sequence": 14,
+            "has_caption": true,
+            "caption": "One simple why enough son mean.",
+            "type": "bathroom"
+          },
+          {
+            "photo_id": "L-1012-C3",
+            "url": "https://cdn.example.com/photos/L-1012-C3.jpg",
+            "sequence": 13,
+            "has_caption": true,
+            "caption": "Probably answer decision reveal sit.",
+            "type": "living_room"
+          },
+          {
+            "photo_id": "L-1012-C4",
+            "url": "https://cdn.example.com/photos/L-1012-C4.jpg",
+            "sequence": 6,
+            "has_caption": false,
+            "caption": null,
+            "type": "bathroom"
+          }
+        ],
+        "reviews_count": 67,
+        "reviews_score": 4.54,
+        "location_score": 4.33
+      }
+    ],
+    "property_photos": [
+      {
+        "photo_id": "L-1012-1",
+        "url": "https://cdn.example.com/photos/L-1012-1.jpg",
+        "sequence": 9,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Soldier bill environment future ready good growth million.",
+        "alt_text": "Fall discover Mr that seat within natural.",
+        "type": "bedroom"
+      },
+      {
+        "photo_id": "L-1012-2",
+        "url": "https://cdn.example.com/photos/L-1012-2.jpg",
+        "sequence": 14,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Several adult system art kitchen what officer.",
+        "alt_text": "Public stop require sometimes relationship surface.",
+        "type": "bathroom"
+      },
+      {
+        "photo_id": "L-1012-3",
+        "url": "https://cdn.example.com/photos/L-1012-3.jpg",
+        "sequence": 1,
+        "has_caption": true,
+        "caption": "Campaign industry them whole will.",
+        "suggested_caption": "Enjoy only training few improve test walk cold sing.",
+        "alt_text": "Technology force peace worker coach present people paper.",
+        "type": "kitchen"
+      },
+      {
+        "photo_id": "L-1012-4",
+        "url": "https://cdn.example.com/photos/L-1012-4.jpg",
+        "sequence": 1,
+        "has_caption": true,
+        "caption": "Soon teach material new.",
+        "suggested_caption": "Feel within hope accept tend by yard long.",
+        "alt_text": "Relationship current clear hospital.",
+        "type": "kitchen"
+      },
+      {
+        "photo_id": "L-1012-5",
+        "url": "https://cdn.example.com/photos/L-1012-5.jpg",
+        "sequence": 8,
+        "has_caption": true,
+        "caption": "Campaign describe prove born trouble news head.",
+        "suggested_caption": "Direction until appear key provide night democratic floor great local special glass organization.",
+        "alt_text": "Food ten including.",
+        "type": "bathroom"
+      }
+    ],
+    "property_photos_coverage": {
+      "rooms_present": [
+        "balcony",
+        "bathroom",
+        "exterior",
+        "kitchen"
+      ],
+      "rooms_missing": [
+        "floor_plan"
+      ],
+      "amenities_present": [
+        "wifi",
+        "workspace",
+        "gym"
+      ],
+      "amenities_missing": [
+        "smart_tv",
+        "pool"
+      ]
+    },
+    "recommendations": [
+      {
+        "id": "rec1",
+        "title": "Add floor plan",
+        "impact": "high",
+        "effort": "low",
+        "details": "upload floor plan"
+      },
+      {
+        "id": "rec2",
+        "title": "Add aerial photo",
+        "impact": "medium",
+        "effort": "medium",
+        "details": "upload aerial"
+      }
+    ]
+  },
+  {
+    "listing_id": "L-1013",
+    "property_title": "Ok Retreat",
+    "airbnb_link": "https://www.airbnb.com/rooms/4995535349",
+    "booking_link": "https://www.booking.com/rooms/7221744035",
+    "vrbo_link": "https://www.vrbo.com/rooms/2412131296",
+    "num_photos": 22,
+    "captioned_count": 13,
+    "missing_captions": 9,
+    "competitor": [
+      {
+        "name": "Stuff Vista",
+        "num_photos": 55,
+        "airbnb_link": "https://www.airbnb.com/rooms/5129497460",
+        "booking_link": "https://www.booking.com/rooms/6868730672",
+        "vrbo_link": "https://www.vrbo.com/rooms/8314721205",
+        "photos": [
+          {
+            "photo_id": "L-1013-C1",
+            "url": "https://cdn.example.com/photos/L-1013-C1.jpg",
+            "sequence": 8,
+            "has_caption": false,
+            "caption": null,
+            "type": "bedroom"
+          },
+          {
+            "photo_id": "L-1013-C2",
+            "url": "https://cdn.example.com/photos/L-1013-C2.jpg",
+            "sequence": 1,
+            "has_caption": false,
+            "caption": null,
+            "type": "living_room"
+          }
+        ],
+        "reviews_count": 182,
+        "reviews_score": 3.94,
+        "location_score": 4.81
+      },
+      {
+        "name": "Be Marina",
+        "num_photos": 35,
+        "airbnb_link": "https://www.airbnb.com/rooms/2317142830",
+        "booking_link": "https://www.booking.com/rooms/8331247972",
+        "vrbo_link": "https://www.vrbo.com/rooms/3775708125",
+        "photos": [
+          {
+            "photo_id": "L-1013-C1",
+            "url": "https://cdn.example.com/photos/L-1013-C1.jpg",
+            "sequence": 7,
+            "has_caption": false,
+            "caption": null,
+            "type": "kitchen"
+          },
+          {
+            "photo_id": "L-1013-C2",
+            "url": "https://cdn.example.com/photos/L-1013-C2.jpg",
+            "sequence": 19,
+            "has_caption": true,
+            "caption": "Item enough majority media care spend thousand any hundred peace phone.",
+            "type": "kitchen"
+          }
+        ],
+        "reviews_count": 61,
+        "reviews_score": 3.96,
+        "location_score": 4.38
+      }
+    ],
+    "property_photos": [
+      {
+        "photo_id": "L-1013-1",
+        "url": "https://cdn.example.com/photos/L-1013-1.jpg",
+        "sequence": 16,
+        "has_caption": true,
+        "caption": "Person whether also member personal nation policy close.",
+        "suggested_caption": "Look teach hard contain amount value watch.",
+        "alt_text": "Move international political read physical against serve.",
+        "type": "kitchen"
+      },
+      {
+        "photo_id": "L-1013-2",
+        "url": "https://cdn.example.com/photos/L-1013-2.jpg",
+        "sequence": 19,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Thus claim evidence brother model student hot keep nor minute available.",
+        "alt_text": "Little sense bed hand make.",
+        "type": "kitchen"
+      },
+      {
+        "photo_id": "L-1013-3",
+        "url": "https://cdn.example.com/photos/L-1013-3.jpg",
+        "sequence": 14,
+        "has_caption": true,
+        "caption": "Meeting he young read sport great.",
+        "suggested_caption": "Cause share way per capital base.",
+        "alt_text": "Whatever war dinner enter spring.",
+        "type": "bathroom"
+      },
+      {
+        "photo_id": "L-1013-4",
+        "url": "https://cdn.example.com/photos/L-1013-4.jpg",
+        "sequence": 9,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Item event such trade wind writer catch maintain word.",
+        "alt_text": "Maybe history major meet purpose view moment.",
+        "type": "bedroom"
+      },
+      {
+        "photo_id": "L-1013-5",
+        "url": "https://cdn.example.com/photos/L-1013-5.jpg",
+        "sequence": 2,
+        "has_caption": true,
+        "caption": "Simply time attorney half next I.",
+        "suggested_caption": "Form popular under by strategy put feel left.",
+        "alt_text": "Hold four sometimes whole alone husband.",
+        "type": "bedroom"
+      }
+    ],
+    "property_photos_coverage": {
+      "rooms_present": [
+        "balcony",
+        "living_room",
+        "bathroom",
+        "kitchen"
+      ],
+      "rooms_missing": [
+        "floor_plan"
+      ],
+      "amenities_present": [
+        "parking",
+        "sea_view",
+        "washer_dryer"
+      ],
+      "amenities_missing": [
+        "parking",
+        "smart_tv"
+      ]
+    },
+    "recommendations": [
+      {
+        "id": "rec1",
+        "title": "Add floor plan",
+        "impact": "high",
+        "effort": "low",
+        "details": "upload floor plan"
+      },
+      {
+        "id": "rec2",
+        "title": "Add aerial photo",
+        "impact": "medium",
+        "effort": "medium",
+        "details": "upload aerial"
+      }
+    ]
+  },
+  {
+    "listing_id": "L-1014",
+    "property_title": "Social Residences",
+    "airbnb_link": "https://www.airbnb.com/rooms/9129453786",
+    "booking_link": "https://www.booking.com/rooms/9387950459",
+    "vrbo_link": "https://www.vrbo.com/rooms/6850510727",
+    "num_photos": 28,
+    "captioned_count": 23,
+    "missing_captions": 5,
+    "competitor": [
+      {
+        "name": "Thing Residences",
+        "num_photos": 27,
+        "airbnb_link": "https://www.airbnb.com/rooms/8965052427",
+        "booking_link": "https://www.booking.com/rooms/510095937",
+        "vrbo_link": "https://www.vrbo.com/rooms/9255750203",
+        "photos": [
+          {
+            "photo_id": "L-1014-C1",
+            "url": "https://cdn.example.com/photos/L-1014-C1.jpg",
+            "sequence": 4,
+            "has_caption": false,
+            "caption": null,
+            "type": "kitchen"
+          }
+        ],
+        "reviews_count": 69,
+        "reviews_score": 3.96,
+        "location_score": 3.89
+      },
+      {
+        "name": "Name Suites",
+        "num_photos": 60,
+        "airbnb_link": "https://www.airbnb.com/rooms/3493784440",
+        "booking_link": "https://www.booking.com/rooms/556152786",
+        "vrbo_link": "https://www.vrbo.com/rooms/4167565110",
+        "photos": [
+          {
+            "photo_id": "L-1014-C1",
+            "url": "https://cdn.example.com/photos/L-1014-C1.jpg",
+            "sequence": 10,
+            "has_caption": false,
+            "caption": null,
+            "type": "bedroom"
+          },
+          {
+            "photo_id": "L-1014-C2",
+            "url": "https://cdn.example.com/photos/L-1014-C2.jpg",
+            "sequence": 20,
+            "has_caption": true,
+            "caption": "Hard continue medical ability significant.",
+            "type": "kitchen"
+          },
+          {
+            "photo_id": "L-1014-C3",
+            "url": "https://cdn.example.com/photos/L-1014-C3.jpg",
+            "sequence": 4,
+            "has_caption": true,
+            "caption": "Including ball listen side religious check include thank teach.",
+            "type": "kitchen"
+          },
+          {
+            "photo_id": "L-1014-C4",
+            "url": "https://cdn.example.com/photos/L-1014-C4.jpg",
+            "sequence": 8,
+            "has_caption": true,
+            "caption": "Sign difficult set growth school seven help any language.",
+            "type": "bedroom"
+          }
+        ],
+        "reviews_count": 145,
+        "reviews_score": 4.69,
+        "location_score": 3.86
+      }
+    ],
+    "property_photos": [
+      {
+        "photo_id": "L-1014-1",
+        "url": "https://cdn.example.com/photos/L-1014-1.jpg",
+        "sequence": 17,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Deep degree very process hope return reduce inside room effect child big building.",
+        "alt_text": "Table success skin marriage father.",
+        "type": "living_room"
+      },
+      {
+        "photo_id": "L-1014-2",
+        "url": "https://cdn.example.com/photos/L-1014-2.jpg",
+        "sequence": 5,
+        "has_caption": true,
+        "caption": "Campaign both know the administration person blood outside.",
+        "suggested_caption": "Full recently cell physical do big section single.",
+        "alt_text": "Stock rather you stand.",
+        "type": "bedroom"
+      },
+      {
+        "photo_id": "L-1014-3",
+        "url": "https://cdn.example.com/photos/L-1014-3.jpg",
+        "sequence": 2,
+        "has_caption": true,
+        "caption": "Wish rather wall cut face full into.",
+        "suggested_caption": "Member guy many he late open out season.",
+        "alt_text": "Action build institution parent.",
+        "type": "living_room"
+      },
+      {
+        "photo_id": "L-1014-4",
+        "url": "https://cdn.example.com/photos/L-1014-4.jpg",
+        "sequence": 5,
+        "has_caption": true,
+        "caption": "From face range fact born development gun media.",
+        "suggested_caption": "Computer they item order keep want place offer sense show spring lead eat.",
+        "alt_text": "Campaign per show girl response.",
+        "type": "bedroom"
+      },
+      {
+        "photo_id": "L-1014-5",
+        "url": "https://cdn.example.com/photos/L-1014-5.jpg",
+        "sequence": 15,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Great decade fish develop person take since well project four almost need hair ability.",
+        "alt_text": "Child writer on would other.",
+        "type": "bathroom"
+      }
+    ],
+    "property_photos_coverage": {
+      "rooms_present": [
+        "kitchen",
+        "living_room",
+        "balcony"
+      ],
+      "rooms_missing": [
+        "floor_plan"
+      ],
+      "amenities_present": [
+        "pool",
+        "wifi",
+        "sea_view"
+      ],
+      "amenities_missing": [
+        "parking",
+        "gym"
+      ]
+    },
+    "recommendations": [
+      {
+        "id": "rec1",
+        "title": "Add floor plan",
+        "impact": "high",
+        "effort": "low",
+        "details": "upload floor plan"
+      },
+      {
+        "id": "rec2",
+        "title": "Add aerial photo",
+        "impact": "medium",
+        "effort": "medium",
+        "details": "upload aerial"
+      }
+    ]
+  },
+  {
+    "listing_id": "L-1015",
+    "property_title": "Effort Oasis",
+    "airbnb_link": "https://www.airbnb.com/rooms/6590682976",
+    "booking_link": "https://www.booking.com/rooms/8425658250",
+    "vrbo_link": "https://www.vrbo.com/rooms/5780112970",
+    "num_photos": 40,
+    "captioned_count": 24,
+    "missing_captions": 16,
+    "competitor": [
+      {
+        "name": "Health Vista",
+        "num_photos": 35,
+        "airbnb_link": "https://www.airbnb.com/rooms/4490917039",
+        "booking_link": "https://www.booking.com/rooms/3383191590",
+        "vrbo_link": "https://www.vrbo.com/rooms/1980047929",
+        "photos": [
+          {
+            "photo_id": "L-1015-C1",
+            "url": "https://cdn.example.com/photos/L-1015-C1.jpg",
+            "sequence": 16,
+            "has_caption": true,
+            "caption": "Society have product situation body power rest present avoid part.",
+            "type": "bathroom"
+          },
+          {
+            "photo_id": "L-1015-C2",
+            "url": "https://cdn.example.com/photos/L-1015-C2.jpg",
+            "sequence": 13,
+            "has_caption": true,
+            "caption": "Trial my reality office again difference section try professor free.",
+            "type": "kitchen"
+          },
+          {
+            "photo_id": "L-1015-C3",
+            "url": "https://cdn.example.com/photos/L-1015-C3.jpg",
+            "sequence": 5,
+            "has_caption": false,
+            "caption": null,
+            "type": "kitchen"
+          }
+        ],
+        "reviews_count": 133,
+        "reviews_score": 4.13,
+        "location_score": 4.37
+      }
+    ],
+    "property_photos": [
+      {
+        "photo_id": "L-1015-1",
+        "url": "https://cdn.example.com/photos/L-1015-1.jpg",
+        "sequence": 11,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Others herself above fight partner should few example somebody find.",
+        "alt_text": "Fish budget perform market including include environmental both.",
+        "type": "living_room"
+      },
+      {
+        "photo_id": "L-1015-2",
+        "url": "https://cdn.example.com/photos/L-1015-2.jpg",
+        "sequence": 14,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Nature present man scientist collection quite subject provide dark race show national.",
+        "alt_text": "Summer study exist team group own economic.",
+        "type": "living_room"
+      },
+      {
+        "photo_id": "L-1015-3",
+        "url": "https://cdn.example.com/photos/L-1015-3.jpg",
+        "sequence": 20,
+        "has_caption": true,
+        "caption": "Reveal building cold visit back suddenly put quite.",
+        "suggested_caption": "Others into project both only start significant phone foreign decide without.",
+        "alt_text": "Worker girl her scene road unit.",
+        "type": "bathroom"
+      },
+      {
+        "photo_id": "L-1015-4",
+        "url": "https://cdn.example.com/photos/L-1015-4.jpg",
+        "sequence": 19,
+        "has_caption": true,
+        "caption": "Exist book service about article him.",
+        "suggested_caption": "After trip poor research product it.",
+        "alt_text": "Research south investment morning someone.",
+        "type": "bathroom"
+      },
+      {
+        "photo_id": "L-1015-5",
+        "url": "https://cdn.example.com/photos/L-1015-5.jpg",
+        "sequence": 13,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Public very dream apply mission may down watch fine travel decision whether.",
+        "alt_text": "Happen land way dark prepare.",
+        "type": "living_room"
+      }
+    ],
+    "property_photos_coverage": {
+      "rooms_present": [
+        "bedroom",
+        "bathroom",
+        "living_room"
+      ],
+      "rooms_missing": [
+        "floor_plan"
+      ],
+      "amenities_present": [
+        "parking",
+        "wifi",
+        "gym"
+      ],
+      "amenities_missing": [
+        "smart_tv",
+        "parking"
+      ]
+    },
+    "recommendations": [
+      {
+        "id": "rec1",
+        "title": "Add floor plan",
+        "impact": "high",
+        "effort": "low",
+        "details": "upload floor plan"
+      },
+      {
+        "id": "rec2",
+        "title": "Add aerial photo",
+        "impact": "medium",
+        "effort": "medium",
+        "details": "upload aerial"
+      }
+    ]
+  },
+  {
+    "listing_id": "L-1016",
+    "property_title": "She Retreat",
+    "airbnb_link": "https://www.airbnb.com/rooms/1569691576",
+    "booking_link": "https://www.booking.com/rooms/2575541636",
+    "vrbo_link": "https://www.vrbo.com/rooms/6025358636",
+    "num_photos": 42,
+    "captioned_count": 19,
+    "missing_captions": 23,
+    "competitor": [
+      {
+        "name": "See Marina",
+        "num_photos": 60,
+        "airbnb_link": "https://www.airbnb.com/rooms/8063624703",
+        "booking_link": "https://www.booking.com/rooms/2987198689",
+        "vrbo_link": "https://www.vrbo.com/rooms/5304733447",
+        "photos": [
+          {
+            "photo_id": "L-1016-C1",
+            "url": "https://cdn.example.com/photos/L-1016-C1.jpg",
+            "sequence": 1,
+            "has_caption": false,
+            "caption": null,
+            "type": "kitchen"
+          },
+          {
+            "photo_id": "L-1016-C2",
+            "url": "https://cdn.example.com/photos/L-1016-C2.jpg",
+            "sequence": 9,
+            "has_caption": true,
+            "caption": "Be wife front mind leader seem authority well pass skin.",
+            "type": "bathroom"
+          }
+        ],
+        "reviews_count": 251,
+        "reviews_score": 3.89,
+        "location_score": 3.88
+      }
+    ],
+    "property_photos": [
+      {
+        "photo_id": "L-1016-1",
+        "url": "https://cdn.example.com/photos/L-1016-1.jpg",
+        "sequence": 11,
+        "has_caption": true,
+        "caption": "Admit cultural idea people.",
+        "suggested_caption": "Woman discover company manager face until modern party best admit fine.",
+        "alt_text": "Quite stock card.",
+        "type": "bathroom"
+      },
+      {
+        "photo_id": "L-1016-2",
+        "url": "https://cdn.example.com/photos/L-1016-2.jpg",
+        "sequence": 19,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "This view even be course soldier land quickly threat.",
+        "alt_text": "Write once letter sometimes.",
+        "type": "bathroom"
+      },
+      {
+        "photo_id": "L-1016-3",
+        "url": "https://cdn.example.com/photos/L-1016-3.jpg",
+        "sequence": 20,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Exactly grow player brother imagine little future blue again dream.",
+        "alt_text": "Culture we shoulder how available if various here.",
+        "type": "kitchen"
+      },
+      {
+        "photo_id": "L-1016-4",
+        "url": "https://cdn.example.com/photos/L-1016-4.jpg",
+        "sequence": 19,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Many watch body put who travel start moment final herself also.",
+        "alt_text": "Sort score article.",
+        "type": "bathroom"
+      },
+      {
+        "photo_id": "L-1016-5",
+        "url": "https://cdn.example.com/photos/L-1016-5.jpg",
+        "sequence": 17,
+        "has_caption": true,
+        "caption": "Drug case interview product view.",
+        "suggested_caption": "Much when suggest table medical watch goal four value.",
+        "alt_text": "Begin activity century to.",
+        "type": "bedroom"
+      }
+    ],
+    "property_photos_coverage": {
+      "rooms_present": [
+        "living_room",
+        "exterior",
+        "bathroom",
+        "bedroom"
+      ],
+      "rooms_missing": [
+        "floor_plan"
+      ],
+      "amenities_present": [
+        "gym",
+        "wifi",
+        "washer_dryer"
+      ],
+      "amenities_missing": [
+        "gym",
+        "washer_dryer"
+      ]
+    },
+    "recommendations": [
+      {
+        "id": "rec1",
+        "title": "Add floor plan",
+        "impact": "high",
+        "effort": "low",
+        "details": "upload floor plan"
+      },
+      {
+        "id": "rec2",
+        "title": "Add aerial photo",
+        "impact": "medium",
+        "effort": "medium",
+        "details": "upload aerial"
+      }
+    ]
+  },
+  {
+    "listing_id": "L-1017",
+    "property_title": "Across Retreat",
+    "airbnb_link": "https://www.airbnb.com/rooms/8016472952",
+    "booking_link": "https://www.booking.com/rooms/6350631214",
+    "vrbo_link": "https://www.vrbo.com/rooms/2956947181",
+    "num_photos": 39,
+    "captioned_count": 28,
+    "missing_captions": 11,
+    "competitor": [
+      {
+        "name": "Bank Retreat",
+        "num_photos": 55,
+        "airbnb_link": "https://www.airbnb.com/rooms/9410662412",
+        "booking_link": "https://www.booking.com/rooms/3522934091",
+        "vrbo_link": "https://www.vrbo.com/rooms/4381853244",
+        "photos": [
+          {
+            "photo_id": "L-1017-C1",
+            "url": "https://cdn.example.com/photos/L-1017-C1.jpg",
+            "sequence": 20,
+            "has_caption": false,
+            "caption": null,
+            "type": "bedroom"
+          }
+        ],
+        "reviews_count": 294,
+        "reviews_score": 3.82,
+        "location_score": 4.52
+      }
+    ],
+    "property_photos": [
+      {
+        "photo_id": "L-1017-1",
+        "url": "https://cdn.example.com/photos/L-1017-1.jpg",
+        "sequence": 16,
+        "has_caption": true,
+        "caption": "Central show bag add want final range win reality.",
+        "suggested_caption": "Provide lead ability well later trade on father eight represent step against.",
+        "alt_text": "Why me last become find expect.",
+        "type": "bedroom"
+      },
+      {
+        "photo_id": "L-1017-2",
+        "url": "https://cdn.example.com/photos/L-1017-2.jpg",
+        "sequence": 12,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "South throw seat model federal traditional idea many together executive join fight discover.",
+        "alt_text": "You nation carry Republican.",
+        "type": "kitchen"
+      },
+      {
+        "photo_id": "L-1017-3",
+        "url": "https://cdn.example.com/photos/L-1017-3.jpg",
+        "sequence": 15,
+        "has_caption": true,
+        "caption": "Should behavior trade order where believe technology I color.",
+        "suggested_caption": "Surface traditional assume officer nature movie what own south force bill loss.",
+        "alt_text": "Try few present character attorney leader serious.",
+        "type": "bathroom"
+      },
+      {
+        "photo_id": "L-1017-4",
+        "url": "https://cdn.example.com/photos/L-1017-4.jpg",
+        "sequence": 3,
+        "has_caption": true,
+        "caption": "Cut up since themselves sing your media.",
+        "suggested_caption": "Remain media management laugh difficult should without forget the bill support.",
+        "alt_text": "My adult candidate language deep information nature.",
+        "type": "bedroom"
+      },
+      {
+        "photo_id": "L-1017-5",
+        "url": "https://cdn.example.com/photos/L-1017-5.jpg",
+        "sequence": 9,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Late knowledge into result you somebody step moment paper real.",
+        "alt_text": "Theory among modern each place measure ten.",
+        "type": "living_room"
+      }
+    ],
+    "property_photos_coverage": {
+      "rooms_present": [
+        "exterior",
+        "living_room",
+        "balcony",
+        "kitchen"
+      ],
+      "rooms_missing": [
+        "floor_plan"
+      ],
+      "amenities_present": [
+        "workspace",
+        "sea_view",
+        "washer_dryer"
+      ],
+      "amenities_missing": [
+        "washer_dryer",
+        "workspace"
+      ]
+    },
+    "recommendations": [
+      {
+        "id": "rec1",
+        "title": "Add floor plan",
+        "impact": "high",
+        "effort": "low",
+        "details": "upload floor plan"
+      },
+      {
+        "id": "rec2",
+        "title": "Add aerial photo",
+        "impact": "medium",
+        "effort": "medium",
+        "details": "upload aerial"
+      }
+    ]
+  },
+  {
+    "listing_id": "L-1018",
+    "property_title": "Main Skyline",
+    "airbnb_link": "https://www.airbnb.com/rooms/1872193076",
+    "booking_link": "https://www.booking.com/rooms/3398122086",
+    "vrbo_link": "https://www.vrbo.com/rooms/8317215901",
+    "num_photos": 24,
+    "captioned_count": 17,
+    "missing_captions": 7,
+    "competitor": [
+      {
+        "name": "Nothing Residences",
+        "num_photos": 45,
+        "airbnb_link": "https://www.airbnb.com/rooms/8700021319",
+        "booking_link": "https://www.booking.com/rooms/6428932018",
+        "vrbo_link": "https://www.vrbo.com/rooms/8760384472",
+        "photos": [
+          {
+            "photo_id": "L-1018-C1",
+            "url": "https://cdn.example.com/photos/L-1018-C1.jpg",
+            "sequence": 14,
+            "has_caption": false,
+            "caption": null,
+            "type": "living_room"
+          },
+          {
+            "photo_id": "L-1018-C2",
+            "url": "https://cdn.example.com/photos/L-1018-C2.jpg",
+            "sequence": 10,
+            "has_caption": true,
+            "caption": "Necessary condition natural with weight cover level he.",
+            "type": "bathroom"
+          },
+          {
+            "photo_id": "L-1018-C3",
+            "url": "https://cdn.example.com/photos/L-1018-C3.jpg",
+            "sequence": 10,
+            "has_caption": true,
+            "caption": "Relate minute nature write bed seek wife meet eat real.",
+            "type": "living_room"
+          }
+        ],
+        "reviews_count": 166,
+        "reviews_score": 4.44,
+        "location_score": 3.87
+      },
+      {
+        "name": "Experience Marina",
+        "num_photos": 20,
+        "airbnb_link": "https://www.airbnb.com/rooms/8016327390",
+        "booking_link": "https://www.booking.com/rooms/244752057",
+        "vrbo_link": "https://www.vrbo.com/rooms/3855801396",
+        "photos": [
+          {
+            "photo_id": "L-1018-C1",
+            "url": "https://cdn.example.com/photos/L-1018-C1.jpg",
+            "sequence": 7,
+            "has_caption": false,
+            "caption": null,
+            "type": "living_room"
+          },
+          {
+            "photo_id": "L-1018-C2",
+            "url": "https://cdn.example.com/photos/L-1018-C2.jpg",
+            "sequence": 6,
+            "has_caption": true,
+            "caption": "True want yard test next close soldier cell suffer new.",
+            "type": "kitchen"
+          },
+          {
+            "photo_id": "L-1018-C3",
+            "url": "https://cdn.example.com/photos/L-1018-C3.jpg",
+            "sequence": 20,
+            "has_caption": true,
+            "caption": "Various safe more fast table response source million miss.",
+            "type": "bathroom"
+          },
+          {
+            "photo_id": "L-1018-C4",
+            "url": "https://cdn.example.com/photos/L-1018-C4.jpg",
+            "sequence": 19,
+            "has_caption": false,
+            "caption": null,
+            "type": "bathroom"
+          }
+        ],
+        "reviews_count": 136,
+        "reviews_score": 4.63,
+        "location_score": 4.38
+      }
+    ],
+    "property_photos": [
+      {
+        "photo_id": "L-1018-1",
+        "url": "https://cdn.example.com/photos/L-1018-1.jpg",
+        "sequence": 15,
+        "has_caption": true,
+        "caption": "Far spring citizen whole anything.",
+        "suggested_caption": "Without option national most enter feeling subject lot history risk.",
+        "alt_text": "Phone young stand building artist agree.",
+        "type": "bedroom"
+      },
+      {
+        "photo_id": "L-1018-2",
+        "url": "https://cdn.example.com/photos/L-1018-2.jpg",
+        "sequence": 4,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Rise major southern student American pass real treatment west difference.",
+        "alt_text": "Case little then dog type gas agent moment.",
+        "type": "living_room"
+      },
+      {
+        "photo_id": "L-1018-3",
+        "url": "https://cdn.example.com/photos/L-1018-3.jpg",
+        "sequence": 3,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Image particular sport clear back happen.",
+        "alt_text": "Miss adult mention camera suffer reduce cost both.",
+        "type": "bathroom"
+      },
+      {
+        "photo_id": "L-1018-4",
+        "url": "https://cdn.example.com/photos/L-1018-4.jpg",
+        "sequence": 3,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Case risk standard officer expert manage middle impact.",
+        "alt_text": "Structure phone happen discuss wrong.",
+        "type": "bedroom"
+      },
+      {
+        "photo_id": "L-1018-5",
+        "url": "https://cdn.example.com/photos/L-1018-5.jpg",
+        "sequence": 13,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Local good building never interview strategy American.",
+        "alt_text": "If upon Democrat information collection could.",
+        "type": "bathroom"
+      }
+    ],
+    "property_photos_coverage": {
+      "rooms_present": [
+        "bedroom",
+        "kitchen",
+        "living_room"
+      ],
+      "rooms_missing": [
+        "floor_plan"
+      ],
+      "amenities_present": [
+        "workspace",
+        "washer_dryer",
+        "wifi"
+      ],
+      "amenities_missing": [
+        "gym",
+        "parking"
+      ]
+    },
+    "recommendations": [
+      {
+        "id": "rec1",
+        "title": "Add floor plan",
+        "impact": "high",
+        "effort": "low",
+        "details": "upload floor plan"
+      },
+      {
+        "id": "rec2",
+        "title": "Add aerial photo",
+        "impact": "medium",
+        "effort": "medium",
+        "details": "upload aerial"
+      }
+    ]
+  },
+  {
+    "listing_id": "L-1019",
+    "property_title": "Fund Oasis",
+    "airbnb_link": "https://www.airbnb.com/rooms/5022614919",
+    "booking_link": "https://www.booking.com/rooms/2594906825",
+    "vrbo_link": "https://www.vrbo.com/rooms/7919547617",
+    "num_photos": 35,
+    "captioned_count": 15,
+    "missing_captions": 20,
+    "competitor": [
+      {
+        "name": "Scene Suites",
+        "num_photos": 50,
+        "airbnb_link": "https://www.airbnb.com/rooms/4440509172",
+        "booking_link": "https://www.booking.com/rooms/4641850564",
+        "vrbo_link": "https://www.vrbo.com/rooms/3413855554",
+        "photos": [
+          {
+            "photo_id": "L-1019-C1",
+            "url": "https://cdn.example.com/photos/L-1019-C1.jpg",
+            "sequence": 10,
+            "has_caption": true,
+            "caption": "Available star true artist shoulder question.",
+            "type": "kitchen"
+          },
+          {
+            "photo_id": "L-1019-C2",
+            "url": "https://cdn.example.com/photos/L-1019-C2.jpg",
+            "sequence": 9,
+            "has_caption": false,
+            "caption": null,
+            "type": "living_room"
+          },
+          {
+            "photo_id": "L-1019-C3",
+            "url": "https://cdn.example.com/photos/L-1019-C3.jpg",
+            "sequence": 10,
+            "has_caption": true,
+            "caption": "Part brother to people public sell common item next.",
+            "type": "living_room"
+          }
+        ],
+        "reviews_count": 192,
+        "reviews_score": 4.27,
+        "location_score": 4.4
+      }
+    ],
+    "property_photos": [
+      {
+        "photo_id": "L-1019-1",
+        "url": "https://cdn.example.com/photos/L-1019-1.jpg",
+        "sequence": 7,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Young ask case table half while report hospital.",
+        "alt_text": "Century above allow main usually.",
+        "type": "bathroom"
+      },
+      {
+        "photo_id": "L-1019-2",
+        "url": "https://cdn.example.com/photos/L-1019-2.jpg",
+        "sequence": 7,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Resource born image million read table each.",
+        "alt_text": "Industry use pick once movie rise according.",
+        "type": "bedroom"
+      },
+      {
+        "photo_id": "L-1019-3",
+        "url": "https://cdn.example.com/photos/L-1019-3.jpg",
+        "sequence": 5,
+        "has_caption": true,
+        "caption": "Feeling positive market task big many spend place professor.",
+        "suggested_caption": "Yard along language yeah decade base newspaper develop mean about.",
+        "alt_text": "Plant off benefit hot.",
+        "type": "kitchen"
+      },
+      {
+        "photo_id": "L-1019-4",
+        "url": "https://cdn.example.com/photos/L-1019-4.jpg",
+        "sequence": 3,
+        "has_caption": false,
+        "caption": null,
+        "suggested_caption": "Democrat environmental science picture meeting factor likely few hear service above seat cup.",
+        "alt_text": "Store perform age wide state but friend blood.",
+        "type": "bathroom"
+      },
+      {
+        "photo_id": "L-1019-5",
+        "url": "https://cdn.example.com/photos/L-1019-5.jpg",
+        "sequence": 11,
+        "has_caption": true,
+        "caption": "Necessary media cost to project everybody have successful.",
+        "suggested_caption": "Pick gun action bag address appear enter save case woman organization.",
+        "alt_text": "Economy rate couple which I smile.",
+        "type": "bedroom"
+      }
+    ],
+    "property_photos_coverage": {
+      "rooms_present": [
+        "kitchen",
+        "bathroom",
+        "bedroom"
+      ],
+      "rooms_missing": [
+        "floor_plan"
+      ],
+      "amenities_present": [
+        "gym",
+        "parking",
+        "sea_view"
+      ],
+      "amenities_missing": [
+        "pool",
+        "smart_tv"
+      ]
+    },
+    "recommendations": [
+      {
+        "id": "rec1",
+        "title": "Add floor plan",
+        "impact": "high",
+        "effort": "low",
+        "details": "upload floor plan"
+      },
+      {
+        "id": "rec2",
+        "title": "Add aerial photo",
+        "impact": "medium",
+        "effort": "medium",
+        "details": "upload aerial"
+      }
+    ]
+  }
+]
