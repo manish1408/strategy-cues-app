@@ -1,6 +1,20 @@
+// SCSS Variables
+$primary-color: #0066cc;
+$secondary-color: #6c757d;
+$success-color: #28a745;
+$danger-color: #dc3545;
+$warning-color: #ffc107;
+$info-color: #17a2b8;
+$light-color: #f8f9fa;
+$dark-color: #343a40;
+$border-radius: 12px;
+$box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+$transition: all 0.3s ease;
+
 /* Content Section Styles */
 .content-section {
   padding: 2rem 0;
+  min-height: 100vh;
 }
 
 .page-header {
@@ -64,12 +78,52 @@
   }
 }
 
-/* Table Container */
-.table-container {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+// Table View Styles
+.table-view {
+  .table-card {
+    background: white;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+    border: 1px solid #e9ecef;
+    overflow: hidden;
+
+    .table-responsive {
+      .table {
+        margin: 0;
+
+        thead th {
+          background-color: #f8f9fa;
+          border-bottom: 2px solid #dee2e6;
+          font-weight: 600;
+          color: $dark-color;
+          padding: 1rem 0.75rem;
+          white-space: nowrap;
+
+          &:first-child {
+            max-width: 260px;
+          }
+        }
+
+        tbody tr {
+          transition: $transition;
+
+          &:hover {
+            background-color: #f8f9fa;
+          }
+
+          td {
+            padding: 5px 10px;
+            vertical-align: middle;
+            border-bottom: 1px solid #e9ecef;
+
+            &:first-child {
+              max-width: 260px;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 /* Table Controls */
@@ -147,30 +201,35 @@
   }
 }
 
-.export-section {
-  .export-btn {
-    background: transparent;
-    color: var(--brand-black);
-    border: 2px solid var(--brand-yellow);
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    
-    &:hover {
-      background: var(--brand-yellow);
-      color: var(--brand-black);
-      transform: translateY(-1px);
-    }
-    
-    i {
-      font-size: 0.8rem;
-    }
+// Export button styling to match revenue page
+.btn-outline-success {
+  border-color: $success-color;
+  color: $success-color;
+  transition: $transition;
+  font-weight: 500;
+
+  &:hover {
+    background-color: $success-color;
+    border-color: $success-color;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  i {
+    transition: $transition;
+  }
+
+  &:hover i {
+    transform: translateY(-1px);
   }
 }
 
@@ -225,44 +284,23 @@
   }
 }
 
-/* Table Styles */
-.photo-comparison-table {
-  width: 100%;
-  border-collapse: collapse;
-  
-  thead {
-    background: #f8f9fa;
-    
-    th {
-      padding: 1rem 1.5rem;
-      text-align: left;
-      font-weight: 600;
-      color: var(--brand-black);
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      border-bottom: 2px solid #eee;
-    }
+// Property name styling to match revenue page
+.property-name {
+  max-width: 260px;
+
+  strong {
+    color: $dark-color;
+    font-weight: 600;
+    display: block;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
   }
-  
-  tbody {
-    tr {
-      border-bottom: 1px solid #f0f0f0;
-      transition: background-color 0.2s ease;
-      
-      &:hover {
-        background: #f8f9fa;
-      }
-      
-      &:last-child {
-        border-bottom: none;
-      }
-    }
-    
-    td {
-      padding: 1.5rem;
-      vertical-align: top;
-    }
+
+  .property-details {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
@@ -542,39 +580,48 @@
   }
 }
 
-/* Actions Cell */
+// Actions Cell styling to match revenue page
 .actions-cell {
-  .view-btn {
-    background: var(--brand-yellow);
-    color: var(--brand-black);
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    
-    &:hover {
-      background: var(--brand-yellow-dark);
-      transform: translateY(-1px);
+  .btn-group {
+    .btn-outline-primary {
+      color: $primary-color;
+      border-color: $primary-color;
+      transition: $transition;
+
+      &:hover {
+        background-color: $primary-color;
+        border-color: $primary-color;
+        color: white;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 102, 204, 0.3);
+      }
+
+      &:focus {
+        box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.25);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
     }
   }
 }
 
-/* Responsive Design */
+// Responsive Design
 @media (max-width: 768px) {
+  .content-section {
+    padding: 0.5rem;
+  }
+
   .table-responsive {
-    overflow-x: auto;
+    font-size: 0.85rem;
+
+    .table th,
+    .table td {
+      padding: 0.5rem 0.25rem;
+    }
   }
-  
-  .photo-comparison-table {
-    min-width: 800px;
-  }
-  
+
   .property-info {
     flex-direction: column;
     align-items: flex-start;
@@ -590,20 +637,6 @@
     flex-direction: column;
     text-align: center;
     gap: 0.75rem;
-  }
-  
-  .table-controls {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 1rem;
-    
-    .search-section {
-      min-width: auto;
-    }
-    
-    .export-section {
-      align-self: flex-end;
-    }
   }
 }
 

@@ -39,37 +39,33 @@
          
 
 
-            <!-- Photo Comparison Table -->
+            <!-- Controls Section -->
             <div class="row">
               <div class="col-12">
-                <div class="search-section">
-                  <div class="search-input-group">
-                    <i class="fas fa-search"></i>
-                    <input 
-                      type="text" 
-                      class="search-input" 
-                      placeholder="Search properties, competitors, or photo types..."
-                      [(ngModel)]="searchTerm"
-                      (input)="onSearchChange()">
-                    <button class="clear-search" *ngIf="searchTerm" (click)="clearSearch()">
-                      <i class="fas fa-times"></i>
-                    </button>
+                <div class="row align-items-end mb-2">
+                  <div class="col-md-6">
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="fas fa-search"></i></span>
+                      <input type="text" class="form-control" placeholder="Search properties, competitors, or photo types..."
+                        [(ngModel)]="searchTerm" (input)="onSearchChange()">
+                    </div>
                   </div>
-                  <div class="search-results" *ngIf="searchTerm">
-                    <span>{{filteredData.length}} of {{photoComparisonData.length}} properties</span>
+                  <div class="col-md-6">
+                    <div class="d-flex gap-2 float-end">
+                      <button class="btn btn-outline-success" (click)="exportToCSV()" title="Export to CSV">
+                        <i class="fas fa-download me-2"></i>
+                        Export CSV
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <div class="export-section">
-                  <button class="btn btn-outline-primary export-btn" (click)="exportToCSV()">
-                    <i class="fas fa-download"></i>
-                    Export CSV
-                  </button>
                 </div>
               </div>
-              <div class="col-12">
-                <div class="table-container">
-                  <div class="table-responsive">
-                    <table class="photo-comparison-table">
+            </div>
+            <!-- Table View -->
+            <div class="table-view">
+              <div class="table-card">
+                <div class="table-responsive">
+                  <table class="table table-hover">
                       <thead>
                         <tr>
                           <th>Property</th>
@@ -164,14 +160,15 @@
                             </div>
                           </td>
                           <td class="actions-cell">
-                            <button class="btn btn-sm btn-primary view-btn" (click)="viewPhotoDetails(property.listing_id)">
-                              <i class="fas fa-eye"></i>
-                            </button>
+                            <div class="btn-group btn-group-sm">
+                              <button class="btn btn-outline-primary btn-sm" (click)="viewPhotoDetails(property.listing_id)">
+                                <i class="fas fa-eye"></i>
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       </tbody>
-                    </table>
-                  </div>
+                  </table>
                 </div>
               </div>
             </div>

@@ -21,13 +21,20 @@
 
   <!-- Top Navigation Cards -->
   <div class="top-navigation" *ngIf="propertyData?.competitor && propertyData.competitor.length > 0">
-    <button class="nav-arrow prev" (click)="previousCompetitor()">
+    <button class="nav-arrow prev" (click)="previousCompetitor()" [disabled]="selectedCompetitorIndex <= 0">
       <i class="fas fa-chevron-left"></i>
     </button>
-    <div class="nav-cards">
+    <div class="nav-cards" 
+         (touchstart)="onTouchStart($event, 'competitor')"
+         (touchmove)="onTouchMove($event)"
+         (touchend)="onTouchEnd($event, 'competitor')"
+         (mousedown)="onMouseDown($event, 'competitor')"
+         (mousemove)="onMouseMove($event)"
+         (mouseup)="onMouseUp($event, 'competitor')"
+         (mouseleave)="onMouseUp($event, 'competitor')">
       <div class="nav-card" [class.active]="selectedCompetitorIndex === -1" (click)="selectCompetitor(-1)">
         <div class="nav-card-image">
-          <img [src]="getMainImage()" [alt]="propertyData.property_title">
+          <img [src]="getMainImage()" [alt]="propertyData.property_title" (error)="onImageError($event)">
         </div>
         <div class="nav-card-content">
           <h4>Your Photos</h4>
@@ -38,18 +45,22 @@
           <i class="fas fa-link"></i>
         </div>
       </div>
+      <!-- Selected Competitor Card (Always Second) -->
       <div class="nav-card" 
-           *ngFor="let comp of propertyData.competitor; let i = index" 
-           [class.active]="selectedCompetitorIndex === i" 
-           (click)="selectCompetitor(i)">
+           [class.active]="selectedCompetitorIndex >= 0" 
+           (click)="selectCompetitor(selectedCompetitorIndex >= 0 ? selectedCompetitorIndex : 0)">
         <div class="nav-card-image">
-          <img [src]="comp.photos && comp.photos.length > 0 ? comp.photos[0].url : 'assets/images/placeholder.jpg'" [alt]="comp.name">
+          <img [src]="getCurrentCompetitor()?.photos && getCurrentCompetitor()?.photos.length > 0 ? getCurrentCompetitor().photos[0].url : 'assets/images/placeholder.jpg'" 
+               [alt]="getCurrentCompetitor()?.name || 'Competitor'" 
+               (error)="onImageError($event)">
         </div>
         <div class="nav-card-content">
-          <h4>{{comp.name}}</h4>
-          <span class="photo-count">{{comp.num_photos}} photos</span>
-          <span class="gap-indicator" [ngClass]="getGapClass(comp.num_photos - propertyData.num_photos)">
-            {{comp.num_photos - propertyData.num_photos > 0 ? '+' : ''}}{{comp.num_photos - propertyData.num_photos}} {{comp.num_photos - propertyData.num_photos > 0 ? 'more than you' : 'less than you'}}
+          <h4>{{getCurrentCompetitor()?.name || 'Select Competitor'}}</h4>
+          <span class="photo-count">{{getCurrentCompetitor()?.num_photos || 0}} photos</span>
+          <span class="gap-indicator" 
+                [ngClass]="getGapClass((getCurrentCompetitor()?.num_photos || 0) - propertyData.num_photos)"
+                *ngIf="getCurrentCompetitor()">
+            {{(getCurrentCompetitor()?.num_photos || 0) - propertyData.num_photos > 0 ? '+' : ''}}{{(getCurrentCompetitor()?.num_photos || 0) - propertyData.num_photos}} {{(getCurrentCompetitor()?.num_photos || 0) - propertyData.num_photos > 0 ? 'more than you' : 'less than you'}}
           </span>
         </div>
         <div class="nav-card-links">
@@ -57,7 +68,7 @@
         </div>
       </div>
     </div>
-    <button class="nav-arrow next" (click)="nextCompetitor()">
+    <button class="nav-arrow next" (click)="nextCompetitor()" [disabled]="selectedCompetitorIndex >= propertyData.competitor.length - 1">
       <i class="fas fa-chevron-right"></i>
     </button>
   </div>
@@ -98,9 +109,16 @@
         </div>
         <div class="photo-count">{{propertyData.num_photos}} photos</div>
       </div>
-      
-      <div class="main-image-container">
-        <img [src]="getCurrentImage()" [alt]="propertyData.property_title" class="main-image">
+     
+      <div class="main-image-container" 
+           (touchstart)="onTouchStart($event, 'main')"
+           (touchmove)="onTouchMove($event)"
+           (touchend)="onTouchEnd($event, 'main')"
+           (mousedown)="onMouseDown($event, 'main')"
+           (mousemove)="onMouseMove($event)"
+           (mouseup)="onMouseUp($event, 'main')"
+           (mouseleave)="onMouseUp($event, 'main')">
+        <img [src]="getCurrentImage()" [alt]="propertyData.property_title" class="main-image" (error)="onImageError($event)">
         <div class="image-badges">
           <div class="best-photo-badge" *ngIf="isBestPhoto()">
             <i class="fas fa-star"></i>
@@ -115,11 +133,50 @@
             <i class="fas fa-chevron-right"></i>
           </button>
         </div>
+        <div class="image-caption-error" *ngIf="!hasCurrentImageCaption()">
+          <i class="fas fa-exclamation-triangle"></i>
+          No caption set for this photo
+        </div>
+        
       </div>
+    
       
-      <div class="image-footer" *ngIf="!hasCurrentImageCaption()">
-        <i class="fas fa-exclamation-triangle"></i>
-        No caption set for this photo
+     
+      
+      <!-- Thumbnail Gallery -->
+      <div class="thumbnail-gallery" 
+           (touchstart)="onThumbnailTouchStart($event, 'main')"
+           (touchmove)="onThumbnailTouchMove($event)"
+           (touchend)="onThumbnailTouchEnd($event, 'main')"
+           (mousedown)="onThumbnailMouseDown($event, 'main')"
+           (mousemove)="onThumbnailMouseMove($event)"
+           (mouseup)="onThumbnailMouseUp($event, 'main')"
+           (mouseleave)="onThumbnailMouseUp($event, 'main')">
+        
+        <!-- Thumbnail Navigation Arrows -->
+        <div class="thumbnail-navigation">
+          <button class="thumbnail-nav-btn prev" 
+                  (click)="previousImage()" 
+                  *ngIf="currentImageIndex > 0"
+                  title="Previous photo">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button class="thumbnail-nav-btn next" 
+                  (click)="nextImage()" 
+                  *ngIf="currentImageIndex < getTotalImages() - 1"
+                  title="Next photo">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+
+        <div class="thumbnail-item" 
+             *ngFor="let photo of getVisibleThumbnails('main'); let i = index"
+             [class.active]="getThumbnailIndex('main', i) === currentImageIndex"
+             [class.disabled]="photo === null"
+             (click)="photo && setCurrentImage(getThumbnailIndex('main', i))">
+          <img *ngIf="photo" [src]="photo.url" [alt]="photo.caption || 'Property photo'" (error)="onImageError($event)">
+          <div *ngIf="photo" class="thumbnail-number">{{getThumbnailIndex('main', i) + 1}}</div>
+        </div>
       </div>
     </div>
 
@@ -158,8 +215,15 @@
         <div class="photo-count">{{getCurrentCompetitor().num_photos}} photos</div>
       </div>
       
-      <div class="main-image-container">
-        <img [src]="getCurrentCompetitorImage()" [alt]="getCurrentCompetitor().name" class="main-image">
+      <div class="main-image-container" 
+           (touchstart)="onTouchStart($event, 'competitor')"
+           (touchmove)="onTouchMove($event)"
+           (touchend)="onTouchEnd($event, 'competitor')"
+           (mousedown)="onMouseDown($event, 'competitor')"
+           (mousemove)="onMouseMove($event)"
+           (mouseup)="onMouseUp($event, 'competitor')"
+           (mouseleave)="onMouseUp($event, 'competitor')">
+        <img [src]="getCurrentCompetitorImage()" [alt]="getCurrentCompetitor().name" class="main-image" (error)="onImageError($event)">
         <div class="image-navigation">
           <button class="nav-btn prev" (click)="previousCompetitorImage()" *ngIf="currentCompetitorImageIndex > 0">
             <i class="fas fa-chevron-left"></i>
@@ -168,11 +232,48 @@
             <i class="fas fa-chevron-right"></i>
           </button>
         </div>
-      </div>
-      
-      <div class="image-footer" *ngIf="!hasCurrentCompetitorImageCaption()">
+         <div class="image-caption-error" *ngIf="!hasCurrentCompetitorImageCaption()">
         <i class="fas fa-exclamation-triangle"></i>
         No caption set for this photo
+      </div>
+      </div>
+      
+     
+      
+      <!-- Competitor Thumbnail Gallery -->
+      <div class="thumbnail-gallery" 
+           (touchstart)="onThumbnailTouchStart($event, 'competitor')"
+           (touchmove)="onThumbnailTouchMove($event)"
+           (touchend)="onThumbnailTouchEnd($event, 'competitor')"
+           (mousedown)="onThumbnailMouseDown($event, 'competitor')"
+           (mousemove)="onThumbnailMouseMove($event)"
+           (mouseup)="onThumbnailMouseUp($event, 'competitor')"
+           (mouseleave)="onThumbnailMouseUp($event, 'competitor')">
+        
+        <!-- Competitor Thumbnail Navigation Arrows -->
+        <div class="thumbnail-navigation">
+          <button class="thumbnail-nav-btn prev" 
+                  (click)="previousCompetitorImage()" 
+                  *ngIf="currentCompetitorImageIndex > 0"
+                  title="Previous competitor photo">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button class="thumbnail-nav-btn next" 
+                  (click)="nextCompetitorImage()" 
+                  *ngIf="currentCompetitorImageIndex < getCurrentCompetitor().photos.length - 1"
+                  title="Next competitor photo">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+
+        <div class="thumbnail-item" 
+             *ngFor="let photo of getVisibleThumbnails('competitor'); let i = index"
+             [class.active]="getThumbnailIndex('competitor', i) === currentCompetitorImageIndex"
+             [class.disabled]="photo === null"
+             (click)="photo && setCurrentCompetitorImage(getThumbnailIndex('competitor', i))">
+          <img *ngIf="photo" [src]="photo.url" [alt]="photo.caption || 'Competitor photo'" (error)="onImageError($event)">
+          <div *ngIf="photo" class="thumbnail-number">{{getThumbnailIndex('competitor', i) + 1}}</div>
+        </div>
       </div>
     </div>
   </div>
@@ -221,12 +322,47 @@
     </div>
   </div>
 
+  <!-- Additional Photo Suggestions -->
+  <div class="photo-suggestions-section" *ngIf="getPhotoSuggestions().length > 0">
+    <div class="suggestions-header">
+      <h2>Additional photo suggestions</h2>
+      <button class="refresh-btn" (click)="refreshSuggestions()" title="Refresh suggestions">
+        <i class="fas fa-sync-alt"></i>
+      </button>
+    </div>
+    <div class="suggestions-list">
+      <div class="suggestion-item" *ngFor="let suggestion of getPhotoSuggestions()">
+        <div class="suggestion-status">
+          <i class="fas" [ngClass]="suggestion.available ? 'fa-check' : 'fa-times'" 
+             [class.status-available]="suggestion.available" 
+             [class.status-unavailable]="!suggestion.available"></i>
+        </div>
+        <div class="suggestion-content">
+          <div class="suggestion-main">
+            <span class="suggestion-title">{{suggestion.title}}</span>
+            <div class="suggestion-meta" *ngIf="suggestion.impact && suggestion.effort">
+              <span class="impact-badge" [ngClass]="'impact-' + suggestion.impact">{{suggestion.impact}} impact</span>
+              <span class="effort-badge" [ngClass]="'effort-' + suggestion.effort">{{suggestion.effort}} effort</span>
+            </div>
+          </div>
+          <div class="info-icon-container">
+            <i class="fas fa-info-circle info-icon" 
+               (click)="showSuggestionInfo(suggestion)"></i>
+            <div class="tooltip">{{suggestion.description}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+
   <!-- Photo Gallery -->
-  <div class="photo-gallery" *ngIf="propertyData?.property_photos">
+  <!-- <div class="photo-gallery" *ngIf="propertyData?.property_photos">
     <h2>Photo Gallery</h2>
     <div class="gallery-grid">
       <div class="photo-item" *ngFor="let photo of propertyData.property_photos; let i = index" (click)="openPhotoModal(i)">
-        <img [src]="photo.url" [alt]="photo.caption || 'Property photo'">
+        <img [src]="photo.url" [alt]="photo.caption || 'Property photo'" (error)="onImageError($event)">
         <div class="photo-overlay">
           <div class="photo-info">
             <span class="photo-type">{{photo.type}}</span>
@@ -239,7 +375,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <!-- Missing Captions Section -->
   <div class="missing-captions-section" *ngIf="propertyData?.missing_captions > 0">
@@ -261,7 +397,7 @@
       <i class="fas fa-times"></i>
     </button>
     <div class="modal-image">
-      <img [src]="getSelectedPhoto()?.url" [alt]="getSelectedPhoto()?.caption">
+      <img [src]="getSelectedPhoto()?.url" [alt]="getSelectedPhoto()?.caption" (error)="onImageError($event)">
     </div>
     <div class="modal-info">
       <h3>{{getSelectedPhoto()?.type}}</h3>

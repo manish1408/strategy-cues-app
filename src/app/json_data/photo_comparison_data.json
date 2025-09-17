@@ -18,7 +18,8 @@
         "photos": [
           {
             "photo_id": "L-1000-C1",
-            "url": "https://cdn.example.com/photos/L-1000-C1.jpg",
+           
+            "url": "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTM4MDk2MTMwMTEzMjM5MTE1Ng==/original/608054a3-f926-4738-b572-904335e7622e.jpeg",
             "sequence": 16,
             "has_caption": true,
             "caption": "Value school party visit fast particularly easy reach.",
@@ -26,7 +27,8 @@
           },
           {
             "photo_id": "L-1000-C2",
-            "url": "https://cdn.example.com/photos/L-1000-C2.jpg",
+          
+            "url": "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTM4MDk2MTMwMTEzMjM5MTE1Ng==/original/1e1e3a12-8314-43a6-91ae-7514c9d1d6a5.jpeg",
             "sequence": 19,
             "has_caption": true,
             "caption": "Decision single heavy hotel mean car.",
@@ -34,7 +36,8 @@
           },
           {
             "photo_id": "L-1000-C3",
-            "url": "https://cdn.example.com/photos/L-1000-C3.jpg",
+            
+            "url": "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTM4MDk2MTMwMTEzMjM5MTE1Ng==/original/608054a3-f926-4738-b572-904335e7622e.jpeg",
             "sequence": 20,
             "has_caption": false,
             "caption": null,
@@ -44,12 +47,68 @@
         "reviews_count": 30,
         "reviews_score": 4.88,
         "location_score": 3.9
+      },
+      {
+        "name": "Trade Suites",
+        "num_photos": 47,
+        "airbnb_link": "https://www.airbnb.com/rooms/901318697",
+        "booking_link": "https://www.booking.com/rooms/3068128109",
+        "vrbo_link": "https://www.vrbo.com/rooms/9335251291",
+        "photos": [
+          {
+            "photo_id": "L-1002-C1",
+            "url": "https://cdn.example.com/photos/L-1002-C1.jpg",
+            "sequence": 7,
+            "has_caption": true,
+            "caption": "Fact compare these write myself fall least top their old.",
+            "type": "bedroom"
+          }
+        ],
+        "reviews_count": 8,
+        "reviews_score": 4.71,
+        "location_score": 4.52
+      },
+      {
+        "name": "Soon Retreat",
+        "num_photos": 46,
+        "airbnb_link": "https://www.airbnb.com/rooms/737909933",
+        "booking_link": "https://www.booking.com/rooms/4178994894",
+        "vrbo_link": "https://www.vrbo.com/rooms/4426476929",
+        "photos": [
+          {
+            "photo_id": "L-1002-C1",
+            "url": "https://cdn.example.com/photos/L-1002-C1.jpg",
+            "sequence": 9,
+            "has_caption": true,
+            "caption": "Join crime air guy month man others.",
+            "type": "kitchen"
+          },
+          {
+            "photo_id": "L-1002-C2",
+            "url": "https://cdn.example.com/photos/L-1002-C2.jpg",
+            "sequence": 4,
+            "has_caption": true,
+            "caption": "Decide week well board there manager.",
+            "type": "bathroom"
+          },
+          {
+            "photo_id": "L-1002-C3",
+            "url": "https://cdn.example.com/photos/L-1002-C3.jpg",
+            "sequence": 8,
+            "has_caption": false,
+            "caption": null,
+            "type": "bedroom"
+          }
+        ],
+        "reviews_count": 257,
+        "reviews_score": 3.88,
+        "location_score": 3.81
       }
     ],
     "property_photos": [
       {
         "photo_id": "L-1000-1",
-        "url": "https://cdn.example.com/photos/L-1000-1.jpg",
+        "url": "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1359344140568122603/original/22171cb4-9f2b-45ef-8d22-e8ce28aca232.jpeg",
         "sequence": 13,
         "has_caption": false,
         "caption": null,
@@ -59,7 +118,7 @@
       },
       {
         "photo_id": "L-1000-2",
-        "url": "https://cdn.example.com/photos/L-1000-2.jpg",
+        "url": "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1359344140568122603/original/abe8f13d-ef0e-487d-becc-b1f5e2cd11af.jpeg",
         "sequence": 2,
         "has_caption": true,
         "caption": "Daughter different compare than show.",
@@ -69,7 +128,7 @@
       },
       {
         "photo_id": "L-1000-3",
-        "url": "https://cdn.example.com/photos/L-1000-3.jpg",
+        "url": "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1359344140568122603/original/3f3d3518-1e06-4c39-9fcd-dc19c2172374.jpeg",
         "sequence": 15,
         "has_caption": true,
         "caption": "Democrat challenge drive resource station stand everybody on.",
@@ -79,7 +138,7 @@
       },
       {
         "photo_id": "L-1000-4",
-        "url": "https://cdn.example.com/photos/L-1000-4.jpg",
+        "url": "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1359344140568122603/original/5a953463-ffb5-4030-85bf-d03f7ec5e9c1.jpeg",
         "sequence": 10,
         "has_caption": false,
         "caption": null,
@@ -89,7 +148,7 @@
       },
       {
         "photo_id": "L-1000-5",
-        "url": "https://cdn.example.com/photos/L-1000-5.jpg",
+        "url": "https://a0.muscache.com/im/pictures/prohost-api/Hosting-1359344140568122603/original/f5903c84-ca0e-48d3-b356-aad5d981f39a.jpeg",
         "sequence": 13,
         "has_caption": false,
         "caption": null,
@@ -163,6 +222,62 @@
         "reviews_count": 131,
         "reviews_score": 4.24,
         "location_score": 3.96
+      },
+      {
+        "name": "Trade Suites",
+        "num_photos": 47,
+        "airbnb_link": "https://www.airbnb.com/rooms/901318697",
+        "booking_link": "https://www.booking.com/rooms/3068128109",
+        "vrbo_link": "https://www.vrbo.com/rooms/9335251291",
+        "photos": [
+          {
+            "photo_id": "L-1002-C1",
+            "url": "https://cdn.example.com/photos/L-1002-C1.jpg",
+            "sequence": 7,
+            "has_caption": true,
+            "caption": "Fact compare these write myself fall least top their old.",
+            "type": "bedroom"
+          }
+        ],
+        "reviews_count": 8,
+        "reviews_score": 4.71,
+        "location_score": 4.52
+      },
+      {
+        "name": "Soon Retreat",
+        "num_photos": 46,
+        "airbnb_link": "https://www.airbnb.com/rooms/737909933",
+        "booking_link": "https://www.booking.com/rooms/4178994894",
+        "vrbo_link": "https://www.vrbo.com/rooms/4426476929",
+        "photos": [
+          {
+            "photo_id": "L-1002-C1",
+            "url": "https://cdn.example.com/photos/L-1002-C1.jpg",
+            "sequence": 9,
+            "has_caption": true,
+            "caption": "Join crime air guy month man others.",
+            "type": "kitchen"
+          },
+          {
+            "photo_id": "L-1002-C2",
+            "url": "https://cdn.example.com/photos/L-1002-C2.jpg",
+            "sequence": 4,
+            "has_caption": true,
+            "caption": "Decide week well board there manager.",
+            "type": "bathroom"
+          },
+          {
+            "photo_id": "L-1002-C3",
+            "url": "https://cdn.example.com/photos/L-1002-C3.jpg",
+            "sequence": 8,
+            "has_caption": false,
+            "caption": null,
+            "type": "bedroom"
+          }
+        ],
+        "reviews_count": 257,
+        "reviews_score": 3.88,
+        "location_score": 3.81
       }
     ],
     "property_photos": [
