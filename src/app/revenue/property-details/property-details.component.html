@@ -12,7 +12,7 @@
               <h1 class="mb-1">{{ property.Listing_Name }}</h1>
               <div class="property-meta">
                 <span class="badge bg-light text-dark me-2">{{ property.Area }}</span>
-                <span class="badge" [ngClass]="getRoomTypeClass(property.Room_Type)"> 
+                <span class="badge" [ngClass]="getRoomTypeClass(property.Room_Type)" *ngIf="property.Room_Type"> 
                   {{ property.Room_Type }}
                 </span>
               </div>
@@ -21,11 +21,11 @@
         </div>
         <div class="col-md-4 text-end">
           <div class="key-metrics">
-            <div class="metric">
+            <div class="metric" *ngIf="property.MPI !== null">
               <span class="metric-label">MPI</span>
               <span class="metric-value">{{ property.MPI }}</span>
             </div>
-            <div class="metric">
+            <div class="metric" *ngIf="property.RevPAR && property.RevPAR.TM !== null">
               <span class="metric-label">RevPAR (TM)</span>
               <span class="metric-value">${{ property.RevPAR.TM }}</span>
             </div>
@@ -34,21 +34,21 @@
             <button 
               class="btn btn-booking me-2" 
               (click)="openBookingLink('Booking')"
-              [disabled]="!property.Property_URLs.Booking"
+              [disabled]="!property.Property_URLs || !property.Property_URLs.Booking || !property.Property_URLs.Booking.url"
               title="Book on Booking.com">
               <i class="fas fa-bed"></i> Booking.com
             </button>
             <button 
               class="btn btn-airbnb me-2" 
               (click)="openBookingLink('Airbnb')"
-              [disabled]="!property.Property_URLs.Airbnb"
+              [disabled]="!property.Property_URLs || !property.Property_URLs.Airbnb || !property.Property_URLs.Airbnb.url"
               title="Book on Airbnb">
               <i class="fas fa-home"></i> Airbnb
             </button>
             <button 
               class="btn btn-vrbo" 
               (click)="openBookingLink('VRBO')"
-              [disabled]="!property.Property_URLs.VRBO"
+              [disabled]="!property.Property_URLs || !property.Property_URLs.VRBO || !property.Property_URLs.VRBO.url"
               title="Book on VRBO">
               <i class="fas fa-key"></i> VRBO
             </button>
@@ -98,7 +98,7 @@
       <div *ngIf="activeTab === 'overview'" class="tab-pane">
         <div class="row">
           <!-- Occupancy Section -->
-          <div class="col-lg-6 mb-4">
+          <div class="col-lg-6 mb-4" *ngIf="property.Occupancy">
             <div class="card">
               <div class="card-header">
                 <h5 class="mb-0"><i class="fas fa-calendar-alt me-2"></i>Occupancy Metrics</h5>
@@ -108,8 +108,8 @@
                   <div class="col-6">
                     <div class="metric-card">
                       <div class="metric-label">This Month</div>
-                      <div class="metric-value large">{{ property.Occupancy.TM || '' }}</div>
-                      <div class="progress mt-2" style="height: 8px;">
+                      <div class="metric-value large">{{ property.Occupancy.TM || 'N/A' }}</div>
+                      <div class="progress mt-2" style="height: 8px;" *ngIf="property.Occupancy.TM !== null">
                         <div class="progress-bar" [ngClass]="getOccupancyClass(property.Occupancy.TM)"
                         [style.width.%]="property.Occupancy.TM.toString()"></div>
                       </div>
@@ -118,8 +118,8 @@
                   <div class="col-6">
                     <div class="metric-card">
                       <div class="metric-label">Next Month</div>
-                      <div class="metric-value large">{{ property.Occupancy.NM || '' }}</div>
-                      <div class="progress mt-2" style="height: 8px;">
+                      <div class="metric-value large">{{ property.Occupancy.NM || 'N/A' }}</div>
+                      <div class="progress mt-2" style="height: 8px;" *ngIf="property.Occupancy.NM !== null">
                         <div class="progress-bar" [ngClass]="getOccupancyClass(property.Occupancy.NM)"
                         [style.width.%]="property.Occupancy.NM.toString()"></div>
                       </div>
@@ -130,13 +130,13 @@
                   <div class="col-6">
                     <div class="metric-card small">
                       <div class="metric-label">7 Days</div>
-                      <div class="metric-value">{{ property.Occupancy['7_days'] }}</div>
+                      <div class="metric-value">{{ property.Occupancy['7_days'] || 'N/A' }}</div>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="metric-card small">
                       <div class="metric-label">30 Days</div>
-                      <div class="metric-value">{{ property.Occupancy['30_days'] }}</div>
+                      <div class="metric-value">{{ property.Occupancy['30_days'] || 'N/A' }}</div>
                     </div>
                   </div>
                 </div>
@@ -145,37 +145,37 @@
           </div>
 
           <!-- Revenue Section -->
-          <div class="col-lg-6 mb-4">
+          <div class="col-lg-6 mb-4" *ngIf="property.ADR || property.RevPAR">
             <div class="card">
               <div class="card-header">
                 <h5 class="mb-0"><i class="fas fa-dollar-sign me-2"></i>Revenue Metrics</h5>
               </div>
               <div class="card-body">
-                <div class="row">
+                <div class="row" *ngIf="property.ADR">
                   <div class="col-6">
                     <div class="metric-card">
                       <div class="metric-label">ADR (TM)</div>
-                      <div class="metric-value large">${{ property.ADR.TM }}</div>
+                      <div class="metric-value large">${{ property.ADR.TM || 'N/A' }}</div>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="metric-card">
                       <div class="metric-label">ADR (NM)</div>
-                      <div class="metric-value large">${{ property.ADR.NM }}</div>
+                      <div class="metric-value large">${{ property.ADR.NM || 'N/A' }}</div>
                     </div>
                   </div>
                 </div>
-                <div class="row mt-3">
+                <div class="row mt-3" *ngIf="property.RevPAR">
                   <div class="col-6">
                     <div class="metric-card">
                       <div class="metric-label">RevPAR (TM)</div>
-                      <div class="metric-value large">${{ property.RevPAR.TM }}</div>
+                      <div class="metric-value large">${{ property.RevPAR.TM || 'N/A' }}</div>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="metric-card">
                       <div class="metric-label">RevPAR (NM)</div>
-                      <div class="metric-value large">${{ property.RevPAR.NM }}</div>
+                      <div class="metric-value large">${{ property.RevPAR.NM || 'N/A' }}</div>
                     </div>
                   </div>
                 </div>
@@ -185,41 +185,41 @@
         </div>
 
         <!-- Pick Up Occupancy -->
-        <div class="row">
+        <div class="row" *ngIf="property.Pick_Up_Occ || property.MPI !== null || property.Min_Rate_Threshold !== null">
           <div class="col-12 mb-4">
             <div class="card">
               <div class="card-header">
                 <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Pick Up Occupancy</h5>
               </div>
               <div class="card-body">
-                <div class="row">
+                <div class="row" *ngIf="property.Pick_Up_Occ">
                   <div class="col-md-4">
                     <div class="metric-card">
                       <div class="metric-label">7 Days</div>
-                      <div class="metric-value">{{ property.Pick_Up_Occ['7_Days'] }}</div>
+                      <div class="metric-value">{{ property.Pick_Up_Occ['7_Days'] || 'N/A' }}</div>
                     </div>
                   </div>
                   <div class="col-md-4">
                     <div class="metric-card">
                       <div class="metric-label">14 Days</div>
-                      <div class="metric-value">{{ property.Pick_Up_Occ['14_Days'] }}</div>
+                      <div class="metric-value">{{ property.Pick_Up_Occ['14_Days'] || 'N/A' }}</div>
                     </div>
                   </div>
                   <div class="col-md-4">
                     <div class="metric-card">
                       <div class="metric-label">30 Days</div>
-                      <div class="metric-value">{{ property.Pick_Up_Occ['30_Days'] }}</div>
+                      <div class="metric-value">{{ property.Pick_Up_Occ['30_Days'] || 'N/A' }}</div>
                     </div>
                   </div>
                 </div>
                 <div class="row mt-3">
-                  <div class="col-md-6">
+                  <div class="col-md-6" *ngIf="property.MPI !== null">
                     <div class="metric-card">
                       <div class="metric-label">MPI</div>
                       <div class="metric-value large">{{ property.MPI }}</div>
                     </div>
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-6" *ngIf="property.Min_Rate_Threshold !== null">
                     <div class="metric-card">
                       <div class="metric-label">Min Rate Threshold</div>
                       <div class="metric-value large">{{ property.Min_Rate_Threshold }}</div>
@@ -230,12 +230,25 @@
             </div>
           </div>
         </div>
+        
+        <!-- No Data Available Message -->
+        <div class="row" *ngIf="!property.Occupancy && !property.ADR && !property.RevPAR && property.MPI === null && property.Min_Rate_Threshold === null && !property.Pick_Up_Occ">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body text-center py-5">
+                <i class="fas fa-info-circle fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">No Overview Data Available</h4>
+                <p class="text-muted">This property doesn't have any overview metrics data at the moment.</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Performance Tab -->
       <div *ngIf="activeTab === 'performance'" class="tab-pane">
-        <div class="row">
-          <div class="col-lg-6 mb-4">
+        <div class="row" *ngIf="property.STLY_Var || property.STLM_Var">
+          <div class="col-lg-6 mb-4" *ngIf="property.STLY_Var">
             <div class="card">
               <div class="card-header">
                 <h5 class="mb-0"><i class="fas fa-calendar-check me-2"></i>Same Time Last Year (STLY)</h5>
@@ -245,19 +258,19 @@
                   <div class="metric-row">
                     <span class="metric-name">Occupancy</span>
                     <span class="metric-value" [ngClass]="getPerformanceClass(property.STLY_Var.Occ)">
-                      {{ property.STLY_Var.Occ }}
+                      {{ property.STLY_Var.Occ || 'N/A' }}
                     </span>
                   </div>
                   <div class="metric-row">
                     <span class="metric-name">ADR</span>
                     <span class="metric-value" [ngClass]="getPerformanceClass(property.STLY_Var.ADR)">
-                      {{ property.STLY_Var.ADR }}
+                      {{ property.STLY_Var.ADR || 'N/A' }}
                     </span>
                   </div>
                   <div class="metric-row">
                     <span class="metric-name">RevPAR</span>
                     <span class="metric-value" [ngClass]="getPerformanceClass(property.STLY_Var.RevPAR)">
-                      {{ property.STLY_Var.RevPAR }}
+                      {{ property.STLY_Var.RevPAR || 'N/A' }}
                     </span>
                   </div>
                 </div>
@@ -265,7 +278,7 @@
             </div>
           </div>
           
-          <div class="col-lg-6 mb-4">
+          <div class="col-lg-6 mb-4" *ngIf="property.STLM_Var">
             <div class="card">
               <div class="card-header">
                 <h5 class="mb-0"><i class="fas fa-calendar-minus me-2"></i>Same Time Last Month (STLM)</h5>
@@ -275,22 +288,35 @@
                   <div class="metric-row">
                     <span class="metric-name">Occupancy</span>
                     <span class="metric-value" [ngClass]="getPerformanceClass(property.STLM_Var.Occ)">
-                      {{ property.STLM_Var.Occ }}
+                      {{ property.STLM_Var.Occ || 'N/A' }}
                     </span>
                   </div>
                   <div class="metric-row">
                     <span class="metric-name">ADR</span>
                     <span class="metric-value" [ngClass]="getPerformanceClass(property.STLM_Var.ADR)">
-                      {{ property.STLM_Var.ADR }}
+                      {{ property.STLM_Var.ADR || 'N/A' }}
                     </span>
                   </div>
                   <div class="metric-row">
                     <span class="metric-name">RevPAR</span>
                     <span class="metric-value" [ngClass]="getPerformanceClass(property.STLM_Var.RevPAR)">
-                      {{ property.STLM_Var.RevPAR }}
+                      {{ property.STLM_Var.RevPAR || 'N/A' }}
                     </span>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- No Performance Data Available Message -->
+        <div class="row" *ngIf="!property.STLY_Var && !property.STLM_Var">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body text-center py-5">
+                <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">No Performance Data Available</h4>
+                <p class="text-muted">This property doesn't have any performance comparison data at the moment.</p>
               </div>
             </div>
           </div>
@@ -299,9 +325,9 @@
 
       <!-- Platforms Tab -->
       <div *ngIf="activeTab === 'platforms'" class="tab-pane">
-        <div class="row">
+        <div class="row" *ngIf="property.BookingCom || property.Airbnb || property.VRBO">
           <!-- Booking.com -->
-          <div class="col-lg-4 mb-4">
+          <div class="col-lg-4 mb-4" *ngIf="property.BookingCom">
             <div class="card platform-card">
               <div class="card-header bg-primary text-white">
                 <h5 class="mb-0"><i class="fas fa-bed me-2"></i>Booking.com</h5>
@@ -356,7 +382,7 @@
           </div>
 
           <!-- Airbnb -->
-          <div class="col-lg-4 mb-4">
+          <div class="col-lg-4 mb-4" *ngIf="property.Airbnb">
             <div class="card platform-card">
               <div class="card-header bg-danger text-white">
                 <h5 class="mb-0"><i class="fas fa-home me-2"></i>Airbnb</h5>
@@ -397,7 +423,7 @@
           </div>
 
           <!-- VRBO -->
-          <div class="col-lg-4 mb-4">
+          <div class="col-lg-4 mb-4" *ngIf="property.VRBO">
             <div class="card platform-card">
               <div class="card-header bg-warning text-dark">
                 <h5 class="mb-0"><i class="fas fa-building me-2"></i>VRBO</h5>
@@ -423,9 +449,22 @@
             </div>
           </div>
         </div>
+        
+        <!-- No Platform Data Available Message -->
+        <div class="row" *ngIf="!property.BookingCom && !property.Airbnb && !property.VRBO">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body text-center py-5">
+                <i class="fas fa-globe fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">No Platform Data Available</h4>
+                <p class="text-muted">This property doesn't have any platform configuration data at the moment.</p>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <!-- Cancellation Policies -->
-        <div class="row">
+        <div class="row" *ngIf="property.CXL_Policy || property.Adult_Child_Config">
           <div class="col-12 mb-4">
             <div class="card">
               <div class="card-header">
@@ -433,37 +472,37 @@
               </div>
               <div class="card-body">
                 <div class="row">
-                  <div class="col-md-6">
+                  <div class="col-md-6" *ngIf="property.CXL_Policy">
                     <h6>Cancellation Policies</h6>
                     <div class="policy-list">
                       <div class="policy-item">
                         <span class="platform-name">Booking.com:</span>
-                        <span class="policy-value">{{ property.CXL_Policy.Booking }}</span>
+                        <span class="policy-value">{{ property.CXL_Policy.Booking || 'N/A' }}</span>
                       </div>
                       <div class="policy-item">
                         <span class="platform-name">Airbnb:</span>
-                        <span class="policy-value">{{ property.CXL_Policy.Airbnb }}</span>
+                        <span class="policy-value">{{ property.CXL_Policy.Airbnb || 'N/A' }}</span>
                       </div>
                       <div class="policy-item">
                         <span class="platform-name">VRBO:</span>
-                        <span class="policy-value">{{ property.CXL_Policy.VRBO }}</span>
+                        <span class="policy-value">{{ property.CXL_Policy.VRBO || 'N/A' }}</span>
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-6" *ngIf="property.Adult_Child_Config">
                     <h6>Adult/Child Configuration</h6>
                     <div class="policy-list">
                       <div class="policy-item">
                         <span class="platform-name">Booking.com:</span>
-                        <span class="policy-value">{{ property.Adult_Child_Config.Booking }}</span>
+                        <span class="policy-value">{{ property.Adult_Child_Config.Booking || 'N/A' }}</span>
                       </div>
                       <div class="policy-item">
                         <span class="platform-name">Airbnb:</span>
-                        <span class="policy-value">{{ property.Adult_Child_Config.Airbnb }}</span>
+                        <span class="policy-value">{{ property.Adult_Child_Config.Airbnb || 'N/A' }}</span>
                       </div>
                       <div class="policy-item">
                         <span class="platform-name">VRBO:</span>
-                        <span class="policy-value">{{ property.Adult_Child_Config.VRBO }}</span>
+                        <span class="policy-value">{{ property.Adult_Child_Config.VRBO || 'N/A' }}</span>
                       </div>
                     </div>
                   </div>
@@ -476,9 +515,9 @@
 
       <!-- Reviews Tab -->
       <div *ngIf="activeTab === 'reviews'" class="tab-pane">
-        <div class="row">
+        <div class="row" *ngIf="property.Reviews">
           <!-- Booking.com Reviews -->
-          <div class="col-lg-4 mb-4">
+          <div class="col-lg-4 mb-4" *ngIf="property.Reviews.Booking">
             <div class="card review-card">
               <div class="card-header bg-primary text-white">
                 <h5 class="mb-0"><i class="fas fa-bed me-2"></i>Booking.com Reviews</h5>
@@ -487,9 +526,9 @@
                 <div class="review-summary">
                   <div class="score-display">
                     <span class="score-value" [ngClass]="getReviewScoreClass(property.Reviews.Booking.Rev_Score)">
-                      {{ property.Reviews.Booking.Rev_Score }}
+                      {{ property.Reviews.Booking.Rev_Score || 'N/A' }}
                     </span>
-                    <div class="score-stars">
+                    <div class="score-stars" *ngIf="property.Reviews.Booking.Rev_Score">
                       <i class="fas fa-star" *ngFor="let star of [1,2,3,4,5]; let i = index" 
                          [ngClass]="i < Math.floor(+property.Reviews.Booking.Rev_Score) ? 'text-warning' : 'text-muted'"></i>
                     </div>
@@ -497,15 +536,15 @@
                   <div class="review-details">
                     <div class="detail-item">
                       <span class="label">Total Reviews:</span>
-                      <span class="value">{{ property.Reviews.Booking.Total_Rev }}</span>
+                      <span class="value">{{ property.Reviews.Booking.Total_Rev || 'N/A' }}</span>
                     </div>
                     <div class="detail-item">
                       <span class="label">Last Review Date:</span>
-                      <span class="value">{{ property.Reviews.Booking.Last_Rev_Dt }}</span>
+                      <span class="value">{{ property.Reviews.Booking.Last_Rev_Dt || 'N/A' }}</span>
                     </div>
                     <div class="detail-item">
                       <span class="label">Last Review Score:</span>
-                      <span class="value">{{ property.Reviews.Booking.Last_Rev_Score }}</span>
+                      <span class="value">{{ property.Reviews.Booking.Last_Rev_Score || 'N/A' }}</span>
                     </div>
                   </div>
                 </div>
@@ -514,7 +553,7 @@
           </div>
 
           <!-- Airbnb Reviews -->
-          <div class="col-lg-4 mb-4">
+          <div class="col-lg-4 mb-4" *ngIf="property.Reviews.Airbnb">
             <div class="card review-card">
               <div class="card-header bg-danger text-white">
                 <h5 class="mb-0"><i class="fas fa-home me-2"></i>Airbnb Reviews</h5>
@@ -523,9 +562,9 @@
                 <div class="review-summary">
                   <div class="score-display">
                     <span class="score-value" [ngClass]="getReviewScoreClass(property.Reviews.Airbnb.Rev_Score)">
-                      {{ property.Reviews.Airbnb.Rev_Score }}
+                      {{ property.Reviews.Airbnb.Rev_Score || 'N/A' }}
                     </span>
-                    <div class="score-stars">
+                    <div class="score-stars" *ngIf="property.Reviews.Airbnb.Rev_Score">
                       <i class="fas fa-star" *ngFor="let star of [1,2,3,4,5]; let i = index" 
                          [ngClass]="i < Math.floor(+property.Reviews.Airbnb.Rev_Score) ? 'text-warning' : 'text-muted'"></i>
                     </div>
@@ -533,15 +572,15 @@
                   <div class="review-details">
                     <div class="detail-item">
                       <span class="label">Total Reviews:</span>
-                      <span class="value">{{ property.Reviews.Airbnb.Total_Rev }}</span>
+                      <span class="value">{{ property.Reviews.Airbnb.Total_Rev || 'N/A' }}</span>
                     </div>
                     <div class="detail-item">
                       <span class="label">Last Review Date:</span>
-                      <span class="value">{{ property.Reviews.Airbnb.Last_Rev_Dt }}</span>
+                      <span class="value">{{ property.Reviews.Airbnb.Last_Rev_Dt || 'N/A' }}</span>
                     </div>
                     <div class="detail-item">
                       <span class="label">Last Review Score:</span>
-                      <span class="value">{{ property.Reviews.Airbnb.Last_Rev_Score }}</span>
+                      <span class="value">{{ property.Reviews.Airbnb.Last_Rev_Score || 'N/A' }}</span>
                     </div>
                   </div>
                 </div>
@@ -550,7 +589,7 @@
           </div>
 
           <!-- VRBO Reviews -->
-          <div class="col-lg-4 mb-4">
+          <div class="col-lg-4 mb-4" *ngIf="property.Reviews.VRBO">
             <div class="card review-card">
               <div class="card-header bg-warning text-dark">
                 <h5 class="mb-0"><i class="fas fa-building me-2"></i>VRBO Reviews</h5>
@@ -559,9 +598,9 @@
                 <div class="review-summary">
                   <div class="score-display">
                     <span class="score-value" [ngClass]="getReviewScoreClass(property.Reviews.VRBO.Rev_Score)">
-                      {{ property.Reviews.VRBO.Rev_Score }}
+                      {{ property.Reviews.VRBO.Rev_Score || 'N/A' }}
                     </span>
-                    <div class="score-stars">
+                    <div class="score-stars" *ngIf="property.Reviews.VRBO.Rev_Score">
                       <i class="fas fa-star" *ngFor="let star of [1,2,3,4,5]; let i = index" 
                          [ngClass]="i < Math.floor(+property.Reviews.VRBO.Rev_Score) ? 'text-warning' : 'text-muted'"></i>
                     </div>
@@ -569,18 +608,31 @@
                   <div class="review-details">
                     <div class="detail-item">
                       <span class="label">Total Reviews:</span>
-                      <span class="value">{{ property.Reviews.VRBO.Total_Rev }}</span>
+                      <span class="value">{{ property.Reviews.VRBO.Total_Rev || 'N/A' }}</span>
                     </div>
                     <div class="detail-item">
                       <span class="label">Last Review Date:</span>
-                      <span class="value">{{ property.Reviews.VRBO.Last_Rev_Dt }}</span>
+                      <span class="value">{{ property.Reviews.VRBO.Last_Rev_Dt || 'N/A' }}</span>
                     </div>
                     <div class="detail-item">
                       <span class="label">Last Review Score:</span>
-                      <span class="value">{{ property.Reviews.VRBO.Last_Rev_Score }}</span>
+                      <span class="value">{{ property.Reviews.VRBO.Last_Rev_Score || 'N/A' }}</span>
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- No Reviews Data Available Message -->
+        <div class="row" *ngIf="!property.Reviews">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body text-center py-5">
+                <i class="fas fa-star fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">No Reviews Data Available</h4>
+                <p class="text-muted">This property doesn't have any reviews data at the moment.</p>
               </div>
             </div>
           </div>
@@ -590,8 +642,27 @@
   </div>
 </div>
 
+<!-- Loading State -->
+<div *ngIf="loading" class="property-loading">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-md-6 text-center">
+        <div class="card">
+          <div class="card-body py-5">
+            <div class="spinner-border text-primary mb-3" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <h3>Loading Property Details</h3>
+            <p class="text-muted mb-4">Please wait while we fetch the property information...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Property Not Found -->
-<div *ngIf="!property" class="property-not-found">
+<div *ngIf="!loading && !property && error" class="property-not-found">
   <div class="container-fluid">
     <div class="row justify-content-center">
       <div class="col-md-6 text-center">
@@ -599,7 +670,7 @@
           <div class="card-body py-5">
             <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
             <h3>Property Not Found</h3>
-            <p class="text-muted mb-4">The requested property could not be found.</p>
+            <p class="text-muted mb-4">{{ error }}</p>
             <button class="btn btn-primary" (click)="goBack()">
               <i class="fas fa-arrow-left me-2"></i>Back to Revenue Dashboard
             </button>

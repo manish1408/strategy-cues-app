@@ -9,38 +9,38 @@ interface PropertyData {
   operator_id: string;
   Listing_Name: string;
   Area: string;
-  Room_Type: string;
+  Room_Type: string | null;
   Occupancy: {
     '7_days': number;
     '30_days': number;
     TM: number;
     NM: number;
-  };
+  } | null;
   ADR: {
     TM: number;
     NM: number;
-  };
+  } | null;
   RevPAR: {
     TM: number;
     NM: number;
-  };
-  MPI: number;
+  } | null;
+  MPI: number | null;
   STLY_Var: {
     Occ: number;
     ADR: number;
     RevPAR: number;
-  };
+  } | null;
   STLM_Var: {
     Occ: number;
     ADR: number;
     RevPAR: number;
-  };
+  } | null;
   Pick_Up_Occ: {
     '7_Days': number;
     '14_Days': number;
     '30_Days': number;
-  };
-  Min_Rate_Threshold: number;
+  } | null;
+  Min_Rate_Threshold: number | null;
   BookingCom: {
     Genius: string;
     Mobile: string;
@@ -48,27 +48,27 @@ interface PropertyData {
     Weekly: string;
     Monthly: string;
     LM_Disc: string;
-  };
+  } | null;
   Airbnb: {
     Weekly: string;
     Monthly: string;
     Member: string;
     LM_Disc: string;
-  };
+  } | null;
   VRBO: {
     Weekly: string;
     Monthly: string;
-  };
+  } | null;
   CXL_Policy: {
     Booking: string;
     Airbnb: string;
     VRBO: string;
-  };
+  } | null;
   Adult_Child_Config: {
     Booking: number;
     Airbnb: number;
     VRBO: number;
-  };
+  } | null;
   Reviews: {
     Booking: {
       Last_Rev_Dt: string;
@@ -88,11 +88,24 @@ interface PropertyData {
       Rev_Score: number;
       Total_Rev: number;
     };
-  };
+  } | null;
   Property_URLs: {
-    Booking: string;
-    Airbnb: string;
-    VRBO: string;
+    Booking: {
+      url: string | null;
+      id: string | null;
+    } | null;
+    Airbnb: {
+      url: string | null;
+      id: string | null;
+    } | null;
+    VRBO: {
+      url: string | null;
+      id: string | null;
+    } | null;
+    Pricelab: {
+      url: string | null;
+      id: string | null;
+    } | null;
   };
 }
 
@@ -106,6 +119,8 @@ export class PropertyDetailsComponent implements OnInit {
   propertyId: string = '';
   activeTab: 'overview' | 'performance' | 'platforms' | 'reviews' = 'overview';
   operatorId: string = '';
+  loading: boolean = true;
+  error: string | null = null;
   // Utility property for template
   Math = Math;
 
@@ -127,20 +142,24 @@ export class PropertyDetailsComponent implements OnInit {
   }
 
   loadPropertyData(): void {
+    this.loading = true;
+    this.error = null;
 
-    this.propertyService.getProperty(this.propertyId, this.operatorId).subscribe((res: any) => {
-      this.property = res.data;
+    this.propertyService.getProperty(this.propertyId, this.operatorId).subscribe({
+      next: (res: any) => {
+        if (res.success && res.data) {
+          this.property = res.data;
+        } else {
+          this.error = res.message || 'Property not found';
+        }
+        this.loading = false;
+      },
+      error: (error: any) => {
+        console.error('Error loading property:', error);
+        this.error = 'Failed to load property details. Please try again.';
+        this.loading = false;
+      }
     });
-    // const propertyData: PropertyData[] = revenueData as PropertyData[];
-    
-    // // Find property by index (using ID as index)
-    // const index = parseInt(this.propertyId);
-    // if (index >= 0 && index < propertyData.length) {
-    //   this.property = propertyData[index];
-    // } else {
-    //   // Property not found, redirect back to revenue page
-    //   this.router.navigate(['/revenue']);
-    // }
   }
 
   switchTab(tab: 'overview' | 'performance' | 'platforms' | 'reviews'): void {
@@ -164,21 +183,24 @@ export class PropertyDetailsComponent implements OnInit {
     }
   }
 
-  getPerformanceClass(value: number): string {
+  getPerformanceClass(value: number | null): string {
+    if (value === null || value === undefined) return 'text-muted';
     const numValue = parseFloat(value.toString().replace('%', ''));
     if (numValue > 0) return 'text-success';
     if (numValue < 0) return 'text-danger';
     return 'text-muted';
   }
 
-  getOccupancyClass(occupancy: number): string {
+  getOccupancyClass(occupancy: number | null): string {
+    if (occupancy === null || occupancy === undefined) return 'bg-secondary';
     const numValue = parseFloat(occupancy.toString().replace('%', ''));
     if (numValue >= 80) return 'bg-success';
     if (numValue >= 60) return 'bg-warning';
     return 'bg-danger';
   }
 
-  getReviewScoreClass(score: number): string {
+  getReviewScoreClass(score: number | null): string {
+    if (score === null || score === undefined) return 'text-muted';
     const numValue = parseFloat(score.toString());
     if (numValue >= 4.5) return 'text-success';
     if (numValue >= 4.0) return 'text-warning';
@@ -187,14 +209,16 @@ export class PropertyDetailsComponent implements OnInit {
   }
 
   // Helper method to check if a platform feature is enabled
-  isFeatureEnabled(value: string): boolean {
+  isFeatureEnabled(value: string | null): boolean {
+    if (!value) return false;
     return value.toLowerCase() === 'yes';
   }
 
   // Methods to handle booking platform links
   openBookingLink(platform: 'Booking' | 'Airbnb' | 'VRBO'): void {
-    if (this.property?.Property_URLs?.[platform]) {
-      window.open(this.property.Property_URLs[platform], '_blank');
+    const platformData = this.property?.Property_URLs?.[platform];
+    if (platformData?.url) {
+      window.open(platformData.url, '_blank');
     }
   }
 }
