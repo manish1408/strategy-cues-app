@@ -32,6 +32,9 @@
                 <th scope="col">Airbnb</th>
                 <th scope="col">VRBO ID</th>
                 <th scope="col">VRBO</th>
+                <th scope="col">PricelabID</th>
+                <th scope="col">Pricelab</th>
+
                 <th scope="col" [width]="'100px'">Action</th>
               </tr>
             </thead>
@@ -44,6 +47,8 @@
                 <td>{{ listing?.property_urls?.Airbnb?.url }}</td>
                 <td>{{ listing?.property_urls?.VRBO?.id }}</td>
                 <td>{{ listing?.property_urls?.VRBO?.url }}</td>
+                <td>{{ listing?.property_urls?.Pricelab?.id }}</td>
+                <td>{{ listing?.property_urls?.Pricelab?.url }}</td>
                 <td>
                   <img src="assets/icons/edit.svg" class="cursor-pointer me-2" data-bs-toggle="modal" data-bs-target="#addListing" (click)="editListing(listing)" />
                   <img src="assets/icons/trash.svg" (click)="deleteListing(listing?.id)" class="cursor-pointer" />
@@ -181,6 +186,31 @@
             />
             <div *ngIf="addListingForm.get('vrbo.url')?.errors?.['required'] && addListingForm.get('vrbo')?.touched">
               <span class="text-danger">{{ addListingForm.get('vrbo.url')?.errors?.['required'] }}</span>
+            </div>
+          </div>
+          <div class="mb-3" [formGroupName]="'pricelab'">
+            <label for="pricelab" class="form-label">Pricelab</label>
+            <input
+              type="text"
+              id="pricelab"
+              formControlName="id"
+              class="form-control mb-2"
+                placeholder="Enter Pricelab ID"
+              [ngClass]="{ 'is-invalid': hasError('pricelab.id') }"
+            />
+            <div *ngIf="addListingForm.get('pricelab.id')?.errors?.['required'] && addListingForm.get('pricelab')?.touched">
+              <span class="text-danger">{{ addListingForm.get('pricelab.id')?.errors?.['required'] }}</span>
+            </div>
+            <input
+              type="text"
+              id="pricelab"
+              formControlName="url"
+              class="form-control"
+              placeholder="Enter Pricelab"
+              [ngClass]="{ 'is-invalid': hasError('pricelab.url') }"
+            />
+            <div *ngIf="addListingForm.get('pricelab.url')?.errors?.['required'] && addListingForm.get('pricelab')?.touched">
+              <span class="text-danger">{{ addListingForm.get('pricelab.url')?.errors?.['required'] }}</span>
             </div>
           </div>
         </form>

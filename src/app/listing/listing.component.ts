@@ -18,7 +18,7 @@ export class ListingComponent implements OnInit {
   @ViewChild("closeButton") closeButton!: ElementRef;
 
   currentPage: number = 1;
-  itemsPerPage: number = 10;
+  itemsPerPage: number = 20;
   totalPages: number = 0;
   apiLoading: boolean = false;
   loading: boolean = false;
@@ -51,6 +51,10 @@ export class ListingComponent implements OnInit {
         id: [""],
       }),
       vrbo: this.fb.group({
+        url: [""],
+        id: [""],
+      }),
+      pricelab: this.fb.group({
         url: [""],
         id: [""],
       }),
@@ -111,6 +115,10 @@ export class ListingComponent implements OnInit {
           url: listing.property_urls?.VRBO.url || "",
           id: listing.property_urls?.VRBO.id || "",
         },
+        pricelab: {
+          url: listing.property_urls?.Pricelab.url || "",
+          id: listing.property_urls?.Pricelab.id || "",
+        },
       });
     } else {
       console.error('Invalid listing object:', listing);
@@ -161,12 +169,12 @@ export class ListingComponent implements OnInit {
     console.log('operatorId:', this.operatorId);
   
     this.addListingForm.markAllAsTouched();
-    const { bookingCom, airbnb, vrbo } = this.addListingForm.value;
-    if ((bookingCom.url && !bookingCom.id) || (airbnb.url && !airbnb.id) || (vrbo.url && !vrbo.id)) {
+    const { bookingCom, airbnb, vrbo, pricelab } = this.addListingForm.value;
+    if ((bookingCom.url && !bookingCom.id) || (airbnb.url && !airbnb.id) || (vrbo.url && !vrbo.id) || (pricelab.url && !pricelab.id)) {
       this.toastr.error("Please provide an ID for each URL you entered.");
       return;
     }
-    if (!bookingCom.id && !airbnb.id && !vrbo.id) {
+    if (!bookingCom.id && !airbnb.id && !vrbo.id && !pricelab.id) {
       this.toastr.error("At least one listing ID must be provided.");
       return;
     }
@@ -188,7 +196,11 @@ export class ListingComponent implements OnInit {
             url: vrbo.url,
             id: vrbo.id || '',
           },
-          Pricelab: this.pricelab || '',
+         
+          Pricelab: {
+            url: pricelab.url,
+            id: pricelab.id || '',
+          },
         },
       };
   
@@ -244,6 +256,10 @@ export class ListingComponent implements OnInit {
           id: "",
         },
         vrbo: {
+          url: "",
+          id: "",
+        },
+        pricelab: {
           url: "",
           id: "",
         },
