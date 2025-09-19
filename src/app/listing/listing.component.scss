@@ -1814,3 +1814,51 @@ $transition: all 0.3s ease;
     stroke-dasharray: 0 100;
   }
 }
+
+.platform-link {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+  
+  &.airbnb {
+    background: #FF5A5F;
+    color: white;
+    
+    &:hover {
+      background: #e04a4f;
+    }
+  }
+  
+  &.booking {
+    background: #003580;
+    color: white;
+    
+    &:hover {
+      background: #002a66;
+    }
+  }
+  
+  &.vrbo {
+    background: #00A699;
+    color: white;
+    
+    &:hover {
+      background: #008a7d;
+    }
+  }
+
+  &.pricelab {
+    background: #ff4746;
+    color: white;
+    
+    &:hover {
+      background: #ff4746;
+    }
+  }
+}

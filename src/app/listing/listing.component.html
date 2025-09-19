@@ -45,12 +45,15 @@
                 <td>
                   <div *ngIf="listing?.urls?.Booking?.url || listing?.property_urls?.Booking?.url" 
                        class="d-flex align-items-center gap-1">
-                    <span class="text-dark">{{ extractPropertyName(listing?.urls?.Booking?.url || listing?.property_urls?.Booking?.url, 'booking') }}</span>
-                    <a [href]="listing?.urls?.Booking?.url || listing?.property_urls?.Booking?.url" 
+                    <!-- <span class="text-dark">{{ extractPropertyName(listing?.urls?.Booking?.url || listing?.property_urls?.Booking?.url, 'booking') }}</span> -->
+                    <!-- <a [href]="listing?.urls?.Booking?.url || listing?.property_urls?.Booking?.url" 
                        target="_blank" 
                        rel="noopener noreferrer"
                        class="btn btn-outline-primary btn-sm">
-                      <i class="fas fa-eye"></i>
+                       <i class="fas fa-eye"></i>
+                    </a> -->
+                    <a [href]="listing?.urls?.Booking?.url || listing?.property_urls?.Booking?.url" target="_blank" class="platform-link booking">
+                      <i class="fas fa-bed"></i>
                     </a>
                   </div>
                   <span *ngIf="!listing?.urls?.Booking?.url && !listing?.property_urls?.Booking?.url" class="text-muted">-</span>
@@ -59,12 +62,15 @@
                 <td>
                   <div *ngIf="listing?.urls?.Airbnb?.url || listing?.property_urls?.Airbnb?.url" 
                        class="d-flex align-items-center gap-1">
-                    <span class="text-dark">{{ extractPropertyName(listing?.urls?.Airbnb?.url || listing?.property_urls?.Airbnb?.url, 'airbnb') }}</span>
-                    <a [href]="listing?.urls?.Airbnb?.url || listing?.property_urls?.Airbnb?.url" 
+                    <!-- <span class="text-dark">{{ extractPropertyName(listing?.urls?.Airbnb?.url || listing?.property_urls?.Airbnb?.url, 'airbnb') }}</span> -->
+                    <!-- <a [href]="listing?.urls?.Airbnb?.url || listing?.property_urls?.Airbnb?.url" 
                        target="_blank" 
                        rel="noopener noreferrer"
                        class="btn btn-outline-primary btn-sm">
                       <i class="fas fa-eye"></i>
+                    </a> -->
+                    <a [href]="listing?.urls?.Airbnb?.url || listing?.property_urls?.Airbnb?.url" target="_blank" class="platform-link airbnb">
+                      <i class="fab fa-airbnb"></i>
                     </a>
                   </div>
                   <span *ngIf="!listing?.urls?.Airbnb?.url && !listing?.property_urls?.Airbnb?.url" class="text-muted">-</span>
@@ -73,12 +79,15 @@
                 <td>
                   <div *ngIf="listing?.urls?.VRBO?.url || listing?.property_urls?.VRBO?.url" 
                        class="d-flex align-items-center gap-1">
-                    <span class="text-dark">{{ extractPropertyName(listing?.urls?.VRBO?.url || listing?.property_urls?.VRBO?.url, 'vrbo') }}</span>
-                    <a [href]="listing?.urls?.VRBO?.url || listing?.property_urls?.VRBO?.url" 
+                    <!-- <span class="text-dark">{{ extractPropertyName(listing?.urls?.VRBO?.url || listing?.property_urls?.VRBO?.url, 'vrbo') }}</span> -->
+                    <!-- <a [href]="listing?.urls?.VRBO?.url || listing?.property_urls?.VRBO?.url" 
                        target="_blank" 
                        rel="noopener noreferrer"
                        class="btn btn-outline-primary btn-sm">
                       <i class="fas fa-eye"></i>
+                    </a> -->
+                    <a [href]="listing?.urls?.VRBO?.url || listing?.property_urls?.VRBO?.url" target="_blank" class="platform-link vrbo">
+                      <i class="fas fa-home"></i>
                     </a>
                   </div>
                   <span *ngIf="!listing?.urls?.VRBO?.url && !listing?.property_urls?.VRBO?.url" class="text-muted">-</span>
@@ -87,12 +96,15 @@
                 <td>
                   <div *ngIf="listing?.urls?.Pricelab?.url || listing?.property_urls?.Pricelab?.url" 
                        class="d-flex align-items-center gap-1">
-                    <span class="text-dark">{{ extractPropertyName(listing?.urls?.Pricelab?.url || listing?.property_urls?.Pricelab?.url, 'pricelab') }}</span>
-                    <a [href]="listing?.urls?.Pricelab?.url || listing?.property_urls?.Pricelab?.url" 
+                    <!-- <span class="text-dark">{{ extractPropertyName(listing?.urls?.Pricelab?.url || listing?.property_urls?.Pricelab?.url, 'pricelab') }}</span> -->
+                    <!-- <a [href]="listing?.urls?.Pricelab?.url || listing?.property_urls?.Pricelab?.url" 
                        target="_blank" 
                        rel="noopener noreferrer"
                        class="btn btn-outline-primary btn-sm">
                       <i class="fas fa-eye"></i>
+                    </a> -->
+                    <a [href]="listing?.urls?.Pricelab?.url || listing?.property_urls?.Pricelab?.url" target="_blank" class="platform-link pricelab">
+                      <i class="fas fa-chart-bar"></i> 
                     </a>
                   </div>
                   <span *ngIf="!listing?.urls?.Pricelab?.url && !listing?.property_urls?.Pricelab?.url" class="text-muted">-</span>
