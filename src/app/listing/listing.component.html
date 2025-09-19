@@ -41,14 +41,54 @@
             <tbody>
               <tr *ngFor="let listing of allListingList; let i = index">
                 <th scope="row">{{ (currentPage - 1) * itemsPerPage + i + 1 }}</th>
-                <td>{{ listing?.property_urls?.Booking?.id }}</td>
-                <td>{{ listing?.property_urls?.Booking?.url }}</td>
-                <td>{{ listing?.property_urls?.Airbnb?.id }}</td>
-                <td>{{ listing?.property_urls?.Airbnb?.url }}</td>
-                <td>{{ listing?.property_urls?.VRBO?.id }}</td>
-                <td>{{ listing?.property_urls?.VRBO?.url }}</td>
-                <td>{{ listing?.property_urls?.Pricelab?.id }}</td>
-                <td>{{ listing?.property_urls?.Pricelab?.url }}</td>
+                <td>{{ listing?.urls?.Booking?.id || listing?.property_urls?.Booking?.id }}</td>
+                <td>
+                  <a *ngIf="listing?.urls?.Booking?.url || listing?.property_urls?.Booking?.url" 
+                     [href]="listing?.urls?.Booking?.url || listing?.property_urls?.Booking?.url" 
+                     target="_blank" 
+                     rel="noopener noreferrer"
+                     class="text-decoration-none d-flex align-items-center gap-1 text-dark">
+                    {{ extractPropertyName(listing?.urls?.Booking?.url || listing?.property_urls?.Booking?.url, 'booking') }}
+                    <i class="fas fa-external-link-alt text-muted" style="font-size: 0.8em;"></i>
+                  </a>
+                  <span *ngIf="!listing?.urls?.Booking?.url && !listing?.property_urls?.Booking?.url" class="text-muted">-</span>
+                </td>
+                <td>{{ listing?.urls?.Airbnb?.id || listing?.property_urls?.Airbnb?.id }}</td>
+                <td>
+                  <a *ngIf="listing?.urls?.Airbnb?.url || listing?.property_urls?.Airbnb?.url" 
+                     [href]="listing?.urls?.Airbnb?.url || listing?.property_urls?.Airbnb?.url" 
+                     target="_blank" 
+                     rel="noopener noreferrer"
+                     class="text-decoration-none d-flex align-items-center gap-1 text-dark">
+                    {{ extractPropertyName(listing?.urls?.Airbnb?.url || listing?.property_urls?.Airbnb?.url, 'airbnb') }}
+                    <i class="fas fa-external-link-alt text-muted" style="font-size: 0.8em;"></i>
+                  </a>
+                  <span *ngIf="!listing?.urls?.Airbnb?.url && !listing?.property_urls?.Airbnb?.url" class="text-muted">-</span>
+                </td>
+                <td>{{ listing?.urls?.VRBO?.id || listing?.property_urls?.VRBO?.id }}</td>
+                <td>
+                  <a *ngIf="listing?.urls?.VRBO?.url || listing?.property_urls?.VRBO?.url" 
+                     [href]="listing?.urls?.VRBO?.url || listing?.property_urls?.VRBO?.url" 
+                     target="_blank" 
+                     rel="noopener noreferrer"
+                     class="text-decoration-none d-flex align-items-center gap-1 text-dark">
+                    {{ extractPropertyName(listing?.urls?.VRBO?.url || listing?.property_urls?.VRBO?.url, 'vrbo') }}
+                    <i class="fas fa-external-link-alt text-muted" style="font-size: 0.8em;"></i>
+                  </a>
+                  <span *ngIf="!listing?.urls?.VRBO?.url && !listing?.property_urls?.VRBO?.url" class="text-muted">-</span>
+                </td>
+                <td>{{ listing?.urls?.Pricelab?.id || listing?.property_urls?.Pricelab?.id }}</td>
+                <td>
+                  <a *ngIf="listing?.urls?.Pricelab?.url || listing?.property_urls?.Pricelab?.url" 
+                     [href]="listing?.urls?.Pricelab?.url || listing?.property_urls?.Pricelab?.url" 
+                     target="_blank" 
+                     rel="noopener noreferrer"
+                     class="text-decoration-none d-flex align-items-center gap-1 text-dark">
+                    {{ extractPropertyName(listing?.urls?.Pricelab?.url || listing?.property_urls?.Pricelab?.url, 'pricelab') }}
+                    <i class="fas fa-external-link-alt text-muted" style="font-size: 0.8em;"></i>
+                  </a>
+                  <span *ngIf="!listing?.urls?.Pricelab?.url && !listing?.property_urls?.Pricelab?.url" class="text-muted">-</span>
+                </td>
                 <td>
                   <img src="assets/icons/edit.svg" class="cursor-pointer me-2" data-bs-toggle="modal" data-bs-target="#addListing" (click)="editListing(listing)" />
                   <img src="assets/icons/trash.svg" (click)="deleteListing(listing?.id)" class="cursor-pointer" />

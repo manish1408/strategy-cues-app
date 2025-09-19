@@ -353,4 +353,46 @@ export class ListingComponent implements OnInit {
     const endIndex = startIndex + this.itemsPerPage;
     return this.allListingList.slice(startIndex, endIndex);
   }
+
+  // Extract property name from URL
+  extractPropertyName(url: string, platform: string): string {
+    if (!url) return '-';
+    
+    try {
+      let propertyName = '';
+      
+      switch (platform.toLowerCase()) {
+        case 'booking':
+          // Extract from booking.com URLs like: /hotel/ae/breathtaking-views-ocean-heights.html
+          const bookingMatch = url.match(/\/hotel\/[^\/]+\/([^\/]+)\.html/);
+          if (bookingMatch) {
+            propertyName = bookingMatch[1].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+          }
+          break;
+          
+        case 'airbnb':
+          // For Airbnb, we'll use a generic name since the URL structure doesn't contain property names
+          propertyName = 'Airbnb Listing';
+          break;
+          
+        case 'vrbo':
+          // For VRBO, we'll use a generic name
+          propertyName = 'VRBO Listing';
+          break;
+          
+        case 'pricelab':
+          // For Pricelab, we'll use a generic name
+          propertyName = 'Pricelab Listing';
+          break;
+          
+        default:
+          propertyName = platform;
+      }
+      
+      return propertyName || platform;
+    } catch (error) {
+      console.error('Error extracting property name:', error);
+      return platform;
+    }
+  }
 }

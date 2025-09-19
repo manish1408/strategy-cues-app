@@ -325,7 +325,7 @@
                   <div class="dual-occupancy-cell">
                     <div class="occupancy-row">
                       <span class="occupancy-label">TM:</span>
-                      <circle-progress [percent]="safeParseNumber(property.Occupancy.TM)" [radius]="15"
+                      <circle-progress [percent]="safeParseNumber(property.Occupancy.TM)" [radius]="18" [backgroundPadding]="-2" [backgroundStroke]="'#f8f9fa'" [backgroundStrokeWidth]="6"
                         [outerStrokeWidth]="6" [innerStrokeWidth]="0" [outerStrokeColor]="'#78C000'"
                         [innerStrokeColor]="'#C7E596'" [animation]="true" [animationDuration]="300" [showUnits]="false"
                         [showSubtitle]="false" [title]="safeParseNumber(property.Occupancy.TM) + '%'"
@@ -334,8 +334,8 @@
                     </div>
                     <div class="occupancy-row">
                       <span class="occupancy-label">NM:</span>
-                      <circle-progress [percent]="safeParseNumber(property.Occupancy.NM)" [radius]="15"
-                        [outerStrokeWidth]="6" [innerStrokeWidth]="0" [outerStrokeColor]="'#FF6347'"
+                      <circle-progress [percent]="safeParseNumber(property.Occupancy.NM)" [radius]="18" [backgroundPadding]="-2" [backgroundStroke]="'#f8f9fa'" [backgroundStrokeWidth]="6"
+                        [outerStrokeWidth]="6" [innerStrokeWidth]="0" [outerStrokeColor]="'#FF6347'" 
                         [innerStrokeColor]="'#FFC0CB'" [animation]="true" [animationDuration]="300" [showUnits]="false"
                         [showSubtitle]="false" [title]="safeParseNumber(property.Occupancy.NM) + '%'"
                         [titleFontSize]="'8px'" [titleColor]="'#FF6347'" [titleFontWeight]="'900'">
