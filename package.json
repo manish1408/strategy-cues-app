@@ -17,7 +17,7 @@
   "dependencies": {
     "-": "^0.0.1",
     "@angular/animations": "^18.0.0",
-    "@angular/cdk": "^18.2.0",
+    "@angular/cdk": "^18.2.14",
     "@angular/common": "^18.0.0",
     "@angular/compiler": "^18.0.0",
     "@angular/core": "^18.0.0",
@@ -34,6 +34,7 @@
     "html-to-md": "^0.8.8",
     "moment": "^2.30.1",
     "ng-circle-progress": "^1.7.1",
+    "ng-gallery": "^12.0.0",
     "ng-otp-input": "^1.9.3",
     "ng2-charts": "^6.0.1",
     "ngx-bootstrap": "^18.1.3",

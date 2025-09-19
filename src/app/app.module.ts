@@ -15,6 +15,7 @@ import { SharedModule } from './shared/sharedModule';
 import { ReactiveFormsModule } from '@angular/forms';
 // import 'event-source-polyfill';
 import { SelectDropDownModule } from "ngx-select-dropdown";
+import { GALLERY_CONFIG, GalleryConfig } from 'ng-gallery';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -41,6 +42,15 @@ import { SelectDropDownModule } from "ngx-select-dropdown";
       useClass: JwtInterceptor,
       multi: true,
     },
+
+      {
+        provide: GALLERY_CONFIG,
+        useValue: {
+          autoHeight: true, 
+          imageSize: 'cover'
+        } as GalleryConfig
+      },
+
     provideCharts(withDefaultRegisterables()),
   ],
   bootstrap: [AppComponent],
