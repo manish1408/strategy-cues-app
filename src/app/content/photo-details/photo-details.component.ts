@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Location } from "@angular/common";
 import photoComparisonData from "../../json_data/photo_comparison_data.json";
+import { GalleryItem, ImageItem } from 'ng-gallery';
 
 @Component({
   selector: "app-photo-details",
@@ -15,7 +16,9 @@ export class PhotoDetailsComponent implements OnInit {
   currentImageIndex: number = 0;
   currentCompetitorImageIndex: number = 0;
   Math = Math;
-
+  images: GalleryItem[] = [];
+  competitorImages: GalleryItem[] = [];
+  galleryRefreshKey: number = 0;
   // Swipe functionality properties
   private touchStartX: number = 0;
   private touchStartY: number = 0;
@@ -46,7 +49,17 @@ export class PhotoDetailsComponent implements OnInit {
     this.propertyData = photoComparisonData.find(
       (property) => property.listing_id === this.route.snapshot.params["id"]
     );
-    console.log(this.propertyData);
+    console.log('Property Data:', this.propertyData);
+    console.log('Property Photos:', this.propertyData?.property_photos);
+    console.log('Competitors:', this.propertyData?.competitor);
+    
+    this.images = [...(this.propertyData?.property_photos?.map((photo: any) => 
+      new ImageItem({ src: photo.url, thumb: photo.url })
+    ) || [])];
+    console.log('Your Photos Images Array:', this.images);
+    console.log('Your Photos URLs:', this.images.map(img => img.data?.src));
+    
+    this.updateCompetitorImages();
   }
 
   // Navigation methods
@@ -91,7 +104,8 @@ export class PhotoDetailsComponent implements OnInit {
   getCurrentCompetitor(): any {
     if (
       this.propertyData?.competitor &&
-      this.propertyData.competitor.length > 0
+      this.propertyData.competitor.length > 0 &&
+      this.selectedCompetitorIndex >= 0
     ) {
       return this.propertyData.competitor[this.selectedCompetitorIndex];
     }
@@ -171,12 +185,49 @@ export class PhotoDetailsComponent implements OnInit {
   selectCompetitor(index: number): void {
     this.selectedCompetitorIndex = index;
     this.currentCompetitorImageIndex = 0;
+    this.updateCompetitorImages();
+  }
+
+  // Force refresh galleries
+  refreshGalleries(): void {
+    this.galleryRefreshKey++;
+    console.log('Refreshing galleries with key:', this.galleryRefreshKey);
+  }
+
+  updateCompetitorImages(): void {
+    console.log('Updating competitor images. Selected index:', this.selectedCompetitorIndex);
+    
+    // If no competitor is selected (selectedCompetitorIndex === -1), show empty array
+    if (this.selectedCompetitorIndex === -1) {
+      this.competitorImages = [];
+      console.log('No competitor selected, clearing competitor images');
+      return;
+    }
+    
+    const currentCompetitor = this.getCurrentCompetitor();
+    console.log('Current competitor:', currentCompetitor);
+    console.log('Current competitor photos:', currentCompetitor?.photos);
+    
+    if (currentCompetitor?.photos && currentCompetitor.photos.length > 0) {
+      // Create a new array to force change detection
+      this.competitorImages = [...currentCompetitor.photos.map((photo: any) => 
+        new ImageItem({ src: photo.url, thumb: photo.url })
+      )];
+      console.log('Competitor Images Array:', this.competitorImages);
+      console.log('Competitor Photos URLs:', this.competitorImages.map(img => img.data?.src));
+      // Force gallery refresh
+      this.galleryRefreshKey++;
+    } else {
+      this.competitorImages = [];
+      console.log('No competitor photos found, clearing competitor images');
+    }
   }
 
   previousCompetitor(): void {
-    if (this.selectedCompetitorIndex > 0) {
+    if (this.selectedCompetitorIndex > -1) {
       this.selectedCompetitorIndex--;
       this.currentCompetitorImageIndex = 0;
+      this.updateCompetitorImages();
     }
   }
 
@@ -191,6 +242,7 @@ export class PhotoDetailsComponent implements OnInit {
     ) {
       this.selectedCompetitorIndex++;
       this.currentCompetitorImageIndex = 0;
+      this.updateCompetitorImages();
       console.log('Moved to competitor index:', this.selectedCompetitorIndex);
       console.log('New competitor:', this.getCurrentCompetitor());
     } else {

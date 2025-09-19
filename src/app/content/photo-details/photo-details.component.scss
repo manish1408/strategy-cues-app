@@ -20,7 +20,7 @@
   align-items: center;
   justify-content: center;
   padding: 1.5rem 2rem;
-  background: white;
+  background: white;  
   border-bottom: 1px solid #e9ecef;
   gap: 1rem;
 
@@ -154,7 +154,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0;
-  min-height: calc(100vh - 200px);
+  min-height: calc(100vh - 275px);
 }
 
 .comparison-section {
@@ -1588,4 +1588,8 @@
       }
     }
   }
+}
+
+.competitor-photos-gallery{
+  min-height: 100px;
 }

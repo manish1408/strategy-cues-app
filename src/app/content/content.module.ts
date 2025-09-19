@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { ContentRoutingModule } from './content-routing.module';
 import { ContentComponent } from './content.component';
 import { PhotoDetailsComponent } from './photo-details/photo-details.component';
+import { GalleryModule } from 'ng-gallery';
+
 
 @NgModule({
   declarations: [
@@ -14,7 +16,8 @@ import { PhotoDetailsComponent } from './photo-details/photo-details.component';
   imports: [
     CommonModule,
     FormsModule,
-    ContentRoutingModule
-  ]
+    ContentRoutingModule,
+ GalleryModule
+]
 })
 export class ContentModule { }
