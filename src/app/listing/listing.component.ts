@@ -99,31 +99,68 @@ export class ListingComponent implements OnInit {
   }
 
   editListing(listing: any) {
+    console.log('editListing called with:', listing);
+    console.log('listing.property_urls:', listing.property_urls);
+    
     if (listing && listing.id) {
       this.isEdit = true;
       this.editingListingId = listing.id;
-      this.addListingForm.patchValue({
+      
+      const formData = {
         bookingCom: {
-          url: listing.property_urls?.Booking.url || "",
-          id: listing.property_urls?.Booking.id || "",
+          url: listing.property_urls?.Booking?.url || "",
+          id: listing.property_urls?.Booking?.id || "",
         },
         airbnb: {
-          url: listing.property_urls?.Airbnb.url || "",
-          id: listing.property_urls?.Airbnb.id || "",
+          url: listing.property_urls?.Airbnb?.url || "",
+          id: listing.property_urls?.Airbnb?.id || "",
         },
         vrbo: {
-          url: listing.property_urls?.VRBO.url || "",
-          id: listing.property_urls?.VRBO.id || "",
+          url: listing.property_urls?.VRBO?.url || "",
+          id: listing.property_urls?.VRBO?.id || "",
         },
         pricelab: {
-          url: listing.property_urls?.Pricelab.url || "",
-          id: listing.property_urls?.Pricelab.id || "",
+          url: listing.property_urls?.Pricelab?.url || "",
+          id: listing.property_urls?.Pricelab?.id || "",
         },
-      });
+      };
+      
+      console.log('Form data to patch:', formData);
+      
+      this.addListingForm.patchValue(formData);
+      
+      console.log('Form after patch:', this.addListingForm.value);
     } else {
       console.error('Invalid listing object:', listing);
     }
   }
+
+  // editListing(listing: any) {
+  //   if (listing && listing.id) {
+  //     this.isEdit = true;
+  //     this.editingListingId = listing.id;
+  //     this.addListingForm.patchValue({
+  //       bookingCom: {
+  //         url: listing.property_urls?.Booking.url || "",
+  //         id: listing.property_urls?.Booking.id || "",
+  //       },
+  //       airbnb: {
+  //         url: listing.property_urls?.Airbnb.url || "",
+  //         id: listing.property_urls?.Airbnb.id || "",
+  //       },
+  //       vrbo: {
+  //         url: listing.property_urls?.VRBO.url || "",
+  //         id: listing.property_urls?.VRBO.id || "",
+  //       },
+  //       pricelab: {
+  //         url: listing.property_urls?.Pricelab.url || "",
+  //         id: listing.property_urls?.Pricelab.id || "",
+  //       },
+  //     });
+  //   } else {
+  //     console.error('Invalid listing object:', listing);
+  //   }
+  // }
 
   deleteListing(listingId: string) {
     console.log('Attempting to delete listing with ID:', listingId);
