@@ -1248,17 +1248,28 @@ export class RevenueComponent implements OnInit {
     return this.filteredData.slice(startIndex, endIndex);
   }
 
-  // Helper method to get MPI TM value (using the current MPI value)
-  getMPITM(property: PropertyData): string {
-    return this.safeParseString(property.MPI);
+  // Helper method to check if property has any last review scores
+  hasLastReviewScore(property: PropertyData): boolean {
+    const bookingScore = this.safeParseNumber(property.Reviews.Booking.Last_Rev_Score);
+    const airbnbScore = this.safeParseNumber(property.Reviews.Airbnb.Last_Rev_Score);
+    const vrboScore = this.safeParseNumber(property.Reviews.VRBO.Last_Rev_Score);
+    
+    return bookingScore > 0 || airbnbScore > 0 || vrboScore > 0;
   }
 
-  // Helper method to get MPI NM value (for now, using same as TM - can be updated with actual data later)
-  getMPINM(property: PropertyData): string {
-    // For now, using the same value as TM
-    // This can be updated when actual NM MPI data is available
-    return this.safeParseString(property.MPI);
+  // Helper method to check if property has any last review dates
+  hasLastReviewDate(property: PropertyData): boolean {
+    const bookingDate = property.Reviews.Booking.Last_Review_Date;
+    const airbnbDate = property.Reviews.Airbnb.Last_Review_Date;
+    const vrboDate = property.Reviews.VRBO.Last_Review_Date;
+    
+    const hasBookingDate = !!(bookingDate && typeof bookingDate === 'string' && bookingDate.trim() !== '');
+    const hasAirbnbDate = !!(airbnbDate && typeof airbnbDate === 'string' && airbnbDate.trim() !== '');
+    const hasVrboDate = !!(vrboDate && typeof vrboDate === 'string' && vrboDate.trim() !== '');
+    
+    return hasBookingDate || hasAirbnbDate || hasVrboDate;
   }
+
 
   // Modal and filter methods
   openFilterModal(): void {

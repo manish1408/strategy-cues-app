@@ -364,13 +364,8 @@
                   </div>
                 </td>
                 <td *ngIf="columnVisibility.mpi">
-                  <div class="dual-value-cell">
-                    <div class="value-pair">
-                      <span class="badge text-white me-1" style="background-color: #1e1e1e;">TM: {{ getMPITM(property)
-                        }}</span>
-                      <span class="badge text-white" style="background-color: #1e1e1e;">NM: {{ getMPINM(property)
-                        }}</span>
-                    </div>
+                  <div class="single-value-cell">
+                    <span class="badge text-white" style="background-color: #1e1e1e;">{{ safeParseNumber(property.MPI) }}%</span>
                   </div>
                 </td>
                 <td *ngIf="columnVisibility.reviews">
@@ -462,7 +457,7 @@
                 </td>
                 <td *ngIf="columnVisibility.minRateThreshold">
                   <div class="min-rate-threshold-cell">
-                    <span class="threshold-value">{{ property.Min_Rate_Threshold }}</span>
+                    <span class="threshold-value">{{ property.Min_Rate_Threshold || 'N/A' }}</span>
                   </div>
                 </td>
                 <td *ngIf="columnVisibility.stlyVarOcc">
@@ -481,36 +476,42 @@
                 </td>
                 <td *ngIf="columnVisibility.lastReviewScore">
                   <div class="review-score-cell">
-                    <div class="review-item clickable" title="Click to visit Booking.com property page"
+                    <div class="review-item clickable" *ngIf="safeParseNumber(property.Reviews.Booking.Last_Rev_Score) > 0" title="Click to visit Booking.com property page"
                       (click)="openPropertyUrl(property, 'Booking')">
                       <i class="fas fa-bed text-primary"></i>
                       <span class="score-value">{{ property.Reviews.Booking.Last_Rev_Score }}</span>
                     </div>
-                    <div class="review-item clickable" title="Click to visit Airbnb property page"
+                    <div class="review-item clickable" *ngIf="safeParseNumber(property.Reviews.Airbnb.Last_Rev_Score) > 0" title="Click to visit Airbnb property page"
                       (click)="openPropertyUrl(property, 'Airbnb')">
                       <i class="fab fa-airbnb text-danger"></i>
                       <span class="score-value">{{ property.Reviews.Airbnb.Last_Rev_Score }}</span>
                     </div>
-                    <div class="review-item clickable" title="Click to visit VRBO property page"
+                    <div class="review-item clickable" *ngIf="safeParseNumber(property.Reviews.VRBO.Last_Rev_Score) > 0" title="Click to visit VRBO property page"
                       (click)="openPropertyUrl(property, 'VRBO')">
                       <i class="fas fa-home text-warning"></i>
                       <span class="score-value">{{ property.Reviews.VRBO.Last_Rev_Score }}</span>
+                    </div>
+                    <div *ngIf="!hasLastReviewScore(property)" class="no-data-text">
+                      <small class="text-muted">No review scores</small>
                     </div>
                   </div>
                 </td>
                 <td *ngIf="columnVisibility.lastRevenueDate">
                   <div class="revenue-date-cell">
-                    <div class="date-item">
+                    <div class="date-item" *ngIf="property.Reviews.Booking.Last_Review_Date && property.Reviews.Booking.Last_Review_Date.trim() !== ''">
                       <i class="fas fa-bed text-primary"></i>
                       <span class="date-value">{{ property.Reviews.Booking.Last_Review_Date }}</span>
                     </div>
-                    <div class="date-item">
+                    <div class="date-item" *ngIf="property.Reviews.Airbnb.Last_Review_Date && property.Reviews.Airbnb.Last_Review_Date.trim() !== ''">
                       <i class="fab fa-airbnb text-danger"></i>
                       <span class="date-value">{{ property.Reviews.Airbnb.Last_Review_Date }}</span>
                     </div>
-                    <div class="date-item">
+                    <div class="date-item" *ngIf="property.Reviews.VRBO.Last_Review_Date && property.Reviews.VRBO.Last_Review_Date.trim() !== ''">
                       <i class="fas fa-home text-warning"></i>
                       <span class="date-value">{{ property.Reviews.VRBO.Last_Review_Date }}</span>
+                    </div>
+                    <div *ngIf="!hasLastReviewDate(property)" class="no-data-text">
+                      <small class="text-muted">No review dates</small>
                     </div>
                   </div>
                 </td>
