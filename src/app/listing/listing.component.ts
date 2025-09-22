@@ -7,6 +7,7 @@ import { LocalStorageService } from "../_services/local-storage.service";
 import { ToastService } from "../_services/toast.service";
 import { EventService } from "../_services/event.service";
 import { ListingService } from "../_services/listing.service";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-listing",
@@ -39,7 +40,8 @@ export class ListingComponent implements OnInit {
     private localStorageService: LocalStorageService,
     private toastService: ToastService,
     private eventService: EventService<any>,
-    private listingService: ListingService
+    private listingService: ListingService,
+    private route: ActivatedRoute
   ) {
     this.addListingForm = this.fb.group({
       bookingCom: this.fb.group({
@@ -62,8 +64,21 @@ export class ListingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
-    this.loadListings();
+      // First try to get operatorId from query parameters
+      this.route.queryParams.subscribe(params => {
+        if (params['operatorId']) {
+          this.operatorId = params['operatorId'];
+          console.log('Revenue ngOnInit - operatorId from query params:', this.operatorId);
+        } else {
+          // Fallback to localStorage
+          this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
+          console.log('Revenue ngOnInit - operatorId from localStorage:', this.operatorId);
+        }
+        
+        // Load properties with the operatorId
+        this.loadListings();
+      });
+   
   }
  
 

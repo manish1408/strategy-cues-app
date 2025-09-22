@@ -151,9 +151,26 @@ export class AppComponent {
   }
 
   selectOperator(operator: any) {
+    // console.log('Selecting operator:', operator);
     this.selectedOperator = operator;
     localStorage.setItem("selectedOperator", JSON.stringify(operator));
+    // console.log('Operator saved to localStorage:', localStorage.getItem("selectedOperator"));
+    
+    // Show success message
+    this.toastr.success(`Operator "${operator.name}" selected successfully!`);
+    
+    // Auto-navigate to current page with new operator ID
+    const currentUrl = this.router.url.split('?')[0]; // Get current route without query params
+    this.router.navigate([currentUrl], { queryParams: { id: operator._id } });
   }
+
+  // Method to check current operator selection
+  // checkOperatorSelection() {
+  //   const stored = localStorage.getItem("selectedOperator");
+  //   console.log('Current localStorage selectedOperator:', stored);
+  //   console.log('Current component selectedOperator:', this.selectedOperator);
+  //   return stored ? JSON.parse(stored) : null;
+  // }
 
   startWatchingAppEvents() {
     this.eventService.events
