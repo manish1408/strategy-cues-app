@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, OnInit } from "@angular/core";
+import { Component, ElementRef, ViewChild, OnInit, OnDestroy } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
 import { finalize } from "rxjs";
@@ -8,6 +8,7 @@ import { ToastService } from "../_services/toast.service";
 import { EventService } from "../_services/event.service";
 import { ListingService } from "../_services/listing.service";
 import { ActivatedRoute } from "@angular/router";
+import { MapService } from "../_services/map.service";
 
 @Component({
   selector: "app-listing",
@@ -15,7 +16,7 @@ import { ActivatedRoute } from "@angular/router";
   templateUrl: "./listing.component.html",
   styleUrls: ["./listing.component.scss"],
 })
-export class ListingComponent implements OnInit {
+export class ListingComponent implements OnInit, OnDestroy {
   @ViewChild("closeButton") closeButton!: ElementRef;
 
   currentPage: number = 1;
@@ -33,6 +34,9 @@ export class ListingComponent implements OnInit {
   airbnbId: string | null = null;
   vrboId: string | null = null;
   pricelab: string | null = null;
+  mappingStatuses: { [key: string]: string } = {}; // Store mapping status for each listing
+  scrapingStatuses: { [key: string]: string } = {}; // Store scraping status for each listing
+  statusPollingIntervals: { [key: string]: any } = {}; // Store polling intervals for each listing
   constructor(
     private toastr: ToastrService,
     private fb: FormBuilder,
@@ -41,7 +45,8 @@ export class ListingComponent implements OnInit {
     private toastService: ToastService,
     private eventService: EventService<any>,
     private listingService: ListingService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private mapService: MapService
   ) {
     this.addListingForm = this.fb.group({
       bookingCom: this.fb.group({
@@ -97,6 +102,9 @@ export class ListingComponent implements OnInit {
             id: listing.id,
             property_urls: listing.urls,
           }));
+          
+          // Fetch mapping status for each listing
+          this.fetchMappingStatuses();
         }
 
         // Update pagination data
@@ -111,6 +119,156 @@ export class ListingComponent implements OnInit {
       this.apiLoading = false;
     }
   );
+  }
+
+  fetchMappingStatuses() {
+    // Fetch mapping and scraping status for each listing
+    this.allListingList.forEach((listing: any) => {
+      if (listing.id && this.operatorId) {
+        this.propertiesService.getProperty(listing.id, this.operatorId).subscribe({
+          next: (res: any) => {
+            if (res.success && res.data) {
+              // Store mapping status for this listing
+              this.mappingStatuses[listing.id] = res.data.mapping_status || 'pending';
+              // Store scraping status for this listing
+              this.scrapingStatuses[listing.id] = res.data.scraping_status || 'pending';
+            }
+          },
+          error: (error: any) => {
+            console.error(`Error fetching status for listing ${listing.id}:`, error);
+            // Default to pending if error
+            this.mappingStatuses[listing.id] = 'pending';
+            this.scrapingStatuses[listing.id] = 'pending';
+          }
+        });
+      }
+    });
+  }
+
+  isMappingDisabled(listingId: string): boolean {
+    const mappingStatus = this.mappingStatuses[listingId];
+    const scrapingStatus = this.scrapingStatuses[listingId];
+    
+    // Disable if mapping is in_progress or failed
+    if (mappingStatus === 'in_progress' || mappingStatus === 'failed') {
+      return true;
+    }
+    
+    // Disable if scraping is not completed (pending, in_progress, or failed)
+    if (scrapingStatus !== 'completed') {
+      return true;
+    }
+    
+    return false;
+  }
+
+  getMappingStatusText(listingId: string): string {
+    const status = this.mappingStatuses[listingId];
+    switch (status) {
+      case 'pending': return 'Pending';
+      case 'in_progress': return 'In Progress';
+      case 'completed': return 'Completed';
+      case 'failed': return 'Failed';
+      default: return 'Unknown';
+    }
+  }
+
+  getScrapingStatusText(listingId: string): string {
+    const status = this.scrapingStatuses[listingId];
+    switch (status) {
+      case 'pending': return 'Pending';
+      case 'in_progress': return 'In Progress';
+      case 'completed': return 'Completed';
+      case 'failed': return 'Failed';
+      default: return 'Unknown';
+    }
+  }
+
+  getCombinedStatusText(listingId: string): string {
+    const scrapingStatus = this.getScrapingStatusText(listingId);
+    const mappingStatus = this.getMappingStatusText(listingId);
+    return `Scraping: ${scrapingStatus}, Mapping: ${mappingStatus}`;
+  }
+
+  startStatusPolling(listingId: string) {
+    // Clear any existing polling for this listing
+    this.stopStatusPolling(listingId);
+    
+    // Start polling every 1 minute (60000ms)
+    this.statusPollingIntervals[listingId] = setInterval(() => {
+      this.checkListingStatus(listingId);
+    }, 60000);
+    
+    console.log(`Started status polling for listing ${listingId}`);
+  }
+
+  stopStatusPolling(listingId: string) {
+    if (this.statusPollingIntervals[listingId]) {
+      clearInterval(this.statusPollingIntervals[listingId]);
+      delete this.statusPollingIntervals[listingId];
+      console.log(`Stopped status polling for listing ${listingId}`);
+    }
+  }
+
+  checkListingStatus(listingId: string) {
+    if (listingId && this.operatorId) {
+      this.propertiesService.getProperty(listingId, this.operatorId).subscribe({
+        next: (res: any) => {
+          if (res.success && res.data) {
+            const newMappingStatus = res.data.mapping_status || 'pending';
+            const newScrapingStatus = res.data.scraping_status || 'pending';
+            const oldMappingStatus = this.mappingStatuses[listingId];
+            const oldScrapingStatus = this.scrapingStatuses[listingId];
+            
+            // Update both statuses
+            this.mappingStatuses[listingId] = newMappingStatus;
+            this.scrapingStatuses[listingId] = newScrapingStatus;
+            
+            // Show toast if mapping status changed to completed
+            if (newMappingStatus === 'completed' && oldMappingStatus !== 'completed') {
+              this.toastr.success('Mapping completed successfully!');
+              this.stopStatusPolling(listingId); // Stop polling when completed
+            } else if (newMappingStatus === 'failed' && oldMappingStatus !== 'failed') {
+              this.toastr.error('Mapping failed. Please try again.');
+              this.stopStatusPolling(listingId); // Stop polling when failed
+            }
+            
+            // Show toast if scraping status changed to completed
+            if (newScrapingStatus === 'completed' && oldScrapingStatus !== 'completed') {
+              this.toastr.success('Scraping completed successfully!');
+            } else if (newScrapingStatus === 'failed' && oldScrapingStatus !== 'failed') {
+              this.toastr.error('Scraping failed. Please try again.');
+              this.stopStatusPolling(listingId); // Stop polling when failed
+            }
+            
+            console.log(`Status polled for listing ${listingId}: Mapping ${oldMappingStatus} → ${newMappingStatus}, Scraping ${oldScrapingStatus} → ${newScrapingStatus}`);
+          }
+        },
+        error: (error: any) => {
+          console.error(`Error polling status for listing ${listingId}:`, error);
+        }
+      });
+    }
+  }
+
+  fetchUpdatedMappingStatus(bookingId: string, airbnbId: string, vrboId: string, pricelabsId: string) {
+    // Find the listing that matches the provided IDs
+    const matchingListing = this.allListingList.find((listing: any) => {
+      const listingBookingId = listing?.urls?.Booking?.id || listing?.property_urls?.Booking?.id;
+      const listingAirbnbId = listing?.urls?.Airbnb?.id || listing?.property_urls?.Airbnb?.id;
+      const listingVrboId = listing?.urls?.VRBO?.id || listing?.property_urls?.VRBO?.id;
+      const listingPricelabId = listing?.urls?.Pricelab?.id || listing?.property_urls?.Pricelab?.id;
+      
+      return (bookingId && listingBookingId === bookingId) ||
+             (airbnbId && listingAirbnbId === airbnbId) ||
+             (vrboId && listingVrboId === vrboId) ||
+             (pricelabsId && listingPricelabId === pricelabsId);
+    });
+
+    if (matchingListing && matchingListing.id) {
+      // Start polling for this listing to check status every minute
+      this.startStatusPolling(matchingListing.id);
+    }
   }
 
   editListing(listing: any) {
@@ -150,32 +308,7 @@ export class ListingComponent implements OnInit {
     }
   }
 
-  // editListing(listing: any) {
-  //   if (listing && listing.id) {
-  //     this.isEdit = true;
-  //     this.editingListingId = listing.id;
-  //     this.addListingForm.patchValue({
-  //       bookingCom: {
-  //         url: listing.property_urls?.Booking.url || "",
-  //         id: listing.property_urls?.Booking.id || "",
-  //       },
-  //       airbnb: {
-  //         url: listing.property_urls?.Airbnb.url || "",
-  //         id: listing.property_urls?.Airbnb.id || "",
-  //       },
-  //       vrbo: {
-  //         url: listing.property_urls?.VRBO.url || "",
-  //         id: listing.property_urls?.VRBO.id || "",
-  //       },
-  //       pricelab: {
-  //         url: listing.property_urls?.Pricelab.url || "",
-  //         id: listing.property_urls?.Pricelab.id || "",
-  //       },
-  //     });
-  //   } else {
-  //     console.error('Invalid listing object:', listing);
-  //   }
-  // }
+ 
 
   deleteListing(listingId: string) {
     console.log('Attempting to delete listing with ID:', listingId);
@@ -409,5 +542,90 @@ export class ListingComponent implements OnInit {
       console.error('Error extracting property name:', error);
       return platform;
     }
+  }
+
+  syncListing(bookingId: string, airbnbId: string, vrboId: string, pricelabsId: string) {
+    if (!this.operatorId) {
+      console.error('Field required: operator_id');
+      this.toastr.error('Operator ID is required');
+      return;
+    }
+
+    if (!bookingId && !airbnbId && !vrboId && !pricelabsId) {
+      this.toastr.error('No valid ID found. Please ensure the listing has at least one platform ID (Booking.com, Airbnb, VRBO, or Pricelabs)');
+      return;
+    }
+
+    console.log('Scraping listing with:', {
+      operatorId: this.operatorId,
+      bookingId: bookingId,
+      airbnbId: airbnbId,
+      vrboId: vrboId,
+      pricelabsId: pricelabsId
+    });
+
+     this.listingService.syncListing(this.operatorId, bookingId, airbnbId, vrboId, pricelabsId).subscribe({
+       next: (res: any) => {
+         console.log('Sync response:', res);
+         this.toastr.success(res.data.message);
+         // Fetch updated mapping status after successful sync
+         this.fetchUpdatedMappingStatus(bookingId, airbnbId, vrboId, pricelabsId);
+       },
+       error: (error: any) => {
+         console.error('Sync error:', error);
+         this.toastr.error('Failed to scrape listing: ' + (error.error?.detail || error.message || 'Unknown error'));
+       }
+     });
+  }
+  
+
+  mapListing(bookingId: string, airbnbId: string, vrboId: string, pricelabsId: string) {
+  
+    if (!this.operatorId) {
+      console.error('Field required: operator_id');
+      this.toastr.error('Operator ID is required');
+      return;
+    }
+
+    if (!bookingId && !airbnbId && !vrboId && !pricelabsId) {
+      this.toastr.error('No valid ID found. Please ensure the listing has at least one platform ID (Booking.com, Airbnb, VRBO, or Pricelabs)');
+      return;
+    }
+
+    console.log('Mapping listing with:', {
+      operatorId: this.operatorId,
+      bookingId: bookingId,
+      airbnbId: airbnbId,
+      vrboId: vrboId,
+      pricelabsId: pricelabsId
+    });
+
+    this.mapService.mapListing(this.operatorId, bookingId, airbnbId, vrboId, pricelabsId).subscribe({
+      next: (res: any) => {
+        console.log('Map response:', res);
+        this.toastr.success(res.message);
+        // Fetch updated mapping status after successful mapping
+        this.fetchUpdatedMappingStatus(bookingId, airbnbId, vrboId, pricelabsId);
+      },
+      error: (error: any) => {
+        console.error('Map error:', error);
+        this.toastr.error('Failed to map listing: ' + (error.error?.detail || error.message || 'Unknown error'));
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    // Stop all polling intervals when component is destroyed
+    Object.keys(this.statusPollingIntervals).forEach(listingId => {
+      this.stopStatusPolling(listingId);
+    });
+  }
+
+  syncPriceLabsListings() {
+    // this.listingService.syncPriceLabsListings(this.operatorId).subscribe({
+    //   next: (res: any) => {
+    //     console.log('PriceLabs listings:', res);
+    //   }
+    // });
   }
 }

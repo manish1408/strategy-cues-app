@@ -30,6 +30,29 @@ export class ListingService {
     return this.http.get<any>(`${this._url}/get-property-urls`, { params });
   }
 
+  syncListing(operatorId: string, bookingId: string, airbnbId: string, vrboId: string, pricelabsId: string): Observable<any> {
+    const payload: any = {
+      operatorId: operatorId
+    };
+
+    if (bookingId) {
+        payload.bookingId = bookingId;
+      }
+
+    if (airbnbId) {
+      payload.airbnbId = airbnbId;
+    }
+    if (vrboId) {
+      payload.vrboId = vrboId;
+    }
+    if (pricelabsId) {
+      payload.pricelabsId = pricelabsId;
+    }
+    return this.http.post<any>(`${this._url}/scrape-listing`, payload);
+  }
+
+
+
  
 
 }   
