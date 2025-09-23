@@ -10,6 +10,7 @@ import { ListingService } from "../_services/listing.service";
 import { ActivatedRoute } from "@angular/router";
 import { MapService } from "../_services/map.service";
 import { PricelabsService } from "../_services/pricelabs.service";
+import { Status, PropertyStatus } from "../_models/status.model";
 
 @Component({
   selector: "app-listing",
@@ -36,9 +37,10 @@ export class ListingComponent implements OnInit, OnDestroy {
   airbnbId: string | null = null;
   vrboId: string | null = null;
   pricelab: string | null = null;
-  mappingStatuses: { [key: string]: string } = {}; // Store mapping status for each listing
-  scrapingStatuses: { [key: string]: string } = {}; // Store scraping status for each listing
-  statusPollingIntervals: { [key: string]: any } = {}; // Store polling intervals for each listing
+  // Status management
+  Status = Status; // Make Status enum available in template
+  propertyStatuses: { [key: string]: PropertyStatus } = {}; // Store status for each property
+  statusPollingIntervals: { [key: string]: any } = {}; // Store polling intervals for each property
   constructor(
     private toastr: ToastrService,
     private fb: FormBuilder,
@@ -106,8 +108,8 @@ export class ListingComponent implements OnInit, OnDestroy {
             property_urls: listing.urls,
           }));
           
-          // Fetch mapping status for each listing
-          this.fetchMappingStatuses();
+          // Fetch property statuses for each listing
+          this.fetchPropertyStatuses();
         }
 
         // Update pagination data
@@ -124,139 +126,198 @@ export class ListingComponent implements OnInit, OnDestroy {
   );
   }
 
-  fetchMappingStatuses() {
-    // Fetch mapping and scraping status for each listing
+  fetchPropertyStatuses() {
+    // Fetch sync and mapping status for each property
     this.allListingList.forEach((listing: any) => {
       if (listing.id && this.operatorId) {
         this.propertiesService.getProperty(listing.id, this.operatorId).subscribe({
           next: (res: any) => {
             if (res.success && res.data) {
-              // Store mapping status for this listing
-              this.mappingStatuses[listing.id] = res.data.mapping_status || 'pending';
-              // Store scraping status for this listing
-              this.scrapingStatuses[listing.id] = res.data.scraping_status || 'pending';
+              const syncStatus = res.data.scraping_status || Status.PENDING;
+              const mappingStatus = res.data.mapping_status || Status.PENDING;
+              
+              this.propertyStatuses[listing.id] = {
+                propertyId: listing.id,
+                operatorId: this.operatorId!,
+                syncStatus: syncStatus,
+                mappingStatus: mappingStatus,
+                lastUpdated: new Date()
+              };
+              
+              // Resume polling if any operation is in progress
+              if (syncStatus === Status.IN_PROGRESS || mappingStatus === Status.IN_PROGRESS) {
+                console.log(`Resuming polling for property ${listing.id} - operation in progress`);
+                this.startStatusPolling(listing.id);
+              }
             }
           },
           error: (error: any) => {
-            console.error(`Error fetching status for listing ${listing.id}:`, error);
+            console.error(`Error fetching status for property ${listing.id}:`, error);
             // Default to pending if error
-            this.mappingStatuses[listing.id] = 'pending';
-            this.scrapingStatuses[listing.id] = 'pending';
+            this.propertyStatuses[listing.id] = {
+              propertyId: listing.id,
+              operatorId: this.operatorId!,
+              syncStatus: Status.PENDING,
+              mappingStatus: Status.PENDING,
+              lastUpdated: new Date()
+            };
           }
         });
       }
     });
   }
 
-  isMappingDisabled(listingId: string): boolean {
-    const mappingStatus = this.mappingStatuses[listingId];
-    const scrapingStatus = this.scrapingStatuses[listingId];
+  isSyncDisabled(propertyId: string): boolean {
+    const status = this.propertyStatuses[propertyId];
+    if (!status) return false;
     
-    // Disable if mapping is in_progress or failed
-    if (mappingStatus === 'in_progress' || mappingStatus === 'failed') {
+    // Disable if sync is in progress
+    return status.syncStatus === Status.IN_PROGRESS;
+  }
+
+
+  isPollingActive(propertyId: string): boolean {
+    // Check if there's an active polling interval for this property
+    return !!this.statusPollingIntervals[propertyId];
+  }
+
+  isMappingDisabled(propertyId: string): boolean {
+    const status = this.propertyStatuses[propertyId];
+    if (!status) return true; // Disable if no status available
+    
+    // Disable if mapping is in progress
+    if (status.mappingStatus === Status.IN_PROGRESS) {
       return true;
     }
     
-    // Disable if scraping is not completed (pending, in_progress, or failed)
-    if (scrapingStatus !== 'completed') {
+    // Disable if sync is not completed (must sync first)
+    if (status.syncStatus !== Status.COMPLETED) {
       return true;
     }
     
     return false;
   }
 
-  getMappingStatusText(listingId: string): string {
-    const status = this.mappingStatuses[listingId];
-    switch (status) {
-      case 'pending': return 'Pending';
-      case 'in_progress': return 'In Progress';
-      case 'completed': return 'Completed';
-      case 'failed': return 'Failed';
-      default: return 'Unknown';
-    }
-  }
-
-  getScrapingStatusText(listingId: string): string {
-    const status = this.scrapingStatuses[listingId];
-    switch (status) {
-      case 'pending': return 'Pending';
-      case 'in_progress': return 'In Progress';
-      case 'completed': return 'Completed';
-      case 'failed': return 'Failed';
-      default: return 'Unknown';
-    }
-  }
-
-  getCombinedStatusText(listingId: string): string {
-    const scrapingStatus = this.getScrapingStatusText(listingId);
-    const mappingStatus = this.getMappingStatusText(listingId);
-    return `Scraping: ${scrapingStatus}, Mapping: ${mappingStatus}`;
-  }
-
-  startStatusPolling(listingId: string) {
-    // Clear any existing polling for this listing
-    this.stopStatusPolling(listingId);
+  getSyncStatusText(propertyId: string): string {
+    const status = this.propertyStatuses[propertyId];
+    if (!status) return 'Loading';
     
-    // Start polling every 1 minute (60000ms)
-    this.statusPollingIntervals[listingId] = setInterval(() => {
-      this.checkListingStatus(listingId);
-    }, 60000);
-    
-    console.log(`Started status polling for listing ${listingId}`);
-  }
-
-  stopStatusPolling(listingId: string) {
-    if (this.statusPollingIntervals[listingId]) {
-      clearInterval(this.statusPollingIntervals[listingId]);
-      delete this.statusPollingIntervals[listingId];
-      console.log(`Stopped status polling for listing ${listingId}`);
+    switch (status.syncStatus) {
+      case Status.PENDING: return 'Pending';
+      case Status.IN_PROGRESS: return 'In Progress';
+      case Status.COMPLETED: return 'Completed';
+      case Status.FAILED: return 'Failed';
+      default: return 'Loading';
     }
   }
 
-  checkListingStatus(listingId: string) {
-    if (listingId && this.operatorId) {
-      this.propertiesService.getProperty(listingId, this.operatorId).subscribe({
+  getMappingStatusText(propertyId: string): string {
+    const status = this.propertyStatuses[propertyId];
+    if (!status) return 'Loading';
+    
+    switch (status.mappingStatus) {
+      case Status.PENDING: return 'Pending';
+      case Status.IN_PROGRESS: return 'In Progress';
+      case Status.COMPLETED: return 'Completed';
+      case Status.FAILED: return 'Failed';
+      default: return 'Loading';
+    }
+  }
+
+  isStatusLoading(propertyId: string): boolean {
+    const status = this.propertyStatuses[propertyId];
+    return !status;
+  }
+
+  getCombinedStatusText(propertyId: string): string {
+    const syncStatus = this.getSyncStatusText(propertyId);
+    const mappingStatus = this.getMappingStatusText(propertyId);
+    return `Sync: ${syncStatus}, Mapping: ${mappingStatus}`;
+  }
+
+  startStatusPolling(propertyId: string) {
+    // Clear any existing polling for this property
+    this.stopStatusPolling(propertyId);
+    
+    // Start polling every 30 seconds (30000ms) for faster updates
+    this.statusPollingIntervals[propertyId] = setInterval(() => {
+      this.checkPropertyStatus(propertyId);
+    }, 5000);
+    
+    console.log(`Started status polling for property ${propertyId}`);
+  }
+
+  stopStatusPolling(propertyId: string) {
+    if (this.statusPollingIntervals[propertyId]) {
+      clearInterval(this.statusPollingIntervals[propertyId]);
+      delete this.statusPollingIntervals[propertyId];
+      console.log(`Stopped status polling for property ${propertyId}`);
+    }
+  }
+
+  checkPropertyStatus(propertyId: string) {
+    if (propertyId && this.operatorId) {
+      this.propertiesService.getProperty(propertyId, this.operatorId).subscribe({
         next: (res: any) => {
           if (res.success && res.data) {
-            const newMappingStatus = res.data.mapping_status || 'pending';
-            const newScrapingStatus = res.data.scraping_status || 'pending';
-            const oldMappingStatus = this.mappingStatuses[listingId];
-            const oldScrapingStatus = this.scrapingStatuses[listingId];
+            const newSyncStatus = res.data.scraping_status || Status.PENDING;
+            const newMappingStatus = res.data.mapping_status || Status.PENDING;
+            const oldStatus = this.propertyStatuses[propertyId];
             
-            // Update both statuses
-            this.mappingStatuses[listingId] = newMappingStatus;
-            this.scrapingStatuses[listingId] = newScrapingStatus;
+            // Update status
+            this.propertyStatuses[propertyId] = {
+              propertyId: propertyId,
+              operatorId: this.operatorId!,
+              syncStatus: newSyncStatus,
+              mappingStatus: newMappingStatus,
+              lastUpdated: new Date()
+            };
             
-            // Show toast if mapping status changed to completed
-            if (newMappingStatus === 'completed' && oldMappingStatus !== 'completed') {
-              this.toastr.success('Mapping completed successfully!');
-              this.stopStatusPolling(listingId); // Stop polling when completed
-            } else if (newMappingStatus === 'failed' && oldMappingStatus !== 'failed') {
-              this.toastr.error('Mapping failed. Please try again.');
-              this.stopStatusPolling(listingId); // Stop polling when failed
+            // Show toast notifications for status changes and stop polling when operations complete
+            if (oldStatus) {
+              // Show toast if sync status changed
+              if (newSyncStatus === Status.COMPLETED && oldStatus.syncStatus !== Status.COMPLETED) {
+                this.toastr.success('Sync completed successfully!');
+                // Stop polling if sync completed (user can start mapping manually)
+                this.stopStatusPolling(propertyId);
+                console.log(`Stopped polling for property ${propertyId} - sync completed`);
+              } else if (newSyncStatus === Status.FAILED && oldStatus.syncStatus !== Status.FAILED) {
+                this.toastr.error('Sync failed. Please try again.');
+                this.stopStatusPolling(propertyId); // Stop polling when failed
+              }
+              
+              // Show toast if mapping status changed
+              if (newMappingStatus === Status.COMPLETED && oldStatus.mappingStatus !== Status.COMPLETED) {
+                this.toastr.success('Mapping completed successfully!');
+                // Stop polling when mapping completed
+                this.stopStatusPolling(propertyId);
+                console.log(`Stopped polling for property ${propertyId} - mapping completed`);
+              } else if (newMappingStatus === Status.FAILED && oldStatus.mappingStatus !== Status.FAILED) {
+                this.toastr.error('Mapping failed. Please try again.');
+                this.stopStatusPolling(propertyId); // Stop polling when failed
+              }
             }
             
-            // Show toast if scraping status changed to completed
-            if (newScrapingStatus === 'completed' && oldScrapingStatus !== 'completed') {
-              this.toastr.success('Scraping completed successfully!');
-            } else if (newScrapingStatus === 'failed' && oldScrapingStatus !== 'failed') {
-              this.toastr.error('Scraping failed. Please try again.');
-              this.stopStatusPolling(listingId); // Stop polling when failed
+            // Stop polling when both sync and mapping are completed (additional safety check)
+            if (newSyncStatus === Status.COMPLETED && newMappingStatus === Status.COMPLETED) {
+              this.toastr.success('All operations completed successfully!');
+              this.stopStatusPolling(propertyId);
+              console.log(`Stopped polling for property ${propertyId} - both sync and mapping completed`);
             }
             
-            console.log(`Status polled for listing ${listingId}: Mapping ${oldMappingStatus} → ${newMappingStatus}, Scraping ${oldScrapingStatus} → ${newScrapingStatus}`);
+            console.log(`Status polled for property ${propertyId}: Sync ${oldStatus?.syncStatus} → ${newSyncStatus}, Mapping ${oldStatus?.mappingStatus} → ${newMappingStatus}`);
           }
         },
         error: (error: any) => {
-          console.error(`Error polling status for listing ${listingId}:`, error);
+          console.error(`Error polling status for property ${propertyId}:`, error);
         }
       });
     }
   }
 
-  fetchUpdatedMappingStatus(bookingId: string, airbnbId: string, vrboId: string, pricelabsId: string) {
-    // Find the listing that matches the provided IDs
-    const matchingListing = this.allListingList.find((listing: any) => {
+  fetchUpdatedPropertyStatus(bookingId: string, airbnbId: string, vrboId: string, pricelabsId: string) {
+    // Find the property that matches the provided IDs
+    const matchingProperty = this.allListingList.find((listing: any) => {
       const listingBookingId = listing?.urls?.Booking?.id || listing?.property_urls?.Booking?.id;
       const listingAirbnbId = listing?.urls?.Airbnb?.id || listing?.property_urls?.Airbnb?.id;
       const listingVrboId = listing?.urls?.VRBO?.id || listing?.property_urls?.VRBO?.id;
@@ -268,9 +329,9 @@ export class ListingComponent implements OnInit, OnDestroy {
              (pricelabsId && listingPricelabId === pricelabsId);
     });
 
-    if (matchingListing && matchingListing.id) {
-      // Start polling for this listing to check status every minute
-      this.startStatusPolling(matchingListing.id);
+    if (matchingProperty && matchingProperty.id) {
+      // Start polling for this property to check status every 30 seconds
+      this.startStatusPolling(matchingProperty.id);
     }
   }
 
@@ -559,7 +620,31 @@ export class ListingComponent implements OnInit, OnDestroy {
       return;
     }
 
-    console.log('Scraping listing with:', {
+    // Find the property ID to update status
+    const matchingProperty = this.allListingList.find((listing: any) => {
+      const listingBookingId = listing?.urls?.Booking?.id || listing?.property_urls?.Booking?.id;
+      const listingAirbnbId = listing?.urls?.Airbnb?.id || listing?.property_urls?.Airbnb?.id;
+      const listingVrboId = listing?.urls?.VRBO?.id || listing?.property_urls?.VRBO?.id;
+      const listingPricelabId = listing?.urls?.Pricelab?.id || listing?.property_urls?.Pricelab?.id;
+      
+      return (bookingId && listingBookingId === bookingId) ||
+             (airbnbId && listingAirbnbId === airbnbId) ||
+             (vrboId && listingVrboId === vrboId) ||
+             (pricelabsId && listingPricelabId === pricelabsId);
+    });
+
+    if (matchingProperty && matchingProperty.id) {
+      // Update status to in_progress
+      this.propertyStatuses[matchingProperty.id] = {
+        propertyId: matchingProperty.id,
+        operatorId: this.operatorId,
+        syncStatus: Status.IN_PROGRESS,
+        mappingStatus: this.propertyStatuses[matchingProperty.id]?.mappingStatus || Status.PENDING,
+        lastUpdated: new Date()
+      };
+    }
+
+    console.log('Syncing listing with:', {
       operatorId: this.operatorId,
       bookingId: bookingId,
       airbnbId: airbnbId,
@@ -570,20 +655,31 @@ export class ListingComponent implements OnInit, OnDestroy {
      this.listingService.syncListing(this.operatorId, bookingId, airbnbId, vrboId, pricelabsId).subscribe({
        next: (res: any) => {
          console.log('Sync response:', res);
-         this.toastr.success(res.data.message);
-         // Fetch updated mapping status after successful sync
-         this.fetchUpdatedMappingStatus(bookingId, airbnbId, vrboId, pricelabsId);
+         this.toastr.success(res.data.message || 'Sync started successfully');
+         // Start polling for status updates
+         this.fetchUpdatedPropertyStatus(bookingId, airbnbId, vrboId, pricelabsId);
        },
        error: (error: any) => {
          console.error('Sync error:', error);
-         this.toastr.error('Failed to scrape listing: ' + (error.error?.detail || error.message || 'Unknown error'));
+         this.toastr.error('Failed to sync listing: ' + (error.error?.detail || error.message || 'Unknown error'));
+         
+        // Update status to failed
+        if (matchingProperty && matchingProperty.id) {
+          this.propertyStatuses[matchingProperty.id] = {
+            propertyId: matchingProperty.id,
+            operatorId: this.operatorId!,
+            syncStatus: Status.FAILED,
+            mappingStatus: this.propertyStatuses[matchingProperty.id]?.mappingStatus || Status.PENDING,
+            lastUpdated: new Date()
+          };
+        }
        }
      });
   }
+
   
 
   mapListing(bookingId: string, airbnbId: string, vrboId: string, pricelabsId: string) {
-  
     if (!this.operatorId) {
       console.error('Field required: operator_id');
       this.toastr.error('Operator ID is required');
@@ -593,6 +689,30 @@ export class ListingComponent implements OnInit, OnDestroy {
     if (!bookingId && !airbnbId && !vrboId && !pricelabsId) {
       this.toastr.error('No valid ID found. Please ensure the listing has at least one platform ID (Booking.com, Airbnb, VRBO, or Pricelabs)');
       return;
+    }
+
+    // Find the property ID to update status
+    const matchingProperty = this.allListingList.find((listing: any) => {
+      const listingBookingId = listing?.urls?.Booking?.id || listing?.property_urls?.Booking?.id;
+      const listingAirbnbId = listing?.urls?.Airbnb?.id || listing?.property_urls?.Airbnb?.id;
+      const listingVrboId = listing?.urls?.VRBO?.id || listing?.property_urls?.VRBO?.id;
+      const listingPricelabId = listing?.urls?.Pricelab?.id || listing?.property_urls?.Pricelab?.id;
+      
+      return (bookingId && listingBookingId === bookingId) ||
+             (airbnbId && listingAirbnbId === airbnbId) ||
+             (vrboId && listingVrboId === vrboId) ||
+             (pricelabsId && listingPricelabId === pricelabsId);
+    });
+
+    if (matchingProperty && matchingProperty.id) {
+      // Update status to in_progress
+      this.propertyStatuses[matchingProperty.id] = {
+        propertyId: matchingProperty.id,
+        operatorId: this.operatorId,
+        syncStatus: this.propertyStatuses[matchingProperty.id]?.syncStatus || Status.PENDING,
+        mappingStatus: Status.IN_PROGRESS,
+        lastUpdated: new Date()
+      };
     }
 
     console.log('Mapping listing with:', {
@@ -606,21 +726,32 @@ export class ListingComponent implements OnInit, OnDestroy {
     this.mapService.mapListing(this.operatorId, bookingId, airbnbId, vrboId, pricelabsId).subscribe({
       next: (res: any) => {
         console.log('Map response:', res);
-        this.toastr.success(res.message);
-        // Fetch updated mapping status after successful mapping
-        this.fetchUpdatedMappingStatus(bookingId, airbnbId, vrboId, pricelabsId);
+        this.toastr.success(res.message || 'Mapping started successfully');
+        // Start polling for status updates
+        this.fetchUpdatedPropertyStatus(bookingId, airbnbId, vrboId, pricelabsId);
       },
       error: (error: any) => {
         console.error('Map error:', error);
         this.toastr.error('Failed to map listing: ' + (error.error?.detail || error.message || 'Unknown error'));
+        
+        // Update status to failed
+        if (matchingProperty && matchingProperty.id) {
+          this.propertyStatuses[matchingProperty.id] = {
+            propertyId: matchingProperty.id,
+            operatorId: this.operatorId!,
+            syncStatus: this.propertyStatuses[matchingProperty.id]?.syncStatus || Status.PENDING,
+            mappingStatus: Status.FAILED,
+            lastUpdated: new Date()
+          };
+        }
       }
     });
   }
 
   ngOnDestroy() {
     // Stop all polling intervals when component is destroyed
-    Object.keys(this.statusPollingIntervals).forEach(listingId => {
-      this.stopStatusPolling(listingId);
+    Object.keys(this.statusPollingIntervals).forEach(propertyId => {
+      this.stopStatusPolling(propertyId);
     });
   }
 

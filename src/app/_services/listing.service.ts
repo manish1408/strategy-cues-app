@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "../../environments/environment";
 import { LocalStorageService } from "./local-storage.service";
 import { Observable } from "rxjs";
+import { PropertyStatus } from "../_models/status.model";
 
 @Injectable({
   providedIn: "root",
@@ -51,8 +52,11 @@ export class ListingService {
     return this.http.post<any>(`${this._url}/scrape-listing`, payload);
   }
 
-
-
- 
+  fetchStatus(propertyId: string, operatorId: string): Observable<any> {
+    const params = new HttpParams()
+      .set('operator_id', operatorId);
+    
+    return this.http.get<any>(`${this._url}/get-property/${propertyId}`, { params });
+  }
 
 }   
