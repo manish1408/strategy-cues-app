@@ -123,15 +123,21 @@
                   <img src="assets/icons/edit.svg" class="cursor-pointer me-2" data-bs-toggle="modal" data-bs-target="#addListing" (click)="editListing(listing)" />
                   <img src="assets/icons/trash.svg" (click)="deleteListing(listing?.id)" class="cursor-pointer me-2" />
                   <img src="assets/icons/sync.svg" style="width: 28px; height: 28px;"  class="cursor-pointer me-2" (click)="syncListing(listing?.urls?.Booking?.id || listing?.property_urls?.Booking?.id, listing?.urls?.Airbnb?.id || listing?.property_urls?.Airbnb?.id, listing?.urls?.VRBO?.id || listing?.property_urls?.VRBO?.id, listing?.urls?.Pricelab?.id || listing?.property_urls?.Pricelab?.id)" class="cursor-pointer" />
-                  <img 
+                  <!-- <img 
                     src="assets/icons/data-mapping.svg" 
                     style="width: 20px; height: 20px; margin-left: 10px;" 
                     [class.cursor-pointer]="!isMappingDisabled(listing?.id)"
                     [class.cursor-not-allowed]="isMappingDisabled(listing?.id)"
                     [style.opacity]="isMappingDisabled(listing?.id) ? '0.5' : '1'"
                     [title]="getCombinedStatusText(listing?.id)"
-                    (click)="!isMappingDisabled(listing?.id) && mapListing(listing?.urls?.Booking?.id || listing?.property_urls?.Booking?.id, listing?.urls?.Airbnb?.id || listing?.property_urls?.Airbnb?.id, listing?.urls?.VRBO?.id || listing?.property_urls?.VRBO?.id, listing?.urls?.Pricelab?.id || listing?.property_urls?.Pricelab?.id)" />
-                </td>
+                    (click)="!isMappingDisabled(listing?.id) && mapListing(listing?.urls?.Booking?.id || listing?.property_urls?.Booking?.id, listing?.urls?.Airbnb?.id || listing?.property_urls?.Airbnb?.id, listing?.urls?.VRBO?.id || listing?.property_urls?.VRBO?.id, listing?.urls?.Pricelab?.id || listing?.property_urls?.Pricelab?.id)" /> -->
+                    <img 
+                    src="assets/icons/data-mapping.svg" class="cursor-pointer"
+                    style="width: 20px; height: 20px; margin-left: 10px;" 
+                    [title]="getCombinedStatusText(listing?.id)"
+                    (click)="mapListing(listing?.urls?.Booking?.id || listing?.property_urls?.Booking?.id, listing?.urls?.Airbnb?.id || listing?.property_urls?.Airbnb?.id, listing?.urls?.VRBO?.id || listing?.property_urls?.VRBO?.id, listing?.urls?.Pricelab?.id || listing?.property_urls?.Pricelab?.id)" />
+               
+                  </td>
               </tr>
             </tbody>
           </table>
