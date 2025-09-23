@@ -9,6 +9,7 @@ import { EventService } from "../_services/event.service";
 import { ListingService } from "../_services/listing.service";
 import { ActivatedRoute } from "@angular/router";
 import { MapService } from "../_services/map.service";
+import { PricelabsService } from "../_services/pricelabs.service";
 
 @Component({
   selector: "app-listing",
@@ -23,6 +24,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   itemsPerPage: number = 20;
   totalPages: number = 0;
   apiLoading: boolean = false;
+  syncPriceLabsLoading: boolean = false;
   loading: boolean = false;
   allListingList: any[] = [];
   isEdit: boolean = false;
@@ -46,7 +48,8 @@ export class ListingComponent implements OnInit, OnDestroy {
     private eventService: EventService<any>,
     private listingService: ListingService,
     private route: ActivatedRoute,
-    private mapService: MapService
+    private mapService: MapService,
+    private pricelabsService: PricelabsService
   ) {
     this.addListingForm = this.fb.group({
       bookingCom: this.fb.group({
@@ -622,10 +625,20 @@ export class ListingComponent implements OnInit, OnDestroy {
   }
 
   syncPriceLabsListings() {
-    // this.listingService.syncPriceLabsListings(this.operatorId).subscribe({
-    //   next: (res: any) => {
-    //     console.log('PriceLabs listings:', res);
-    //   }
-    // });
+    this.syncPriceLabsLoading = true;
+    this.pricelabsService.syncPricelabs(this.operatorId || '').subscribe({
+      next: (res: any) => { 
+        console.log('PriceLabs listings:', res);
+        this.toastr.success("PriceLabs data synced successfully");
+        this.syncPriceLabsLoading = false;
+        // Refresh listings to show updated data
+        this.loadListings();
+      },
+      error: (error: any) => {
+        console.error('PriceLabs error:', error);
+        this.toastr.error("Failed to sync PriceLabs data");
+        this.syncPriceLabsLoading = false;
+      }
+    });
   }
 }
