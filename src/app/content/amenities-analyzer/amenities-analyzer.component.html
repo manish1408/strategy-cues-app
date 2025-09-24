@@ -1,0 +1,52 @@
+<div class="amenities-analyzer">
+  <!-- Ranking & Conversion Boosters Section -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Ranking & Conversion Boosters</h2>
+      <p class="section-description">
+        Our research has found these amenities to boost visibility & conversions for most listings. 
+        Green shows amenities you have & red shows missing amenities.
+      </p>
+    </div>
+    
+    <div class="amenities-grid">
+      <div class="amenity-chip" 
+           [ngClass]="{'has-amenity': item.has, 'missing-amenity': !item.has}"
+           *ngFor="let item of rankingBoosters">
+        <div class="amenity-icon">
+          <i class="fas" [ngClass]="item.has ? 'fa-check' : 'fa-times'"></i>
+        </div>
+        <span class="amenity-name">{{ item.name }}</span>
+        <div class="info-icon">
+          <i class="fas fa-info-circle"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Ranking Amenities Section -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Top Ranking Amenities in Your Area (from popular to rare)</h2>
+      <p class="section-description">
+        You're missing these high-ranking items based on your local area.
+      </p>
+      <div class="tip-box">
+        <strong>Tip:</strong> Items listed below are not always found in the Airbnb Amenities section of the Airbnb editor. 
+        Some items are found under 'House Rules', 'Check-in method' or 'Accessibility'.
+      </div>
+    </div>
+    
+    <div class="amenities-grid">
+      <div class="amenity-chip missing-amenity" *ngFor="let amenity of topRankingAmenities">
+        <div class="amenity-icon">
+          <i class="fas fa-times"></i>
+        </div>
+        <span class="amenity-name">{{ amenity }}</span>
+        <div class="info-icon">
+          <i class="fas fa-info-circle"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
