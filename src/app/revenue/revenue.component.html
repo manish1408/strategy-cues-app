@@ -327,7 +327,7 @@
               <tr *ngFor="let property of getPaginatedData()">
                 <td *ngIf="columnVisibility.propertyName">
                   <div class="property-name">
-                    <div class="property-title">{{ property.Listing_Name }}</div>
+                    <div class="property-title" [title]="property.Listing_Name">{{ property.Listing_Name }}</div>
                     <div class="property-links">
                       <a *ngIf="property.Property_URLs?.Airbnb?.url" [href]="property.Property_URLs?.Airbnb?.url" target="_blank" class="platform-link airbnb" title="View on Airbnb">
                         <i class="fab fa-airbnb"></i>

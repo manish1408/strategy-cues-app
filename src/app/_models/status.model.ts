@@ -1,8 +1,10 @@
 export enum Status {
   PENDING = "pending",
-  IN_PROGRESS = "in_progress", 
-  COMPLETED = "completed",
-  FAILED = "failed"
+  SCRAPING_IN_PROGRESS = "scraping_in_progress",
+  ERROR_IN_SCRAPING = "error_in_scraping",
+  MAPPING_IN_PROGRESS = "mapping_in_progress",
+  ERROR_IN_MAPPING = "error_in_mapping",
+  COMPLETED = "completed"
 }
 
 export interface StatusInfo {
@@ -14,7 +16,7 @@ export interface StatusInfo {
 export interface PropertyStatus {
   propertyId: string;
   operatorId: string;
-  syncStatus: Status;
-  mappingStatus: Status;
+  syncStatus: string;
+  mappingStatus: string;
   lastUpdated?: Date;
 }
