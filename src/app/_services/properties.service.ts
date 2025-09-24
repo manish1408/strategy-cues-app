@@ -103,6 +103,24 @@ export interface PropertyData {
       Last_Review_Date: string;
     };
   };
+  Property_URLs?: {
+    Booking?: {
+      url: string;
+      id: string;
+    };
+    Airbnb?: {
+      url: string;
+      id: string;
+    };
+    VRBO?: {
+      url: string;
+      id: string;
+    };
+    Pricelab?: {
+      url: string;
+      id: string;
+    };
+  };
 }
 
 @Injectable({

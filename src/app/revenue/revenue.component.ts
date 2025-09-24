@@ -206,7 +206,7 @@ export class RevenueComponent implements OnInit {
 
   // Pagination properties
   currentPage: number = 1;
-  itemsPerPage: number = 10;
+  itemsPerPage: number = 20;
   totalPages: number = 1;
 
   // Sorting properties
@@ -219,19 +219,20 @@ export class RevenueComponent implements OnInit {
   // Column visibility properties
   columnVisibility = {
     propertyName: true,
-    occupancy: true,
+    occupancyTM: true,
+    occupancyNM: true,
     adr: true,
     revpar: true,
-    mpi: false,
+    mpi: true,
     reviews: true,
-    cxlPolicy: false,
-    adultChildConfig: false,
-    pickupOcc: false,
-    minRateThreshold: false,
-    stlyVarOcc: false,
-    stlyVarRevPAR: false,
-    lastReviewScore: false,
-    lastRevenueDate: false,
+    cxlPolicy: true,
+    adultChildConfig: true,
+    pickupOcc: true,
+    minRateThreshold: true,
+    stlyVarOcc: true,
+    stlyVarRevPAR: true,
+    lastReviewScore: true,
+    lastReviewDate: true,
     actions: true,
   };
 
@@ -2278,19 +2279,20 @@ export class RevenueComponent implements OnInit {
   resetToDefaultColumns(): void {
     this.columnVisibility = {
       propertyName: true,
-      occupancy: true,
+      occupancyTM: true,
+      occupancyNM: true,
       adr: true,
       revpar: true,
-      mpi: false,
+      mpi: true,
       reviews: true,
-      cxlPolicy: false,
-      adultChildConfig: false,
-      pickupOcc: false,
-      minRateThreshold: false,
-      stlyVarOcc: false,
-      stlyVarRevPAR: false,
-      lastReviewScore: false,
-      lastRevenueDate: false,
+      cxlPolicy: true,
+      adultChildConfig: true,
+      pickupOcc: true,
+      minRateThreshold: true,
+      stlyVarOcc: true,
+      stlyVarRevPAR: true,
+      lastReviewScore: true,
+      lastReviewDate: true,
       actions: true,
     };
   }
