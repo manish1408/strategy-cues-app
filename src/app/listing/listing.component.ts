@@ -103,11 +103,29 @@ export class ListingComponent implements OnInit, OnDestroy {
         if (Array.isArray(res.data.properties)) {
           this.allListingList = res.data.properties.map((listing: any) => ({
             id: listing.id,
-            property_urls: listing.urls,
+            property_urls: {
+              Booking: {
+                id: listing.urls.BookingId,
+                url: listing.urls.BookingUrl
+              },
+              Airbnb: {
+                id: listing.urls.AirbnbId,
+                url: listing.urls.AirbnbUrl
+              },
+              VRBO: {
+                id: listing.urls.VRBOId,
+                url: listing.urls.VRBOUrl
+              },
+              Pricelab: {
+                id: listing.urls.PricelabsId,
+                url: listing.urls.PricelabsUrl
+              }
+            },
+            urls: listing.urls // Keep original structure for status access
           }));
           
-          // Fetch property statuses for each listing
-          this.fetchPropertyStatuses();
+          // Initialize property statuses from the main API response
+          this.initializePropertyStatuses(res.data.properties);
         }
 
         // Update pagination data
@@ -124,42 +142,25 @@ export class ListingComponent implements OnInit, OnDestroy {
   );
   }
 
-  fetchPropertyStatuses() {
-    // Fetch sync and mapping status for each property
-    this.allListingList.forEach((listing: any) => {
-      if (listing.id && this.operatorId) {
-        this.propertiesService.getProperty(listing.id, this.operatorId).subscribe({
-          next: (res: any) => {
-            if (res.success && res.data) {
-              const apiStatus = res.data.status || 'pending';
-              
-              this.propertyStatuses[listing.id] = {
-                propertyId: listing.id,
-                operatorId: this.operatorId!,
-                syncStatus: apiStatus,
-                mappingStatus: apiStatus,
-                lastUpdated: new Date()
-              };
-              
-              // Resume polling if any operation is in progress
-              if (apiStatus === 'scraping_in_progress' || apiStatus === 'mapping_in_progress') {
-                console.log(`Resuming polling for property ${listing.id} - operation in progress`);
-                this.startStatusPolling(listing.id);
-              }
-            }
-          },
-          error: (error: any) => {
-            console.error(`Error fetching status for property ${listing.id}:`, error);
-            // Default to pending if error
-            this.propertyStatuses[listing.id] = {
-              propertyId: listing.id,
-              operatorId: this.operatorId!,
-              syncStatus: Status.PENDING,
-              mappingStatus: Status.PENDING,
-              lastUpdated: new Date()
-            };
-          }
-        });
+  initializePropertyStatuses(properties: any[]) {
+    // Initialize property statuses from the main API response
+    properties.forEach((property: any) => {
+      if (property.id && this.operatorId) {
+        const apiStatus = property.urls?.status || 'pending';
+        
+        this.propertyStatuses[property.id] = {
+          propertyId: property.id,
+          operatorId: this.operatorId!,
+          syncStatus: apiStatus,
+          mappingStatus: apiStatus,
+          lastUpdated: new Date()
+        };
+        
+        // Start polling if any operation is in progress
+        if (apiStatus === 'scraping_in_progress' || apiStatus === 'mapping_in_progress') {
+          console.log(`Starting polling for property ${property.id} - operation in progress`);
+          this.startStatusPolling(property.id);
+        }
       }
     });
   }
@@ -288,7 +289,16 @@ export class ListingComponent implements OnInit, OnDestroy {
     });
 
     if (matchingProperty && matchingProperty.id) {
-      // Start polling for this property to check status every 30 seconds
+      // Update status to scraping_in_progress and start polling
+      this.propertyStatuses[matchingProperty.id] = {
+        propertyId: matchingProperty.id,
+        operatorId: this.operatorId!,
+        syncStatus: 'scraping_in_progress',
+        mappingStatus: 'scraping_in_progress',
+        lastUpdated: new Date()
+      };
+      
+      // Start polling for this property to check status every 5 seconds
       this.startStatusPolling(matchingProperty.id);
     }
   }
@@ -578,7 +588,7 @@ export class ListingComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Find the property ID to update status
+    // Find the property ID for error handling
     const matchingProperty = this.allListingList.find((listing: any) => {
       const listingBookingId = listing?.urls?.Booking?.id || listing?.property_urls?.Booking?.id;
       const listingAirbnbId = listing?.urls?.Airbnb?.id || listing?.property_urls?.Airbnb?.id;
@@ -590,17 +600,6 @@ export class ListingComponent implements OnInit, OnDestroy {
              (vrboId && listingVrboId === vrboId) ||
              (pricelabsId && listingPricelabId === pricelabsId);
     });
-
-    if (matchingProperty && matchingProperty.id) {
-      // Update status to scraping_in_progress
-      this.propertyStatuses[matchingProperty.id] = {
-        propertyId: matchingProperty.id,
-        operatorId: this.operatorId,
-        syncStatus: 'scraping_in_progress',
-        mappingStatus: 'scraping_in_progress',
-        lastUpdated: new Date()
-      };
-    }
 
     console.log('Scraping and mapping listing with:', {
       operatorId: this.operatorId,
