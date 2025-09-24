@@ -1,0 +1,54 @@
+<div class="my-reviews">
+  <!-- My Reviews Analysis -->
+  <div class="reviews-section">
+    <h2>What guests didn't like about my properties:</h2>
+    <div class="cards-grid">
+      <div class="review-card dislike-card" *ngFor="let item of myDislikes">
+        <h3>{{ item.title }}</h3>
+        <p>{{ item.description }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="reviews-section">
+    <h2>What guests wish they had from my properties:</h2>
+    <div class="cards-grid">
+      <div class="review-card wish-card" *ngFor="let item of myWishes">
+        <h3>{{ item.title }}</h3>
+        <p>{{ item.description }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="reviews-section">
+    <h2>What guests love about my properties:</h2>
+    <div class="cards-grid">
+      <div class="review-card love-card" *ngFor="let item of myLoves">
+        <h3>{{ item.title }}</h3>
+        <p>{{ item.description }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="reviews-section">
+    <h2>Based on my reviews, what can I improve?</h2>
+    <div class="cards-grid">
+      <div class="review-card action-card" *ngFor="let item of myActionableChanges">
+        <div class="action-icon">
+          <i class="fas fa-plus"></i>
+        </div>
+        <div class="action-content">
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Help Button -->
+  <div class="help-button">
+    <button class="help-btn" title="Help">
+      <i class="fas fa-question"></i>
+    </button>
+  </div>
+</div>

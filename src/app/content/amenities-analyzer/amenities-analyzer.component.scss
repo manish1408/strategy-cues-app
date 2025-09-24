@@ -1,0 +1,326 @@
+// Reuse existing variables from content.component.scss
+$primary-color: #0066cc;
+$secondary-color: #6c757d;
+$success-color: #28a745;
+$danger-color: #dc3545;
+$warning-color: #ffc107;
+$info-color: #17a2b8;
+$light-color: #f8f9fa;
+$dark-color: #343a40;
+$border-radius: 12px;
+$box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+$transition: all 0.3s ease;
+
+.amenities-analyzer {
+  padding: 2rem 0;
+  min-height: 100vh;
+  background: #f8f9fa;
+
+  .section {
+    background: white;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+    margin-bottom: 2rem;
+    padding: 2rem;
+
+    .section-header {
+      margin-bottom: 2rem;
+
+      h2 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: var(--brand-black);
+        margin: 0 0 1rem 0;
+      }
+
+      h3 {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: var(--brand-black);
+        margin: 1.5rem 0 1rem 0;
+      }
+
+      .section-description {
+        font-size: 1rem;
+        color: #666;
+        margin: 0 0 1rem 0;
+        line-height: 1.5;
+      }
+
+      .tip-box {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-top: 1rem;
+
+        strong {
+          color: #856404;
+        }
+
+        color: #856404;
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+    }
+
+    .amenities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+
+      .amenity-chip {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        border-radius: 25px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: $transition;
+        cursor: pointer;
+        position: relative;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .amenity-icon {
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-right: 0.75rem;
+          flex-shrink: 0;
+
+          i {
+            font-size: 0.8rem;
+          }
+        }
+
+        .amenity-name {
+          flex: 1;
+          color: var(--brand-black);
+        }
+
+        .info-icon {
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-left: 0.5rem;
+          flex-shrink: 0;
+          cursor: pointer;
+
+          i {
+            font-size: 0.7rem;
+          }
+        }
+
+        &.has-amenity {
+          background: #d4edda;
+          border: 1px solid #c3e6cb;
+
+          .amenity-icon {
+            background: $success-color;
+            color: white;
+          }
+
+          .info-icon {
+            background: rgba(40, 167, 69, 0.1);
+            color: $success-color;
+
+            &:hover {
+              background: rgba(40, 167, 69, 0.2);
+            }
+          }
+        }
+
+        &.missing-amenity {
+          background: #f8d7da;
+          border: 1px solid #f5c6cb;
+
+          .amenity-icon {
+            background: $danger-color;
+            color: white;
+          }
+
+          .info-icon {
+            background: rgba(220, 53, 69, 0.1);
+            color: $danger-color;
+
+            &:hover {
+              background: rgba(220, 53, 69, 0.2);
+            }
+          }
+        }
+      }
+    }
+
+    .notification-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem;
+      background: #f8f9fa;
+      border-radius: 8px;
+      margin-top: 1rem;
+
+      .notification-text {
+        font-size: 1rem;
+        color: var(--brand-black);
+        font-weight: 500;
+      }
+
+      .toggle-switch {
+        position: relative;
+        width: 50px;
+        height: 24px;
+        background: #ccc;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: $transition;
+
+        &.active {
+          background: $success-color;
+        }
+
+        .toggle-slider {
+          position: absolute;
+          top: 2px;
+          left: 2px;
+          width: 20px;
+          height: 20px;
+          background: white;
+          border-radius: 50%;
+          transition: $transition;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        &.active .toggle-slider {
+          transform: translateX(26px);
+        }
+
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .amenities-analyzer {
+    padding: 1rem 0;
+
+    .section {
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+
+      .section-header {
+        h2 {
+          font-size: 1.5rem;
+        }
+
+        h3 {
+          font-size: 1.2rem;
+        }
+
+        .section-description {
+          font-size: 0.95rem;
+        }
+
+        .tip-box {
+          padding: 0.75rem;
+          font-size: 0.9rem;
+        }
+      }
+
+      .amenities-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 0.75rem;
+
+        .amenity-chip {
+          padding: 0.5rem 0.75rem;
+          font-size: 0.85rem;
+
+          .amenity-icon {
+            width: 18px;
+            height: 18px;
+            margin-right: 0.5rem;
+
+            i {
+              font-size: 0.7rem;
+            }
+          }
+
+          .info-icon {
+            width: 18px;
+            height: 18px;
+            margin-left: 0.25rem;
+
+            i {
+              font-size: 0.6rem;
+            }
+          }
+        }
+      }
+
+      .notification-item {
+        padding: 0.75rem;
+
+        .notification-text {
+          font-size: 0.95rem;
+        }
+
+        .toggle-switch {
+          width: 45px;
+          height: 22px;
+
+          .toggle-slider {
+            width: 18px;
+            height: 18px;
+          }
+
+          &.active .toggle-slider {
+            transform: translateX(23px);
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .amenities-analyzer {
+    .section {
+      padding: 1rem;
+
+      .amenities-grid {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+
+        .amenity-chip {
+          padding: 0.5rem;
+          font-size: 0.8rem;
+        }
+      }
+
+      .notification-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+
+        .toggle-switch {
+          align-self: flex-end;
+        }
+      }
+    }
+  }
+}
