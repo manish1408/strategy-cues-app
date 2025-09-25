@@ -2,7 +2,6 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { AuthGuard } from "./_guards/auth.guard";
 import { OperatorGuard } from "./_guards/operator.guard";
-// import { OnboardGuard } from "./_guards/onboard.guard";
 
 const routes: Routes = [
   { path: '', redirectTo: 'signin', pathMatch: 'full' },

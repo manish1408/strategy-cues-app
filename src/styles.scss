@@ -35,12 +35,39 @@
   src: url("/assets/fonts/beatrice/BeatriceTRIAL-Bold-BF64829e8fd7dc6.ttf");
   font-weight: 700;
 }
-html {
-  font-size: 14px !important;
+/* Typography Scale - Consistent font sizes throughout the project */
+:root {
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-base: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 30px;
+  --font-size-4xl: 36px;
+  
+  /* Font weights */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* Line heights */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
 }
+
+html {
+  font-size: var(--font-size-base) !important;
+}
+
 body {
   font-family: beatrice, sans-serif;
-  font-size: 14px !important;
+  font-size: var(--font-size-base) !important; /* 14px */
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
 }
 
 .generic-form-box .input-field input.is-invalid {
@@ -113,15 +140,15 @@ input:checked + .slider:before {
 }
 
 .title {
-  font-size: 24px;
-  font-weight: 700;
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
   color: var(--brand-black);
-  line-height: 28px;
+  line-height: var(--line-height-tight);
   margin: 0;
 }
 .desc {
-  font-size: 14px;
-  font-weight: 400;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
   color: #1e1e1e;
   margin: 0;
 }
@@ -129,8 +156,8 @@ input:checked + .slider:before {
 .nav-pills .nav-link {
   border-radius: 32px;
   color: var(--brand-black);
-  font-size: 14px;
-  font-weight: 500;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
   cursor: pointer;
   background-color: #ffffff;
 }
@@ -150,16 +177,16 @@ input:checked + .slider:before {
 .dropdown-item {
   padding: 12px;
   color: #344054;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
   cursor: pointer;
 }
 .dropdown-item li {
   color: var(--Dark-Navy, #12234c);
-  font-size: 14px;
+  font-size: var(--font-size-base);
   font-style: normal;
-  font-weight: 400;
-  line-height: 20px;
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
 }
 
 
@@ -208,13 +235,13 @@ input:checked + .slider:before {
   text-align: left;
   vertical-align: middle;
   color: var(--brand-black);
-  font-size: 14px;
-  font-weight: 500;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
 }
 .table th {
   color: #5c6972;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
   border-top: none;
 }
 .table td:first-child,
@@ -354,10 +381,10 @@ input:checked + .slider {
   height: 90vh;
 }
 .form-control {
-  font-size: 14px;
+  font-size: var(--font-size-base);
 }
 .btn-sm, .input-sm {
-  font-size: 12px !important;
+  font-size: var(--font-size-sm) !important;
   height: 28px;
 }
 .auth-vdo-img {
@@ -559,12 +586,10 @@ input:checked + .slider {
     align-items: center;
     justify-content: space-between;
     span {
-      // font-family: Roboto;
-      font-size: 14px;
-      font-weight: 400 !important;
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-normal) !important;
       text-align: left;
-      font-weight: 400;
-      line-height: 1.42857143;
+      line-height: var(--line-height-normal);
     }
     img {
       width: 20px;
@@ -593,8 +618,8 @@ input:checked + .slider {
     border: 1px solid var(--primary);
     background: var(--primary);
     color: var(--white-color);
-    font-size: 14px;
-    font-weight: 600;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
     position: relative;
     z-index: 5;
     overflow: hidden;
@@ -609,15 +634,13 @@ input:checked + .slider {
   border-radius: 30px;
   background: var(--secondary);
   color: var(--primary);
-  font-size: 14px;
-  font-weight: 600;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
   position: relative;
   z-index: 5;
   overflow: hidden;
-  // text-transform: capitalize;
   text-align: center;
   white-space: nowrap;
-    text-align: center;
 }
 
 .button-style-2.disabled, .button-style-2:disabled, fieldset:disabled .button-style-2 {
@@ -636,8 +659,8 @@ input:checked + .slider {
 
 .divider-text {
   color: var(--brand-black);
-  font-size: 14px;
-  font-weight: 400;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
   margin: 0;
 }
 
@@ -715,15 +738,15 @@ input:checked + .slider {
 }
 
 label {
-font-size: 12px;
-margin-bottom: 0px !important;
+  font-size: var(--font-size-sm);
+  margin-bottom: 0px !important;
 }
 
 
 .custom-tooltip .tooltip-inner {
   background-color: var(--brand-yellow-light); 
   color: var(--brand-black); 
-  font-size: 12px;
+  font-size: var(--font-size-sm);
 }
 
 /* Optional: Change tooltip arrow color */

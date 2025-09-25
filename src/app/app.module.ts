@@ -1,4 +1,4 @@
-import { NgModule, importProvidersFrom } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -11,9 +11,7 @@ import { JwtInterceptor } from './_guards/jwt.interceptor';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { EventService } from './_services/event.service';
 import { SharedModule } from './shared/sharedModule';
-// import { SharedPipesModule } from './_pipes/shared.pipe';
 import { ReactiveFormsModule } from '@angular/forms';
-// import 'event-source-polyfill';
 import { SelectDropDownModule } from "ngx-select-dropdown";
 import { GALLERY_CONFIG, GalleryConfig } from 'ng-gallery';
 @NgModule({
@@ -31,7 +29,6 @@ import { GALLERY_CONFIG, GalleryConfig } from 'ng-gallery';
     MonacoEditorModule.forRoot(),
     ReactiveFormsModule,    
     SharedModule,
-    // SharedPipesModule,
     SelectDropDownModule
   ],
   providers: [

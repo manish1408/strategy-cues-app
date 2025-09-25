@@ -76,11 +76,9 @@ export class ListingComponent implements OnInit, OnDestroy {
       this.route.queryParams.subscribe(params => {
         if (params['operatorId']) {
           this.operatorId = params['operatorId'];
-          console.log('Revenue ngOnInit - operatorId from query params:', this.operatorId);
         } else {
           // Fallback to localStorage
           this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
-          console.log('Revenue ngOnInit - operatorId from localStorage:', this.operatorId);
         }
         
         // Load properties with the operatorId
@@ -158,7 +156,6 @@ export class ListingComponent implements OnInit, OnDestroy {
         
         // Start polling if any operation is in progress
         if (apiStatus === 'scraping_in_progress' || apiStatus === 'mapping_in_progress') {
-          console.log(`Starting polling for property ${property.id} - operation in progress`);
           this.startStatusPolling(property.id);
         }
       }
@@ -220,14 +217,12 @@ export class ListingComponent implements OnInit, OnDestroy {
       this.checkPropertyStatus(propertyId);
     }, 5000);
     
-    console.log(`Started status polling for property ${propertyId}`);
   }
 
   stopStatusPolling(propertyId: string) {
     if (this.statusPollingIntervals[propertyId]) {
       clearInterval(this.statusPollingIntervals[propertyId]);
       delete this.statusPollingIntervals[propertyId];
-      console.log(`Stopped status polling for property ${propertyId}`);
     }
   }
 
@@ -254,7 +249,6 @@ export class ListingComponent implements OnInit, OnDestroy {
               if (newStatus === 'completed' && oldStatus.syncStatus !== 'completed') {
                 this.toastr.success(`Scraping and mapping completed successfully for Property ID: ${propertyId}!`);
                 this.stopStatusPolling(propertyId);
-                console.log(`Stopped polling for property ${propertyId} - operation completed`);
               } else if (newStatus === 'error_in_scraping' && oldStatus.syncStatus !== 'error_in_scraping') {
                 this.toastr.error(`Scraping failed for Property ID: ${propertyId}. Please try again.`);
                 this.stopStatusPolling(propertyId); // Stop polling when failed
@@ -264,7 +258,6 @@ export class ListingComponent implements OnInit, OnDestroy {
               }
             }
             
-            console.log(`Status polled for property ${propertyId}: ${oldStatus?.syncStatus} → ${newStatus}`);
           }
         },
         error: (error: any) => {
@@ -304,8 +297,6 @@ export class ListingComponent implements OnInit, OnDestroy {
   }
 
   editListing(listing: any) {
-    console.log('editListing called with:', listing);
-    console.log('listing.property_urls:', listing.property_urls);
     
     if (listing && listing.id) {
       this.isEdit = true;
@@ -330,11 +321,9 @@ export class ListingComponent implements OnInit, OnDestroy {
         },
       };
       
-      console.log('Form data to patch:', formData);
       
       this.addListingForm.patchValue(formData);
       
-      console.log('Form after patch:', this.addListingForm.value);
     } else {
       console.error('Invalid listing object:', listing);
     }
@@ -343,8 +332,6 @@ export class ListingComponent implements OnInit, OnDestroy {
  
 
   deleteListing(listingId: string) {
-    console.log('Attempting to delete listing with ID:', listingId);
-    console.log('Operator ID:', this.operatorId);
   
     this.toastService.showConfirm(
       'Are you sure?',
@@ -357,7 +344,6 @@ export class ListingComponent implements OnInit, OnDestroy {
           .pipe(finalize(() => (this.loading = false)))
           .subscribe({
             next: (res: any) => {
-              console.log('Delete response:', res);
               this.toastr.success("Listing deleted successfully");
               this.loadListings();
             },
@@ -368,7 +354,6 @@ export class ListingComponent implements OnInit, OnDestroy {
           });
       },
       () => {
-        console.log('Delete action cancelled');
       }
     );
   }
@@ -381,9 +366,6 @@ export class ListingComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    console.log('isEdit:', this.isEdit);
-    console.log('editingListingId:', this.editingListingId);
-    console.log('operatorId:', this.operatorId);
   
     this.addListingForm.markAllAsTouched();
     const { bookingCom, airbnb, vrbo, pricelab } = this.addListingForm.value;
@@ -422,7 +404,6 @@ export class ListingComponent implements OnInit, OnDestroy {
       };
   
       if (this.isEdit && this.editingListingId) {
-        console.log('Updating Listing');
         this.propertiesService
           .updateProperty(formData, this.editingListingId)
           .pipe(finalize(() => (this.loading = false)))
@@ -439,7 +420,6 @@ export class ListingComponent implements OnInit, OnDestroy {
             },
           });
       } else {
-        console.log('Creating Listing');
         this.propertiesService
           .createProperty(formData)
           .pipe(finalize(() => (this.loading = false)))
@@ -534,47 +514,6 @@ export class ListingComponent implements OnInit, OnDestroy {
     return this.allListingList.slice(startIndex, endIndex);
   }
 
-  // Extract property name from URL
-  extractPropertyName(url: string, platform: string): string {
-    if (!url) return '-';
-    
-    try {
-      let propertyName = '';
-      
-      switch (platform.toLowerCase()) {
-        case 'booking':
-          // Extract from booking.com URLs like: /hotel/ae/breathtaking-views-ocean-heights.html
-          const bookingMatch = url.match(/\/hotel\/[^\/]+\/([^\/]+)\.html/);
-          if (bookingMatch) {
-            propertyName = bookingMatch[1].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-          }
-          break;
-          
-        case 'airbnb':
-          // For Airbnb, we'll use a generic name since the URL structure doesn't contain property names
-          propertyName = 'Airbnb Listing';
-          break;
-          
-        case 'vrbo':
-          // For VRBO, we'll use a generic name
-          propertyName = 'VRBO Listing';
-          break;
-          
-        case 'pricelab':
-          // For Pricelab, we'll use a generic name
-          propertyName = 'Pricelab Listing';
-          break;
-          
-        default:
-          propertyName = platform;
-      }
-      
-      return propertyName || platform;
-    } catch (error) {
-      console.error('Error extracting property name:', error);
-      return platform;
-    }
-  }
 
   scrapeAndMapListing(bookingId: string, airbnbId: string, vrboId: string, pricelabsId: string) {
     if (!this.operatorId) {
@@ -601,25 +540,16 @@ export class ListingComponent implements OnInit, OnDestroy {
              (pricelabsId && listingPricelabId === pricelabsId);
     });
 
-    console.log('Scraping and mapping listing with:', {
-      operatorId: this.operatorId,
-      bookingId: bookingId,
-      airbnbId: airbnbId,
-      vrboId: vrboId,
-      pricelabsId: pricelabsId
-    });
-
-     this.listingService.scrapeAndMapListing(this.operatorId, bookingId, airbnbId, vrboId, pricelabsId).subscribe({
-       next: (res: any) => {
-         console.log('Scrape and map response:', res);
-         this.toastr.success(res.data.message || 'Scraping and mapping started successfully');
-         // Start polling for status updates
-         this.fetchUpdatedPropertyStatus(bookingId, airbnbId, vrboId, pricelabsId);
-       },
-       error: (error: any) => {
-         console.error('Scrape and map error:', error);
-         this.toastr.error(`Failed to scrape and map listing for Property ID: ${matchingProperty?.id || 'Unknown'}. ${error.error?.detail || error.message || 'Unknown error'}`);
-         
+    this.listingService.scrapeAndMapListing(this.operatorId, bookingId, airbnbId, vrboId, pricelabsId).subscribe({
+      next: (res: any) => {
+        this.toastr.success(res.data.message || 'Scraping and mapping started successfully');
+        // Start polling for status updates
+        this.fetchUpdatedPropertyStatus(bookingId, airbnbId, vrboId, pricelabsId);
+      },
+      error: (error: any) => {
+        console.error('Scrape and map error:', error);
+        this.toastr.error(`Failed to scrape and map listing for Property ID: ${matchingProperty?.id || 'Unknown'}. ${error.error?.detail || error.message || 'Unknown error'}`);
+        
         // Update status to scraping error
         if (matchingProperty && matchingProperty.id) {
           this.propertyStatuses[matchingProperty.id] = {
@@ -630,8 +560,8 @@ export class ListingComponent implements OnInit, OnDestroy {
             lastUpdated: new Date()
           };
         }
-       }
-     });
+      }
+    });
   }
 
   
@@ -648,7 +578,6 @@ export class ListingComponent implements OnInit, OnDestroy {
     this.syncPriceLabsLoading = true;
     this.pricelabsService.syncPricelabs(this.operatorId || '').subscribe({
       next: (res: any) => { 
-        console.log('PriceLabs listings:', res);
         this.toastr.success("PriceLabs data synced successfully");
         this.syncPriceLabsLoading = false;
         // Refresh listings to show updated data
@@ -666,34 +595,23 @@ export class ListingComponent implements OnInit, OnDestroy {
   getListingPropertyImage(listing: any): string {
     // Try to get image from any available platform
     // Priority: Booking.com -> Airbnb -> VRBO -> Pricelab -> Placeholder
-    if (listing?.photos?.booking && listing.photos.booking.length > 0) {
-      return listing.photos.booking[0].url;
+    if (listing?.urls?.Photos?.booking && listing.urls.Photos.booking.length > 0) {
+      return listing.urls.Photos.booking[0].url;
     }
-    if (listing?.photos?.airbnb && listing.photos.airbnb.length > 0) {
-      return listing.photos.airbnb[0].url;
+    if (listing?.urls?.Photos?.airbnb && listing.urls.Photos.airbnb.length > 0) {
+      return listing.urls.Photos.airbnb[0].url;
     }
-    if (listing?.photos?.vrbo && listing.photos.vrbo.length > 0) {
-      return listing.photos.vrbo[0].url;
+    if (listing?.urls?.Photos?.vrbo && listing.urls.Photos.vrbo.length > 0) {
+      return listing.urls.Photos.vrbo[0].url;
     }
     // Fallback to placeholder
     return 'assets/images/placeholder.jpg';
   }
 
   getListingPropertyName(listing: any): string {
-    // Try to extract property name from URLs or use a default
-    const bookingUrl = listing?.urls?.BookingUrl;
-    const airbnbUrl = listing?.urls?.AirbnbUrl;
-    const vrboUrl = listing?.urls?.VRBOUrl;
-    
-    // Try to extract name from any available URL
-    if (bookingUrl) {
-      return this.extractPropertyName(bookingUrl, 'booking');
-    }
-    if (airbnbUrl) {
-      return this.extractPropertyName(airbnbUrl, 'airbnb');
-    }
-    if (vrboUrl) {
-      return this.extractPropertyName(vrboUrl, 'vrbo');
+    // Use the PropertyName directly from the API response
+    if (listing?.urls?.PropertyName) {
+      return listing.urls.PropertyName;
     }
     
     // Fallback to listing ID or default name

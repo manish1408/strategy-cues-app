@@ -39,6 +39,12 @@ export class PhotoDetailsComponent implements OnInit {
   private isThumbnailMouseDown: boolean = false;
   private currentThumbnailSwipeType: 'main' | 'competitor' | null = null;
 
+  // Caption modal properties
+  showCaptionModal: boolean = false;
+  selectedPhotoId: string = '';
+  captionText: string = '';
+  isSubmittingCaption: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -624,5 +630,40 @@ export class PhotoDetailsComponent implements OnInit {
         }
       }
     }
+  }
+
+  // Caption modal methods
+  openCaptionModal(photoId: string): void {
+    this.selectedPhotoId = photoId;
+    this.captionText = '';
+    this.showCaptionModal = true;
+  }
+
+  closeCaptionModal(): void {
+    this.showCaptionModal = false;
+    this.selectedPhotoId = '';
+    this.captionText = '';
+    this.isSubmittingCaption = false;
+  }
+
+  submitCaption(): void {
+    if (!this.captionText.trim()) {
+      return;
+    }
+
+    this.isSubmittingCaption = true;
+
+    // Simulate API call - replace with actual API call
+    setTimeout(() => {
+      // Here you would typically make an API call to save the caption
+      console.log(`Adding caption for photo ${this.selectedPhotoId}:`, this.captionText);
+      
+      // Simulate success
+      this.isSubmittingCaption = false;
+      this.closeCaptionModal();
+      
+      // You might want to show a success message here
+      // this.showSuccessMessage('Caption added successfully!');
+    }, 2000);
   }
 }

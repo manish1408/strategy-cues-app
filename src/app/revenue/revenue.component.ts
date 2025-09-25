@@ -318,11 +318,9 @@ export class RevenueComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       if (params['operatorId']) {
         this.operatorId = params['operatorId'];
-        console.log('Revenue ngOnInit - operatorId from query params:', this.operatorId);
       } else {
         // Fallback to localStorage
         this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
-        console.log('Revenue ngOnInit - operatorId from localStorage:', this.operatorId);
       }
       
       // Load properties with the operatorId
@@ -333,7 +331,6 @@ export class RevenueComponent implements OnInit {
   }
 
   loadProperties(): void {
-    console.log('loadProperties called - setting loading to true');
     this.loading = true;
     this.error = null;
 
@@ -342,12 +339,6 @@ export class RevenueComponent implements OnInit {
   }
 
   loadCurrentPageData(): void {
-    console.log('loadCurrentPageData called with:', {
-      currentPage: this.currentPage,
-      itemsPerPage: this.itemsPerPage,
-      operatorId: this.operatorId,
-      sortOrder: this.sortOrder
-    });
     
     // Load current page data for display
     this.propertiesService
@@ -359,18 +350,11 @@ export class RevenueComponent implements OnInit {
       )
       .subscribe({
         next: (response: any) => {
-          console.log('Revenue API Response:', response);
-          console.log('Response success:', response.success);
-          console.log('Response data:', response.data);
           
           if (response.success) {
             this.propertyData =
               PropertiesService.extractPropertiesArray(response);
-            console.log('Extracted Property Data:', this.propertyData);
-            console.log('Property Data Length:', this.propertyData.length);
-            
             this.filteredData = [...this.propertyData];
-            console.log('Filtered Data Length:', this.filteredData.length);
 
             // If this is the first load, also load additional data for range calculations
             if (this.currentPage === 1 && this.allPropertyData.length === 0) {
@@ -383,7 +367,6 @@ export class RevenueComponent implements OnInit {
             console.error('API Response not successful:', response);
             this.error = response.message || "Failed to load properties data";
           }
-          console.log('Setting loading to false');
           this.loading = false;
         },
         error: (error: any) => {
@@ -392,11 +375,9 @@ export class RevenueComponent implements OnInit {
           this.loading = false;
         },
         complete: () => {
-          console.log('Revenue API call completed');
           // Ensure loading is set to false even if there's an issue
           setTimeout(() => {
             if (this.loading) {
-              console.log('Forcing loading to false after timeout');
               this.loading = false;
             }
           }, 1000);
@@ -672,6 +653,11 @@ export class RevenueComponent implements OnInit {
     this.loadProperties();
   }
 
+  // Perform search action
+  performSearch(): void {
+    this.filterData();
+  }
+
   // Filter data based on search term, area, room type, and all range filters
   filterData(): void {
     // Use complete dataset for filtering if available, otherwise use current page data
@@ -830,55 +816,55 @@ export class RevenueComponent implements OnInit {
       // Platform filters - Booking.com (three-state filtering)
       const matchesBookingGenius = this.matchesThreeStateFilter(
         this.bookingGeniusFilter,
-        item.BookingCom.Genius
+        item.BookingCom?.Genius
       );
       const matchesBookingMobile = this.matchesThreeStateFilter(
         this.bookingMobileFilter,
-        item.BookingCom.Mobile
+        item.BookingCom?.Mobile
       );
       const matchesBookingPref = this.matchesThreeStateFilter(
         this.bookingPrefFilter,
-        item.BookingCom.Pref
+        item.BookingCom?.Pref
       );
       const matchesBookingWeekly = this.matchesThreeStateFilter(
         this.bookingWeeklyFilter,
-        item.BookingCom.Weekly
+        item.BookingCom?.Weekly
       );
       const matchesBookingMonthly = this.matchesThreeStateFilter(
         this.bookingMonthlyFilter,
-        item.BookingCom.Monthly
+        item.BookingCom?.Monthly
       );
       const matchesBookingLMDisc = this.matchesThreeStateFilter(
         this.bookingLMDiscFilter,
-        item.BookingCom.LM_Disc
+        item.BookingCom?.LM_Disc
       );
 
       // Platform filters - Airbnb (three-state filtering)
       const matchesAirbnbWeekly = this.matchesThreeStateFilter(
         this.airbnbWeeklyFilter,
-        item.Airbnb.Weekly
+        item.Airbnb?.Weekly
       );
       const matchesAirbnbMonthly = this.matchesThreeStateFilter(
         this.airbnbMonthlyFilter,
-        item.Airbnb.Monthly
+        item.Airbnb?.Monthly
       );
       const matchesAirbnbMember = this.matchesThreeStateFilter(
         this.airbnbMemberFilter,
-        item.Airbnb.Member
+        item.Airbnb?.Member
       );
       const matchesAirbnbLMDisc = this.matchesThreeStateFilter(
         this.airbnbLMDiscFilter,
-        item.Airbnb.LM_Disc
+        item.Airbnb?.LM_Disc
       );
 
       // Platform filters - VRBO (three-state filtering)
       const matchesVrboWeekly = this.matchesThreeStateFilter(
         this.vrboWeeklyFilter,
-        item.VRBO.Weekly
+        item.VRBO?.Weekly
       );
       const matchesVrboMonthly = this.matchesThreeStateFilter(
         this.vrboMonthlyFilter,
-        item.VRBO.Monthly
+        item.VRBO?.Monthly
       );
 
       // Reviews filters - Booking.com
@@ -1172,7 +1158,6 @@ export class RevenueComponent implements OnInit {
   }
 
   compareProperty(item: PropertyData): void {
-    console.log("Compare property:", item);
     // Implement property comparison logic
     // This could open a comparison modal, navigate to a comparison page, etc.
   }
@@ -1228,7 +1213,7 @@ export class RevenueComponent implements OnInit {
   // Helper method for three-state filtering
   private matchesThreeStateFilter(
     filterValue: string,
-    itemValue: string
+    itemValue: string | null | undefined
   ): boolean {
     if (filterValue === "not-present") {
       return true; // No filter applied, show all
@@ -2643,13 +2628,7 @@ export class RevenueComponent implements OnInit {
 
   // Debug method to check property URLs
   debugPropertyUrls(property: PropertyData): void {
-    console.log('Property URLs Debug:', {
-      listingName: property.Listing_Name,
-      airbnbUrl: property.AirbnbUrl,
-      bookingUrl: property.BookingUrl,
-      vrboUrl: property.VRBOUrl,
-      pricelabsUrl: property.PricelabsUrl
-    });
+    // Method for debugging property URLs if needed
   }
 
   // Get color based on occupancy percentage

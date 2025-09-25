@@ -35,7 +35,7 @@
           <table class="table table-hover">
             <thead>
               <tr>
-                <th scope="col">#</th>
+              
                 <th scope="col" style="width: 300px;">Property</th>
                 <th scope="col">Booking ID</th>
                 <th scope="col">Airbnb ID</th>
@@ -47,7 +47,7 @@
             </thead>
             <tbody>
               <tr *ngFor="let listing of allListingList; let i = index">
-                <th scope="row">{{ (currentPage - 1) * itemsPerPage + i + 1 }}</th>
+               
                 <td class="property-cell">
                   <div class="property-info">
                     <div class="property-image">
@@ -144,7 +144,7 @@
                     [class.cursor-not-allowed]="isScrapeAndMapDisabled(listing?.id)"
                     [style.opacity]="isScrapeAndMapDisabled(listing?.id) ? '0.5' : '1'"
                     [title]="'Scrape and Map: ' + getCombinedStatusText(listing?.id)"
-                    (click)="!isScrapeAndMapDisabled(listing?.id) && scrapeAndMapListing(listing?.urls?.Booking?.id || listing?.property_urls?.Booking?.id, listing?.urls?.Airbnb?.id || listing?.property_urls?.Airbnb?.id, listing?.urls?.VRBO?.id || listing?.property_urls?.VRBO?.id, listing?.urls?.Pricelab?.id || listing?.property_urls?.Pricelab?.id)" />
+                    (click)="!isScrapeAndMapDisabled(listing?.id) && scrapeAndMapListing(listing?.urls?.BookingId, listing?.urls?.AirbnbId, listing?.urls?.VRBOId, listing?.urls?.PricelabsId)" />
                
                   </td>
               </tr>

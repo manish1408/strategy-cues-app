@@ -5,11 +5,12 @@
       <div class="row align-items-end mb-2">
         <div class="col-md-6">
           <div class="input-group">
-            <span class="input-group-text"><i class="fas fa-search"></i></span>
+           
             <input type="text" class="form-control" placeholder="Search by name, area, or room type..."
-              [(ngModel)]="searchTerm" (input)="filterData()">
+            [(ngModel)]="searchTerm" (keyup.enter)="performSearch()" >
+              <span (click)="performSearch()" class="cursor-pointer input-group-text"><i class="fas fa-search"></i></span>
           </div>
-        </div>
+        </div> 
         <div class="col-md-3">
           <div class="d-flex gap-2">
             <button class="btn btn-outline-secondary" (click)="openFilterModal()" [class.btn-primary]="hasActiveFilters()"
@@ -430,7 +431,7 @@
                     <div class="review-item no-reviews" *ngIf="safeParseNumber(property.Reviews.Booking.Rev_Score) === 0"
                       title="Booking.com: No reviews">
                       <i class="fas fa-bed text-muted"></i>
-                      <span class="no-reviews-text" style="font-size: 11px;">No Reviews</span>
+                      <span class="no-reviews-text" style="font-size: var(--font-size-xs);">No Reviews</span>
                     </div>
 
                     <!-- Airbnb Reviews -->
@@ -447,7 +448,7 @@
                     <div class="review-item no-reviews" *ngIf="safeParseNumber(property.Reviews.Airbnb.Rev_Score) === 0"
                       title="Airbnb: No reviews">
                       <i class="fab fa-airbnb text-muted"></i>
-                      <span class="no-reviews-text" style="font-size: 11px;">No Reviews</span>
+                      <span class="no-reviews-text" style="font-size: var(--font-size-xs);">No Reviews</span>
                     </div>
 
                     <!-- VRBO Reviews -->
@@ -464,7 +465,7 @@
                     <div class="review-item no-reviews" *ngIf="safeParseNumber(property.Reviews.VRBO.Rev_Score) === 0"
                       title="VRBO: No reviews">
                       <i class="fas fa-home text-muted"></i>
-                      <span class="no-reviews-text" style="font-size: 11px;">No Reviews</span>
+                      <span class="no-reviews-text" style="font-size: var(--font-size-xs);">No Reviews</span>
                     </div>
                   </div>
                 </td>
@@ -476,7 +477,7 @@
                     </div>
                     <div class="policy-item no-policy" *ngIf="!property.CXL_Policy?.Booking || property.CXL_Policy.Booking.trim() === ''">
                       <i class="fas fa-bed text-muted"></i>
-                      <span class="no-policy-text" style="font-size: 11px;">No policy</span>
+                      <span class="no-policy-text" style="font-size: var(--font-size-xs);">No policy</span>
                     </div>
                     <div class="policy-item" *ngIf="property.CXL_Policy?.Airbnb && property.CXL_Policy.Airbnb.trim() !== ''">
                       <i class="fab fa-airbnb text-danger"></i>
@@ -484,7 +485,7 @@
                     </div>
                     <div class="policy-item no-policy" *ngIf="!property.CXL_Policy?.Airbnb || property.CXL_Policy.Airbnb.trim() === ''">
                       <i class="fab fa-airbnb text-muted"></i>
-                      <span class="no-policy-text" style="font-size: 11px;">No policy</span>
+                      <span class="no-policy-text" style="font-size: var(--font-size-xs);">No policy</span>
                     </div>
                     <div class="policy-item" *ngIf="property.CXL_Policy?.VRBO && property.CXL_Policy.VRBO.trim() !== ''">
                       <i class="fas fa-home text-warning"></i>
@@ -492,7 +493,7 @@
                     </div>
                     <div class="policy-item no-policy" *ngIf="!property.CXL_Policy?.VRBO || property.CXL_Policy.VRBO.trim() === ''">
                       <i class="fas fa-home text-muted"></i>
-                      <span class="no-policy-text" style="font-size: 10px;">No policy</span>
+                      <span class="no-policy-text" style="font-size: var(--font-size-xs);">No policy</span>
                     </div>
                   </div>
                 </td>
@@ -511,7 +512,7 @@
                       <span class="config-text">{{ property.Adult_Child_Config.VRBO }}</span>
                     </div>
                     <div class="no-config-text" *ngIf="!property.Adult_Child_Config">
-                      <small class="text-muted" style="font-size: 11px;">No configuration</small>
+                      <small class="text-muted" style="font-size: var(--font-size-xs);">No configuration</small>
                     </div>
                   </div>
                 </td>
@@ -573,7 +574,7 @@
                     <div class="review-item no-review-score" *ngIf="property.Reviews.Booking.Last_Rev_Score === null"
                       title="Booking.com: No review score">
                       <i class="fas fa-bed text-muted"></i>
-                      <span class="no-review-score-text" style="font-size: 10px;">No review score</span>
+                      <span class="no-review-score-text" style="font-size: var(--font-size-xs);">No review score</span>
                     </div>
 
                     <!-- Airbnb Last Review Score -->
@@ -585,7 +586,7 @@
                     <div class="review-item no-review-score" *ngIf="property.Reviews.Airbnb.Last_Rev_Score === null"
                       title="Airbnb: No review score">
                       <i class="fab fa-airbnb text-muted"></i>
-                      <span class="no-review-score-text" style="font-size: 10px;">No review score</span>
+                      <span class="no-review-score-text" style="font-size: var(--font-size-xs);">No review score</span>
                     </div>
 
                     <!-- VRBO Last Review Score -->
@@ -597,7 +598,7 @@
                     <div class="review-item no-review-score" *ngIf="property.Reviews.VRBO.Last_Rev_Score === null"
                       title="VRBO: No review score">
                       <i class="fas fa-home text-muted"></i>
-                      <span class="no-review-score-text" style="font-size: 10px;">No review score</span>
+                      <span class="no-review-score-text" style="font-size: var(--font-size-xs);">No review score</span>
                     </div>
                   </div>
                 </td>
@@ -616,7 +617,7 @@
                       <span class="date-value">{{ property.Reviews.VRBO.Last_Review_Date }}</span>
                     </div>
                     <div *ngIf="!hasLastReviewDate(property)" class="no-data-text">
-                      <small class="text-muted" style="font-size: 11px;">No Last Review Date</small>
+                      <small class="text-muted" style="font-size: var(--font-size-xs);">No Last Review Date</small>
                     </div>
                   </div>
                 </td>
