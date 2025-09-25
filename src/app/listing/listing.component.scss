@@ -11,6 +11,116 @@ $border-radius: 12px;
 $box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 $transition: all 0.3s ease;
 
+/* Property Cell Styles */
+.property-cell {
+  .property-info {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+  
+  .property-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  
+  .property-details {
+    .property-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--brand-black);
+      margin: 0 0 0.25rem 0;
+      line-height: 1.3;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-wrap: break-word;
+      max-height: 2.6em; /* 2 lines * 1.3 line-height */
+    }
+    
+    .property-links {
+      display: flex;
+      gap: 0.5rem;
+      
+      .platform-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        border: 1px solid transparent;
+
+        &.airbnb {
+          background-color: #ff5a5f;
+          color: white;
+
+          &:hover:not(.disabled) {
+            background-color: #e00007;
+            transform: translateY(-1px);
+          }
+        }
+
+        &.booking {
+          background-color: #003580;
+          color: white;
+
+          &:hover:not(.disabled) {
+            background-color: #00204d;
+            transform: translateY(-1px);
+          }
+        }
+
+        &.vrbo {
+          background-color: #00a699;
+          color: white;
+
+          &:hover:not(.disabled) {
+            background-color: #008a7e;
+            transform: translateY(-1px);
+          }
+        }
+
+        &.pricelab {
+          background-color: #6c757d;
+          color: white;
+
+          &:hover:not(.disabled) {
+            background-color: #5a6268;
+            transform: translateY(-1px);
+          }
+        }
+
+        &.disabled {
+          opacity: 0.4;
+          cursor: not-allowed;
+          background-color: #e9ecef !important;
+          color: #6c757d !important;
+          border-color: #dee2e6;
+        }
+
+        i {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
 .listing-dashboard {
   min-height: 100vh;
 

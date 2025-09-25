@@ -36,89 +36,79 @@
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Booking.com ID</th>
-                <th scope="col">Booking.com</th>
+                <th scope="col" style="width: 300px;">Property</th>
+                <th scope="col">Booking ID</th>
                 <th scope="col">Airbnb ID</th>
-                <th scope="col">Airbnb</th>
                 <th scope="col">VRBO ID</th>
-                <th scope="col">VRBO</th>
-                <th scope="col">PricelabID</th>
-                <th scope="col">Pricelab</th>
+                <th scope="col">Pricelab ID</th>
                 <th scope="col">Status</th>
-                <th scope="col" >Action</th>
+                <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let listing of allListingList; let i = index">
                 <th scope="row">{{ (currentPage - 1) * itemsPerPage + i + 1 }}</th>
-                <td>{{ listing?.urls?.Booking?.id || listing?.property_urls?.Booking?.id }}</td>
-                <td>
-                  <div *ngIf="listing?.urls?.Booking?.url || listing?.property_urls?.Booking?.url" 
-                       class="d-flex align-items-center gap-1">
-                    <!-- <span class="text-dark">{{ extractPropertyName(listing?.urls?.Booking?.url || listing?.property_urls?.Booking?.url, 'booking') }}</span> -->
-                    <!-- <a [href]="listing?.urls?.Booking?.url || listing?.property_urls?.Booking?.url" 
-                       target="_blank" 
-                       rel="noopener noreferrer"
-                       class="btn btn-outline-primary btn-sm">
-                       <i class="fas fa-eye"></i>
-                    </a> -->
-                    <a [href]="listing?.urls?.Booking?.url || listing?.property_urls?.Booking?.url" target="_blank" class="platform-link booking">
-                      <i class="fas fa-bed"></i>
-                    </a>
+                <td class="property-cell">
+                  <div class="property-info">
+                    <div class="property-image">
+                      <img [src]="getListingPropertyImage(listing)" [alt]="getListingPropertyName(listing)" 
+                           (error)="onListingImageError($event)" class="property-thumbnail">
+                    </div>
+                    <div class="property-details">
+                      <h4 [title]="getListingPropertyName(listing)" [attr.aria-label]="getListingPropertyName(listing)" class="property-title">{{ getListingPropertyName(listing) }}</h4>
+                      <div class="property-links">
+                        <!-- Booking.com Link -->
+                        <a *ngIf="listing?.urls?.BookingUrl" 
+                           [href]="listing?.urls?.BookingUrl" 
+                           target="_blank" class="platform-link booking" title="View on Booking.com">
+                          <i class="fas fa-bed"></i>
+                        </a>
+                        <span *ngIf="!listing?.urls?.BookingUrl" 
+                              class="platform-link booking disabled" title="No Booking.com URL available">
+                          <i class="fas fa-bed"></i>
+                        </span>
+                        
+                        <!-- Airbnb Link -->
+                        <a *ngIf="listing?.urls?.AirbnbUrl" 
+                           [href]="listing?.urls?.AirbnbUrl" 
+                           target="_blank" class="platform-link airbnb" title="View on Airbnb">
+                          <i class="fab fa-airbnb"></i>
+                        </a>
+                        <span *ngIf="!listing?.urls?.AirbnbUrl" 
+                              class="platform-link airbnb disabled" title="No Airbnb URL available">
+                          <i class="fab fa-airbnb"></i>
+                        </span>
+                        
+                        <!-- VRBO Link -->
+                        <a *ngIf="listing?.urls?.VRBOUrl" 
+                           [href]="listing?.urls?.VRBOUrl" 
+                           target="_blank" class="platform-link vrbo" title="View on VRBO">
+                          <i class="fas fa-home"></i>
+                        </a>
+                        <span *ngIf="!listing?.urls?.VRBOUrl" 
+                              class="platform-link vrbo disabled" title="No VRBO URL available">
+                          <i class="fas fa-home"></i>
+                        </span>
+                        
+                        <!-- Pricelab Link -->
+                        <a *ngIf="listing?.urls?.PricelabsUrl" 
+                           [href]="listing?.urls?.PricelabsUrl" 
+                           target="_blank" class="platform-link pricelab" title="View on Pricelab">
+                          <i class="fas fa-chart-bar"></i>
+                        </a>
+                        <span *ngIf="!listing?.urls?.PricelabsUrl" 
+                              class="platform-link pricelab disabled" title="No Pricelab URL available">
+                          <i class="fas fa-chart-bar"></i>
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <span *ngIf="!listing?.urls?.Booking?.url && !listing?.property_urls?.Booking?.url" class="text-muted">-</span>
                 </td>
-                <td>{{ listing?.urls?.Airbnb?.id || listing?.property_urls?.Airbnb?.id }}</td>
-                <td>
-                  <div *ngIf="listing?.urls?.Airbnb?.url || listing?.property_urls?.Airbnb?.url" 
-                       class="d-flex align-items-center gap-1">
-                    <!-- <span class="text-dark">{{ extractPropertyName(listing?.urls?.Airbnb?.url || listing?.property_urls?.Airbnb?.url, 'airbnb') }}</span> -->
-                    <!-- <a [href]="listing?.urls?.Airbnb?.url || listing?.property_urls?.Airbnb?.url" 
-                       target="_blank" 
-                       rel="noopener noreferrer"
-                       class="btn btn-outline-primary btn-sm">
-                      <i class="fas fa-eye"></i>
-                    </a> -->
-                    <a [href]="listing?.urls?.Airbnb?.url || listing?.property_urls?.Airbnb?.url" target="_blank" class="platform-link airbnb">
-                      <i class="fab fa-airbnb"></i>
-                    </a>
-                  </div>
-                  <span *ngIf="!listing?.urls?.Airbnb?.url && !listing?.property_urls?.Airbnb?.url" class="text-muted">-</span>
-                </td>
-                <td>{{ listing?.urls?.VRBO?.id || listing?.property_urls?.VRBO?.id }}</td>
-                <td>
-                  <div *ngIf="listing?.urls?.VRBO?.url || listing?.property_urls?.VRBO?.url" 
-                       class="d-flex align-items-center gap-1">
-                    <!-- <span class="text-dark">{{ extractPropertyName(listing?.urls?.VRBO?.url || listing?.property_urls?.VRBO?.url, 'vrbo') }}</span> -->
-                    <!-- <a [href]="listing?.urls?.VRBO?.url || listing?.property_urls?.VRBO?.url" 
-                       target="_blank" 
-                       rel="noopener noreferrer"
-                       class="btn btn-outline-primary btn-sm">
-                      <i class="fas fa-eye"></i>
-                    </a> -->
-                    <a [href]="listing?.urls?.VRBO?.url || listing?.property_urls?.VRBO?.url" target="_blank" class="platform-link vrbo">
-                      <i class="fas fa-home"></i>
-                    </a>
-                  </div>
-                  <span *ngIf="!listing?.urls?.VRBO?.url && !listing?.property_urls?.VRBO?.url" class="text-muted">-</span>
-                </td>
-                <td>{{ listing?.urls?.Pricelab?.id || listing?.property_urls?.Pricelab?.id }}</td>
-                <td>
-                  <div *ngIf="listing?.urls?.Pricelab?.url || listing?.property_urls?.Pricelab?.url" 
-                       class="d-flex align-items-center gap-1">
-                    <!-- <span class="text-dark">{{ extractPropertyName(listing?.urls?.Pricelab?.url || listing?.property_urls?.Pricelab?.url, 'pricelab') }}</span> -->
-                    <!-- <a [href]="listing?.urls?.Pricelab?.url || listing?.property_urls?.Pricelab?.url" 
-                       target="_blank" 
-                       rel="noopener noreferrer"
-                       class="btn btn-outline-primary btn-sm">
-                      <i class="fas fa-eye"></i>
-                    </a> -->
-                    <a [href]="listing?.urls?.Pricelab?.url || listing?.property_urls?.Pricelab?.url" target="_blank" class="platform-link pricelab">
-                      <i class="fas fa-chart-bar"></i> 
-                    </a>
-                  </div>
-                  <span *ngIf="!listing?.urls?.Pricelab?.url && !listing?.property_urls?.Pricelab?.url" class="text-muted">-</span>
-                </td>
+                <td>{{ listing?.urls?.BookingId || listing?._id || 'N/A' }}</td>
+                <td>{{ listing?.urls?.AirbnbId || listing?._id || 'N/A' }}</td>
+                <td>{{ listing?.urls?.VRBOId || listing?._id || 'N/A' }}</td>
+                <td>{{ listing?.urls?.PricelabsId || listing?._id || 'N/A' }}</td>
+                
                 <!-- Combined Status Column -->
                 <td>
                   <!-- Loading State -->

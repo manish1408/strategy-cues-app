@@ -661,4 +661,47 @@ export class ListingComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  // Property image and name methods for listing
+  getListingPropertyImage(listing: any): string {
+    // Try to get image from any available platform
+    // Priority: Booking.com -> Airbnb -> VRBO -> Pricelab -> Placeholder
+    if (listing?.photos?.booking && listing.photos.booking.length > 0) {
+      return listing.photos.booking[0].url;
+    }
+    if (listing?.photos?.airbnb && listing.photos.airbnb.length > 0) {
+      return listing.photos.airbnb[0].url;
+    }
+    if (listing?.photos?.vrbo && listing.photos.vrbo.length > 0) {
+      return listing.photos.vrbo[0].url;
+    }
+    // Fallback to placeholder
+    return 'assets/images/placeholder.jpg';
+  }
+
+  getListingPropertyName(listing: any): string {
+    // Try to extract property name from URLs or use a default
+    const bookingUrl = listing?.urls?.BookingUrl;
+    const airbnbUrl = listing?.urls?.AirbnbUrl;
+    const vrboUrl = listing?.urls?.VRBOUrl;
+    
+    // Try to extract name from any available URL
+    if (bookingUrl) {
+      return this.extractPropertyName(bookingUrl, 'booking');
+    }
+    if (airbnbUrl) {
+      return this.extractPropertyName(airbnbUrl, 'airbnb');
+    }
+    if (vrboUrl) {
+      return this.extractPropertyName(vrboUrl, 'vrbo');
+    }
+    
+    // Fallback to listing ID or default name
+    return `Property ${listing?.id || 'Unknown'}`;
+  }
+
+  onListingImageError(event: any): void {
+    // Set fallback image when the main image fails to load
+    event.target.src = 'assets/images/placeholder.jpg';
+  }
 }

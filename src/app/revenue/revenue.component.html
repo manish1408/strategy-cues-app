@@ -325,41 +325,66 @@
             </thead>
             <tbody>
               <tr *ngFor="let property of getPaginatedData()">
-                <td *ngIf="columnVisibility.propertyName">
-                  <div class="property-name">
-                    <div class="property-title" [title]="property.Listing_Name">{{ property.Listing_Name }}</div>
-                    <div class="property-links">
-                      <a *ngIf="property.Property_URLs?.Airbnb?.url" [href]="property.Property_URLs?.Airbnb?.url" target="_blank" class="platform-link airbnb" title="View on Airbnb">
-                        <i class="fab fa-airbnb"></i>
-                      </a>
-                      <a *ngIf="property.Property_URLs?.Booking?.url" [href]="property.Property_URLs?.Booking?.url" target="_blank" class="platform-link booking" title="View on Booking.com">
-                        <i class="fas fa-bed"></i>
-                      </a>
-                      <a *ngIf="property.Property_URLs?.VRBO?.url" [href]="property.Property_URLs?.VRBO?.url" target="_blank" class="platform-link vrbo" title="View on VRBO">
-                        <i class="fas fa-home"></i>
-                      </a>
-                      <a *ngIf="property.Property_URLs?.Pricelab?.url" [href]="property.Property_URLs?.Pricelab?.url" target="_blank" class="platform-link pricelab" title="View on Pricelab">
-                        <i class="fas fa-chart-line"></i>
-                      </a>
+                <td class="property-cell" *ngIf="columnVisibility.propertyName">
+                  <div class="property-info">
+                    <div class="property-image">
+                      <img [src]="getPropertyImage(property)" [alt]="property.Listing_Name" 
+                           (error)="onImageError($event)" class="property-thumbnail">
+                    </div>
+                    <div class="property-details">
+                      <h4 [title]="property.Listing_Name" [attr.aria-label]="property.Listing_Name">{{ property.Listing_Name }}</h4>
+                      <div class="property-links">
+                        <!-- Airbnb Link -->
+                        <a *ngIf="property.AirbnbUrl" [href]="property.AirbnbUrl" target="_blank" class="platform-link airbnb" title="View on Airbnb">
+                          <i class="fab fa-airbnb"></i>
+                        </a>
+                        <span *ngIf="!property.AirbnbUrl" class="platform-link airbnb disabled" title="No Airbnb URL available">
+                          <i class="fab fa-airbnb"></i>
+                        </span>
+                        
+                        <!-- Booking.com Link -->
+                        <a *ngIf="property.BookingUrl" [href]="property.BookingUrl" target="_blank" class="platform-link booking" title="View on Booking.com">
+                          <i class="fas fa-bed"></i>
+                        </a>
+                        <span *ngIf="!property.BookingUrl" class="platform-link booking disabled" title="No Booking.com URL available">
+                          <i class="fas fa-bed"></i>
+                        </span>
+                        
+                        <!-- VRBO Link -->
+                        <a *ngIf="property.VRBOUrl" [href]="property.VRBOUrl" target="_blank" class="platform-link vrbo" title="View on VRBO">
+                          <i class="fas fa-home"></i>
+                        </a>
+                        <span *ngIf="!property.VRBOUrl" class="platform-link vrbo disabled" title="No VRBO URL available">
+                          <i class="fas fa-home"></i>
+                        </span>
+                        
+                        <!-- Pricelab Link -->
+                        <a *ngIf="property.PricelabsUrl" [href]="property.PricelabsUrl" target="_blank" class="platform-link pricelab" title="View on Pricelab">
+                          <i class="fas fa-chart-line"></i>
+                        </a>
+                        <span *ngIf="!property.PricelabsUrl" class="platform-link pricelab disabled" title="No Pricelab URL available">
+                          <i class="fas fa-chart-line"></i>
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </td>
                 <td *ngIf="columnVisibility.occupancyTM">
                   <div class="occupancy-cell">
-                    <circle-progress [percent]="safeParseNumber(property.Occupancy.TM)" [radius]="18" [backgroundPadding]="-2" [backgroundStroke]="'#f8f9fa'" [backgroundStrokeWidth]="6"
+                    <circle-progress [percent]="safeParseNumber(property.Occupancy?.TM)" [radius]="18" [backgroundPadding]="-2" [backgroundStroke]="'#f8f9fa'" [backgroundStrokeWidth]="6"
                       [outerStrokeWidth]="6" [innerStrokeWidth]="0" [outerStrokeColor]="'#78C000'"
                       [innerStrokeColor]="'#C7E596'" [animation]="true" [animationDuration]="300" [showUnits]="false"
-                      [showSubtitle]="false" [title]="safeParseNumber(property.Occupancy.TM) + '%'"
+                      [showSubtitle]="false" [title]="safeParseNumber(property.Occupancy?.TM) + '%'"
                       [titleFontSize]="'8px'" [titleColor]="'#78C000'" [titleFontWeight]="'900'">
                     </circle-progress>
                   </div>
                 </td>
                 <td *ngIf="columnVisibility.occupancyNM">
                   <div class="occupancy-cell">
-                    <circle-progress [percent]="safeParseNumber(property.Occupancy.NM)" [radius]="18" [backgroundPadding]="-2" [backgroundStroke]="'#f8f9fa'" [backgroundStrokeWidth]="6"
+                    <circle-progress [percent]="safeParseNumber(property.Occupancy?.NM)" [radius]="18" [backgroundPadding]="-2" [backgroundStroke]="'#f8f9fa'" [backgroundStrokeWidth]="6"
                       [outerStrokeWidth]="6" [innerStrokeWidth]="0" [outerStrokeColor]="'#FF6347'" 
                       [innerStrokeColor]="'#FFC0CB'" [animation]="true" [animationDuration]="300" [showUnits]="false"
-                      [showSubtitle]="false" [title]="safeParseNumber(property.Occupancy.NM) + '%'"
+                      [showSubtitle]="false" [title]="safeParseNumber(property.Occupancy?.NM) + '%'"
                       [titleFontSize]="'8px'" [titleColor]="'#FF6347'" [titleFontWeight]="'900'">
                     </circle-progress>
                   </div>
@@ -367,9 +392,9 @@
                 <td *ngIf="columnVisibility.adr">
                   <div class="dual-value-cell">
                     <div class="value-pair">
-                      <span class="badge text-white me-1" style="background-color: #1e1e1e;">TM: ${{ property.ADR.TM || 'N/A'
+                      <span class="badge text-white me-1" style="background-color: #1e1e1e;">TM: ${{ property.ADR?.TM || 'N/A'
                         }}</span>
-                      <span class="badge text-white" style="background-color: #1e1e1e;">NM: ${{ property.ADR.NM || 'N/A'
+                      <span class="badge text-white" style="background-color: #1e1e1e;">NM: ${{ property.ADR?.NM || 'N/A'
                         }}</span>
                     </div>
                   </div>
@@ -377,9 +402,9 @@
                 <td *ngIf="columnVisibility.revpar">
                   <div class="dual-value-cell">
                     <div class="value-pair">
-                      <span class="badge text-white me-1" style="background-color: #1e1e1e;">TM: ${{ property.RevPAR.TM || 'N/A'
+                      <span class="badge text-white me-1" style="background-color: #1e1e1e;">TM: ${{ property.RevPAR?.TM || 'N/A'
                         }}</span>
-                      <span class="badge text-white" style="background-color: #1e1e1e;">NM: ${{ property.RevPAR.NM || 'N/A'
+                      <span class="badge text-white" style="background-color: #1e1e1e;">NM: ${{ property.RevPAR?.NM || 'N/A'
                         }}</span>
                     </div>
                   </div>
@@ -392,51 +417,51 @@
                 <td *ngIf="columnVisibility.reviews">
                   <div class="reviews-cell-compact">
                     <!-- Booking.com Reviews -->
-                    <div class="review-item clickable" *ngIf="safeParseNumber(property.Reviews.Booking.Rev_Score) > 0"
-                      title="Booking.com: {{ property.Reviews.Booking.Rev_Score }}/10 ({{ property.Reviews.Booking.Total_Rev }} reviews) - Click to visit property"
+                    <div class="review-item clickable" *ngIf="safeParseNumber(property.Reviews?.Booking?.Rev_Score) > 0"
+                      title="Booking.com: {{ property.Reviews?.Booking?.Rev_Score }}/10 ({{ property.Reviews?.Booking?.Total_Rev }} reviews) - Click to visit property"
                       (click)="openPropertyUrl(property, 'Booking')">
                       <i class="fas fa-bed text-primary"></i>
                       <div class="stars">
-                        <i *ngFor="let star of getStarArray(property.Reviews.Booking.Rev_Score, 10)" class="fas fa-star"
+                        <i *ngFor="let star of getStarArray(property.Reviews?.Booking?.Rev_Score || 0, 10)" class="fas fa-star"
                           [ngClass]="star.filled ? 'star-filled' : 'star-empty'"></i>
                       </div>
-                      <span class="rating-text">{{ property.Reviews.Booking.Rev_Score }}</span>
+                      <span class="rating-text">{{ property.Reviews?.Booking?.Rev_Score }}</span>
                     </div>
-                    <div class="review-item no-reviews" *ngIf="safeParseNumber(property.Reviews.Booking.Rev_Score) === 0"
+                    <div class="review-item no-reviews" *ngIf="safeParseNumber(property.Reviews?.Booking?.Rev_Score) === 0"
                       title="Booking.com: No reviews">
                       <i class="fas fa-bed text-muted"></i>
                       <span class="no-reviews-text" style="font-size: 11px;">No Reviews</span>
                     </div>
 
                     <!-- Airbnb Reviews -->
-                    <div class="review-item clickable" *ngIf="safeParseNumber(property.Reviews.Airbnb.Rev_Score) > 0"
-                      title="Airbnb: {{ property.Reviews.Airbnb.Rev_Score }}/5 ({{ property.Reviews.Airbnb.Total_Rev }} reviews) - Click to visit property"
+                    <div class="review-item clickable" *ngIf="safeParseNumber(property.Reviews?.Airbnb?.Rev_Score) > 0"
+                      title="Airbnb: {{ property.Reviews?.Airbnb?.Rev_Score }}/5 ({{ property.Reviews?.Airbnb?.Total_Rev }} reviews) - Click to visit property"
                       (click)="openPropertyUrl(property, 'Airbnb')">
                       <i class="fab fa-airbnb text-danger"></i>
                       <div class="stars">
-                        <i *ngFor="let star of getStarArray(property.Reviews.Airbnb.Rev_Score, 5)" class="fas fa-star"
+                        <i *ngFor="let star of getStarArray(property.Reviews?.Airbnb?.Rev_Score || 0, 5)" class="fas fa-star"
                           [ngClass]="star.filled ? 'star-filled' : 'star-empty'"></i>
                       </div>
-                      <span class="rating-text">{{ property.Reviews.Airbnb.Rev_Score }}</span>
+                      <span class="rating-text">{{ property.Reviews?.Airbnb?.Rev_Score }}</span>
                     </div>
-                    <div class="review-item no-reviews" *ngIf="safeParseNumber(property.Reviews.Airbnb.Rev_Score) === 0"
+                    <div class="review-item no-reviews" *ngIf="safeParseNumber(property.Reviews?.Airbnb?.Rev_Score) === 0"
                       title="Airbnb: No reviews">
                       <i class="fab fa-airbnb text-muted"></i>
                       <span class="no-reviews-text" style="font-size: 11px;">No Reviews</span>
                     </div>
 
                     <!-- VRBO Reviews -->
-                    <div class="review-item clickable" *ngIf="safeParseNumber(property.Reviews.VRBO.Rev_Score) > 0"
-                      title="VRBO: {{ property.Reviews.VRBO.Rev_Score }}/5 ({{ property.Reviews.VRBO.Total_Rev }} reviews) - Click to visit property"
+                    <div class="review-item clickable" *ngIf="safeParseNumber(property.Reviews?.VRBO?.Rev_Score) > 0"
+                      title="VRBO: {{ property.Reviews?.VRBO?.Rev_Score }}/5 ({{ property.Reviews?.VRBO?.Total_Rev }} reviews) - Click to visit property"
                       (click)="openPropertyUrl(property, 'VRBO')">
                       <i class="fas fa-home text-warning"></i>
                       <div class="stars">
-                        <i *ngFor="let star of getStarArray(property.Reviews.VRBO.Rev_Score, 5)" class="fas fa-star"
+                        <i *ngFor="let star of getStarArray(property.Reviews?.VRBO?.Rev_Score || 0, 5)" class="fas fa-star"
                           [ngClass]="star.filled ? 'star-filled' : 'star-empty'"></i>
                       </div>
-                      <span class="rating-text">{{ property.Reviews.VRBO.Rev_Score }}</span>
+                      <span class="rating-text">{{ property.Reviews?.VRBO?.Rev_Score }}</span>
                     </div>
-                    <div class="review-item no-reviews" *ngIf="safeParseNumber(property.Reviews.VRBO.Rev_Score) === 0"
+                    <div class="review-item no-reviews" *ngIf="safeParseNumber(property.Reviews?.VRBO?.Rev_Score) === 0"
                       title="VRBO: No reviews">
                       <i class="fas fa-home text-muted"></i>
                       <span class="no-reviews-text" style="font-size: 11px;">No Reviews</span>
@@ -445,27 +470,27 @@
                 </td>
                 <td *ngIf="columnVisibility.cxlPolicy">
                   <div class="cxl-policy-cell">
-                    <div class="policy-item" *ngIf="property.CXL_Policy.Booking && property.CXL_Policy.Booking.trim() !== ''">
+                    <div class="policy-item" *ngIf="property.CXL_Policy?.Booking && property.CXL_Policy.Booking.trim() !== ''">
                       <i class="fas fa-bed text-primary"></i>
                       <span class="policy-text">{{ property.CXL_Policy.Booking }}</span>
                     </div>
-                    <div class="policy-item no-policy" *ngIf="!property.CXL_Policy.Booking || property.CXL_Policy.Booking.trim() === ''">
+                    <div class="policy-item no-policy" *ngIf="!property.CXL_Policy?.Booking || property.CXL_Policy.Booking.trim() === ''">
                       <i class="fas fa-bed text-muted"></i>
                       <span class="no-policy-text" style="font-size: 11px;">No policy</span>
                     </div>
-                    <div class="policy-item" *ngIf="property.CXL_Policy.Airbnb && property.CXL_Policy.Airbnb.trim() !== ''">
+                    <div class="policy-item" *ngIf="property.CXL_Policy?.Airbnb && property.CXL_Policy.Airbnb.trim() !== ''">
                       <i class="fab fa-airbnb text-danger"></i>
                       <span class="policy-text">{{ property.CXL_Policy.Airbnb }}</span>
                     </div>
-                    <div class="policy-item no-policy" *ngIf="!property.CXL_Policy.Airbnb || property.CXL_Policy.Airbnb.trim() === ''">
+                    <div class="policy-item no-policy" *ngIf="!property.CXL_Policy?.Airbnb || property.CXL_Policy.Airbnb.trim() === ''">
                       <i class="fab fa-airbnb text-muted"></i>
                       <span class="no-policy-text" style="font-size: 11px;">No policy</span>
                     </div>
-                    <div class="policy-item" *ngIf="property.CXL_Policy.VRBO && property.CXL_Policy.VRBO.trim() !== ''">
+                    <div class="policy-item" *ngIf="property.CXL_Policy?.VRBO && property.CXL_Policy.VRBO.trim() !== ''">
                       <i class="fas fa-home text-warning"></i>
                       <span class="policy-text">{{ property.CXL_Policy.VRBO }}</span>
                     </div>
-                    <div class="policy-item no-policy" *ngIf="!property.CXL_Policy.VRBO || property.CXL_Policy.VRBO.trim() === ''">
+                    <div class="policy-item no-policy" *ngIf="!property.CXL_Policy?.VRBO || property.CXL_Policy.VRBO.trim() === ''">
                       <i class="fas fa-home text-muted"></i>
                       <span class="no-policy-text" style="font-size: 10px;">No policy</span>
                     </div>
@@ -473,17 +498,20 @@
                 </td>
                 <td *ngIf="columnVisibility.adultChildConfig">
                   <div class="adult-child-config-cell">
-                    <div class="config-item" *ngIf="property.Adult_Child_Config.Booking">
+                    <div class="config-item" *ngIf="property.Adult_Child_Config?.Booking">
                       <i class="fas fa-bed text-primary"></i>
                       <span class="config-text">{{ property.Adult_Child_Config.Booking }}</span>
                     </div>
-                    <div class="config-item" *ngIf="property.Adult_Child_Config.Airbnb">
+                    <div class="config-item" *ngIf="property.Adult_Child_Config?.Airbnb">
                       <i class="fab fa-airbnb text-danger"></i>
                       <span class="config-text">{{ property.Adult_Child_Config.Airbnb }}</span>
                     </div>
-                    <div class="config-item" *ngIf="property.Adult_Child_Config.VRBO">
+                    <div class="config-item" *ngIf="property.Adult_Child_Config?.VRBO">
                       <i class="fas fa-home text-warning"></i>
                       <span class="config-text">{{ property.Adult_Child_Config.VRBO }}</span>
+                    </div>
+                    <div class="no-config-text" *ngIf="!property.Adult_Child_Config">
+                      <small class="text-muted" style="font-size: 11px;">No configuration</small>
                     </div>
                   </div>
                 </td>
@@ -537,36 +565,36 @@
                 <td *ngIf="columnVisibility.lastReviewScore">
                   <div class="review-score-cell">
                     <!-- Booking.com Last Review Score -->
-                    <div class="review-item clickable" *ngIf="safeParseNumber(property.Reviews.Booking.Last_Rev_Score) > 0" title="Click to visit Booking.com property page"
+                    <div class="review-item clickable" *ngIf="safeParseNumber(property.Reviews?.Booking?.Last_Rev_Score) > 0" title="Click to visit Booking.com property page"
                       (click)="openPropertyUrl(property, 'Booking')">
                       <i class="fas fa-bed text-primary"></i>
-                      <span class="score-value">{{ property.Reviews.Booking.Last_Rev_Score }}</span>
+                      <span class="score-value">{{ property.Reviews?.Booking?.Last_Rev_Score }}</span>
                     </div>
-                    <div class="review-item no-review-score" *ngIf="property.Reviews.Booking.Last_Rev_Score === null"
+                    <div class="review-item no-review-score" *ngIf="property.Reviews?.Booking?.Last_Rev_Score === null"
                       title="Booking.com: No review score">
                       <i class="fas fa-bed text-muted"></i>
                       <span class="no-review-score-text" style="font-size: 10px;">No review score</span>
                     </div>
 
                     <!-- Airbnb Last Review Score -->
-                    <div class="review-item clickable" *ngIf="safeParseNumber(property.Reviews.Airbnb.Last_Rev_Score) > 0" title="Click to visit Airbnb property page"
+                    <div class="review-item clickable" *ngIf="safeParseNumber(property.Reviews?.Airbnb?.Last_Rev_Score) > 0" title="Click to visit Airbnb property page"
                       (click)="openPropertyUrl(property, 'Airbnb')">
                       <i class="fab fa-airbnb text-danger"></i>
-                      <span class="score-value">{{ property.Reviews.Airbnb.Last_Rev_Score }}</span>
+                      <span class="score-value">{{ property.Reviews?.Airbnb?.Last_Rev_Score }}</span>
                     </div>
-                    <div class="review-item no-review-score" *ngIf="property.Reviews.Airbnb.Last_Rev_Score === null"
+                    <div class="review-item no-review-score" *ngIf="property.Reviews?.Airbnb?.Last_Rev_Score === null"
                       title="Airbnb: No review score">
                       <i class="fab fa-airbnb text-muted"></i>
                       <span class="no-review-score-text" style="font-size: 10px;">No review score</span>
                     </div>
 
                     <!-- VRBO Last Review Score -->
-                    <div class="review-item clickable" *ngIf="safeParseNumber(property.Reviews.VRBO.Last_Rev_Score) > 0" title="Click to visit VRBO property page"
+                    <div class="review-item clickable" *ngIf="safeParseNumber(property.Reviews?.VRBO?.Last_Rev_Score) > 0" title="Click to visit VRBO property page"
                       (click)="openPropertyUrl(property, 'VRBO')">
                       <i class="fas fa-home text-warning"></i>
-                      <span class="score-value">{{ property.Reviews.VRBO.Last_Rev_Score }}</span>
+                      <span class="score-value">{{ property.Reviews?.VRBO?.Last_Rev_Score }}</span>
                     </div>
-                    <div class="review-item no-review-score" *ngIf="property.Reviews.VRBO.Last_Rev_Score === null"
+                    <div class="review-item no-review-score" *ngIf="property.Reviews?.VRBO?.Last_Rev_Score === null"
                       title="VRBO: No review score">
                       <i class="fas fa-home text-muted"></i>
                       <span class="no-review-score-text" style="font-size: 10px;">No review score</span>
@@ -575,15 +603,15 @@
                 </td>
                 <td *ngIf="columnVisibility.lastReviewDate">
                   <div class="revenue-date-cell">
-                    <div class="date-item" *ngIf="property.Reviews.Booking.Last_Review_Date && property.Reviews.Booking.Last_Review_Date.trim() !== ''">
+                    <div class="date-item" *ngIf="property.Reviews?.Booking?.Last_Review_Date && property.Reviews.Booking.Last_Review_Date.trim() !== ''">
                       <i class="fas fa-bed text-primary"></i>
                       <span class="date-value">{{ property.Reviews.Booking.Last_Review_Date }}</span>
                     </div>
-                    <div class="date-item" *ngIf="property.Reviews.Airbnb.Last_Review_Date && property.Reviews.Airbnb.Last_Review_Date.trim() !== ''">
+                    <div class="date-item" *ngIf="property.Reviews?.Airbnb?.Last_Review_Date && property.Reviews.Airbnb.Last_Review_Date.trim() !== ''">
                       <i class="fab fa-airbnb text-danger"></i>
                       <span class="date-value">{{ property.Reviews.Airbnb.Last_Review_Date }}</span>
                     </div>
-                    <div class="date-item" *ngIf="property.Reviews.VRBO.Last_Review_Date && property.Reviews.VRBO.Last_Review_Date.trim() !== ''">
+                    <div class="date-item" *ngIf="property.Reviews?.VRBO?.Last_Review_Date && property.Reviews.VRBO.Last_Review_Date.trim() !== ''">
                       <i class="fas fa-home text-warning"></i>
                       <span class="date-value">{{ property.Reviews.VRBO.Last_Review_Date }}</span>
                     </div>

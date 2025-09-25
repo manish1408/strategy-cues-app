@@ -21,6 +21,7 @@ export interface PropertyData {
   Listing_Name: string;
   Area: string;
   Room_Type: string;
+  Property_Type?: string;
   Occupancy: {
     '7_days': string | number;
     '30_days': string | number;
@@ -52,34 +53,15 @@ export interface PropertyData {
     '30_Days': string | number;
   };
   Min_Rate_Threshold: string | number;
-  BookingCom: {
-    Genius: string;
-    Mobile: string;
-    Pref: string;
-    Weekly: string;
-    Monthly: string;
-    LM_Disc: string;
-  };
-  Airbnb: {
-    Weekly: string;
-    Monthly: string;
-    Member: string;
-    LM_Disc: string;
-  };
-  VRBO: {
-    Weekly: string;
-    Monthly: string;
-  };
+  BookingCom: any;
+  Airbnb: any;
+  VRBO: any;
   CXL_Policy: {
     Booking: string;
     Airbnb: string;
     VRBO: string;
   };
-  Adult_Child_Config: {
-    Booking: string;
-    Airbnb: string;
-    VRBO: string;
-  };
+  Adult_Child_Config: any;
   Reviews: {
     Booking: {
       Last_Rev_Dt: string;
@@ -103,6 +85,41 @@ export interface PropertyData {
       Last_Review_Date: string;
     };
   };
+  // New direct URL fields
+  BookingUrl?: string;
+  AirbnbUrl?: string;
+  VRBOUrl?: string;
+  PricelabsUrl?: string;
+  // New ID fields
+  BookingId?: string;
+  AirbnbId?: string;
+  VRBOId?: string;
+  PricelabsId?: string;
+  // Photos object
+  Photos?: {
+    booking?: Array<{
+      id: string;
+      url: string;
+      caption?: string;
+      accessibility_label?: string;
+      source: string;
+    }>;
+    airbnb?: Array<{
+      id: string;
+      url: string;
+      caption?: string;
+      accessibility_label?: string;
+      source: string;
+    }>;
+    vrbo?: Array<{
+      id: string;
+      url: string;
+      caption?: string;
+      accessibility_label?: string;
+      source: string;
+    }>;
+  };
+  // Legacy Property_URLs for backward compatibility
   Property_URLs?: {
     Booking?: {
       url: string;
@@ -121,6 +138,11 @@ export interface PropertyData {
       id: string;
     };
   };
+  // Additional fields
+  operator_id: string;
+  listing_id?: string;
+  createdAt: string;
+  status?: string;
 }
 
 @Injectable({
@@ -187,6 +209,7 @@ export class PropertiesService {
         Listing_Name: property.Listing_Name,
         Area: property.Area,
         Room_Type: property.Room_Type,
+        Property_Type: property.Property_Type,
         Occupancy: property.Occupancy || {
           '7_days': null,
           '30_days': null,
@@ -218,34 +241,15 @@ export class PropertiesService {
           '30_Days': null
         },
         Min_Rate_Threshold: property.Min_Rate_Threshold || null,
-        BookingCom: property.BookingCom || {
-          Genius: null,
-          Mobile: null,
-          Pref: null,
-          Weekly: null,
-          Monthly: null,
-          LM_Disc: null
-        },
-        Airbnb: property.Airbnb || {
-          Weekly: null,
-          Monthly: null,
-          Member: null,
-          LM_Disc: null
-        },
-        VRBO: property.VRBO || {
-          Weekly: null,
-          Monthly: null
-        },
+        BookingCom: property.BookingCom || null,
+        Airbnb: property.Airbnb || null,
+        VRBO: property.VRBO || null,
         CXL_Policy: property.CXL_Policy || {
           Booking: null,
           Airbnb: null,
           VRBO: null
         },
-        Adult_Child_Config: property.Adult_Child_Config || {
-          Booking: null,
-          Airbnb: null,
-          VRBO: null
-        },
+        Adult_Child_Config: property.Adult_Child_Config || null,
         Reviews: property.Reviews || {
           Booking: {
             Last_Rev_Dt: null,
@@ -269,14 +273,33 @@ export class PropertiesService {
             Last_Review_Date: null
           }
         },
+        // New URL fields
+        BookingUrl: property.BookingUrl || null,
+        AirbnbUrl: property.AirbnbUrl || null,
+        VRBOUrl: property.VRBOUrl || null,
+        PricelabsUrl: property.PricelabsUrl || null,
+        // New ID fields
+        BookingId: property.BookingId || null,
+        AirbnbId: property.AirbnbId || null,
+        VRBOId: property.VRBOId || null,
+        PricelabsId: property.PricelabsId || null,
+        // Photos object
+        Photos: property.Photos || {
+          booking: null,
+          airbnb: null,
+          vrbo: null
+        },
+        // Legacy Property_URLs for backward compatibility
         Property_URLs: property.Property_URLs || {
-          Booking: { url: null, id: null },
-          Airbnb: { url: null, id: null },
-          VRBO: { url: null, id: null },
-          Pricelab: null
+          Booking: { url: property.BookingUrl, id: property.BookingId },
+          Airbnb: { url: property.AirbnbUrl, id: property.AirbnbId },
+          VRBO: { url: property.VRBOUrl, id: property.VRBOId },
+          Pricelab: { url: property.PricelabsUrl, id: property.PricelabsId }
         },
         operator_id: property.operator_id,
-        createdAt: property.createdAt
+        listing_id: property.listing_id,
+        createdAt: property.createdAt,
+        status: property.status
       }));
       console.log('Mapped properties:', mappedProperties);
       return mappedProperties;

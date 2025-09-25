@@ -2317,8 +2317,21 @@ export class RevenueComponent implements OnInit {
     property: any,
     platform: "Booking" | "Airbnb" | "VRBO"
   ): void {
-    if (property.Property_URLs && property.Property_URLs[platform]) {
-      const url = property.Property_URLs[platform];
+    let url: string | null = null;
+    
+    switch (platform) {
+      case "Booking":
+        url = property.BookingUrl;
+        break;
+      case "Airbnb":
+        url = property.AirbnbUrl;
+        break;
+      case "VRBO":
+        url = property.VRBOUrl;
+        break;
+    }
+    
+    if (url) {
       window.open(url, "_blank", "noopener,noreferrer");
     } else {
       console.warn(
@@ -2605,5 +2618,37 @@ export class RevenueComponent implements OnInit {
     }
     // Reset file input
     event.target.value = '';
+  }
+
+  // Property image methods
+  getPropertyImage(property: PropertyData): string {
+    // Priority order: Booking.com -> Airbnb -> VRBO -> Placeholder
+    if (property.Photos?.booking && property.Photos.booking.length > 0) {
+      return property.Photos.booking[0].url;
+    }
+    if (property.Photos?.airbnb && property.Photos.airbnb.length > 0) {
+      return property.Photos.airbnb[0].url;
+    }
+    if (property.Photos?.vrbo && property.Photos.vrbo.length > 0) {
+      return property.Photos.vrbo[0].url;
+    }
+    // Fallback to placeholder
+    return 'assets/images/placeholder.jpg';
+  }
+
+  onImageError(event: any): void {
+    // Set fallback image when the main image fails to load
+    event.target.src = 'assets/images/placeholder.jpg';
+  }
+
+  // Debug method to check property URLs
+  debugPropertyUrls(property: PropertyData): void {
+    console.log('Property URLs Debug:', {
+      listingName: property.Listing_Name,
+      airbnbUrl: property.AirbnbUrl,
+      bookingUrl: property.BookingUrl,
+      vrboUrl: property.VRBOUrl,
+      pricelabsUrl: property.PricelabsUrl
+    });
   }
 }
