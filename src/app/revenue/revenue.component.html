@@ -84,8 +84,14 @@
           <div class="d-flex gap-2 float-end">
 
 
-            <button class="btn btn-outline-success" (click)="exportToCSV()" title="Export to CSV">
-              <i class="fas fa-download me-2"></i>
+            <button class="btn btn-outline-success" 
+                    (click)="exportToCSV()" 
+                    [disabled]="exportLoading" 
+                    title="Export to CSV">
+              <div *ngIf="exportLoading" class="spinner-border spinner-border-sm me-2" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <i class="fas fa-download me-2" *ngIf="!exportLoading"></i>
               Export CSV
             </button>
             <div class="dropdown">

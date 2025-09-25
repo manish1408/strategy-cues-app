@@ -11,6 +11,9 @@ import { HttpClient } from '@angular/common/http';
   constructor(private http: HttpClient) {}
 
   exportToCSV(operatorId: string) {
-    return this.http.get(`${this._url}/properties/${operatorId}`);
+    return this.http.get(`${this._url}/properties/${operatorId}`, {
+      responseType: 'blob',
+      observe: 'response'
+    });
   }
             }

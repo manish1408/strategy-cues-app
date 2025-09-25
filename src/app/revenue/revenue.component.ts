@@ -25,6 +25,7 @@ export class RevenueComponent implements OnInit {
   allPropertyData: PropertyData[] = []; // Complete dataset for range calculations
   filteredData: PropertyData[] = [];
   loading: boolean = false;
+  exportLoading: boolean = false;
   error: string | null = null;
   operatorId: string | null = null;
   sortOrder = "desc";
@@ -1163,33 +1164,50 @@ export class RevenueComponent implements OnInit {
   }
 
   exportToCSV() {
-    this.loading = true;
+    this.exportLoading = true;
     this.exportService.exportToCSV(this.operatorId || "").subscribe({
-      next: (res: any) => {
-        this.loading = false;
-          // Check if res.data is a URL (starts with http or https)
-          if (typeof res.data.file_url === "string" && res.data.file_url.startsWith("https")) {
-            // Open the link in a new tab
+      next: (response: any) => {
+        this.exportLoading = false;
+        
+        // Handle blob response from backend
+        if (response.body instanceof Blob) {
+          const blob = response.body;
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          
+          // Try to get filename from Content-Disposition header
+          const contentDisposition = response.headers.get('Content-Disposition');
+          let filename = `properties_${new Date().toISOString().split("T")[0]}.csv`;
+          
+          if (contentDisposition) {
+            const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+            if (filenameMatch && filenameMatch[1]) {
+              filename = filenameMatch[1].replace(/['"]/g, '');
+            }
+          }
+          
+          link.download = filename;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(url);
+          this.toastr.success("Properties exported successfully");
+        } else {
+          // Fallback for JSON response with file_url
+          const res = response.body;
+          if (typeof res === 'object' && res.data && typeof res.data.file_url === "string" && res.data.file_url.startsWith("https")) {
             window.open(res.data.file_url, "_blank");
             this.toastr.success("Properties exported successfully");
           } else {
-            // Fallback: treat as CSV string and download as file
-            const blob = new Blob([res.data], { type: "text/csv" });
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = `properties_${new Date().toISOString().split("T")[0]}.csv`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(url);
-            this.toastr.success("Properties exported successfully");
+            this.toastr.error("Invalid response format from server");
           }
-        
+        }
       },
       error: (error) => {
-        this.loading = false;
-        this.toastr.error(error.error?.error || "Failed to export properties");
+        this.exportLoading = false;
+        console.error('Export error:', error);
+        this.toastr.error(error.error?.error || error.message || "Failed to export properties");
       },
     });
 }
