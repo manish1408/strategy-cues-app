@@ -2651,4 +2651,18 @@ export class RevenueComponent implements OnInit {
       pricelabsUrl: property.PricelabsUrl
     });
   }
+
+  // Get color based on occupancy percentage
+  getOccupancyColor(percentage: number, isLight: boolean = false): string {
+    if (percentage >= 70) {
+      // Green for high occupancy (70%+)
+      return isLight ? '#C7E596' : '#78C000';
+    } else if (percentage >= 30) {
+      // Amber/Orange for medium occupancy (30-69%)
+      return isLight ? '#FFE4B5' : '#FF8C00';
+    } else {
+      // Red for low occupancy (0-29%)
+      return isLight ? '#FFC0CB' : '#FF6347';
+    }
+  }
 }
