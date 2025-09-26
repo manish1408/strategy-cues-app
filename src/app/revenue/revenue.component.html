@@ -64,16 +64,7 @@
                   No saved presets
                 </div>
                 
-                <!-- Debug section for testing -->
-                <div *ngIf="filterPresets.length > 0" class="dropdown-item-text text-muted">
-                  <small>Debug: {{ filterPresets.length }} presets loaded</small>
-                  <br>
-                  <button class="btn btn-sm btn-outline-info" (click)="debugPresets()">Debug</button>
-                  <button class="btn btn-sm btn-outline-warning" (click)="testPresetClick(filterPresets[0].id)" 
-                          *ngIf="filterPresets.length > 0">Test First Preset</button>
-                  <button class="btn btn-sm btn-outline-danger" (click)="testDeletePreset(filterPresets[0].id)" 
-                          *ngIf="filterPresets.length > 0">Test Delete First</button>
-                </div>
+               
                 
                 <div class="dropdown-divider"></div>
                 
