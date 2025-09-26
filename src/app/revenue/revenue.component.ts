@@ -22,8 +22,6 @@ declare var bootstrap: any;
 export class RevenueComponent implements OnInit {
   // Data from API
   propertyData: PropertyData[] = [];
-  allPropertyData: PropertyData[] = []; // Complete dataset for range calculations
-  filteredData: PropertyData[] = [];
   loading: boolean = false;
   exportLoading: boolean = false;
   error: string | null = null;
@@ -336,34 +334,37 @@ export class RevenueComponent implements OnInit {
     this.error = null;
 
     // Load current page data first
-    this.loadCurrentPageData();
+    this.loadFilteredPropertiesData();
   }
 
-  loadCurrentPageData(): void {
+  loadFilteredPropertiesData(): void {
     
-    // Load current page data for display
+    // Build filter parameters
+    const filterParams = this.buildFilterParams();
+    
+    // Load current page data using filter endpoint
     this.propertiesService
-      .getProperties(
-        this.currentPage,
-        this.itemsPerPage,
-        this.operatorId || "",
-        this.sortOrder
-      )
+      .filterProperties(filterParams)
       .subscribe({
         next: (response: any) => {
           
           if (response.success) {
             this.propertyData =
               PropertiesService.extractPropertiesArray(response);
-            this.filteredData = [...this.propertyData];
 
-            // If this is the first load, also load additional data for range calculations
-            if (this.currentPage === 1 && this.allPropertyData.length === 0) {
-              this.loadDataForRanges();
+            // Update pagination data from API response
+            if (response.data && response.data.pagination) {
+              this.totalPages = response.data.pagination.total_pages;
+              this.currentPage = response.data.pagination.page;
+              this.itemsPerPage = response.data.pagination.limit;
             }
 
+            // Calculate range values and filter options from current data
+            this.calculateRangeValues();
+            this.extractFilterOptions();
+            this.initializeTempFilters();
+
             this.calculateSummaryData();
-            this.updatePagination();
           } else {
             console.error('API Response not successful:', response);
             this.error = response.message || "Failed to load properties data";
@@ -386,43 +387,10 @@ export class RevenueComponent implements OnInit {
       });
   }
 
-  loadDataForRanges(): void {
-    // Load additional pages to get a better sample for range calculations and filtering
-    // Use a reasonable limit that the API can handle
-    this.propertiesService
-      .getProperties(1, 50, this.operatorId || "", this.sortOrder)
-      .subscribe({
-        next: (response: any) => {
-          if (response.success) {
-            this.allPropertyData =
-              PropertiesService.extractPropertiesArray(response);
-            this.calculateRangeValues();
-            this.extractFilterOptions();
-            this.initializeTempFilters();
-
-            // Apply current filters to the complete dataset
-            this.filterData();
-          }
-        },
-        error: (error: any) => {
-          // Fallback to using current page data for ranges
-          this.allPropertyData = [...this.propertyData];
-          this.calculateRangeValues();
-          this.extractFilterOptions();
-          this.initializeTempFilters();
-
-          // Apply current filters to the available data
-          this.filterData();
-        },
-      });
-  }
 
   calculateSummaryData(): void {
-    // Use filtered data for summary calculations to show accurate totals
-    const dataSource =
-      this.filteredData && this.filteredData.length > 0
-        ? this.filteredData
-        : this.propertyData;
+    // Use current page data for summary calculations
+    const dataSource = this.propertyData;
 
     if (!Array.isArray(dataSource) || dataSource.length === 0) {
       this.totalListings = 0;
@@ -449,11 +417,8 @@ export class RevenueComponent implements OnInit {
   }
 
   extractFilterOptions(): void {
-    // Use allPropertyData if available, otherwise fallback to current page data
-    const dataSource =
-      this.allPropertyData && this.allPropertyData.length > 0
-        ? this.allPropertyData
-        : this.propertyData;
+    // Use current page data for filter options
+    const dataSource = this.propertyData;
 
     if (!Array.isArray(dataSource) || dataSource.length === 0) {
       this.areas = [];
@@ -466,11 +431,8 @@ export class RevenueComponent implements OnInit {
   }
 
   calculateRangeValues(): void {
-    // Use allPropertyData if available, otherwise fallback to current page data
-    const dataSource =
-      this.allPropertyData && this.allPropertyData.length > 0
-        ? this.allPropertyData
-        : this.propertyData;
+    // Use current page data for range calculations
+    const dataSource = this.propertyData;
 
     if (!Array.isArray(dataSource) || dataSource.length === 0) {
       // Set default ranges if no data
@@ -659,326 +621,131 @@ export class RevenueComponent implements OnInit {
     this.filterData();
   }
 
-  // Filter data based on search term, area, room type, and all range filters
-  filterData(): void {
-    // Use complete dataset for filtering if available, otherwise use current page data
-    const dataSource =
-      this.allPropertyData && this.allPropertyData.length > 0
-        ? this.allPropertyData
-        : this.propertyData;
+  // Build filter parameters for the API
+  buildFilterParams(): any {
+    const params: any = {
+      operator_id: this.operatorId,
+      page: this.currentPage,
+      limit: this.itemsPerPage
+    };
 
-    if (!Array.isArray(dataSource) || dataSource.length === 0) {
-      this.filteredData = [];
-      this.updatePagination();
-      return;
+    // Basic filters
+    if (this.selectedArea) params.area = this.selectedArea;
+    if (this.selectedRoomType) params.room_type = this.selectedRoomType;
+
+    // Basic range filters
+    if (this.adrMin !== null) params.adr_min = this.adrMin;
+    if (this.adrMax !== null) params.adr_max = this.adrMax;
+    if (this.revparMin !== null) params.revpar_min = this.revparMin;
+    if (this.revparMax !== null) params.revpar_max = this.revparMax;
+    if (this.mpiMin !== null) params.mpi_min = this.mpiMin;
+    if (this.mpiMax !== null) params.mpi_max = this.mpiMax;
+    if (this.minRateThresholdMin !== null) params.min_rate_threshold_min = this.minRateThresholdMin;
+    if (this.minRateThresholdMax !== null) params.min_rate_threshold_max = this.minRateThresholdMax;
+
+    // Occupancy filters
+    if (this.occupancyTMMin !== null) params.occ_tm_min = this.occupancyTMMin;
+    if (this.occupancyTMMax !== null) params.occ_tm_max = this.occupancyTMMax;
+    if (this.occupancyNMMin !== null) params.occ_nm_min = this.occupancyNMMin;
+    if (this.occupancyNMMax !== null) params.occ_nm_max = this.occupancyNMMax;
+    if (this.occupancy7DaysMin !== null) params.occ_7days_min = this.occupancy7DaysMin;
+    if (this.occupancy7DaysMax !== null) params.occ_7days_max = this.occupancy7DaysMax;
+    if (this.occupancy30DaysMin !== null) params.occ_30days_min = this.occupancy30DaysMin;
+    if (this.occupancy30DaysMax !== null) params.occ_30days_max = this.occupancy30DaysMax;
+
+    // Pickup occupancy filters
+    if (this.pickUpOcc7DaysMin !== null) params.pickup_7days_min = this.pickUpOcc7DaysMin;
+    if (this.pickUpOcc7DaysMax !== null) params.pickup_7days_max = this.pickUpOcc7DaysMax;
+    if (this.pickUpOcc14DaysMin !== null) params.pickup_14days_min = this.pickUpOcc14DaysMin;
+    if (this.pickUpOcc14DaysMax !== null) params.pickup_14days_max = this.pickUpOcc14DaysMax;
+    if (this.pickUpOcc30DaysMin !== null) params.pickup_30days_min = this.pickUpOcc30DaysMin;
+    if (this.pickUpOcc30DaysMax !== null) params.pickup_30days_max = this.pickUpOcc30DaysMax;
+
+    // STLY Variance filters
+    if (this.stlyVarOccMin !== null) params.stly_occ_min = this.stlyVarOccMin;
+    if (this.stlyVarOccMax !== null) params.stly_occ_max = this.stlyVarOccMax;
+    if (this.stlyVarADRMin !== null) params.stly_adr_min = this.stlyVarADRMin;
+    if (this.stlyVarADRMax !== null) params.stly_adr_max = this.stlyVarADRMax;
+    if (this.stlyVarRevPARMin !== null) params.stly_revpar_min = this.stlyVarRevPARMin;
+    if (this.stlyVarRevPARMax !== null) params.stly_revpar_max = this.stlyVarRevPARMax;
+
+    // STLM Variance filters
+    if (this.stlmVarOccMin !== null) params.stlm_occ_min = this.stlmVarOccMin;
+    if (this.stlmVarOccMax !== null) params.stlm_occ_max = this.stlmVarOccMax;
+    if (this.stlmVarADRMin !== null) params.stlm_adr_min = this.stlmVarADRMin;
+    if (this.stlmVarADRMax !== null) params.stlm_adr_max = this.stlmVarADRMax;
+    if (this.stlmVarRevPARMin !== null) params.stlm_revpar_min = this.stlmVarRevPARMin;
+    if (this.stlmVarRevPARMax !== null) params.stlm_revpar_max = this.stlmVarRevPARMax;
+
+    // Platform filters - Booking.com
+    if (this.bookingGeniusFilter !== 'not-present') {
+      params.booking_genius = this.bookingGeniusFilter === 'yes';
+    }
+    if (this.bookingMobileFilter !== 'not-present') {
+      params.booking_mobile = this.bookingMobileFilter === 'yes';
+    }
+    if (this.bookingPrefFilter !== 'not-present') {
+      params.booking_preferred = this.bookingPrefFilter === 'yes';
+    }
+    if (this.bookingWeeklyFilter !== 'not-present') {
+      params.booking_weekly = this.bookingWeeklyFilter === 'yes';
+    }
+    if (this.bookingMonthlyFilter !== 'not-present') {
+      params.booking_monthly = this.bookingMonthlyFilter === 'yes';
+    }
+    if (this.bookingLMDiscFilter !== 'not-present') {
+      params.booking_lastminute = this.bookingLMDiscFilter === 'yes';
     }
 
-    this.filteredData = dataSource.filter((item) => {
-      // Basic search and category filters
-      const matchesSearch =
-        !this.searchTerm ||
-        item.Listing_Name.toLowerCase().includes(
-          this.searchTerm.toLowerCase()
-        ) ||
-        item.Area.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        item.Room_Type.toLowerCase().includes(this.searchTerm.toLowerCase());
+    // Platform filters - Airbnb
+    if (this.airbnbWeeklyFilter !== 'not-present') {
+      params.airbnb_weekly = this.airbnbWeeklyFilter === 'yes';
+    }
+    if (this.airbnbMonthlyFilter !== 'not-present') {
+      params.airbnb_monthly = this.airbnbMonthlyFilter === 'yes';
+    }
+    if (this.airbnbMemberFilter !== 'not-present') {
+      params.airbnb_member = this.airbnbMemberFilter === 'yes';
+    }
+    if (this.airbnbLMDiscFilter !== 'not-present') {
+      params.airbnb_lastminute = this.airbnbLMDiscFilter === 'yes';
+    }
 
-      const matchesArea = !this.selectedArea || item.Area === this.selectedArea;
-      const matchesRoomType =
-        !this.selectedRoomType || item.Room_Type === this.selectedRoomType;
+    // Platform filters - VRBO
+    if (this.vrboWeeklyFilter !== 'not-present') {
+      params.vrbo_weekly = this.vrboWeeklyFilter === 'yes';
+    }
+    if (this.vrboMonthlyFilter !== 'not-present') {
+      params.vrbo_monthly = this.vrboMonthlyFilter === 'yes';
+    }
 
-      // Parse numeric values for filtering using safe parsing
-      const adrTM = this.safeParseNumber(item.ADR.TM);
-      const revparTM = this.safeParseNumber(item.RevPAR.TM);
-      const mpi = this.safeParseNumber(item.MPI);
-      const minRateThreshold = this.safeParseNumber(item.Min_Rate_Threshold);
+    // Review filters - Booking.com
+    if (this.bookingRevScoreMin !== null) params.booking_review_min = this.bookingRevScoreMin;
+    if (this.bookingRevScoreMax !== null) params.booking_review_max = this.bookingRevScoreMax;
+    if (this.bookingTotalRevMin !== null) params.booking_total_reviews_min = this.bookingTotalRevMin;
+    if (this.bookingTotalRevMax !== null) params.booking_total_reviews_max = this.bookingTotalRevMax;
 
-      // Occupancy values
-      const occupancyTM = this.safeParseNumber(item.Occupancy.TM);
-      const occupancyNM = this.safeParseNumber(item.Occupancy.NM);
-      const occupancy7Days = this.safeParseNumber(item.Occupancy["7_days"]);
-      const occupancy30Days = this.safeParseNumber(item.Occupancy["30_days"]);
-      const pickUpOcc7Days = this.safeParseNumber(item.Pick_Up_Occ["7_Days"]);
-      const pickUpOcc14Days = this.safeParseNumber(item.Pick_Up_Occ["14_Days"]);
-      const pickUpOcc30Days = this.safeParseNumber(item.Pick_Up_Occ["30_Days"]);
+    // Review filters - Airbnb
+    if (this.airbnbRevScoreMin !== null) params.airbnb_review_min = this.airbnbRevScoreMin;
+    if (this.airbnbRevScoreMax !== null) params.airbnb_review_max = this.airbnbRevScoreMax;
+    if (this.airbnbTotalRevMin !== null) params.airbnb_total_reviews_min = this.airbnbTotalRevMin;
+    if (this.airbnbTotalRevMax !== null) params.airbnb_total_reviews_max = this.airbnbTotalRevMax;
 
-      // Performance values
-      const stlyVarOcc = this.safeParseNumber(item.STLY_Var.Occ);
-      const stlyVarADR = this.safeParseNumber(item.STLY_Var.ADR);
-      const stlyVarRevPAR = this.safeParseNumber(item.STLY_Var.RevPAR);
-      const stlmVarOcc = this.safeParseNumber(item.STLM_Var.Occ);
-      const stlmVarADR = this.safeParseNumber(item.STLM_Var.ADR);
-      const stlmVarRevPAR = this.safeParseNumber(item.STLM_Var.RevPAR);
+    // Review filters - VRBO
+    if (this.vrboRevScoreMin !== null) params.vrbo_review_min = this.vrboRevScoreMin;
+    if (this.vrboRevScoreMax !== null) params.vrbo_review_max = this.vrboRevScoreMax;
+    if (this.vrboTotalRevMin !== null) params.vrbo_total_reviews_min = this.vrboTotalRevMin;
+    if (this.vrboTotalRevMax !== null) params.vrbo_total_reviews_max = this.vrboTotalRevMax;
 
-      // Reviews values
-      const bookingRevScore = this.safeParseNumber(
-        item.Reviews.Booking.Rev_Score
-      );
-      const bookingTotalRev = this.safeParseNumber(
-        item.Reviews.Booking.Total_Rev
-      );
-      const airbnbRevScore = this.safeParseNumber(
-        item.Reviews.Airbnb.Rev_Score
-      );
-      const airbnbTotalRev = this.safeParseNumber(
-        item.Reviews.Airbnb.Total_Rev
-      );
-      const vrboRevScore = this.safeParseNumber(item.Reviews.VRBO.Rev_Score);
-      const vrboTotalRev = this.safeParseNumber(item.Reviews.VRBO.Total_Rev);
+    return params;
+  }
 
-      // Basic range filters
-      const matchesAdrMin = this.adrMin === null || adrTM >= this.adrMin;
-      const matchesAdrMax = this.adrMax === null || adrTM <= this.adrMax;
-      const matchesRevparMin =
-        this.revparMin === null || revparTM >= this.revparMin;
-      const matchesRevparMax =
-        this.revparMax === null || revparTM <= this.revparMax;
-      const matchesMpiMin = this.mpiMin === null || mpi >= this.mpiMin;
-      const matchesMpiMax = this.mpiMax === null || mpi <= this.mpiMax;
-      const matchesMinRateThresholdMin =
-        this.minRateThresholdMin === null ||
-        minRateThreshold >= this.minRateThresholdMin;
-      const matchesMinRateThresholdMax =
-        this.minRateThresholdMax === null ||
-        minRateThreshold <= this.minRateThresholdMax;
-
-      // Occupancy filters
-      const matchesOccupancyTMMin =
-        this.occupancyTMMin === null || occupancyTM >= this.occupancyTMMin;
-      const matchesOccupancyTMMax =
-        this.occupancyTMMax === null || occupancyTM <= this.occupancyTMMax;
-      const matchesOccupancyNMMin =
-        this.occupancyNMMin === null || occupancyNM >= this.occupancyNMMin;
-      const matchesOccupancyNMMax =
-        this.occupancyNMMax === null || occupancyNM <= this.occupancyNMMax;
-      const matchesOccupancy7DaysMin =
-        this.occupancy7DaysMin === null ||
-        occupancy7Days >= this.occupancy7DaysMin;
-      const matchesOccupancy7DaysMax =
-        this.occupancy7DaysMax === null ||
-        occupancy7Days <= this.occupancy7DaysMax;
-      const matchesOccupancy30DaysMin =
-        this.occupancy30DaysMin === null ||
-        occupancy30Days >= this.occupancy30DaysMin;
-      const matchesOccupancy30DaysMax =
-        this.occupancy30DaysMax === null ||
-        occupancy30Days <= this.occupancy30DaysMax;
-      const matchesPickUpOcc7DaysMin =
-        this.pickUpOcc7DaysMin === null ||
-        pickUpOcc7Days >= this.pickUpOcc7DaysMin;
-      const matchesPickUpOcc7DaysMax =
-        this.pickUpOcc7DaysMax === null ||
-        pickUpOcc7Days <= this.pickUpOcc7DaysMax;
-      const matchesPickUpOcc14DaysMin =
-        this.pickUpOcc14DaysMin === null ||
-        pickUpOcc14Days >= this.pickUpOcc14DaysMin;
-      const matchesPickUpOcc14DaysMax =
-        this.pickUpOcc14DaysMax === null ||
-        pickUpOcc14Days <= this.pickUpOcc14DaysMax;
-      const matchesPickUpOcc30DaysMin =
-        this.pickUpOcc30DaysMin === null ||
-        pickUpOcc30Days >= this.pickUpOcc30DaysMin;
-      const matchesPickUpOcc30DaysMax =
-        this.pickUpOcc30DaysMax === null ||
-        pickUpOcc30Days <= this.pickUpOcc30DaysMax;
-
-      // Performance filters (STLY Var)
-      const matchesStlyVarOccMin =
-        this.stlyVarOccMin === null || stlyVarOcc >= this.stlyVarOccMin;
-      const matchesStlyVarOccMax =
-        this.stlyVarOccMax === null || stlyVarOcc <= this.stlyVarOccMax;
-      const matchesStlyVarADRMin =
-        this.stlyVarADRMin === null || stlyVarADR >= this.stlyVarADRMin;
-      const matchesStlyVarADRMax =
-        this.stlyVarADRMax === null || stlyVarADR <= this.stlyVarADRMax;
-      const matchesStlyVarRevPARMin =
-        this.stlyVarRevPARMin === null ||
-        stlyVarRevPAR >= this.stlyVarRevPARMin;
-      const matchesStlyVarRevPARMax =
-        this.stlyVarRevPARMax === null ||
-        stlyVarRevPAR <= this.stlyVarRevPARMax;
-
-      // Performance filters (STLM Var)
-      const matchesStlmVarOccMin =
-        this.stlmVarOccMin === null || stlmVarOcc >= this.stlmVarOccMin;
-      const matchesStlmVarOccMax =
-        this.stlmVarOccMax === null || stlmVarOcc <= this.stlmVarOccMax;
-      const matchesStlmVarADRMin =
-        this.stlmVarADRMin === null || stlmVarADR >= this.stlmVarADRMin;
-      const matchesStlmVarADRMax =
-        this.stlmVarADRMax === null || stlmVarADR <= this.stlmVarADRMax;
-      const matchesStlmVarRevPARMin =
-        this.stlmVarRevPARMin === null ||
-        stlmVarRevPAR >= this.stlmVarRevPARMin;
-      const matchesStlmVarRevPARMax =
-        this.stlmVarRevPARMax === null ||
-        stlmVarRevPAR <= this.stlmVarRevPARMax;
-
-      // Platform filters - Booking.com (three-state filtering)
-      const matchesBookingGenius = this.matchesThreeStateFilter(
-        this.bookingGeniusFilter,
-        item.BookingCom?.Genius
-      );
-      const matchesBookingMobile = this.matchesThreeStateFilter(
-        this.bookingMobileFilter,
-        item.BookingCom?.Mobile
-      );
-      const matchesBookingPref = this.matchesThreeStateFilter(
-        this.bookingPrefFilter,
-        item.BookingCom?.Pref
-      );
-      const matchesBookingWeekly = this.matchesThreeStateFilter(
-        this.bookingWeeklyFilter,
-        item.BookingCom?.Weekly
-      );
-      const matchesBookingMonthly = this.matchesThreeStateFilter(
-        this.bookingMonthlyFilter,
-        item.BookingCom?.Monthly
-      );
-      const matchesBookingLMDisc = this.matchesThreeStateFilter(
-        this.bookingLMDiscFilter,
-        item.BookingCom?.LM_Disc
-      );
-
-      // Platform filters - Airbnb (three-state filtering)
-      const matchesAirbnbWeekly = this.matchesThreeStateFilter(
-        this.airbnbWeeklyFilter,
-        item.Airbnb?.Weekly
-      );
-      const matchesAirbnbMonthly = this.matchesThreeStateFilter(
-        this.airbnbMonthlyFilter,
-        item.Airbnb?.Monthly
-      );
-      const matchesAirbnbMember = this.matchesThreeStateFilter(
-        this.airbnbMemberFilter,
-        item.Airbnb?.Member
-      );
-      const matchesAirbnbLMDisc = this.matchesThreeStateFilter(
-        this.airbnbLMDiscFilter,
-        item.Airbnb?.LM_Disc
-      );
-
-      // Platform filters - VRBO (three-state filtering)
-      const matchesVrboWeekly = this.matchesThreeStateFilter(
-        this.vrboWeeklyFilter,
-        item.VRBO?.Weekly
-      );
-      const matchesVrboMonthly = this.matchesThreeStateFilter(
-        this.vrboMonthlyFilter,
-        item.VRBO?.Monthly
-      );
-
-      // Reviews filters - Booking.com
-      const matchesBookingRevScoreMin =
-        this.bookingRevScoreMin === null ||
-        bookingRevScore >= this.bookingRevScoreMin;
-      const matchesBookingRevScoreMax =
-        this.bookingRevScoreMax === null ||
-        bookingRevScore <= this.bookingRevScoreMax;
-      const matchesBookingTotalRevMin =
-        this.bookingTotalRevMin === null ||
-        bookingTotalRev >= this.bookingTotalRevMin;
-      const matchesBookingTotalRevMax =
-        this.bookingTotalRevMax === null ||
-        bookingTotalRev <= this.bookingTotalRevMax;
-
-      // Reviews filters - Airbnb
-      const matchesAirbnbRevScoreMin =
-        this.airbnbRevScoreMin === null ||
-        airbnbRevScore >= this.airbnbRevScoreMin;
-      const matchesAirbnbRevScoreMax =
-        this.airbnbRevScoreMax === null ||
-        airbnbRevScore <= this.airbnbRevScoreMax;
-      const matchesAirbnbTotalRevMin =
-        this.airbnbTotalRevMin === null ||
-        airbnbTotalRev >= this.airbnbTotalRevMin;
-      const matchesAirbnbTotalRevMax =
-        this.airbnbTotalRevMax === null ||
-        airbnbTotalRev <= this.airbnbTotalRevMax;
-
-      // Reviews filters - VRBO
-      const matchesVrboRevScoreMin =
-        this.vrboRevScoreMin === null || vrboRevScore >= this.vrboRevScoreMin;
-      const matchesVrboRevScoreMax =
-        this.vrboRevScoreMax === null || vrboRevScore <= this.vrboRevScoreMax;
-      const matchesVrboTotalRevMin =
-        this.vrboTotalRevMin === null || vrboTotalRev >= this.vrboTotalRevMin;
-      const matchesVrboTotalRevMax =
-        this.vrboTotalRevMax === null || vrboTotalRev <= this.vrboTotalRevMax;
-
-      return (
-        matchesSearch &&
-        matchesArea &&
-        matchesRoomType &&
-        // Basic filters
-        matchesAdrMin &&
-        matchesAdrMax &&
-        matchesRevparMin &&
-        matchesRevparMax &&
-        matchesMpiMin &&
-        matchesMpiMax &&
-        matchesMinRateThresholdMin &&
-        matchesMinRateThresholdMax &&
-        // Occupancy filters
-        matchesOccupancyTMMin &&
-        matchesOccupancyTMMax &&
-        matchesOccupancyNMMin &&
-        matchesOccupancyNMMax &&
-        matchesOccupancy7DaysMin &&
-        matchesOccupancy7DaysMax &&
-        matchesOccupancy30DaysMin &&
-        matchesOccupancy30DaysMax &&
-        matchesPickUpOcc7DaysMin &&
-        matchesPickUpOcc7DaysMax &&
-        matchesPickUpOcc14DaysMin &&
-        matchesPickUpOcc14DaysMax &&
-        matchesPickUpOcc30DaysMin &&
-        matchesPickUpOcc30DaysMax &&
-        // Performance filters
-        matchesStlyVarOccMin &&
-        matchesStlyVarOccMax &&
-        matchesStlyVarADRMin &&
-        matchesStlyVarADRMax &&
-        matchesStlyVarRevPARMin &&
-        matchesStlyVarRevPARMax &&
-        matchesStlmVarOccMin &&
-        matchesStlmVarOccMax &&
-        matchesStlmVarADRMin &&
-        matchesStlmVarADRMax &&
-        matchesStlmVarRevPARMin &&
-        matchesStlmVarRevPARMax &&
-        // Platform filters
-        matchesBookingGenius &&
-        matchesBookingMobile &&
-        matchesBookingPref &&
-        matchesBookingWeekly &&
-        matchesBookingMonthly &&
-        matchesBookingLMDisc &&
-        matchesAirbnbWeekly &&
-        matchesAirbnbMonthly &&
-        matchesAirbnbMember &&
-        matchesAirbnbLMDisc &&
-        matchesVrboWeekly &&
-        matchesVrboMonthly &&
-        // Reviews filters
-        matchesBookingRevScoreMin &&
-        matchesBookingRevScoreMax &&
-        matchesBookingTotalRevMin &&
-        matchesBookingTotalRevMax &&
-        matchesAirbnbRevScoreMin &&
-        matchesAirbnbRevScoreMax &&
-        matchesAirbnbTotalRevMin &&
-        matchesAirbnbTotalRevMax &&
-        matchesVrboRevScoreMin &&
-        matchesVrboRevScoreMax &&
-        matchesVrboTotalRevMin &&
-        matchesVrboTotalRevMax
-      );
-    });
-
+  // Filter data based on search term, area, room type, and all range filters
+  filterData(): void {
+    // For server-side pagination, we need to reload data with filters
+    // Reset to first page when applying filters
     this.currentPage = 1;
-    this.updatePagination();
-    this.calculateSummaryData(); // Recalculate summary data based on filtered results
+    this.loadFilteredPropertiesData();
   }
 
   // Sort data by field
@@ -990,7 +757,7 @@ export class RevenueComponent implements OnInit {
       this.sortDirection = "asc";
     }
 
-    this.filteredData.sort((a, b) => {
+    this.propertyData.sort((a, b) => {
       let aVal: any;
       let bVal: any;
 
@@ -1034,15 +801,14 @@ export class RevenueComponent implements OnInit {
 
   // Pagination methods
   updatePagination(): void {
-    // For API-based pagination, we'll need to get total count from the API response
-    // For now, using filtered data length as fallback
-    this.totalPages = Math.ceil(this.filteredData.length / this.itemsPerPage);
+    // Pagination data is now updated from API response in loadFilteredPropertiesData()
+    // This method is kept for backward compatibility but pagination is handled by API
   }
 
   changePage(page: number): void {
     if (page >= 1 && page !== this.currentPage && page <= this.totalPages) {
       this.currentPage = page;
-      // No need to load new data since we're using client-side pagination with filtered data
+      this.loadFilteredPropertiesData(); // Load new data from API for the new page
     }
   }
 
@@ -1246,11 +1012,7 @@ export class RevenueComponent implements OnInit {
   }
 
   // Helper methods for templates
-  getPaginatedData(): PropertyData[] {
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    const endIndex = startIndex + this.itemsPerPage;
-    return this.filteredData.slice(startIndex, endIndex);
-  }
+  // getPaginatedData() method removed - now using server-side pagination
 
   // Helper method to check if property has any last review scores
   hasLastReviewScore(property: PropertyData): boolean {
@@ -1655,8 +1417,8 @@ export class RevenueComponent implements OnInit {
         this.tempVrboMonthlyFilter = value;
         break;
     }
-    // Apply filters immediately for real-time feedback
-    this.filterData();
+    // Don't apply filters immediately - let users apply them manually via the Apply button
+    // this.filterData();
   }
 
   // Helper method to get the next slider value (for clicking on slider track)

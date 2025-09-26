@@ -321,7 +321,21 @@ export class PropertiesService {
   }
 
   filterProperties(filters: any): Observable<ApiResponse<PropertyData[]>> {
-    return this.http.post<ApiResponse<PropertyData[]>>(`${this._url}/filter-properties`, filters);
+    let params = new HttpParams();
+    
+    // Add all filter parameters to the query string
+    Object.keys(filters).forEach(key => {
+      if (filters[key] !== null && filters[key] !== undefined && filters[key] !== '') {
+        params = params.set(key, filters[key].toString());
+      }
+    });
+    
+    console.log('PropertiesService.filterProperties called with:', {
+      url: `${this._url}/filter-properties`,
+      params: params.toString()
+    });
+    
+    return this.http.get<ApiResponse<PropertyData[]>>(`${this._url}/filter-properties`, { params });
   }
 
   createProperty(propertyData: any): Observable<ApiResponse<any>> {
