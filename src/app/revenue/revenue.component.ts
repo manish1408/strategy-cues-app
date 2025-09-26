@@ -2413,10 +2413,10 @@ export class RevenueComponent implements OnInit {
 
   // Get color based on occupancy percentage
   getOccupancyColor(percentage: number, isLight: boolean = false): string {
-    if (percentage >= 70) {
+    if (percentage >= 66) {
       // Green for high occupancy (70%+)
       return isLight ? '#C7E596' : '#78C000';
-    } else if (percentage >= 30) {
+    } else if (percentage >= 33) {
       // Amber/Orange for medium occupancy (30-69%)
       return isLight ? '#FFE4B5' : '#FF8C00';
     } else {
