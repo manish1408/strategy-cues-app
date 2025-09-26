@@ -818,6 +818,7 @@ export class RevenueComponent implements OnInit {
 
   changePage(page: number): void {
     if (page >= 1 && page !== this.currentPage && page <= this.totalPages) {
+      this.loading = true;
       this.currentPage = page;
       this.loadFilteredPropertiesData(); // Load new data from API for the new page
     }
