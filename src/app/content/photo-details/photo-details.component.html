@@ -1,25 +1,102 @@
 <div class="photo-details-container">
   <!-- Header Section -->
   <div class="details-header">
-    <div class="header-content">
-      <button class="back-btn" (click)="goBack()">
-        <i class="fas fa-arrow-left"></i>
-        Back to Properties
-      </button>
-      <div class="property-title">
-        <h1>{{propertyData?.property_title}}</h1>
-        <span class="listing-id">{{propertyData?.listing_id}}</span>
-      </div>
-      <div class="header-actions">
-        <button class="btn btn-outline-primary" (click)="exportPropertyData()">
-          <i class="fas fa-download"></i>
-          Export Data
-        </button>
+    <div class="container-fluid">
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <div class="property-title">
+            <button class="btn btn-outline-secondary me-3" (click)="goBack()"> 
+              <i class="fas fa-arrow-left"></i> Back to Content
+            </button>
+            <div class="title-info">
+              <h1 class="mb-1">{{ propertyData?.property_title }}</h1>
+              <div class="property-meta">
+                <!-- <span class="badge bg-light text-dark me-2">{{ propertyData?.listing_id }}</span> -->
+                <span class="badge bg-primary" *ngIf="propertyData?.num_photos"> 
+                  {{ propertyData?.num_photos }} Photos
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 text-end">
+          <div class="key-metrics">
+            <div class="metric" *ngIf="propertyData?.captioned_count !== null">
+              <span class="metric-label">Captioned</span>
+              <span class="metric-value">{{ propertyData?.captioned_count }}/{{ propertyData?.num_photos }}</span>
+            </div>
+            <div class="metric" *ngIf="propertyData?.missing_captions !== null">
+              <span class="metric-label">Missing</span>
+              <span class="metric-value">{{ propertyData?.missing_captions }}</span>
+            </div>
+          </div>
+          <div class="booking-buttons mt-3">
+            <button 
+              class="btn btn-airbnb me-2" 
+              (click)="openBookingLink('Airbnb')"
+              [disabled]="!propertyData?.airbnb_link"
+              title="View on Airbnb">
+              <i class="fab fa-airbnb"></i> Airbnb
+            </button>
+            <button 
+              class="btn btn-booking me-2" 
+              (click)="openBookingLink('Booking')"
+              [disabled]="!propertyData?.booking_link"
+              title="View on Booking.com">
+              <i class="fas fa-bed"></i> Booking.com
+            </button>
+            <button 
+              class="btn btn-vrbo" 
+              (click)="openBookingLink('VRBO')"
+              [disabled]="!propertyData?.vrbo_link"
+              title="View on VRBO">
+              <i class="fas fa-home"></i> VRBO
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Top Navigation Cards -->
+  <!-- Tab Navigation -->
+  <div class="tab-navigation">
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link" 
+           [class.active]="activeTab === 'photos'"
+           (click)="setActiveTab('photos')">
+          Photos
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" 
+           [class.active]="activeTab === 'competitor-reviews'"
+           (click)="setActiveTab('competitor-reviews')">
+          Competitor Reviews 
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" 
+           [class.active]="activeTab === 'my-reviews'"
+           (click)="setActiveTab('my-reviews')">
+          My Reviews 
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" 
+           [class.active]="activeTab === 'amenities'"
+           (click)="setActiveTab('amenities')">
+          Amenities Analyser
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Tab Content -->
+  <div class="tab-content">
+    <!-- Photos Tab -->
+    <div class="tab-pane" [class.active]="activeTab === 'photos'" *ngIf="activeTab === 'photos'">
+      <!-- Top Navigation Cards -->
   <div class="top-navigation" *ngIf="propertyData?.competitor && propertyData.competitor.length > 0">
     <button class="nav-arrow prev" (click)="previousCompetitor()" [disabled]="selectedCompetitorIndex <= 0">
       <i class="fas fa-chevron-left"></i>
@@ -266,6 +343,23 @@
         <span>Photo {{photoId}} needs a caption</span>
         <button class="btn btn-sm btn-primary" (click)="openCaptionModal(photoId)">Add Caption</button>
       </div>
+    </div>
+  </div>
+    </div>
+
+    <!-- Competitor Reviews Tab -->
+    <div class="tab-pane" [class.active]="activeTab === 'competitor-reviews'" *ngIf="activeTab === 'competitor-reviews'">
+      <app-competitor-reviews></app-competitor-reviews>
+    </div>
+
+    <!-- My Reviews Tab -->
+    <div class="tab-pane" [class.active]="activeTab === 'my-reviews'" *ngIf="activeTab === 'my-reviews'">
+      <app-my-reviews></app-my-reviews>
+    </div>
+
+    <!-- Amenities Analyser Tab -->
+    <div class="tab-pane" [class.active]="activeTab === 'amenities'" *ngIf="activeTab === 'amenities'">
+      <app-amenities-analyzer></app-amenities-analyzer>
     </div>
   </div>
 </div>

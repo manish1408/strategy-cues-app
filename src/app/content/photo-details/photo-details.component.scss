@@ -384,87 +384,174 @@
 
 /* Header Section */
 .details-header {
-  background: white;
-  border-bottom: 1px solid #e9ecef;
-  padding: 1.5rem 2rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 2rem 0;
+  margin-bottom: 0;
 
-.header-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.back-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: none;
-  border: 2px solid #e9ecef;
-  color: #6c757d;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 0.9rem;
-  font-weight: 500;
-
-  &:hover {
-    border-color: var(--brand-yellow);
-    color: var(--brand-black);
-    background: var(--brand-yellow-light);
-  }
-
-  i {
-    font-size: 0.8rem;
-  }
-}
-
-.property-title {
-  flex: 1;
-  text-align: center;
-
-  h1 {
-    font-size: var(--font-size-3xl);
-    font-weight: 700;
-    color: var(--brand-black);
-    margin-bottom: 0.25rem;
-  }
-
-  .listing-id {
-    font-size: 0.9rem;
-    color: #6c757d;
-    font-weight: 500;
-  }
-}
-
-.header-actions {
-  .btn {
-    background: transparent;
-    color: var(--brand-black);
-    border: 2px solid var(--brand-yellow);
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
+  .property-title {
     display: flex;
     align-items: center;
+
+    .btn {
+      border-color: rgba(255, 255, 255, 0.3);
+      color: white;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.5);
+        color: white;
+      }
+    }
+
+    .title-info {
+      margin-left: 0;
+
+      h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+
+      .property-meta {
+        .badge {
+          font-size: 0.875rem;
+          padding: 0.5rem 1rem;
+        }
+      }
+    }
+  }
+
+  .key-metrics {
+    display: flex;
+    gap: 2rem;
+    justify-content: flex-end;
+
+    .metric {
+      text-align: center;
+
+      .metric-label {
+        display: block;
+        font-size: 0.875rem;
+        opacity: 0.8;
+        margin-bottom: 0.25rem;
+      }
+
+      .metric-value {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 700;
+      }
+    }
+  }
+
+  .booking-buttons {
+    display: flex;
     gap: 0.5rem;
+    justify-content: flex-end;
+    flex-wrap: wrap;
 
-    &:hover {
-      background: var(--brand-yellow);
-      color: var(--brand-black);
-    }
+    .btn {
+      font-size: 0.875rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
 
-    i {
-      font-size: 0.8rem;
+      i {
+        margin-right: 0.5rem;
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      &.btn-booking {
+        background-color: #003580;
+        color: white;
+        border-color: #003580;
+
+        &:hover:not(:disabled) {
+          background-color: #002a66;
+          border-color: #002a66;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 8px rgba(0, 53, 128, 0.3);
+        }
+      }
+
+      &.btn-airbnb {
+        background-color: #FF5A5F;
+        color: white;
+        border-color: #FF5A5F;
+
+        &:hover:not(:disabled) {
+          background-color: #e04348;
+          border-color: #e04348;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 8px rgba(255, 90, 95, 0.3);
+        }
+      }
+
+      &.btn-vrbo {
+        background-color: #1E3A8A;
+        color: white;
+        border-color: #1E3A8A;
+
+        &:hover:not(:disabled) {
+          background-color: #1e40af;
+          border-color: #1e40af;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 8px rgba(30, 58, 138, 0.3);
+        }
+      }
     }
+  }
+}
+
+/* Tab Navigation */
+.tab-navigation {
+  background: white;
+  border-bottom: 1px solid #dee2e6;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  .nav-tabs {
+    border-bottom: none;
+
+    .nav-item {
+      .nav-link {
+        border: none;
+        color: #6c757d;
+        padding: 1rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+
+        &:hover {
+          color: #495057;
+          background-color: #f8f9fa;
+        }
+
+        &.active {
+          color: #667eea;
+          background-color: transparent;
+          border-bottom: 3px solid #667eea;
+        }
+
+        i {
+          font-size: 0.875rem;
+        }
+      }
+    }
+  }
+}
+
+/* Tab Content */
+.tab-content {
+  padding: 2rem 0;
+
+  .tab-pane {
+    animation: fadeIn 0.3s ease-in-out;
   }
 }
 
@@ -1346,10 +1433,48 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .header-content {
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
+  .details-header {
+    .property-title {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+
+      .title-info {
+        margin-left: 0;
+
+        h1 {
+          font-size: 1.5rem;
+        }
+      }
+    }
+
+    .key-metrics {
+      justify-content: flex-start;
+      margin-top: 1rem;
+      gap: 1rem;
+
+      .metric {
+        .metric-value {
+          font-size: 1.2rem;
+        }
+      }
+    }
+  }
+
+  .tab-navigation {
+    .nav-tabs {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+
+      .nav-item {
+        flex-shrink: 0;
+
+        .nav-link {
+          padding: 0.75rem 1rem;
+          white-space: nowrap;
+        }
+      }
+    }
   }
 
   .top-navigation {
@@ -1682,6 +1807,26 @@
   }
 }
 
+@media (max-width: 576px) {
+  .details-header {
+    padding: 1.5rem 0;
+
+    .property-title {
+      .title-info h1 {
+        font-size: 1.25rem;
+      }
+    }
+
+    .key-metrics {
+      .metric {
+        .metric-value {
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+}
+
 @keyframes modalSlideIn {
   from {
     opacity: 0;
@@ -1690,6 +1835,18 @@
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
