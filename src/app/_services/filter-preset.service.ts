@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of, catchError } from 'rxjs';
 import { FilterPreset } from '../_models/filter-preset.interface';
+import { FilterPresetApiService } from './filter-preset-api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,14 +11,46 @@ export class FilterPresetService {
   private presetsSubject = new BehaviorSubject<FilterPreset[]>([]);
   public presets$ = this.presetsSubject.asObservable();
 
-  constructor() {
+  constructor(private filterPresetApiService: FilterPresetApiService) {
     this.loadPresets();
   }
 
   /**
-   * Load all presets from localStorage
+   * Load all presets from API
    */
-  private loadPresets(): void {
+  loadPresets(operatorId?: string): void {
+    if (operatorId) {
+      this.filterPresetApiService.getFilterPresets(operatorId).subscribe({
+        next: (response) => {
+          if (response.success && response.data) {
+            // Convert API response to local format
+            const presets = response.data.map(apiPreset => ({
+              id: apiPreset.id,
+              name: apiPreset.name,
+              description: apiPreset.description,
+              createdAt: new Date(apiPreset.created_at),
+              updatedAt: new Date(apiPreset.updated_at),
+              filters: apiPreset.filters
+            }));
+            this.presetsSubject.next(presets);
+          }
+        },
+        error: (error) => {
+          console.error('Error loading filter presets from API:', error);
+          // Fallback to localStorage if API fails
+          this.loadPresetsFromStorage();
+        }
+      });
+    } else {
+      // Fallback to localStorage if no operatorId
+      this.loadPresetsFromStorage();
+    }
+  }
+
+  /**
+   * Fallback: Load presets from localStorage
+   */
+  private loadPresetsFromStorage(): void {
     try {
       const stored = localStorage.getItem(this.STORAGE_KEY);
       if (stored) {
@@ -30,7 +63,7 @@ export class FilterPresetService {
         this.presetsSubject.next(presets);
       }
     } catch (error) {
-      console.error('Error loading filter presets:', error);
+      console.error('Error loading filter presets from storage:', error);
       this.presetsSubject.next([]);
     }
   }
@@ -64,7 +97,7 @@ export class FilterPresetService {
   /**
    * Save a new preset
    */
-  savePreset(name: string, filters: FilterPreset['filters'], description?: string): FilterPreset {
+  savePreset(name: string, filters: FilterPreset['filters'], description?: string, operatorId?: string): FilterPreset {
     if (!name || name.trim().length === 0) {
       throw new Error('Preset name is required');
     }
@@ -75,6 +108,56 @@ export class FilterPresetService {
       throw new Error('A preset with this name already exists');
     }
 
+    // Create preset via API if operatorId is available
+    if (operatorId) {
+      this.filterPresetApiService.createFilterPreset(operatorId, {
+        name: name.trim(),
+        description: description?.trim(),
+        filters: { ...filters }
+      }).subscribe({
+        next: (response) => {
+          if (response.success && response.data) {
+            const newPreset: FilterPreset = {
+              id: response.data.id,
+              name: response.data.name,
+              description: response.data.description,
+              createdAt: new Date(response.data.created_at),
+              updatedAt: new Date(response.data.updated_at),
+              filters: response.data.filters
+            };
+
+            const updatedPresets = [...existingPresets, newPreset];
+            this.presetsSubject.next(updatedPresets);
+          }
+        },
+        error: (error) => {
+          console.error('Error saving preset to API:', error);
+          // Fallback to localStorage
+          this.savePresetToStorage(name, filters, description);
+        }
+      });
+    } else {
+      // Fallback to localStorage if no operatorId
+      this.savePresetToStorage(name, filters, description);
+    }
+
+    // Return temporary preset for immediate UI update
+    const tempPreset: FilterPreset = {
+      id: this.generateId(),
+      name: name.trim(),
+      description: description?.trim(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      filters: { ...filters }
+    };
+
+    return tempPreset;
+  }
+
+  /**
+   * Fallback: Save preset to localStorage
+   */
+  private savePresetToStorage(name: string, filters: FilterPreset['filters'], description?: string): FilterPreset {
     const newPreset: FilterPreset = {
       id: this.generateId(),
       name: name.trim(),
@@ -84,6 +167,7 @@ export class FilterPresetService {
       filters: { ...filters }
     };
 
+    const existingPresets = this.presetsSubject.value;
     const updatedPresets = [...existingPresets, newPreset];
     this.saveToStorage(updatedPresets);
     this.presetsSubject.next(updatedPresets);
@@ -135,6 +219,35 @@ export class FilterPresetService {
    * Delete a preset
    */
   deletePreset(id: string): boolean {
+    const existingPresets = this.presetsSubject.value;
+    const presetToDelete = existingPresets.find(preset => preset.id === id);
+
+    if (!presetToDelete) {
+      return false; // Preset not found
+    }
+
+    // Delete via API
+    this.filterPresetApiService.deleteFilterPreset(id).subscribe({
+      next: (response) => {
+        if (response.success) {
+          const filteredPresets = existingPresets.filter(preset => preset.id !== id);
+          this.presetsSubject.next(filteredPresets);
+        }
+      },
+      error: (error) => {
+        console.error('Error deleting preset from API:', error);
+        // Fallback to localStorage
+        this.deletePresetFromStorage(id);
+      }
+    });
+
+    return true;
+  }
+
+  /**
+   * Fallback: Delete preset from localStorage
+   */
+  private deletePresetFromStorage(id: string): boolean {
     const existingPresets = this.presetsSubject.value;
     const filteredPresets = existingPresets.filter(preset => preset.id !== id);
 

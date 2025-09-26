@@ -50,8 +50,9 @@
                     </div>
                     <div class="preset-actions">
                       <button class="btn btn-sm btn-outline-danger" (click)="deletePreset(preset.id)" 
-                        title="Delete preset">
-                        <i class="fas fa-trash"></i>
+                        [disabled]="presetDeleting" title="Delete preset">
+                        <i *ngIf="!presetDeleting" class="fas fa-trash"></i>
+                        <i *ngIf="presetDeleting" class="fas fa-spinner fa-spin"></i>
                       </button>
                     </div>
                   </div>
@@ -67,8 +68,9 @@
                 <div class="dropdown-item-text px-3 py-2">
                   <div class="btn-group btn-group-sm w-100" role="group">
                     <button type="button" class="btn btn-outline-success" (click)="showSavePresetDialog()" 
-                      [disabled]="!hasActiveFilters()" title="Save current filters as preset">
-                      <i class="fas fa-save me-1"></i>Save
+                      [disabled]="!hasActiveFilters() || presetSaving" title="Save current filters as preset">
+                      <i *ngIf="!presetSaving" class="fas fa-save me-1"></i>
+                      <i *ngIf="presetSaving" class="fas fa-spinner fa-spin me-1"></i>Save
                     </button>
                     <button type="button" class="btn btn-outline-secondary" (click)="togglePresetManagement()"
                       title="Manage presets">
@@ -265,8 +267,9 @@
           </h6>
           <div class="filter-actions">
             <button class="btn btn-sm btn-outline-success me-2" (click)="showSavePresetDialog()" 
-              title="Save current filters as preset">
-              <i class="fas fa-bookmark me-1"></i>Save as Preset
+              [disabled]="presetSaving" title="Save current filters as preset">
+              <i *ngIf="!presetSaving" class="fas fa-bookmark me-1"></i>
+              <i *ngIf="presetSaving" class="fas fa-spinner fa-spin me-1"></i>Save as Preset
             </button>
             <button class="btn btn-sm btn-outline-danger" (click)="clearAllFilters()">
               <i class="fas fa-times me-1"></i>Clear All
@@ -1478,8 +1481,9 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" (click)="cancelSavePreset()">Cancel</button>
             <button type="button" class="btn btn-success" (click)="saveCurrentFiltersAsPreset()" 
-              [disabled]="!newPresetName.trim()">
-              <i class="fas fa-save me-2"></i>Save Preset
+              [disabled]="!newPresetName.trim() || presetSaving">
+              <i *ngIf="!presetSaving" class="fas fa-save me-2"></i>
+              <i *ngIf="presetSaving" class="fas fa-spinner fa-spin me-2"></i>Save Preset
             </button>
           </div>
         </div>
@@ -1505,13 +1509,15 @@
               <div class="col-md-6 text-end">
                 <div class="btn-group btn-group-sm">
                   <button class="btn btn-outline-primary" (click)="exportPresets()" 
-                    title="Export all presets">
-                    <i class="fas fa-download me-1"></i>Export
+                    [disabled]="presetExporting" title="Export all presets">
+                    <i *ngIf="!presetExporting" class="fas fa-download me-1"></i>
+                    <i *ngIf="presetExporting" class="fas fa-spinner fa-spin me-1"></i>Export
                   </button>
-                  <label class="btn btn-outline-secondary" title="Import presets">
-                    <i class="fas fa-upload me-1"></i>Import
+                  <label class="btn btn-outline-secondary" [class.disabled]="presetImporting" title="Import presets">
+                    <i *ngIf="!presetImporting" class="fas fa-upload me-1"></i>
+                    <i *ngIf="presetImporting" class="fas fa-spinner fa-spin me-1"></i>Import
                     <input type="file" accept=".json" (change)="importPresets($event)" 
-                      style="display: none;">
+                      [disabled]="presetImporting" style="display: none;">
                   </label>
                 </div>
               </div>
@@ -1543,12 +1549,14 @@
                         <i class="fas fa-play"></i>
                       </button>
                       <button class="btn btn-sm btn-outline-secondary me-1" 
-                        (click)="duplicatePreset(preset.id)" title="Duplicate preset">
-                        <i class="fas fa-copy"></i>
+                        (click)="duplicatePreset(preset.id)" [disabled]="presetDuplicating" title="Duplicate preset">
+                        <i *ngIf="!presetDuplicating" class="fas fa-copy"></i>
+                        <i *ngIf="presetDuplicating" class="fas fa-spinner fa-spin"></i>
                       </button>
                       <button class="btn btn-sm btn-outline-danger" 
-                        (click)="deletePreset(preset.id)" title="Delete preset">
-                        <i class="fas fa-trash"></i>
+                        (click)="deletePreset(preset.id)" [disabled]="presetDeleting" title="Delete preset">
+                        <i *ngIf="!presetDeleting" class="fas fa-trash"></i>
+                        <i *ngIf="presetDeleting" class="fas fa-spinner fa-spin"></i>
                       </button>
                     </div>
                   </div>
