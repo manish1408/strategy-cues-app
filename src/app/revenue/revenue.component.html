@@ -385,7 +385,7 @@
                 </td>
                 <td *ngIf="columnVisibility.occupancyTM">
                   <div class="occupancy-cell">
-                    <circle-progress [percent]="safeParseNumber(property.Occupancy.TM)" [radius]="18" [backgroundPadding]="-2" [backgroundStroke]="'#f8f9fa'" [backgroundStrokeWidth]="6"
+                    <circle-progress [percent]="safeParseNumber(property.Occupancy.TM)" [radius]="24" [backgroundPadding]="-3" [backgroundStroke]="'#ccc'" [backgroundStrokeWidth]="6"
                       [outerStrokeWidth]="6" [innerStrokeWidth]="0" [outerStrokeColor]="getOccupancyColor(safeParseNumber(property.Occupancy.TM))"
                       [innerStrokeColor]="getOccupancyColor(safeParseNumber(property.Occupancy.TM), true)" [animation]="true" [animationDuration]="300" [showUnits]="false"
                       [showSubtitle]="false" [title]="safeParseNumber(property.Occupancy.TM) + '%'"
@@ -395,7 +395,7 @@
                 </td>
                 <td *ngIf="columnVisibility.occupancyNM">
                   <div class="occupancy-cell">
-                    <circle-progress [percent]="safeParseNumber(property.Occupancy.NM)" [radius]="18" [backgroundPadding]="-2" [backgroundStroke]="'#f8f9fa'" [backgroundStrokeWidth]="6"
+                    <circle-progress [percent]="safeParseNumber(property.Occupancy.NM)" [radius]="24" [backgroundPadding]="-3" [backgroundStroke]="'#ccc'" [backgroundStrokeWidth]="6"
                       [outerStrokeWidth]="6" [innerStrokeWidth]="0" [outerStrokeColor]="getOccupancyColor(safeParseNumber(property.Occupancy.NM))" 
                       [innerStrokeColor]="getOccupancyColor(safeParseNumber(property.Occupancy.NM), true)" [animation]="true" [animationDuration]="300" [showUnits]="false"
                       [showSubtitle]="false" [title]="safeParseNumber(property.Occupancy.NM) + '%'"
