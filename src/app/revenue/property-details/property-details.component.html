@@ -12,9 +12,6 @@
               <h1 class="mb-1">{{ property.Listing_Name }}</h1>
               <div class="property-meta">
                 <span class="badge bg-light text-dark me-2">{{ property.Area }}</span>
-                <span class="badge" [ngClass]="getRoomTypeClass(property.Room_Type)" *ngIf="property.Room_Type"> 
-                  {{ property.Room_Type }}
-                </span>
               </div>
             </div>
           </div>
@@ -34,24 +31,21 @@
             <button 
               class="btn btn-booking me-2" 
               (click)="openBookingLink('Booking')"
-              [disabled]="!property.Property_URLs || !property.Property_URLs.Booking || !property.Property_URLs.Booking.url"
               title="Book on Booking.com">
               <i class="fas fa-bed"></i> Booking.com
             </button>
             <button 
               class="btn btn-airbnb me-2" 
               (click)="openBookingLink('Airbnb')"
-              [disabled]="!property.Property_URLs || !property.Property_URLs.Airbnb || !property.Property_URLs.Airbnb.url"
               title="Book on Airbnb">
               <i class="fas fa-home"></i> Airbnb
             </button>
-            <button 
+            <!-- <button 
               class="btn btn-vrbo" 
               (click)="openBookingLink('VRBO')"
-              [disabled]="!property.Property_URLs || !property.Property_URLs.VRBO || !property.Property_URLs.VRBO.url"
               title="Book on VRBO">
               <i class="fas fa-key"></i> VRBO
-            </button>
+            </button> -->
           </div>
         </div>
       </div>
@@ -108,7 +102,7 @@
                   <div class="col-6">
                     <div class="metric-card">
                       <div class="metric-label">This Month</div>
-                      <div class="metric-value large">{{ property.Occupancy.TM || 'N/A' }}</div>
+                      <div class="metric-value large">{{ property.Occupancy.TM || 'N/A' }}%</div>
                       <div class="progress mt-2" style="height: 8px;" *ngIf="property.Occupancy.TM !== null">
                         <div class="progress-bar" [ngClass]="getOccupancyClass(property.Occupancy.TM)"
                         [style.width.%]="property.Occupancy.TM.toString()"></div>
@@ -118,7 +112,7 @@
                   <div class="col-6">
                     <div class="metric-card">
                       <div class="metric-label">Next Month</div>
-                      <div class="metric-value large">{{ property.Occupancy.NM || 'N/A' }}</div>
+                      <div class="metric-value large">{{ property.Occupancy.NM || 'N/A' }}%</div>
                       <div class="progress mt-2" style="height: 8px;" *ngIf="property.Occupancy.NM !== null">
                         <div class="progress-bar" [ngClass]="getOccupancyClass(property.Occupancy.NM)"
                         [style.width.%]="property.Occupancy.NM.toString()"></div>
@@ -130,13 +124,13 @@
                   <div class="col-6">
                     <div class="metric-card small">
                       <div class="metric-label">7 Days</div>
-                      <div class="metric-value">{{ property.Occupancy['7_days'] || 'N/A' }}</div>
+                      <div class="metric-value">{{ property.Occupancy['7_days'] || 'N/A' }}%</div>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="metric-card small">
                       <div class="metric-label">30 Days</div>
-                      <div class="metric-value">{{ property.Occupancy['30_days'] || 'N/A' }}</div>
+                      <div class="metric-value">{{ property.Occupancy['30_days'] || 'N/A' }}%</div>
                     </div>
                   </div>
                 </div>
@@ -196,19 +190,19 @@
                   <div class="col-md-4">
                     <div class="metric-card">
                       <div class="metric-label">7 Days</div>
-                      <div class="metric-value">{{ property.Pick_Up_Occ['7_Days'] || 'N/A' }}</div>
+                      <div class="metric-value">{{ property.Pick_Up_Occ['7_Days'] || 'N/A' }}%</div>
                     </div>
                   </div>
                   <div class="col-md-4">
                     <div class="metric-card">
                       <div class="metric-label">14 Days</div>
-                      <div class="metric-value">{{ property.Pick_Up_Occ['14_Days'] || 'N/A' }}</div>
+                      <div class="metric-value">{{ property.Pick_Up_Occ['14_Days'] || 'N/A' }}%</div>
                     </div>
                   </div>
                   <div class="col-md-4">
                     <div class="metric-card">
                       <div class="metric-label">30 Days</div>
-                      <div class="metric-value">{{ property.Pick_Up_Occ['30_Days'] || 'N/A' }}</div>
+                      <div class="metric-value">{{ property.Pick_Up_Occ['30_Days'] || 'N/A' }}%</div>
                     </div>
                   </div>
                 </div>
@@ -216,7 +210,7 @@
                   <div class="col-md-6" *ngIf="property.MPI !== null">
                     <div class="metric-card">
                       <div class="metric-label">MPI</div>
-                      <div class="metric-value large">{{ property.MPI }}</div>
+                      <div class="metric-value large">{{ property.MPI }}%</div>
                     </div>
                   </div>
                   <div class="col-md-6" *ngIf="property.Min_Rate_Threshold !== null">
@@ -247,7 +241,7 @@
 
       <!-- Performance Tab -->
       <div *ngIf="activeTab === 'performance'" class="tab-pane">
-        <div class="row" *ngIf="property.STLY_Var || property.STLM_Var">
+        <div class="row" *ngIf="property.STLY_Var">
           <div class="col-lg-6 mb-4" *ngIf="property.STLY_Var">
             <div class="card">
               <div class="card-header">
@@ -258,19 +252,19 @@
                   <div class="metric-row">
                     <span class="metric-name">Occupancy</span>
                     <span class="metric-value" [ngClass]="getPerformanceClass(property.STLY_Var.Occ)">
-                      {{ property.STLY_Var.Occ || 'N/A' }}
+                      {{ property.STLY_Var.Occ }}%
                     </span>
                   </div>
                   <div class="metric-row">
                     <span class="metric-name">ADR</span>
                     <span class="metric-value" [ngClass]="getPerformanceClass(property.STLY_Var.ADR)">
-                      {{ property.STLY_Var.ADR || 'N/A' }}
+                      {{ property.STLY_Var.ADR }}
                     </span>
                   </div>
                   <div class="metric-row">
                     <span class="metric-name">RevPAR</span>
                     <span class="metric-value" [ngClass]="getPerformanceClass(property.STLY_Var.RevPAR)">
-                      {{ property.STLY_Var.RevPAR || 'N/A' }}
+                      {{ property.STLY_Var.RevPAR }}
                     </span>
                   </div>
                 </div>
@@ -477,15 +471,15 @@
                     <div class="policy-list">
                       <div class="policy-item">
                         <span class="platform-name">Booking.com:</span>
-                        <span class="policy-value">{{ property.CXL_Policy.Booking || 'N/A' }}</span>
+                        <span class="policy-value">{{ property.CXL_Policy.Booking }}</span>
                       </div>
                       <div class="policy-item">
                         <span class="platform-name">Airbnb:</span>
-                        <span class="policy-value">{{ property.CXL_Policy.Airbnb || 'N/A' }}</span>
+                        <span class="policy-value">{{ property.CXL_Policy.Airbnb }}</span>
                       </div>
                       <div class="policy-item">
                         <span class="platform-name">VRBO:</span>
-                        <span class="policy-value">{{ property.CXL_Policy.VRBO || 'N/A' }}</span>
+                        <span class="policy-value">{{ property.CXL_Policy.VRBO }}</span>
                       </div>
                     </div>
                   </div>
@@ -494,15 +488,15 @@
                     <div class="policy-list">
                       <div class="policy-item">
                         <span class="platform-name">Booking.com:</span>
-                        <span class="policy-value">{{ property.Adult_Child_Config.Booking || 'N/A' }}</span>
+                        <span class="policy-value">Max: {{ property.Adult_Child_Config.Booking.max_adults }}, {{ property.Adult_Child_Config.Booking.max_children }}</span>
                       </div>
                       <div class="policy-item">
                         <span class="platform-name">Airbnb:</span>
-                        <span class="policy-value">{{ property.Adult_Child_Config.Airbnb || 'N/A' }}</span>
+                        <span class="policy-value">{{ property.Adult_Child_Config.Airbnb }}</span>
                       </div>
                       <div class="policy-item">
                         <span class="platform-name">VRBO:</span>
-                        <span class="policy-value">{{ property.Adult_Child_Config.VRBO || 'N/A' }}</span>
+                        <span class="policy-value">{{ property.Adult_Child_Config.VRBO }}</span>
                       </div>
                     </div>
                   </div>

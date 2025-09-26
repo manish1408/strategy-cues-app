@@ -365,12 +365,12 @@
                         </span>
                         
                         <!-- VRBO Link -->
-                        <a *ngIf="property.VRBOUrl" [href]="property.VRBOUrl" target="_blank" class="platform-link vrbo" title="View on VRBO">
+                        <!-- <a *ngIf="property.VRBOUrl" [href]="property.VRBOUrl" target="_blank" class="platform-link vrbo" title="View on VRBO">
                           <i class="fas fa-home"></i>
-                        </a>
-                        <span *ngIf="!property.VRBOUrl" class="platform-link vrbo disabled" title="No VRBO URL available">
+                        </a> -->
+                        <!-- <span *ngIf="!property.VRBOUrl" class="platform-link vrbo disabled" title="No VRBO URL available">
                           <i class="fas fa-home"></i>
-                        </span>
+                        </span> -->
                         
                         <!-- Pricelab Link -->
                         <a *ngIf="property.PricelabsUrl" [href]="property.PricelabsUrl" target="_blank" class="platform-link pricelab" title="View on Pricelab">
@@ -465,7 +465,7 @@
                     </div>
 
                     <!-- VRBO Reviews -->
-                    <div class="review-item clickable" *ngIf="safeParseNumber(property.Reviews?.VRBO?.Rev_Score) > 0"
+                    <!-- <div class="review-item clickable" *ngIf="safeParseNumber(property.Reviews?.VRBO?.Rev_Score) > 0"
                       title="VRBO: {{ property.Reviews.VRBO.Rev_Score }}/5 ({{ property.Reviews.VRBO.Total_Rev }} reviews) - Click to visit property"
                       (click)="openPropertyUrl(property, 'VRBO')">
                       <i class="fas fa-home text-warning"></i>
@@ -475,11 +475,12 @@
                       </div>
                       <span class="rating-text">{{ property.Reviews.VRBO.Rev_Score }}</span>
                     </div>
+
                     <div class="review-item no-reviews" *ngIf="safeParseNumber(property.Reviews.VRBO.Rev_Score) === 0"
                       title="VRBO: No reviews">
                       <i class="fas fa-home text-muted"></i>
                       <span class="no-reviews-text" style="font-size: var(--font-size-xs);">No Reviews</span>
-                    </div>
+                    </div> -->
                   </div>
                 </td>
                 <td *ngIf="columnVisibility.cxlPolicy">
@@ -500,14 +501,14 @@
                       <i class="fab fa-airbnb text-muted"></i>
                       <span class="no-policy-text" style="font-size: var(--font-size-xs);">No policy</span>
                     </div>
-                    <div class="policy-item" *ngIf="property.CXL_Policy?.VRBO && property.CXL_Policy.VRBO.trim() !== ''">
+                    <!-- <div class="policy-item" *ngIf="property.CXL_Policy?.VRBO && property.CXL_Policy.VRBO.trim() !== ''">
                       <i class="fas fa-home text-warning"></i>
                       <span class="policy-text">{{ property.CXL_Policy.VRBO }}</span>
                     </div>
                     <div class="policy-item no-policy" *ngIf="!property.CXL_Policy?.VRBO || property.CXL_Policy.VRBO.trim() === ''">
                       <i class="fas fa-home text-muted"></i>
                       <span class="no-policy-text" style="font-size: var(--font-size-xs);">No policy</span>
-                    </div>
+                    </div> -->
                   </div>
                 </td>
                 <td *ngIf="columnVisibility.adultChildConfig">

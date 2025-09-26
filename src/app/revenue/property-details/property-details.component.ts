@@ -4,110 +4,6 @@ import revenueData from '../../json_data/dubai_revenue_magt_cues_50.json';
 import { PropertiesService } from '../../_services/properties.service';
 import { LocalStorageService } from '../../_services/local-storage.service';
 
-interface PropertyData {
-  _id: string;
-  operator_id: string;
-  Listing_Name: string;
-  Area: string;
-  Room_Type: string | null;
-  Occupancy: {
-    '7_days': number;
-    '30_days': number;
-    TM: number;
-    NM: number;
-  } | null;
-  ADR: {
-    TM: number;
-    NM: number;
-  } | null;
-  RevPAR: {
-    TM: number;
-    NM: number;
-  } | null;
-  MPI: number | null;
-  STLY_Var: {
-    Occ: number;
-    ADR: number;
-    RevPAR: number;
-  } | null;
-  STLM_Var: {
-    Occ: number;
-    ADR: number;
-    RevPAR: number;
-  } | null;
-  Pick_Up_Occ: {
-    '7_Days': number;
-    '14_Days': number;
-    '30_Days': number;
-  } | null;
-  Min_Rate_Threshold: number | null;
-  BookingCom: {
-    Genius: string;
-    Mobile: string;
-    Pref: string;
-    Weekly: string;
-    Monthly: string;
-    LM_Disc: string;
-  } | null;
-  Airbnb: {
-    Weekly: string;
-    Monthly: string;
-    Member: string;
-    LM_Disc: string;
-  } | null;
-  VRBO: {
-    Weekly: string;
-    Monthly: string;
-  } | null;
-  CXL_Policy: {
-    Booking: string;
-    Airbnb: string;
-    VRBO: string;
-  } | null;
-  Adult_Child_Config: {
-    Booking: number;
-    Airbnb: number;
-    VRBO: number;
-  } | null;
-  Reviews: {
-    Booking: {
-      Last_Rev_Dt: string;
-      Last_Rev_Score: number;
-      Rev_Score: number;
-      Total_Rev: number;
-    };
-    Airbnb: {
-      Last_Rev_Dt: string;
-      Last_Rev_Score: number;
-      Rev_Score: number;
-      Total_Rev: number;
-    };
-    VRBO: {
-      Last_Rev_Dt: string;
-      Last_Rev_Score: number;
-      Rev_Score: number;
-      Total_Rev: number;
-    };
-  } | null;
-  Property_URLs: {
-    Booking: {
-      url: string | null;
-      id: string | null;
-    } | null;
-    Airbnb: {
-      url: string | null;
-      id: string | null;
-    } | null;
-    VRBO: {
-      url: string | null;
-      id: string | null;
-    } | null;
-    Pricelab: {
-      url: string | null;
-      id: string | null;
-    } | null;
-  };
-}
 
 @Component({
   selector: 'app-property-details',
@@ -115,7 +11,7 @@ interface PropertyData {
   styleUrl: './property-details.component.scss'
 })
 export class PropertyDetailsComponent implements OnInit {
-  property: PropertyData | null = null;
+  property: any = null;
   propertyId: string = '';
   activeTab: 'overview' | 'performance' | 'platforms' | 'reviews' = 'overview';
   operatorId: string = '';
@@ -216,9 +112,13 @@ export class PropertyDetailsComponent implements OnInit {
 
   // Methods to handle booking platform links
   openBookingLink(platform: 'Booking' | 'Airbnb' | 'VRBO'): void {
-    const platformData = this.property?.Property_URLs?.[platform];
-    if (platformData?.url) {
-      window.open(platformData.url, '_blank');
+    if(platform === 'Booking') {
+      window.open(this.property.BookingUrl, '_blank');
+    } else if(platform === 'Airbnb') {
+      window.open(this.property.AirbnbUrl, '_blank');
+    } else if(platform === 'VRBO') {
+      window.open(this.property.BookingUrl, '_blank');
     }
+   
   }
 }
