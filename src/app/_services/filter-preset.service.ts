@@ -7,78 +7,58 @@ import { FilterPresetApiService } from './filter-preset-api.service';
   providedIn: 'root'
 })
 export class FilterPresetService {
-  private readonly STORAGE_KEY = 'revenue_filter_presets';
   private presetsSubject = new BehaviorSubject<FilterPreset[]>([]);
   public presets$ = this.presetsSubject.asObservable();
 
   constructor(private filterPresetApiService: FilterPresetApiService) {
-    this.loadPresets();
+    // No automatic loading - will be called explicitly
   }
 
   /**
    * Load all presets from API
    */
-  loadPresets(operatorId?: string): void {
-    if (operatorId) {
-      this.filterPresetApiService.getFilterPresets(operatorId).subscribe({
-        next: (response) => {
-          if (response.success && response.data) {
+  loadPresets(operatorId: string): void {
+    if (!operatorId) {
+      this.presetsSubject.next([]);
+      return;
+    }
+
+    this.filterPresetApiService.getFilterPresets(operatorId).subscribe({
+      next: (response) => {
+        if (response.success && response.data) {
+          // Handle the response structure - data might be an object with filterPresets property
+          let presetsArray = response.data;
+          
+          // If data is an object with filterPresets property, extract it
+          if ((response.data as any).filterPresets && Array.isArray((response.data as any).filterPresets)) {
+            presetsArray = (response.data as any).filterPresets;
+          }
+          
+          // Ensure we have an array
+          if (Array.isArray(presetsArray)) {
             // Convert API response to local format
-            const presets = response.data.map(apiPreset => ({
-              id: apiPreset.id,
+            const presets = presetsArray.map(apiPreset => ({
+              id: apiPreset._id, // API uses _id field
               name: apiPreset.name,
               description: apiPreset.description,
-              createdAt: new Date(apiPreset.created_at),
-              updatedAt: new Date(apiPreset.updated_at),
+              createdAt: this.safeDateConversion(apiPreset.createdAt),
+              updatedAt: this.safeDateConversion(apiPreset.updatedAt),
               filters: apiPreset.filters
             }));
             this.presetsSubject.next(presets);
+          } else {
+            this.presetsSubject.next([]);
           }
-        },
-        error: (error) => {
-          console.error('Error loading filter presets from API:', error);
-          // Fallback to localStorage if API fails
-          this.loadPresetsFromStorage();
+        } else {
+          this.presetsSubject.next([]);
         }
-      });
-    } else {
-      // Fallback to localStorage if no operatorId
-      this.loadPresetsFromStorage();
-    }
-  }
-
-  /**
-   * Fallback: Load presets from localStorage
-   */
-  private loadPresetsFromStorage(): void {
-    try {
-      const stored = localStorage.getItem(this.STORAGE_KEY);
-      if (stored) {
-        const presets = JSON.parse(stored) as FilterPreset[];
-        // Convert date strings back to Date objects
-        presets.forEach(preset => {
-          preset.createdAt = new Date(preset.createdAt);
-          preset.updatedAt = new Date(preset.updatedAt);
-        });
-        this.presetsSubject.next(presets);
+      },
+      error: (error) => {
+        this.presetsSubject.next([]);
       }
-    } catch (error) {
-      console.error('Error loading filter presets from storage:', error);
-      this.presetsSubject.next([]);
-    }
+    });
   }
 
-  /**
-   * Save presets to localStorage
-   */
-  private saveToStorage(presets: FilterPreset[]): void {
-    try {
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(presets));
-    } catch (error) {
-      console.error('Error saving filter presets:', error);
-      throw new Error('Failed to save filter preset. Storage may be full.');
-    }
-  }
 
   /**
    * Get all presets
@@ -102,44 +82,41 @@ export class FilterPresetService {
       throw new Error('Preset name is required');
     }
 
+    if (!operatorId) {
+      throw new Error('Operator ID is required to save preset');
+    }
+
     // Check if name already exists
     const existingPresets = this.presetsSubject.value;
     if (existingPresets.some(preset => preset.name.toLowerCase() === name.trim().toLowerCase())) {
       throw new Error('A preset with this name already exists');
     }
 
-    // Create preset via API if operatorId is available
-    if (operatorId) {
-      this.filterPresetApiService.createFilterPreset(operatorId, {
-        name: name.trim(),
-        description: description?.trim(),
-        filters: { ...filters }
-      }).subscribe({
-        next: (response) => {
-          if (response.success && response.data) {
-            const newPreset: FilterPreset = {
-              id: response.data.id,
-              name: response.data.name,
-              description: response.data.description,
-              createdAt: new Date(response.data.created_at),
-              updatedAt: new Date(response.data.updated_at),
-              filters: response.data.filters
-            };
+    // Create preset via API
+    this.filterPresetApiService.createFilterPreset(operatorId, {
+      name: name.trim(),
+      description: description?.trim(),
+      filters: { ...filters }
+    }).subscribe({
+      next: (response) => {
+        if (response.success && response.data) {
+          const newPreset: FilterPreset = {
+            id: response.data._id,
+            name: response.data.name,
+            description: response.data.description,
+            createdAt: new Date(response.data.createdAt),
+            updatedAt: new Date(response.data.updatedAt),
+            filters: response.data.filters
+          };
 
-            const updatedPresets = [...existingPresets, newPreset];
-            this.presetsSubject.next(updatedPresets);
-          }
-        },
-        error: (error) => {
-          console.error('Error saving preset to API:', error);
-          // Fallback to localStorage
-          this.savePresetToStorage(name, filters, description);
+          const updatedPresets = [...existingPresets, newPreset];
+          this.presetsSubject.next(updatedPresets);
         }
-      });
-    } else {
-      // Fallback to localStorage if no operatorId
-      this.savePresetToStorage(name, filters, description);
-    }
+      },
+      error: (error) => {
+        throw new Error('Failed to save preset to server');
+      }
+    });
 
     // Return temporary preset for immediate UI update
     const tempPreset: FilterPreset = {
@@ -154,36 +131,20 @@ export class FilterPresetService {
     return tempPreset;
   }
 
-  /**
-   * Fallback: Save preset to localStorage
-   */
-  private savePresetToStorage(name: string, filters: FilterPreset['filters'], description?: string): FilterPreset {
-    const newPreset: FilterPreset = {
-      id: this.generateId(),
-      name: name.trim(),
-      description: description?.trim(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      filters: { ...filters }
-    };
-
-    const existingPresets = this.presetsSubject.value;
-    const updatedPresets = [...existingPresets, newPreset];
-    this.saveToStorage(updatedPresets);
-    this.presetsSubject.next(updatedPresets);
-
-    return newPreset;
-  }
 
   /**
    * Update an existing preset
    */
-  updatePreset(id: string, updates: Partial<Omit<FilterPreset, 'id' | 'createdAt'>>): FilterPreset {
+  updatePreset(id: string, updates: Partial<Omit<FilterPreset, 'id' | 'createdAt'>>, operatorId?: string): FilterPreset {
     const existingPresets = this.presetsSubject.value;
     const presetIndex = existingPresets.findIndex(preset => preset.id === id);
 
     if (presetIndex === -1) {
       throw new Error('Preset not found');
+    }
+
+    if (!operatorId) {
+      throw new Error('Operator ID is required to update preset');
     }
 
     // Check if new name conflicts with existing presets (excluding current preset)
@@ -198,6 +159,33 @@ export class FilterPresetService {
       }
     }
 
+    // Update via API
+    this.filterPresetApiService.updateFilterPreset(id, {
+      name: updates.name?.trim(),
+      description: updates.description?.trim(),
+      filters: updates.filters
+    }).subscribe({
+      next: (response) => {
+        if (response.success && response.data) {
+          const updatedPreset: FilterPreset = {
+            id: response.data._id,
+            name: response.data.name,
+            description: response.data.description,
+            createdAt: new Date(response.data.createdAt),
+            updatedAt: new Date(response.data.updatedAt),
+            filters: response.data.filters
+          };
+
+          const updatedPresets = [...existingPresets];
+          updatedPresets[presetIndex] = updatedPreset;
+          this.presetsSubject.next(updatedPresets);
+        }
+      },
+      error: (error) => {
+        throw new Error('Failed to update preset on server');
+      }
+    });
+
     const updatedPreset: FilterPreset = {
       ...existingPresets[presetIndex],
       ...updates,
@@ -206,73 +194,114 @@ export class FilterPresetService {
       updatedAt: new Date()
     };
 
-    const updatedPresets = [...existingPresets];
-    updatedPresets[presetIndex] = updatedPreset;
-
-    this.saveToStorage(updatedPresets);
-    this.presetsSubject.next(updatedPresets);
-
     return updatedPreset;
   }
 
   /**
    * Delete a preset
    */
-  deletePreset(id: string): boolean {
+  deletePreset(id: string, operatorId?: string): Observable<boolean> {
     const existingPresets = this.presetsSubject.value;
     const presetToDelete = existingPresets.find(preset => preset.id === id);
 
     if (!presetToDelete) {
-      return false; // Preset not found
+      return of(false); // Preset not found
     }
 
-    // Delete via API
-    this.filterPresetApiService.deleteFilterPreset(id).subscribe({
-      next: (response) => {
-        if (response.success) {
-          const filteredPresets = existingPresets.filter(preset => preset.id !== id);
-          this.presetsSubject.next(filteredPresets);
+    if (!operatorId) {
+      return of(false);
+    }
+    
+    return new Observable<boolean>(observer => {
+      this.filterPresetApiService.deleteFilterPreset(id, operatorId).subscribe({
+        next: (response) => {
+          console.log('Delete preset API response:', response);
+          
+          // According to API docs, successful response should be: { "data": {}, "success": true }
+          if (response && response.success === true) {
+            console.log('Preset deleted successfully from API');
+            // Remove from local state
+            const filteredPresets = existingPresets.filter(preset => preset.id !== id);
+            this.presetsSubject.next(filteredPresets);
+            observer.next(true);
+            observer.complete();
+          } else {
+            console.warn('Delete preset API returned unexpected response:', response);
+            // Still remove from local state as user requested deletion
+            const filteredPresets = existingPresets.filter(preset => preset.id !== id);
+            this.presetsSubject.next(filteredPresets);
+            observer.next(true);
+            observer.complete();
+          }
+        },
+        error: (error) => {
+          console.error('Error deleting preset from API:', error);
+          console.log('Error details:', {
+            status: error.status,
+            statusText: error.statusText,
+            error: error.error,
+            message: error.message
+          });
+          console.log('Full error object:', JSON.stringify(error, null, 2));
+          
+          // Handle different error scenarios based on API documentation
+          if (error.status === 404) {
+            console.warn('Preset not found on backend (404), removing from local state only');
+            const filteredPresets = existingPresets.filter(preset => preset.id !== id);
+            this.presetsSubject.next(filteredPresets);
+            observer.next(true); // Success because preset is gone
+            observer.complete();
+          } else if (error.status === 400) {
+            console.error('Bad request (400):', error.error);
+            // Check if it's the specific "Filter preset not found" error
+            const errorMessage = error.error?.detail?.error || error.error?.message || '';
+            if (errorMessage.includes('Filter preset not found') || errorMessage.includes('not found')) {
+              console.warn('Preset not found on backend, removing from local state only');
+              const filteredPresets = existingPresets.filter(preset => preset.id !== id);
+              this.presetsSubject.next(filteredPresets);
+              observer.next(true); // Success because preset is gone
+              observer.complete();
+            } else {
+              console.error('Other 400 error - API operation failed');
+              // Don't remove from local state for other 400 errors
+              observer.next(false); // Failure - API error
+              observer.complete();
+            }
+          } else if (error.status === 422) {
+            console.error('Validation error (422):', error.error);
+            // Don't remove from local state for validation errors
+            observer.next(false); // Failure - validation error
+            observer.complete();
+          } else {
+            console.error('Unexpected error - API operation failed');
+            // Don't remove from local state for unexpected errors
+            observer.next(false); // Failure - unexpected error
+            observer.complete();
+          }
         }
-      },
-      error: (error) => {
-        console.error('Error deleting preset from API:', error);
-        // Fallback to localStorage
-        this.deletePresetFromStorage(id);
-      }
+      });
     });
-
-    return true;
   }
 
-  /**
-   * Fallback: Delete preset from localStorage
-   */
-  private deletePresetFromStorage(id: string): boolean {
-    const existingPresets = this.presetsSubject.value;
-    const filteredPresets = existingPresets.filter(preset => preset.id !== id);
-
-    if (filteredPresets.length === existingPresets.length) {
-      return false; // Preset not found
-    }
-
-    this.saveToStorage(filteredPresets);
-    this.presetsSubject.next(filteredPresets);
-    return true;
-  }
 
   /**
    * Duplicate a preset with a new name
    */
-  duplicatePreset(id: string, newName: string): FilterPreset {
+  duplicatePreset(id: string, newName: string, operatorId?: string): FilterPreset {
     const existingPreset = this.getPresetById(id);
     if (!existingPreset) {
       throw new Error('Preset not found');
     }
 
+    if (!operatorId) {
+      throw new Error('Operator ID is required to duplicate preset');
+    }
+
     return this.savePreset(
       newName, 
       existingPreset.filters, 
-      `Copy of ${existingPreset.description || existingPreset.name}`
+      `Copy of ${existingPreset.description || existingPreset.name}`,
+      operatorId
     );
   }
 
@@ -294,80 +323,26 @@ export class FilterPresetService {
     return this.presetsSubject.value.length;
   }
 
-  /**
-   * Export presets as JSON
-   */
-  exportPresets(): string {
-    return JSON.stringify(this.presetsSubject.value, null, 2);
-  }
 
-  /**
-   * Import presets from JSON
-   */
-  importPresets(jsonData: string, replaceExisting: boolean = false): number {
-    try {
-      const importedPresets = JSON.parse(jsonData) as FilterPreset[];
-      
-      // Validate imported data
-      if (!Array.isArray(importedPresets)) {
-        throw new Error('Invalid preset data format');
-      }
-
-      // Validate each preset
-      importedPresets.forEach((preset, index) => {
-        if (!preset.id || !preset.name || !preset.filters) {
-          throw new Error(`Invalid preset at index ${index}`);
-        }
-      });
-
-      let existingPresets = replaceExisting ? [] : this.presetsSubject.value;
-      let importedCount = 0;
-
-      importedPresets.forEach(preset => {
-        // Generate new ID to avoid conflicts
-        const newPreset = {
-          ...preset,
-          id: this.generateId(),
-          createdAt: new Date(preset.createdAt),
-          updatedAt: new Date(),
-        };
-
-        // Handle name conflicts
-        let finalName = preset.name;
-        let counter = 1;
-        while (existingPresets.some(p => p.name.toLowerCase() === finalName.toLowerCase())) {
-          finalName = `${preset.name} (${counter})`;
-          counter++;
-        }
-        newPreset.name = finalName;
-
-        existingPresets.push(newPreset);
-        importedCount++;
-      });
-
-      this.saveToStorage(existingPresets);
-      this.presetsSubject.next(existingPresets);
-
-      return importedCount;
-    } catch (error) {
-      console.error('Error importing presets:', error);
-      throw new Error('Failed to import presets. Please check the file format.');
-    }
-  }
-
-  /**
-   * Clear all presets
-   */
-  clearAllPresets(): void {
-    this.saveToStorage([]);
-    this.presetsSubject.next([]);
-  }
 
   /**
    * Generate a unique ID for presets
    */
   private generateId(): string {
     return 'preset_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+  }
+
+  /**
+   * Safely convert date strings to Date objects
+   */
+  private safeDateConversion(dateString: any): Date {
+    if (!dateString) return new Date();
+    if (dateString instanceof Date) return dateString;
+    if (typeof dateString === 'string') {
+      const parsed = new Date(dateString);
+      return isNaN(parsed.getTime()) ? new Date() : parsed;
+    }
+    return new Date();
   }
 
   /**

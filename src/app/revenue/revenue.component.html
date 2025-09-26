@@ -38,9 +38,11 @@
                 <div *ngIf="filterPresets.length > 0" class="preset-list">
                   <div *ngFor="let preset of filterPresets" class="dropdown-item preset-item" (click)="$event.stopPropagation()">
                     <div class="preset-info">
-                      <div class="preset-name" (click)="selectedPresetId = preset.id; onPresetSelectionChange()">
+                      <div class="preset-name" (click)="selectedPresetId = preset.id; onPresetSelectionChange()" 
+                           [class.selected]="selectedPresetId === preset.id">
                         <i class="fas fa-bookmark text-primary me-2"></i>
                         {{ preset.name }}
+                        <span *ngIf="selectedPresetId === preset.id" class="badge bg-success ms-2">Selected</span>
                       </div>
                       <div class="preset-summary">
                         <small class="text-muted">{{ getPresetSummary(preset).slice(0, 2).join(', ') }}
@@ -60,6 +62,17 @@
                 
                 <div *ngIf="filterPresets.length === 0" class="dropdown-item-text text-muted">
                   No saved presets
+                </div>
+                
+                <!-- Debug section for testing -->
+                <div *ngIf="filterPresets.length > 0" class="dropdown-item-text text-muted">
+                  <small>Debug: {{ filterPresets.length }} presets loaded</small>
+                  <br>
+                  <button class="btn btn-sm btn-outline-info" (click)="debugPresets()">Debug</button>
+                  <button class="btn btn-sm btn-outline-warning" (click)="testPresetClick(filterPresets[0].id)" 
+                          *ngIf="filterPresets.length > 0">Test First Preset</button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="testDeletePreset(filterPresets[0].id)" 
+                          *ngIf="filterPresets.length > 0">Test Delete First</button>
                 </div>
                 
                 <div class="dropdown-divider"></div>
@@ -510,15 +523,15 @@
                   <div class="adult-child-config-cell">
                     <div class="config-item" *ngIf="property.Adult_Child_Config?.Booking">
                       <i class="fas fa-bed text-primary"></i>
-                      <span class="config-text">{{ property.Adult_Child_Config.Booking }}</span>
+                      <span class="config-text">Guests: {{ formatGuestConfig(property.Adult_Child_Config.Booking) }}</span>
                     </div>
                     <div class="config-item" *ngIf="property.Adult_Child_Config?.Airbnb">
                       <i class="fab fa-airbnb text-danger"></i>
-                      <span class="config-text">{{ property.Adult_Child_Config.Airbnb }}</span>
+                      <span class="config-text">Guests: {{ formatGuestConfig(property.Adult_Child_Config.Airbnb) }}</span>
                     </div>
                     <div class="config-item" *ngIf="property.Adult_Child_Config?.VRBO">
                       <i class="fas fa-home text-warning"></i>
-                      <span class="config-text">{{ property.Adult_Child_Config.VRBO }}</span>
+                      <span class="config-text">Guests: {{ formatGuestConfig(property.Adult_Child_Config.VRBO) }}</span>
                     </div>
                     <div class="no-config-text" *ngIf="!property.Adult_Child_Config">
                       <small class="text-muted" style="font-size: var(--font-size-xs);">No configuration</small>
@@ -1536,9 +1549,9 @@
                     <div class="preset-title">
                       <h6 class="mb-1">{{ preset.name }}</h6>
                       <small class="text-muted">
-                        Created: {{ preset.createdAt | date:'short' }}
-                        <span *ngIf="preset.updatedAt > preset.createdAt">
-                          | Updated: {{ preset.updatedAt | date:'short' }}
+                        Created: {{ getSafeDate(preset.createdAt) | date:'short' }}
+                        <span *ngIf="isValidDate(preset.updatedAt) && preset.updatedAt > preset.createdAt">
+                          | Updated: {{ getSafeDate(preset.updatedAt) | date:'short' }}
                         </span>
                       </small>
                     </div>

@@ -9,6 +9,7 @@ import { FilterPreset } from '../_models/filter-preset.interface';
 import { Router, ActivatedRoute } from "@angular/router";
 import { ExportService } from "../_services/export.service";
 import { ToastrService } from "ngx-toastr";
+import { ToastService } from "../_services/toast.service";
 
 // Declare global variables for jQuery and Bootstrap
 declare var $: any;
@@ -293,7 +294,8 @@ export class RevenueComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private exportService: ExportService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private toastService: ToastService
   ) {
     this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
   }
@@ -2118,20 +2120,23 @@ export class RevenueComponent implements OnInit {
   loadFilterPresets(): void {
     this.presetLoading = true;
     
-    // Load presets with operatorId
-    if (this.operatorId) {
-      console.log('Loading presets for operatorId:', this.operatorId);
-      this.filterPresetService.loadPresets(this.operatorId);
-    } else {
-      console.warn('No operatorId available, loading presets from localStorage');
-      this.filterPresetService.loadPresets(); // This will fallback to localStorage
+    if (!this.operatorId) {
+      console.error('Operator ID is required to load presets');
+      this.presetLoading = false;
+      this.toastr.error('Operator ID is required to load presets');
+      return;
     }
+    
+    console.log('Loading presets for operatorId:', this.operatorId);
+    this.filterPresetService.loadPresets(this.operatorId);
     
     this.filterPresetService.presets$.subscribe({
       next: (presets) => {
         this.filterPresets = presets;
         this.presetLoading = false;
         console.log('Filter presets loaded:', presets.length, presets);
+        console.log('Component filterPresets array:', this.filterPresets);
+        console.log('Component filterPresets length:', this.filterPresets.length);
       },
       error: (error) => {
         console.error('Error loading filter presets:', error);
@@ -2145,6 +2150,63 @@ export class RevenueComponent implements OnInit {
   refreshPresets(): void {
     console.log('Refreshing presets...');
     this.loadFilterPresets();
+  }
+
+  // Debug method to check current presets state
+  debugPresets(): void {
+    console.log('=== DEBUG PRESETS ===');
+    console.log('Component filterPresets:', this.filterPresets);
+    console.log('Component filterPresets length:', this.filterPresets.length);
+    console.log('Service presets:', this.filterPresetService.getAllPresets());
+    console.log('Service presets length:', this.filterPresetService.getAllPresets().length);
+    console.log('Operator ID:', this.operatorId);
+    console.log('===================');
+  }
+
+  // Test method to simulate preset click
+  testPresetClick(presetId: string): void {
+    console.log('Testing preset click with ID:', presetId);
+    this.selectedPresetId = presetId;
+    this.onPresetSelectionChange();
+  }
+
+  // Test method to debug delete functionality
+  testDeletePreset(presetId: string): void {
+    console.log('=== TESTING DELETE PRESET ===');
+    console.log('Preset ID to delete:', presetId);
+    console.log('Operator ID:', this.operatorId);
+    
+    const preset = this.filterPresetService.getPresetById(presetId);
+    console.log('Found preset:', preset);
+    
+    if (preset) {
+      console.log('Attempting to delete preset:', preset.name);
+      this.deletePreset(presetId);
+    } else {
+      console.error('Preset not found with ID:', presetId);
+    }
+  }
+
+  // Helper method to safely handle dates
+  getSafeDate(date: any): Date {
+    if (!date) return new Date();
+    if (date instanceof Date) return date;
+    if (typeof date === 'string') {
+      const parsed = new Date(date);
+      return isNaN(parsed.getTime()) ? new Date() : parsed;
+    }
+    return new Date();
+  }
+
+  // Helper method to check if date is valid
+  isValidDate(date: any): boolean {
+    if (!date) return false;
+    if (date instanceof Date) return !isNaN(date.getTime());
+    if (typeof date === 'string') {
+      const parsed = new Date(date);
+      return !isNaN(parsed.getTime());
+    }
+    return false;
   }
 
   getCurrentFilters(): FilterPreset['filters'] {
@@ -2224,9 +2286,13 @@ export class RevenueComponent implements OnInit {
   }
 
   applyPresetFilters(filters: FilterPreset['filters']): void {
+    console.log('applyPresetFilters called with filters:', filters);
+    
     // Basic filters
     this.selectedArea = filters.selectedArea || '';
     this.selectedRoomType = filters.selectedRoomType || '';
+    
+    console.log('Applied basic filters - Area:', this.selectedArea, 'RoomType:', this.selectedRoomType);
     
     // Range filters
     this.adrMin = filters.adrMin || null;
@@ -2299,27 +2365,40 @@ export class RevenueComponent implements OnInit {
     // Update temporary filters to match
     this.initializeTempFilters();
     
+    console.log('All filters applied, reloading data...');
+    console.log('Current filter state:', {
+      selectedArea: this.selectedArea,
+      selectedRoomType: this.selectedRoomType,
+      adrMin: this.adrMin,
+      adrMax: this.adrMax
+    });
+    
     // Apply the filters by reloading data with new filter values
     this.loadFilteredPropertiesData();
     this.toastr.success('Preset filters applied successfully!');
   }
 
   onPresetSelectionChange(): void {
+    console.log('onPresetSelectionChange called with selectedPresetId:', this.selectedPresetId);
     if (this.selectedPresetId) {
       const preset = this.filterPresetService.getPresetById(this.selectedPresetId);
+      console.log('Found preset:', preset);
       if (preset) {
         console.log('Applying preset:', preset.name, preset.filters);
         this.applyPresetFilters(preset.filters);
       } else {
         console.error('Preset not found with ID:', this.selectedPresetId);
+        console.log('Available presets:', this.filterPresetService.getAllPresets());
         this.toastr.error('Preset not found');
       }
+    } else {
+      console.warn('No preset ID selected');
     }
   }
 
   showSavePresetDialog(): void {
     if (!this.hasActiveFilters()) {
-      alert('No active filters to save. Please apply some filters first.');
+      this.toastr.warning('No active filters to save. Please apply some filters first.');
       return;
     }
     this.showSavePresetForm = true;
@@ -2372,53 +2451,82 @@ export class RevenueComponent implements OnInit {
 
   deletePreset(presetId: string): void {
     const preset = this.filterPresetService.getPresetById(presetId);
-    if (preset && confirm(`Are you sure you want to delete the preset "${preset.name}"?`)) {
-      this.presetDeleting = true;
-      
-      try {
-        const deleted = this.filterPresetService.deletePreset(presetId);
-        if (deleted) {
-          // Note: The actual API call is asynchronous, so we'll handle the loading state in the service
-          setTimeout(() => {
-            this.presetDeleting = false;
-            this.toastr.success(`Preset "${preset.name}" deleted successfully!`);
-            if (this.selectedPresetId === presetId) {
-              this.selectedPresetId = '';
-            }
-          }, 1000);
-        } else {
-          this.presetDeleting = false;
-          this.toastr.error('Failed to delete preset');
-        }
-      } catch (error: any) {
-        console.error('Error deleting preset:', error);
-        this.presetDeleting = false;
-        this.toastr.error(error.message || 'Failed to delete preset');
-      }
+    if (!preset) {
+      this.toastr.error('Preset not found');
+      return;
     }
+
+    this.toastService.showConfirm(
+      'Delete Preset',
+      `Are you sure you want to delete the preset "${preset.name}"?`,
+      'Yes, delete it!',
+      'No, cancel',
+      () => {
+        this.presetDeleting = true;
+        console.log('Deleting preset:', preset.name, 'with ID:', presetId);
+        
+        // Store the original preset name for messages
+        const presetName = preset.name;
+        
+        if (!this.operatorId || !presetId) {
+          this.toastr.error('Operator ID and Preset ID are required to delete a preset');
+          return;
+        }
+
+        // Call the service method which now returns an Observable
+        this.filterPresetService.deletePreset(presetId, this.operatorId).subscribe({
+          next: (success) => {
+            console.log('Delete preset response:', success);
+            this.presetDeleting = false;
+            if (success) {
+              this.toastr.success(`Preset "${presetName}" deleted successfully!`);
+              if (this.selectedPresetId === presetId) {
+                this.selectedPresetId = '';
+              }
+            } else {
+              this.toastr.error('Failed to delete preset');
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting preset:', error);
+            this.presetDeleting = false;
+            this.toastr.error('Failed to delete preset');
+          }
+        });
+      }
+    );
   }
 
   duplicatePreset(presetId: string): void {
     const preset = this.filterPresetService.getPresetById(presetId);
     if (preset) {
-      const newName = prompt(`Enter name for the duplicate preset:`, `${preset.name} (Copy)`);
-      if (newName && newName.trim()) {
-        this.presetDuplicating = true;
-        
-        try {
-          const duplicatedPreset = this.filterPresetService.duplicatePreset(presetId, newName.trim());
-          // Note: The actual API call is asynchronous, so we'll handle the loading state in the service
-          setTimeout(() => {
-            this.presetDuplicating = false;
-            this.toastr.success(`Preset duplicated as "${newName}"`);
-            console.log('Preset duplicated:', duplicatedPreset);
-          }, 1000);
-        } catch (error: any) {
-          console.error('Error duplicating preset:', error);
-          this.presetDuplicating = false;
-          this.toastr.error(error.message || 'Failed to duplicate preset');
+      this.toastService.showInput(
+        'Duplicate Preset',
+        'Enter name for the duplicate preset:',
+        `${preset.name} (Copy)`,
+        'Enter preset name',
+        'Duplicate',
+        'Cancel',
+        (newName: string) => {
+          if (newName && newName.trim()) {
+            this.presetDuplicating = true;
+            
+            try {
+              const duplicatedPreset = this.filterPresetService.duplicatePreset(presetId, newName.trim(), this.operatorId || undefined);
+              // Note: The actual API call is asynchronous, so we'll handle the loading state in the service
+              setTimeout(() => {
+                this.presetDuplicating = false;
+                this.toastr.success(`Preset duplicated as "${newName}"`);
+                console.log('Preset duplicated:', duplicatedPreset);
+              }, 1000);
+            } catch (error: any) {
+              console.error('Error duplicating preset:', error);
+              this.presetDuplicating = false;
+              this.toastr.error(error.message || 'Failed to duplicate preset');
+            }
+          }
         }
-      }
+      );
     }
   }
 
@@ -2434,7 +2542,7 @@ export class RevenueComponent implements OnInit {
     this.presetExporting = true;
     
     try {
-      const data = this.filterPresetService.exportPresets();
+      const data = JSON.stringify(this.filterPresets, null, 2);
       const blob = new Blob([data], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -2466,7 +2574,47 @@ export class RevenueComponent implements OnInit {
       reader.onload = (e) => {
         try {
           const jsonData = e.target?.result as string;
-          const importedCount = this.filterPresetService.importPresets(jsonData, false);
+          const importedPresets = JSON.parse(jsonData) as FilterPreset[];
+          
+          // Validate imported data
+          if (!Array.isArray(importedPresets)) {
+            throw new Error('Invalid preset data format');
+          }
+
+          // Validate each preset
+          importedPresets.forEach((preset, index) => {
+            if (!preset.id || !preset.name || !preset.filters) {
+              throw new Error(`Invalid preset at index ${index}`);
+            }
+          });
+
+          let importedCount = 0;
+          const existingPresets = [...this.filterPresets];
+
+          importedPresets.forEach(preset => {
+            // Generate new ID to avoid conflicts
+            const newPreset = {
+              ...preset,
+              id: 'imported_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            };
+
+            // Handle name conflicts
+            let finalName = preset.name;
+            let counter = 1;
+            while (existingPresets.some(p => p.name.toLowerCase() === finalName.toLowerCase())) {
+              finalName = `${preset.name} (${counter})`;
+              counter++;
+            }
+            newPreset.name = finalName;
+
+            existingPresets.push(newPreset);
+            importedCount++;
+          });
+
+          // Update the component's filter presets array
+          this.filterPresets = existingPresets;
           
           // Reset loading state after a short delay
           setTimeout(() => {
@@ -2485,6 +2633,7 @@ export class RevenueComponent implements OnInit {
     // Reset file input
     event.target.value = '';
   }
+
 
   // Property image methods
   getPropertyImage(property: PropertyData): string {
@@ -2524,5 +2673,26 @@ export class RevenueComponent implements OnInit {
       // Red for low occupancy (0-29%)
       return isLight ? '#FFC0CB' : '#FF6347';
     }
+  }
+
+  // Format guest configuration for display
+  formatGuestConfig(guestConfig: any): string {
+    if (!guestConfig) {
+      return 'N/A';
+    }
+
+    // Extract numbers from strings like "6 adults", "5 children"
+    const adults = this.extractNumber(guestConfig.max_adults) || 0;
+    const children = this.extractNumber(guestConfig.max_children) || 0;
+    const total = adults + children;
+
+    return `${total} (${adults}+${children})`;
+  }
+
+  // Helper method to extract number from string like "6 adults" -> 6
+  private extractNumber(text: string): number {
+    if (!text) return 0;
+    const match = text.match(/\d+/);
+    return match ? parseInt(match[0], 10) : 0;
   }
 }
