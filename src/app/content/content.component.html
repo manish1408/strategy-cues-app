@@ -1,200 +1,139 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
-      
-      <!-- Tab Navigation -->
-      <div class="tab-navigation">
-        <ul class="nav nav-tabs">
-          <li class="nav-item">
-            <a class="nav-link" 
-               [class.active]="activeTab === 'photos'"
-               (click)="setActiveTab('photos')">
-              Photos
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" 
-               [class.active]="activeTab === 'competitor-reviews'"
-               (click)="setActiveTab('competitor-reviews')">
-              Competitor Reviews 
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" 
-               [class.active]="activeTab === 'my-reviews'"
-               (click)="setActiveTab('my-reviews')">
-              My Reviews 
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" 
-               [class.active]="activeTab === 'amenities'"
-               (click)="setActiveTab('amenities')">
-              Amenities Analyser
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Tab Content -->
-      <div class="tab-content">
-
-        <!-- Photos Optimiser Tab -->
-        <div class="tab-pane" [class.active]="activeTab === 'photos'" *ngIf="activeTab === 'photos'">
-          <div class="content-section">
-            <!-- Page Header -->
-         
-
-
-            <!-- Controls Section -->
-            <div class="row">
-              <div class="col-12">
-                <div class="row align-items-end mb-2">
-                  <div class="col-md-6">
-                    <div class="input-group">
-                      <span class="input-group-text"><i class="fas fa-search"></i></span>
-                      <input type="text" class="form-control" placeholder="Search properties, competitors, or photo types..."
-                        [(ngModel)]="searchTerm" (input)="onSearchChange()">
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="d-flex gap-2 float-end">
-                      <button class="btn btn-outline-success" (click)="exportToCSV()" title="Export to CSV">
-                        <i class="fas fa-download me-2"></i>
-                        Export CSV
-                      </button>
-                    </div>
-                  </div>
+      <div class="content-section">
+        <!-- Controls Section -->
+        <div class="row">
+          <div class="col-12">
+            <div class="row align-items-end mb-2">
+              <div class="col-md-6">
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-search"></i></span>
+                  <input type="text" class="form-control" placeholder="Search properties, competitors, or photo types..."
+                    [(ngModel)]="searchTerm" (input)="onSearchChange()">
                 </div>
               </div>
-            </div>
-            <!-- Table View -->
-            <div class="table-view">
-              <div class="table-card">
-                <div class="table-responsive">
-                  <table class="table table-hover">
-                      <thead>
-                        <tr>
-                          <th>Property</th>
-                          <th>Your Photos</th>
-                          <th>Competitor</th>
-                          <th>Photo Gap</th>
-                          <th>Caption Status</th>
-                          <th>Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr *ngFor="let property of getDisplayData()" class="table-row">
-                          <td class="property-cell">
-                            <div class="property-info">
-                              <div class="property-image">
-                                <img [src]="'assets/images/placeholder.jpg'" [alt]="property.property_title">
-                              </div>
-                              <div class="property-details">
-                                <h4>{{property.property_title}}</h4>
-                                <!-- <span class="property-id">{{property.listing_id}}</span> -->
-                                <div class="property-links">
-                                  <a [href]="property.airbnb_link" target="_blank" class="platform-link airbnb">
-                                    <i class="fab fa-airbnb"></i>
-                                  </a>
-                                  <a [href]="property.booking_link" target="_blank" class="platform-link booking">
-                                    <i class="fas fa-bed"></i>
-                                  </a>
-                                  <a [href]="property.vrbo_link" target="_blank" class="platform-link vrbo">
-                                    <i class="fas fa-home"></i>
-                                  </a>
-                                </div>
-                              </div>
-                            </div>
-                          </td>
-                          <td class="photos-cell">
-                            <div class="photo-count-info">
-                              <span class="count-number">{{property.num_photos}}</span>
-                              <span class="count-label">photos</span>
-                              <div class="photo-types">
-                                <span class="type-badge" *ngFor="let type of getPhotoTypes(property.property_photos)">{{type}}</span>
-                              </div>
-                            </div>
-                          </td>
-                          <td class="competitor-cell">
-                            <div class="competitor-info" *ngIf="property.competitor && property.competitor.length > 0">
-                              <div class="competitor-header">
-                                <span class="competitor-name">{{property.competitor[0].name}}</span>
-                                <div class="competitor-rating">
-                                  <i class="fas fa-star"></i>
-                                  <span>{{property.competitor[0].reviews_score}}</span>
-                                </div>
-                              </div>
-                              <div class="competitor-photos">
-                                <span class="competitor-count">{{property.competitor[0].num_photos}} photos</span>
-                                <span class="reviews-count">{{property.competitor[0].reviews_count}} reviews</span>
-                              </div>
-                              <div class="competitor-links">
-                                <a [href]="property.competitor[0].airbnb_link" target="_blank" class="platform-link airbnb">
-                                  <i class="fab fa-airbnb"></i>
-                                </a>
-                                <a [href]="property.competitor[0].booking_link" target="_blank" class="platform-link booking">
-                                  <i class="fas fa-bed"></i>
-                                </a>
-                                <a [href]="property.competitor[0].vrbo_link" target="_blank" class="platform-link vrbo">
-                                  <i class="fas fa-home"></i>
-                                </a>
-                              </div>
-                            </div>
-                            <div class="no-competitor" *ngIf="!property.competitor || property.competitor.length === 0">
-                              <i class="fas fa-info-circle"></i>
-                              <span>No competitor data</span>
-                            </div>
-                          </td>
-                          <td class="gap-cell">
-                            <div class="photo-gap" [ngClass]="getGapClass(getPhotoGap(property))">
-                              <span class="gap-number">{{Math.abs(getPhotoGap(property))}}</span>
-                              <span class="gap-direction">{{getPhotoGap(property) > 0 ? 'behind' : 'ahead'}}</span>
-                            </div>
-                          </td>
-                          <td class="caption-cell">
-                            <div class="caption-status">
-                              <div class="caption-progress">
-                                <div class="progress-bar">
-                                  <div class="progress-fill" [style.width.%]="getCaptionPercentage(property)"></div>
-                                </div>
-                                <span class="caption-text">{{property.captioned_count}}/{{property.num_photos}}</span>
-                              </div>
-                              <div class="missing-captions" *ngIf="property.missing_captions > 0">
-                                <i class="fas fa-exclamation-triangle"></i>
-                                <span>{{property.missing_captions}} missing</span>
-                              </div>
-                            </div>
-                          </td>
-                          <td class="actions-cell">
-                            <div class="btn-group btn-group-sm">
-                              <button class="btn btn-outline-primary btn-sm" (click)="viewPhotoDetails(property.listing_id)">
-                                <i class="fas fa-eye"></i>
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      </tbody>
-                  </table>
+              <div class="col-md-6">
+                <div class="d-flex gap-2 float-end">
+                  <button class="btn btn-outline-success" (click)="exportToCSV()" title="Export to CSV">
+                    <i class="fas fa-download me-2"></i>
+                    Export CSV
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        <!-- Competitor Reviews Tab -->
-        <div class="tab-pane" [class.active]="activeTab === 'competitor-reviews'" *ngIf="activeTab === 'competitor-reviews'">
-          <app-competitor-reviews></app-competitor-reviews>
-        </div>
-
-        <!-- My Reviews Tab -->
-        <div class="tab-pane" [class.active]="activeTab === 'my-reviews'" *ngIf="activeTab === 'my-reviews'">
-          <app-my-reviews></app-my-reviews>
-        </div>
-
-        <!-- Amenities Analyser Tab -->
-        <div class="tab-pane" [class.active]="activeTab === 'amenities'" *ngIf="activeTab === 'amenities'">
-          <app-amenities-analyzer></app-amenities-analyzer>
+        <!-- Table View -->
+        <div class="table-view">
+          <div class="table-card">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Property</th>
+                      <th>Your Photos</th>
+                      <th>Competitor</th>
+                      <th>Photo Gap</th>
+                      <th>Caption Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let property of getDisplayData()" class="table-row">
+                      <td class="property-cell">
+                        <div class="property-info">
+                          <div class="property-image">
+                            <img [src]="'assets/images/placeholder.jpg'" [alt]="property.property_title">
+                          </div>
+                          <div class="property-details">
+                            <h4>{{property.property_title}}</h4>
+                            <!-- <span class="property-id">{{property.listing_id}}</span> -->
+                            <div class="property-links">
+                              <a [href]="property.airbnb_link" target="_blank" class="platform-link airbnb">
+                                <i class="fab fa-airbnb"></i>
+                              </a>
+                              <a [href]="property.booking_link" target="_blank" class="platform-link booking">
+                                <i class="fas fa-bed"></i>
+                              </a>
+                              <a [href]="property.vrbo_link" target="_blank" class="platform-link vrbo">
+                                <i class="fas fa-home"></i>
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="photos-cell">
+                        <div class="photo-count-info">
+                          <span class="count-number">{{property.num_photos}}</span>
+                          <span class="count-label">photos</span>
+                          <div class="photo-types">
+                            <span class="type-badge" *ngFor="let type of getPhotoTypes(property.property_photos)">{{type}}</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="competitor-cell">
+                        <div class="competitor-info" *ngIf="property.competitor && property.competitor.length > 0">
+                          <div class="competitor-header">
+                            <span class="competitor-name">{{property.competitor[0].name}}</span>
+                            <div class="competitor-rating">
+                              <i class="fas fa-star"></i>
+                              <span>{{property.competitor[0].reviews_score}}</span>
+                            </div>
+                          </div>
+                          <div class="competitor-photos">
+                            <span class="competitor-count">{{property.competitor[0].num_photos}} photos</span>
+                            <span class="reviews-count">{{property.competitor[0].reviews_count}} reviews</span>
+                          </div>
+                          <div class="competitor-links">
+                            <a [href]="property.competitor[0].airbnb_link" target="_blank" class="platform-link airbnb">
+                              <i class="fab fa-airbnb"></i>
+                            </a>
+                            <a [href]="property.competitor[0].booking_link" target="_blank" class="platform-link booking">
+                              <i class="fas fa-bed"></i>
+                            </a>
+                            <a [href]="property.competitor[0].vrbo_link" target="_blank" class="platform-link vrbo">
+                              <i class="fas fa-home"></i>
+                            </a>
+                          </div>
+                        </div>
+                        <div class="no-competitor" *ngIf="!property.competitor || property.competitor.length === 0">
+                          <i class="fas fa-info-circle"></i>
+                          <span>No competitor data</span>
+                        </div>
+                      </td>
+                      <td class="gap-cell">
+                        <div class="photo-gap" [ngClass]="getGapClass(getPhotoGap(property))">
+                          <span class="gap-number">{{Math.abs(getPhotoGap(property))}}</span>
+                          <span class="gap-direction">{{getPhotoGap(property) > 0 ? 'behind' : 'ahead'}}</span>
+                        </div>
+                      </td>
+                      <td class="caption-cell">
+                        <div class="caption-status">
+                          <div class="caption-progress">
+                            <div class="progress-bar">
+                              <div class="progress-fill" [style.width.%]="getCaptionPercentage(property)"></div>
+                            </div>
+                            <span class="caption-text">{{property.captioned_count}}/{{property.num_photos}}</span>
+                          </div>
+                          <div class="missing-captions" *ngIf="property.missing_captions > 0">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>{{property.missing_captions}} missing</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="actions-cell">
+                        <div class="btn-group btn-group-sm">
+                          <button class="btn btn-outline-primary btn-sm" (click)="viewPhotoDetails(property.listing_id)">
+                            <i class="fas fa-eye"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>

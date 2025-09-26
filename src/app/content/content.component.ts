@@ -8,7 +8,6 @@ import photoComparisonData from '../json_data/photo_comparison_data.json';
   styleUrl: './content.component.scss',
 })
 export class ContentComponent implements OnInit {
-  activeTab: string = 'photos';
   photoComparisonData: any[] = photoComparisonData;
   filteredData: any[] = photoComparisonData;
   searchTerm: string = '';
@@ -19,9 +18,6 @@ export class ContentComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  setActiveTab(tab: string): void {
-    this.activeTab = tab;
-  }
 
   // Summary statistics methods
   getTotalProperties(): number {

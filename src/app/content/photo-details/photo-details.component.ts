@@ -10,6 +10,7 @@ import { GalleryItem, ImageItem } from 'ng-gallery';
   styleUrl: "./photo-details.component.scss",
 })
 export class PhotoDetailsComponent implements OnInit {
+  activeTab: string = 'photos';
   propertyData: any;
   selectedPhotoIndex: number | null = null;
   selectedCompetitorIndex: number = 0;
@@ -71,6 +72,10 @@ export class PhotoDetailsComponent implements OnInit {
   // Navigation methods
   goBack(): void {
     this.location.back();
+  }
+
+  setActiveTab(tab: string): void {
+    this.activeTab = tab;
   }
 
   // Image methods

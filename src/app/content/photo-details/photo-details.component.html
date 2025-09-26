@@ -19,7 +19,45 @@
     </div>
   </div>
 
-  <!-- Top Navigation Cards -->
+  <!-- Tab Navigation -->
+  <div class="tab-navigation">
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link" 
+           [class.active]="activeTab === 'photos'"
+           (click)="setActiveTab('photos')">
+          Photos
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" 
+           [class.active]="activeTab === 'competitor-reviews'"
+           (click)="setActiveTab('competitor-reviews')">
+          Competitor Reviews 
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" 
+           [class.active]="activeTab === 'my-reviews'"
+           (click)="setActiveTab('my-reviews')">
+          My Reviews 
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" 
+           [class.active]="activeTab === 'amenities'"
+           (click)="setActiveTab('amenities')">
+          Amenities Analyser
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Tab Content -->
+  <div class="tab-content">
+    <!-- Photos Tab -->
+    <div class="tab-pane" [class.active]="activeTab === 'photos'" *ngIf="activeTab === 'photos'">
+      <!-- Top Navigation Cards -->
   <div class="top-navigation" *ngIf="propertyData?.competitor && propertyData.competitor.length > 0">
     <button class="nav-arrow prev" (click)="previousCompetitor()" [disabled]="selectedCompetitorIndex <= 0">
       <i class="fas fa-chevron-left"></i>
@@ -266,6 +304,23 @@
         <span>Photo {{photoId}} needs a caption</span>
         <button class="btn btn-sm btn-primary" (click)="openCaptionModal(photoId)">Add Caption</button>
       </div>
+    </div>
+  </div>
+    </div>
+
+    <!-- Competitor Reviews Tab -->
+    <div class="tab-pane" [class.active]="activeTab === 'competitor-reviews'" *ngIf="activeTab === 'competitor-reviews'">
+      <app-competitor-reviews></app-competitor-reviews>
+    </div>
+
+    <!-- My Reviews Tab -->
+    <div class="tab-pane" [class.active]="activeTab === 'my-reviews'" *ngIf="activeTab === 'my-reviews'">
+      <app-my-reviews></app-my-reviews>
+    </div>
+
+    <!-- Amenities Analyser Tab -->
+    <div class="tab-pane" [class.active]="activeTab === 'amenities'" *ngIf="activeTab === 'amenities'">
+      <app-amenities-analyzer></app-amenities-analyzer>
     </div>
   </div>
 </div>
