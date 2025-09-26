@@ -57,9 +57,21 @@ export interface PropertyData {
   Airbnb: any;
   VRBO: any;
   CXL_Policy: {
-    Booking: string;
-    Airbnb: string;
-    VRBO: string;
+    Booking: {
+      type: string;
+      description: string;
+      free_cancellation_until: string | null;
+    } | null;
+    Airbnb: {
+      type: string;
+      description: string;
+      free_cancellation_until: string | null;
+    } | null;
+    VRBO: {
+      type: string;
+      description: string;
+      free_cancellation_until: string | null;
+    } | null;
   };
   Adult_Child_Config: any;
   Reviews: {

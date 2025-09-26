@@ -485,27 +485,43 @@
                 </td>
                 <td *ngIf="columnVisibility.cxlPolicy">
                   <div class="cxl-policy-cell">
-                    <div class="policy-item" *ngIf="property.CXL_Policy?.Booking && property.CXL_Policy.Booking.trim() !== ''">
+                    <!-- Booking.com Policy -->
+                    <div class="policy-item" *ngIf="property.CXL_Policy?.Booking">
                       <i class="fas fa-bed text-primary"></i>
-                      <span class="policy-text">{{ property.CXL_Policy.Booking }}</span>
+                      <div class="policy-details">
+                        <div class="policy-type">{{ property.CXL_Policy.Booking?.type }}</div>
+                      </div>
                     </div>
-                    <div class="policy-item no-policy" *ngIf="!property.CXL_Policy?.Booking || property.CXL_Policy.Booking.trim() === ''">
+                    <div class="policy-item no-policy" *ngIf="!property.CXL_Policy?.Booking">
                       <i class="fas fa-bed text-muted"></i>
                       <span class="no-policy-text" style="font-size: var(--font-size-xs);">No policy</span>
                     </div>
-                    <div class="policy-item" *ngIf="property.CXL_Policy?.Airbnb && property.CXL_Policy.Airbnb.trim() !== ''">
+                    
+                    <!-- Airbnb Policy -->
+                    <div class="policy-item" *ngIf="property.CXL_Policy?.Airbnb">
                       <i class="fab fa-airbnb text-danger"></i>
-                      <span class="policy-text">{{ property.CXL_Policy.Airbnb }}</span>
+                      <div class="policy-details">
+                        <div class="policy-type">{{ property.CXL_Policy.Airbnb?.type }}</div>
+                       
+                      </div>
                     </div>
-                    <div class="policy-item no-policy" *ngIf="!property.CXL_Policy?.Airbnb || property.CXL_Policy.Airbnb.trim() === ''">
+                    <div class="policy-item no-policy" *ngIf="!property.CXL_Policy?.Airbnb">
                       <i class="fab fa-airbnb text-muted"></i>
                       <span class="no-policy-text" style="font-size: var(--font-size-xs);">No policy</span>
                     </div>
-                    <!-- <div class="policy-item" *ngIf="property.CXL_Policy?.VRBO && property.CXL_Policy.VRBO.trim() !== ''">
+                    
+                    <!-- VRBO Policy -->
+                    <!-- <div class="policy-item" *ngIf="property.CXL_Policy?.VRBO">
                       <i class="fas fa-home text-warning"></i>
-                      <span class="policy-text">{{ property.CXL_Policy.VRBO }}</span>
-                    </div>
-                    <div class="policy-item no-policy" *ngIf="!property.CXL_Policy?.VRBO || property.CXL_Policy.VRBO.trim() === ''">
+                      <div class="policy-details">
+                        <div class="policy-type">{{ property.CXL_Policy.VRBO?.type }}</div>
+                        <div class="policy-description">{{ property.CXL_Policy.VRBO?.description }}</div>
+                        <div class="policy-free-cancellation" *ngIf="property.CXL_Policy.VRBO?.free_cancellation_until">
+                          Free until: {{ property.CXL_Policy.VRBO?.free_cancellation_until }}
+                        </div>
+                      </div>
+                    </div> -->
+                    <!-- <div class="policy-item no-policy" *ngIf="!property.CXL_Policy?.VRBO">
                       <i class="fas fa-home text-muted"></i>
                       <span class="no-policy-text" style="font-size: var(--font-size-xs);">No policy</span>
                     </div> -->
@@ -604,16 +620,7 @@
                     </div>
 
                     <!-- VRBO Last Review Score -->
-                    <div class="review-item clickable" *ngIf="safeParseNumber(property.Reviews.VRBO.Last_Rev_Score) > 0" title="Click to visit VRBO property page"
-                      (click)="openPropertyUrl(property, 'VRBO')">
-                      <i class="fas fa-home text-warning"></i>
-                      <span class="score-value">{{ property.Reviews.VRBO.Last_Rev_Score }}</span>
-                    </div>
-                    <div class="review-item no-review-score" *ngIf="property.Reviews.VRBO.Last_Rev_Score === null"
-                      title="VRBO: No review score">
-                      <i class="fas fa-home text-muted"></i>
-                      <span class="no-review-score-text" style="font-size: var(--font-size-xs);">No review score</span>
-                    </div>
+                   
                   </div>
                 </td>
                 <td *ngIf="columnVisibility.lastReviewDate">
