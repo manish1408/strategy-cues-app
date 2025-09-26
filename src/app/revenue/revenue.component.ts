@@ -9,6 +9,7 @@ import { FilterPreset } from '../_models/filter-preset.interface';
 import { Router, ActivatedRoute } from "@angular/router";
 import { ExportService } from "../_services/export.service";
 import { ToastrService } from "ngx-toastr";
+import { ToastService } from "../_services/toast.service";
 
 // Declare global variables for jQuery and Bootstrap
 declare var $: any;
@@ -277,6 +278,14 @@ export class RevenueComponent implements OnInit {
   newPresetDescription: string = '';
   presetSaveError: string = '';
   showPresetManagement: boolean = false;
+  
+  // Preset loading states
+  presetLoading: boolean = false;
+  presetSaving: boolean = false;
+  presetDeleting: boolean = false;
+  presetDuplicating: boolean = false;
+  presetExporting: boolean = false;
+  presetImporting: boolean = false;
 
   constructor(
     private propertiesService: PropertiesService, 
@@ -285,7 +294,8 @@ export class RevenueComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private exportService: ExportService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private toastService: ToastService
   ) {
     this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
   }
@@ -324,9 +334,10 @@ export class RevenueComponent implements OnInit {
       
       // Load properties with the operatorId
       this.loadProperties();
+      
+      // Load filter presets after operatorId is set
+      this.loadFilterPresets();
     });
-    
-    this.loadFilterPresets();
   }
 
   loadProperties(): void {
@@ -2028,6 +2039,9 @@ export class RevenueComponent implements OnInit {
     // Clear temporary filters
     this.initializeTempFilters();
 
+    // Clear selected preset
+    this.selectedPresetId = '';
+
     this.filterData();
   }
 
@@ -2107,9 +2121,95 @@ export class RevenueComponent implements OnInit {
 
   // Filter Preset Methods
   loadFilterPresets(): void {
-    this.filterPresetService.presets$.subscribe(presets => {
-      this.filterPresets = presets;
+    this.presetLoading = true;
+    
+    if (!this.operatorId) {
+      console.error('Operator ID is required to load presets');
+      this.presetLoading = false;
+      this.toastr.error('Operator ID is required to load presets');
+      return;
+    }
+    
+    console.log('Loading presets for operatorId:', this.operatorId);
+    this.filterPresetService.loadPresets(this.operatorId);
+    
+    this.filterPresetService.presets$.subscribe({
+      next: (presets) => {
+        this.filterPresets = presets;
+        this.presetLoading = false;
+        console.log('Filter presets loaded:', presets.length, presets);
+        console.log('Component filterPresets array:', this.filterPresets);
+        console.log('Component filterPresets length:', this.filterPresets.length);
+      },
+      error: (error) => {
+        console.error('Error loading filter presets:', error);
+        this.presetLoading = false;
+        this.toastr.error('Failed to load filter presets');
+      }
     });
+  }
+
+  // Method to refresh presets (useful for debugging)
+  refreshPresets(): void {
+    console.log('Refreshing presets...');
+    this.loadFilterPresets();
+  }
+
+  // Debug method to check current presets state
+  debugPresets(): void {
+    console.log('=== DEBUG PRESETS ===');
+    console.log('Component filterPresets:', this.filterPresets);
+    console.log('Component filterPresets length:', this.filterPresets.length);
+    console.log('Service presets:', this.filterPresetService.getAllPresets());
+    console.log('Service presets length:', this.filterPresetService.getAllPresets().length);
+    console.log('Operator ID:', this.operatorId);
+    console.log('===================');
+  }
+
+  // Test method to simulate preset click
+  testPresetClick(presetId: string): void {
+    console.log('Testing preset click with ID:', presetId);
+    this.selectedPresetId = presetId;
+    this.onPresetSelectionChange();
+  }
+
+  // Test method to debug delete functionality
+  testDeletePreset(presetId: string): void {
+    console.log('=== TESTING DELETE PRESET ===');
+    console.log('Preset ID to delete:', presetId);
+    console.log('Operator ID:', this.operatorId);
+    
+    const preset = this.filterPresetService.getPresetById(presetId);
+    console.log('Found preset:', preset);
+    
+    if (preset) {
+      console.log('Attempting to delete preset:', preset.name);
+      this.deletePreset(presetId);
+    } else {
+      console.error('Preset not found with ID:', presetId);
+    }
+  }
+
+  // Helper method to safely handle dates
+  getSafeDate(date: any): Date {
+    if (!date) return new Date();
+    if (date instanceof Date) return date;
+    if (typeof date === 'string') {
+      const parsed = new Date(date);
+      return isNaN(parsed.getTime()) ? new Date() : parsed;
+    }
+    return new Date();
+  }
+
+  // Helper method to check if date is valid
+  isValidDate(date: any): boolean {
+    if (!date) return false;
+    if (date instanceof Date) return !isNaN(date.getTime());
+    if (typeof date === 'string') {
+      const parsed = new Date(date);
+      return !isNaN(parsed.getTime());
+    }
+    return false;
   }
 
   getCurrentFilters(): FilterPreset['filters'] {
@@ -2118,45 +2218,45 @@ export class RevenueComponent implements OnInit {
       selectedArea: this.selectedArea || undefined,
       selectedRoomType: this.selectedRoomType || undefined,
       
-      // Range filters
-      adrMin: this.adrMin,
-      adrMax: this.adrMax,
-      revparMin: this.revparMin,
-      revparMax: this.revparMax,
-      mpiMin: this.mpiMin,
-      mpiMax: this.mpiMax,
-      minRateThresholdMin: this.minRateThresholdMin,
-      minRateThresholdMax: this.minRateThresholdMax,
+      // Range filters - only include non-null values
+      adrMin: this.adrMin !== null ? this.adrMin : undefined,
+      adrMax: this.adrMax !== null ? this.adrMax : undefined,
+      revparMin: this.revparMin !== null ? this.revparMin : undefined,
+      revparMax: this.revparMax !== null ? this.revparMax : undefined,
+      mpiMin: this.mpiMin !== null ? this.mpiMin : undefined,
+      mpiMax: this.mpiMax !== null ? this.mpiMax : undefined,
+      minRateThresholdMin: this.minRateThresholdMin !== null ? this.minRateThresholdMin : undefined,
+      minRateThresholdMax: this.minRateThresholdMax !== null ? this.minRateThresholdMax : undefined,
       
-      // Occupancy filters
-      occupancyTMMin: this.occupancyTMMin,
-      occupancyTMMax: this.occupancyTMMax,
-      occupancyNMMin: this.occupancyNMMin,
-      occupancyNMMax: this.occupancyNMMax,
-      occupancy7DaysMin: this.occupancy7DaysMin,
-      occupancy7DaysMax: this.occupancy7DaysMax,
-      occupancy30DaysMin: this.occupancy30DaysMin,
-      occupancy30DaysMax: this.occupancy30DaysMax,
-      pickUpOcc7DaysMin: this.pickUpOcc7DaysMin,
-      pickUpOcc7DaysMax: this.pickUpOcc7DaysMax,
-      pickUpOcc14DaysMin: this.pickUpOcc14DaysMin,
-      pickUpOcc14DaysMax: this.pickUpOcc14DaysMax,
-      pickUpOcc30DaysMin: this.pickUpOcc30DaysMin,
-      pickUpOcc30DaysMax: this.pickUpOcc30DaysMax,
+      // Occupancy filters - only include non-null values
+      occupancyTMMin: this.occupancyTMMin !== null ? this.occupancyTMMin : undefined,
+      occupancyTMMax: this.occupancyTMMax !== null ? this.occupancyTMMax : undefined,
+      occupancyNMMin: this.occupancyNMMin !== null ? this.occupancyNMMin : undefined,
+      occupancyNMMax: this.occupancyNMMax !== null ? this.occupancyNMMax : undefined,
+      occupancy7DaysMin: this.occupancy7DaysMin !== null ? this.occupancy7DaysMin : undefined,
+      occupancy7DaysMax: this.occupancy7DaysMax !== null ? this.occupancy7DaysMax : undefined,
+      occupancy30DaysMin: this.occupancy30DaysMin !== null ? this.occupancy30DaysMin : undefined,
+      occupancy30DaysMax: this.occupancy30DaysMax !== null ? this.occupancy30DaysMax : undefined,
+      pickUpOcc7DaysMin: this.pickUpOcc7DaysMin !== null ? this.pickUpOcc7DaysMin : undefined,
+      pickUpOcc7DaysMax: this.pickUpOcc7DaysMax !== null ? this.pickUpOcc7DaysMax : undefined,
+      pickUpOcc14DaysMin: this.pickUpOcc14DaysMin !== null ? this.pickUpOcc14DaysMin : undefined,
+      pickUpOcc14DaysMax: this.pickUpOcc14DaysMax !== null ? this.pickUpOcc14DaysMax : undefined,
+      pickUpOcc30DaysMin: this.pickUpOcc30DaysMin !== null ? this.pickUpOcc30DaysMin : undefined,
+      pickUpOcc30DaysMax: this.pickUpOcc30DaysMax !== null ? this.pickUpOcc30DaysMax : undefined,
       
-      // Performance filters
-      stlyVarOccMin: this.stlyVarOccMin,
-      stlyVarOccMax: this.stlyVarOccMax,
-      stlyVarADRMin: this.stlyVarADRMin,
-      stlyVarADRMax: this.stlyVarADRMax,
-      stlyVarRevPARMin: this.stlyVarRevPARMin,
-      stlyVarRevPARMax: this.stlyVarRevPARMax,
-      stlmVarOccMin: this.stlmVarOccMin,
-      stlmVarOccMax: this.stlmVarOccMax,
-      stlmVarADRMin: this.stlmVarADRMin,
-      stlmVarADRMax: this.stlmVarADRMax,
-      stlmVarRevPARMin: this.stlmVarRevPARMin,
-      stlmVarRevPARMax: this.stlmVarRevPARMax,
+      // Performance filters - only include non-null values
+      stlyVarOccMin: this.stlyVarOccMin !== null ? this.stlyVarOccMin : undefined,
+      stlyVarOccMax: this.stlyVarOccMax !== null ? this.stlyVarOccMax : undefined,
+      stlyVarADRMin: this.stlyVarADRMin !== null ? this.stlyVarADRMin : undefined,
+      stlyVarADRMax: this.stlyVarADRMax !== null ? this.stlyVarADRMax : undefined,
+      stlyVarRevPARMin: this.stlyVarRevPARMin !== null ? this.stlyVarRevPARMin : undefined,
+      stlyVarRevPARMax: this.stlyVarRevPARMax !== null ? this.stlyVarRevPARMax : undefined,
+      stlmVarOccMin: this.stlmVarOccMin !== null ? this.stlmVarOccMin : undefined,
+      stlmVarOccMax: this.stlmVarOccMax !== null ? this.stlmVarOccMax : undefined,
+      stlmVarADRMin: this.stlmVarADRMin !== null ? this.stlmVarADRMin : undefined,
+      stlmVarADRMax: this.stlmVarADRMax !== null ? this.stlmVarADRMax : undefined,
+      stlmVarRevPARMin: this.stlmVarRevPARMin !== null ? this.stlmVarRevPARMin : undefined,
+      stlmVarRevPARMax: this.stlmVarRevPARMax !== null ? this.stlmVarRevPARMax : undefined,
       
       // Platform filters
       bookingGeniusFilter: this.bookingGeniusFilter !== 'not-present' ? this.bookingGeniusFilter : undefined,
@@ -2172,26 +2272,30 @@ export class RevenueComponent implements OnInit {
       vrboWeeklyFilter: this.vrboWeeklyFilter !== 'not-present' ? this.vrboWeeklyFilter : undefined,
       vrboMonthlyFilter: this.vrboMonthlyFilter !== 'not-present' ? this.vrboMonthlyFilter : undefined,
       
-      // Reviews filters
-      bookingRevScoreMin: this.bookingRevScoreMin,
-      bookingRevScoreMax: this.bookingRevScoreMax,
-      bookingTotalRevMin: this.bookingTotalRevMin,
-      bookingTotalRevMax: this.bookingTotalRevMax,
-      airbnbRevScoreMin: this.airbnbRevScoreMin,
-      airbnbRevScoreMax: this.airbnbRevScoreMax,
-      airbnbTotalRevMin: this.airbnbTotalRevMin,
-      airbnbTotalRevMax: this.airbnbTotalRevMax,
-      vrboRevScoreMin: this.vrboRevScoreMin,
-      vrboRevScoreMax: this.vrboRevScoreMax,
-      vrboTotalRevMin: this.vrboTotalRevMin,
-      vrboTotalRevMax: this.vrboTotalRevMax
+      // Reviews filters - only include non-null values
+      bookingRevScoreMin: this.bookingRevScoreMin !== null ? this.bookingRevScoreMin : undefined,
+      bookingRevScoreMax: this.bookingRevScoreMax !== null ? this.bookingRevScoreMax : undefined,
+      bookingTotalRevMin: this.bookingTotalRevMin !== null ? this.bookingTotalRevMin : undefined,
+      bookingTotalRevMax: this.bookingTotalRevMax !== null ? this.bookingTotalRevMax : undefined,
+      airbnbRevScoreMin: this.airbnbRevScoreMin !== null ? this.airbnbRevScoreMin : undefined,
+      airbnbRevScoreMax: this.airbnbRevScoreMax !== null ? this.airbnbRevScoreMax : undefined,
+      airbnbTotalRevMin: this.airbnbTotalRevMin !== null ? this.airbnbTotalRevMin : undefined,
+      airbnbTotalRevMax: this.airbnbTotalRevMax !== null ? this.airbnbTotalRevMax : undefined,
+      vrboRevScoreMin: this.vrboRevScoreMin !== null ? this.vrboRevScoreMin : undefined,
+      vrboRevScoreMax: this.vrboRevScoreMax !== null ? this.vrboRevScoreMax : undefined,
+      vrboTotalRevMin: this.vrboTotalRevMin !== null ? this.vrboTotalRevMin : undefined,
+      vrboTotalRevMax: this.vrboTotalRevMax !== null ? this.vrboTotalRevMax : undefined
     };
   }
 
   applyPresetFilters(filters: FilterPreset['filters']): void {
+    console.log('applyPresetFilters called with filters:', filters);
+    
     // Basic filters
     this.selectedArea = filters.selectedArea || '';
     this.selectedRoomType = filters.selectedRoomType || '';
+    
+    console.log('Applied basic filters - Area:', this.selectedArea, 'RoomType:', this.selectedRoomType);
     
     // Range filters
     this.adrMin = filters.adrMin || null;
@@ -2264,22 +2368,40 @@ export class RevenueComponent implements OnInit {
     // Update temporary filters to match
     this.initializeTempFilters();
     
-    // Apply the filters
-    this.filterData();
+    console.log('All filters applied, reloading data...');
+    console.log('Current filter state:', {
+      selectedArea: this.selectedArea,
+      selectedRoomType: this.selectedRoomType,
+      adrMin: this.adrMin,
+      adrMax: this.adrMax
+    });
+    
+    // Apply the filters by reloading data with new filter values
+    this.loadFilteredPropertiesData();
+    this.toastr.success('Preset filters applied successfully!');
   }
 
   onPresetSelectionChange(): void {
+    console.log('onPresetSelectionChange called with selectedPresetId:', this.selectedPresetId);
     if (this.selectedPresetId) {
       const preset = this.filterPresetService.getPresetById(this.selectedPresetId);
+      console.log('Found preset:', preset);
       if (preset) {
+        console.log('Applying preset:', preset.name, preset.filters);
         this.applyPresetFilters(preset.filters);
+      } else {
+        console.error('Preset not found with ID:', this.selectedPresetId);
+        console.log('Available presets:', this.filterPresetService.getAllPresets());
+        this.toastr.error('Preset not found');
       }
+    } else {
+      console.warn('No preset ID selected');
     }
   }
 
   showSavePresetDialog(): void {
     if (!this.hasActiveFilters()) {
-      alert('No active filters to save. Please apply some filters first.');
+      this.toastr.warning('No active filters to save. Please apply some filters first.');
       return;
     }
     this.showSavePresetForm = true;
@@ -2301,43 +2423,113 @@ export class RevenueComponent implements OnInit {
       return;
     }
 
+    this.presetSaving = true;
+    this.presetSaveError = '';
+
     try {
       const currentFilters = this.getCurrentFilters();
-      this.filterPresetService.savePreset(
+      console.log('Saving preset with filters:', currentFilters);
+      const savedPreset = this.filterPresetService.savePreset(
         this.newPresetName.trim(),
         currentFilters,
-        this.newPresetDescription.trim() || undefined
+        this.newPresetDescription.trim() || undefined,
+        this.operatorId || undefined
       );
       
-      this.cancelSavePreset();
-      alert(`Filter preset "${this.newPresetName}" saved successfully!`);
+      // Note: The actual API call is asynchronous, so we'll handle the loading state in the service
+      // For now, we'll set a timeout to reset the loading state
+      setTimeout(() => {
+        this.presetSaving = false;
+        this.cancelSavePreset();
+        this.toastr.success(`Filter preset "${this.newPresetName}" saved successfully!`);
+        console.log('Preset saved:', savedPreset);
+      }, 1000);
     } catch (error: any) {
+      console.error('Error saving preset:', error);
+      this.presetSaving = false;
       this.presetSaveError = error.message || 'Failed to save preset';
+      this.toastr.error(this.presetSaveError);
     }
   }
 
   deletePreset(presetId: string): void {
     const preset = this.filterPresetService.getPresetById(presetId);
-    if (preset && confirm(`Are you sure you want to delete the preset "${preset.name}"?`)) {
-      this.filterPresetService.deletePreset(presetId);
-      if (this.selectedPresetId === presetId) {
-        this.selectedPresetId = '';
-      }
+    if (!preset) {
+      this.toastr.error('Preset not found');
+      return;
     }
+
+    this.toastService.showConfirm(
+      'Delete Preset',
+      `Are you sure you want to delete the preset "${preset.name}"?`,
+      'Yes, delete it!',
+      'No, cancel',
+      () => {
+        this.presetDeleting = true;
+        console.log('Deleting preset:', preset.name, 'with ID:', presetId);
+        
+        // Store the original preset name for messages
+        const presetName = preset.name;
+        
+        if (!this.operatorId || !presetId) {
+          this.toastr.error('Operator ID and Preset ID are required to delete a preset');
+          return;
+        }
+
+        // Call the service method which now returns an Observable
+        this.filterPresetService.deletePreset(presetId, this.operatorId).subscribe({
+          next: (success) => {
+            console.log('Delete preset response:', success);
+            this.presetDeleting = false;
+            if (success) {
+              this.toastr.success(`Preset "${presetName}" deleted successfully!`);
+              if (this.selectedPresetId === presetId) {
+                this.selectedPresetId = '';
+              }
+            } else {
+              this.toastr.error('Failed to delete preset');
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting preset:', error);
+            this.presetDeleting = false;
+            this.toastr.error('Failed to delete preset');
+          }
+        });
+      }
+    );
   }
 
   duplicatePreset(presetId: string): void {
     const preset = this.filterPresetService.getPresetById(presetId);
     if (preset) {
-      const newName = prompt(`Enter name for the duplicate preset:`, `${preset.name} (Copy)`);
-      if (newName && newName.trim()) {
-        try {
-          this.filterPresetService.duplicatePreset(presetId, newName.trim());
-          alert(`Preset duplicated as "${newName}"`);
-        } catch (error: any) {
-          alert(error.message || 'Failed to duplicate preset');
+      this.toastService.showInput(
+        'Duplicate Preset',
+        'Enter name for the duplicate preset:',
+        `${preset.name} (Copy)`,
+        'Enter preset name',
+        'Duplicate',
+        'Cancel',
+        (newName: string) => {
+          if (newName && newName.trim()) {
+            this.presetDuplicating = true;
+            
+            try {
+              const duplicatedPreset = this.filterPresetService.duplicatePreset(presetId, newName.trim(), this.operatorId || undefined);
+              // Note: The actual API call is asynchronous, so we'll handle the loading state in the service
+              setTimeout(() => {
+                this.presetDuplicating = false;
+                this.toastr.success(`Preset duplicated as "${newName}"`);
+                console.log('Preset duplicated:', duplicatedPreset);
+              }, 1000);
+            } catch (error: any) {
+              console.error('Error duplicating preset:', error);
+              this.presetDuplicating = false;
+              this.toastr.error(error.message || 'Failed to duplicate preset');
+            }
+          }
         }
-      }
+      );
     }
   }
 
@@ -2350,8 +2542,10 @@ export class RevenueComponent implements OnInit {
   }
 
   exportPresets(): void {
+    this.presetExporting = true;
+    
     try {
-      const data = this.filterPresetService.exportPresets();
+      const data = JSON.stringify(this.filterPresets, null, 2);
       const blob = new Blob([data], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -2361,22 +2555,80 @@ export class RevenueComponent implements OnInit {
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
-    } catch (error) {
-      alert('Failed to export presets');
+      
+      // Reset loading state after a short delay
+      setTimeout(() => {
+        this.presetExporting = false;
+        this.toastr.success('Filter presets exported successfully!');
+        console.log('Presets exported:', data);
+      }, 500);
+    } catch (error: any) {
+      console.error('Error exporting presets:', error);
+      this.presetExporting = false;
+      this.toastr.error(error.message || 'Failed to export presets');
     }
   }
 
   importPresets(event: any): void {
     const file = event.target.files[0];
     if (file) {
+      this.presetImporting = true;
       const reader = new FileReader();
       reader.onload = (e) => {
         try {
           const jsonData = e.target?.result as string;
-          const importedCount = this.filterPresetService.importPresets(jsonData, false);
-          alert(`Successfully imported ${importedCount} preset(s)`);
+          const importedPresets = JSON.parse(jsonData) as FilterPreset[];
+          
+          // Validate imported data
+          if (!Array.isArray(importedPresets)) {
+            throw new Error('Invalid preset data format');
+          }
+
+          // Validate each preset
+          importedPresets.forEach((preset, index) => {
+            if (!preset.id || !preset.name || !preset.filters) {
+              throw new Error(`Invalid preset at index ${index}`);
+            }
+          });
+
+          let importedCount = 0;
+          const existingPresets = [...this.filterPresets];
+
+          importedPresets.forEach(preset => {
+            // Generate new ID to avoid conflicts
+            const newPreset = {
+              ...preset,
+              id: 'imported_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            };
+
+            // Handle name conflicts
+            let finalName = preset.name;
+            let counter = 1;
+            while (existingPresets.some(p => p.name.toLowerCase() === finalName.toLowerCase())) {
+              finalName = `${preset.name} (${counter})`;
+              counter++;
+            }
+            newPreset.name = finalName;
+
+            existingPresets.push(newPreset);
+            importedCount++;
+          });
+
+          // Update the component's filter presets array
+          this.filterPresets = existingPresets;
+          
+          // Reset loading state after a short delay
+          setTimeout(() => {
+            this.presetImporting = false;
+            this.toastr.success(`Successfully imported ${importedCount} preset(s)`);
+            console.log('Presets imported:', importedCount);
+          }, 500);
         } catch (error: any) {
-          alert(error.message || 'Failed to import presets');
+          console.error('Error importing presets:', error);
+          this.presetImporting = false;
+          this.toastr.error(error.message || 'Failed to import presets');
         }
       };
       reader.readAsText(file);
@@ -2384,6 +2636,7 @@ export class RevenueComponent implements OnInit {
     // Reset file input
     event.target.value = '';
   }
+
 
   // Property image methods
   getPropertyImage(property: PropertyData): string {
@@ -2423,5 +2676,26 @@ export class RevenueComponent implements OnInit {
       // Red for low occupancy (0-29%)
       return isLight ? '#FFC0CB' : '#FF6347';
     }
+  }
+
+  // Format guest configuration for display
+  formatGuestConfig(guestConfig: any): string {
+    if (!guestConfig) {
+      return 'N/A';
+    }
+
+    // Extract numbers from strings like "6 adults", "5 children"
+    const adults = this.extractNumber(guestConfig.max_adults) || 0;
+    const children = this.extractNumber(guestConfig.max_children) || 0;
+    const total = adults + children;
+
+    return `${total} (${adults}+${children})`;
+  }
+
+  // Helper method to extract number from string like "6 adults" -> 6
+  private extractNumber(text: string): number {
+    if (!text) return 0;
+    const match = text.match(/\d+/);
+    return match ? parseInt(match[0], 10) : 0;
   }
 }

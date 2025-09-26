@@ -71,6 +71,37 @@ export class ToastService {
       }
     });
   }
+
+  showInput(
+    title: string,
+    text: string,
+    inputValue: string = '',
+    inputPlaceholder: string = '',
+    confirmButtonText: string = 'OK',
+    cancelButtonText: string = 'Cancel',
+    confirmCallback?: (value: string) => void,
+    cancelCallback?: () => void
+  ) {
+    Swal.fire({
+      title: title,
+      text: text,
+      input: 'text',
+      inputValue: inputValue,
+      inputPlaceholder: inputPlaceholder,
+      showCancelButton: true,
+      confirmButtonText: confirmButtonText,
+      cancelButtonText: cancelButtonText,
+    }).then((result: any) => {
+      if (result.isConfirmed && confirmCallback) {
+        confirmCallback(result.value);
+      } else if (
+        result.dismiss === Swal.DismissReason.cancel &&
+        cancelCallback
+      ) {
+        cancelCallback();
+      }
+    });
+  }
 }
 
 export enum ToastLocation {

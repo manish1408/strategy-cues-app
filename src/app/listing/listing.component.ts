@@ -101,25 +101,19 @@ export class ListingComponent implements OnInit, OnDestroy {
         if (Array.isArray(res.data.properties)) {
           this.allListingList = res.data.properties.map((listing: any) => ({
             id: listing.id,
-            property_urls: {
-              Booking: {
-                id: listing.urls.BookingId,
-                url: listing.urls.BookingUrl
-              },
-              Airbnb: {
-                id: listing.urls.AirbnbId,
-                url: listing.urls.AirbnbUrl
-              },
-              VRBO: {
-                id: listing.urls.VRBOId,
-                url: listing.urls.VRBOUrl
-              },
-              Pricelab: {
-                id: listing.urls.PricelabsId,
-                url: listing.urls.PricelabsUrl
-              }
-            },
-            urls: listing.urls // Keep original structure for status access
+            urls: {
+              BookingId: listing.urls?.BookingId,
+              BookingUrl: listing.urls?.BookingUrl,
+              AirbnbId: listing.urls?.AirbnbId,
+              AirbnbUrl: listing.urls?.AirbnbUrl,
+              VRBOId: listing.urls?.VRBOId,
+              VRBOUrl: listing.urls?.VRBOUrl,
+              PricelabsId: listing.urls?.PricelabsId,
+              PricelabsUrl: listing.urls?.PricelabsUrl,
+              status: listing.urls?.status,
+              PropertyName: listing.urls?.PropertyName,
+              Photos: listing.urls?.Photos
+            }
           }));
           
           // Initialize property statuses from the main API response
@@ -270,10 +264,10 @@ export class ListingComponent implements OnInit, OnDestroy {
   fetchUpdatedPropertyStatus(bookingId: string, airbnbId: string, vrboId: string, pricelabsId: string) {
     // Find the property that matches the provided IDs
     const matchingProperty = this.allListingList.find((listing: any) => {
-      const listingBookingId = listing?.urls?.Booking?.id || listing?.property_urls?.Booking?.id;
-      const listingAirbnbId = listing?.urls?.Airbnb?.id || listing?.property_urls?.Airbnb?.id;
-      const listingVrboId = listing?.urls?.VRBO?.id || listing?.property_urls?.VRBO?.id;
-      const listingPricelabId = listing?.urls?.Pricelab?.id || listing?.property_urls?.Pricelab?.id;
+      const listingBookingId = listing?.urls?.BookingId;
+      const listingAirbnbId = listing?.urls?.AirbnbId;
+      const listingVrboId = listing?.urls?.VRBOId;
+      const listingPricelabId = listing?.urls?.PricelabsId;
       
       return (bookingId && listingBookingId === bookingId) ||
              (airbnbId && listingAirbnbId === airbnbId) ||
@@ -304,20 +298,20 @@ export class ListingComponent implements OnInit, OnDestroy {
       
       const formData = {
         bookingCom: {
-          url: listing.property_urls?.Booking?.url || "",
-          id: listing.property_urls?.Booking?.id || "",
+          url: listing.urls?.BookingUrl || "",
+          id: listing.urls?.BookingId || "",
         },
         airbnb: {
-          url: listing.property_urls?.Airbnb?.url || "",
-          id: listing.property_urls?.Airbnb?.id || "",
+          url: listing.urls?.AirbnbUrl || "",
+          id: listing.urls?.AirbnbId || "",
         },
         vrbo: {
-          url: listing.property_urls?.VRBO?.url || "",
-          id: listing.property_urls?.VRBO?.id || "",
+          url: listing.urls?.VRBOUrl || "",
+          id: listing.urls?.VRBOId || "",
         },
         pricelab: {
-          url: listing.property_urls?.Pricelab?.url || "",
-          id: listing.property_urls?.Pricelab?.id || "",
+          url: listing.urls?.PricelabsUrl || "",
+          id: listing.urls?.PricelabsId || "",
         },
       };
       
@@ -382,25 +376,14 @@ export class ListingComponent implements OnInit, OnDestroy {
       this.loading = true;
       const formData = {
         operator_id: this.operatorId,
-        Property_URLs: {
-          Booking: {
-            url: bookingCom.url,
-            id: bookingCom.id || '',
-          },
-          Airbnb: {
-            url: airbnb.url,
-            id: airbnb.id || '',
-          },
-          VRBO: {
-            url: vrbo.url,
-            id: vrbo.id || '',
-          },
-         
-          Pricelab: {
-            url: pricelab.url,
-            id: pricelab.id || '',
-          },
-        },
+        BookingId: bookingCom.id || '',
+        BookingUrl: bookingCom.url || '',
+        AirbnbId: airbnb.id || '',
+        AirbnbUrl: airbnb.url || '',
+        VRBOId: vrbo.id || '',
+        VRBOUrl: vrbo.url || '',
+        PricelabsId: pricelab.id || '',
+        PricelabsUrl: pricelab.url || '',
       };
   
       if (this.isEdit && this.editingListingId) {
@@ -442,24 +425,21 @@ export class ListingComponent implements OnInit, OnDestroy {
   resetForm() {
     this.addListingForm.reset();
     this.addListingForm.patchValue({
-      operator_id: this.operatorId,
-      Property_URLs: {
-        bookingCom: {
-          url: "",
-          id: "",
-        },
-        airbnb: {
-          url: "",
-          id: "",
-        },
-        vrbo: {
-          url: "",
-          id: "",
-        },
-        pricelab: {
-          url: "",
-          id: "",
-        },
+      bookingCom: {
+        url: "",
+        id: "",
+      },
+      airbnb: {
+        url: "",
+        id: "",
+      },
+      vrbo: {
+        url: "",
+        id: "",
+      },
+      pricelab: {
+        url: "",
+        id: "",
       },
     });
     this.isEdit = false;
@@ -529,10 +509,10 @@ export class ListingComponent implements OnInit, OnDestroy {
 
     // Find the property ID for error handling
     const matchingProperty = this.allListingList.find((listing: any) => {
-      const listingBookingId = listing?.urls?.Booking?.id || listing?.property_urls?.Booking?.id;
-      const listingAirbnbId = listing?.urls?.Airbnb?.id || listing?.property_urls?.Airbnb?.id;
-      const listingVrboId = listing?.urls?.VRBO?.id || listing?.property_urls?.VRBO?.id;
-      const listingPricelabId = listing?.urls?.Pricelab?.id || listing?.property_urls?.Pricelab?.id;
+      const listingBookingId = listing?.urls?.BookingId;
+      const listingAirbnbId = listing?.urls?.AirbnbId;
+      const listingVrboId = listing?.urls?.VRBOId;
+      const listingPricelabId = listing?.urls?.PricelabsId;
       
       return (bookingId && listingBookingId === bookingId) ||
              (airbnbId && listingAirbnbId === airbnbId) ||

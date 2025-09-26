@@ -38,9 +38,11 @@
                 <div *ngIf="filterPresets.length > 0" class="preset-list">
                   <div *ngFor="let preset of filterPresets" class="dropdown-item preset-item" (click)="$event.stopPropagation()">
                     <div class="preset-info">
-                      <div class="preset-name" (click)="selectedPresetId = preset.id; onPresetSelectionChange()">
+                      <div class="preset-name" (click)="selectedPresetId = preset.id; onPresetSelectionChange()" 
+                           [class.selected]="selectedPresetId === preset.id">
                         <i class="fas fa-bookmark text-primary me-2"></i>
                         {{ preset.name }}
+                        <span *ngIf="selectedPresetId === preset.id" class="badge bg-success ms-2">Selected</span>
                       </div>
                       <div class="preset-summary">
                         <small class="text-muted">{{ getPresetSummary(preset).slice(0, 2).join(', ') }}
@@ -50,8 +52,9 @@
                     </div>
                     <div class="preset-actions">
                       <button class="btn btn-sm btn-outline-danger" (click)="deletePreset(preset.id)" 
-                        title="Delete preset">
-                        <i class="fas fa-trash"></i>
+                        [disabled]="presetDeleting" title="Delete preset">
+                        <i *ngIf="!presetDeleting" class="fas fa-trash"></i>
+                        <i *ngIf="presetDeleting" class="fas fa-spinner fa-spin"></i>
                       </button>
                     </div>
                   </div>
@@ -61,14 +64,17 @@
                   No saved presets
                 </div>
                 
+               
+                
                 <div class="dropdown-divider"></div>
                 
                 <!-- Preset Management Actions -->
                 <div class="dropdown-item-text px-3 py-2">
                   <div class="btn-group btn-group-sm w-100" role="group">
                     <button type="button" class="btn btn-outline-success" (click)="showSavePresetDialog()" 
-                      [disabled]="!hasActiveFilters()" title="Save current filters as preset">
-                      <i class="fas fa-save me-1"></i>Save
+                      [disabled]="!hasActiveFilters() || presetSaving" title="Save current filters as preset">
+                      <i *ngIf="!presetSaving" class="fas fa-save me-1"></i>
+                      <i *ngIf="presetSaving" class="fas fa-spinner fa-spin me-1"></i>Save
                     </button>
                     <button type="button" class="btn btn-outline-secondary" (click)="togglePresetManagement()"
                       title="Manage presets">
@@ -265,8 +271,9 @@
           </h6>
           <div class="filter-actions">
             <button class="btn btn-sm btn-outline-success me-2" (click)="showSavePresetDialog()" 
-              title="Save current filters as preset">
-              <i class="fas fa-bookmark me-1"></i>Save as Preset
+              [disabled]="presetSaving" title="Save current filters as preset">
+              <i *ngIf="!presetSaving" class="fas fa-bookmark me-1"></i>
+              <i *ngIf="presetSaving" class="fas fa-spinner fa-spin me-1"></i>Save as Preset
             </button>
             <button class="btn btn-sm btn-outline-danger" (click)="clearAllFilters()">
               <i class="fas fa-times me-1"></i>Clear All
@@ -507,15 +514,15 @@
                   <div class="adult-child-config-cell">
                     <div class="config-item" *ngIf="property.Adult_Child_Config?.Booking">
                       <i class="fas fa-bed text-primary"></i>
-                      <span class="config-text">{{ property.Adult_Child_Config.Booking }}</span>
+                      <span class="config-text">Max guests: {{ formatGuestConfig(property.Adult_Child_Config.Booking) }}</span>
                     </div>
                     <div class="config-item" *ngIf="property.Adult_Child_Config?.Airbnb">
                       <i class="fab fa-airbnb text-danger"></i>
-                      <span class="config-text">{{ property.Adult_Child_Config.Airbnb }}</span>
+                      <span class="config-text">Max guests: {{ formatGuestConfig(property.Adult_Child_Config.Airbnb) }}</span>
                     </div>
                     <div class="config-item" *ngIf="property.Adult_Child_Config?.VRBO">
                       <i class="fas fa-home text-warning"></i>
-                      <span class="config-text">{{ property.Adult_Child_Config.VRBO }}</span>
+                      <span class="config-text">Max guests: {{ formatGuestConfig(property.Adult_Child_Config.VRBO) }}</span>
                     </div>
                     <div class="no-config-text" *ngIf="!property.Adult_Child_Config">
                       <small class="text-muted" style="font-size: var(--font-size-xs);">No configuration</small>
@@ -1478,8 +1485,9 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" (click)="cancelSavePreset()">Cancel</button>
             <button type="button" class="btn btn-success" (click)="saveCurrentFiltersAsPreset()" 
-              [disabled]="!newPresetName.trim()">
-              <i class="fas fa-save me-2"></i>Save Preset
+              [disabled]="!newPresetName.trim() || presetSaving">
+              <i *ngIf="!presetSaving" class="fas fa-save me-2"></i>
+              <i *ngIf="presetSaving" class="fas fa-spinner fa-spin me-2"></i>Save Preset
             </button>
           </div>
         </div>
@@ -1505,13 +1513,15 @@
               <div class="col-md-6 text-end">
                 <div class="btn-group btn-group-sm">
                   <button class="btn btn-outline-primary" (click)="exportPresets()" 
-                    title="Export all presets">
-                    <i class="fas fa-download me-1"></i>Export
+                    [disabled]="presetExporting" title="Export all presets">
+                    <i *ngIf="!presetExporting" class="fas fa-download me-1"></i>
+                    <i *ngIf="presetExporting" class="fas fa-spinner fa-spin me-1"></i>Export
                   </button>
-                  <label class="btn btn-outline-secondary" title="Import presets">
-                    <i class="fas fa-upload me-1"></i>Import
+                  <label class="btn btn-outline-secondary" [class.disabled]="presetImporting" title="Import presets">
+                    <i *ngIf="!presetImporting" class="fas fa-upload me-1"></i>
+                    <i *ngIf="presetImporting" class="fas fa-spinner fa-spin me-1"></i>Import
                     <input type="file" accept=".json" (change)="importPresets($event)" 
-                      style="display: none;">
+                      [disabled]="presetImporting" style="display: none;">
                   </label>
                 </div>
               </div>
@@ -1528,27 +1538,32 @@
                 <div class="preset-card">
                   <div class="preset-header">
                     <div class="preset-title">
-                      <h6 class="mb-1">{{ preset.name }}</h6>
+                      <div class="d-flex align-items-center">
+                        <h6 class="mb-1 me-2">{{ preset.name }}</h6>
+                        <span *ngIf="selectedPresetId === preset.id" class="badge bg-success">Selected</span>
+                      </div>
                       <small class="text-muted">
-                        Created: {{ preset.createdAt | date:'short' }}
-                        <span *ngIf="preset.updatedAt > preset.createdAt">
-                          | Updated: {{ preset.updatedAt | date:'short' }}
+                        Created: {{ getSafeDate(preset.createdAt) | date:'short' }}
+                        <span *ngIf="isValidDate(preset.updatedAt) && preset.updatedAt > preset.createdAt">
+                          | Updated: {{ getSafeDate(preset.updatedAt) | date:'short' }}
                         </span>
                       </small>
                     </div>
                     <div class="preset-actions">
-                      <button class="btn btn-sm btn-outline-primary me-1" 
+                      <button *ngIf="selectedPresetId !== preset.id" class="btn btn-sm btn-outline-primary me-1" 
                         (click)="selectedPresetId = preset.id; onPresetSelectionChange(); togglePresetManagement()"
                         title="Apply this preset">
                         <i class="fas fa-play"></i>
                       </button>
                       <button class="btn btn-sm btn-outline-secondary me-1" 
-                        (click)="duplicatePreset(preset.id)" title="Duplicate preset">
-                        <i class="fas fa-copy"></i>
+                        (click)="duplicatePreset(preset.id)" [disabled]="presetDuplicating" title="Duplicate preset">
+                        <i *ngIf="!presetDuplicating" class="fas fa-copy"></i>
+                        <i *ngIf="presetDuplicating" class="fas fa-spinner fa-spin"></i>
                       </button>
                       <button class="btn btn-sm btn-outline-danger" 
-                        (click)="deletePreset(preset.id)" title="Delete preset">
-                        <i class="fas fa-trash"></i>
+                        (click)="deletePreset(preset.id)" [disabled]="presetDeleting" title="Delete preset">
+                        <i *ngIf="!presetDeleting" class="fas fa-trash"></i>
+                        <i *ngIf="presetDeleting" class="fas fa-spinner fa-spin"></i>
                       </button>
                     </div>
                   </div>

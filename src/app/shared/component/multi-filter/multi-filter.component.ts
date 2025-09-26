@@ -56,8 +56,8 @@ export class MultiFilterComponent {
       // Truncate the selection to 3 topics
       this.selectedTopic = this.selectedTopic.slice(0, 3);
       
-      // Show an alert to the user
-      alert('You can only select up to 3 topics.');
+      // Show a warning to the user
+      console.warn('You can only select up to 3 topics.');
     } else {
       // Emit the selected topics if within the limit
       this.filterApplied.emit(this.selectedTopic);
