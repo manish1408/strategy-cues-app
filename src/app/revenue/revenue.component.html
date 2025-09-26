@@ -1538,7 +1538,10 @@
                 <div class="preset-card">
                   <div class="preset-header">
                     <div class="preset-title">
-                      <h6 class="mb-1">{{ preset.name }}</h6>
+                      <div class="d-flex align-items-center">
+                        <h6 class="mb-1 me-2">{{ preset.name }}</h6>
+                        <span *ngIf="selectedPresetId === preset.id" class="badge bg-success">Selected</span>
+                      </div>
                       <small class="text-muted">
                         Created: {{ getSafeDate(preset.createdAt) | date:'short' }}
                         <span *ngIf="isValidDate(preset.updatedAt) && preset.updatedAt > preset.createdAt">
@@ -1547,7 +1550,7 @@
                       </small>
                     </div>
                     <div class="preset-actions">
-                      <button class="btn btn-sm btn-outline-primary me-1" 
+                      <button *ngIf="selectedPresetId !== preset.id" class="btn btn-sm btn-outline-primary me-1" 
                         (click)="selectedPresetId = preset.id; onPresetSelectionChange(); togglePresetManagement()"
                         title="Apply this preset">
                         <i class="fas fa-play"></i>
