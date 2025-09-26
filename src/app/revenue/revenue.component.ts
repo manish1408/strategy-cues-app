@@ -2039,6 +2039,9 @@ export class RevenueComponent implements OnInit {
     // Clear temporary filters
     this.initializeTempFilters();
 
+    // Clear selected preset
+    this.selectedPresetId = '';
+
     this.filterData();
   }
 
