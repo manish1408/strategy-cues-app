@@ -755,6 +755,7 @@ export class RevenueComponent implements OnInit {
   filterData(): void {
     // For server-side pagination, we need to reload data with filters
     // Reset to first page when applying filters
+    this.loading = true;
     this.currentPage = 1;
     this.loadFilteredPropertiesData();
   }
@@ -818,6 +819,7 @@ export class RevenueComponent implements OnInit {
 
   changePage(page: number): void {
     if (page >= 1 && page !== this.currentPage && page <= this.totalPages) {
+      this.loading = true;
       this.currentPage = page;
       this.loadFilteredPropertiesData(); // Load new data from API for the new page
     }
@@ -1965,7 +1967,8 @@ export class RevenueComponent implements OnInit {
   }
 
   // Update clear all filters method
-  clearAllFilters(): void {
+  clearAllFilters(): void { 
+    this.loading = true;
     // Clear active filters
     this.selectedArea = "";
     this.selectedRoomType = "";
@@ -2290,6 +2293,7 @@ export class RevenueComponent implements OnInit {
 
   applyPresetFilters(filters: FilterPreset['filters']): void {
     console.log('applyPresetFilters called with filters:', filters);
+    this.loading = true;
     
     // Basic filters
     this.selectedArea = filters.selectedArea || '';
