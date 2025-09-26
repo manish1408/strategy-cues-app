@@ -514,15 +514,15 @@
                   <div class="adult-child-config-cell">
                     <div class="config-item" *ngIf="property.Adult_Child_Config?.Booking">
                       <i class="fas fa-bed text-primary"></i>
-                      <span class="config-text">Guests: {{ formatGuestConfig(property.Adult_Child_Config.Booking) }}</span>
+                      <span class="config-text">Max guests: {{ formatGuestConfig(property.Adult_Child_Config.Booking) }}</span>
                     </div>
                     <div class="config-item" *ngIf="property.Adult_Child_Config?.Airbnb">
                       <i class="fab fa-airbnb text-danger"></i>
-                      <span class="config-text">Guests: {{ formatGuestConfig(property.Adult_Child_Config.Airbnb) }}</span>
+                      <span class="config-text">Max guests: {{ formatGuestConfig(property.Adult_Child_Config.Airbnb) }}</span>
                     </div>
                     <div class="config-item" *ngIf="property.Adult_Child_Config?.VRBO">
                       <i class="fas fa-home text-warning"></i>
-                      <span class="config-text">Guests: {{ formatGuestConfig(property.Adult_Child_Config.VRBO) }}</span>
+                      <span class="config-text">Max guests: {{ formatGuestConfig(property.Adult_Child_Config.VRBO) }}</span>
                     </div>
                     <div class="no-config-text" *ngIf="!property.Adult_Child_Config">
                       <small class="text-muted" style="font-size: var(--font-size-xs);">No configuration</small>
