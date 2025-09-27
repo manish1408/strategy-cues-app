@@ -424,8 +424,12 @@
                   </div>
                 </td>
                 <td *ngIf="columnVisibility.mpi">
-                  <div class="single-value-cell">
-                    <span class="badge text-white" style="background-color: #1e1e1e;">{{ safeParseNumber(property.MPI) }}%</span>
+                  <div class="dual-value-cell">
+                    <div class="value-pair">
+                    <span class="badge text-white  me-1" style="background-color: #1e1e1e;">TM: {{ safeParseNumber(property.MPI.TM) }}%</span>
+                    <span class="badge text-white  me-1" style="background-color: #1e1e1e;">NM: {{ safeParseNumber(property.MPI.NM) }}%</span>
+                    <span class="badge text-white  me-1" style="background-color: #1e1e1e;">LYTM: {{ safeParseNumber(property.MPI.LYTM) }}%</span>
+                    </div>
                   </div>
                 </td>
                 <td *ngIf="columnVisibility.reviews">

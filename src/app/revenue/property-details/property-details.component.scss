@@ -302,17 +302,57 @@
 
     .policy-list {
       .policy-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.75rem 0;
+        padding: 1rem 0;
         border-bottom: 1px solid #f1f3f4;
 
         &:last-child {
           border-bottom: none;
         }
 
-        .platform-name {
+        .policy-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 0.5rem;
+
+          .platform-name {
+            font-weight: 600;
+            color: #495057;
+            font-size: 1rem;
+          }
+
+          .policy-type {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+          }
+        }
+
+        .policy-description {
+          color: #6c757d;
+          font-size: 0.9rem;
+          line-height: 1.4;
+          margin-bottom: 0.5rem;
+        }
+
+        .policy-details {
+          margin-top: 0.5rem;
+
+          small {
+            display: flex;
+            align-items: center;
+            color: #6c757d;
+            font-size: 0.8rem;
+
+            i {
+              margin-right: 0.25rem;
+            }
+          }
+        }
+
+        // Legacy support for old structure
+        .platform-name:not(.policy-header .platform-name) {
           font-weight: 500;
           color: #495057;
         }
@@ -450,6 +490,32 @@
 
 .text-muted {
   color: #6c757d !important;
+}
+
+// Policy type badge styles
+.badge-success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.badge-warning {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.badge-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.badge-info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.badge-secondary {
+  background-color: #e2e3e5;
+  color: #383d41;
 }
 
 // Animations

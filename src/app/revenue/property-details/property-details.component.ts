@@ -110,6 +110,24 @@ export class PropertyDetailsComponent implements OnInit {
     return value.toLowerCase() === 'yes';
   }
 
+  // Helper method to get CSS class for policy type badges
+  getPolicyTypeClass(policyType: string | null): string {
+    if (!policyType) return 'badge-secondary';
+    
+    switch (policyType.toLowerCase()) {
+      case 'flexible':
+        return 'badge-success';
+      case 'moderate':
+        return 'badge-warning';
+      case 'strict':
+        return 'badge-danger';
+      case 'hotel_policy':
+        return 'badge-info';
+      default:
+        return 'badge-secondary';
+    }
+  }
+
   // Methods to handle booking platform links
   openBookingLink(platform: 'Booking' | 'Airbnb' | 'VRBO'): void {
     if(platform === 'Booking') {

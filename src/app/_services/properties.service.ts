@@ -36,7 +36,7 @@ export interface PropertyData {
     TM: string | number;
     NM: string | number;
   };
-  MPI: string | number;
+  MPI: any;
   STLY_Var: {
     Occ: string | number;
     ADR: string | number;
