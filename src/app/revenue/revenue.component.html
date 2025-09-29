@@ -560,7 +560,7 @@
                       <i class="fas fa-home text-warning"></i>
                       <span class="config-text">Max guests: {{ formatGuestConfig(property.Adult_Child_Config.VRBO) }}</span>
                     </div> -->
-                    <div class="no-config-text" *ngIf="!property.Adult_Child_Config">
+                    <div class="no-config-text" *ngIf="!property.Adult_Child_Config?.Booking && !property.Adult_Child_Config?.Airbnb && !property.Adult_Child_Config?.VRBO">
                       <small class="text-muted" style="font-size: var(--font-size-xs);">No configuration</small>
                     </div>
                   </div>

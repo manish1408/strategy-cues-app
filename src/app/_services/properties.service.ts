@@ -36,7 +36,11 @@ export interface PropertyData {
     TM: string | number;
     NM: string | number;
   };
-  MPI: any;
+  MPI: {
+    TM: string | number;
+    NM: string | number;
+    LYTM: string | number;
+  };
   STLY_Var: {
     Occ: string | number;
     ADR: string | number;
@@ -73,7 +77,20 @@ export interface PropertyData {
       free_cancellation_until: string | null;
     } | null;
   };
-  Adult_Child_Config: any;
+  Adult_Child_Config: {
+    Booking: {
+      id: string;
+      max_guests: string;
+      max_adults: string;
+      max_children: string;
+      max_infants: string;
+      room_count: string;
+    } | null;
+    Airbnb: {
+      max_guests: number;
+    } | null;
+    VRBO: any | null;
+  };
   Reviews: {
     Booking: {
       Last_Rev_Dt: string;
@@ -236,7 +253,11 @@ export class PropertiesService {
           TM: null,
           NM: null
         },
-        MPI: property.MPI || null,
+        MPI: property.MPI || {
+          TM: null,
+          NM: null,
+          LYTM: null
+        },
         STLY_Var: property.STLY_Var || {
           Occ: null,
           ADR: null,
@@ -261,7 +282,11 @@ export class PropertiesService {
           Airbnb: null,
           VRBO: null
         },
-        Adult_Child_Config: property.Adult_Child_Config || null,
+        Adult_Child_Config: property.Adult_Child_Config || {
+          Booking: null,
+          Airbnb: null,
+          VRBO: null
+        },
         Reviews: property.Reviews || {
           Booking: {
             Last_Rev_Dt: null,

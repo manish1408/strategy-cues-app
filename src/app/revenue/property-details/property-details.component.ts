@@ -141,8 +141,41 @@ export class PropertyDetailsComponent implements OnInit {
     } else if(platform === 'Airbnb') {
       window.open(this.property.AirbnbUrl, '_blank');
     } else if(platform === 'VRBO') {
-      window.open(this.property.BookingUrl, '_blank');
+      window.open(this.property.VRBOUrl, '_blank');
     }
-   
+  }
+
+  // Format guest configuration for display
+  formatGuestConfig(guestConfig: any): string {
+    if (!guestConfig) {
+      return 'N/A';
+    }
+
+    // Handle different structures for Booking vs Airbnb
+    if (guestConfig.max_guests && typeof guestConfig.max_guests === 'number') {
+      // Airbnb structure: max_guests is a number
+      return `${guestConfig.max_guests}`;
+    } else {
+      // Booking structure: extract numbers from strings like "6 adults", "5 children"
+      const adults = this.extractNumber(guestConfig.max_adults) || 0;
+      const children = this.extractNumber(guestConfig.max_children) || 0;
+      const total = adults + children;
+
+      return `${total} (${adults}+${children})`;
+    }
+  }
+
+  // Helper method to extract number from string like "6 adults" -> 6
+  private extractNumber(text: string): number {
+    if (!text) return 0;
+    const match = text.match(/\d+/);
+    return match ? parseInt(match[0], 10) : 0;
+  }
+
+  // Method to open photo in modal or new tab
+  openPhotoModal(photoUrl: string, caption?: string): void {
+    // For now, just open the image in a new tab
+    // You can implement a proper modal later if needed
+    window.open(photoUrl, '_blank');
   }
 }

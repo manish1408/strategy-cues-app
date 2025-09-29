@@ -475,8 +475,8 @@ export class RevenueComponent implements OnInit {
     this.revparMinRange = revparValues.length > 0 ? Math.floor(Math.min(...revparValues)) : 0;
     this.revparMaxRange = revparValues.length > 0 ? Math.ceil(Math.max(...revparValues)) : 1000;
 
-    // Calculate MPI ranges from data source
-    const mpiValues = dataSource.map((item) => this.safeParseNumber(item.MPI))
+    // Calculate MPI ranges from data source (using TM values)
+    const mpiValues = dataSource.map((item) => this.safeParseNumber(item.MPI?.TM))
       .filter(val => val !== null && val !== undefined);
     this.mpiMinRange = mpiValues.length > 0 ? Math.floor(Math.min(...mpiValues)) : 0;
     this.mpiMaxRange = mpiValues.length > 0 ? Math.ceil(Math.max(...mpiValues)) : 200;
@@ -793,8 +793,8 @@ export class RevenueComponent implements OnInit {
           bVal = this.safeParseNumber(b.RevPAR.TM);
           break;
         case "mpi":
-          aVal = this.safeParseNumber(a.MPI);
-          bVal = this.safeParseNumber(b.MPI);
+          aVal = this.safeParseNumber(a.MPI?.TM);
+          bVal = this.safeParseNumber(b.MPI?.TM);
           break;
         default:
           aVal = (a as any)[field];
@@ -2693,12 +2693,18 @@ export class RevenueComponent implements OnInit {
       return 'N/A';
     }
 
-    // Extract numbers from strings like "6 adults", "5 children"
-    const adults = this.extractNumber(guestConfig.max_adults) || 0;
-    const children = this.extractNumber(guestConfig.max_children) || 0;
-    const total = adults + children;
+    // Handle different structures for Booking vs Airbnb
+    if (guestConfig.max_guests && typeof guestConfig.max_guests === 'number') {
+      // Airbnb structure: max_guests is a number
+      return `${guestConfig.max_guests}`;
+    } else {
+      // Booking structure: extract numbers from strings like "6 adults", "5 children"
+      const adults = this.extractNumber(guestConfig.max_adults) || 0;
+      const children = this.extractNumber(guestConfig.max_children) || 0;
+      const total = adults + children;
 
-    return `${total} (${adults}+${children})`;
+      return `${total} (${adults}+${children})`;
+    }
   }
 
   // Helper method to extract number from string like "6 adults" -> 6
