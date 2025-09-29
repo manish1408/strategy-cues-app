@@ -30,10 +30,10 @@
             <div class="table-responsive">
               <table class="table table-hover">
                   <thead>
-                    <tr>
+                    <tr> 
                       <th>Property</th>
                       <th>Your Photos</th>
-                      <th>Competitor</th>
+                      <th>Reviews</th>
                       <th>Photo Gap</th>
                       <th>Caption Status</th>
                       <th>Actions</th>
@@ -64,61 +64,179 @@
                         </div>
                       </td>
                       <td class="photos-cell">
-                        <div class="photo-count-info">
-                          <span class="count-number">{{property.num_photos}}</span>
-                          <span class="count-label">photos</span>
-                          <div class="photo-types">
-                            <span class="type-badge" *ngFor="let type of getPhotoTypes(property.property_photos)">{{type}}</span>
+                        <div class="platform-photos">
+                          <!-- Airbnb Photos -->
+                          <div class="platform-photo airbnb-photo">
+                            <div class="platform-icon">
+                              <i class="fab fa-airbnb"></i>
+                            </div>
+                            <div class="photo-info">
+                              <div class="photo-count">
+                                <span class="count-number">{{getAirbnbPhotoCount(property).count}}</span>
+                                <span class="count-label">photos</span>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <!-- Booking.com Photos -->
+                          <div class="platform-photo booking-photo">
+                            <div class="platform-icon">
+                              <i class="fas fa-bed"></i>
+                            </div>
+                            <div class="photo-info">
+                              <div class="photo-count">
+                                <span class="count-number">{{getBookingPhotoCount(property).count}}</span>
+                                <span class="count-label">photos</span>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <!-- VRBO Photos -->
+                          <div class="platform-photo vrbo-photo">
+                            <div class="platform-icon">
+                              <i class="fas fa-home"></i>
+                            </div>
+                            <div class="photo-info">
+                              <div class="photo-count">
+                                <span class="count-number">{{getVrboPhotoCount(property).count}}</span>
+                                <span class="count-label">photos</span>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </td>
-                      <td class="competitor-cell">
-                        <div class="competitor-info" *ngIf="property.competitor && property.competitor.length > 0">
-                          <div class="competitor-header">
-                            <span class="competitor-name">{{property.competitor[0].name}}</span>
-                            <div class="competitor-rating">
-                              <i class="fas fa-star"></i>
-                              <span>{{property.competitor[0].reviews_score}}</span>
+                      <td class="reviews-cell">
+                        <div class="platform-reviews">
+                          <!-- Airbnb Reviews -->
+                          <div class="platform-review airbnb-review">
+                            <div class="platform-icon">
+                              <i class="fab fa-airbnb"></i>
+                            </div>
+                            <div class="review-info">
+                              <div class="review-count">
+                                <span class="count-number">{{getAirbnbReviewCount(property).count}}</span>
+                                <span class="count-label">reviews</span>
+                              </div>
+                              <div class="review-score" *ngIf="getAirbnbReviewCount(property).score > 0">
+                                <i class="fas fa-star"></i>
+                                <span>{{getAirbnbReviewCount(property).score}}</span>
+                              </div>
                             </div>
                           </div>
-                          <div class="competitor-photos">
-                            <span class="competitor-count">{{property.competitor[0].num_photos}} photos</span>
-                            <span class="reviews-count">{{property.competitor[0].reviews_count}} reviews</span>
-                          </div>
-                          <div class="competitor-links">
-                            <a [href]="property.competitor[0].airbnb_link" target="_blank" class="platform-link airbnb">
-                              <i class="fab fa-airbnb"></i>
-                            </a>
-                            <a [href]="property.competitor[0].booking_link" target="_blank" class="platform-link booking">
+                          
+                          <!-- Booking.com Reviews -->
+                          <div class="platform-review booking-review">
+                            <div class="platform-icon">
                               <i class="fas fa-bed"></i>
-                            </a>
-                            <a [href]="property.competitor[0].vrbo_link" target="_blank" class="platform-link vrbo">
-                              <i class="fas fa-home"></i>
-                            </a>
+                            </div>
+                            <div class="review-info">
+                              <div class="review-count">
+                                <span class="count-number">{{getBookingReviewCount(property).count}}</span>
+                                <span class="count-label">reviews</span>
+                              </div>
+                              <div class="review-score" *ngIf="getBookingReviewCount(property).score > 0">
+                                <i class="fas fa-star"></i>
+                                <span>{{getBookingReviewCount(property).score}}</span>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                        <div class="no-competitor" *ngIf="!property.competitor || property.competitor.length === 0">
-                          <i class="fas fa-info-circle"></i>
-                          <span>No competitor data</span>
+                          
+                          <!-- VRBO Reviews -->
+                          <div class="platform-review vrbo-review">
+                            <div class="platform-icon">
+                              <i class="fas fa-home"></i>
+                            </div>
+                            <div class="review-info">
+                              <div class="review-count">
+                                <span class="count-number">{{getVrboReviewCount(property).count}}</span>
+                                <span class="count-label">reviews</span>
+                              </div>
+                              <div class="review-score" *ngIf="getVrboReviewCount(property).score > 0">
+                                <i class="fas fa-star"></i>
+                                <span>{{getVrboReviewCount(property).score}}</span>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </td>
                       <td class="gap-cell">
-                        <div class="photo-gap" [ngClass]="getGapClass(getPhotoGap(property))">
-                          <span class="gap-number">{{Math.abs(getPhotoGap(property))}}</span>
-                          <span class="gap-direction">{{getPhotoGap(property) > 0 ? 'behind' : 'ahead'}}</span>
+                        <div class="platform-gaps">
+                          <!-- Airbnb Photo Gap -->
+                          <div class="platform-gap airbnb-gap" [ngClass]="getPlatformGapClass(getAirbnbPhotoGap(property))">
+                            <div class="platform-icon">
+                              <i class="fab fa-airbnb"></i>
+                            </div>
+                            <div class="gap-info">
+                              <span class="gap-number">{{Math.abs(getAirbnbPhotoGap(property))}}</span>
+                              <span class="gap-direction">{{getAirbnbPhotoGap(property) > 0 ? 'behind' : 'ahead'}}</span>
+                            </div>
+                          </div>
+                          
+                          <!-- Booking.com Photo Gap -->
+                          <div class="platform-gap booking-gap" [ngClass]="getPlatformGapClass(getBookingPhotoGap(property))">
+                            <div class="platform-icon">
+                              <i class="fas fa-bed"></i>
+                            </div>
+                            <div class="gap-info">
+                              <span class="gap-number">{{Math.abs(getBookingPhotoGap(property))}}</span>
+                              <span class="gap-direction">{{getBookingPhotoGap(property) > 0 ? 'behind' : 'ahead'}}</span>
+                            </div>
+                          </div>
+                          
+                          <!-- VRBO Photo Gap -->
+                          <div class="platform-gap vrbo-gap" [ngClass]="getPlatformGapClass(getVrboPhotoGap(property))">
+                            <div class="platform-icon">
+                              <i class="fas fa-home"></i>
+                            </div>
+                            <div class="gap-info">
+                              <span class="gap-number">{{Math.abs(getVrboPhotoGap(property))}}</span>
+                              <span class="gap-direction">{{getVrboPhotoGap(property) > 0 ? 'behind' : 'ahead'}}</span>
+                            </div>
+                          </div>
                         </div>
                       </td>
                       <td class="caption-cell">
-                        <div class="caption-status">
-                          <div class="caption-progress">
-                            <div class="progress-bar">
-                              <div class="progress-fill" [style.width.%]="getCaptionPercentage(property)"></div>
+                        <div class="platform-captions">
+                          <!-- Airbnb Caption Status -->
+                          <div class="platform-caption airbnb-caption" [ngClass]="getCaptionStatusClass(getAirbnbCaptionStatus(property).percentage)">
+                            <div class="platform-icon">
+                              <i class="fab fa-airbnb"></i>
                             </div>
-                            <span class="caption-text">{{property.captioned_count}}/{{property.num_photos}}</span>
+                            <div class="caption-info">
+                              <div class="caption-text">{{getAirbnbCaptionStatus(property).captioned}}/{{getAirbnbCaptionStatus(property).total}}</div>
+                              <div class="missing-captions" *ngIf="getAirbnbCaptionStatus(property).missing > 0">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span>{{getAirbnbCaptionStatus(property).missing}} missing</span>
+                              </div>
+                            </div>
                           </div>
-                          <div class="missing-captions" *ngIf="property.missing_captions > 0">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <span>{{property.missing_captions}} missing</span>
+                          
+                          <!-- Booking.com Caption Status -->
+                          <div class="platform-caption booking-caption" [ngClass]="getCaptionStatusClass(getBookingCaptionStatus(property).percentage)">
+                            <div class="platform-icon">
+                              <i class="fas fa-bed"></i>
+                            </div>
+                            <div class="caption-info">
+                              <div class="caption-text">{{getBookingCaptionStatus(property).captioned}}/{{getBookingCaptionStatus(property).total}}</div>
+                              <div class="missing-captions" *ngIf="getBookingCaptionStatus(property).missing > 0">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span>{{getBookingCaptionStatus(property).missing}} missing</span>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <!-- VRBO Caption Status -->
+                          <div class="platform-caption vrbo-caption" [ngClass]="getCaptionStatusClass(getVrboCaptionStatus(property).percentage)">
+                            <div class="platform-icon">
+                              <i class="fas fa-home"></i>
+                            </div>
+                            <div class="caption-info">
+                              <div class="caption-text">{{getVrboCaptionStatus(property).captioned}}/{{getVrboCaptionStatus(property).total}}</div>
+                              <div class="missing-captions" *ngIf="getVrboCaptionStatus(property).missing > 0">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span>{{getVrboCaptionStatus(property).missing}} missing</span>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </td>

@@ -384,192 +384,501 @@ $transition: all 0.3s ease;
 
 /* Photos Cell */
 .photos-cell {
-  .photo-count-info {
-    .count-number {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--brand-black);
-      display: block;
-    }
+  .platform-photos {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
     
-    .count-label {
-      font-size: 0.9rem;
-      color: #666;
-      display: block;
-      margin-bottom: 0.75rem;
-    }
-    
-    .photo-types {
+    .platform-photo {
       display: flex;
-      flex-wrap: wrap;
-      gap: 0.25rem;
+      align-items: center;
+      padding: 0.5rem;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
       
-      .type-badge {
-        background: var(--brand-yellow-light);
-        color: var(--brand-black);
-        padding: 0.25rem 0.5rem;
-        border-radius: 4px;
-        font-size: 0.75rem;
-        font-weight: 500;
-        text-transform: capitalize;
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      
+      .platform-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 0.75rem;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+      }
+      
+      .photo-info {
+        flex: 1;
+        
+        .photo-count {
+          margin-bottom: 0.5rem;
+          
+          .count-number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--brand-black);
+            display: block;
+            line-height: 1;
+          }
+          
+          .count-label {
+            font-size: 0.8rem;
+            color: #666;
+            display: block;
+            margin-top: 0.125rem;
+          }
+        }
+        
+        .photo-types {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.25rem;
+          
+          .type-badge {
+            background: rgba(0, 0, 0, 0.1);
+            color: #666;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            text-transform: capitalize;
+          }
+        }
+      }
+      
+      // Airbnb styling
+      &.airbnb-photo {
+        background: rgba(255, 90, 95, 0.05);
+        border-color: rgba(255, 90, 95, 0.1);
+        
+        .platform-icon {
+          background: #FF5A5F;
+          color: white;
+        }
+        
+        .photo-info .photo-types .type-badge {
+          background: rgba(255, 90, 95, 0.15);
+          color: #c53030;
+        }
+      }
+      
+      // Booking.com styling
+      &.booking-photo {
+        background: rgba(0, 53, 128, 0.05);
+        border-color: rgba(0, 53, 128, 0.1);
+        
+        .platform-icon {
+          background: #003580;
+          color: white;
+        }
+        
+        .photo-info .photo-types .type-badge {
+          background: rgba(0, 53, 128, 0.15);
+          color: #1e40af;
+        }
+      }
+      
+      // VRBO styling
+      &.vrbo-photo {
+        background: rgba(0, 166, 153, 0.05);
+        border-color: rgba(0, 166, 153, 0.1);
+        
+        .platform-icon {
+          background: #00A699;
+          color: white;
+        }
+        
+        .photo-info .photo-types .type-badge {
+          background: rgba(0, 166, 153, 0.15);
+          color: #059669;
+        }
       }
     }
   }
 }
 
-/* Competitor Cell */
-.competitor-cell {
-  .competitor-info {
-    .competitor-header {
+/* Reviews Cell */
+.reviews-cell {
+  .platform-reviews {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    
+    .platform-review {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin-bottom: 0.5rem;
+      padding: 0.5rem;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
       
-      .competitor-name {
-        font-weight: 600;
-        color: var(--brand-black);
-        font-size: 0.95rem;
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
       
-      .competitor-rating {
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-        color: #ffc107;
-        font-size: 0.85rem;
-        font-weight: 500;
-      }
-    }
-    
-    .competitor-photos {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 0.75rem;
-      
-      .competitor-count,
-      .reviews-count {
-        font-size: 0.8rem;
-        color: #666;
-      }
-    }
-    
-    .competitor-links {
-      display: flex;
-      gap: 0.5rem;
-      
-      .platform-link {
-        width: 24px;
-        height: 24px;
-        border-radius: 4px;
+      .platform-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
         display: flex;
         align-items: center;
         justify-content: center;
-        text-decoration: none;
-        font-size: 0.7rem;
-        transition: all 0.2s ease;
+        margin-right: 0.75rem;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+      }
+      
+      .review-info {
+        flex: 1;
         
-        &.airbnb {
+        .review-count {
+          margin-bottom: 0.25rem;
+          
+          .count-number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--brand-black);
+            display: block;
+            line-height: 1;
+          }
+          
+          .count-label {
+            font-size: 0.8rem;
+            color: #666;
+            display: block;
+            margin-top: 0.125rem;
+          }
+        }
+        
+        .review-score {
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+          color: #ffc107;
+          font-size: 0.8rem;
+          font-weight: 500;
+          
+          i {
+            font-size: 0.7rem;
+          }
+        }
+      }
+      
+      // Airbnb styling
+      &.airbnb-review {
+        background: rgba(255, 90, 95, 0.05);
+        border-color: rgba(255, 90, 95, 0.1);
+        
+        .platform-icon {
           background: #FF5A5F;
           color: white;
         }
+      }
+      
+      // Booking.com styling
+      &.booking-review {
+        background: rgba(0, 53, 128, 0.05);
+        border-color: rgba(0, 53, 128, 0.1);
         
-        &.booking {
+        .platform-icon {
           background: #003580;
           color: white;
         }
+      }
+      
+      // VRBO styling
+      &.vrbo-review {
+        background: rgba(0, 166, 153, 0.05);
+        border-color: rgba(0, 166, 153, 0.1);
         
-        &.vrbo {
+        .platform-icon {
           background: #00A699;
           color: white;
         }
       }
     }
   }
-  
-  .no-competitor {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #999;
-    font-size: 0.85rem;
-    font-style: italic;
-  }
 }
 
 /* Gap Cell */
 .gap-cell {
-  .photo-gap {
-    text-align: center;
-    padding: 0.75rem;
-    border-radius: 8px;
-    font-weight: 600;
+  .platform-gaps {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
     
-    &.gap-ahead {
-      background: #d4edda;
-      color: #155724;
-    }
-    
-    &.gap-behind {
-      background: #fff3cd;
-      color: #856404;
-    }
-    
-    &.gap-critical {
-      background: #f8d7da;
-      color: #721c24;
-    }
-    
-    .gap-number {
-      font-size: 1.25rem;
-      display: block;
-    }
-    
-    .gap-direction {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+    .platform-gap {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+      
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      
+      .platform-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 0.75rem;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+      }
+      
+      .gap-info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        
+        .gap-number {
+          font-size: 1rem;
+          font-weight: 700;
+          line-height: 1;
+        }
+        
+        .gap-direction {
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          opacity: 0.8;
+        }
+      }
+      
+      // Airbnb styling
+      &.airbnb-gap {
+        .platform-icon {
+          background: #FF5A5F;
+          color: white;
+        }
+        
+        &.gap-ahead {
+          background: rgba(255, 90, 95, 0.1);
+          border-color: rgba(255, 90, 95, 0.2);
+          color: #c53030;
+        }
+        
+        &.gap-behind {
+          background: rgba(255, 90, 95, 0.15);
+          border-color: rgba(255, 90, 95, 0.3);
+          color: #9c1a1a;
+        }
+        
+        &.gap-critical {
+          background: rgba(255, 90, 95, 0.2);
+          border-color: rgba(255, 90, 95, 0.4);
+          color: #742a2a;
+        }
+      }
+      
+      // Booking.com styling
+      &.booking-gap {
+        .platform-icon {
+          background: #003580;
+          color: white;
+        }
+        
+        &.gap-ahead {
+          background: rgba(0, 53, 128, 0.1);
+          border-color: rgba(0, 53, 128, 0.2);
+          color: #1e40af;
+        }
+        
+        &.gap-behind {
+          background: rgba(0, 53, 128, 0.15);
+          border-color: rgba(0, 53, 128, 0.3);
+          color: #1e3a8a;
+        }
+        
+        &.gap-critical {
+          background: rgba(0, 53, 128, 0.2);
+          border-color: rgba(0, 53, 128, 0.4);
+          color: #1e293b;
+        }
+      }
+      
+      // VRBO styling
+      &.vrbo-gap {
+        .platform-icon {
+          background: #00A699;
+          color: white;
+        }
+        
+        &.gap-ahead {
+          background: rgba(0, 166, 153, 0.1);
+          border-color: rgba(0, 166, 153, 0.2);
+          color: #059669;
+        }
+        
+        &.gap-behind {
+          background: rgba(0, 166, 153, 0.15);
+          border-color: rgba(0, 166, 153, 0.3);
+          color: #047857;
+        }
+        
+        &.gap-critical {
+          background: rgba(0, 166, 153, 0.2);
+          border-color: rgba(0, 166, 153, 0.4);
+          color: #065f46;
+        }
+      }
     }
   }
 }
 
 /* Caption Cell */
 .caption-cell {
-  .caption-status {
-    .caption-progress {
-      margin-bottom: 0.5rem;
+  .platform-captions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    
+    .platform-caption {
+      display: flex;
+      align-items: flex-start;
+      padding: 0.5rem;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
       
-      .progress-bar {
-        width: 100%;
-        height: 8px;
-        background: #e9ecef;
-        border-radius: 4px;
-        overflow: hidden;
-        margin-bottom: 0.25rem;
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      
+      .platform-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 0.75rem;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+        margin-top: 0.25rem;
+      }
+      
+      .caption-info {
+        flex: 1;
         
-        .progress-fill {
-          height: 100%;
-          background: linear-gradient(90deg, var(--brand-yellow), var(--brand-yellow-accent));
-          transition: width 0.3s ease;
+        .caption-text {
+          font-size: 0.8rem;
+          color: #666;
+          font-weight: 500;
+          margin-bottom: 0.25rem;
+        }
+        
+        .missing-captions {
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+          color: #dc3545;
+          font-size: 0.7rem;
+          
+          i {
+            font-size: 0.6rem;
+          }
         }
       }
       
-      .caption-text {
-        font-size: 0.85rem;
-        color: #666;
-        font-weight: 500;
+      // Airbnb styling
+      &.airbnb-caption {
+        .platform-icon {
+          background: #FF5A5F;
+          color: white;
+        }
+        
+        &.caption-excellent {
+          background: rgba(255, 90, 95, 0.05);
+          border-color: rgba(255, 90, 95, 0.1);
+        }
+        
+        &.caption-good {
+          background: rgba(255, 90, 95, 0.08);
+          border-color: rgba(255, 90, 95, 0.15);
+        }
+        
+        &.caption-fair {
+          background: rgba(255, 90, 95, 0.1);
+          border-color: rgba(255, 90, 95, 0.2);
+        }
+        
+        &.caption-poor {
+          background: rgba(255, 90, 95, 0.15);
+          border-color: rgba(255, 90, 95, 0.3);
+        }
       }
-    }
-    
-    .missing-captions {
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
-      color: #dc3545;
-      font-size: 0.8rem;
       
-      i {
-        font-size: 0.7rem;
+      // Booking.com styling
+      &.booking-caption {
+        .platform-icon {
+          background: #003580;
+          color: white;
+        }
+        
+        &.caption-excellent {
+          background: rgba(0, 53, 128, 0.05);
+          border-color: rgba(0, 53, 128, 0.1);
+        }
+        
+        &.caption-good {
+          background: rgba(0, 53, 128, 0.08);
+          border-color: rgba(0, 53, 128, 0.15);
+        }
+        
+        &.caption-fair {
+          background: rgba(0, 53, 128, 0.1);
+          border-color: rgba(0, 53, 128, 0.2);
+        }
+        
+        &.caption-poor {
+          background: rgba(0, 53, 128, 0.15);
+          border-color: rgba(0, 53, 128, 0.3);
+        }
+      }
+      
+      // VRBO styling
+      &.vrbo-caption {
+        .platform-icon {
+          background: #00A699;
+          color: white;
+        }
+        
+        &.caption-excellent {
+          background: rgba(0, 166, 153, 0.05);
+          border-color: rgba(0, 166, 153, 0.1);
+        }
+        
+        &.caption-good {
+          background: rgba(0, 166, 153, 0.08);
+          border-color: rgba(0, 166, 153, 0.15);
+        }
+        
+        &.caption-fair {
+          background: rgba(0, 166, 153, 0.1);
+          border-color: rgba(0, 166, 153, 0.2);
+        }
+        
+        &.caption-poor {
+          background: rgba(0, 166, 153, 0.15);
+          border-color: rgba(0, 166, 153, 0.3);
+        }
       }
     }
   }
@@ -632,6 +941,135 @@ $transition: all 0.3s ease;
     flex-direction: column;
     text-align: center;
     gap: 0.75rem;
+  }
+  
+  .platform-gaps {
+    gap: 0.25rem;
+    
+    .platform-gap {
+      padding: 0.25rem;
+      
+      .platform-icon {
+        width: 24px;
+        height: 24px;
+        margin-right: 0.5rem;
+        font-size: 0.7rem;
+      }
+      
+      .gap-info {
+        .gap-number {
+          font-size: 0.85rem;
+        }
+        
+        .gap-direction {
+          font-size: 0.6rem;
+        }
+      }
+    }
+  }
+  
+  .platform-photos {
+    gap: 0.25rem;
+    
+    .platform-photo {
+      padding: 0.25rem;
+      
+      .platform-icon {
+        width: 24px;
+        height: 24px;
+        margin-right: 0.5rem;
+        font-size: 0.7rem;
+      }
+      
+      .photo-info {
+        .photo-count {
+          margin-bottom: 0.25rem;
+          
+          .count-number {
+            font-size: 1rem;
+          }
+          
+          .count-label {
+            font-size: 0.7rem;
+          }
+        }
+        
+        .photo-types {
+          .type-badge {
+            font-size: 0.6rem;
+            padding: 0.15rem 0.3rem;
+          }
+        }
+      }
+    }
+  }
+  
+  .platform-reviews {
+    gap: 0.25rem;
+    
+    .platform-review {
+      padding: 0.25rem;
+      
+      .platform-icon {
+        width: 24px;
+        height: 24px;
+        margin-right: 0.5rem;
+        font-size: 0.7rem;
+      }
+      
+      .review-info {
+        .review-count {
+          margin-bottom: 0.125rem;
+          
+          .count-number {
+            font-size: 1rem;
+          }
+          
+          .count-label {
+            font-size: 0.7rem;
+          }
+        }
+        
+        .review-score {
+          font-size: 0.7rem;
+          
+          i {
+            font-size: 0.6rem;
+          }
+        }
+      }
+    }
+  }
+  
+  .platform-captions {
+    gap: 0.25rem;
+    
+    .platform-caption {
+      padding: 0.25rem;
+      
+      .platform-icon {
+        width: 24px;
+        height: 24px;
+        margin-right: 0.5rem;
+        font-size: 0.7rem;
+        margin-top: 0.125rem;
+      }
+      
+      .caption-info {
+        .caption-text {
+          font-size: 0.7rem;
+          margin-bottom: 0.125rem;
+        }
+        
+        .missing-captions {
+          font-size: 0.6rem;
+          
+          i {
+            font-size: 0.5rem;
+          }
+        }
+      }
+    }
   }
 }
 

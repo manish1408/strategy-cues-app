@@ -54,14 +54,147 @@ export class ContentComponent implements OnInit {
     return property.competitor[0].num_photos - property.num_photos;
   }
 
+  // Platform-specific photo gap methods
+  getAirbnbPhotoGap(property: any): number {
+    // For now, using the same logic as general photo gap
+    // In a real implementation, this would compare Airbnb-specific photo counts
+    return this.getPhotoGap(property);
+  }
+
+  getBookingPhotoGap(property: any): number {
+    // For now, using the same logic as general photo gap
+    // In a real implementation, this would compare Booking.com-specific photo counts
+    return this.getPhotoGap(property);
+  }
+
+  getVrboPhotoGap(property: any): number {
+    // For now, using the same logic as general photo gap
+    // In a real implementation, this would compare VRBO-specific photo counts
+    return this.getPhotoGap(property);
+  }
+
+  getPlatformGapClass(photoGap: number): string {
+    if (photoGap > 0) {
+      return photoGap > 20 ? 'gap-critical' : 'gap-behind';
+    } else {
+      return 'gap-ahead';
+    }
+  }
+
   getPhotoTypes(photos: any[]): string[] {
     if (!photos) return [];
     const types = [...new Set(photos.map(photo => photo.type))];
     return types.slice(0, 3); // Show max 3 types
   }
 
+  // Platform-specific photo count methods
+  getAirbnbPhotoCount(property: any): { count: number; types: string[] } {
+    // For now, using the same logic as general photo count
+    // In a real implementation, this would use platform-specific photo data
+    return {
+      count: property.num_photos,
+      types: this.getPhotoTypes(property.property_photos)
+    };
+  }
+
+  getBookingPhotoCount(property: any): { count: number; types: string[] } {
+    // For now, using the same logic as general photo count
+    // In a real implementation, this would use platform-specific photo data
+    return {
+      count: property.num_photos,
+      types: this.getPhotoTypes(property.property_photos)
+    };
+  }
+
+  getVrboPhotoCount(property: any): { count: number; types: string[] } {
+    // For now, using the same logic as general photo count
+    // In a real implementation, this would use platform-specific photo data
+    return {
+      count: property.num_photos,
+      types: this.getPhotoTypes(property.property_photos)
+    };
+  }
+
+  // Platform-specific review count methods
+  getAirbnbReviewCount(property: any): { count: number; score: number } {
+    // For now, using competitor data as placeholder
+    // In a real implementation, this would use platform-specific review data
+    if (property.competitor && property.competitor.length > 0) {
+      return {
+        count: property.competitor[0].reviews_count || 0,
+        score: property.competitor[0].reviews_score || 0
+      };
+    }
+    return { count: 0, score: 0 };
+  }
+
+  getBookingReviewCount(property: any): { count: number; score: number } {
+    // For now, using competitor data as placeholder
+    // In a real implementation, this would use platform-specific review data
+    if (property.competitor && property.competitor.length > 0) {
+      return {
+        count: property.competitor[0].reviews_count || 0,
+        score: property.competitor[0].reviews_score || 0
+      };
+    }
+    return { count: 0, score: 0 };
+  }
+
+  getVrboReviewCount(property: any): { count: number; score: number } {
+    // For now, using competitor data as placeholder
+    // In a real implementation, this would use platform-specific review data
+    if (property.competitor && property.competitor.length > 0) {
+      return {
+        count: property.competitor[0].reviews_count || 0,
+        score: property.competitor[0].reviews_score || 0
+      };
+    }
+    return { count: 0, score: 0 };
+  }
+
   getCaptionPercentage(property: any): number {
     return Math.round((property.captioned_count / property.num_photos) * 100);
+  }
+
+  // Platform-specific caption status methods
+  getAirbnbCaptionStatus(property: any): { percentage: number; captioned: number; total: number; missing: number } {
+    // For now, using the same logic as general caption status
+    // In a real implementation, this would use platform-specific caption data
+    return {
+      percentage: this.getCaptionPercentage(property),
+      captioned: property.captioned_count,
+      total: property.num_photos,
+      missing: property.missing_captions
+    };
+  }
+
+  getBookingCaptionStatus(property: any): { percentage: number; captioned: number; total: number; missing: number } {
+    // For now, using the same logic as general caption status
+    // In a real implementation, this would use platform-specific caption data
+    return {
+      percentage: this.getCaptionPercentage(property),
+      captioned: property.captioned_count,
+      total: property.num_photos,
+      missing: property.missing_captions
+    };
+  }
+
+  getVrboCaptionStatus(property: any): { percentage: number; captioned: number; total: number; missing: number } {
+    // For now, using the same logic as general caption status
+    // In a real implementation, this would use platform-specific caption data
+    return {
+      percentage: this.getCaptionPercentage(property),
+      captioned: property.captioned_count,
+      total: property.num_photos,
+      missing: property.missing_captions
+    };
+  }
+
+  getCaptionStatusClass(percentage: number): string {
+    if (percentage >= 90) return 'caption-excellent';
+    if (percentage >= 70) return 'caption-good';
+    if (percentage >= 50) return 'caption-fair';
+    return 'caption-poor';
   }
 
   // Search functionality
