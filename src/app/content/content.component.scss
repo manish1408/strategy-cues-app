@@ -423,15 +423,19 @@ $transition: all 0.3s ease;
       }
       
       .platform-icon {
-        width: 32px;
-        height: 32px;
+        // width: 24px;
+        // height: 24px;
         border-radius: 6px;
         display: flex;
         align-items: center;
         justify-content: center;
         // margin-right: 0.75rem;
-        font-size: 0.9rem;
+        // font-size: 0.9rem;
         flex-shrink: 0;
+
+        i {
+          font-size: 0.75rem;
+        }
       }
       
       .photo-info {
@@ -482,6 +486,11 @@ $transition: all 0.3s ease;
         .platform-icon {
           // background: #FF5A5F;
           color: #FF5A5F;
+          padding-right: 0.5rem;
+
+          i {
+            font-size: 0.75rem;
+          }
         }
         
         .photo-info .photo-types .type-badge {
@@ -498,6 +507,10 @@ $transition: all 0.3s ease;
         .platform-icon {
           // background: #003580;
           color: #003580;
+          padding-right: 0.5rem;
+          i {
+            font-size: 0.75rem;
+          }
         }
         
         .photo-info .photo-types .type-badge {
@@ -510,6 +523,11 @@ $transition: all 0.3s ease;
       &.pricelab-photo {
         .platform-icon {
           color: #6c757d;
+          padding-right: 0.5rem;
+
+          i {
+            font-size: 0.75rem;
+          }
         }
       }
 
@@ -559,15 +577,20 @@ $transition: all 0.3s ease;
       }
       
       .platform-icon {
-        width: 32px;
-        height: 32px;
+        // width: 24px;
+        // height: 24px;
         border-radius: 6px;
         display: flex;
         align-items: center;
         justify-content: center;
         // margin-right: 0.75rem;
-        font-size: 0.9rem;
+        // font-size: 0.9rem;
         flex-shrink: 0;
+        padding-right: 0.5rem;
+
+        i {
+          font-size: 0.75rem;
+        }
       }
       
       .review-info {
@@ -619,6 +642,10 @@ $transition: all 0.3s ease;
         .platform-icon {
           // background: #FF5A5F;
           color: #FF5A5F;
+          padding-right: 0.5rem;
+          i {
+            font-size: 0.75rem;
+          }
         }
       }
       
@@ -630,9 +657,24 @@ $transition: all 0.3s ease;
         .platform-icon {
           // background: #003580;
           color: #003580;
+          padding-right: 0.5rem;
+          i {
+            font-size: 0.75rem;
+          }
         }
       }
       
+      // Pricelab styling
+      &.pricelab-review {
+        .platform-icon {
+          color: #6c757d;
+          padding-right: 0.5rem;
+          i {
+            font-size: 0.75rem;
+          }
+        }
+      }
+
       // VRBO styling
       /* &.vrbo-review {
         background: rgba(0, 166, 153, 0.05);
@@ -669,15 +711,19 @@ $transition: all 0.3s ease;
       }
       
       .platform-icon {
-        width: 32px;
-        height: 32px;
+        // width: 24px;
+        // height: 24px;
         border-radius: 6px;
         display: flex;
         align-items: center;
         justify-content: center;
         // margin-right: 0.75rem;
-        font-size: 0.9rem;
+        // font-size: 0.9rem;
         flex-shrink: 0;
+        padding-right: 0.5rem;
+        i {
+          font-size: 0.75rem;
+        }
       }
       
       .gap-info {
@@ -706,6 +752,10 @@ $transition: all 0.3s ease;
         .platform-icon {
           // background: #FF5A5F;
           color: #FF5A5F;
+          padding-right: 0.5rem;
+          i {
+            font-size: 0.75rem;
+          }
         }
 
         &.gap-ahead {
@@ -732,6 +782,11 @@ $transition: all 0.3s ease;
         .platform-icon {
           // background: #003580;
           color: #003580;
+          padding-right: 0.5rem;
+
+          i {
+            font-size: 0.75rem;
+          }
         }
         
         &.gap-ahead {
@@ -757,6 +812,11 @@ $transition: all 0.3s ease;
       &.pricelab-gap {
         .platform-icon {
           color: #6c757d;
+          padding-right: 0.5rem;
+
+          i {
+            font-size: 0.75rem;
+          }
         }
 
         &.gap-ahead {
@@ -833,16 +893,20 @@ $transition: all 0.3s ease;
       }
       
       .platform-icon {
-        width: 32px;
-        height: 32px;
+        //  width: 24px;
+        // height: 24px;
         border-radius: 6px;
         display: flex;
         align-items: center;
         justify-content: center;
         // margin-right: 0.75rem;
-        font-size: 0.9rem;
+        // font-size: 0.9rem;
         flex-shrink: 0;
         margin-top: 0.25rem;
+        padding-right: 0.5rem;
+        i {
+          font-size: 0.75rem;
+        }
       }
       
       .caption-info {
@@ -877,6 +941,11 @@ $transition: all 0.3s ease;
         .platform-icon {
           // background: #FF5A5F;
           color: #FF5A5F;
+          padding-right: 0.5rem;
+
+          i {
+            font-size: 0.75rem;
+          }
         }
         
         &.caption-excellent {
@@ -905,6 +974,10 @@ $transition: all 0.3s ease;
         .platform-icon {
           // background: #003580;
           color: #003580;
+          padding-right: 0.5rem;
+          i {
+            font-size: 0.75rem;
+          }
         }
         
         &.caption-excellent {
@@ -932,6 +1005,10 @@ $transition: all 0.3s ease;
       &.pricelab-caption {
         .platform-icon {
           color: #6c757d;
+          padding-right: 0.5rem;
+          i {
+            font-size: 0.75rem;
+          }
         }
 
         &.caption-excellent {
@@ -1052,10 +1129,15 @@ $transition: all 0.3s ease;
       // padding: 0.25rem;
       
       .platform-icon {
-        width: 24px;
-        height: 24px;
-        margin-right: 0.5rem;
-        font-size: 0.7rem;
+        //  width: 24px;
+        // height: 24px;
+        // margin-right: 0.5rem;
+        // font-size: 0.7rem;
+        padding-right: 0.5rem;
+
+        i {
+          font-size: 0.75rem;
+        }
       }
       
       .gap-info {
@@ -1116,7 +1198,11 @@ $transition: all 0.3s ease;
         width: 24px;
         height: 24px;
         margin-right: 0.5rem;
-        font-size: 0.7rem;
+        // font-size: 0.7rem;
+
+        i {
+          font-size: 0.75rem;
+        }
       }
       
       .review-info {
@@ -1153,7 +1239,11 @@ $transition: all 0.3s ease;
         width: 24px;
         height: 24px;
         margin-right: 0.5rem;
-        font-size: var(--font-size-xs);
+        // font-size: var(--font-size-xs);
+
+        i {
+          font-size: 0.75rem;
+        }
         margin-top: 0.125rem;
       }
       
