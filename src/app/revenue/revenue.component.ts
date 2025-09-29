@@ -364,7 +364,12 @@ export class RevenueComponent implements OnInit {
               PropertiesService.extractPropertiesArray(response);
 
             // Update pagination data from API response
-            if (response.data && response.data.pagination) {
+            if (response.pagination) {
+              this.totalPages = response.pagination.total_pages;
+              this.currentPage = response.pagination.page;
+              this.itemsPerPage = response.pagination.limit;
+            } else if (response.data && response.data.pagination) {
+              // Fallback for nested pagination structure
               this.totalPages = response.data.pagination.total_pages;
               this.currentPage = response.data.pagination.page;
               this.itemsPerPage = response.data.pagination.limit;

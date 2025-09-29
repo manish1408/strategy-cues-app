@@ -1145,8 +1145,8 @@ $transition: all 0.3s ease;
       flex-shrink: 0;
     }
 
-    .policy-text {
-      font-size: var(--font-size-xs);
+    .policy-type {
+      font-size: var(--font-size-xs) !important;
       color: #495057;
       white-space: nowrap;
       overflow: hidden;
@@ -1157,8 +1157,8 @@ $transition: all 0.3s ease;
       align-items: center;
     }
 
-    .no-policy-text {
-      font-size: var(--font-size-xs);
+    .no-policy-type {
+      font-size: var(--font-size-xs) !important;
       color: #6c757d;
       line-height: 1.2;
       display: flex;

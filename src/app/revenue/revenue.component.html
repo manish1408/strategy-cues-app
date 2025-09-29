@@ -384,7 +384,7 @@
                   </div>
                 </td>
                 <td *ngIf="columnVisibility.occupancyTM">
-                  <div class="occupancy-cell">
+                  <div class="occupancy-cell" *ngIf="property.Occupancy">
                     <circle-progress [percent]="safeParseNumber(property.Occupancy.TM)" [radius]="24" [backgroundPadding]="-3" [backgroundStroke]="'#ccc'" [backgroundStrokeWidth]="6"
                       [outerStrokeWidth]="6" [innerStrokeWidth]="0" [outerStrokeColor]="getOccupancyColor(safeParseNumber(property.Occupancy.TM))"
                       [innerStrokeColor]="getOccupancyColor(safeParseNumber(property.Occupancy.TM), true)" [animation]="true" [animationDuration]="300" [showUnits]="false"
@@ -392,9 +392,12 @@
                       [titleFontSize]="'8px'" [titleColor]="getOccupancyColor(safeParseNumber(property.Occupancy.TM))" [titleFontWeight]="'900'">
                     </circle-progress>
                   </div>
+                  <div class="occupancy-cell" *ngIf="!property.Occupancy">
+                    <span class="text-muted">N/A</span>
+                  </div>
                 </td>
                 <td *ngIf="columnVisibility.occupancyNM">
-                  <div class="occupancy-cell">
+                  <div class="occupancy-cell" *ngIf="property.Occupancy">
                     <circle-progress [percent]="safeParseNumber(property.Occupancy.NM)" [radius]="24" [backgroundPadding]="-3" [backgroundStroke]="'#ccc'" [backgroundStrokeWidth]="6"
                       [outerStrokeWidth]="6" [innerStrokeWidth]="0" [outerStrokeColor]="getOccupancyColor(safeParseNumber(property.Occupancy.NM))" 
                       [innerStrokeColor]="getOccupancyColor(safeParseNumber(property.Occupancy.NM), true)" [animation]="true" [animationDuration]="300" [showUnits]="false"
@@ -402,33 +405,45 @@
                       [titleFontSize]="'8px'" [titleColor]="getOccupancyColor(safeParseNumber(property.Occupancy.NM))" [titleFontWeight]="'900'">
                     </circle-progress>
                   </div>
+                  <div class="occupancy-cell" *ngIf="!property.Occupancy">
+                    <span class="text-muted">N/A</span>
+                  </div>
                 </td>
                 <td *ngIf="columnVisibility.adr">
                   <div class="dual-value-cell">
-                    <div class="value-pair">
+                    <div class="value-pair" *ngIf="property.ADR">
                       <span class="badge text-white me-1" style="background-color: #1e1e1e;">TM: ${{ property.ADR.TM || 'N/A'
                         }}</span>
                       <span class="badge text-white" style="background-color: #1e1e1e;">NM: ${{ property.ADR.NM || 'N/A'
                         }}</span>
                     </div>
+                    <div class="value-pair" *ngIf="!property.ADR">
+                      <span class="text-muted">N/A</span>
+                    </div>
                   </div>
                 </td>
                 <td *ngIf="columnVisibility.revpar">
                   <div class="dual-value-cell">
-                    <div class="value-pair">
+                    <div class="value-pair" *ngIf="property.RevPAR">
                       <span class="badge text-white me-1" style="background-color: #1e1e1e;">TM: ${{ property.RevPAR.TM || 'N/A'
                         }}</span>
                       <span class="badge text-white" style="background-color: #1e1e1e;">NM: ${{ property.RevPAR.NM || 'N/A'
                         }}</span>
                     </div>
+                    <div class="value-pair" *ngIf="!property.RevPAR">
+                      <span class="text-muted">N/A</span>
+                    </div>
                   </div>
                 </td>
                 <td *ngIf="columnVisibility.mpi">
                   <div class="dual-value-cell">
-                    <div class="value-pair">
-                    <span class="badge text-white  me-1" style="background-color: #1e1e1e;">TM: {{ safeParseNumber(property.MPI.TM) }}%</span>
-                    <span class="badge text-white  me-1" style="background-color: #1e1e1e;">NM: {{ safeParseNumber(property.MPI.NM) }}%</span>
-                    <span class="badge text-white  me-1" style="background-color: #1e1e1e;">LYTM: {{ safeParseNumber(property.MPI.LYTM) }}%</span>
+                    <div class="value-pair" *ngIf="property.MPI">
+                      <span class="badge text-white  me-1" style="background-color: #1e1e1e;">TM: {{ safeParseNumber(property.MPI.TM) }}%</span>
+                      <span class="badge text-white  me-1" style="background-color: #1e1e1e;">NM: {{ safeParseNumber(property.MPI.NM) }}%</span>
+                      <span class="badge text-white  me-1" style="background-color: #1e1e1e;">LYTM: {{ safeParseNumber(property.MPI.LYTM) }}%</span>
+                    </div>
+                    <div class="value-pair" *ngIf="!property.MPI">
+                      <span class="text-muted">N/A</span>
                     </div>
                   </div>
                 </td>
@@ -493,25 +508,25 @@
                     <div class="policy-item" *ngIf="property.CXL_Policy?.Booking">
                       <i class="fas fa-bed text-primary"></i>
                       <div class="policy-details">
-                        <div class="policy-type">{{ property.CXL_Policy.Booking?.type }}</div>
+                        <div class="policy-type">{{ property.CXL_Policy.Booking?.type | formatText }}</div>
                       </div>
                     </div>
                     <div class="policy-item no-policy" *ngIf="!property.CXL_Policy?.Booking">
                       <i class="fas fa-bed text-muted"></i>
-                      <span class="no-policy-text" style="font-size: var(--font-size-xs);">No policy</span>
+                      <span class="no-policy-type" style="font-size: var(--font-size-xs);">No policy</span>
                     </div>
                     
                     <!-- Airbnb Policy -->
                     <div class="policy-item" *ngIf="property.CXL_Policy?.Airbnb">
                       <i class="fab fa-airbnb text-danger"></i>
                       <div class="policy-details">
-                        <div class="policy-type">{{ property.CXL_Policy.Airbnb?.type }}</div>
+                        <div class="policy-type">{{ property.CXL_Policy.Airbnb?.type | formatText }}</div>
                        
                       </div>
                     </div>
                     <div class="policy-item no-policy" *ngIf="!property.CXL_Policy?.Airbnb">
                       <i class="fab fa-airbnb text-muted"></i>
-                      <span class="no-policy-text" style="font-size: var(--font-size-xs);">No policy</span>
+                      <span class="no-policy-type" style="font-size: var(--font-size-xs);">No policy</span>
                     </div>
                     
                     <!-- VRBO Policy -->
@@ -541,10 +556,10 @@
                       <i class="fab fa-airbnb text-danger"></i>
                       <span class="config-text">Max guests: {{ formatGuestConfig(property.Adult_Child_Config.Airbnb) }}</span>
                     </div>
-                    <div class="config-item" *ngIf="property.Adult_Child_Config?.VRBO">
+                    <!-- <div class="config-item" *ngIf="property.Adult_Child_Config?.VRBO">
                       <i class="fas fa-home text-warning"></i>
                       <span class="config-text">Max guests: {{ formatGuestConfig(property.Adult_Child_Config.VRBO) }}</span>
-                    </div>
+                    </div> -->
                     <div class="no-config-text" *ngIf="!property.Adult_Child_Config">
                       <small class="text-muted" style="font-size: var(--font-size-xs);">No configuration</small>
                     </div>
@@ -600,50 +615,73 @@
                 <td *ngIf="columnVisibility.lastReviewScore">
                   <div class="review-score-cell">
                     <!-- Booking.com Last Review Score -->
-                    <div class="review-item clickable" *ngIf="safeParseNumber(property.Reviews.Booking.Last_Rev_Score) > 0" title="Click to visit Booking.com property page"
-                      (click)="openPropertyUrl(property, 'Booking')">
+                    <div class="review-item" *ngIf="property.Reviews.Booking.Last_Rev_Score !== null" 
+                      [class.clickable]="safeParseNumber(property.Reviews.Booking.Last_Rev_Score) > 0" 
+                      [title]="safeParseNumber(property.Reviews.Booking.Last_Rev_Score) > 0 ? 'Click to visit Booking.com property page' : 'Booking.com: ' + property.Reviews.Booking.Last_Rev_Score"
+                      (click)="safeParseNumber(property.Reviews.Booking.Last_Rev_Score) > 0 ? openPropertyUrl(property, 'Booking') : null">
                       <i class="fas fa-bed text-primary"></i>
                       <span class="score-value">{{ property.Reviews.Booking.Last_Rev_Score }}</span>
                     </div>
-                    <div class="review-item no-review-score" *ngIf="property.Reviews.Booking.Last_Rev_Score === null"
-                      title="Booking.com: No review score">
-                      <i class="fas fa-bed text-muted"></i>
-                      <span class="no-review-score-text" style="font-size: var(--font-size-xs);">No review score</span>
-                    </div>
 
                     <!-- Airbnb Last Review Score -->
-                    <div class="review-item clickable" *ngIf="safeParseNumber(property.Reviews.Airbnb.Last_Rev_Score) > 0" title="Click to visit Airbnb property page"
-                      (click)="openPropertyUrl(property, 'Airbnb')">
+                    <div class="review-item" *ngIf="property.Reviews.Airbnb.Last_Rev_Score !== null" 
+                      [class.clickable]="safeParseNumber(property.Reviews.Airbnb.Last_Rev_Score) > 0" 
+                      [title]="safeParseNumber(property.Reviews.Airbnb.Last_Rev_Score) > 0 ? 'Click to visit Airbnb property page' : 'Airbnb: ' + property.Reviews.Airbnb.Last_Rev_Score"
+                      (click)="safeParseNumber(property.Reviews.Airbnb.Last_Rev_Score) > 0 ? openPropertyUrl(property, 'Airbnb') : null">
                       <i class="fab fa-airbnb text-danger"></i>
                       <span class="score-value">{{ property.Reviews.Airbnb.Last_Rev_Score }}</span>
                     </div>
-                    <div class="review-item no-review-score" *ngIf="property.Reviews.Airbnb.Last_Rev_Score === null"
-                      title="Airbnb: No review score">
-                      <i class="fab fa-airbnb text-muted"></i>
-                      <span class="no-review-score-text" style="font-size: var(--font-size-xs);">No review score</span>
-                    </div>
 
                     <!-- VRBO Last Review Score -->
-                   
+                    <!-- <div class="review-item" *ngIf="property.Reviews.VRBO.Last_Rev_Score !== null" 
+                      [class.clickable]="safeParseNumber(property.Reviews.VRBO.Last_Rev_Score) > 0" 
+                      [title]="safeParseNumber(property.Reviews.VRBO.Last_Rev_Score) > 0 ? 'Click to visit VRBO property page' : 'VRBO: ' + property.Reviews.VRBO.Last_Rev_Score"
+                      (click)="safeParseNumber(property.Reviews.VRBO.Last_Rev_Score) > 0 ? openPropertyUrl(property, 'VRBO') : null">
+                      <i class="fas fa-home text-warning"></i>
+                      <span class="score-value">{{ property.Reviews.VRBO.Last_Rev_Score }}</span>
+                    </div> -->
                   </div>
                 </td>
                 <td *ngIf="columnVisibility.lastReviewDate">
                   <div class="revenue-date-cell">
-                    <div class="date-item" *ngIf="property.Reviews.Booking.Last_Review_Date && property.Reviews.Booking.Last_Review_Date.trim() !== ''">
+                    <!-- Booking.com Last Review Date -->
+                    <div class="date-item" *ngIf="property.Reviews.Booking.Last_Review_Date !== null">
                       <i class="fas fa-bed text-primary"></i>
-                      <span class="date-value">{{ property.Reviews.Booking.Last_Review_Date }}</span>
+                      <span class="date-value">
+                        <span *ngIf="property.Reviews.Booking.Last_Review_Date && property.Reviews.Booking.Last_Review_Date.trim() !== '' && property.Reviews.Booking.Last_Review_Date !== 'N/A'">
+                          {{ property.Reviews.Booking.Last_Review_Date | date:'MMM dd, yyyy' }}
+                        </span>
+                        <span *ngIf="property.Reviews.Booking.Last_Review_Date === 'N/A' || property.Reviews.Booking.Last_Review_Date.trim() === ''">
+                          {{ property.Reviews.Booking.Last_Review_Date }}
+                        </span>
+                      </span>
                     </div>
-                    <div class="date-item" *ngIf="property.Reviews.Airbnb.Last_Review_Date && property.Reviews.Airbnb.Last_Review_Date.trim() !== ''">
+                    
+                    <!-- Airbnb Last Review Date -->
+                    <div class="date-item" *ngIf="property.Reviews.Airbnb.Last_Review_Date !== null">
                       <i class="fab fa-airbnb text-danger"></i>
-                      <span class="date-value">{{ property.Reviews.Airbnb.Last_Review_Date }}</span>
+                      <span class="date-value">
+                        <span *ngIf="property.Reviews.Airbnb.Last_Review_Date && property.Reviews.Airbnb.Last_Review_Date.trim() !== '' && property.Reviews.Airbnb.Last_Review_Date !== 'N/A'">
+                          {{ property.Reviews.Airbnb.Last_Review_Date | date:'MMM dd, yyyy' }}
+                        </span>
+                        <span *ngIf="property.Reviews.Airbnb.Last_Review_Date === 'N/A' || property.Reviews.Airbnb.Last_Review_Date.trim() === ''">
+                          {{ property.Reviews.Airbnb.Last_Review_Date }}
+                        </span>
+                      </span>
                     </div>
-                      <div class="date-item" *ngIf="property.Reviews.VRBO.Last_Review_Date && property.Reviews.VRBO.Last_Review_Date.trim() !== ''">
+                    
+                    <!-- VRBO Last Review Date -->
+                    <!-- <div class="date-item" *ngIf="property.Reviews.VRBO.Last_Review_Date !== null">
                       <i class="fas fa-home text-warning"></i>
-                      <span class="date-value">{{ property.Reviews.VRBO.Last_Review_Date }}</span>
-                    </div>
-                    <div *ngIf="!hasLastReviewDate(property)" class="no-data-text">
-                      <small class="text-muted" style="font-size: var(--font-size-xs);">No Last Review Date</small>
-                    </div>
+                      <span class="date-value">
+                        <span *ngIf="property.Reviews.VRBO.Last_Review_Date && property.Reviews.VRBO.Last_Review_Date.trim() !== '' && property.Reviews.VRBO.Last_Review_Date !== 'N/A'">
+                          {{ property.Reviews.VRBO.Last_Review_Date | date:'MMM dd, yyyy' }}
+                        </span>
+                        <span *ngIf="property.Reviews.VRBO.Last_Review_Date === 'N/A' || property.Reviews.VRBO.Last_Review_Date.trim() === ''">
+                          {{ property.Reviews.VRBO.Last_Review_Date }}
+                        </span>
+                      </span>
+                    </div> -->
                   </div>
                 </td>
                 <td *ngIf="columnVisibility.actions">
@@ -1282,7 +1320,7 @@
                   </div>
 
                   <!-- VRBO Filters -->
-                  <div class="col-12 mb-3 mt-4">
+                  <!-- <div class="col-12 mb-3 mt-4">
                     <h6 class="fw-bold text-warning">VRBO Features</h6>
                   </div>
                   <div class="col-md-6 mb-3">
@@ -1322,7 +1360,7 @@
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
               </div>
 
@@ -1404,7 +1442,7 @@
                   </div>
 
                   <!-- VRBO Reviews -->
-                  <div class="col-12 mb-3 mt-4">
+                  <!-- <div class="col-12 mb-3 mt-4">
                     <h6 class="fw-bold text-warning">VRBO Reviews</h6>
                   </div>
                   <div class="col-md-6 mb-3">
@@ -1438,7 +1476,7 @@
                           (input)="onVrboTotalRevMaxChange($event)" class="range-max">
                       </div>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
               </div>
 

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { PropertyDetailsComponent } from './property-details.component';
+import { SharedModule } from '../../shared/sharedModule';
 
 const routes: Routes = [
   { path: '', component: PropertyDetailsComponent }
@@ -11,7 +12,8 @@ const routes: Routes = [
   declarations: [PropertyDetailsComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    SharedModule
   ]
 })
 export class PropertyDetailsModule {}

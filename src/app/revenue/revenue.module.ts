@@ -4,18 +4,18 @@ import { FormsModule } from '@angular/forms';
 
 import { RevenueRoutingModule } from './revenue-routing.module';
 import { RevenueComponent } from './revenue.component';
-import { PropertyDetailsComponent } from './property-details/property-details.component';
 import { NgCircleProgressModule } from 'ng-circle-progress';
+import { SharedModule } from '../shared/sharedModule';
 
 @NgModule({
   declarations: [
-    RevenueComponent,
-    // PropertyDetailsComponent
+    RevenueComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
     RevenueRoutingModule,
+    SharedModule,
 
     NgCircleProgressModule.forRoot()
   ]

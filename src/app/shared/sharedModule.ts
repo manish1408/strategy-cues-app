@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 
 import { ClickOutsideDirective } from "../_directives/click-outside.directive";
+import { FormatTextPipe } from "../_pipes/format-text.pipe";
 
 import { SelectDropDownModule } from "ngx-select-dropdown";
 import { MultiFilterComponent } from "./component/multi-filter/multi-filter.component";
@@ -49,14 +50,16 @@ renderer.link = (href: string, title: string, text: string) => {
     PhoneDropdownComponent,
     ClickOutsideDirective,
     MultiFilterComponent,
-    WarningModalComponent
+    WarningModalComponent,
+    FormatTextPipe
   ],
   providers: [],
   exports: [
     PhoneDropdownComponent,
     ClickOutsideDirective,
     MultiFilterComponent,
-    WarningModalComponent
+    WarningModalComponent,
+    FormatTextPipe
    
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

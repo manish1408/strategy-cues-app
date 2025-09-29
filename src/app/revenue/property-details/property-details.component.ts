@@ -20,6 +20,11 @@ export class PropertyDetailsComponent implements OnInit {
   // Utility property for template
   Math = Math;
 
+  // Helper method to check if value is an object
+  isObject(value: any): boolean {
+    return typeof value === 'object' && value !== null;
+  }
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -105,8 +110,9 @@ export class PropertyDetailsComponent implements OnInit {
   }
 
   // Helper method to check if a platform feature is enabled
-  isFeatureEnabled(value: string | null): boolean {
+  isFeatureEnabled(value: string | null | object): boolean {
     if (!value) return false;
+    if (typeof value === 'object') return true; // Objects are considered enabled
     return value.toLowerCase() === 'yes';
   }
 
