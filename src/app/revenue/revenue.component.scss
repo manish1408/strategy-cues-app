@@ -434,6 +434,20 @@ $transition: all 0.3s ease;
   }
 }
 
+// Light gray badge styling
+.badge-light-gray {
+  background-color: #f8f9fa !important;
+  color: #495057 !important;
+  border: 1px solid #dee2e6 !important;
+  font-weight: 600;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #e9ecef !important;
+    border-color: #adb5bd !important;
+  }
+}
+
 // Dual occupancy cell styles for displaying TM/NM progress bars
 .dual-occupancy-cell {
   padding: 0.5rem;

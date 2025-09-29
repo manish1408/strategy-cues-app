@@ -412,9 +412,9 @@
                 <td *ngIf="columnVisibility.adr">
                   <div class="dual-value-cell">
                     <div class="value-pair" *ngIf="property.ADR">
-                      <span class="badge text-white me-1" style="background-color: #1e1e1e;">TM: ${{ property.ADR.TM || 'N/A'
+                      <span class="badge badge-light-gray me-1">TM: ${{ property.ADR.TM || 'N/A'
                         }}</span>
-                      <span class="badge text-white" style="background-color: #1e1e1e;">NM: ${{ property.ADR.NM || 'N/A'
+                      <span class="badge badge-light-gray">NM: ${{ property.ADR.NM || 'N/A'
                         }}</span>
                     </div>
                     <div class="value-pair" *ngIf="!property.ADR">
@@ -425,9 +425,9 @@
                 <td *ngIf="columnVisibility.revpar">
                   <div class="dual-value-cell">
                     <div class="value-pair" *ngIf="property.RevPAR">
-                      <span class="badge text-white me-1" style="background-color: #1e1e1e;">TM: ${{ property.RevPAR.TM || 'N/A'
+                      <span class="badge badge-light-gray me-1">TM: ${{ property.RevPAR.TM || 'N/A'
                         }}</span>
-                      <span class="badge text-white" style="background-color: #1e1e1e;">NM: ${{ property.RevPAR.NM || 'N/A'
+                      <span class="badge badge-light-gray">NM: ${{ property.RevPAR.NM || 'N/A'
                         }}</span>
                     </div>
                     <div class="value-pair" *ngIf="!property.RevPAR">
@@ -438,9 +438,9 @@
                 <td *ngIf="columnVisibility.mpi">
                   <div class="dual-value-cell">
                     <div class="value-pair" *ngIf="property.MPI">
-                      <span class="badge text-white  me-1" style="background-color: #1e1e1e;">TM: {{ safeParseNumber(property.MPI.TM) }}%</span>
-                      <span class="badge text-white  me-1" style="background-color: #1e1e1e;">NM: {{ safeParseNumber(property.MPI.NM) }}%</span>
-                      <span class="badge text-white  me-1" style="background-color: #1e1e1e;">LYTM: {{ safeParseNumber(property.MPI.LYTM) }}%</span>
+                      <span class="badge badge-light-gray me-1">TM: {{ safeParseNumber(property.MPI.TM) }}%</span>
+                      <span class="badge badge-light-gray me-1">NM: {{ safeParseNumber(property.MPI.NM) }}%</span>
+                      <span class="badge badge-light-gray me-1">LYTM: {{ safeParseNumber(property.MPI.LYTM) }}%</span>
                     </div>
                     <div class="value-pair" *ngIf="!property.MPI">
                       <span class="text-muted">N/A</span>
