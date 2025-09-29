@@ -67,11 +67,17 @@ export class ContentComponent implements OnInit {
     return this.getPhotoGap(property);
   }
 
-  getVrboPhotoGap(property: any): number {
+  getPricelabPhotoGap(property: any): number {
     // For now, using the same logic as general photo gap
-    // In a real implementation, this would compare VRBO-specific photo counts
+    // In a real implementation, this would compare Pricelab-specific photo counts
     return this.getPhotoGap(property);
   }
+
+  // getVrboPhotoGap(property: any): number {
+  //   // For now, using the same logic as general photo gap
+  //   // In a real implementation, this would compare VRBO-specific photo counts
+  //   return this.getPhotoGap(property);
+  // }
 
   getPlatformGapClass(photoGap: number): string {
     if (photoGap > 0) {
@@ -106,7 +112,7 @@ export class ContentComponent implements OnInit {
     };
   }
 
-  getVrboPhotoCount(property: any): { count: number; types: string[] } {
+  getPricelabPhotoCount(property: any): { count: number; types: string[] } {
     // For now, using the same logic as general photo count
     // In a real implementation, this would use platform-specific photo data
     return {
@@ -114,6 +120,15 @@ export class ContentComponent implements OnInit {
       types: this.getPhotoTypes(property.property_photos)
     };
   }
+
+  // getVrboPhotoCount(property: any): { count: number; types: string[] } {
+  //   // For now, using the same logic as general photo count
+  //   // In a real implementation, this would use platform-specific photo data
+  //   return {
+  //     count: property.num_photos,
+  //     types: this.getPhotoTypes(property.property_photos)
+  //   };
+  // }
 
   // Platform-specific review count methods
   getAirbnbReviewCount(property: any): { count: number; score: number } {
@@ -140,7 +155,7 @@ export class ContentComponent implements OnInit {
     return { count: 0, score: 0 };
   }
 
-  getVrboReviewCount(property: any): { count: number; score: number } {
+  getPricelabReviewCount(property: any): { count: number; score: number } {
     // For now, using competitor data as placeholder
     // In a real implementation, this would use platform-specific review data
     if (property.competitor && property.competitor.length > 0) {
@@ -151,6 +166,18 @@ export class ContentComponent implements OnInit {
     }
     return { count: 0, score: 0 };
   }
+
+  // getVrboReviewCount(property: any): { count: number; score: number } {
+  //   // For now, using competitor data as placeholder
+  //   // In a real implementation, this would use platform-specific review data
+  //   if (property.competitor && property.competitor.length > 0) {
+  //     return {
+  //       count: property.competitor[0].reviews_count || 0,
+  //       score: property.competitor[0].reviews_score || 0
+  //     };
+  //   }
+  //   return { count: 0, score: 0 };
+  // }
 
   getCaptionPercentage(property: any): number {
     return Math.round((property.captioned_count / property.num_photos) * 100);
@@ -179,7 +206,7 @@ export class ContentComponent implements OnInit {
     };
   }
 
-  getVrboCaptionStatus(property: any): { percentage: number; captioned: number; total: number; missing: number } {
+  getPricelabCaptionStatus(property: any): { percentage: number; captioned: number; total: number; missing: number } {
     // For now, using the same logic as general caption status
     // In a real implementation, this would use platform-specific caption data
     return {
@@ -189,6 +216,17 @@ export class ContentComponent implements OnInit {
       missing: property.missing_captions
     };
   }
+
+  // getVrboCaptionStatus(property: any): { percentage: number; captioned: number; total: number; missing: number } {
+  //   // For now, using the same logic as general caption status
+  //   // In a real implementation, this would use platform-specific caption data
+  //   return {
+  //     percentage: this.getCaptionPercentage(property),
+  //     captioned: property.captioned_count,
+  //     total: property.num_photos,
+  //     missing: property.missing_captions
+  //   };
+  // }
 
   getCaptionStatusClass(percentage: number): string {
     if (percentage >= 90) return 'caption-excellent';
@@ -252,7 +290,8 @@ export class ContentComponent implements OnInit {
       'Competitor Reviews': property.competitor && property.competitor.length > 0 ? property.competitor[0].reviews_count : 0,
       'Airbnb Link': property.airbnb_link,
       'Booking Link': property.booking_link,
-      'VRBO Link': property.vrbo_link
+      'Pricelab Link': property.pricelabs_link,
+      // 'VRBO Link': property.vrbo_link
     }));
 
     const headers = Object.keys(csvData[0]);

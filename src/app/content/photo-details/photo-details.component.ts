@@ -87,9 +87,12 @@ export class PhotoDetailsComponent implements OnInit {
       case 'Booking':
         url = this.propertyData?.booking_link;
         break;
-      case 'VRBO':
-        url = this.propertyData?.vrbo_link;
+      case 'Pricelab':
+        url = this.propertyData?.pricelabs_link;
         break;
+      // case 'VRBO':
+      //   url = this.propertyData?.vrbo_link;
+      //   break;
     }
     
     if (url) {
@@ -418,7 +421,8 @@ export class PhotoDetailsComponent implements OnInit {
       "Caption Rate %": this.getCaptionPercentage(),
       "Airbnb Link": this.propertyData.airbnb_link,
       "Booking Link": this.propertyData.booking_link,
-      "VRBO Link": this.propertyData.vrbo_link,
+      "Pricelab Link": this.propertyData.pricelabs_link,
+      // "VRBO Link": this.propertyData.vrbo_link,
     };
 
     // Add competitor data if available

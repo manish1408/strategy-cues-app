@@ -494,7 +494,20 @@
         }
       }
 
-      &.btn-vrbo {
+      &.btn-pricelab {
+        background-color: #6c757d;
+        
+
+        &:hover:not(:disabled) {
+          background-color: #5a6268;
+          color: white;
+          border-color: #5a6268;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 8px rgba(107, 70, 193, 0.3);
+        }
+      }
+
+      /* &.btn-vrbo {
         background-color: #1E3A8A;
         color: white;
         border-color: #1E3A8A;
@@ -505,7 +518,7 @@
           transform: translateY(-1px);
           box-shadow: 0 4px 8px rgba(30, 58, 138, 0.3);
         }
-      }
+      } */
     }
   }
 }
@@ -639,9 +652,13 @@
         color: #003580;
       }
 
-      &.vrbo i {
-        color: #2d6099;
+      &.pricelab i {
+        color: #6c757d;
       }
+
+      /* &.vrbo i {
+        color: #2d6099;
+      } */
     }
   }
 }
@@ -866,9 +883,13 @@
           color: #003580;
         }
 
-        &.vrbo {
-          color: #2d6099;
+        &.pricelab {
+          color: #6c757d;
         }
+
+        /* &.vrbo {
+          color: #2d6099;
+        } */
       }
     }
   }

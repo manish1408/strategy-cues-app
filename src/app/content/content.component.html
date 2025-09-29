@@ -56,9 +56,15 @@
                               <a [href]="property.booking_link" target="_blank" class="platform-link booking">
                                 <i class="fas fa-bed"></i>
                               </a>
-                              <a [href]="property.vrbo_link" target="_blank" class="platform-link vrbo">
-                                <i class="fas fa-home"></i>
+                              <a *ngIf="property.pricelabs_link" [href]="property.pricelabs_link" target="_blank" class="platform-link pricelab" title="View on Pricelab">
+                                <i class="fas fa-chart-line"></i>
                               </a>
+                              <span *ngIf="!property.pricelabs_link" class="platform-link pricelab disabled" title="No Pricelab URL available">
+                                <i class="fas fa-chart-line"></i>
+                              </span>
+                              <!-- <a [href]="property.vrbo_link" target="_blank" class="platform-link vrbo">
+                                <i class="fas fa-home"></i>
+                              </a> -->
                             </div>
                           </div>
                         </div>
@@ -90,9 +96,22 @@
                               </div>
                             </div>
                           </div>
+
+                          <!-- Pricelab Photos -->
+                          <div class="platform-photo pricelab-photo">
+                            <div class="platform-icon">
+                              <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="photo-info">
+                              <div class="photo-count">
+                                <span class="count-number">{{getPricelabPhotoCount(property).count}}</span>
+                                <span class="count-label">photos</span>
+                              </div>
+                            </div>
+                          </div>
                           
                           <!-- VRBO Photos -->
-                          <div class="platform-photo vrbo-photo">
+                          <!-- <div class="platform-photo vrbo-photo">
                             <div class="platform-icon">
                               <i class="fas fa-home"></i>
                             </div>
@@ -102,7 +121,7 @@
                                 <span class="count-label">photos</span>
                               </div>
                             </div>
-                          </div>
+                          </div> -->
                         </div>
                       </td>
                       <td class="reviews-cell">
@@ -141,8 +160,24 @@
                             </div>
                           </div>
                           
+                          <!-- Pricelab Reviews -->
+                          <div class="platform-review pricelab-review">
+                            <div class="platform-icon">
+                              <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="review-info">
+                              <div class="review-count">
+                                <span class="count-number">{{getPricelabReviewCount(property).count}}</span>
+                                <span class="count-label">reviews</span>
+                              </div>
+                              <div class="review-score" *ngIf="getPricelabReviewCount(property).score > 0">
+                                <i class="fas fa-star"></i>
+                                <span>{{getPricelabReviewCount(property).score}}</span>
+                              </div>
+                            </div>
+                          </div>
                           <!-- VRBO Reviews -->
-                          <div class="platform-review vrbo-review">
+                          <!-- <div class="platform-review vrbo-review">
                             <div class="platform-icon">
                               <i class="fas fa-home"></i>
                             </div>
@@ -156,7 +191,7 @@
                                 <span>{{getVrboReviewCount(property).score}}</span>
                               </div>
                             </div>
-                          </div>
+                          </div> -->
                         </div>
                       </td>
                       <td class="gap-cell">
@@ -182,9 +217,20 @@
                               <span class="gap-direction">{{getBookingPhotoGap(property) > 0 ? 'behind' : 'ahead'}}</span>
                             </div>
                           </div>
+
+                          <!-- Pricelab Photo Gap -->
+                          <div class="platform-gap pricelab-gap" [ngClass]="getPlatformGapClass(getPricelabPhotoGap(property))">
+                            <div class="platform-icon">
+                              <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="gap-info">
+                              <span class="gap-number">{{Math.abs(getPricelabPhotoGap(property))}}</span>
+                              <span class="gap-direction">{{getPricelabPhotoGap(property) > 0 ? 'behind' : 'ahead'}}</span>
+                            </div>
+                          </div>
                           
                           <!-- VRBO Photo Gap -->
-                          <div class="platform-gap vrbo-gap" [ngClass]="getPlatformGapClass(getVrboPhotoGap(property))">
+                          <!-- <div class="platform-gap vrbo-gap" [ngClass]="getPlatformGapClass(getVrboPhotoGap(property))">
                             <div class="platform-icon">
                               <i class="fas fa-home"></i>
                             </div>
@@ -192,7 +238,7 @@
                               <span class="gap-number">{{Math.abs(getVrboPhotoGap(property))}}</span>
                               <span class="gap-direction">{{getVrboPhotoGap(property) > 0 ? 'behind' : 'ahead'}}</span>
                             </div>
-                          </div>
+                          </div> -->
                         </div>
                       </td>
                       <td class="caption-cell">
@@ -224,9 +270,23 @@
                               </div>
                             </div>
                           </div>
-                          
+
+                          <!-- Pricelab Caption Status -->
+                          <div class="platform-caption pricelab-caption" [ngClass]="getCaptionStatusClass(getPricelabCaptionStatus(property).percentage)">
+                            <div class="platform-icon">
+                              <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="caption-info">
+                              <div class="caption-text">{{getPricelabCaptionStatus(property).captioned}}/{{getPricelabCaptionStatus(property).total}}</div>
+                              <div class="missing-captions" *ngIf="getPricelabCaptionStatus(property).missing > 0">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span>{{getPricelabCaptionStatus(property).missing}} missing</span>
+                              </div>
+                            </div>
+                          </div>
+
                           <!-- VRBO Caption Status -->
-                          <div class="platform-caption vrbo-caption" [ngClass]="getCaptionStatusClass(getVrboCaptionStatus(property).percentage)">
+                          <!-- <div class="platform-caption vrbo-caption" [ngClass]="getCaptionStatusClass(getVrboCaptionStatus(property).percentage)">
                             <div class="platform-icon">
                               <i class="fas fa-home"></i>
                             </div>
@@ -237,7 +297,7 @@
                                 <span>{{getVrboCaptionStatus(property).missing}} missing</span>
                               </div>
                             </div>
-                          </div>
+                          </div> -->
                         </div>
                       </td>
                       <td class="actions-cell">

@@ -46,12 +46,19 @@
               <i class="fas fa-bed"></i> Booking.com
             </button>
             <button 
+              class="btn btn-pricelab me-2" 
+              (click)="openBookingLink('Pricelab')"
+              [disabled]="!propertyData?.pricelabs_link"
+              title="View on Pricelab">
+              <i class="fas fa-chart-line"></i> Pricelab
+            </button>
+            <!-- <button 
               class="btn btn-vrbo" 
               (click)="openBookingLink('VRBO')"
               [disabled]="!propertyData?.vrbo_link"
               title="View on VRBO">
               <i class="fas fa-home"></i> VRBO
-            </button>
+            </button> -->
           </div>
         </div>
       </div>
@@ -271,9 +278,15 @@
           <a [href]="comp.booking_link" target="_blank" class="platform-link booking">
             <i class="fas fa-bed"></i>
           </a>
-          <a [href]="comp.vrbo_link" target="_blank" class="platform-link vrbo">
-            <i class="fas fa-home"></i>
+          <a *ngIf="comp.pricelabs_link" [href]="comp.pricelabs_link" target="_blank" class="platform-link pricelab" title="View on Pricelab">
+            <i class="fas fa-chart-line"></i>
           </a>
+          <span *ngIf="!comp.pricelabs_link" class="platform-link pricelab disabled" title="No Pricelab URL available">
+            <i class="fas fa-chart-line"></i>
+          </span>
+          <!-- <a [href]="comp.vrbo_link" target="_blank" class="platform-link vrbo">
+            <i class="fas fa-home"></i>
+          </a> -->
         </div>
       </div>
     </div>
