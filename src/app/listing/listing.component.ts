@@ -9,6 +9,7 @@ import { EventService } from "../_services/event.service";
 import { ListingService } from "../_services/listing.service";
 import { ActivatedRoute } from "@angular/router";
 import { PricelabsService } from "../_services/pricelabs.service";
+import { CompetitorPropertiesService } from "../_services/competitor-properties.service";
 import { Status, PropertyStatus } from "../_models/status.model";
 
 @Component({
@@ -36,6 +37,8 @@ export class ListingComponent implements OnInit, OnDestroy {
   airbnbId: string | null = null;
   vrboId: string | null = null;
   pricelab: string | null = null;
+  savingCompetitor: boolean = false;
+  competitorIds: string[] = [];
   // Status management
   Status = Status; // Make Status enum available in template
   propertyStatuses: { [key: string]: PropertyStatus } = {}; // Store status for each property
@@ -49,7 +52,8 @@ export class ListingComponent implements OnInit, OnDestroy {
     private eventService: EventService<any>,
     private listingService: ListingService,
     private route: ActivatedRoute,
-    private pricelabsService: PricelabsService
+    private pricelabsService: PricelabsService,
+    private competitorPropertiesService: CompetitorPropertiesService
   ) {
     this.addListingForm = this.fb.group({
       bookingCom: this.fb.group({
@@ -324,11 +328,14 @@ export class ListingComponent implements OnInit, OnDestroy {
       
       this.addListingForm.patchValue(formData);
       
-      // Initialize competitors array with at least one form
+      // Clear competitors array
       while (this.competitorsFormArray.length !== 0) {
         this.competitorsFormArray.removeAt(0);
       }
-      this.addCompetitor();
+      this.competitorIds = [];
+      
+      // Fetch existing competitor data
+      // this.loadCompetitorData(listing.id);
       
     } else {
       console.error('Invalid listing object:', listing);
@@ -459,8 +466,8 @@ export class ListingComponent implements OnInit, OnDestroy {
     while (this.competitorsFormArray.length !== 0) {
       this.competitorsFormArray.removeAt(0);
     }
-    // Add one initial competitor form
-    this.addCompetitor();
+    // Add one initial blank competitor form (without saving)
+    this.addBlankCompetitorForm();
     console.log('Reset form, competitors array length:', this.competitorsFormArray.length);
     this.isEdit = false;
     this.editingListingId = null;
@@ -625,16 +632,159 @@ export class ListingComponent implements OnInit, OnDestroy {
 
   // Competitor management methods
   addCompetitor(): void {
-    const competitorForm = this.createCompetitorForm();
-    this.competitorsFormArray.push(competitorForm);
-    console.log('Added competitor, total competitors:', this.competitorsFormArray.length);
+    this.savingCompetitor = true;
+    
+    // Get the current competitor form data (the last form in the array)
+    const currentFormIndex = this.competitorsFormArray.length - 1;
+    const currentForm = this.competitorsFormArray.at(currentFormIndex);
+    
+    // Create competitor data for API call using the correct format
+    const competitorData = [{
+      operatorId: this.operatorId,
+      bookingId: currentForm.get('bookingComId')?.value || "",
+      airbnbId: currentForm.get('airbnbId')?.value || "",
+      vrboId: currentForm.get('vrboId')?.value || "",
+      bookingLink: currentForm.get('bookingComUrl')?.value || "",
+      airbnbLink: currentForm.get('airbnbUrl')?.value || "",
+      vrboLink: currentForm.get('vrboUrl')?.value || ""
+    }];
+
+    this.competitorPropertiesService.createCompetitorProperty(competitorData).subscribe({
+      next: (response: any) => {
+        console.log('Competitor saved successfully:', response);
+        this.toastr.success('Competitor added successfully');
+        
+        // Add competitor ID to the current form's index
+        if (response.id) {
+          this.competitorIds[currentFormIndex] = response.id;
+          console.log('Set competitor ID at index', currentFormIndex, 'to', response.id);
+          console.log('Updated competitorIds array:', this.competitorIds);
+        }
+        
+        // Add new blank form to the array for next competitor
+        this.addBlankCompetitorForm();
+        
+        this.savingCompetitor = false;
+        console.log('Added competitor, total competitors:', this.competitorsFormArray.length, 'competitorIds:', this.competitorIds);
+      },
+      error: (error: any) => {
+        console.error('Error saving competitor:', error);
+        this.toastr.error('Failed to add competitor');
+        this.savingCompetitor = false;
+      }
+    });
   }
 
   removeCompetitor(index: number): void {
     if (this.competitorsFormArray.length > 1) {
-      this.competitorsFormArray.removeAt(index);
+      // Check if this competitor has been saved (has an ID)
+      const competitorId = this.competitorIds[index];
+      
+      if (competitorId) {
+        // Call delete API if competitor was saved
+        const deleteData = {
+          operatorId: this.operatorId
+        };
+        
+        this.competitorPropertiesService.deleteCompetitorProperty(deleteData, competitorId).subscribe({
+          next: (response: any) => {
+            console.log('Competitor deleted successfully:', response);
+            this.toastr.success('Competitor removed successfully');
+            
+            // Remove from competitorIds array
+            this.competitorIds.splice(index, 1);
+            
+            // Remove from form array
+            this.competitorsFormArray.removeAt(index);
+          },
+          error: (error: any) => {
+            console.error('Error deleting competitor:', error);
+            this.toastr.error('Failed to remove competitor');
+          }
+        });
+      } else {
+        // Just remove from form array if not saved yet
+        this.competitorsFormArray.removeAt(index);
+      }
     }
   }
+
+  // Check if current competitor form has valid data
+  isCurrentCompetitorFormValid(): boolean {
+    if (this.competitorsFormArray.length === 0) {
+      return false;
+    }
+    
+    const currentForm = this.competitorsFormArray.at(this.competitorsFormArray.length - 1);
+    const bookingComId = currentForm.get('bookingComId')?.value;
+    const bookingComUrl = currentForm.get('bookingComUrl')?.value;
+    const airbnbId = currentForm.get('airbnbId')?.value;
+    const airbnbUrl = currentForm.get('airbnbUrl')?.value;
+    const vrboId = currentForm.get('vrboId')?.value;
+    const vrboUrl = currentForm.get('vrboUrl')?.value;
+    
+    // At least one field should have data
+    return !!(bookingComId || bookingComUrl || airbnbId || airbnbUrl || vrboId || vrboUrl);
+  }
+
+  // Check if a competitor at given index has been saved
+  isCompetitorSaved(index: number): boolean {
+    console.log(`Checking competitor ${index}:`, {
+      competitorIds: this.competitorIds,
+      hasId: !!this.competitorIds[index],
+      id: this.competitorIds[index],
+      arrayLength: this.competitorIds.length
+    });
+    return !!this.competitorIds[index];
+  }
+
+
+  // Add blank competitor form without saving
+  addBlankCompetitorForm(): void {
+    const competitorForm = this.createCompetitorForm();
+    this.competitorsFormArray.push(competitorForm);
+    console.log('Added blank competitor form, total competitors:', this.competitorsFormArray.length);
+  }
+
+  // Load competitor data from API - COMMENTED OUT DUE TO 404 ERROR
+  // loadCompetitorData(listingId: string): void {
+  //   if (!this.operatorId) {
+  //     console.error('Operator ID not available');
+  //     return;
+  //   }
+
+  //   this.competitorPropertiesService.getCompetitorProperties(this.operatorId, listingId).subscribe({
+  //     next: (response: any) => {
+  //       console.log('Competitor data loaded:', response);
+        
+  //       if (response && response.length > 0) {
+  //         // Populate forms with existing competitor data
+  //         response.forEach((competitor: any, index: number) => {
+  //           const competitorForm = this.createCompetitorForm();
+  //           competitorForm.patchValue({
+  //             bookingComId: competitor.bookingId || '',
+  //             bookingComUrl: competitor.bookingLink || '',
+  //             airbnbId: competitor.airbnbId || '',
+  //             airbnbUrl: competitor.airbnbLink || '',
+  //             vrboId: competitor.vrboId || '',
+  //             vrboUrl: competitor.vrboLink || ''
+  //           });
+            
+  //           this.competitorsFormArray.push(competitorForm);
+  //           this.competitorIds.push(competitor.id);
+  //         });
+  //       } else {
+  //         // No existing competitors, add one blank form
+  //         this.addBlankCompetitorForm();
+  //       }
+  //     },
+  //     error: (error: any) => {
+  //       console.error('Error loading competitor data:', error);
+  //       // On error, still add one blank form
+  //       this.addBlankCompetitorForm();
+  //     }
+  //   });
+  // }
 
   createCompetitorForm(): FormGroup {
     return this.fb.group({
