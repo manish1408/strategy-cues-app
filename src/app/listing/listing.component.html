@@ -95,11 +95,11 @@
                         <a *ngIf="listing?.urls?.PricelabsUrl" 
                            [href]="listing?.urls?.PricelabsUrl" 
                            target="_blank" class="platform-link pricelab" title="View on Pricelab">
-                          <i class="fas fa-chart-bar"></i>
+                          <i class="fas fa-chart-line"></i>
                         </a>
                         <span *ngIf="!listing?.urls?.PricelabsUrl" 
                               class="platform-link pricelab disabled" title="No Pricelab URL available">
-                          <i class="fas fa-chart-bar"></i>
+                          <i class="fas fa-chart-line"></i>
                         </span>
                       </div>
                     </div>
@@ -206,109 +206,242 @@
         <i class="fa-solid fa-xmark" data-bs-dismiss="modal"></i>
       </div>
       <div class="modal-body">
-        <form [formGroup]="addListingForm">
-          <div class="mb-3" [formGroupName]="'bookingCom'">
-            <label for="name" class="form-label">Booking.com</label>
-            <input
-              type="text"
-              id="bookingCom"
-              formControlName="id"
-              class="form-control mb-2"
-              placeholder="Enter Booking.com ID"
-              [ngClass]="{ 'is-invalid': hasError('bookingCom.id') }"
-            />
-            <div *ngIf="addListingForm.get('bookingCom.id')?.errors?.['required'] && addListingForm.get('bookingCom')?.touched">
-              <span class="text-danger">{{ addListingForm.get('bookingCom.id')?.errors?.['required'] }}</span>
-            </div>
-            <input
-              type="text"
-              id="bookingCom"
-              formControlName="url"
-              [ngClass]="{ 'is-invalid': hasError('bookingCom.url') }"
-              class="form-control"
-              placeholder="Enter Booking.com"
-            />
-            <div *ngIf="addListingForm.get('bookingCom.url')?.errors?.['required'] && addListingForm.get('bookingCom')?.touched">
-              <span class="text-danger">{{ addListingForm.get('bookingCom.url')?.errors?.['required'] }}</span>
-            </div>
+        <!-- Tab Navigation -->
+        <ul class="nav nav-tabs mb-3" id="listingTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="listing-tab" data-bs-toggle="tab" data-bs-target="#listing" type="button" role="tab" aria-controls="listing" aria-selected="true">
+              <i class="fas fa-home me-2"></i>Listing Details
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="competitors-tab" data-bs-toggle="tab" data-bs-target="#competitors" type="button" role="tab" aria-controls="competitors" aria-selected="false">
+              <i class="fas fa-users me-2"></i>Competitors
+            </button>
+          </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="listingTabContent">
+          <!-- Listing Details Tab -->
+          <div class="tab-pane fade show active" id="listing" role="tabpanel" aria-labelledby="listing-tab">
+            <form [formGroup]="addListingForm">
+              <div class="mb-3" [formGroupName]="'bookingCom'">
+                <label class="form-label mb-2 text-dark fs-6">Booking.com</label>
+                <div class="row">
+                  <div class="col-md-6 mb-2">
+                    <label class="form-label">Booking.com ID</label>
+                    <input
+                      type="text"
+                      formControlName="id"
+                      class="form-control"
+                      placeholder="Enter Booking.com ID"
+                      [ngClass]="{ 'is-invalid': hasError('bookingCom.id') }"
+                    />
+                    <div *ngIf="addListingForm.get('bookingCom.id')?.errors?.['required'] && addListingForm.get('bookingCom')?.touched">
+                      <span class="text-danger">{{ addListingForm.get('bookingCom.id')?.errors?.['required'] }}</span>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <label class="form-label">Booking.com URL</label>
+                    <input
+                      type="text"
+                      formControlName="url"
+                      class="form-control"
+                      placeholder="Enter Booking.com URL"
+                      [ngClass]="{ 'is-invalid': hasError('bookingCom.url') }"
+                    />
+                    <div *ngIf="addListingForm.get('bookingCom.url')?.errors?.['required'] && addListingForm.get('bookingCom')?.touched">
+                      <span class="text-danger">{{ addListingForm.get('bookingCom.url')?.errors?.['required'] }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mb-3" [formGroupName]="'airbnb'">
+                <label class="form-label mb-2 text-dark fs-6">Airbnb</label>
+                <div class="row">
+                  <div class="col-md-6 mb-2">
+                    <label class="form-label">Airbnb ID</label>
+                    <input
+                      type="text"
+                      formControlName="id"
+                      class="form-control"
+                      placeholder="Enter Airbnb ID"
+                      [ngClass]="{ 'is-invalid': hasError('airbnb.id') }"
+                    />
+                    <div *ngIf="addListingForm.get('airbnb.id')?.errors?.['required'] && addListingForm.get('airbnb')?.touched">
+                      <span class="text-danger">{{ addListingForm.get('airbnb.id')?.errors?.['required'] }}</span>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <label class="form-label">Airbnb URL</label>
+                    <input
+                      type="text"
+                      formControlName="url"
+                      class="form-control"
+                      placeholder="Enter Airbnb URL"
+                      [ngClass]="{ 'is-invalid': hasError('airbnb.url') }"
+                    />
+                    <div *ngIf="addListingForm.get('airbnb.url')?.errors?.['required'] && addListingForm.get('airbnb')?.touched">
+                      <span class="text-danger">{{ addListingForm.get('airbnb.url')?.errors?.['required'] }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mb-3" [formGroupName]="'vrbo'">
+                <label class="form-label  mb-2 text-dark fs-6">VRBO</label>
+                <div class="row">
+                  <div class="col-md-6 mb-2">
+                    <label class="form-label">VRBO ID</label>
+                    <input
+                      type="text"
+                      formControlName="id"
+                      class="form-control"
+                      placeholder="Enter VRBO ID"
+                      [ngClass]="{ 'is-invalid': hasError('vrbo.id') }"
+                    />
+                    <div *ngIf="addListingForm.get('vrbo.id')?.errors?.['required'] && addListingForm.get('vrbo')?.touched">
+                      <span class="text-danger">{{ addListingForm.get('vrbo.id')?.errors?.['required'] }}</span>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <label class="form-label">VRBO URL</label>
+                    <input
+                      type="text"
+                      formControlName="url"
+                      class="form-control"
+                      placeholder="Enter VRBO URL"
+                      [ngClass]="{ 'is-invalid': hasError('vrbo.url') }"
+                    />
+                    <div *ngIf="addListingForm.get('vrbo.url')?.errors?.['required'] && addListingForm.get('vrbo')?.touched">
+                      <span class="text-danger">{{ addListingForm.get('vrbo.url')?.errors?.['required'] }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mb-3" [formGroupName]="'pricelab'">
+                <label class="form-label">Pricelab</label>
+                <div class="row">
+                  <div class="col-md-6 mb-2">
+                    <label class="form-label">Pricelab ID</label>
+                    <input
+                      type="text"
+                      formControlName="id"
+                      class="form-control"
+                      placeholder="Enter Pricelab ID"
+                      [ngClass]="{ 'is-invalid': hasError('pricelab.id') }"
+                    />
+                    <div *ngIf="addListingForm.get('pricelab.id')?.errors?.['required'] && addListingForm.get('pricelab')?.touched">
+                      <span class="text-danger">{{ addListingForm.get('pricelab.id')?.errors?.['required'] }}</span>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <label class="form-label mb-2 text-dark fs-6">Pricelab URL</label>
+                    <input
+                      type="text"
+                      formControlName="url"
+                      class="form-control"
+                      placeholder="Enter Pricelab URL"
+                      [ngClass]="{ 'is-invalid': hasError('pricelab.url') }"
+                    />
+                    <div *ngIf="addListingForm.get('pricelab.url')?.errors?.['required'] && addListingForm.get('pricelab')?.touched">
+                      <span class="text-danger">{{ addListingForm.get('pricelab.url')?.errors?.['required'] }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
           </div>
 
-          <div class="mb-3" [formGroupName]="'airbnb'">
-            <label for="location" class="form-label">Airbnb</label>
-            <input
-              type="text"
-              id="airbnb"
-              formControlName="id"
-              class="form-control mb-2"
-              placeholder="Enter Airbnb ID"
-              [ngClass]="{ 'is-invalid': hasError('airbnb.id') }"
-            />
-            <div *ngIf="addListingForm.get('airbnb.id')?.errors?.['required'] && addListingForm.get('airbnb')?.touched">
-              <span class="text-danger">{{ addListingForm.get('airbnb.id')?.errors?.['required'] }}</span>
+          <!-- Competitors Tab -->
+          <div class="tab-pane fade" id="competitors" role="tabpanel" aria-labelledby="competitors-tab">
+            <form [formGroup]="addListingForm">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="mb-0">Competitor Listings</h6>
+                <button type="button" class="btn btn-outline-primary btn-sm" (click)="addCompetitor()">
+                  <i class="fas fa-plus me-1"></i>Add Competitor
+                </button>
+              </div>
+              
+              <div formArrayName="competitors" class="competitors-list">
+              <div *ngFor="let competitor of competitorsFormArray.controls; let i = index" 
+                   [formGroupName]="i" 
+                   class="competitor-form mb-3 p-3 border rounded">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h6 class="mb-0">Competitor {{ i + 1 }}</h6>
+                  <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeCompetitor(i)" *ngIf="competitorsFormArray.length > 1">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+                
+                <div class="row">
+                  <div class="col-md-6 mb-2">
+                    <label class="form-label">Booking.com ID</label>
+                    <input
+                      type="text"
+                      formControlName="bookingComId"
+                      class="form-control"
+                      placeholder="Enter Booking.com ID"
+                    />
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <label class="form-label">Booking.com URL</label>
+                    <input
+                      type="text"
+                      formControlName="bookingComUrl"
+                      class="form-control"
+                      placeholder="Enter Booking.com URL"
+                    />
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <label class="form-label">Airbnb ID</label>
+                    <input
+                      type="text"
+                      formControlName="airbnbId"
+                      class="form-control"
+                      placeholder="Enter Airbnb ID"
+                    />
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <label class="form-label">Airbnb URL</label>
+                    <input
+                      type="text"
+                      formControlName="airbnbUrl"
+                      class="form-control"
+                      placeholder="Enter Airbnb URL"
+                    />
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <label class="form-label">VRBO ID</label>
+                    <input
+                      type="text"
+                      formControlName="vrboId"
+                      class="form-control"
+                      placeholder="Enter VRBO ID"
+                    />
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <label class="form-label">VRBO URL</label>
+                    <input
+                      type="text"
+                      formControlName="vrboUrl"
+                      class="form-control"
+                      placeholder="Enter VRBO URL"
+                    />
+                  </div>
+                </div>
+              </div>
+              
+              <div *ngIf="competitorsFormArray.length === 0" class="text-center py-4 text-muted">
+                <i class="fas fa-users fa-2x mb-2"></i>
+                <p>No competitors added yet. Click "Add Competitor" to get started.</p>
+              </div>
             </div>
-            <input
-              type="text"
-              id="airbnb"
-              formControlName="url"
-              class="form-control"
-              placeholder="Enter Airbnb"
-              [ngClass]="{ 'is-invalid': hasError('airbnb.url') }"
-            />
-            <div *ngIf="addListingForm.get('airbnb.url')?.errors?.['required'] && addListingForm.get('airbnb')?.touched">
-              <span class="text-danger">{{ addListingForm.get('airbnb.url')?.errors?.['required'] }}</span>
-            </div>
+            </form>
           </div>
-
-          <div class="mb-3" [formGroupName]="'vrbo'">
-            <label for="vrbo" class="form-label">VRBO</label>
-            <input
-              type="text"
-              id="vrbo"
-              formControlName="id"
-              class="form-control mb-2"
-              placeholder="Enter VRBO ID"
-              [ngClass]="{ 'is-invalid': hasError('vrbo.id') }"
-            />
-            <div *ngIf="addListingForm.get('vrbo.id')?.errors?.['required'] && addListingForm.get('vrbo')?.touched">
-              <span class="text-danger">{{ addListingForm.get('vrbo.id')?.errors?.['required'] }}</span>
-            </div>
-            <input
-              id="vrbo"
-              formControlName="url"
-              class="form-control"
-              placeholder="Enter VRBO"
-              [ngClass]="{ 'is-invalid': hasError('vrbo.url') }"
-            />
-            <div *ngIf="addListingForm.get('vrbo.url')?.errors?.['required'] && addListingForm.get('vrbo')?.touched">
-              <span class="text-danger">{{ addListingForm.get('vrbo.url')?.errors?.['required'] }}</span>
-            </div>
-          </div>
-          <div class="mb-3" [formGroupName]="'pricelab'">
-            <label for="pricelab" class="form-label">Pricelab</label>
-            <input
-              type="text"
-              id="pricelab"
-              formControlName="id"
-              class="form-control mb-2"
-                placeholder="Enter Pricelab ID"
-              [ngClass]="{ 'is-invalid': hasError('pricelab.id') }"
-            />
-            <div *ngIf="addListingForm.get('pricelab.id')?.errors?.['required'] && addListingForm.get('pricelab')?.touched">
-              <span class="text-danger">{{ addListingForm.get('pricelab.id')?.errors?.['required'] }}</span>
-            </div>
-            <input
-              type="text"
-              id="pricelab"
-              formControlName="url"
-              class="form-control"
-              placeholder="Enter Pricelab"
-              [ngClass]="{ 'is-invalid': hasError('pricelab.url') }"
-            />
-            <div *ngIf="addListingForm.get('pricelab.url')?.errors?.['required'] && addListingForm.get('pricelab')?.touched">
-              <span class="text-danger">{{ addListingForm.get('pricelab.url')?.errors?.['required'] }}</span>
-            </div>
-          </div>
-        </form>
+        </div>
       </div>
       <div class="modal-footer d-flex justify-content-end">
         <button

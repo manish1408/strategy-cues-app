@@ -17,7 +17,7 @@
               [class.text-white]="hasActiveFilters()">
               <i class="fas fa-filter me-2"></i>
               Filters
-              <span *ngIf="getActiveFilterCount() > 0" class="badge bg-white text-primary ms-2">
+              <span *ngIf="getActiveFilterCount() > 0" class="badge bg-white  ms-2">
                 {{ getActiveFilterCount() }}
               </span>
             </button>
@@ -40,7 +40,7 @@
                     <div class="preset-info">
                       <div class="preset-name" (click)="selectedPresetId = preset.id; onPresetSelectionChange()" 
                            [class.selected]="selectedPresetId === preset.id">
-                        <i class="fas fa-bookmark text-primary me-2"></i>
+                        <i class="fas fa-bookmark  me-2"></i>
                         {{ preset.name }}
                         <span *ngIf="selectedPresetId === preset.id" class="badge bg-success ms-2">Selected</span>
                       </div>
@@ -295,7 +295,7 @@
 
     <!-- Loading State -->
     <div *ngIf="loading" class="text-center py-5">
-      <div class="spinner-border text-primary" role="status">
+      <div class="spinner-border " role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
       <p class="mt-3">Loading properties...</p>
@@ -453,7 +453,7 @@
                     <div class="review-item clickable" *ngIf="safeParseNumber(property.Reviews?.Booking?.Rev_Score) > 0"
                       title="Booking.com: {{ property.Reviews.Booking.Rev_Score }}/10 ({{ property.Reviews.Booking.Total_Rev }} reviews) - Click to visit property"
                       (click)="openPropertyUrl(property, 'Booking')">
-                      <i class="fas fa-bed text-primary"></i>
+                      <i class="fas fa-bed "></i>
                       <div class="stars">
                         <i *ngFor="let star of getStarArray(property.Reviews.Booking.Rev_Score || 0, 10)" class="fas fa-star"
                           [ngClass]="star.filled ? 'star-filled' : 'star-empty'"></i>
@@ -506,7 +506,7 @@
                   <div class="cxl-policy-cell">
                     <!-- Booking.com Policy -->
                     <div class="policy-item" *ngIf="property.CXL_Policy?.Booking">
-                      <i class="fas fa-bed text-primary"></i>
+                      <i class="fas fa-bed"></i>
                       <div class="policy-details">
                         <div class="policy-type">{{ property.CXL_Policy.Booking?.type | formatText }}</div>
                       </div>
@@ -549,7 +549,7 @@
                 <td *ngIf="columnVisibility.adultChildConfig">
                   <div class="adult-child-config-cell">
                     <div class="config-item" *ngIf="property.Adult_Child_Config?.Booking">
-                      <i class="fas fa-bed text-primary"></i>
+                      <i class="fas fa-bed "></i>
                       <span class="config-text">Max guests: {{ formatGuestConfig(property.Adult_Child_Config.Booking) }}</span>
                     </div>
                     <div class="config-item" *ngIf="property.Adult_Child_Config?.Airbnb">
@@ -619,7 +619,7 @@
                       [class.clickable]="safeParseNumber(property.Reviews.Booking.Last_Rev_Score) > 0" 
                       [title]="safeParseNumber(property.Reviews.Booking.Last_Rev_Score) > 0 ? 'Click to visit Booking.com property page' : 'Booking.com: ' + property.Reviews.Booking.Last_Rev_Score"
                       (click)="safeParseNumber(property.Reviews.Booking.Last_Rev_Score) > 0 ? openPropertyUrl(property, 'Booking') : null">
-                      <i class="fas fa-bed text-primary"></i>
+                      <i class="fas fa-bed "></i>
                       <span class="score-value">{{ property.Reviews.Booking.Last_Rev_Score }}</span>
                     </div>
 
@@ -646,7 +646,7 @@
                   <div class="revenue-date-cell">
                     <!-- Booking.com Last Review Date -->
                     <div class="date-item" *ngIf="property.Reviews.Booking.Last_Review_Date !== null">
-                      <i class="fas fa-bed text-primary"></i>
+                      <i class="fas fa-bed "></i>
                       <span class="date-value">
                         <span *ngIf="property.Reviews.Booking.Last_Review_Date && property.Reviews.Booking.Last_Review_Date.trim() !== '' && property.Reviews.Booking.Last_Review_Date !== 'N/A'">
                           {{ property.Reviews.Booking.Last_Review_Date | date:'MMM dd, yyyy' }}
@@ -704,7 +704,7 @@
       <!-- Pagination -->
       <div class="pagination-section" *ngIf="totalPages > 1">
         <div *ngIf="loading" class="text-center py-5">
-          <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+          <div class="spinner-border " role="status" style="width: 3rem; height: 3rem;">
             <span class="visually-hidden">Loading...</span>
           </div>
           <div class="mt-3">
@@ -1120,7 +1120,7 @@
                 <div class="row">
                   <!-- Booking.com Filters -->
                   <div class="col-12 mb-3">
-                    <h6 class="fw-bold text-primary">Booking.com Features</h6>
+                    <h6 class="fw-bold ">Booking.com Features</h6>
                   </div>
                   <div class="col-md-4 mb-3">
                     <div class="slider-container">
@@ -1369,7 +1369,7 @@
                 <div class="row">
                   <!-- Booking Reviews -->
                   <div class="col-12 mb-3">
-                    <h6 class="fw-bold text-primary">Booking.com Reviews</h6>
+                    <h6 class="fw-bold ">Booking.com Reviews</h6>
                   </div>
                   <div class="col-md-6 mb-3">
                     <label class="form-label">Review Score Range</label>

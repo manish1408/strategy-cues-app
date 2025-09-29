@@ -96,11 +96,11 @@ $transition: all 0.3s ease;
         }
 
         &.pricelab {
-          background-color: #6c757d;
+          background-color: #6B46C1;
           color: white;
 
           &:hover:not(.disabled) {
-            background-color: #5a6268;
+            background-color: #553C9A;
             transform: translateY(-1px);
           }
         }
@@ -1964,11 +1964,11 @@ $transition: all 0.3s ease;
   }
 
   &.pricelab {
-    background: #ff4746;
+    background: #6B46C1;
     color: white;
     
     &:hover {
-      background: #ff4746;
+      background: #553C9A;
     }
   }
 }

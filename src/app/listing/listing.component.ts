@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild, OnInit, OnDestroy } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, FormArray, Validators } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
 import { finalize } from "rxjs";
 import { PropertiesService } from "../_services/properties.service";
@@ -68,7 +68,13 @@ export class ListingComponent implements OnInit, OnDestroy {
         url: [""],
         id: [""],
       }),
+      competitors: this.fb.array([])
     });
+  }
+
+  // Getter for competitors form array
+  get competitorsFormArray(): FormArray {
+    return this.addListingForm.get('competitors') as FormArray;
   }
 
   ngOnInit(): void {
@@ -318,6 +324,12 @@ export class ListingComponent implements OnInit, OnDestroy {
       
       this.addListingForm.patchValue(formData);
       
+      // Initialize competitors array with at least one form
+      while (this.competitorsFormArray.length !== 0) {
+        this.competitorsFormArray.removeAt(0);
+      }
+      this.addCompetitor();
+      
     } else {
       console.error('Invalid listing object:', listing);
     }
@@ -442,6 +454,14 @@ export class ListingComponent implements OnInit, OnDestroy {
         id: "",
       },
     });
+    
+    // Clear competitors array and add one initial competitor
+    while (this.competitorsFormArray.length !== 0) {
+      this.competitorsFormArray.removeAt(0);
+    }
+    // Add one initial competitor form
+    this.addCompetitor();
+    console.log('Reset form, competitors array length:', this.competitorsFormArray.length);
     this.isEdit = false;
     this.editingListingId = null;
   }
@@ -601,5 +621,29 @@ export class ListingComponent implements OnInit, OnDestroy {
   onListingImageError(event: any): void {
     // Set fallback image when the main image fails to load
     event.target.src = 'assets/images/placeholder.jpg';
+  }
+
+  // Competitor management methods
+  addCompetitor(): void {
+    const competitorForm = this.createCompetitorForm();
+    this.competitorsFormArray.push(competitorForm);
+    console.log('Added competitor, total competitors:', this.competitorsFormArray.length);
+  }
+
+  removeCompetitor(index: number): void {
+    if (this.competitorsFormArray.length > 1) {
+      this.competitorsFormArray.removeAt(index);
+    }
+  }
+
+  createCompetitorForm(): FormGroup {
+    return this.fb.group({
+      bookingComId: [''],
+      bookingComUrl: [''],
+      airbnbId: [''],
+      airbnbUrl: [''],
+      vrboId: [''],
+      vrboUrl: ['']
+    });
   }
 }

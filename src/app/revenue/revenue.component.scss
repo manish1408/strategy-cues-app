@@ -191,11 +191,11 @@ $transition: all 0.3s ease;
         }
 
         &.pricelab {
-          background-color: #6c757d;
+          background-color: #6B46C1;
           color: white;
 
           &:hover:not(.disabled) {
-            background-color: #5a6268;
+            background-color: #553C9A;
             transform: translateY(-1px);
           }
         }
@@ -1025,6 +1025,7 @@ $transition: all 0.3s ease;
       min-width: 14px;
       text-align: center;
       flex-shrink: 0;
+      color: #003580;
     }
 
     .stars {
@@ -1143,6 +1144,7 @@ $transition: all 0.3s ease;
       min-width: 14px;
       text-align: center;
       flex-shrink: 0;
+      color: #003580;
     }
 
     .policy-type {
@@ -1189,6 +1191,7 @@ $transition: all 0.3s ease;
       min-width: 14px;
       text-align: center;
       flex-shrink: 0;
+      color: #003580;
     }
 
     .config-text {
@@ -1308,6 +1311,7 @@ $transition: all 0.3s ease;
       min-width: 14px;
       text-align: center;
       flex-shrink: 0;
+      color: #003580;
     }
 
     .score-value {
@@ -1352,6 +1356,7 @@ $transition: all 0.3s ease;
       font-size: 0.75rem;
       min-width: 14px;
       text-align: center;
+      color: #003580;
     }
 
     .date-value {
