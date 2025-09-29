@@ -17,42 +17,7 @@
           </div>
         </div>
         <div class="col-md-4 text-end">
-          <div class="key-metrics">
-            <div class="metric" *ngIf="property.MPI !== null">
-              <div class="metric-table">
-                <div class="metric-header">
-                  <span class="metric-title">MPI</span>
-                </div>
-                <div class="metric-grid">
-                  <div class="metric-item">
-                    <span class="metric-sub-label">(TM)</span>
-                    <span class="metric-value">{{ property.MPI.TM }}%</span>
-                  </div>
-                  <div class="metric-item">
-                    <span class="metric-sub-label">(NM)</span>
-                    <span class="metric-value">{{ property.MPI.NM }}%</span>
-                  </div>
-                  <div class="metric-item">
-                    <span class="metric-sub-label">(LYTM)</span>
-                    <span class="metric-value">{{ property.MPI.LYTM }}%</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="metric" *ngIf="property.RevPAR && property.RevPAR.TM !== null">
-              <div class="metric-table">
-                <div class="metric-header">
-                  <span class="metric-title">RevPAR</span>
-                </div>
-                <div class="metric-grid single-column">
-                  <div class="metric-item">
-                    <span class="metric-sub-label">(TM)</span>
-                    <span class="metric-value">${{ property.RevPAR.TM }}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+         
           <div class="booking-buttons mt-3">
             <button class="btn btn-booking me-2" (click)="openBookingLink('Booking')" title="Book on Booking.com">
               <i class="fas fa-bed"></i> Booking.com
