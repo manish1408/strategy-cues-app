@@ -419,7 +419,6 @@ export class ListingComponent implements OnInit, OnDestroy {
     return new Promise((resolve, reject) => {
       this.competitorPropertiesService.createCompetitorProperty(newCompetitors).subscribe({
         next: (response: any) => {
-          console.log('Competitors created successfully:', response);
           
           // Update competitor IDs with the new ones from API
           if (response.data && response.data.ids && response.data.ids.length > 0) {
@@ -499,13 +498,6 @@ export class ListingComponent implements OnInit, OnDestroy {
       competitorIdsToSend = this.competitorIds.filter(id => id && !id.startsWith('temp_'));
     }
 
-    console.log('Saving listing with competitor IDs:', {
-      isEdit: this.isEdit,
-      editingListingId: this.editingListingId,
-      allCompetitorIds: this.competitorIds,
-      originalCompetitorIds: Object.keys(this.competitorOriginalById),
-      competitorIdsToSend: competitorIdsToSend
-    });
 
     const formData = {
       operator_id: this.operatorId,
@@ -584,7 +576,6 @@ export class ListingComponent implements OnInit, OnDestroy {
     this.addBlankCompetitorForm();
     this.competitorIds = [];
     this.competitorOriginalById = {};
-    console.log('Reset form, competitors array length:', this.competitorsFormArray.length);
     this.isEdit = false;
     this.editingListingId = null;
   }
@@ -752,7 +743,6 @@ export class ListingComponent implements OnInit, OnDestroy {
     this.addBlankCompetitorForm();
     
     this.toastr.success('New competitor form added. Fill the details and click Update to save.');
-    console.log('Added new competitor form, total competitors:', this.competitorsFormArray.length);
   }
 
   deleteCompetitor(index: number): void {
@@ -767,11 +757,6 @@ export class ListingComponent implements OnInit, OnDestroy {
     const form = this.competitorsFormArray.at(index);
     const isDisabled = form?.disabled || false;
     
-    console.log(`Removing competitor ${index}:`, {
-      competitorId,
-      isDisabled,
-      competitorIds: this.competitorIds
-    });
     
     // Check if it's a temporary ID (not yet saved to API)
     const isTemporaryId = competitorId && competitorId.startsWith('temp_');
@@ -805,7 +790,6 @@ export class ListingComponent implements OnInit, OnDestroy {
       // Call delete API if competitor was saved to the server (prefilled competitors)
       this.competitorPropertiesService.deleteCompetitorProperty(competitorId).subscribe({
         next: (response: any) => {
-          console.log('Competitor deleted successfully:', response);
           this.toastr.success('Competitor deleted successfully');
           
           // Remove from competitorIds array
@@ -839,13 +823,6 @@ export class ListingComponent implements OnInit, OnDestroy {
     const isDisabled = form?.disabled || false;
     const hasId = !!this.competitorIds[index];
     
-    console.log(`Checking competitor ${index}:`, {
-      isDisabled,
-      hasId,
-      competitorIds: this.competitorIds,
-      id: this.competitorIds[index],
-      arrayLength: this.competitorIds.length
-    });
     
     // A competitor is saved if the form is disabled OR if it has an ID
     return isDisabled || hasId;
@@ -856,7 +833,6 @@ export class ListingComponent implements OnInit, OnDestroy {
   addBlankCompetitorForm(): void {
     const competitorForm = this.createCompetitorForm();
     this.competitorsFormArray.push(competitorForm);
-    console.log('Added blank competitor form, total competitors:', this.competitorsFormArray.length);
   }
 
   // Load competitor data from API
@@ -869,22 +845,13 @@ export class ListingComponent implements OnInit, OnDestroy {
     this.loadingCompetitors = true;
     this.competitorPropertiesService.getCompetitorProperties(listingId).subscribe({
       next: (response: any) => {
-        console.log('Competitor data loaded:', response);
-        console.log('Response structure:', {
-          hasData: !!response?.data,
-          hasCompetitors: !!response?.data?.competitors,
-          competitorsLength: response?.data?.competitors?.length,
-          directResponse: response
-        });
         
         // Check if response has data.competitors array
         const competitors = response?.data?.competitors || response?.competitors || response;
         
         if (competitors && competitors.length > 0) {
-          console.log('Found competitors:', competitors.length);
           // Populate forms with existing competitor data
           competitors.forEach((competitor: any, index: number) => {
-            console.log(`Processing competitor ${index}:`, competitor);
             const competitorForm = this.createCompetitorForm();
             const formData = {
               bookingComId: competitor.bookingId || '',
@@ -894,7 +861,6 @@ export class ListingComponent implements OnInit, OnDestroy {
               vrboId: competitor.vrboId || '',
               vrboUrl: competitor.vrboLink || ''
             };
-            console.log(`Form data for competitor ${index}:`, formData);
             competitorForm.patchValue(formData);
             
             // Disable the form since it's already saved
@@ -906,7 +872,6 @@ export class ListingComponent implements OnInit, OnDestroy {
             if (competitor?.id) {
               this.competitorOriginalById[competitor.id] = { ...formData };
             }
-            console.log(`Added competitor form ${index}, total forms: ${this.competitorsFormArray.length}`);
           });
           
           // Always add a blank form after loading existing competitors

@@ -97,12 +97,6 @@ export class ContentComponent implements OnInit, OnDestroy {
         this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
       }
       
-      console.log('Pagination data:', {
-        totalItems: this.totalItems,
-        totalPages: this.totalPages,
-        currentPage: this.currentPage,
-        itemsPerPage: this.itemsPerPage
-      });
       
       this.setLoadingState(false);
     } else {
@@ -592,16 +586,15 @@ export class ContentComponent implements OnInit, OnDestroy {
 
   // Navigation methods
   viewPhotoDetails(propertyId: string): void {
-    console.log('Navigating to photo details for property:', propertyId);
     this.router.navigate(['/content/photo-details', propertyId]);
   }
 
   // Legacy methods for backward compatibility
   previousCompetitor(): void {
-    console.log('Previous competitor');
+    // Legacy method for backward compatibility
   }
 
   nextCompetitor(): void {
-    console.log('Next competitor');
+    // Legacy method for backward compatibility
   }
 }

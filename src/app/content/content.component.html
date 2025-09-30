@@ -38,14 +38,6 @@
           {{ error }}
         </div>
 
-        <!-- Debug Info (remove in production) -->
-        <div *ngIf="!loading && !error" class="alert alert-info" role="alert">
-          <strong>Debug Info:</strong> 
-          Total Items: {{ totalItems }}, 
-          Total Pages: {{ totalPages }}, 
-          Current Page: {{ currentPage }}, 
-          Items Per Page: {{ itemsPerPage }}
-        </div>
 
         <!-- Table View -->
         <div class="table-view" *ngIf="!loading">

@@ -25,5 +25,9 @@ export class CompetitorComparisonService {
     return this.http.get<any>(`${this._url}/get-comparisons`, { params });
   }
 
+  getPropertyCompetitors(property_id: string) {
+    return this.http.get<any>(`${this._url}/get-comparisons-by-property/${property_id}`);
+  }
+
  
 }
