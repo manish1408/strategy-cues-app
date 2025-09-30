@@ -9,7 +9,7 @@
               <i class="fas fa-arrow-left"></i> Back to Content
             </button>
             <div class="title-info">
-              <h1 class="mb-1">{{ propertyData?.property_title }}</h1>
+              <h1 class="mb-1 text-truncate" [title]="propertyData?.propertyName">{{ propertyData?.propertyName }}</h1>
               <div class="property-meta">
                 <!-- <span class="badge bg-light text-dark me-2">{{ propertyData?.listing_id }}</span> -->
                 <span class="badge bg-primary" *ngIf="propertyData?.num_photos"> 
@@ -118,10 +118,10 @@
          (mouseleave)="onMouseUp($event, 'competitor')">
       <div class="nav-card" [class.active]="selectedCompetitorIndex === -1" (click)="selectCompetitor(-1)">
         <div class="nav-card-image">
-          <img [src]="getMainImage()" [alt]="propertyData.property_title" (error)="onImageError($event)">
+          <img [src]="getMainImage()" [alt]="propertyData.propertyName" (error)="onImageError($event)">
         </div>
         <div class="nav-card-content">
-          <h4>Your Photos</h4>
+          <h4 [title]="propertyData.Listing_Name | summary:10">{{propertyData.Listing_Name | summary:10}}</h4>
           <span class="photo-count">{{propertyData.num_photos}} photos</span>
           <span class="gap-indicator">Your property</span>
         </div>
@@ -135,11 +135,11 @@
            (click)="selectCompetitor(selectedCompetitorIndex >= 0 ? selectedCompetitorIndex : 0)">
         <div class="nav-card-image">
           <img [src]="getCurrentCompetitor()?.photos && getCurrentCompetitor()?.photos.length > 0 ? getCurrentCompetitor().photos[0].url : 'assets/images/placeholder.jpg'" 
-               [alt]="getCurrentCompetitor()?.name || 'Competitor'" 
+               [alt]="getCurrentCompetitor()?.propertyName || 'Competitor'" 
                (error)="onImageError($event)">
         </div>
         <div class="nav-card-content">
-          <h4>{{getCurrentCompetitor()?.name || 'Select Competitor'}}</h4>
+          <h4 [title]="getCurrentCompetitor()?.propertyName || 'Select Competitor'">{{getCurrentCompetitor()?.propertyName | summary: 8}}</h4>
           <span class="photo-count">{{getCurrentCompetitor()?.num_photos || 0}} photos</span>
           <span class="gap-indicator" 
                 [ngClass]="getGapClass((getCurrentCompetitor()?.num_photos || 0) - propertyData.num_photos)"
@@ -162,34 +162,47 @@
     <!-- Your Photos Section -->
     <div class="comparison-section your-photos">
       <div class="section-header">
-        <h2>Your photos</h2>
+        <h2 [title]="propertyData.Listing_Name">{{propertyData.Listing_Name}}</h2>
         <div class="review-summary">
-          <span class="review-count">{{getReviewCount()}} reviews:</span>
-          <div class="review-scores">
-            <span class="score-item">
-              <i class="fas fa-shower"></i>
-              {{getReviewScore('cleanliness')}} cleanliness
-            </span>
-            <span class="score-item">
-              <i class="fas fa-check"></i>
-              {{getReviewScore('accuracy')}} accuracy
-            </span>
-            <span class="score-item">
-              <i class="fas fa-user-check"></i>
-              {{getReviewScore('checkin')}} check-in
-            </span>
-            <span class="score-item">
-              <i class="fas fa-comments"></i>
-              {{getReviewScore('communication')}} communication
-            </span>
-            <span class="score-item">
-              <i class="fas fa-map-marker-alt"></i>
-              {{getReviewScore('location')}} location
-            </span>
-            <span class="score-item">
-              {{getReviewScore('value')}} value
-            </span>
-          </div>
+    
+          <!-- Amenities Section -->
+            <div class="amenities-section">
+              <div class="amenities-scores" *ngIf="(propertyData.amenitiesAirbnb && propertyData.amenitiesAirbnb.length > 0) || 
+                                                    (propertyData.amenitiesBooking && propertyData.amenitiesBooking.length > 0) || 
+                                                    (propertyData.amenitiesVrbo && propertyData.amenitiesVrbo.length > 0)">
+                <!-- Airbnb Amenities -->
+                <div class="platform-amenity-group" *ngIf="propertyData.amenitiesAirbnb && propertyData.amenitiesAirbnb.length > 0">
+                  <i class="fab fa-airbnb platform-icon airbnb-icon"></i>
+                  <span class="amenity-item" *ngFor="let amenity of propertyData.amenitiesAirbnb">
+                    <i class="fas" [ngClass]="getAmenityIcon(amenity.icon)"></i>
+                    {{amenity.title}}
+                  </span>
+                </div>
+                
+                <!-- Booking Amenities -->
+                <div class="platform-amenity-group" *ngIf="propertyData.amenitiesBooking && propertyData.amenitiesBooking.length > 0">
+                  <i class="fas fa-bed platform-icon booking-icon"></i>
+                  <span class="amenity-item" *ngFor="let amenity of propertyData.amenitiesBooking">
+                    <i class="fas" [ngClass]="getAmenityIcon(amenity.icon)"></i>
+                    {{amenity.title}}
+                  </span>
+                </div>
+                
+                <!-- VRBO Amenities -->
+                <div class="platform-amenity-group" *ngIf="propertyData.amenitiesVrbo && propertyData.amenitiesVrbo.length > 0">
+                  <i class="fas fa-home platform-icon vrbo-icon"></i>
+                  <span class="amenity-item" *ngFor="let amenity of propertyData.amenitiesVrbo">
+                    <i class="fas" [ngClass]="getAmenityIcon(amenity.icon)"></i>
+                    {{amenity.title}}
+                  </span>
+                </div>
+              </div>
+              <div class="no-amenities-message" *ngIf="!(propertyData.amenitiesAirbnb && propertyData.amenitiesAirbnb.length > 0) && 
+                                                        !(propertyData.amenitiesBooking && propertyData.amenitiesBooking.length > 0) && 
+                                                        !(propertyData.amenitiesVrbo && propertyData.amenitiesVrbo.length > 0)">
+                No amenities found
+              </div>
+            </div>
         </div>
         <div class="photo-count">{{propertyData.num_photos}} photos</div>
       </div>
@@ -204,34 +217,40 @@
     <!-- Competitor Photos Section -->
     <div class="comparison-section competitor-photos" *ngIf="getCurrentCompetitor()">
       <div class="section-header">  
-        <h2>{{getCurrentCompetitor().name}}</h2>
+        <h2 [title]="getCurrentCompetitor().propertyName">{{getCurrentCompetitor().propertyName}}</h2>
         <div class="review-summary">
-          <span class="review-count">{{getCurrentCompetitor().reviews_count}} reviews:</span>
-          <div class="review-scores">
-            <span class="score-item">
-              <i class="fas fa-shower"></i>
-              {{getCurrentCompetitor().reviews_score}} cleanliness
-            </span>
-            <span class="score-item">
-              <i class="fas fa-check"></i>
-              {{getCurrentCompetitor().reviews_score}} accuracy
-            </span>
-            <span class="score-item">
-              <i class="fas fa-user-check"></i>
-              {{getCurrentCompetitor().reviews_score}} check-in
-            </span>
-            <span class="score-item">
-              <i class="fas fa-comments"></i>
-              {{getCurrentCompetitor().reviews_score}} communication
-            </span>
-            <span class="score-item">
-              <i class="fas fa-map-marker-alt"></i>
-              {{getCurrentCompetitor().reviews_score}} location
-            </span>
-            <span class="score-item">
-              {{getCurrentCompetitor().reviews_score}} value
-            </span>
-          </div>
+       
+                <!-- Amenities Section -->
+                <div class="amenities-section">
+                  <div class="amenities-scores">
+                    <!-- Airbnb Amenities -->
+                    <div class="platform-amenity-group" *ngIf="getCurrentCompetitor().amenitiesAirbnb && getCurrentCompetitor().amenitiesAirbnb.length > 0">
+                      <i class="fab fa-airbnb platform-icon airbnb-icon"></i>
+                      <span class="amenity-item" *ngFor="let amenity of getCurrentCompetitor().amenitiesAirbnb">
+                        <i class="fas" [ngClass]="getAmenityIcon(amenity.icon)"></i>
+                        {{amenity.title}}
+                      </span>
+                    </div>
+                    
+                    <!-- Booking Amenities -->
+                    <div class="platform-amenity-group" *ngIf="getCurrentCompetitor().amenitiesBooking && getCurrentCompetitor().amenitiesBooking.length > 0">
+                      <i class="fas fa-bed platform-icon booking-icon"></i>
+                      <span class="amenity-item" *ngFor="let amenity of getCurrentCompetitor().amenitiesBooking">
+                        <i class="fas" [ngClass]="getAmenityIcon(amenity.icon)"></i>
+                        {{amenity.title}}
+                      </span>
+                    </div>
+                    
+                    <!-- VRBO Amenities -->
+                    <div class="platform-amenity-group" *ngIf="getCurrentCompetitor().amenitiesVrbo && getCurrentCompetitor().amenitiesVrbo.length > 0">
+                      <i class="fas fa-home platform-icon vrbo-icon"></i>
+                      <span class="amenity-item" *ngFor="let amenity of getCurrentCompetitor().amenitiesVrbo">
+                        <i class="fas" [ngClass]="getAmenityIcon(amenity.icon)"></i>
+                        {{amenity.title}}
+                      </span>
+                    </div>
+                  </div>
+                </div>
         </div>
         <div class="photo-count">{{getCurrentCompetitor().num_photos}} photos</div>
       </div>
@@ -248,27 +267,56 @@
     <div class="competitor-grid">
       <div class="competitor-card" *ngFor="let comp of propertyData.competitor">
         <div class="competitor-header">
-          <h3>{{comp.name}}</h3>
+          <h3 [title]="comp.propertyName">{{comp.propertyName}}</h3>
           <div class="competitor-rating">
-            <i class="fas fa-star"></i>
-            <span>{{comp.reviews_score}}</span>
-            <span class="reviews-count">({{comp.reviews_count}} reviews)</span>
+            <div class="platform-badges">
+              <span class="badge airbnb-badge" *ngIf="comp.reviewsAirbnb && comp.reviewsAirbnb.length > 0">
+                <i class="fab fa-airbnb"></i> {{comp.reviewsAirbnb.length}}
+              </span>
+              <span class="badge booking-badge" *ngIf="comp.reviewsBooking && comp.reviewsBooking.length > 0">
+                <i class="fas fa-bed"></i> {{comp.reviewsBooking.length}}
+              </span>
+              <span class="badge vrbo-badge" *ngIf="comp.reviewsVrbo && comp.reviewsVrbo.length > 0">
+                <i class="fas fa-home"></i> {{comp.reviewsVrbo.length}}
+              </span>
+            </div>
+            <!-- <span class="reviews-count">({{comp.reviews_count}} reviews)</span> -->
           </div>
         </div>
         <div class="competitor-stats">
-          <div class="stat-row">
-            <span class="label">Photos:</span>
-            <span class="value">{{comp.num_photos}}</span>
-          </div>
-          <div class="stat-row">
-            <span class="label">Photo Gap:</span>
-            <span class="value" [ngClass]="getGapClass(comp.num_photos - propertyData.num_photos)">
-              {{comp.num_photos - propertyData.num_photos > 0 ? '+' : ''}}{{comp.num_photos - propertyData.num_photos}}
-            </span>
-          </div>
-          <div class="stat-row">
-            <span class="label">Location Score:</span>
-            <span class="value">{{comp.location_score}}</span>
+          <div class="platform-stats-table">
+            <div class="table-header">
+              <div class="header-cell">Platform</div>
+              <div class="header-cell">Photos</div>
+              <div class="header-cell">Photo Gap</div>
+            </div>
+            <div class="table-row airbnb-row">
+              <div class="cell platform-cell">
+                <i class="fab fa-airbnb"></i> Airbnb
+              </div>
+              <div class="cell">{{comp.propertyAirbnbPhotos?.length || 0}}</div>
+              <div class="cell" [ngClass]="getGapClass((comp.propertyAirbnbPhotos?.length || 0) - (propertyData.Photos?.airbnb?.length || 0))">
+                {{(comp.propertyAirbnbPhotos?.length || 0) - (propertyData.Photos?.airbnb?.length || 0) > 0 ? '+' : ''}}{{(comp.propertyAirbnbPhotos?.length || 0) - (propertyData.Photos?.airbnb?.length || 0)}}
+              </div>
+            </div>
+            <div class="table-row booking-row">
+              <div class="cell platform-cell">
+                <i class="fas fa-bed"></i> Booking
+              </div>
+              <div class="cell">{{comp.propertyBookingPhotos?.length || 0}}</div>
+              <div class="cell" [ngClass]="getGapClass((comp.propertyBookingPhotos?.length || 0) - (propertyData.Photos?.booking?.length || 0))">
+                {{(comp.propertyBookingPhotos?.length || 0) - (propertyData.Photos?.booking?.length || 0) > 0 ? '+' : ''}}{{(comp.propertyBookingPhotos?.length || 0) - (propertyData.Photos?.booking?.length || 0)}}
+              </div>
+            </div>
+            <div class="table-row vrbo-row">
+              <div class="cell platform-cell">
+                <i class="fas fa-home"></i> VRBO
+              </div>
+              <div class="cell">{{comp.propertyVrboPhotos?.length || 0}}</div>
+              <div class="cell" [ngClass]="getGapClass((comp.propertyVrboPhotos?.length || 0) - (propertyData.Photos?.vrbo?.length || 0))">
+                {{(comp.propertyVrboPhotos?.length || 0) - (propertyData.Photos?.vrbo?.length || 0) > 0 ? '+' : ''}}{{(comp.propertyVrboPhotos?.length || 0) - (propertyData.Photos?.vrbo?.length || 0)}}
+              </div>
+            </div>
           </div>
         </div>
         <div class="competitor-links">
@@ -296,9 +344,6 @@
   <div class="photo-suggestions-section" *ngIf="getPhotoSuggestions().length > 0">
     <div class="suggestions-header">
       <h2>Additional photo suggestions</h2>
-      <button class="refresh-btn" (click)="refreshSuggestions()" title="Refresh suggestions">
-        <i class="fas fa-sync-alt"></i>
-      </button>
     </div>
     <div class="suggestions-list">
       <div class="suggestion-item" *ngFor="let suggestion of getPhotoSuggestions()">
@@ -416,7 +461,7 @@
     </div>
     <div class="modal-body">
       <div class="property-info">
-        <h4>{{ propertyData?.listing_name || 'Property' }}</h4>
+        <h4 [title]="propertyData?.listing_name || 'Property'">{{ propertyData?.listing_name || 'Property' }}</h4>
         <p class="photo-id">Photo ID: {{ selectedPhotoId }}</p>
       </div>
       <div class="form-group">

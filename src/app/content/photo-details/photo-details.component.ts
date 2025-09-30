@@ -1,13 +1,16 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Location } from "@angular/common";
 import photoComparisonData from "../../json_data/photo_comparison_data.json";
 import { GalleryItem, ImageItem } from 'ng-gallery';
+import { CompetitorComparisonService } from '../../_services/competitor-comparison.servie';
+import { SummaryPipe } from '../../summary.pipe';
 
 @Component({
   selector: "app-photo-details",
   templateUrl: "./photo-details.component.html",
   styleUrl: "./photo-details.component.scss",
+  providers: [SummaryPipe]
 })
 export class PhotoDetailsComponent implements OnInit {
   activeTab: string = 'photos';
@@ -49,20 +52,35 @@ export class PhotoDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private location: Location
+    private location: Location,
+    private competitorComparisonService: CompetitorComparisonService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     const propertyId = this.route.snapshot.params["id"];
+    
     console.log('Photo Details - Looking for property with ID:', propertyId);
     console.log('Available properties in JSON:', photoComparisonData.map(p => ({ id: p.listing_id, title: p.property_title })));
     
     this.propertyData = photoComparisonData.find(
       (property) => property.listing_id === propertyId
     );
+    
+    // If no property data found, create default property data
+    if (!this.propertyData) {
+      this.propertyData = this.getDefaultPropertyData();
+      console.log('No property data found, using default property data');
+    }
+    
     console.log('Property Data:', this.propertyData);
-    console.log('Property Photos:', this.propertyData?.photos);
-    console.log('Competitors:', this.propertyData?.competitors);
+    console.log('Property Photos structure:', {
+      Photos: this.propertyData?.Photos,
+      airbnb: this.propertyData?.Photos?.airbnb,
+      booking: this.propertyData?.Photos?.booking,
+      vrbo: this.propertyData?.Photos?.vrbo
+    });
+    console.log('Competitors:', this.propertyData?.competitor);
     
     // Get photos from the new structure
     const allPhotos = this.getAllPropertyPhotos();
@@ -72,31 +90,120 @@ export class PhotoDetailsComponent implements OnInit {
     console.log('Your Photos Images Array:', this.images);
     console.log('Your Photos URLs:', this.images.map(img => img.data?.src));
     
+    // API call to get property competitors
+    this.loadPropertyCompetitors(propertyId);
+    
     this.updateCompetitorImages();
+  }
+
+  // Load property competitors from API
+  loadPropertyCompetitors(propertyId: string): void {
+    console.log('Loading property competitors for ID:', propertyId);
+    
+    this.competitorComparisonService.getPropertyCompetitors(propertyId).subscribe({
+      next: (response: any) => {
+        console.log('Property competitors API response:', response);
+        console.log('Competitors data:', response?.data);
+        console.log('Competitors count:', response?.data?.competitors?.length || 0);
+        
+        // Bind the API data to component properties
+        if (response?.data) {
+          // Update property data with API response
+          if (response.data.property) {
+            this.propertyData = { ...this.propertyData, ...response.data.property };
+            
+          }
+          
+          // Update competitors data
+          if (response.data.competitors && Array.isArray(response.data.competitors)) {
+            this.propertyData.competitor = response.data.competitors;
+            
+            // Update competitor images if we have competitors
+            if (this.propertyData.competitor.length > 0) {
+              this.updateCompetitorImages();
+            }
+          } else {
+            // Show default competitors when no data from backend
+            this.propertyData.competitor = this.getDefaultCompetitors();
+            console.log('No competitors found, showing default competitors');
+          }
+          
+          // Trigger change detection to update the UI
+          this.cdr.detectChanges();
+        }
+      },
+      error: (error: any) => {
+        console.log('Error loading property competitors:', error);
+        console.log('Error details:', error?.error);
+        
+        // Show default data when API call fails
+        this.propertyData.competitor = this.getDefaultCompetitors();
+        this.competitorImages = this.getDefaultCompetitorPhotos();
+        console.log('API call failed, showing default competitors and images');
+        
+        // Trigger change detection to update the UI
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   // Helper method to get all property photos from new structure
   getAllPropertyPhotos(): any[] {
-    if (!this.propertyData?.photos) return [];
+    if (!this.propertyData?.Photos) {
+      // Return default placeholder photos if no data from backend
+      return this.getDefaultPropertyPhotos();
+    }
     
     const allPhotos = [];
     
     // Add Airbnb photos
-    if (this.propertyData.photos.airbnb && this.propertyData.photos.airbnb.length > 0) {
-      allPhotos.push(...this.propertyData.photos.airbnb);
+    if (this.propertyData.Photos.airbnb && Array.isArray(this.propertyData.Photos.airbnb)) {
+      allPhotos.push(...this.propertyData.Photos.airbnb);
     }
     
     // Add Booking photos
-    if (this.propertyData.photos.booking && this.propertyData.photos.booking.length > 0) {
-      allPhotos.push(...this.propertyData.photos.booking);
+    if (this.propertyData.Photos.booking && Array.isArray(this.propertyData.Photos.booking)) {
+      allPhotos.push(...this.propertyData.Photos.booking);
     }
     
     // Add VRBO photos if available
-    if (this.propertyData.photos.vrbo && this.propertyData.photos.vrbo.length > 0) {
-      allPhotos.push(...this.propertyData.photos.vrbo);
+    if (this.propertyData.Photos.vrbo && Array.isArray(this.propertyData.Photos.vrbo)) {
+      allPhotos.push(...this.propertyData.Photos.vrbo);
+    }
+    
+    // If no photos found from backend, return default photos
+    if (allPhotos.length === 0) {
+      return this.getDefaultPropertyPhotos();
     }
     
     return allPhotos;
+  }
+
+  // Default property photos when backend data is not available
+  getDefaultPropertyPhotos(): any[] {
+    return [
+      {
+        id: 'default-1',
+        url: 'assets/images/placeholder.jpg',
+        caption: 'Property photo placeholder',
+        accessibility_label: 'Default property image',
+        source: 'default'
+      },
+      {
+        id: 'default-2',
+        url: 'assets/images/placeholder.jpg',
+        caption: 'Property photo placeholder',
+        accessibility_label: 'Default property image',
+        source: 'default'
+      },
+      {
+        id: 'default-3',
+        url: 'assets/images/placeholder.jpg',
+        caption: 'Property photo placeholder',
+        accessibility_label: 'Default property image',
+        source: 'default'
+      }
+    ];
   }
 
   // Navigation methods
@@ -162,17 +269,41 @@ export class PhotoDetailsComponent implements OnInit {
 
   getCurrentCompetitor(): any {
     if (
-      this.propertyData?.competitors &&
-      this.propertyData.competitors.length > 0 &&
+      this.propertyData?.competitor &&
+      this.propertyData.competitor.length > 0 &&
       this.selectedCompetitorIndex >= 0
     ) {
-      return this.propertyData.competitors[this.selectedCompetitorIndex];
+      return this.propertyData.competitor[this.selectedCompetitorIndex];
     }
     return null;
   }
 
   getTotalImages(): number {
     return this.getAllPropertyPhotos().length;
+  }
+
+  getTotalCompetitorPhotos(): number {
+    const currentCompetitor = this.getCurrentCompetitor();
+    if (!currentCompetitor) return 0;
+    
+    let totalPhotos = 0;
+    
+    // Count Airbnb photos
+    if (currentCompetitor.propertyAirbnbPhotos && Array.isArray(currentCompetitor.propertyAirbnbPhotos)) {
+      totalPhotos += currentCompetitor.propertyAirbnbPhotos.length;
+    }
+    
+    // Count Booking photos
+    if (currentCompetitor.propertyBookingPhotos && Array.isArray(currentCompetitor.propertyBookingPhotos)) {
+      totalPhotos += currentCompetitor.propertyBookingPhotos.length;
+    }
+    
+    // Count VRBO photos
+    if (currentCompetitor.propertyVrboPhotos && Array.isArray(currentCompetitor.propertyVrboPhotos)) {
+      totalPhotos += currentCompetitor.propertyVrboPhotos.length;
+    }
+    
+    return totalPhotos;
   }
 
   getSelectedPhoto(): any {
@@ -264,21 +395,175 @@ export class PhotoDetailsComponent implements OnInit {
     
     const currentCompetitor = this.getCurrentCompetitor();
     console.log('Current competitor:', currentCompetitor);
-    console.log('Current competitor photos:', currentCompetitor?.photos);
+    console.log('Current competitor photos structure:', {
+      propertyAirbnbPhotos: currentCompetitor?.propertyAirbnbPhotos,
+      propertyBookingPhotos: currentCompetitor?.propertyBookingPhotos,
+      propertyVrboPhotos: currentCompetitor?.propertyVrboPhotos
+    });
     
-    if (currentCompetitor?.photos && currentCompetitor.photos.length > 0) {
+    // Collect all photos from different platforms
+    const allCompetitorPhotos: any[] = [];
+    
+    // Add Airbnb photos
+    if (currentCompetitor?.propertyAirbnbPhotos && Array.isArray(currentCompetitor.propertyAirbnbPhotos)) {
+      allCompetitorPhotos.push(...currentCompetitor.propertyAirbnbPhotos);
+    }
+    
+    // Add Booking photos
+    if (currentCompetitor?.propertyBookingPhotos && Array.isArray(currentCompetitor.propertyBookingPhotos)) {
+      allCompetitorPhotos.push(...currentCompetitor.propertyBookingPhotos);
+    }
+    
+    // Add VRBO photos
+    if (currentCompetitor?.propertyVrboPhotos && Array.isArray(currentCompetitor.propertyVrboPhotos)) {
+      allCompetitorPhotos.push(...currentCompetitor.propertyVrboPhotos);
+    }
+    
+    if (allCompetitorPhotos.length > 0) {
       // Create a new array to force change detection
-      this.competitorImages = [...currentCompetitor.photos.map((photo: any) => 
+      this.competitorImages = [...allCompetitorPhotos.map((photo: any) => 
         new ImageItem({ src: photo.url, thumb: photo.url })
       )];
-      console.log('Competitor Images Array:', this.competitorImages);
-      console.log('Competitor Photos URLs:', this.competitorImages.map(img => img.data?.src));
       // Force gallery refresh
       this.galleryRefreshKey++;
     } else {
-      this.competitorImages = [];
-      console.log('No competitor photos found, clearing competitor images');
+      // Show default competitor photos when no data from backend
+      this.competitorImages = this.getDefaultCompetitorPhotos();
+      console.log('No competitor photos found, showing default competitor images');
     }
+  }
+
+  // Default competitor photos when backend data is not available
+  getDefaultCompetitorPhotos(): any[] {
+    return [
+      {
+        id: 'competitor-default-1',
+        url: 'assets/images/placeholder.jpg',
+        caption: 'Competitor photo placeholder',
+        accessibility_label: 'Default competitor image',
+        source: 'default'
+      },
+      {
+        id: 'competitor-default-2',
+        url: 'assets/images/placeholder.jpg',
+        caption: 'Competitor photo placeholder',
+        accessibility_label: 'Default competitor image',
+        source: 'default'
+      }
+    ].map(photo => new ImageItem({ src: photo.url, thumb: photo.url }));
+  }
+
+  // Default competitors when backend data is not available
+  getDefaultCompetitors(): any[] {
+    return [
+      {
+        id: 'default-competitor-1',
+        name: 'Sample Competitor 1',
+        num_photos: 2,
+        reviews_score: 4.5,
+        reviews_count: 25,
+        location_score: 4.2,
+        propertyAirbnbPhotos: [
+          {
+            id: 'default-airbnb-1',
+            url: 'assets/images/placeholder.jpg',
+            caption: 'Default Airbnb photo',
+            accessibility_label: 'Default competitor image',
+            source: 'airbnb'
+          }
+        ],
+        propertyBookingPhotos: [
+          {
+            id: 'default-booking-1',
+            url: 'assets/images/placeholder.jpg',
+            caption: 'Default Booking photo',
+            accessibility_label: 'Default competitor image',
+            source: 'booking'
+          }
+        ],
+        propertyVrboPhotos: null,
+        airbnb_link: '#',
+        booking_link: '#',
+        pricelabs_link: null
+      },
+      {
+        id: 'default-competitor-2',
+        name: 'Sample Competitor 2',
+        num_photos: 2,
+        reviews_score: 4.3,
+        reviews_count: 18,
+        location_score: 4.0,
+        propertyAirbnbPhotos: [
+          {
+            id: 'default-airbnb-2',
+            url: 'assets/images/placeholder.jpg',
+            caption: 'Default Airbnb photo',
+            accessibility_label: 'Default competitor image',
+            source: 'airbnb'
+          }
+        ],
+        propertyBookingPhotos: [
+          {
+            id: 'default-booking-2',
+            url: 'assets/images/placeholder.jpg',
+            caption: 'Default Booking photo',
+            accessibility_label: 'Default competitor image',
+            source: 'booking'
+          }
+        ],
+        propertyVrboPhotos: null,
+        airbnb_link: '#',
+        booking_link: '#',
+        pricelabs_link: null
+      }
+    ];
+  }
+
+  // Default property data when no data is available
+  getDefaultPropertyData(): any {
+    return {
+      listing_id: 'default-property',
+      property_title: 'Default Property',
+      listing_name: 'Default Property Name',
+      num_photos: 3,
+      Photos: {
+        airbnb: this.getDefaultPropertyPhotos(),
+        booking: [],
+        vrbo: null
+      },
+      reviews: {
+        cleanliness: 4.5,
+        accuracy: 4.5,
+        checkin: 4.5,
+        communication: 4.5,
+        location: 4.5,
+        value: 4.5
+      },
+      reviews_count: 10,
+      competitor: []
+    };
+  }
+
+  getAmenityIcon(iconString: string): string {
+    const iconMap: { [key: string]: string } = {
+      'SYSTEM_COOKING_BASICS': 'fa-utensils',
+      'SYSTEM_WI_FI': 'fa-wifi',
+      'SYSTEM_POOL': 'fa-swimming-pool',
+      'SYSTEM_TV': 'fa-tv',
+      'SYSTEM_ELEVATOR': 'fa-elevator',
+      'SYSTEM_PARKING': 'fa-parking',
+      'SYSTEM_AIR_CONDITIONING': 'fa-snowflake',
+      'SYSTEM_BALCONY': 'fa-home',
+      'SYSTEM_VIEW': 'fa-eye',
+      'SYSTEM_KITCHEN': 'fa-utensils',
+      'SYSTEM_INTERNET': 'fa-wifi',
+      'SYSTEM_PRIVATE_POOL': 'fa-swimming-pool',
+      'SYSTEM_OUTDOOR_POOL': 'fa-swimming-pool',
+      'SYSTEM_SMOKE_FREE': 'fa-ban-smoking',
+      'SYSTEM_GENERAL': 'fa-check-circle'
+    };
+    
+    return iconMap[iconString] || 'fa-check-circle';
   }
 
   previousCompetitor(): void {
@@ -291,12 +576,12 @@ export class PhotoDetailsComponent implements OnInit {
 
   nextCompetitor(): void {
     console.log('Next competitor clicked. Current index:', this.selectedCompetitorIndex);
-    console.log('Total competitors:', this.propertyData?.competitors?.length);
+    console.log('Total competitors:', this.propertyData?.competitor?.length);
     console.log('Current competitor:', this.getCurrentCompetitor());
     
     if (
-      this.propertyData?.competitors &&
-      this.selectedCompetitorIndex < this.propertyData.competitors.length - 1
+      this.propertyData?.competitor &&
+      this.selectedCompetitorIndex < this.propertyData.competitor.length - 1
     ) {
       this.selectedCompetitorIndex++;
       this.currentCompetitorImageIndex = 0;
@@ -450,10 +735,10 @@ export class PhotoDetailsComponent implements OnInit {
 
     // Add competitor data if available
     if (
-      this.propertyData.competitors &&
-      this.propertyData.competitors.length > 0
+      this.propertyData.competitor &&
+      this.propertyData.competitor.length > 0
     ) {
-      const comp = this.propertyData.competitors[0];
+      const comp = this.propertyData.competitor[0];
       csvData["Competitor Name"] = comp.name;
       csvData["Competitor Photos"] = comp.num_photos;
       csvData["Photo Gap"] = comp.num_photos - this.propertyData.num_photos;

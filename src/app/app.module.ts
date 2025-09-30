@@ -14,8 +14,9 @@ import { SharedModule } from './shared/sharedModule';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SelectDropDownModule } from "ngx-select-dropdown";
 import { GALLERY_CONFIG, GalleryConfig } from 'ng-gallery';
+import { SummaryPipe } from './summary.pipe';
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, SummaryPipe],
   imports: [
     BrowserModule,
     AppRoutingModule,

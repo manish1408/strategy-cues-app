@@ -26,7 +26,7 @@ export class CompetitorComparisonService {
   }
 
   getPropertyCompetitors(property_id: string) {
-    return this.http.get<any>(`${this._url}/get-comparisons-by-property/${property_id}`);
+    return this.http.get<any>(`${this._url}/get-property-competitors/${property_id}`);
   }
 
  

@@ -9,6 +9,7 @@ import { CompetitorReviewsComponent } from './competitor-reviews/competitor-revi
 import { MyReviewsComponent } from './my-reviews/my-reviews.component';
 import { AmenitiesAnalyzerComponent } from './amenities-analyzer/amenities-analyzer.component';
 import { GalleryModule } from 'ng-gallery';
+import { SummaryPipe } from '../_pipes/summary.pipe';
 
 
 @NgModule({
@@ -17,13 +18,15 @@ import { GalleryModule } from 'ng-gallery';
     PhotoDetailsComponent,
     CompetitorReviewsComponent,
     MyReviewsComponent,
-    AmenitiesAnalyzerComponent
+    AmenitiesAnalyzerComponent,
+    SummaryPipe
   ],
   imports: [
     CommonModule,
     FormsModule,
     ContentRoutingModule,
- GalleryModule
-]
+ GalleryModule,
+],
+  providers: [SummaryPipe]
 })
 export class ContentModule { }
