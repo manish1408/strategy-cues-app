@@ -16,8 +16,13 @@ export class CompetitorComparisonService {
 
 
 
-  getCompetitorById(competitorId: string) {
-    return this.http.get<any>(`${this._url}/get-comparisons-by-operator-id?operator_id=${competitorId}`);
+  getCompetitorById(operatorId: string, page: number = 1, limit: number = 10) {
+    const params = new HttpParams()
+      .set('operator_id', operatorId)
+      .set('page', page.toString())
+      .set('limit', limit.toString());
+    
+    return this.http.get<any>(`${this._url}/get-comparisons`, { params });
   }
 
  

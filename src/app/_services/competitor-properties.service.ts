@@ -18,12 +18,12 @@ export class CompetitorPropertiesService {
     return this.http.post<any>(`${this._url}/create-competitor`, data);
   }
 
-  deleteCompetitorProperty(data: any, competitor_property_id: string) {
-    return this.http.post<any>(`${this._url}/delete-competitor/${competitor_property_id}`, data);
+  deleteCompetitorProperty(competitor_property_id: string) {
+    return this.http.delete<any>(`${this._url}/delete-competitor/${competitor_property_id}`);
   }
 
-  getCompetitorProperties(operatorId: string, listingId: string) {
-    return this.http.get<any>(`${this._url}/get-competitors/${operatorId}/${listingId}`);
+  getCompetitorProperties(property_id: string) {
+    return this.http.get<any>(`${this._url}/get-competitors-by-property/${property_id}`);
   }
 
  

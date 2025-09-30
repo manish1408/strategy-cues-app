@@ -20,6 +20,12 @@ export class ContentComponent implements OnInit, OnDestroy {
   loading: boolean = false;
   error: string | null = null;
   
+  // Pagination properties
+  currentPage: number = 1;
+  itemsPerPage: number = 20;
+  totalPages: number = 0;
+  totalItems: number = 0;
+  
   // Configuration properties
   operatorId: string = '';
   Math = Math;
@@ -63,7 +69,7 @@ export class ContentComponent implements OnInit, OnDestroy {
     this.setLoadingState(true);
     this.clearError();
     
-    this.competitorComparisonService.getCompetitorById(this.operatorId)
+    this.competitorComparisonService.getCompetitorById(this.operatorId, this.currentPage, this.itemsPerPage)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response: any) => {
@@ -79,6 +85,25 @@ export class ContentComponent implements OnInit, OnDestroy {
     if (response?.data?.comparisons) {
       this.photoComparisonData = this.transformApiDataToPhotoComparison(response.data.comparisons);
       this.filteredData = [...this.photoComparisonData];
+      
+      // Update pagination data from response
+      if (response.data.pagination) {
+        this.totalItems = response.data.pagination.total || 0;
+        this.totalPages = response.data.pagination.totalPages || 0;
+        this.currentPage = response.data.pagination.page || 1;
+      } else {
+        // Fallback if pagination data is not available
+        this.totalItems = response.data.comparisons.length;
+        this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
+      }
+      
+      console.log('Pagination data:', {
+        totalItems: this.totalItems,
+        totalPages: this.totalPages,
+        currentPage: this.currentPage,
+        itemsPerPage: this.itemsPerPage
+      });
+      
       this.setLoadingState(false);
     } else {
       this.handleError('No comparison data available');
@@ -122,6 +147,7 @@ export class ContentComponent implements OnInit, OnDestroy {
     return {
       // Basic property information
       property_id: comparison.propertyId || '',
+      listing_id: comparison.listingId || comparison.propertyId || '',
       listing_name: comparison.listingName || '',
       
       // Platform IDs and links
@@ -131,6 +157,9 @@ export class ContentComponent implements OnInit, OnDestroy {
       airbnb_link: comparison.airbnbLink || '',
       vrbo_id: comparison.vrboId || '',
       vrbo_link: comparison.vrboLink || '',
+      
+      // Photos data - preserve the full photos object
+      photos: comparison.photos || null,
       
       // Booking.com photo data
       num_photos: this.getNestedValue(comparison, 'bookingPhotos.count', 0),
@@ -224,10 +253,11 @@ export class ContentComponent implements OnInit, OnDestroy {
     return this.calculatePhotoGap(property, 'competitorBookingPhotos.count', property.num_photos);
   }
 
-  getPricelabPhotoGap(property: any): number {
-    // Pricelab doesn't have competitors
-    return 0;
-  }
+  // Pricelabs methods - commented out for future use
+  // getPricelabPhotoGap(property: any): number {
+  //   // Pricelab doesn't have competitors
+  //   return 0;
+  // }
 
   private calculatePhotoGap(property: any, competitorPhotoPath: string, propertyPhotoCount: number): number {
     const competitors = this.getCompetitorsForProperty(property);
@@ -270,9 +300,9 @@ export class ContentComponent implements OnInit, OnDestroy {
     return this.createPhotoCountResponse(property.num_photos, property.property_photos);
   }
 
-  getPricelabPhotoCount(property: any): { count: number; types: string[] } {
-    return this.createPhotoCountResponse(property.num_photos, property.property_photos);
-  }
+  // getPricelabPhotoCount(property: any): { count: number; types: string[] } {
+  //   return this.createPhotoCountResponse(property.num_photos, property.property_photos);
+  // }
 
   private createPhotoCountResponse(count: number, photos: any[]): { count: number; types: string[] } {
     return {
@@ -299,15 +329,43 @@ export class ContentComponent implements OnInit, OnDestroy {
     return this.createReviewCountResponse(property.booking_reviews, property.booking_score);
   }
 
-  getPricelabReviewCount(property: any): { count: number; score: number } {
-    // Pricelab doesn't have reviews
-    return this.createReviewCountResponse(0, 0);
-  }
+  // getPricelabReviewCount(property: any): { count: number; score: number } {
+  //   // Pricelab doesn't have reviews
+  //   return this.createReviewCountResponse(0, 0);
+  // }
 
   private createReviewCountResponse(count: number, score: number): { count: number; score: number } {
     return {
       count: count || 0,
       score: score || 0
+    };
+  }
+
+  // Star rating methods
+  getAirbnbStarRating(property: any): { stars: number; fullStars: number; hasHalfStar: boolean } {
+    const score = this.getAirbnbReviewCount(property).score;
+    return this.createStarRating(score);
+  }
+
+  getBookingStarRating(property: any): { stars: number; fullStars: number; hasHalfStar: boolean } {
+    const score = this.getBookingReviewCount(property).score;
+    return this.createStarRating(score);
+  }
+
+  private createStarRating(score: number): { stars: number; fullStars: number; hasHalfStar: boolean } {
+    if (!score || score <= 0) {
+      return { stars: 0, fullStars: 0, hasHalfStar: false };
+    }
+    
+    // Convert score to 5-star scale
+    const normalizedScore = Math.min(Math.max(score, 0), 5);
+    const fullStars = Math.floor(normalizedScore);
+    const hasHalfStar = normalizedScore % 1 >= 0.5;
+    
+    return {
+      stars: normalizedScore,
+      fullStars: fullStars,
+      hasHalfStar: hasHalfStar
     };
   }
 
@@ -346,13 +404,13 @@ export class ContentComponent implements OnInit, OnDestroy {
     );
   }
 
-  getPricelabCaptionStatus(property: any): { percentage: number; captioned: number; total: number; missing: number } {
-    return this.createCaptionStatusResponse(
-      property.num_photos,
-      property.captioned_count,
-      property.missing_captions
-    );
-  }
+  // getPricelabCaptionStatus(property: any): { percentage: number; captioned: number; total: number; missing: number } {
+  //   return this.createCaptionStatusResponse(
+  //     property.num_photos,
+  //     property.captioned_count,
+  //     property.missing_captions
+  //   );
+  // }
 
   private createCaptionStatusResponse(total: number, captioned: number, missing: number): { percentage: number; captioned: number; total: number; missing: number } {
     const totalCount = total || 0;
@@ -386,6 +444,26 @@ export class ContentComponent implements OnInit, OnDestroy {
     return 'caption-poor';
   }
 
+  // ==================== PAGINATION METHODS ====================
+  
+  changePage(page: number): void {
+    if (page >= 1 && page !== this.currentPage && page <= this.totalPages) {
+      this.currentPage = page;
+      this.loadCompetitorComparisonData();
+    }
+  }
+
+  getPageNumbers(): number[] {
+    const pages: number[] = [];
+    const startPage = Math.max(1, this.currentPage - 2);
+    const endPage = Math.min(this.totalPages, this.currentPage + 2);
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }
+
   // ==================== SEARCH FUNCTIONALITY ====================
   
   onSearchChange(): void {
@@ -405,6 +483,7 @@ export class ContentComponent implements OnInit, OnDestroy {
   }
 
   getDisplayData(): any[] {
+    // For API-based pagination, return the current page data
     return this.filteredData;
   }
 
@@ -486,8 +565,34 @@ export class ContentComponent implements OnInit, OnDestroy {
     document.body.removeChild(link);
   }
 
+  // Image methods
+  getPropertyImage(property: any): string {
+  
+    // Try to get first image from photos array
+    if (property.photos) {
+     
+      // Check for Airbnb photos first
+      if (property.photos.airbnb && property.photos.airbnb.length > 0) {
+        return property.photos.airbnb[0].url;
+      }
+      // Check for Booking photos
+      if (property.photos.booking && property.photos.booking.length > 0) {
+        return property.photos.booking[0].url;
+      }
+    }
+    
+    // Fallback to placeholder
+    return 'assets/images/placeholder.jpg';
+  }
+
+  onImageError(event: any): void {
+    // Set fallback image when image fails to load
+    event.target.src = 'assets/images/placeholder.jpg';
+  }
+
   // Navigation methods
   viewPhotoDetails(propertyId: string): void {
+    console.log('Navigating to photo details for property:', propertyId);
     this.router.navigate(['/content/photo-details', propertyId]);
   }
 

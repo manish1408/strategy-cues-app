@@ -38,6 +38,15 @@
           {{ error }}
         </div>
 
+        <!-- Debug Info (remove in production) -->
+        <div *ngIf="!loading && !error" class="alert alert-info" role="alert">
+          <strong>Debug Info:</strong> 
+          Total Items: {{ totalItems }}, 
+          Total Pages: {{ totalPages }}, 
+          Current Page: {{ currentPage }}, 
+          Items Per Page: {{ itemsPerPage }}
+        </div>
+
         <!-- Table View -->
         <div class="table-view" *ngIf="!loading">
           <div class="table-card">
@@ -58,7 +67,10 @@
                       <td class="property-cell">
                         <div class="property-info">
                           <div class="property-image">
-                            <img [src]="'assets/images/placeholder.jpg'" [alt]="property.property_title">
+                            <img [src]="getPropertyImage(property)" 
+                                 [alt]="property.property_title || property.listing_name"
+                                 (error)="onImageError($event)"
+                                 loading="lazy">
                           </div>
                           <div class="property-details">
                             <h4>{{property.listing_name}}</h4>
@@ -75,12 +87,14 @@
                               <a [href]="property.booking_link" target="_blank" class="platform-link booking">
                                 <i class="fas fa-bed"></i>
                               </a>
+                              <!-- Pricelabs link - commented out for future use
                               <a *ngIf="property.pricelabs_link" [href]="property.pricelabs_link" target="_blank" class="platform-link pricelab" title="View on Pricelab">
                                 <i class="fas fa-chart-line"></i>
                               </a>
                               <span *ngIf="!property.pricelabs_link" class="platform-link pricelab disabled" title="No Pricelab URL available">
                                 <i class="fas fa-chart-line"></i>
                               </span>
+                              -->
                               <!-- <a [href]="property.vrbo_link" target="_blank" class="platform-link vrbo">
                                 <i class="fas fa-home"></i>
                               </a> -->
@@ -116,7 +130,7 @@
                             </div>
                           </div>
 
-                          <!-- Pricelab Photos -->
+                          <!-- Pricelab Photos - commented out for future use
                           <div class="platform-photo pricelab-photo">
                             <div class="platform-icon">
                               <i class="fas fa-chart-line"></i>
@@ -128,6 +142,7 @@
                               </div>
                             </div>
                           </div>
+                          -->
                           
                           <!-- VRBO Photos -->
                           <!-- <div class="platform-photo vrbo-photo">
@@ -156,8 +171,13 @@
                                 <span class="count-label">reviews</span>
                               </div>
                               <div class="review-score" *ngIf="getAirbnbReviewCount(property).score > 0">
-                                <i class="fas fa-star"></i>
-                                <span>{{getAirbnbReviewCount(property).score}}</span>
+                                <div class="star-rating">
+                                  <i *ngFor="let star of [1,2,3,4,5]" 
+                                     class="fas fa-star" 
+                                     [class.filled]="star <= getAirbnbStarRating(property).fullStars"
+                                     [class.half-filled]="star === getAirbnbStarRating(property).fullStars + 1 && getAirbnbStarRating(property).hasHalfStar">
+                                  </i>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -173,13 +193,18 @@
                                 <span class="count-label">reviews</span>
                               </div>
                               <div class="review-score" *ngIf="getBookingReviewCount(property).score > 0">
-                                <i class="fas fa-star"></i>
-                                <span>{{getBookingReviewCount(property).score}}</span>
+                                <div class="star-rating">
+                                  <i *ngFor="let star of [1,2,3,4,5]" 
+                                     class="fas fa-star" 
+                                     [class.filled]="star <= getBookingStarRating(property).fullStars"
+                                     [class.half-filled]="star === getBookingStarRating(property).fullStars + 1 && getBookingStarRating(property).hasHalfStar">
+                                  </i>
+                                </div>
                               </div>
                             </div>
                           </div>
                           
-                          <!-- Pricelab Reviews -->
+                          <!-- Pricelab Reviews - commented out for future use
                           <div class="platform-review pricelab-review">
                             <div class="platform-icon">
                               <i class="fas fa-chart-line"></i>
@@ -195,6 +220,7 @@
                               </div>
                             </div>
                           </div>
+                          -->
                           <!-- VRBO Reviews -->
                           <!-- <div class="platform-review vrbo-review">
                             <div class="platform-icon">
@@ -237,7 +263,7 @@
                             </div>
                           </div>
 
-                          <!-- Pricelab Photo Gap -->
+                          <!-- Pricelab Photo Gap - commented out for future use
                           <div class="platform-gap pricelab-gap" [ngClass]="getPlatformGapClass(getPricelabPhotoGap(property))">
                             <div class="platform-icon">
                               <i class="fas fa-chart-line"></i>
@@ -247,6 +273,7 @@
                               <span class="gap-direction">{{getPricelabPhotoGap(property) > 0 ? 'behind' : 'ahead'}}</span>
                             </div>
                           </div>
+                          -->
                           
                           <!-- VRBO Photo Gap -->
                           <!-- <div class="platform-gap vrbo-gap" [ngClass]="getPlatformGapClass(getVrboPhotoGap(property))">
@@ -270,8 +297,10 @@
                             <div class="caption-info">
                               <div class="caption-text">{{getAirbnbCaptionStatus(property).captioned}}/{{getAirbnbCaptionStatus(property).total}}</div>
                               <div class="missing-captions" *ngIf="getAirbnbCaptionStatus(property).missing > 0">
-                                <i class="fas fa-exclamation-triangle"></i>
-                                <span>{{getAirbnbCaptionStatus(property).missing}} missing</span>
+                                <span>
+                                  <i class="fas fa-exclamation-triangle"></i>
+                                  {{getAirbnbCaptionStatus(property).missing}} missing
+                                </span>
                               </div>
                             </div>
                           </div>
@@ -284,13 +313,15 @@
                             <div class="caption-info">
                               <div class="caption-text">{{getBookingCaptionStatus(property).captioned}}/{{getBookingCaptionStatus(property).total}}</div>
                               <div class="missing-captions" *ngIf="getBookingCaptionStatus(property).missing > 0">
-                                <i class="fas fa-exclamation-triangle"></i>
-                                <span>{{getBookingCaptionStatus(property).missing}} missing</span>
+                                <span>
+                                  <i class="fas fa-exclamation-triangle"></i>
+                                  {{getBookingCaptionStatus(property).missing}} missing
+                                </span>
                               </div>
                             </div>
                           </div>
 
-                          <!-- Pricelab Caption Status -->
+                          <!-- Pricelab Caption Status - commented out for future use
                           <div class="platform-caption pricelab-caption" [ngClass]="getCaptionStatusClass(getPricelabCaptionStatus(property).percentage)">
                             <div class="platform-icon">
                               <i class="fas fa-chart-line"></i>
@@ -303,6 +334,7 @@
                               </div>
                             </div>
                           </div>
+                          -->
 
                           <!-- VRBO Caption Status -->
                           <!-- <div class="platform-caption vrbo-caption" [ngClass]="getCaptionStatusClass(getVrboCaptionStatus(property).percentage)">
@@ -330,6 +362,23 @@
                   </tbody>
               </table>
             </div>
+          </div>
+          
+          <!-- Pagination -->
+          <div class="pagination-section" *ngIf="totalPages > 1 && !loading">
+            <nav>
+              <ul class="pagination justify-content-center">
+                <li class="page-item" [class.disabled]="currentPage === 1">
+                  <a class="page-link" (click)="changePage(currentPage - 1)">Previous</a>
+                </li>
+                <li class="page-item" *ngFor="let page of getPageNumbers()" [class.active]="page === currentPage">
+                  <a class="page-link" (click)="changePage(page)">{{ page }}</a>
+                </li>
+                <li class="page-item" [class.disabled]="currentPage === totalPages">
+                  <a class="page-link" (click)="changePage(currentPage + 1)">Next</a>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
       </div>

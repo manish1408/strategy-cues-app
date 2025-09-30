@@ -3,7 +3,7 @@
   <div class="row mb-4">
     <div class="col-12">
       <div class="row align-items-end mb-2">
-        <div class="col-md-6">
+        <div class="col-12 col-md-6 mb-2 mb-md-0">
           <div class="input-group">
            
             <input type="text" class="form-control" placeholder="Search by name, area, or room type..."
@@ -11,8 +11,8 @@
               <span (click)="performSearch()" class="cursor-pointer input-group-text"><i class="fas fa-search"></i></span>
           </div>
         </div> 
-        <div class="col-md-3">
-          <div class="d-flex gap-2">
+        <div class="col-12 col-md-3 mb-2 mb-md-0">
+          <div class="d-flex gap-2 flex-wrap">
             <button class="btn btn-outline-secondary" (click)="openFilterModal()" [class.btn-primary]="hasActiveFilters()"
               [class.text-white]="hasActiveFilters()">
               <i class="fas fa-filter me-2"></i>
@@ -36,10 +36,9 @@
                 
                 <!-- Quick Apply Presets -->
                 <div *ngIf="filterPresets.length > 0" class="preset-list">
-                  <div *ngFor="let preset of filterPresets" class="dropdown-item preset-item" (click)="$event.stopPropagation()">
+                  <div *ngFor="let preset of filterPresets" class="dropdown-item preset-item" (click)="selectedPresetId = preset.id; onPresetSelectionChange()" [class.selected]="selectedPresetId === preset.id">
                     <div class="preset-info">
-                      <div class="preset-name" (click)="selectedPresetId = preset.id; onPresetSelectionChange()" 
-                           [class.selected]="selectedPresetId === preset.id">
+                      <div class="preset-name">
                         <i class="fas fa-bookmark  me-2"></i>
                         {{ preset.name }}
                         <span *ngIf="selectedPresetId === preset.id" class="badge bg-success ms-2">Selected</span>
@@ -51,7 +50,7 @@
                       </div>
                     </div>
                     <div class="preset-actions">
-                      <button class="btn btn-sm btn-outline-danger" (click)="deletePreset(preset.id)" 
+                      <button class="btn btn-sm btn-outline-danger" (click)="$event.stopPropagation(); deletePreset(preset.id)" 
                         [disabled]="presetDeleting" title="Delete preset">
                         <i *ngIf="!presetDeleting" class="fas fa-trash"></i>
                         <i *ngIf="presetDeleting" class="fas fa-spinner fa-spin"></i>
@@ -71,12 +70,12 @@
                 <!-- Preset Management Actions -->
                 <div class="dropdown-item-text px-3 py-2">
                   <div class="btn-group btn-group-sm w-100" role="group">
-                    <button type="button" class="btn btn-outline-success" (click)="showSavePresetDialog()" 
+                    <button type="button" class="btn btn-outline-success me-1" (click)="showSavePresetDialog()" 
                       [disabled]="!hasActiveFilters() || presetSaving" title="Save current filters as preset">
                       <i *ngIf="!presetSaving" class="fas fa-save me-1"></i>
                       <i *ngIf="presetSaving" class="fas fa-spinner fa-spin me-1"></i>Save
                     </button>
-                    <button type="button" class="btn btn-outline-secondary" (click)="togglePresetManagement()"
+                    <button type="button" class="btn btn-outline-secondary ms-1" (click)="togglePresetManagement()"
                       title="Manage presets">
                       <i class="fas fa-cog me-1"></i>Manage
                     </button>
@@ -86,8 +85,8 @@
             </div>
           </div>
         </div>
-        <div class="col-md-3">
-          <div class="d-flex gap-2 float-end">
+        <div class="col-12 col-md-3">
+          <div class="d-flex gap-2 flex-wrap justify-content-md-end">
 
 
             <button class="btn btn-outline-success" 

@@ -53,20 +53,50 @@ export class PhotoDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const propertyId = this.route.snapshot.params["id"];
+    console.log('Photo Details - Looking for property with ID:', propertyId);
+    console.log('Available properties in JSON:', photoComparisonData.map(p => ({ id: p.listing_id, title: p.property_title })));
+    
     this.propertyData = photoComparisonData.find(
-      (property) => property.listing_id === this.route.snapshot.params["id"]
+      (property) => property.listing_id === propertyId
     );
     console.log('Property Data:', this.propertyData);
-    console.log('Property Photos:', this.propertyData?.property_photos);
-    console.log('Competitors:', this.propertyData?.competitor);
+    console.log('Property Photos:', this.propertyData?.photos);
+    console.log('Competitors:', this.propertyData?.competitors);
     
-    this.images = [...(this.propertyData?.property_photos?.map((photo: any) => 
+    // Get photos from the new structure
+    const allPhotos = this.getAllPropertyPhotos();
+    this.images = [...(allPhotos?.map((photo: any) => 
       new ImageItem({ src: photo.url, thumb: photo.url })
     ) || [])];
     console.log('Your Photos Images Array:', this.images);
     console.log('Your Photos URLs:', this.images.map(img => img.data?.src));
     
     this.updateCompetitorImages();
+  }
+
+  // Helper method to get all property photos from new structure
+  getAllPropertyPhotos(): any[] {
+    if (!this.propertyData?.photos) return [];
+    
+    const allPhotos = [];
+    
+    // Add Airbnb photos
+    if (this.propertyData.photos.airbnb && this.propertyData.photos.airbnb.length > 0) {
+      allPhotos.push(...this.propertyData.photos.airbnb);
+    }
+    
+    // Add Booking photos
+    if (this.propertyData.photos.booking && this.propertyData.photos.booking.length > 0) {
+      allPhotos.push(...this.propertyData.photos.booking);
+    }
+    
+    // Add VRBO photos if available
+    if (this.propertyData.photos.vrbo && this.propertyData.photos.vrbo.length > 0) {
+      allPhotos.push(...this.propertyData.photos.vrbo);
+    }
+    
+    return allPhotos;
   }
 
   // Navigation methods
@@ -102,21 +132,17 @@ export class PhotoDetailsComponent implements OnInit {
 
   // Image methods
   getMainImage(): string {
-    if (
-      this.propertyData?.property_photos &&
-      this.propertyData.property_photos.length > 0
-    ) {
-      return this.propertyData.property_photos[0].url;
+    const allPhotos = this.getAllPropertyPhotos();
+    if (allPhotos && allPhotos.length > 0) {
+      return allPhotos[0].url;
     }
     return "assets/images/placeholder.jpg";
   }
 
   getCurrentImage(): string {
-    if (
-      this.propertyData?.property_photos &&
-      this.propertyData.property_photos.length > 0
-    ) {
-      return this.propertyData.property_photos[this.currentImageIndex].url;
+    const allPhotos = this.getAllPropertyPhotos();
+    if (allPhotos && allPhotos.length > 0) {
+      return allPhotos[this.currentImageIndex].url;
     }
     return "assets/images/placeholder.jpg";
   }
@@ -136,25 +162,25 @@ export class PhotoDetailsComponent implements OnInit {
 
   getCurrentCompetitor(): any {
     if (
-      this.propertyData?.competitor &&
-      this.propertyData.competitor.length > 0 &&
+      this.propertyData?.competitors &&
+      this.propertyData.competitors.length > 0 &&
       this.selectedCompetitorIndex >= 0
     ) {
-      return this.propertyData.competitor[this.selectedCompetitorIndex];
+      return this.propertyData.competitors[this.selectedCompetitorIndex];
     }
     return null;
   }
 
   getTotalImages(): number {
-    return this.propertyData?.property_photos?.length || 0;
+    return this.getAllPropertyPhotos().length;
   }
 
   getSelectedPhoto(): any {
-    if (
-      this.selectedPhotoIndex !== null &&
-      this.propertyData?.property_photos
-    ) {
-      return this.propertyData.property_photos[this.selectedPhotoIndex];
+    if (this.selectedPhotoIndex !== null) {
+      const allPhotos = this.getAllPropertyPhotos();
+      if (allPhotos && allPhotos.length > this.selectedPhotoIndex) {
+        return allPhotos[this.selectedPhotoIndex];
+      }
     }
     return null;
   }
@@ -175,12 +201,11 @@ export class PhotoDetailsComponent implements OnInit {
   }
 
   nextPhoto(): void {
-    if (
-      this.selectedPhotoIndex !== null &&
-      this.propertyData?.property_photos &&
-      this.selectedPhotoIndex < this.propertyData.property_photos.length - 1
-    ) {
-      this.selectedPhotoIndex++;
+    if (this.selectedPhotoIndex !== null) {
+      const allPhotos = this.getAllPropertyPhotos();
+      if (allPhotos && this.selectedPhotoIndex < allPhotos.length - 1) {
+        this.selectedPhotoIndex++;
+      }
     }
   }
 
@@ -266,12 +291,12 @@ export class PhotoDetailsComponent implements OnInit {
 
   nextCompetitor(): void {
     console.log('Next competitor clicked. Current index:', this.selectedCompetitorIndex);
-    console.log('Total competitors:', this.propertyData?.competitor?.length);
+    console.log('Total competitors:', this.propertyData?.competitors?.length);
     console.log('Current competitor:', this.getCurrentCompetitor());
     
     if (
-      this.propertyData?.competitor &&
-      this.selectedCompetitorIndex < this.propertyData.competitor.length - 1
+      this.propertyData?.competitors &&
+      this.selectedCompetitorIndex < this.propertyData.competitors.length - 1
     ) {
       this.selectedCompetitorIndex++;
       this.currentCompetitorImageIndex = 0;
@@ -300,8 +325,9 @@ export class PhotoDetailsComponent implements OnInit {
   }
 
   getMissingCaptionPhotos(): string[] {
-    if (!this.propertyData?.property_photos) return [];
-    return this.propertyData.property_photos
+    const allPhotos = this.getAllPropertyPhotos();
+    if (!allPhotos) return [];
+    return allPhotos
       .filter((photo: any) => !photo.caption)
       .map((photo: any) => photo.id || "Unknown");
   }
@@ -327,12 +353,9 @@ export class PhotoDetailsComponent implements OnInit {
 
   // Image caption methods
   hasCurrentImageCaption(): boolean {
-    if (
-      this.propertyData?.property_photos &&
-      this.propertyData.property_photos[this.currentImageIndex]
-    ) {
-      return !!this.propertyData.property_photos[this.currentImageIndex]
-        .caption;
+    const allPhotos = this.getAllPropertyPhotos();
+    if (allPhotos && allPhotos[this.currentImageIndex]) {
+      return !!allPhotos[this.currentImageIndex].caption;
     }
     return false;
   }
@@ -427,10 +450,10 @@ export class PhotoDetailsComponent implements OnInit {
 
     // Add competitor data if available
     if (
-      this.propertyData.competitor &&
-      this.propertyData.competitor.length > 0
+      this.propertyData.competitors &&
+      this.propertyData.competitors.length > 0
     ) {
-      const comp = this.propertyData.competitor[0];
+      const comp = this.propertyData.competitors[0];
       csvData["Competitor Name"] = comp.name;
       csvData["Competitor Photos"] = comp.num_photos;
       csvData["Photo Gap"] = comp.num_photos - this.propertyData.num_photos;
@@ -557,7 +580,7 @@ export class PhotoDetailsComponent implements OnInit {
   // Thumbnail navigation methods for grid layout
   getVisibleThumbnails(type: 'main' | 'competitor'): any[] {
     const currentIndex = type === 'main' ? this.currentImageIndex : this.currentCompetitorImageIndex;
-    const photos = type === 'main' ? this.propertyData?.property_photos : this.getCurrentCompetitor()?.photos;
+    const photos = type === 'main' ? this.getAllPropertyPhotos() : this.getCurrentCompetitor()?.photos;
     
     if (!photos || photos.length === 0) return [];
     
