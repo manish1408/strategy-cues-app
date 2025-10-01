@@ -54,6 +54,7 @@ export class PhotoDetailsComponent implements OnInit {
   isLoading: boolean = true;
 
   // Platform tabs
+  selectedPlatform: string = "airbnb";
   selectedPropertyPlatform: string = "airbnb";
   selectedCompetitorPlatform: string = "airbnb";
   isPropertyGalleryLoading: boolean = false;
@@ -543,6 +544,7 @@ export class PhotoDetailsComponent implements OnInit {
 
   getAmenityIcon(iconString: string): string {
     const iconMap: { [key: string]: string } = {
+      // Airbnb system icons
       SYSTEM_COOKING_BASICS: "fa-utensils",
       SYSTEM_WI_FI: "fa-wifi",
       SYSTEM_POOL: "fa-swimming-pool",
@@ -558,6 +560,20 @@ export class PhotoDetailsComponent implements OnInit {
       SYSTEM_OUTDOOR_POOL: "fa-swimming-pool",
       SYSTEM_SMOKE_FREE: "fa-ban-smoking",
       SYSTEM_GENERAL: "fa-check-circle",
+      // Booking icons
+      pool: "fa-swimming-pool",
+      wifi: "fa-wifi",
+      parking_sign: "fa-parking",
+      kitchen: "fa-utensils",
+      tv: "fa-tv",
+      elevator: "fa-elevator",
+      air_conditioning: "fa-snowflake",
+      balcony: "fa-home",
+      view: "fa-eye",
+      internet: "fa-wifi",
+      private_pool: "fa-swimming-pool",
+      outdoor_pool: "fa-swimming-pool",
+      smoke_free: "fa-ban-smoking",
     };
 
     return iconMap[iconString] || "fa-check-circle";
@@ -599,6 +615,45 @@ export class PhotoDetailsComponent implements OnInit {
     return Math.round(
       (this.propertyData.captioned_count / this.propertyData.num_photos) * 100
     );
+  }
+
+  getTotalPhotos(): number {
+    if (!this.propertyData?.Photos) return 0;
+    
+    const airbnbCount = this.propertyData.Photos.airbnb?.length || 0;
+    const bookingCount = this.propertyData.Photos.booking?.length || 0;
+    const vrboCount = this.propertyData.Photos.vrbo?.length || 0;
+    
+    return airbnbCount + bookingCount + vrboCount;
+  }
+
+  getCaptionedCount(): number {
+    if (!this.propertyData?.Photos) return 0;
+    
+    let captionedCount = 0;
+    
+    // Count captioned photos from Airbnb
+    if (this.propertyData.Photos.airbnb) {
+      captionedCount += this.propertyData.Photos.airbnb.filter((photo: any) => 
+        photo.caption && photo.caption.trim() !== ''
+      ).length;
+    }
+    
+    // Count captioned photos from Booking
+    if (this.propertyData.Photos.booking) {
+      captionedCount += this.propertyData.Photos.booking.filter((photo: any) => 
+        photo.caption && photo.caption.trim() !== ''
+      ).length;
+    }
+    
+    // Count captioned photos from VRBO
+    if (this.propertyData.Photos.vrbo) {
+      captionedCount += this.propertyData.Photos.vrbo.filter((photo: any) => 
+        photo.caption && photo.caption.trim() !== ''
+      ).length;
+    }
+    
+    return captionedCount;
   }
 
   getGapClass(photoGap: number): string {
@@ -661,27 +716,85 @@ export class PhotoDetailsComponent implements OnInit {
     return this.currentImageIndex === 0;
   }
 
-  // Platform tab switching methods
-  selectPropertyPlatform(platform: string): void {
+  // Unified platform selection method
+  selectPlatform(platform: string): void {
+    // Skip VRBO if it's commented out
+    if (platform === 'vrbo') {
+      return;
+    }
+    
+    this.selectedPlatform = platform;
     this.selectedPropertyPlatform = platform;
+    this.selectedCompetitorPlatform = platform;
+    
     this.isPropertyGalleryLoading = true;
-
+    this.isCompetitorGalleryLoading = true;
+    
     // Update images based on selected platform
     setTimeout(() => {
       this.updatePropertyPlatformImages();
+      this.updateCompetitorPlatformImages();
       this.isPropertyGalleryLoading = false;
+      this.isCompetitorGalleryLoading = false;
     }, 300);
   }
 
-  selectCompetitorPlatform(platform: string): void {
-    this.selectedCompetitorPlatform = platform;
-    this.isCompetitorGalleryLoading = true;
+  // Get amenities for selected platform
+  getPropertyAmenitiesForPlatform(platform: string): any[] {
+    if (!this.propertyData) return [];
+    
+    // Check if Amenities object exists (API response structure)
+    if (this.propertyData.Amenities) {
+      switch (platform) {
+        case 'airbnb':
+          return this.propertyData.Amenities.Airbnb || [];
+        case 'booking':
+          return this.propertyData.Amenities.Booking || [];
+        case 'vrbo':
+          return this.propertyData.Amenities.VRBO || [];
+        default:
+          return [];
+      }
+    }
+    
+    // Fallback to old structure if Amenities object doesn't exist
+    switch (platform) {
+      case 'airbnb':
+        return this.propertyData.amenitiesAirbnb || [];
+      case 'booking':
+        return this.propertyData.amenitiesBooking || [];
+      case 'vrbo':
+        return this.propertyData.amenitiesVrbo || [];
+      default:
+        return [];
+    }
+  }
 
-    // Update images based on selected platform
-    setTimeout(() => {
-      this.updateCompetitorPlatformImages();
-      this.isCompetitorGalleryLoading = false;
-    }, 300);
+  // Get competitor amenities for selected platform
+  getCompetitorAmenitiesForPlatform(platform: string): any[] {
+    const competitor = this.getCurrentCompetitor();
+    if (!competitor) return [];
+    
+    // API response structure: competitors use lowercase camelCase properties
+    switch (platform) {
+      case 'airbnb':
+        return competitor.amenitiesAirbnb || [];
+      case 'booking':
+        return competitor.amenitiesBooking || [];
+      case 'vrbo':
+        return competitor.amenitiesVrbo || [];
+      default:
+        return [];
+    }
+  }
+
+  // Platform tab switching methods (keeping for backward compatibility)
+  selectPropertyPlatform(platform: string): void {
+    this.selectPlatform(platform);
+  }
+
+  selectCompetitorPlatform(platform: string): void {
+    this.selectPlatform(platform);
   }
 
   // Update property images based on selected platform

@@ -953,8 +953,19 @@ export class RevenueComponent implements OnInit {
       next: (response: any) => {
         this.exportLoading = false;
         
-        // Handle blob response from backend
-        if (response.body instanceof Blob) {
+        // Handle JSON response with file_url
+        if (response.body && typeof response.body === 'object') {
+          const res = response.body;
+          if (res.success && res.data && typeof res.data.file_url === "string" && res.data.file_url.startsWith("https")) {
+            // Open the file URL directly in a new tab
+            window.open(res.data.file_url, "_blank");
+            this.toastr.success("Properties exported successfully");
+          } else {
+            this.toastr.error("Invalid response format from server");
+          }
+        }
+        // Handle blob response from backend (fallback)
+        else if (response.body instanceof Blob) {
           const blob = response.body;
           const url = window.URL.createObjectURL(blob);
           const link = document.createElement("a");
@@ -978,14 +989,7 @@ export class RevenueComponent implements OnInit {
           window.URL.revokeObjectURL(url);
           this.toastr.success("Properties exported successfully");
         } else {
-          // Fallback for JSON response with file_url
-          const res = response.body;
-          if (typeof res === 'object' && res.data && typeof res.data.file_url === "string" && res.data.file_url.startsWith("https")) {
-            window.open(res.data.file_url, "_blank");
-            this.toastr.success("Properties exported successfully");
-          } else {
-            this.toastr.error("Invalid response format from server");
-          }
+          this.toastr.error("Invalid response format from server");
         }
       },
       error: (error) => {

@@ -391,6 +391,8 @@
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
+      height: 60px;
+      overflow: hidden;
 
       .review-count {
         font-size: var(--font-size-sm);
@@ -2369,4 +2371,40 @@
     font-size: 14px;
     color: #495057;
   }
+}
+
+.competitor-gallery {
+  position: relative;
+
+}
+
+.competitor-gallery-title {
+ position: absolute;
+ top: 35px;
+ left: 35px;
+ background: rgba(0, 0, 0, 0.7);
+ color: white;
+ padding: 0.5rem 1rem;
+ border-radius: 20px;
+ font-size: 0.85rem;
+ font-weight: 500;
+ z-index: 10;
+}
+
+.your-gallery {
+  position: relative;
+
+}
+
+.your-gallery-title {
+ position: absolute;
+ top: 35px;
+ left: 35px;
+ background: rgba(0, 0, 0, 0.7);
+ color: white;
+ padding: 0.5rem 1rem;
+ border-radius: 20px;
+ font-size: 0.85rem;
+ font-weight: 500;
+ z-index: 10;
 }

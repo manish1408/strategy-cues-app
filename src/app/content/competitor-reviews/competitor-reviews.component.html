@@ -24,16 +24,21 @@
       <button (click)="loadGuestDidntLikeData()" class="retry-btn">Retry</button>
     </div>
 
+    
+
 
 
   <!-- Competitor Reviews Section -->
   <div class="reviews-section">
     <h2>What guests didn't like about your competitors (Static Data):</h2>
-    <div class="cards-grid">
+    <div class="cards-grid" *ngIf="guestDidntLikeData && guestDidntLikeData.length > 0">
       <div class="review-card dislike-card" *ngFor="let item of guestDidntLikeData">
         <h3>{{ item.title }}</h3>
         <p>{{ item.description }}</p>
       </div>
+    </div>
+    <div *ngIf="!guestDidntLikeData || guestDidntLikeData.length === 0">
+      <p>No guest didn't like data available.</p>
     </div>
   </div>
 

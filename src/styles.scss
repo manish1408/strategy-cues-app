@@ -862,3 +862,19 @@ gallery-item{
   width: 100% !important;
   object-fit: none !important;
 }
+
+::ng-deep {
+  gallery {
+    .gallery-thumb {
+      // Thumbnail container styles
+      
+      .gallery-image {
+   width: 120px !important;
+   height: 90px !important;
+   object-fit: contain !important;
+      }
+      
+     
+    }
+  }
+}

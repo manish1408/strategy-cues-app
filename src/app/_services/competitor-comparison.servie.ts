@@ -70,7 +70,7 @@ export class CompetitorComparisonService {
     const params = new HttpParams()
       .set('operator_id', operator_id);
     
-    return this.http.get<any>(`${this._url}/guest-wish-they-had-in-my-property/${property_id}`, { params });
+    return this.http.get<any>(`${this._url}/guest-wish-they-had-my-property/${property_id}`, { params });
   }
   
   getGuestLovedInMyProperty(property_id: string, operator_id: string) {
@@ -84,7 +84,7 @@ export class CompetitorComparisonService {
     const params = new HttpParams()
       .set('operator_id', operator_id);
     
-    return this.http.get<any>(`${this._url}/what-to-improve-based-on-my-property/${property_id}`, { params });
+    return this.http.get<any>(`${this._url}/what-to-improve-based-on-my-reviews/${property_id}`, { params });
   }
  
 }
