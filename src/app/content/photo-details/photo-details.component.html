@@ -21,11 +21,11 @@
               <i class="fas fa-arrow-left"></i> Back to Content
             </button>
             <div class="title-info">
-              <h1 class="mb-1 text-truncate" [title]="propertyData?.propertyName">{{ propertyData?.propertyName }}</h1>
+              <h1 class="mb-1 text-truncate" [title]="propertyData?.Listing_Name">{{ propertyData?.Listing_Name }}</h1>
               <div class="property-meta">
                 <!-- <span class="badge bg-light text-dark me-2">{{ propertyData?.listing_id }}</span> -->
-                <span class="badge bg-primary" *ngIf="propertyData?.num_photos"> 
-                  {{ propertyData?.num_photos }} Photos
+                <span class="badge bg-primary" *ngIf="propertyData?.Photos?.airbnb?.length + propertyData?.Photos?.booking?.length + propertyData?.Photos?.vrbo?.length"> 
+                  {{ propertyData?.Photos?.airbnb?.length + propertyData?.Photos?.booking?.length + propertyData?.Photos?.vrbo?.length }} Photos
                 </span>
               </div>
             </div>
@@ -35,42 +35,39 @@
           <div class="key-metrics">
             <div class="metric" *ngIf="propertyData?.captioned_count !== null">
               <span class="metric-label">Captioned</span>
-              <span class="metric-value">{{ propertyData?.captioned_count }}/{{ propertyData?.num_photos }}</span>
+              <span class="metric-value">{{ propertyData?.captioned_count }}/{{ propertyData?.Photos?.airbnb?.length + propertyData?.Photos?.booking?.length + propertyData?.Photos?.vrbo?.length }}</span>
             </div>
-            <div class="metric" *ngIf="propertyData?.missing_captions !== null">
-              <span class="metric-label">Missing</span>
-              <span class="metric-value">{{ propertyData?.missing_captions }}</span>
-            </div>
+           
           </div>
           <div class="booking-buttons mt-3">
             <button 
               class="btn btn-airbnb me-2" 
               (click)="openBookingLink('Airbnb')"
-              [disabled]="!propertyData?.airbnb_link"
+              [disabled]="!propertyData?.AirbnbUrl"
               title="View on Airbnb">
               <i class="fab fa-airbnb"></i> Airbnb
             </button>
             <button 
               class="btn btn-booking me-2" 
               (click)="openBookingLink('Booking')"
-              [disabled]="!propertyData?.booking_link"
+              [disabled]="!propertyData?.BookingUrl"
               title="View on Booking.com">
               <i class="fas fa-bed"></i> Booking.com
             </button>
-            <button 
+            <!-- <button 
               class="btn btn-pricelab me-2" 
               (click)="openBookingLink('Pricelab')"
-              [disabled]="!propertyData?.pricelabs_link"
+              [disabled]="!propertyData?.PricelabsUrl"
               title="View on Pricelab">
               <i class="fas fa-chart-line"></i> Pricelab
-            </button>
-            <!-- <button 
+            </button> -->
+            <button 
               class="btn btn-vrbo" 
               (click)="openBookingLink('VRBO')"
-              [disabled]="!propertyData?.vrbo_link"
+              [disabled]="!propertyData?.VRBOUrl"
               title="View on VRBO">
               <i class="fas fa-home"></i> VRBO
-            </button> -->
+            </button>
           </div>
         </div>
       </div>
@@ -128,35 +125,22 @@
          (mousemove)="onMouseMove($event)"
          (mouseup)="onMouseUp($event, 'competitor')"
          (mouseleave)="onMouseUp($event, 'competitor')">
-      <div class="nav-card" [class.active]="selectedCompetitorIndex === -1" (click)="selectCompetitor(-1)">
-        <div class="nav-card-image">
-          <img [src]="getMainImage()" [alt]="propertyData.propertyName" (error)="onImageError($event)">
-        </div>
-        <div class="nav-card-content">
-          <h4 [title]="propertyData.Listing_Name | summary:10">{{propertyData.Listing_Name | summary:10}}</h4>
-          <span class="photo-count">{{getTotalPropertyPhotos()}} photos</span>
-          <span class="gap-indicator">Your property</span>
-        </div>
-        <div class="nav-card-links">
-          <i class="fas fa-link"></i>
-        </div>
-      </div>
-      <!-- Selected Competitor Card (Always Second) -->
+      <!-- Loop through all competitors -->
       <div class="nav-card" 
-           [class.active]="selectedCompetitorIndex >= 0" 
-           (click)="selectCompetitor(selectedCompetitorIndex >= 0 ? selectedCompetitorIndex : 0)">
+           *ngFor="let competitor of propertyData.competitor; let i = index"
+           [class.active]="selectedCompetitorIndex === i" 
+           (click)="selectCompetitor(i)">
         <div class="nav-card-image">
-          <img [src]="getCurrentCompetitor()?.photos && getCurrentCompetitor()?.photos.length > 0 ? getCurrentCompetitor().photos[0].url : 'assets/images/placeholder.jpg'" 
-               [alt]="getCurrentCompetitor()?.propertyName || 'Competitor'" 
+          <img [src]="competitor.photos && competitor.photos.length > 0 ? competitor.photos[0].url : 'assets/images/placeholder.jpg'" 
+               [alt]="competitor.propertyName" 
                (error)="onImageError($event)">
         </div>
         <div class="nav-card-content">
-          <h4 [title]="getCurrentCompetitor()?.propertyName || 'Select Competitor'">{{getCurrentCompetitor()?.propertyName | summary: 8}}</h4>
-          <span class="photo-count">{{getTotalCompetitorPhotosCount()}} photos</span>
+          <h4 [title]="competitor.propertyName">{{competitor.propertyName | summary: 10}}</h4>
+          <span class="photo-count">{{getCompetitorPhotosCount(competitor)}} photos</span>
           <span class="gap-indicator" 
-                [ngClass]="getGapClass(getPhotoGap())"
-                *ngIf="getCurrentCompetitor()">
-            {{getPhotoGap() > 0 ? '+' : ''}}{{getPhotoGap()}} {{getPhotoGap() > 0 ? 'more than you' : 'less than you'}}
+                [ngClass]="getGapClass(getCompetitorPhotoGap(competitor))">
+            {{getCompetitorPhotoGap(competitor) > 0 ? '+' : ''}}{{getCompetitorPhotoGap(competitor)}} {{getCompetitorPhotoGap(competitor) > 0 ? 'more than you' : 'less than you'}}
           </span>
         </div>
         <div class="nav-card-links">
@@ -174,7 +158,7 @@
     <!-- Your Photos Section -->
     <div class="comparison-section your-photos">
       <div class="section-header">
-        <h2 [title]="propertyData.Listing_Name">{{propertyData.Listing_Name}}</h2>
+        <h2>Your property photos</h2>
         <div class="review-summary">
     
           <!-- Amenities Section -->
@@ -216,20 +200,62 @@
               </div>
             </div>
         </div>
-        <div class="photo-count">{{getTotalPropertyPhotos()}} photos</div>
+        <div class="photo-count">{{getPropertyPlatformPhotoCount(selectedPropertyPlatform)}} photos</div>
       </div>
      
+      <!-- Platform Tabs for Property Photos -->
+      <div class="platform-tabs-container">
+        <ul class="platform-tabs">
+          <li class="platform-tab" 
+              [class.active]="selectedPropertyPlatform === 'airbnb'"
+              (click)="selectPropertyPlatform('airbnb')">
+            <i class="fab fa-airbnb"></i>
+            <span>Airbnb</span>
+          </li>
+          <li class="platform-tab" 
+              [class.active]="selectedPropertyPlatform === 'booking'"
+              (click)="selectPropertyPlatform('booking')">
+            <i class="fas fa-bed"></i>
+            <span>Booking.com</span>
+          </li>
+          <li class="platform-tab" 
+              [class.active]="selectedPropertyPlatform === 'vrbo'"
+              (click)="selectPropertyPlatform('vrbo')">
+            <i class="fas fa-home"></i>
+            <span>VRBO</span>
+          </li>
+        </ul>
+      </div>
 
+      <!-- Loading State -->
+      <div class="gallery-loading" *ngIf="isPropertyGalleryLoading">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
 
-        <gallery [items]="images" bullets="true" bulletPosition='bottom' scrollBehavior='smooth' [ngStyle]="{'background-color': 'white', 'padding': '25px' , 'max-width': '816px'}" gestures="true" imageSize='cover' counter="true" nav="true" itemAutosize="true" thumbs="true"  thumbPosition='bottom' id='your-photos-gallery'></gallery>
-  
+      <!-- Gallery -->
+      <div *ngIf="!isPropertyGalleryLoading">
+        <div *ngIf="images && images.length > 0">
+          <gallery [items]="images" bullets="true" bulletPosition='bottom' scrollBehavior='smooth' [ngStyle]="{'background-color': 'white', 'padding': '25px' , 'max-width': '816px'}" gestures="true" imageSize='cover' counter="true" nav="true" itemAutosize="true" thumbs="true"  thumbPosition='bottom' id='your-photos-gallery'></gallery>
+        </div>
+        
+        <!-- No Images Placeholder -->
+        <div *ngIf="!images || images.length === 0" class="no-images-placeholder">
+          <div class="placeholder-content">
+            <i class="fas fa-image"></i>
+            <h3>No photos available</h3>
+            <p>No photos found for this platform</p>
+          </div>
+        </div>
+      </div>
    
     </div>  
 
     <!-- Competitor Photos Section -->
     <div class="comparison-section competitor-photos" *ngIf="getCurrentCompetitor()">
       <div class="section-header">  
-        <h2 [title]="getCurrentCompetitor().propertyName">{{getCurrentCompetitor().propertyName}}</h2>
+        <h2>Competitor property photos</h2>
         <div class="review-summary">
        
                 <!-- Amenities Section -->
@@ -264,11 +290,55 @@
                   </div>
                 </div>
         </div>
-        <div class="photo-count">{{getTotalCompetitorPhotosCount()}} photos</div>
+        <div class="photo-count">{{getCompetitorPlatformPhotoCount(selectedCompetitorPlatform)}} photos</div>
       </div>
  
-      
-        <gallery  [items]="competitorImages" bullets="true" bulletPosition='bottom' scrollBehavior='smooth' [ngStyle]="{'background-color': 'white', 'padding': '25px', 'max-width': '816px'}" gestures="true" imageSize='cover' counter="true" nav="true" itemAutosize="true" thumbs="true"  thumbPosition='bottom' id='competitor-photos-gallery'></gallery>
+      <!-- Platform Tabs for Competitor Photos -->
+      <div class="platform-tabs-container">
+        <ul class="platform-tabs">
+          <li class="platform-tab" 
+              [class.active]="selectedCompetitorPlatform === 'airbnb'"
+              (click)="selectCompetitorPlatform('airbnb')">
+            <i class="fab fa-airbnb"></i>
+            <span>Airbnb</span>
+          </li>
+          <li class="platform-tab" 
+              [class.active]="selectedCompetitorPlatform === 'booking'"
+              (click)="selectCompetitorPlatform('booking')">
+            <i class="fas fa-bed"></i>
+            <span>Booking.com</span>
+          </li>
+          <li class="platform-tab" 
+              [class.active]="selectedCompetitorPlatform === 'vrbo'"
+              (click)="selectCompetitorPlatform('vrbo')">
+            <i class="fas fa-home"></i>
+            <span>VRBO</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Loading State -->
+      <div class="gallery-loading" *ngIf="isCompetitorGalleryLoading">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+
+      <!-- Gallery -->
+      <div *ngIf="!isCompetitorGalleryLoading">
+        <div *ngIf="competitorImages && competitorImages.length > 0">
+          <gallery  [items]="competitorImages" bullets="true" bulletPosition='bottom' scrollBehavior='smooth' [ngStyle]="{'background-color': 'white', 'padding': '25px', 'max-width': '816px'}" gestures="true" imageSize='cover' counter="true" nav="true" itemAutosize="true" thumbs="true"  thumbPosition='bottom' id='competitor-photos-gallery'></gallery>
+        </div>
+        
+        <!-- No Images Placeholder -->
+        <div *ngIf="!competitorImages || competitorImages.length === 0" class="no-images-placeholder">
+          <div class="placeholder-content">
+            <i class="fas fa-image"></i>
+            <h3>No photos available</h3>
+            <p>No photos found for this platform</p>
+          </div>
+        </div>
+      </div>
    
     </div>
   </div>
@@ -282,6 +352,7 @@
           <h3 [title]="comp.propertyName">{{comp.propertyName}}</h3>
           <div class="competitor-rating">
             <div class="platform-badges">
+              reviews 
               <span class="badge airbnb-badge" *ngIf="comp.reviewsAirbnb && comp.reviewsAirbnb.length > 0">
                 <i class="fab fa-airbnb"></i> {{comp.reviewsAirbnb.length}}
               </span>
@@ -303,10 +374,15 @@
                 <i class="fab fa-airbnb"></i> Airbnb
               </span>
               <span class="badge bg-light text-dark">
-                {{comp.propertyAirbnbPhotos?.length || 0}} photos
+                {{comp.propertyAirbnbPhotos?.length || 0}} Competitor photos
               </span>
-              <span class="badge gap-badge" [ngClass]="getGapClass((comp.propertyAirbnbPhotos?.length || 0) - (propertyData.Photos?.airbnb?.length || 0))">
-                {{(comp.propertyAirbnbPhotos?.length || 0) - (propertyData.Photos?.airbnb?.length || 0) > 0 ? '+' : ''}}{{(comp.propertyAirbnbPhotos?.length || 0) - (propertyData.Photos?.airbnb?.length || 0)}} gap
+              <span class="badge gap-badge" [ngClass]="getGapStatusClass(getPlatformPhotoGap(comp, 'airbnb'))">
+                <ng-container *ngIf="getPlatformPhotoGap(comp, 'airbnb') === 0">
+                  Your photos Equal
+                </ng-container>
+                <ng-container *ngIf="getPlatformPhotoGap(comp, 'airbnb') !== 0">
+                  Your photos {{getAbsolutePhotoGap(getPlatformPhotoGap(comp, 'airbnb'))}} {{getPhotoGapStatus(getPlatformPhotoGap(comp, 'airbnb'))}}
+                </ng-container>
               </span>
             </div>
             
@@ -316,10 +392,15 @@
                 <i class="fas fa-bed"></i> Booking
               </span>
               <span class="badge bg-light text-dark">
-                {{comp.propertyBookingPhotos?.length || 0}} photos
+                {{comp.propertyBookingPhotos?.length || 0}} Competitor photos
               </span>
-              <span class="badge gap-badge" [ngClass]="getGapClass((comp.propertyBookingPhotos?.length || 0) - (propertyData.Photos?.booking?.length || 0))">
-                {{(comp.propertyBookingPhotos?.length || 0) - (propertyData.Photos?.booking?.length || 0) > 0 ? '+' : ''}}{{(comp.propertyBookingPhotos?.length || 0) - (propertyData.Photos?.booking?.length || 0)}} photos gap
+              <span class="badge gap-badge" [ngClass]="getGapStatusClass(getPlatformPhotoGap(comp, 'booking'))">
+                <ng-container *ngIf="getPlatformPhotoGap(comp, 'booking') === 0">
+                  Your photos Equal
+                </ng-container>
+                <ng-container *ngIf="getPlatformPhotoGap(comp, 'booking') !== 0">
+                  Your photos {{getAbsolutePhotoGap(getPlatformPhotoGap(comp, 'booking'))}} {{getPhotoGapStatus(getPlatformPhotoGap(comp, 'booking'))}}
+                </ng-container>
               </span>
             </div>
             
@@ -329,10 +410,15 @@
                 <i class="fas fa-home"></i> VRBO
               </span>
               <span class="badge bg-light text-dark">
-                {{comp.propertyVrboPhotos?.length || 0}} photos
+                {{comp.propertyVrboPhotos?.length || 0}} Competitor photos
               </span>
-              <span class="badge gap-badge" [ngClass]="getGapClass((comp.propertyVrboPhotos?.length || 0) - (propertyData.Photos?.vrbo?.length || 0))">
-                {{(comp.propertyVrboPhotos?.length || 0) - (propertyData.Photos?.vrbo?.length || 0) > 0 ? '+' : ''}}{{(comp.propertyVrboPhotos?.length || 0) - (propertyData.Photos?.vrbo?.length || 0)}} gap
+              <span class="badge gap-badge" [ngClass]="getGapStatusClass(getPlatformPhotoGap(comp, 'vrbo'))">
+                <ng-container *ngIf="getPlatformPhotoGap(comp, 'vrbo') === 0">
+                  Your photos Equal
+                </ng-container>
+                <ng-container *ngIf="getPlatformPhotoGap(comp, 'vrbo') !== 0">
+                  Your photos {{getAbsolutePhotoGap(getPlatformPhotoGap(comp, 'vrbo'))}} {{getPhotoGapStatus(getPlatformPhotoGap(comp, 'vrbo'))}}
+                </ng-container>
               </span>
             </div>
           </div>

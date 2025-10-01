@@ -586,7 +586,7 @@ export class ContentComponent implements OnInit, OnDestroy {
 
   // Navigation methods
   viewPhotoDetails(propertyId: string): void {
-    this.router.navigate(['/content/photo-details', propertyId]);
+    this.router.navigate(['/content/photo-details', propertyId], { queryParams: { operatorId: this.operatorId } });
   }
 
   // Legacy methods for backward compatibility

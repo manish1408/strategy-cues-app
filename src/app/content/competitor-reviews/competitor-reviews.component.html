@@ -1,9 +1,36 @@
 <div class="competitor-reviews">
+  <!-- Full Page Loading State -->
+  <div *ngIf="loading" class="d-flex justify-content-center align-items-center" style="min-height: 60vh;">
+    <div class="text-center">
+      <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <h4 class="text-muted">Loading Guest Insights</h4>
+      <p class="text-muted">Analyzing competitor reviews and guest feedback...</p>
+      <!-- <div class="progress mt-3" style="width: 300px;">
+        <div class="progress-bar" role="progressbar" [style.width.%]="getLoadingProgress()" 
+             [attr.aria-valuenow]="getLoadingProgress()" aria-valuemin="0" aria-valuemax="100">
+          {{ getLoadingProgress() }}%
+        </div>
+      </div> -->
+    </div>
+  </div>
+
+  <!-- Main Content (hidden while loading) -->
+  <div *ngIf="!loading" class="main-content">
+    <!-- Error State -->
+    <div *ngIf="error" class="error-section">
+      <p class="error-message">{{ error }}</p>
+      <button (click)="loadGuestDidntLikeData()" class="retry-btn">Retry</button>
+    </div>
+
+
+
   <!-- Competitor Reviews Section -->
   <div class="reviews-section">
-    <h2>What guests didn't like about your competitors:</h2>
+    <h2>What guests didn't like about your competitors (Static Data):</h2>
     <div class="cards-grid">
-      <div class="review-card dislike-card" *ngFor="let item of competitorDislikes">
+      <div class="review-card dislike-card" *ngFor="let item of guestDidntLikeData">
         <h3>{{ item.title }}</h3>
         <p>{{ item.description }}</p>
       </div>
@@ -12,28 +39,34 @@
 
   <div class="reviews-section">
     <h2>What do guests wish they had in your area:</h2>
-    <div class="cards-grid">
-      <div class="review-card wish-card" *ngFor="let item of competitorWishes">
+    <div class="cards-grid" *ngIf="guestWishesData && guestWishesData.length > 0">
+      <div class="review-card wish-card" *ngFor="let item of guestWishesData">
         <h3>{{ item.title }}</h3>
         <p>{{ item.description }}</p>
       </div>
+    </div>
+    <div *ngIf="!guestWishesData || guestWishesData.length === 0">
+      <p>No guest wishes data available.</p>
     </div>
   </div>
 
   <div class="reviews-section">
     <h2>What guests love about your competitors:</h2>
-    <div class="cards-grid">
-      <div class="review-card love-card" *ngFor="let item of competitorLoves">
+    <div class="cards-grid" *ngIf="guestLovedData && guestLovedData.length > 0">
+      <div class="review-card love-card" *ngFor="let item of guestLovedData">
         <h3>{{ item.title }}</h3>
         <p>{{ item.description }}</p>
       </div>
+    </div>
+    <div *ngIf="!guestLovedData || guestLovedData.length === 0">
+      <p>No guest loved data available.</p>
     </div>
   </div>
 
   <div class="reviews-section">
     <h2>Based on competitor reviews, what can you change?</h2>
-    <div class="cards-grid">
-      <div class="review-card action-card" *ngFor="let item of actionableChanges">
+    <div class="cards-grid" *ngIf="whatToImproveData && whatToImproveData.length > 0">
+      <div class="review-card action-card" *ngFor="let item of whatToImproveData">
         <div class="action-icon">
           <i class="fas fa-plus"></i>
         </div>
@@ -43,12 +76,16 @@
         </div>
       </div>
     </div>
+    <div *ngIf="!whatToImproveData || whatToImproveData.length === 0">
+      <p>No improvement suggestions available.</p>
+    </div>
   </div>
 
-  <!-- Help Button -->
-  <div class="help-button">
-    <button class="help-btn" title="Help">
-      <i class="fas fa-question"></i>
-    </button>
+    <!-- Help Button -->
+    <div class="help-button">
+      <button class="help-btn" title="Help">
+        <i class="fas fa-question"></i>
+      </button>
+    </div>
   </div>
 </div>

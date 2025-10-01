@@ -855,8 +855,10 @@ label {
 gallery-image{
   min-height: 500px !important;
   width: 100% !important;
+  object-fit: none !important;
 }
 
 gallery-item{
   width: 100% !important;
+  object-fit: none !important;
 }

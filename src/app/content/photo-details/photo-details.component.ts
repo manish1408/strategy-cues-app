@@ -2,18 +2,19 @@ import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Location } from "@angular/common";
 import photoComparisonData from "../../json_data/photo_comparison_data.json";
-import { GalleryItem, ImageItem } from 'ng-gallery';
-import { CompetitorComparisonService } from '../../_services/competitor-comparison.servie';
-import { SummaryPipe } from '../../summary.pipe';
+import { GalleryItem, ImageItem } from "ng-gallery";
+import { CompetitorComparisonService } from "../../_services/competitor-comparison.servie";
+import { SummaryPipe } from "../../summary.pipe";
 
 @Component({
   selector: "app-photo-details",
   templateUrl: "./photo-details.component.html",
   styleUrl: "./photo-details.component.scss",
-  providers: [SummaryPipe]
+  providers: [SummaryPipe],
 })
 export class PhotoDetailsComponent implements OnInit {
-  activeTab: string = 'photos';
+  operatorId: string = "";
+  activeTab: string = "photos";
   propertyData: any;
   selectedPhotoIndex: number | null = null;
   selectedCompetitorIndex: number = 0;
@@ -31,7 +32,7 @@ export class PhotoDetailsComponent implements OnInit {
   private mouseStartX: number = 0;
   private mouseStartY: number = 0;
   private isMouseDown: boolean = false;
-  private currentSwipeType: 'main' | 'competitor' | null = null;
+  private currentSwipeType: "main" | "competitor" | null = null;
 
   // Thumbnail swipe properties
   private thumbnailTouchStartX: number = 0;
@@ -41,16 +42,22 @@ export class PhotoDetailsComponent implements OnInit {
   private thumbnailMouseStartX: number = 0;
   private thumbnailMouseStartY: number = 0;
   private isThumbnailMouseDown: boolean = false;
-  private currentThumbnailSwipeType: 'main' | 'competitor' | null = null;
+  private currentThumbnailSwipeType: "main" | "competitor" | null = null;
 
   // Caption modal properties
   showCaptionModal: boolean = false;
-  selectedPhotoId: string = '';
-  captionText: string = '';
+  selectedPhotoId: string = "";
+  captionText: string = "";
   isSubmittingCaption: boolean = false;
 
   // Loading state
   isLoading: boolean = true;
+
+  // Platform tabs
+  selectedPropertyPlatform: string = "airbnb";
+  selectedCompetitorPlatform: string = "airbnb";
+  isPropertyGalleryLoading: boolean = false;
+  isCompetitorGalleryLoading: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -62,169 +69,127 @@ export class PhotoDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     const propertyId = this.route.snapshot.params["id"];
-    
-    console.log('Photo Details - Looking for property with ID:', propertyId);
-    console.log('Available properties in JSON:', photoComparisonData.map(p => ({ id: p.listing_id, title: p.property_title })));
-    
-    this.propertyData = photoComparisonData.find(
-      (property) => property.listing_id === propertyId
-    );
-    
-    // If no property data found, create default property data
-    if (!this.propertyData) {
-      this.propertyData = this.getDefaultPropertyData();
-      console.log('No property data found, using default property data');
-    }
-    
-    console.log('Property Data:', this.propertyData);
-    console.log('Property Photos structure:', {
-      Photos: this.propertyData?.Photos,
-      airbnb: this.propertyData?.Photos?.airbnb,
-      booking: this.propertyData?.Photos?.booking,
-      vrbo: this.propertyData?.Photos?.vrbo
-    });
-    console.log('Competitors:', this.propertyData?.competitor);
-    
-    // Get photos from the new structure
-    const allPhotos = this.getAllPropertyPhotos();
-    this.images = [...(allPhotos?.map((photo: any) => 
-      new ImageItem({ src: photo.url, thumb: photo.url })
-    ) || [])];
-    console.log('Your Photos Images Array:', this.images);
-    console.log('Your Photos URLs:', this.images.map(img => img.data?.src));
-    
+    console.log("Property ID:", propertyId);
+
     // API call to get property competitors
     this.loadPropertyCompetitors(propertyId);
-    
-    this.updateCompetitorImages();
+
+    this.updateCompetitorPlatformImages();
   }
 
   // Load property competitors from API
   loadPropertyCompetitors(propertyId: string): void {
-    console.log('Loading property competitors for ID:', propertyId);
-    
-    this.competitorComparisonService.getPropertyCompetitors(propertyId).subscribe({
-      next: (response: any) => {
-        console.log('Property competitors API response:', response);
-        console.log('Competitors data:', response?.data);
-        console.log('Competitors count:', response?.data?.competitors?.length || 0);
-        
-        // Bind the API data to component properties
-        if (response?.data) {
-          // Update property data with API response
-          if (response.data.property) {
-            this.propertyData = { ...this.propertyData, ...response.data.property };
-            
-            // Debug: Log the Photos structure from API
-            console.log('Property Photos from API:', this.propertyData.Photos);
-            console.log('Property full data:', this.propertyData);
-            
-            // Update images array after receiving property data
-            const allPhotos = this.getAllPropertyPhotos();
-            this.images = [...(allPhotos?.map((photo: any) => 
-              new ImageItem({ src: photo.url, thumb: photo.url })
-            ) || [])];
-            console.log('Updated Your Photos Images Array after API:', this.images);
-            console.log('Updated Your Photos URLs:', this.images.map(img => img.data?.src));
-          }
-          
-          // Update competitors data
-          if (response.data.competitors && Array.isArray(response.data.competitors)) {
-            this.propertyData.competitor = response.data.competitors;
-            
-            // Update competitor images if we have competitors
-            if (this.propertyData.competitor.length > 0) {
-              this.updateCompetitorImages();
+    this.competitorComparisonService
+      .getPropertyCompetitors(propertyId)
+      .subscribe({
+        next: (response: any) => {
+          // Bind the API data to component properties
+          if (response?.data) {
+            // Update property data with API response
+            if (response.data.property) {
+              this.propertyData = {
+                ...this.propertyData,
+                ...response.data.property,
+              };
+
+              // Debug: Log the Photos structure from API
+              console.log(
+                "Property Photos from API:",
+                this.propertyData.Photos
+              );
+              console.log("Property full data:", this.propertyData);
+
+              // Update images array after receiving property data
+              this.updatePropertyPlatformImages();
+              console.log(
+                "Updated Your Photos Images Array after API:",
+                this.images
+              );
+              console.log(
+                "Updated Your Photos URLs:",
+                this.images.map((img) => img.data?.src)
+              );
             }
-          } else {
-            // Show default competitors when no data from backend
-            this.propertyData.competitor = this.getDefaultCompetitors();
-            console.log('No competitors found, showing default competitors');
+
+            // Update competitors data
+            if (
+              response.data.competitors &&
+              Array.isArray(response.data.competitors)
+            ) {
+              this.propertyData.competitor = response.data.competitors;
+
+              // Update competitor images if we have competitors
+              if (this.propertyData.competitor.length > 0) {
+                this.updateCompetitorImages();
+              }
+            } else {
+              // Show default competitors when no data from backend
+              this.propertyData.competitor = this.getDefaultCompetitors();
+              console.log("No competitors found, showing default competitors");
+            }
+
+            // Trigger change detection to update the UI
+            this.cdr.detectChanges();
+
+            // Set loading to false after data is loaded
+            this.isLoading = false;
           }
-          
+        },
+        error: (error: any) => {
+          console.log("Error loading property competitors:", error);
+          console.log("Error details:", error?.error);
+
           // Trigger change detection to update the UI
           this.cdr.detectChanges();
-          
-          // Set loading to false after data is loaded
+
+          // Set loading to false even on error
           this.isLoading = false;
-        }
-      },
-      error: (error: any) => {
-        console.log('Error loading property competitors:', error);
-        console.log('Error details:', error?.error);
-        
-        // Show default data when API call fails
-        this.propertyData.competitor = this.getDefaultCompetitors();
-        this.competitorImages = this.getDefaultCompetitorPhotos();
-        console.log('API call failed, showing default competitors and images');
-        
-        // Trigger change detection to update the UI
-        this.cdr.detectChanges();
-        
-        // Set loading to false even on error
-        this.isLoading = false;
-      }
-    });
+        },
+      });
   }
 
   // Helper method to get all property photos from new structure
   getAllPropertyPhotos(): any[] {
     if (!this.propertyData?.Photos) {
       // Return default placeholder photos if no data from backend
-      return this.getDefaultPropertyPhotos();
+      return [{ url: "assets/images/placeholder.jpg" }];
     }
-    
+
     const allPhotos = [];
-    
+
     // Add Airbnb photos
-    if (this.propertyData.Photos.airbnb && Array.isArray(this.propertyData.Photos.airbnb)) {
+    if (
+      this.propertyData.Photos.airbnb &&
+      Array.isArray(this.propertyData.Photos.airbnb)
+    ) {
       allPhotos.push(...this.propertyData.Photos.airbnb);
     }
-    
+
     // Add Booking photos
-    if (this.propertyData.Photos.booking && Array.isArray(this.propertyData.Photos.booking)) {
+    if (
+      this.propertyData.Photos.booking &&
+      Array.isArray(this.propertyData.Photos.booking)
+    ) {
       allPhotos.push(...this.propertyData.Photos.booking);
     }
-    
+
     // Add VRBO photos if available
-    if (this.propertyData.Photos.vrbo && Array.isArray(this.propertyData.Photos.vrbo)) {
+    if (
+      this.propertyData.Photos.vrbo &&
+      Array.isArray(this.propertyData.Photos.vrbo)
+    ) {
       allPhotos.push(...this.propertyData.Photos.vrbo);
     }
-    
+
     // If no photos found from backend, return default photos
     if (allPhotos.length === 0) {
-      return this.getDefaultPropertyPhotos();
+      return [{ url: "assets/images/placeholder.jpg" }];
     }
-    
+
     return allPhotos;
   }
 
-  // Default property photos when backend data is not available
-  getDefaultPropertyPhotos(): any[] {
-    return [
-      {
-        id: 'default-1',
-        url: 'assets/images/placeholder.jpg',
-        caption: 'Property photo placeholder',
-        accessibility_label: 'Default property image',
-        source: 'default'
-      },
-      {
-        id: 'default-2',
-        url: 'assets/images/placeholder.jpg',
-        caption: 'Property photo placeholder',
-        accessibility_label: 'Default property image',
-        source: 'default'
-      },
-      {
-        id: 'default-3',
-        url: 'assets/images/placeholder.jpg',
-        caption: 'Property photo placeholder',
-        accessibility_label: 'Default property image',
-        source: 'default'
-      }
-    ];
-  }
+
 
   // Navigation methods
   goBack(): void {
@@ -236,24 +201,24 @@ export class PhotoDetailsComponent implements OnInit {
   }
 
   openBookingLink(platform: string): void {
-    let url = '';
+    let url = "";
     switch (platform) {
-      case 'Airbnb':
-        url = this.propertyData?.airbnb_link;
+      case "Airbnb":
+        url = this.propertyData?.AirbnbUrl;
         break;
-      case 'Booking':
-        url = this.propertyData?.booking_link;
+      case "Booking":
+        url = this.propertyData?.BookingUrl;
         break;
-      case 'Pricelab':
-        url = this.propertyData?.pricelabs_link;
+      case "Pricelab":
+        url = this.propertyData?.PricelabsUrl;
         break;
-      // case 'VRBO':
-      //   url = this.propertyData?.vrbo_link;
-      //   break;
+      case "VRBO":
+        url = this.propertyData?.VRBOUrl;
+        break;
     }
-    
+
     if (url) {
-      window.open(url, '_blank');
+      window.open(url, "_blank");
     }
   }
 
@@ -304,19 +269,23 @@ export class PhotoDetailsComponent implements OnInit {
 
   // Get total property photos count
   getTotalPropertyPhotos(): number {
-    return (this.propertyData?.Photos?.airbnb?.length || 0) + 
-           (this.propertyData?.Photos?.booking?.length || 0) + 
-           (this.propertyData?.Photos?.vrbo?.length || 0);
+    return (
+      (this.propertyData?.Photos?.airbnb?.length || 0) +
+      (this.propertyData?.Photos?.booking?.length || 0) +
+      (this.propertyData?.Photos?.vrbo?.length || 0)
+    );
   }
 
   // Get total competitor photos for current competitor
   getTotalCompetitorPhotosCount(): number {
     const competitor = this.getCurrentCompetitor();
     if (!competitor) return 0;
-    
-    return (competitor.propertyAirbnbPhotos?.length || 0) + 
-           (competitor.propertyBookingPhotos?.length || 0) + 
-           (competitor.propertyVrboPhotos?.length || 0);
+
+    return (
+      (competitor.propertyAirbnbPhotos?.length || 0) +
+      (competitor.propertyBookingPhotos?.length || 0) +
+      (competitor.propertyVrboPhotos?.length || 0)
+    );
   }
 
   // Get photo gap between competitor and property
@@ -324,27 +293,53 @@ export class PhotoDetailsComponent implements OnInit {
     return this.getTotalCompetitorPhotosCount() - this.getTotalPropertyPhotos();
   }
 
+  // Get total photos for any competitor by index or competitor object
+  getCompetitorPhotosCount(competitor: any): number {
+    if (!competitor) return 0;
+    return (
+      (competitor.propertyAirbnbPhotos?.length || 0) +
+      (competitor.propertyBookingPhotos?.length || 0) +
+      (competitor.propertyVrboPhotos?.length || 0)
+    );
+  }
+
+  // Get photo gap for a specific competitor
+  getCompetitorPhotoGap(competitor: any): number {
+    return (
+      this.getCompetitorPhotosCount(competitor) - this.getTotalPropertyPhotos()
+    );
+  }
+
   getTotalCompetitorPhotos(): number {
     const currentCompetitor = this.getCurrentCompetitor();
     if (!currentCompetitor) return 0;
-    
+
     let totalPhotos = 0;
-    
+
     // Count Airbnb photos
-    if (currentCompetitor.propertyAirbnbPhotos && Array.isArray(currentCompetitor.propertyAirbnbPhotos)) {
+    if (
+      currentCompetitor.propertyAirbnbPhotos &&
+      Array.isArray(currentCompetitor.propertyAirbnbPhotos)
+    ) {
       totalPhotos += currentCompetitor.propertyAirbnbPhotos.length;
     }
-    
+
     // Count Booking photos
-    if (currentCompetitor.propertyBookingPhotos && Array.isArray(currentCompetitor.propertyBookingPhotos)) {
+    if (
+      currentCompetitor.propertyBookingPhotos &&
+      Array.isArray(currentCompetitor.propertyBookingPhotos)
+    ) {
       totalPhotos += currentCompetitor.propertyBookingPhotos.length;
     }
-    
+
     // Count VRBO photos
-    if (currentCompetitor.propertyVrboPhotos && Array.isArray(currentCompetitor.propertyVrboPhotos)) {
+    if (
+      currentCompetitor.propertyVrboPhotos &&
+      Array.isArray(currentCompetitor.propertyVrboPhotos)
+    ) {
       totalPhotos += currentCompetitor.propertyVrboPhotos.length;
     }
-    
+
     return totalPhotos;
   }
 
@@ -422,156 +417,116 @@ export class PhotoDetailsComponent implements OnInit {
   // Force refresh galleries
   refreshGalleries(): void {
     this.galleryRefreshKey++;
-    console.log('Refreshing galleries with key:', this.galleryRefreshKey);
+    console.log("Refreshing galleries with key:", this.galleryRefreshKey);
   }
 
   updateCompetitorImages(): void {
-    console.log('Updating competitor images. Selected index:', this.selectedCompetitorIndex);
-    
-    // If no competitor is selected (selectedCompetitorIndex === -1), show empty array
-    if (this.selectedCompetitorIndex === -1) {
-      this.competitorImages = [];
-      console.log('No competitor selected, clearing competitor images');
-      return;
-    }
-    
-    const currentCompetitor = this.getCurrentCompetitor();
-    console.log('Current competitor:', currentCompetitor);
-    console.log('Current competitor photos structure:', {
-      propertyAirbnbPhotos: currentCompetitor?.propertyAirbnbPhotos,
-      propertyBookingPhotos: currentCompetitor?.propertyBookingPhotos,
-      propertyVrboPhotos: currentCompetitor?.propertyVrboPhotos
-    });
-    
-    // Collect all photos from different platforms
-    const allCompetitorPhotos: any[] = [];
-    
-    // Add Airbnb photos
-    if (currentCompetitor?.propertyAirbnbPhotos && Array.isArray(currentCompetitor.propertyAirbnbPhotos)) {
-      allCompetitorPhotos.push(...currentCompetitor.propertyAirbnbPhotos);
-    }
-    
-    // Add Booking photos
-    if (currentCompetitor?.propertyBookingPhotos && Array.isArray(currentCompetitor.propertyBookingPhotos)) {
-      allCompetitorPhotos.push(...currentCompetitor.propertyBookingPhotos);
-    }
-    
-    // Add VRBO photos
-    if (currentCompetitor?.propertyVrboPhotos && Array.isArray(currentCompetitor.propertyVrboPhotos)) {
-      allCompetitorPhotos.push(...currentCompetitor.propertyVrboPhotos);
-    }
-    
-    if (allCompetitorPhotos.length > 0) {
-      // Create a new array to force change detection
-      this.competitorImages = [...allCompetitorPhotos.map((photo: any) => 
-        new ImageItem({ src: photo.url, thumb: photo.url })
-      )];
-      // Force gallery refresh
-      this.galleryRefreshKey++;
-    } else {
-      // Show default competitor photos when no data from backend
-      this.competitorImages = this.getDefaultCompetitorPhotos();
-      console.log('No competitor photos found, showing default competitor images');
-    }
+    console.log(
+      "Updating competitor images. Selected index:",
+      this.selectedCompetitorIndex
+    );
+
+    // Use platform-specific images based on selected tab
+    this.updateCompetitorPlatformImages();
   }
 
   // Default competitor photos when backend data is not available
   getDefaultCompetitorPhotos(): any[] {
     return [
       {
-        id: 'competitor-default-1',
-        url: 'assets/images/placeholder.jpg',
-        caption: 'Competitor photo placeholder',
-        accessibility_label: 'Default competitor image',
-        source: 'default'
+        id: "competitor-default-1",
+        url: "assets/images/placeholder.jpg",
+        caption: "Competitor photo placeholder",
+        accessibility_label: "Default competitor image",
+        source: "default",
       },
       {
-        id: 'competitor-default-2',
-        url: 'assets/images/placeholder.jpg',
-        caption: 'Competitor photo placeholder',
-        accessibility_label: 'Default competitor image',
-        source: 'default'
-      }
-    ].map(photo => new ImageItem({ src: photo.url, thumb: photo.url }));
+        id: "competitor-default-2",
+        url: "assets/images/placeholder.jpg",
+        caption: "Competitor photo placeholder",
+        accessibility_label: "Default competitor image",
+        source: "default",
+      },
+    ].map((photo) => new ImageItem({ src: photo.url, thumb: photo.url }));
   }
 
   // Default competitors when backend data is not available
   getDefaultCompetitors(): any[] {
     return [
       {
-        id: 'default-competitor-1',
-        name: 'Sample Competitor 1',
+        id: "default-competitor-1",
+        name: "Sample Competitor 1",
         num_photos: 2,
         reviews_score: 4.5,
         reviews_count: 25,
         location_score: 4.2,
         propertyAirbnbPhotos: [
           {
-            id: 'default-airbnb-1',
-            url: 'assets/images/placeholder.jpg',
-            caption: 'Default Airbnb photo',
-            accessibility_label: 'Default competitor image',
-            source: 'airbnb'
-          }
+            id: "default-airbnb-1",
+            url: "assets/images/placeholder.jpg",
+            caption: "Default Airbnb photo",
+            accessibility_label: "Default competitor image",
+            source: "airbnb",
+          },
         ],
         propertyBookingPhotos: [
           {
-            id: 'default-booking-1',
-            url: 'assets/images/placeholder.jpg',
-            caption: 'Default Booking photo',
-            accessibility_label: 'Default competitor image',
-            source: 'booking'
-          }
+            id: "default-booking-1",
+            url: "assets/images/placeholder.jpg",
+            caption: "Default Booking photo",
+            accessibility_label: "Default competitor image",
+            source: "booking",
+          },
         ],
         propertyVrboPhotos: null,
-        airbnb_link: '#',
-        booking_link: '#',
-        pricelabs_link: null
+        airbnb_link: "#",
+        booking_link: "#",
+        pricelabs_link: null,
       },
       {
-        id: 'default-competitor-2',
-        name: 'Sample Competitor 2',
+        id: "default-competitor-2",
+        name: "Sample Competitor 2",
         num_photos: 2,
         reviews_score: 4.3,
         reviews_count: 18,
         location_score: 4.0,
         propertyAirbnbPhotos: [
           {
-            id: 'default-airbnb-2',
-            url: 'assets/images/placeholder.jpg',
-            caption: 'Default Airbnb photo',
-            accessibility_label: 'Default competitor image',
-            source: 'airbnb'
-          }
+            id: "default-airbnb-2",
+            url: "assets/images/placeholder.jpg",
+            caption: "Default Airbnb photo",
+            accessibility_label: "Default competitor image",
+            source: "airbnb",
+          },
         ],
         propertyBookingPhotos: [
           {
-            id: 'default-booking-2',
-            url: 'assets/images/placeholder.jpg',
-            caption: 'Default Booking photo',
-            accessibility_label: 'Default competitor image',
-            source: 'booking'
-          }
+            id: "default-booking-2",
+            url: "assets/images/placeholder.jpg",
+            caption: "Default Booking photo",
+            accessibility_label: "Default competitor image",
+            source: "booking",
+          },
         ],
         propertyVrboPhotos: null,
-        airbnb_link: '#',
-        booking_link: '#',
-        pricelabs_link: null
-      }
+        airbnb_link: "#",
+        booking_link: "#",
+        pricelabs_link: null,
+      },
     ];
   }
 
   // Default property data when no data is available
   getDefaultPropertyData(): any {
     return {
-      listing_id: 'default-property',
-      property_title: 'Default Property',
-      listing_name: 'Default Property Name',
+      listing_id: "default-property",
+      property_title: "Default Property",
+      listing_name: "Default Property Name",
       num_photos: 3,
       Photos: {
-        airbnb: this.getDefaultPropertyPhotos(),
+        airbnb: [{ url: "assets/images/placeholder.jpg" }],
         booking: [],
-        vrbo: null
+        vrbo: null,
       },
       reviews: {
         cleanliness: 4.5,
@@ -579,33 +534,33 @@ export class PhotoDetailsComponent implements OnInit {
         checkin: 4.5,
         communication: 4.5,
         location: 4.5,
-        value: 4.5
+        value: 4.5,
       },
       reviews_count: 10,
-      competitor: []
+      competitor: [],
     };
   }
 
   getAmenityIcon(iconString: string): string {
     const iconMap: { [key: string]: string } = {
-      'SYSTEM_COOKING_BASICS': 'fa-utensils',
-      'SYSTEM_WI_FI': 'fa-wifi',
-      'SYSTEM_POOL': 'fa-swimming-pool',
-      'SYSTEM_TV': 'fa-tv',
-      'SYSTEM_ELEVATOR': 'fa-elevator',
-      'SYSTEM_PARKING': 'fa-parking',
-      'SYSTEM_AIR_CONDITIONING': 'fa-snowflake',
-      'SYSTEM_BALCONY': 'fa-home',
-      'SYSTEM_VIEW': 'fa-eye',
-      'SYSTEM_KITCHEN': 'fa-utensils',
-      'SYSTEM_INTERNET': 'fa-wifi',
-      'SYSTEM_PRIVATE_POOL': 'fa-swimming-pool',
-      'SYSTEM_OUTDOOR_POOL': 'fa-swimming-pool',
-      'SYSTEM_SMOKE_FREE': 'fa-ban-smoking',
-      'SYSTEM_GENERAL': 'fa-check-circle'
+      SYSTEM_COOKING_BASICS: "fa-utensils",
+      SYSTEM_WI_FI: "fa-wifi",
+      SYSTEM_POOL: "fa-swimming-pool",
+      SYSTEM_TV: "fa-tv",
+      SYSTEM_ELEVATOR: "fa-elevator",
+      SYSTEM_PARKING: "fa-parking",
+      SYSTEM_AIR_CONDITIONING: "fa-snowflake",
+      SYSTEM_BALCONY: "fa-home",
+      SYSTEM_VIEW: "fa-eye",
+      SYSTEM_KITCHEN: "fa-utensils",
+      SYSTEM_INTERNET: "fa-wifi",
+      SYSTEM_PRIVATE_POOL: "fa-swimming-pool",
+      SYSTEM_OUTDOOR_POOL: "fa-swimming-pool",
+      SYSTEM_SMOKE_FREE: "fa-ban-smoking",
+      SYSTEM_GENERAL: "fa-check-circle",
     };
-    
-    return iconMap[iconString] || 'fa-check-circle';
+
+    return iconMap[iconString] || "fa-check-circle";
   }
 
   previousCompetitor(): void {
@@ -617,10 +572,13 @@ export class PhotoDetailsComponent implements OnInit {
   }
 
   nextCompetitor(): void {
-    console.log('Next competitor clicked. Current index:', this.selectedCompetitorIndex);
-    console.log('Total competitors:', this.propertyData?.competitor?.length);
-    console.log('Current competitor:', this.getCurrentCompetitor());
-    
+    console.log(
+      "Next competitor clicked. Current index:",
+      this.selectedCompetitorIndex
+    );
+    console.log("Total competitors:", this.propertyData?.competitor?.length);
+    console.log("Current competitor:", this.getCurrentCompetitor());
+
     if (
       this.propertyData?.competitor &&
       this.selectedCompetitorIndex < this.propertyData.competitor.length - 1
@@ -628,10 +586,10 @@ export class PhotoDetailsComponent implements OnInit {
       this.selectedCompetitorIndex++;
       this.currentCompetitorImageIndex = 0;
       this.updateCompetitorImages();
-      console.log('Moved to competitor index:', this.selectedCompetitorIndex);
-      console.log('New competitor:', this.getCurrentCompetitor());
+      console.log("Moved to competitor index:", this.selectedCompetitorIndex);
+      console.log("New competitor:", this.getCurrentCompetitor());
     } else {
-      console.log('Cannot move to next competitor - at end or no competitors');
+      console.log("Cannot move to next competitor - at end or no competitors");
     }
   }
 
@@ -703,46 +661,197 @@ export class PhotoDetailsComponent implements OnInit {
     return this.currentImageIndex === 0;
   }
 
+  // Platform tab switching methods
+  selectPropertyPlatform(platform: string): void {
+    this.selectedPropertyPlatform = platform;
+    this.isPropertyGalleryLoading = true;
+
+    // Update images based on selected platform
+    setTimeout(() => {
+      this.updatePropertyPlatformImages();
+      this.isPropertyGalleryLoading = false;
+    }, 300);
+  }
+
+  selectCompetitorPlatform(platform: string): void {
+    this.selectedCompetitorPlatform = platform;
+    this.isCompetitorGalleryLoading = true;
+
+    // Update images based on selected platform
+    setTimeout(() => {
+      this.updateCompetitorPlatformImages();
+      this.isCompetitorGalleryLoading = false;
+    }, 300);
+  }
+
+  // Update property images based on selected platform
+  updatePropertyPlatformImages(): void {
+    let platformPhotos: any[] = [];
+
+    switch (this.selectedPropertyPlatform) {
+      case "airbnb":
+        platformPhotos = this.propertyData?.Photos?.airbnb || [];
+        break;
+      case "booking":
+        platformPhotos = this.propertyData?.Photos?.booking || [];
+        break;
+      case "vrbo":
+        platformPhotos = this.propertyData?.Photos?.vrbo || [];
+        break;
+    }
+
+    this.images = platformPhotos.map(
+      (photo: any) => new ImageItem({ src: photo.url, thumb: photo.url })
+    );
+  }
+
+  // Update competitor images based on selected platform
+  updateCompetitorPlatformImages(): void {
+    const competitor = this.getCurrentCompetitor();
+    if (!competitor) return;
+
+    let platformPhotos: any[] = [];
+
+    switch (this.selectedCompetitorPlatform) {
+      case "airbnb":
+        platformPhotos = competitor.propertyAirbnbPhotos || [];
+        break;
+      case "booking":
+        platformPhotos = competitor.propertyBookingPhotos || [];
+        break;
+      case "vrbo":
+        platformPhotos = competitor.propertyVrboPhotos || [];
+        break;
+    }
+
+    this.competitorImages = platformPhotos.map(
+      (photo: any) => new ImageItem({ src: photo.url, thumb: photo.url })
+    );
+  }
+
+  // Get platform photo count for property
+  getPropertyPlatformPhotoCount(platform: string): number {
+    switch (platform) {
+      case "airbnb":
+        return this.propertyData?.Photos?.airbnb?.length || 0;
+      case "booking":
+        return this.propertyData?.Photos?.booking?.length || 0;
+      case "vrbo":
+        return this.propertyData?.Photos?.vrbo?.length || 0;
+      default:
+        return 0;
+    }
+  }
+
+  // Get platform photo count for competitor
+  getCompetitorPlatformPhotoCount(platform: string): number {
+    const competitor = this.getCurrentCompetitor();
+    if (!competitor) return 0;
+
+    switch (platform) {
+      case "airbnb":
+        return competitor.propertyAirbnbPhotos?.length || 0;
+      case "booking":
+        return competitor.propertyBookingPhotos?.length || 0;
+      case "vrbo":
+        return competitor.propertyVrboPhotos?.length || 0;
+      default:
+        return 0;
+    }
+  }
+
+  // Get platform photo gap (property_count - competitor_count)
+  getPlatformPhotoGap(competitor: any, platform: string): number {
+    const propertyCount = this.getPropertyPlatformPhotoCount(platform);
+    let competitorCount = 0;
+
+    switch (platform) {
+      case "airbnb":
+        competitorCount = competitor.propertyAirbnbPhotos?.length || 0;
+        break;
+      case "booking":
+        competitorCount = competitor.propertyBookingPhotos?.length || 0;
+        break;
+      case "vrbo":
+        competitorCount = competitor.propertyVrboPhotos?.length || 0;
+        break;
+    }
+
+    return propertyCount - competitorCount;
+  }
+
+  // Get photo gap status (Ahead/Behind/Equal)
+  getPhotoGapStatus(gap: number): string {
+    if (gap > 0) {
+      return "Ahead";
+    } else if (gap < 0) {
+      return "Behind";
+    } else {
+      return "Equal";
+    }
+  }
+
+  // Get absolute photo gap value
+  getAbsolutePhotoGap(gap: number): number {
+    return Math.abs(gap);
+  }
+
+  // Get gap status class for styling
+  getGapStatusClass(gap: number): string {
+    if (gap > 0) {
+      return "gap-ahead";
+    } else if (gap < 0) {
+      return "gap-behind";
+    } else {
+      return "gap-equal";
+    }
+  }
+
   // Photo suggestions methods
   getPhotoSuggestions(): any[] {
     if (this.propertyData?.recommendations) {
       return this.propertyData.recommendations.map((rec: any) => ({
         title: rec.title,
-        available: rec.impact === 'high' || rec.impact === 'medium',
+        available: rec.impact === "high" || rec.impact === "medium",
         description: rec.details,
         impact: rec.impact,
         effort: rec.effort,
-        id: rec.id
+        id: rec.id,
       }));
     }
-    
+
     // Fallback data if no recommendations in JSON
     return [
       {
         title: "Floor plan",
         available: false,
-        description: "A floor plan helps guests understand the layout and space distribution of your property."
+        description:
+          "A floor plan helps guests understand the layout and space distribution of your property.",
       },
       {
         title: "Aerial photo",
         available: true,
-        description: "Aerial photos show the property's location, surroundings, and neighborhood context."
+        description:
+          "Aerial photos show the property's location, surroundings, and neighborhood context.",
       },
       {
         title: "Best reviews",
         available: false,
-        description: "Highlight your best guest reviews to build trust and showcase positive experiences."
+        description:
+          "Highlight your best guest reviews to build trust and showcase positive experiences.",
       },
       {
         title: "High speed internet",
         available: false,
-        description: "Show your internet setup and speed test results to attract business travelers."
+        description:
+          "Show your internet setup and speed test results to attract business travelers.",
       },
       {
         title: "Map with points of interest",
         available: false,
-        description: "A map showing nearby attractions, restaurants, and transportation options."
-      }
+        description:
+          "A map showing nearby attractions, restaurants, and transportation options.",
+      },
     ];
   }
 
@@ -821,7 +930,7 @@ export class PhotoDetailsComponent implements OnInit {
   }
 
   // Touch event handlers
-  onTouchStart(event: TouchEvent, type: 'main' | 'competitor'): void {
+  onTouchStart(event: TouchEvent, type: "main" | "competitor"): void {
     this.currentSwipeType = type;
     this.touchStartX = event.touches[0].clientX;
     this.touchStartY = event.touches[0].clientY;
@@ -832,7 +941,7 @@ export class PhotoDetailsComponent implements OnInit {
     event.preventDefault();
   }
 
-  onTouchEnd(event: TouchEvent, type: 'main' | 'competitor'): void {
+  onTouchEnd(event: TouchEvent, type: "main" | "competitor"): void {
     this.touchEndX = event.changedTouches[0].clientX;
     this.touchEndY = event.changedTouches[0].clientY;
     this.handleSwipe(type);
@@ -840,7 +949,7 @@ export class PhotoDetailsComponent implements OnInit {
   }
 
   // Mouse event handlers for desktop
-  onMouseDown(event: MouseEvent, type: 'main' | 'competitor'): void {
+  onMouseDown(event: MouseEvent, type: "main" | "competitor"): void {
     this.currentSwipeType = type;
     this.mouseStartX = event.clientX;
     this.mouseStartY = event.clientY;
@@ -853,38 +962,41 @@ export class PhotoDetailsComponent implements OnInit {
     event.preventDefault();
   }
 
-  onMouseUp(event: MouseEvent, type: 'main' | 'competitor'): void {
+  onMouseUp(event: MouseEvent, type: "main" | "competitor"): void {
     if (!this.isMouseDown) return;
-    
+
     const mouseEndX = event.clientX;
     const mouseEndY = event.clientY;
-    
+
     // Calculate swipe distance
     const deltaX = mouseEndX - this.mouseStartX;
     const deltaY = mouseEndY - this.mouseStartY;
-    
+
     // Only trigger swipe if horizontal movement is greater than vertical
     if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
       this.touchStartX = this.mouseStartX;
       this.touchEndX = mouseEndX;
       this.handleSwipe(type);
     }
-    
+
     this.isMouseDown = false;
     this.currentSwipeType = null;
   }
 
   // Handle swipe logic
-  private handleSwipe(type: 'main' | 'competitor'): void {
+  private handleSwipe(type: "main" | "competitor"): void {
     const deltaX = this.touchEndX - this.touchStartX;
     const deltaY = this.touchEndY - this.touchStartY;
-    
+
     // Minimum swipe distance
     const minSwipeDistance = 50;
-    
+
     // Only trigger if horizontal swipe is greater than vertical
-    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minSwipeDistance) {
-      if (type === 'main') {
+    if (
+      Math.abs(deltaX) > Math.abs(deltaY) &&
+      Math.abs(deltaX) > minSwipeDistance
+    ) {
+      if (type === "main") {
         if (deltaX > 0) {
           // Swipe right - go to previous image
           this.previousImage();
@@ -892,7 +1004,7 @@ export class PhotoDetailsComponent implements OnInit {
           // Swipe left - go to next image
           this.nextImage();
         }
-      } else if (type === 'competitor') {
+      } else if (type === "competitor") {
         if (deltaX > 0) {
           // Swipe right - go to previous competitor image
           this.previousCompetitorImage();
@@ -905,15 +1017,21 @@ export class PhotoDetailsComponent implements OnInit {
   }
 
   // Thumbnail navigation methods for grid layout
-  getVisibleThumbnails(type: 'main' | 'competitor'): any[] {
-    const currentIndex = type === 'main' ? this.currentImageIndex : this.currentCompetitorImageIndex;
-    const photos = type === 'main' ? this.getAllPropertyPhotos() : this.getCurrentCompetitor()?.photos;
-    
+  getVisibleThumbnails(type: "main" | "competitor"): any[] {
+    const currentIndex =
+      type === "main"
+        ? this.currentImageIndex
+        : this.currentCompetitorImageIndex;
+    const photos =
+      type === "main"
+        ? this.getAllPropertyPhotos()
+        : this.getCurrentCompetitor()?.photos;
+
     if (!photos || photos.length === 0) return [];
-    
+
     // Always show 3 thumbnails: previous, current, next
     const visibleThumbnails = [];
-    
+
     for (let i = -1; i <= 1; i++) {
       const index = currentIndex + i;
       if (index >= 0 && index < photos.length) {
@@ -923,17 +1041,20 @@ export class PhotoDetailsComponent implements OnInit {
         visibleThumbnails.push(null);
       }
     }
-    
+
     return visibleThumbnails;
   }
 
-  getThumbnailIndex(type: 'main' | 'competitor', visibleIndex: number): number {
-    const currentIndex = type === 'main' ? this.currentImageIndex : this.currentCompetitorImageIndex;
+  getThumbnailIndex(type: "main" | "competitor", visibleIndex: number): number {
+    const currentIndex =
+      type === "main"
+        ? this.currentImageIndex
+        : this.currentCompetitorImageIndex;
     return currentIndex + (visibleIndex - 1); // visibleIndex: 0=prev, 1=current, 2=next
   }
 
   // Thumbnail touch event handlers
-  onThumbnailTouchStart(event: TouchEvent, type: 'main' | 'competitor'): void {
+  onThumbnailTouchStart(event: TouchEvent, type: "main" | "competitor"): void {
     this.currentThumbnailSwipeType = type;
     this.thumbnailTouchStartX = event.touches[0].clientX;
     this.thumbnailTouchStartY = event.touches[0].clientY;
@@ -943,7 +1064,7 @@ export class PhotoDetailsComponent implements OnInit {
     event.preventDefault();
   }
 
-  onThumbnailTouchEnd(event: TouchEvent, type: 'main' | 'competitor'): void {
+  onThumbnailTouchEnd(event: TouchEvent, type: "main" | "competitor"): void {
     this.thumbnailTouchEndX = event.changedTouches[0].clientX;
     this.thumbnailTouchEndY = event.changedTouches[0].clientY;
     this.handleThumbnailSwipe(type);
@@ -951,7 +1072,7 @@ export class PhotoDetailsComponent implements OnInit {
   }
 
   // Thumbnail mouse event handlers
-  onThumbnailMouseDown(event: MouseEvent, type: 'main' | 'competitor'): void {
+  onThumbnailMouseDown(event: MouseEvent, type: "main" | "competitor"): void {
     this.currentThumbnailSwipeType = type;
     this.thumbnailMouseStartX = event.clientX;
     this.thumbnailMouseStartY = event.clientY;
@@ -963,34 +1084,37 @@ export class PhotoDetailsComponent implements OnInit {
     event.preventDefault();
   }
 
-  onThumbnailMouseUp(event: MouseEvent, type: 'main' | 'competitor'): void {
+  onThumbnailMouseUp(event: MouseEvent, type: "main" | "competitor"): void {
     if (!this.isThumbnailMouseDown) return;
-    
+
     const mouseEndX = event.clientX;
     const mouseEndY = event.clientY;
-    
+
     const deltaX = mouseEndX - this.thumbnailMouseStartX;
     const deltaY = mouseEndY - this.thumbnailMouseStartY;
-    
+
     if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
       this.thumbnailTouchStartX = this.thumbnailMouseStartX;
       this.thumbnailTouchEndX = mouseEndX;
       this.handleThumbnailSwipe(type);
     }
-    
+
     this.isThumbnailMouseDown = false;
     this.currentThumbnailSwipeType = null;
   }
 
   // Handle thumbnail swipe logic
-  private handleThumbnailSwipe(type: 'main' | 'competitor'): void {
+  private handleThumbnailSwipe(type: "main" | "competitor"): void {
     const deltaX = this.thumbnailTouchEndX - this.thumbnailTouchStartX;
     const deltaY = this.thumbnailTouchEndY - this.thumbnailTouchStartY;
-    
+
     const minSwipeDistance = 50;
-    
-    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minSwipeDistance) {
-      if (type === 'main') {
+
+    if (
+      Math.abs(deltaX) > Math.abs(deltaY) &&
+      Math.abs(deltaX) > minSwipeDistance
+    ) {
+      if (type === "main") {
         if (deltaX > 0) {
           // Swipe right - go to previous image
           this.previousImage();
@@ -998,7 +1122,7 @@ export class PhotoDetailsComponent implements OnInit {
           // Swipe left - go to next image
           this.nextImage();
         }
-      } else if (type === 'competitor') {
+      } else if (type === "competitor") {
         if (deltaX > 0) {
           // Swipe right - go to previous competitor image
           this.previousCompetitorImage();
@@ -1013,14 +1137,14 @@ export class PhotoDetailsComponent implements OnInit {
   // Caption modal methods
   openCaptionModal(photoId: string): void {
     this.selectedPhotoId = photoId;
-    this.captionText = '';
+    this.captionText = "";
     this.showCaptionModal = true;
   }
 
   closeCaptionModal(): void {
     this.showCaptionModal = false;
-    this.selectedPhotoId = '';
-    this.captionText = '';
+    this.selectedPhotoId = "";
+    this.captionText = "";
     this.isSubmittingCaption = false;
   }
 
@@ -1034,12 +1158,15 @@ export class PhotoDetailsComponent implements OnInit {
     // Simulate API call - replace with actual API call
     setTimeout(() => {
       // Here you would typically make an API call to save the caption
-      console.log(`Adding caption for photo ${this.selectedPhotoId}:`, this.captionText);
-      
+      console.log(
+        `Adding caption for photo ${this.selectedPhotoId}:`,
+        this.captionText
+      );
+
       // Simulate success
       this.isSubmittingCaption = false;
       this.closeCaptionModal();
-      
+
       // You might want to show a success message here
       // this.showSuccessMessage('Caption added successfully!');
     }, 2000);
