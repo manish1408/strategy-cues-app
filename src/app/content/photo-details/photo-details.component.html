@@ -350,7 +350,7 @@
             </div>
             
             <!-- VRBO Stats -->
-            <div class="platform-badge-group">
+            <!-- <div class="platform-badge-group">
               <span class="platform-label">
                 <i class="fas fa-home"></i> VRBO
               </span>
@@ -365,7 +365,7 @@
                   Your photos {{getAbsolutePhotoGap(getPlatformPhotoGap(comp, 'vrbo'))}} {{getPhotoGapStatus(getPlatformPhotoGap(comp, 'vrbo'))}}
                 </ng-container>
               </span>
-            </div>
+            </div> -->
           </div>
         </div>
         <div class="competitor-links">
@@ -375,9 +375,9 @@
           <a [href]="comp.booking_link" target="_blank" class="platform-link booking">
             <i class="fas fa-bed"></i>
           </a>
-          <a *ngIf="comp.pricelabs_link" [href]="comp.pricelabs_link" target="_blank" class="platform-link pricelab" title="View on Pricelab">
+          <!-- <a *ngIf="comp.pricelabs_link" [href]="comp.pricelabs_link" target="_blank" class="platform-link pricelab" title="View on Pricelab">
             <i class="fas fa-chart-line"></i>
-          </a>
+          </a> -->
           <!-- <span *ngIf="!comp.pricelabs_link" class="platform-link pricelab disabled" title="No Pricelab URL available">
             <i class="fas fa-chart-line"></i>
           </span> -->
