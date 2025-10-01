@@ -14,6 +14,33 @@
   //   height: 100%;
 }
 
+/* Loading Container */
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  background: #f8f9fa;
+
+  .spinner-container {
+    text-align: center;
+    padding: 2rem;
+
+    .spinner-border {
+      width: 3rem;
+      height: 3rem;
+      border-width: 0.3rem;
+    }
+
+    .loading-text {
+      color: #6c757d;
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-top: 1rem;
+    }
+  }
+}
+
 /* Top Navigation */
 .top-navigation {
   display: flex;
@@ -2018,128 +2045,84 @@
   background-color: #00A699;
 }
 
-/* Platform Stats Table */
-.platform-stats-table {
-  width: 100%;
-  border: none;
-  border-radius: 12px;
-  overflow: hidden;
+/* Platform Stats Badges */
+.platform-stats-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   margin-bottom: 16px;
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.table-header {
-  display: flex;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-bottom: none;
-  font-weight: 600;
-  font-size: 13px;
-  color: white;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.header-cell {
-  flex: 1;
-  padding: 12px 8px;
-  text-align: center;
-  border-right: 1px solid rgba(255, 255, 255, 0.2);
-  
-  &:last-child {
-    border-right: none;
-  }
-}
-
-.table-row {
-  display: flex;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  transition: all 0.2s ease;
-  
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.02);
-    transform: translateY(-1px);
-  }
-  
-  &:last-child {
-    border-bottom: none;
-  }
-}
-
-.cell {
-  flex: 1;
-  padding: 10px 8px;
-  text-align: center;
-  font-size: 13px;
-  border-right: 1px solid rgba(0, 0, 0, 0.05);
+.platform-badge-group {
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-weight: 500;
+  gap: 8px;
+  flex-wrap: wrap;
   
-  &:last-child {
-    border-right: none;
-  }
-}
-
-.platform-cell {
-  justify-content: flex-start;
-  font-weight: 600;
-  color: #2c3e50;
-  
-  i {
-    margin-right: 6px;
-    font-size: 16px;
-    width: 20px;
-    text-align: center;
-  }
-}
-
-.airbnb-row {
-  .platform-cell i {
-    color: #FF5A5F;
-  }
-  
-  &:hover {
-    background-color: rgba(255, 90, 95, 0.05);
-  }
-}
-
-.booking-row {
-  .platform-cell i {
-    color: #003580;
-  }
-  
-  &:hover {
-    background-color: rgba(0, 53, 128, 0.05);
-  }
-}
-
-.vrbo-row {
-  .platform-cell i {
-    color: #00A699;
-  }
-  
-  &:hover {
-    background-color: rgba(0, 166, 153, 0.05);
-  }
-}
-
-/* Enhanced gap styling */
-.cell {
-  &.gap-positive {
-    color: #27ae60;
+  .platform-label {
     font-weight: 600;
+    font-size: 13px;
+    color: #2c3e50;
+    min-width: 90px;
+    
+    i {
+      margin-right: 6px;
+      font-size: 14px;
+    }
+  }
+  
+  .badge {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 20px;
+  }
+  
+  .gap-badge {
+    font-weight: 600;
+  }
+}
+
+/* Platform-specific icon colors */
+.platform-badge-group {
+  &:nth-child(1) .platform-label i {
+    color: #FF5A5F; // Airbnb
+  }
+  
+  &:nth-child(2) .platform-label i {
+    color: #003580; // Booking
+  }
+  
+  &:nth-child(3) .platform-label i {
+    color: #00A699; // VRBO
+  }
+}
+
+/* Enhanced gap badge styling */
+.gap-badge {
+  &.gap-positive {
+    background-color: #d4edda;
+    color: #155724;
   }
   
   &.gap-negative {
-    color: #e74c3c;
-    font-weight: 600;
+    background-color: #f8d7da;
+    color: #721c24;
   }
   
   &.gap-neutral {
-    color: #95a5a6;
+    background-color: #e2e3e5;
+    color: #6c757d;
+  }
+  
+  &.gap-ahead {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  
+  &.gap-behind {
+    background-color: #f8d7da;
+    color: #721c24;
   }
 }
 
@@ -2159,6 +2142,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
   
   .platform-icon {
     font-size: 14px;

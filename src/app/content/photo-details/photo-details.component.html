@@ -1,4 +1,16 @@
 <div class="photo-details-container">
+  <!-- Loading Spinner -->
+  <div class="loading-container" *ngIf="isLoading">
+    <div class="spinner-container">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="loading-text mt-3">Loading property details...</p>
+    </div>
+  </div>
+
+  <!-- Main Content - Hidden when loading -->
+  <div *ngIf="!isLoading">
   <!-- Header Section -->
   <div class="details-header">
     <div class="container-fluid">
@@ -122,7 +134,7 @@
         </div>
         <div class="nav-card-content">
           <h4 [title]="propertyData.Listing_Name | summary:10">{{propertyData.Listing_Name | summary:10}}</h4>
-          <span class="photo-count">{{propertyData.num_photos}} photos</span>
+          <span class="photo-count">{{getTotalPropertyPhotos()}} photos</span>
           <span class="gap-indicator">Your property</span>
         </div>
         <div class="nav-card-links">
@@ -140,11 +152,11 @@
         </div>
         <div class="nav-card-content">
           <h4 [title]="getCurrentCompetitor()?.propertyName || 'Select Competitor'">{{getCurrentCompetitor()?.propertyName | summary: 8}}</h4>
-          <span class="photo-count">{{getCurrentCompetitor()?.num_photos || 0}} photos</span>
+          <span class="photo-count">{{getTotalCompetitorPhotosCount()}} photos</span>
           <span class="gap-indicator" 
-                [ngClass]="getGapClass((getCurrentCompetitor()?.num_photos || 0) - propertyData.num_photos)"
+                [ngClass]="getGapClass(getPhotoGap())"
                 *ngIf="getCurrentCompetitor()">
-            {{(getCurrentCompetitor()?.num_photos || 0) - propertyData.num_photos > 0 ? '+' : ''}}{{(getCurrentCompetitor()?.num_photos || 0) - propertyData.num_photos}} {{(getCurrentCompetitor()?.num_photos || 0) - propertyData.num_photos > 0 ? 'more than you' : 'less than you'}}
+            {{getPhotoGap() > 0 ? '+' : ''}}{{getPhotoGap()}} {{getPhotoGap() > 0 ? 'more than you' : 'less than you'}}
           </span>
         </div>
         <div class="nav-card-links">
@@ -204,12 +216,12 @@
               </div>
             </div>
         </div>
-        <div class="photo-count">{{propertyData.num_photos}} photos</div>
+        <div class="photo-count">{{getTotalPropertyPhotos()}} photos</div>
       </div>
      
 
 
-        <gallery [items]="images" bullets="true" bulletPosition='bottom' scrollBehavior='smooth' [ngStyle]="{'background-color': 'white', 'padding': '25px'}" gestures="true" imageSize='cover' counter="true" nav="true" itemAutosize="true" thumbs="true"  thumbPosition='bottom' id='your-photos-gallery'></gallery>
+        <gallery [items]="images" bullets="true" bulletPosition='bottom' scrollBehavior='smooth' [ngStyle]="{'background-color': 'white', 'padding': '25px' , 'max-width': '816px'}" gestures="true" imageSize='cover' counter="true" nav="true" itemAutosize="true" thumbs="true"  thumbPosition='bottom' id='your-photos-gallery'></gallery>
   
    
     </div>  
@@ -252,11 +264,11 @@
                   </div>
                 </div>
         </div>
-        <div class="photo-count">{{getCurrentCompetitor().num_photos}} photos</div>
+        <div class="photo-count">{{getTotalCompetitorPhotosCount()}} photos</div>
       </div>
  
       
-        <gallery  [items]="competitorImages" bullets="true" bulletPosition='bottom' scrollBehavior='smooth' [ngStyle]="{'background-color': 'white', 'padding': '25px'}" gestures="true" imageSize='cover' counter="true" nav="true" itemAutosize="true" thumbs="true"  thumbPosition='bottom' id='competitor-photos-gallery'></gallery>
+        <gallery  [items]="competitorImages" bullets="true" bulletPosition='bottom' scrollBehavior='smooth' [ngStyle]="{'background-color': 'white', 'padding': '25px', 'max-width': '816px'}" gestures="true" imageSize='cover' counter="true" nav="true" itemAutosize="true" thumbs="true"  thumbPosition='bottom' id='competitor-photos-gallery'></gallery>
    
     </div>
   </div>
@@ -284,38 +296,44 @@
           </div>
         </div>
         <div class="competitor-stats">
-          <div class="platform-stats-table">
-            <div class="table-header">
-              <div class="header-cell">Platform</div>
-              <div class="header-cell">Photos</div>
-              <div class="header-cell">Photo Gap</div>
-            </div>
-            <div class="table-row airbnb-row">
-              <div class="cell platform-cell">
+          <div class="platform-stats-badges">
+            <!-- Airbnb Stats -->
+            <div class="platform-badge-group">
+              <span class="platform-label">
                 <i class="fab fa-airbnb"></i> Airbnb
-              </div>
-              <div class="cell">{{comp.propertyAirbnbPhotos?.length || 0}}</div>
-              <div class="cell" [ngClass]="getGapClass((comp.propertyAirbnbPhotos?.length || 0) - (propertyData.Photos?.airbnb?.length || 0))">
-                {{(comp.propertyAirbnbPhotos?.length || 0) - (propertyData.Photos?.airbnb?.length || 0) > 0 ? '+' : ''}}{{(comp.propertyAirbnbPhotos?.length || 0) - (propertyData.Photos?.airbnb?.length || 0)}}
-              </div>
+              </span>
+              <span class="badge bg-light text-dark">
+                {{comp.propertyAirbnbPhotos?.length || 0}} photos
+              </span>
+              <span class="badge gap-badge" [ngClass]="getGapClass((comp.propertyAirbnbPhotos?.length || 0) - (propertyData.Photos?.airbnb?.length || 0))">
+                {{(comp.propertyAirbnbPhotos?.length || 0) - (propertyData.Photos?.airbnb?.length || 0) > 0 ? '+' : ''}}{{(comp.propertyAirbnbPhotos?.length || 0) - (propertyData.Photos?.airbnb?.length || 0)}} gap
+              </span>
             </div>
-            <div class="table-row booking-row">
-              <div class="cell platform-cell">
+            
+            <!-- Booking Stats -->
+            <div class="platform-badge-group">
+              <span class="platform-label">
                 <i class="fas fa-bed"></i> Booking
-              </div>
-              <div class="cell">{{comp.propertyBookingPhotos?.length || 0}}</div>
-              <div class="cell" [ngClass]="getGapClass((comp.propertyBookingPhotos?.length || 0) - (propertyData.Photos?.booking?.length || 0))">
-                {{(comp.propertyBookingPhotos?.length || 0) - (propertyData.Photos?.booking?.length || 0) > 0 ? '+' : ''}}{{(comp.propertyBookingPhotos?.length || 0) - (propertyData.Photos?.booking?.length || 0)}}
-              </div>
+              </span>
+              <span class="badge bg-light text-dark">
+                {{comp.propertyBookingPhotos?.length || 0}} photos
+              </span>
+              <span class="badge gap-badge" [ngClass]="getGapClass((comp.propertyBookingPhotos?.length || 0) - (propertyData.Photos?.booking?.length || 0))">
+                {{(comp.propertyBookingPhotos?.length || 0) - (propertyData.Photos?.booking?.length || 0) > 0 ? '+' : ''}}{{(comp.propertyBookingPhotos?.length || 0) - (propertyData.Photos?.booking?.length || 0)}} photos gap
+              </span>
             </div>
-            <div class="table-row vrbo-row">
-              <div class="cell platform-cell">
+            
+            <!-- VRBO Stats -->
+            <div class="platform-badge-group">
+              <span class="platform-label">
                 <i class="fas fa-home"></i> VRBO
-              </div>
-              <div class="cell">{{comp.propertyVrboPhotos?.length || 0}}</div>
-              <div class="cell" [ngClass]="getGapClass((comp.propertyVrboPhotos?.length || 0) - (propertyData.Photos?.vrbo?.length || 0))">
-                {{(comp.propertyVrboPhotos?.length || 0) - (propertyData.Photos?.vrbo?.length || 0) > 0 ? '+' : ''}}{{(comp.propertyVrboPhotos?.length || 0) - (propertyData.Photos?.vrbo?.length || 0)}}
-              </div>
+              </span>
+              <span class="badge bg-light text-dark">
+                {{comp.propertyVrboPhotos?.length || 0}} photos
+              </span>
+              <span class="badge gap-badge" [ngClass]="getGapClass((comp.propertyVrboPhotos?.length || 0) - (propertyData.Photos?.vrbo?.length || 0))">
+                {{(comp.propertyVrboPhotos?.length || 0) - (propertyData.Photos?.vrbo?.length || 0) > 0 ? '+' : ''}}{{(comp.propertyVrboPhotos?.length || 0) - (propertyData.Photos?.vrbo?.length || 0)}} gap
+              </span>
             </div>
           </div>
         </div>
@@ -420,7 +438,8 @@
       <app-amenities-analyzer></app-amenities-analyzer>
     </div>
   </div>
-</div>
+  </div><!-- End of *ngIf="!isLoading" -->
+</div><!-- End of photo-details-container -->
 
 <!-- Photo Modal -->
 <div class="photo-modal" *ngIf="selectedPhotoIndex !== null" (click)="closePhotoModal()">

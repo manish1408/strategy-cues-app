@@ -49,6 +49,9 @@ export class PhotoDetailsComponent implements OnInit {
   captionText: string = '';
   isSubmittingCaption: boolean = false;
 
+  // Loading state
+  isLoading: boolean = true;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -112,6 +115,17 @@ export class PhotoDetailsComponent implements OnInit {
           if (response.data.property) {
             this.propertyData = { ...this.propertyData, ...response.data.property };
             
+            // Debug: Log the Photos structure from API
+            console.log('Property Photos from API:', this.propertyData.Photos);
+            console.log('Property full data:', this.propertyData);
+            
+            // Update images array after receiving property data
+            const allPhotos = this.getAllPropertyPhotos();
+            this.images = [...(allPhotos?.map((photo: any) => 
+              new ImageItem({ src: photo.url, thumb: photo.url })
+            ) || [])];
+            console.log('Updated Your Photos Images Array after API:', this.images);
+            console.log('Updated Your Photos URLs:', this.images.map(img => img.data?.src));
           }
           
           // Update competitors data
@@ -130,6 +144,9 @@ export class PhotoDetailsComponent implements OnInit {
           
           // Trigger change detection to update the UI
           this.cdr.detectChanges();
+          
+          // Set loading to false after data is loaded
+          this.isLoading = false;
         }
       },
       error: (error: any) => {
@@ -143,6 +160,9 @@ export class PhotoDetailsComponent implements OnInit {
         
         // Trigger change detection to update the UI
         this.cdr.detectChanges();
+        
+        // Set loading to false even on error
+        this.isLoading = false;
       }
     });
   }
@@ -280,6 +300,28 @@ export class PhotoDetailsComponent implements OnInit {
 
   getTotalImages(): number {
     return this.getAllPropertyPhotos().length;
+  }
+
+  // Get total property photos count
+  getTotalPropertyPhotos(): number {
+    return (this.propertyData?.Photos?.airbnb?.length || 0) + 
+           (this.propertyData?.Photos?.booking?.length || 0) + 
+           (this.propertyData?.Photos?.vrbo?.length || 0);
+  }
+
+  // Get total competitor photos for current competitor
+  getTotalCompetitorPhotosCount(): number {
+    const competitor = this.getCurrentCompetitor();
+    if (!competitor) return 0;
+    
+    return (competitor.propertyAirbnbPhotos?.length || 0) + 
+           (competitor.propertyBookingPhotos?.length || 0) + 
+           (competitor.propertyVrboPhotos?.length || 0);
+  }
+
+  // Get photo gap between competitor and property
+  getPhotoGap(): number {
+    return this.getTotalCompetitorPhotosCount() - this.getTotalPropertyPhotos();
   }
 
   getTotalCompetitorPhotos(): number {
