@@ -120,18 +120,41 @@ export class PropertyDetailsComponent implements OnInit {
   getPolicyTypeClass(policyType: string | null): string {
     if (!policyType) return 'badge-secondary';
     
-    switch (policyType.toLowerCase()) {
-      case 'flexible':
-        return 'badge-success';
-      case 'moderate':
-        return 'badge-warning';
-      case 'strict':
-        return 'badge-danger';
-      case 'hotel_policy':
-        return 'badge-info';
-      default:
-        return 'badge-secondary';
+    const lowerType = policyType.toLowerCase();
+    
+    // Check for flexible policies
+    if (lowerType.includes('flexible')) {
+      return 'badge-success';
     }
+    // Check for non-refundable policies
+    if (lowerType.includes('non-refundable') || lowerType.includes('non refundable')) {
+      return 'badge-danger';
+    }
+    // Check for moderate/strict policies
+    if (lowerType.includes('moderate')) {
+      return 'badge-warning';
+    }
+    if (lowerType.includes('strict')) {
+      return 'badge-danger';
+    }
+    if (lowerType.includes('hotel_policy')) {
+      return 'badge-info';
+    }
+    
+    return 'badge-secondary';
+  }
+
+  // Helper method to check if Booking policies exist
+  hasBookingPolicies(property: any): boolean {
+    return property?.CXL_Policy?.Booking && Array.isArray(property.CXL_Policy.Booking) && property.CXL_Policy.Booking.length > 0;
+  }
+
+  // Helper method to get policy text as string
+  getPolicyText(textArray: string[] | string): string {
+    if (Array.isArray(textArray)) {
+      return textArray.join(' ');
+    }
+    return textArray || '';
   }
 
   // Methods to handle booking platform links

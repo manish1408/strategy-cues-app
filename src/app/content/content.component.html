@@ -234,24 +234,30 @@
                       <td class="gap-cell">
                         <div class="platform-gaps">
                           <!-- Airbnb Photo Gap -->
-                          <div class="platform-gap airbnb-gap" [ngClass]="getPlatformGapClass(getAirbnbPhotoGap(property))">
+                          <div class="platform-gap airbnb-gap" [ngClass]="hasCompetitors(property) ? getPlatformGapClass(getAirbnbPhotoGap(property)) : 'gap-no-competitor'">
                             <div class="platform-icon">
                               <i class="fab fa-airbnb"></i>
                             </div>
-                            <div class="gap-info">
+                            <div class="gap-info" *ngIf="hasCompetitors(property)">
                               <span class="gap-number">{{Math.abs(getAirbnbPhotoGap(property))}}</span>
                               <span class="gap-direction">{{getAirbnbPhotoGap(property) > 0 ? 'behind' : 'ahead'}}</span>
+                            </div>
+                            <div class="gap-info no-competitor-text" *ngIf="!hasCompetitors(property)">
+                              <span class="gap-text">No Competitor</span>
                             </div>
                           </div>
                           
                           <!-- Booking.com Photo Gap -->
-                          <div class="platform-gap booking-gap" [ngClass]="getPlatformGapClass(getBookingPhotoGap(property))">
+                          <div class="platform-gap booking-gap" [ngClass]="hasCompetitors(property) ? getPlatformGapClass(getBookingPhotoGap(property)) : 'gap-no-competitor'">
                             <div class="platform-icon">
                               <i class="fas fa-bed"></i>
                             </div>
-                            <div class="gap-info">
+                            <div class="gap-info" *ngIf="hasCompetitors(property)">
                               <span class="gap-number">{{Math.abs(getBookingPhotoGap(property))}}</span>
                               <span class="gap-direction">{{getBookingPhotoGap(property) > 0 ? 'behind' : 'ahead'}}</span>
+                            </div>
+                            <div class="gap-info no-competitor-text" *ngIf="!hasCompetitors(property)">
+                              <span class="gap-text">No Competitor</span>
                             </div>
                           </div>
 

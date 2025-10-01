@@ -884,6 +884,24 @@ $transition: all 0.3s ease;
           color: #065f46;
         }
       } */
+
+      // No Competitor styling
+      &.gap-no-competitor {
+        color: #6b7280;
+        
+        .platform-icon {
+          opacity: 0.6;
+        }
+
+        .no-competitor-text {
+          .gap-text {
+            font-size: var(--font-size-xs);
+            font-weight: 500;
+            font-style: italic;
+            color: #9ca3af;
+          }
+        }
+      }
     }
   }
 }

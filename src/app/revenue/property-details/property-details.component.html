@@ -577,68 +577,83 @@
                   <div class="col-md-6" *ngIf="property.CXL_Policy">
                     <h6>Cancellation Policies</h6>
                     <div class="policy-list">
-                      <!-- Booking.com Policy -->
-                      <div class="policy-item" *ngIf="property.CXL_Policy.Booking">
-                        <div class="policy-header">
-                          <span class="platform-name">Booking.com:</span>
-                          <span class="policy-type badge"
-                            [ngClass]="getPolicyTypeClass(property.CXL_Policy.Booking.type)">
-                            {{ property.CXL_Policy.Booking.type | formatText }}
-                          </span>
+                      <!-- Booking.com Policies (Array) -->
+                      <ng-container *ngIf="hasBookingPolicies(property)">
+                        <div class="policy-section-header">
+                          <span class="platform-name"><i class="fas fa-bed me-1"></i>Booking.com:</span>
                         </div>
-                        <div class="policy-description">
-                          {{ property.CXL_Policy.Booking.description }}
+                        <div class="policy-item" *ngFor="let policy of property.CXL_Policy.Booking; let i = index">
+                          <div class="policy-header">
+                            <span class="policy-type badge"
+                              [ngClass]="getPolicyTypeClass(policy.policy_group_title)">
+                              {{ policy.policy_group_title }}
+                            </span>
+                            <span class="badge badge-info ms-2" *ngIf="policy.is_general_policy === 1">
+                              General
+                            </span>
+                            <span class="badge badge-warning ms-2" *ngIf="policy.is_non_refundable_policy === 1">
+                              Non-Refundable
+                            </span>
+                          </div>
+                          <div class="policy-description">
+                            {{ getPolicyText(policy.text) }}
+                          </div>
+                          <div class="policy-meta" *ngIf="policy.prepayment?.text">
+                            <small class="text-muted" [innerHTML]="policy.prepayment.text"></small>
+                          </div>
                         </div>
-                        <div class="policy-details" *ngIf="property.CXL_Policy.Booking.free_cancellation_until">
-                          <small class="text-muted">
-                            <i class="fas fa-clock me-1"></i>
-                            Free cancellation until: {{ property.CXL_Policy.Booking.free_cancellation_until }}
-                          </small>
-                        </div>
-                      </div>
+                      </ng-container>
 
-                      <!-- Airbnb Policy -->
-                      <div class="policy-item" *ngIf="property.CXL_Policy.Airbnb">
-                        <div class="policy-header">
-                          <span class="platform-name">Airbnb:</span>
-                          <span class="policy-type badge"
-                            [ngClass]="getPolicyTypeClass(property.CXL_Policy.Airbnb.type)">
-                            {{ property.CXL_Policy.Airbnb.type | formatText }}
-                          </span>
+                      <!-- Airbnb Policy (Single Object) -->
+                      <div class="policy-section" *ngIf="property.CXL_Policy.Airbnb">
+                        <div class="policy-section-header">
+                          <span class="platform-name"><i class="fab fa-airbnb me-1"></i>Airbnb:</span>
                         </div>
-                        <div class="policy-description">
-                          {{ property.CXL_Policy.Airbnb.description }}
-                        </div>
-                        <div class="policy-details" *ngIf="property.CXL_Policy.Airbnb.free_cancellation_until">
-                          <small class="text-muted">
-                            <i class="fas fa-clock me-1"></i>
-                            Free cancellation until: {{ property.CXL_Policy.Airbnb.free_cancellation_until }}
-                          </small>
+                        <div class="policy-item">
+                          <div class="policy-header">
+                            <span class="policy-type badge"
+                              [ngClass]="getPolicyTypeClass(property.CXL_Policy.Airbnb.type)">
+                              {{ property.CXL_Policy.Airbnb.type | formatText }}
+                            </span>
+                          </div>
+                          <div class="policy-description">
+                            {{ property.CXL_Policy.Airbnb.description }}
+                          </div>
+                          <div class="policy-details" *ngIf="property.CXL_Policy.Airbnb.free_cancellation_until">
+                            <small class="text-muted">
+                              <i class="fas fa-clock me-1"></i>
+                              Free cancellation until: {{ property.CXL_Policy.Airbnb.free_cancellation_until }}
+                            </small>
+                          </div>
                         </div>
                       </div>
 
                       <!-- VRBO Policy -->
-                      <!-- <div class="policy-item" *ngIf="property.CXL_Policy.VRBO">
-                        <div class="policy-header">
-                          <span class="platform-name">VRBO:</span>
-                          <span class="policy-type badge" [ngClass]="getPolicyTypeClass(property.CXL_Policy.VRBO.type)">
-                            {{ property.CXL_Policy.VRBO.type | formatText }}
-                          </span>
+                      <!-- <div class="policy-section" *ngIf="property.CXL_Policy.VRBO">
+                        <div class="policy-section-header">
+                          <span class="platform-name"><i class="fas fa-home me-1"></i>VRBO:</span>
                         </div>
-                        <div class="policy-description">
-                          {{ property.CXL_Policy.VRBO.description }}
-                        </div>
-                        <div class="policy-details" *ngIf="property.CXL_Policy.VRBO.free_cancellation_until">
-                          <small class="text-muted">
-                            <i class="fas fa-clock me-1"></i>
-                            Free cancellation until: {{ property.CXL_Policy.VRBO.free_cancellation_until }}
-                          </small>
+                        <div class="policy-item">
+                          <div class="policy-header">
+                            <span class="policy-type badge" [ngClass]="getPolicyTypeClass(property.CXL_Policy.VRBO.type)">
+                              {{ property.CXL_Policy.VRBO.type | formatText }}
+                            </span>
+                          </div>
+                          <div class="policy-description">
+                            {{ property.CXL_Policy.VRBO.description }}
+                          </div>
+                          <div class="policy-details" *ngIf="property.CXL_Policy.VRBO.free_cancellation_until">
+                            <small class="text-muted">
+                              <i class="fas fa-clock me-1"></i>
+                              Free cancellation until: {{ property.CXL_Policy.VRBO.free_cancellation_until }}
+                            </small>
+                          </div>
                         </div>
                       </div> -->
 
                       <!-- Show message if no policies available -->
                       <div class="policy-item"
-                        *ngIf="!property.CXL_Policy.Booking && !property.CXL_Policy.Airbnb">
+                        *ngIf="!hasBookingPolicies(property) && !property.CXL_Policy.Airbnb && !property.CXL_Policy.VRBO">
                         <span class="text-muted">No cancellation policies configured</span>
                       </div>
                     </div>
