@@ -14,6 +14,7 @@ import { SummaryPipe } from "../../summary.pipe";
 })
 export class PhotoDetailsComponent implements OnInit {
   operatorId: string = "";
+  propertyId: string = "";
   activeTab: string = "photos";
   propertyData: any;
   selectedPhotoIndex: number | null = null;
@@ -69,11 +70,13 @@ export class PhotoDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const propertyId = this.route.snapshot.params["id"];
-    console.log("Property ID:", propertyId);
+    this.propertyId = this.route.snapshot.params["id"];
+    this.operatorId = this.route.snapshot.queryParams["operatorId"] || "";
+    console.log("Property ID:", this.propertyId);
+    console.log("Operator ID:", this.operatorId);
 
     // API call to get property competitors
-    this.loadPropertyCompetitors(propertyId);
+    this.loadPropertyCompetitors(this.propertyId);
 
     this.updateCompetitorPlatformImages();
   }

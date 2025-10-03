@@ -8,15 +8,21 @@
             <div class="row align-items-end mb-2">
               <div class="col-md-6">
                 <div class="input-group">
-                  <span class="input-group-text"><i class="fas fa-search"></i></span>
                   <input type="text" class="form-control" placeholder="Search properties, competitors, or photo types..."
-                    [(ngModel)]="searchTerm" (input)="onSearchChange()">
+                    [(ngModel)]="searchTerm" (keyup.enter)="performSearch()">
+                  <span (click)="performSearch()" class="cursor-pointer input-group-text"><i class="fas fa-search"></i></span>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="d-flex gap-2 float-end">
-                  <button class="btn btn-outline-success" (click)="exportToCSV()" title="Export to CSV">
-                    <i class="fas fa-download me-2"></i>
+                  <button class="btn btn-outline-success" 
+                          (click)="exportToCSV()" 
+                          [disabled]="exportLoading" 
+                          title="Export to CSV">
+                    <div *ngIf="exportLoading" class="spinner-border spinner-border-sm me-2" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <i class="fas fa-download me-2" *ngIf="!exportLoading"></i>
                     Export CSV
                   </button>
                 </div>
@@ -41,7 +47,7 @@
 
         <!-- Table View -->
         <div class="table-view" *ngIf="!loading && !error && photoComparisonData && photoComparisonData.length > 0">
-          <div class="table-card">
+          <div class="table-card" [class.loading]="loading">
             <div class="table-responsive">
               <table class="table table-hover">
                   <thead>

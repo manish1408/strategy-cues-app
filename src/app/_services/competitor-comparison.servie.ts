@@ -86,5 +86,11 @@ export class CompetitorComparisonService {
     
     return this.http.get<any>(`${this._url}/what-to-improve-based-on-my-reviews/${property_id}`, { params });
   }
- 
+
+  getConversionBoostersAndAmenities(property_id: string, operator_id: string) {
+    const params = new HttpParams()
+    .set('operator_id', operator_id);
+  
+  return this.http.get<any>(`${this._url}/conversion-boosters-and-amenities/${property_id}`, { params });
+}
 }

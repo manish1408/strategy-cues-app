@@ -4,6 +4,9 @@ import { Subject, takeUntil } from 'rxjs';
 import { CompetitorComparisonService } from '../_services/competitor-comparison.servie';
 import { LocalStorageService } from '../_services/local-storage.service';
 import photoComparisonData from '../json_data/photo_comparison_data.json';
+import { ExportService } from '../_services/export.service';
+import { ToastrService } from 'ngx-toastr';
+import { ToastService } from '../_services/toast.service';
 
 @Component({
   selector: 'app-content',
@@ -14,10 +17,11 @@ export class ContentComponent implements OnInit, OnDestroy {
   // Data properties
   photoComparisonData: any[] = [];
   filteredData: any[] = [];
-  
+
   // UI state properties
   searchTerm: string = '';
   loading: boolean = false;
+  exportLoading: boolean = false;
   error: string | null = null;
   
   // Pagination properties
@@ -37,7 +41,10 @@ export class ContentComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private competitorComparisonService: CompetitorComparisonService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private exportService: ExportService,
+    private toastr: ToastrService,
+    private toastService: ToastService
   ) { }
 
   ngOnInit(): void {
@@ -460,7 +467,7 @@ export class ContentComponent implements OnInit, OnDestroy {
 
   // ==================== SEARCH FUNCTIONALITY ====================
   
-  onSearchChange(): void {
+  performSearch(): void {
     if (!this.searchTerm.trim()) {
       this.resetFilter();
       return;
@@ -516,48 +523,100 @@ export class ContentComponent implements OnInit, OnDestroy {
   }
 
   // CSV Export functionality
-  exportToCSV(): void {
-    const csvData = this.filteredData.map(property => ({
-      'Property Name': property.listing_name,
-      'Property ID': property.property_id,
-      'Booking.com Photos': property.num_photos,
-      'Airbnb Photos': property.airbnb_photos,
-      'VRBO Photos': property.vrbo_photos,
-      'Booking.com Captioned': property.captioned_count,
-      'Airbnb Captioned': property.airbnb_captioned,
-      'VRBO Captioned': property.vrbo_captioned,
-      'Booking.com Missing': property.missing_captions,
-      'Airbnb Missing': property.airbnb_missing,
-      'VRBO Missing': property.vrbo_missing,
-      'Booking.com Reviews': property.booking_reviews,
-      'Airbnb Reviews': property.airbnb_reviews,
-      'VRBO Reviews': property.vrbo_reviews,
-      'Booking.com Score': property.booking_score,
-      'Airbnb Score': property.airbnb_score,
-      'VRBO Score': property.vrbo_score,
-      'Competitors Count': this.getCompetitorCount(property),
-      'Photo Gap': this.getPhotoGap(property),
-      'Airbnb Link': property.airbnb_link,
-      'Booking Link': property.booking_link,
-      'VRBO Link': property.vrbo_link
-    }));
+  exportToCSV() {
+    this.exportLoading = true;
+    this.exportService.exportToCSVContentCues(this.operatorId || "").subscribe({
+      next: (response: any) => {
+        this.exportLoading = false;
+        
+        // Handle JSON response with file_url
+        if (response.body && typeof response.body === 'object') {
+          const res = response.body;
+          if (res.success && res.data && typeof res.data.file_url === "string" && res.data.file_url.startsWith("https")) {
+            // Open the file URL directly in a new tab
+            window.open(res.data.file_url, "_blank");
+            this.toastr.success("Properties exported successfully");
+          } else {
+            this.toastr.error("Invalid response format from server");
+          }
+        }
+        // Handle blob response from backend (fallback)
+        else if (response.body instanceof Blob) {
+          const blob = response.body;
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          
+          // Try to get filename from Content-Disposition header
+          const contentDisposition = response.headers.get('Content-Disposition');
+          let filename = `properties_${new Date().toISOString().split("T")[0]}.csv`;
+          
+          if (contentDisposition) {
+            const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+            if (filenameMatch && filenameMatch[1]) {
+              filename = filenameMatch[1].replace(/['"]/g, '');
+            }
+          }
+          
+          link.download = filename;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(url);
+          this.toastr.success("Properties exported successfully");
+        } else {
+          this.toastr.error("Invalid response format from server");
+        }
+      },
+      error: (error) => {
+        this.exportLoading = false;
+        console.error('Export error:', error);
+        this.toastr.error(error.error?.error || error.message || "Failed to export properties");
+      },
+    });
+}
+  // exportToCSV(): void {
+  //   const csvData = this.filteredData.map(property => ({
+  //     'Property Name': property.listing_name,
+  //     'Property ID': property.property_id,
+  //     'Booking.com Photos': property.num_photos,
+  //     'Airbnb Photos': property.airbnb_photos,
+  //     'VRBO Photos': property.vrbo_photos,
+  //     'Booking.com Captioned': property.captioned_count,
+  //     'Airbnb Captioned': property.airbnb_captioned,
+  //     'VRBO Captioned': property.vrbo_captioned,
+  //     'Booking.com Missing': property.missing_captions,
+  //     'Airbnb Missing': property.airbnb_missing,
+  //     'VRBO Missing': property.vrbo_missing,
+  //     'Booking.com Reviews': property.booking_reviews,
+  //     'Airbnb Reviews': property.airbnb_reviews,
+  //     'VRBO Reviews': property.vrbo_reviews,
+  //     'Booking.com Score': property.booking_score,
+  //     'Airbnb Score': property.airbnb_score,
+  //     'VRBO Score': property.vrbo_score,
+  //     'Competitors Count': this.getCompetitorCount(property),
+  //     'Photo Gap': this.getPhotoGap(property),
+  //     'Airbnb Link': property.airbnb_link,
+  //     'Booking Link': property.booking_link,
+  //     'VRBO Link': property.vrbo_link
+  //   }));
 
-    const headers = Object.keys(csvData[0]);
-    const csvContent = [
-      headers.join(','),
-      ...csvData.map(row => headers.map(header => `"${(row as any)[header] || ''}"`).join(','))
-    ].join('\n');
+  //   const headers = Object.keys(csvData[0]);
+  //   const csvContent = [
+  //     headers.join(','),
+  //     ...csvData.map(row => headers.map(header => `"${(row as any)[header] || ''}"`).join(','))
+  //   ].join('\n');
 
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-    link.setAttribute('href', url);
-    link.setAttribute('download', `photo_comparison_${new Date().toISOString().split('T')[0]}.csv`);
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
+  //   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  //   const link = document.createElement('a');
+  //   const url = URL.createObjectURL(blob);
+  //   link.setAttribute('href', url);
+  //   link.setAttribute('download', `photo_comparison_${new Date().toISOString().split('T')[0]}.csv`);
+  //   link.style.visibility = 'hidden';
+  //   document.body.appendChild(link);
+  //   link.click();
+  //   document.body.removeChild(link);
+  // }
 
   // Image methods
   getPropertyImage(property: any): string {

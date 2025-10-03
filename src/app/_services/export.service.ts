@@ -10,9 +10,16 @@ import { HttpClient } from '@angular/common/http';
       private _url = environment.APIUrl + "export";
   constructor(private http: HttpClient) {}
 
-  exportToCSV(operatorId: string) {
+  exportToCSVProperties(operatorId: string) {
     return this.http.get(`${this._url}/properties/${operatorId}`, {
       observe: 'response'
     });
   }
+
+  exportToCSVContentCues(operatorId: string) {
+    return this.http.get(`${this._url}/content-cues/${operatorId}`, {
+      observe: 'response'
+    });
+  }
+
             }

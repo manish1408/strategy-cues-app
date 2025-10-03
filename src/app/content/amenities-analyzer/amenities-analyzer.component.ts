@@ -1,4 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { CompetitorComparisonService } from '../../_services/competitor-comparison.servie';
+
+// Interface for the API response
+interface ConversionBoostersResponse {
+  data: {
+    conversionBoosters: {
+      have: Array<{
+        cluster_id: number;
+        label: string;
+        support: number;
+        examples: string[];
+      }>;
+      missing: Array<{
+        cluster_id: number;
+        label: string;
+        support: number;
+        examples: string[];
+      }>;
+    };
+    topAreaAmenitiesMissing: Array<{
+      cluster_id: number;
+      label: string;
+      count: number;
+      support: number;
+      examples: string[];
+      rank: number;
+    }>;
+  };
+  success: boolean;
+}
 
 @Component({
   selector: 'app-amenities-analyzer',
@@ -6,6 +36,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./amenities-analyzer.component.scss']
 })
 export class AmenitiesAnalyzerComponent implements OnInit {
+  @Input() propertyId: string = '';
+  @Input() operatorId: string = '';
   
   // Ranking & Conversion Boosters Data
   rankingBoosters = [
@@ -66,9 +98,51 @@ export class AmenitiesAnalyzerComponent implements OnInit {
     amenityMissing: false
   };
 
-  constructor() { }
+  // Loading state
+  isLoading: boolean = false;
+
+  constructor(private competitorComparisonService: CompetitorComparisonService) { }
 
   ngOnInit(): void {
+    if (this.propertyId && this.operatorId) {
+      this.loadConversionBoostersAndAmenities();
+    }
+  }
+
+  loadConversionBoostersAndAmenities(): void {
+    this.isLoading = true;
+    this.competitorComparisonService.getConversionBoostersAndAmenities(this.propertyId, this.operatorId)
+      .subscribe({
+        next: (response: ConversionBoostersResponse) => {
+          if (response.success && response.data) {
+            this.transformApiDataToComponentData(response.data);
+          }
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error loading conversion boosters and amenities:', error);
+          this.isLoading = false;
+        }
+      });
+  }
+
+  transformApiDataToComponentData(apiData: ConversionBoostersResponse['data']): void {
+    // Transform conversion boosters data
+    const haveAmenities = apiData.conversionBoosters.have.map(item => ({
+      name: item.label,
+      has: true
+    }));
+
+    const missingAmenities = apiData.conversionBoosters.missing.map(item => ({
+      name: item.label,
+      has: false
+    }));
+
+    // Combine and update rankingBoosters
+    this.rankingBoosters = [...haveAmenities, ...missingAmenities];
+
+    // Transform top area amenities missing data
+    this.topRankingAmenities = apiData.topAreaAmenitiesMissing.map(item => item.label);
   }
 
   toggleNotification(setting: string): void {

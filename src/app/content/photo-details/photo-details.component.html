@@ -466,7 +466,10 @@
 
     <!-- Amenities Analyser Tab -->
     <div class="tab-pane" [class.active]="activeTab === 'amenities'" *ngIf="activeTab === 'amenities'">
-      <app-amenities-analyzer></app-amenities-analyzer>
+      <app-amenities-analyzer 
+        [propertyId]="propertyId" 
+        [operatorId]="operatorId">
+      </app-amenities-analyzer>
     </div>
   </div>
   </div><!-- End of *ngIf="!isLoading" -->

@@ -949,7 +949,7 @@ export class RevenueComponent implements OnInit {
 
   exportToCSV() {
     this.exportLoading = true;
-    this.exportService.exportToCSV(this.operatorId || "").subscribe({
+    this.exportService.exportToCSVProperties(this.operatorId || "").subscribe({
       next: (response: any) => {
         this.exportLoading = false;
         
