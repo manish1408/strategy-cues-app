@@ -402,6 +402,13 @@ export class PhotoDetailsComponent implements OnInit {
     this.selectedPhotoIndex = index;
   }
 
+  openPhotoInNewWindow(photoId: string): void {
+    const photo = this.getPhotoById(photoId);
+    if (photo && photo.url) {
+      window.open(photo.url, '_blank');
+    }
+  }
+
   closePhotoModal(): void {
     this.selectedPhotoIndex = null;
   }

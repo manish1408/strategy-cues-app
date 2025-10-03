@@ -457,7 +457,7 @@
     <div class="missing-list">
       <div class="missing-item" *ngFor="let photoId of getMissingCaptionPhotos()">
         <i class="fas fa-exclamation-triangle"></i>
-        <img style="width: 40px; height: 40px;     object-fit: fill;" [src]="getPhotoById(photoId)?.url" [alt]="'Photo ' + photoId" (error)="onImageError($event)">
+        <img style="width: 40px; height: 40px; object-fit: fill; cursor: pointer;" [src]="getPhotoById(photoId)?.url" [alt]="'Photo ' + photoId" (error)="onImageError($event)" (click)="openPhotoInNewWindow(photoId)">
         <span *ngIf="!getPhotoById(photoId)?.caption">Photo {{photoId}} needs a caption</span>
         <span *ngIf="getPhotoById(photoId)?.caption">{{getPhotoById(photoId)?.caption}}</span>
      
@@ -511,13 +511,6 @@
         This photo needs a caption
       </p>
     </div>
-    <div class="modal-navigation">
-      <button class="nav-btn prev" (click)="previousPhoto()" *ngIf="selectedPhotoIndex > 0">
-        <i class="fas fa-chevron-left"></i>
-      </button>
-      <button class="nav-btn next" (click)="nextPhoto()" *ngIf="selectedPhotoIndex < propertyData.property_photos.length - 1">
-        <i class="fas fa-chevron-right"></i>
-      </button>
-    </div>
+   
   </div>
 </div>
