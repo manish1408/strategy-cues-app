@@ -5,20 +5,20 @@ import { CompetitorComparisonService } from '../../_services/competitor-comparis
 interface ConversionBoostersResponse {
   data: {
     conversionBoosters: {
-      have: Array<{
+      have?: Array<{
         cluster_id: number;
         label: string;
         support: number;
         examples: string[];
       }>;
-      missing: Array<{
+      missing?: Array<{
         cluster_id: number;
         label: string;
         support: number;
         examples: string[];
       }>;
-    };
-    topAreaAmenitiesMissing: Array<{
+    } | {};
+    topAreaAmenitiesMissing?: Array<{
       cluster_id: number;
       label: string;
       count: number;
@@ -127,22 +127,39 @@ export class AmenitiesAnalyzerComponent implements OnInit {
   }
 
   transformApiDataToComponentData(apiData: ConversionBoostersResponse['data']): void {
-    // Transform conversion boosters data
-    const haveAmenities = apiData.conversionBoosters.have.map(item => ({
-      name: item.label,
-      has: true
-    }));
+    // Initialize empty arrays
+    let haveAmenities: any[] = [];
+    let missingAmenities: any[] = [];
+    let topAreaAmenities: string[] = [];
 
-    const missingAmenities = apiData.conversionBoosters.missing.map(item => ({
-      name: item.label,
-      has: false
-    }));
+    // Transform conversion boosters data - handle empty object case
+    if (apiData.conversionBoosters && typeof apiData.conversionBoosters === 'object' && !Array.isArray(apiData.conversionBoosters)) {
+      const conversionBoosters = apiData.conversionBoosters as any;
+      
+      if (conversionBoosters.have && Array.isArray(conversionBoosters.have)) {
+        haveAmenities = conversionBoosters.have.map((item: any) => ({
+          name: item.label,
+          has: true
+        }));
+      }
+
+      if (conversionBoosters.missing && Array.isArray(conversionBoosters.missing)) {
+        missingAmenities = conversionBoosters.missing.map((item: any) => ({
+          name: item.label,
+          has: false
+        }));
+      }
+    }
 
     // Combine and update rankingBoosters
     this.rankingBoosters = [...haveAmenities, ...missingAmenities];
 
-    // Transform top area amenities missing data
-    this.topRankingAmenities = apiData.topAreaAmenitiesMissing.map(item => item.label);
+    // Transform top area amenities missing data - handle empty array case
+    if (apiData.topAreaAmenitiesMissing && Array.isArray(apiData.topAreaAmenitiesMissing)) {
+      topAreaAmenities = apiData.topAreaAmenitiesMissing.map(item => item.label);
+    }
+
+    this.topRankingAmenities = topAreaAmenities;
   }
 
   toggleNotification(setting: string): void {

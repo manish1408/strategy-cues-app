@@ -22,7 +22,7 @@
         </p>
       </div>
       
-      <div class="amenities-grid">
+      <div class="amenities-grid" *ngIf="rankingBoosters.length > 0">
         <div class="amenity-chip" 
              [ngClass]="{'has-amenity': item.has, 'missing-amenity': !item.has}"
              *ngFor="let item of rankingBoosters">
@@ -34,6 +34,20 @@
             <i class="fas fa-info-circle"></i>
           </div>
         </div>
+      </div>
+      
+      <!-- No data message for conversion boosters -->
+      <div *ngIf="rankingBoosters.length === 0" class="no-data-message">
+        <div class="no-data-icon">
+          <i class="fas fa-info-circle"></i>
+        </div>
+        <h3>No Conversion Boosters Data Available</h3>
+        <p>We don't have conversion booster data for this property yet. This could be because:</p>
+        <ul>
+          <li>The property is new to our system</li>
+          <li>Insufficient data for analysis</li>
+          <li>Data is still being processed</li>
+        </ul>
       </div>
     </div>
 
@@ -50,7 +64,7 @@
         </div>
       </div>
       
-      <div class="amenities-grid">
+      <div class="amenities-grid" *ngIf="topRankingAmenities.length > 0">
         <div class="amenity-chip missing-amenity" *ngFor="let amenity of topRankingAmenities">
           <div class="amenity-icon">
             <i class="fas fa-times"></i>
@@ -60,6 +74,20 @@
             <i class="fas fa-info-circle"></i>
           </div>
         </div>
+      </div>
+      
+      <!-- No data message for top area amenities -->
+      <div *ngIf="topRankingAmenities.length === 0" class="no-data-message">
+        <div class="no-data-icon">
+          <i class="fas fa-info-circle"></i>
+        </div>
+        <h3>No Area Amenities Data Available</h3>
+        <p>We don't have area amenities data for this property yet. This could be because:</p>
+        <ul>
+          <li>The property is in a new or less analyzed area</li>
+          <li>Insufficient competitor data for comparison</li>
+          <li>Data is still being processed</li>
+        </ul>
       </div>
     </div>
   </div><!-- End of main-content -->
