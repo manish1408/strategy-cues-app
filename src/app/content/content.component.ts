@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { CompetitorComparisonService } from '../_services/competitor-comparison.servie';
 import { LocalStorageService } from '../_services/local-storage.service';
-import photoComparisonData from '../json_data/photo_comparison_data.json';
 import { ExportService } from '../_services/export.service';
 import { ToastrService } from 'ngx-toastr';
 import { ToastService } from '../_services/toast.service';
@@ -72,7 +71,7 @@ export class ContentComponent implements OnInit, OnDestroy {
       });
   }
 
-  private loadCompetitorComparisonData(): void {
+  loadCompetitorComparisonData(): void {
     this.setLoadingState(true);
     this.clearError();
     
@@ -113,26 +112,22 @@ export class ContentComponent implements OnInit, OnDestroy {
 
   private handleApiError(error: any): void {
     console.error('Error loading competitor comparison data:', error);
-    this.handleError('Failed to load competitor data. Using fallback data.');
-    this.loadFallbackData();
+    this.handleError('Failed to load competitor data. Please try again later.');
   }
 
   private handleError(message: string): void {
     this.error = message;
     this.setLoadingState(false);
-    this.loadFallbackData();
-  }
-
-  private loadFallbackData(): void {
-    this.photoComparisonData = photoComparisonData;
-    this.filteredData = [...photoComparisonData];
+    // Clear data when there's an error
+    this.photoComparisonData = [];
+    this.filteredData = [];
   }
 
   private setLoadingState(loading: boolean): void {
     this.loading = loading;
   }
 
-  private clearError(): void {
+  clearError(): void {
     this.error = null;
   }
 
@@ -147,43 +142,55 @@ export class ContentComponent implements OnInit, OnDestroy {
   private transformSingleComparison(comparison: any): any {
     return {
       // Basic property information
-      property_id: comparison.propertyId || '',
-      listing_id: comparison.listingId || comparison.propertyId || '',
-      listing_name: comparison.listingName || '',
+      propertyId: comparison.propertyId || '',
+      listingId: comparison.listingId || comparison.propertyId || '',
+      listingName: comparison.listingName || '',
       
       // Platform IDs and links
-      booking_id: comparison.bookingId || '',
-      booking_link: comparison.bookingLink || '',
-      airbnb_id: comparison.airbnbId || '',
-      airbnb_link: comparison.airbnbLink || '',
-      vrbo_id: comparison.vrboId || '',
-      vrbo_link: comparison.vrboLink || '',
+      bookingId: comparison.bookingId || '',
+      bookingLink: comparison.bookingLink || '',
+      airbnbId: comparison.airbnbId || '',
+      airbnbLink: comparison.airbnbLink || '',
+      vrboId: comparison.vrboId || '',
+      vrboLink: comparison.vrboLink || '',
       
       // Photos data - preserve the full photos object
       photos: comparison.photos || null,
       
       // Booking.com photo data
-      num_photos: this.getNestedValue(comparison, 'bookingPhotos.count', 0),
-      captioned_count: this.getNestedValue(comparison, 'bookingPhotos.withCaption', 0),
-      missing_captions: this.getNestedValue(comparison, 'bookingPhotos.missingCaption', 0),
+      bookingPhotos: {
+        count: this.getNestedValue(comparison, 'bookingPhotos.count', 0),
+        withCaption: this.getNestedValue(comparison, 'bookingPhotos.withCaption', 0),
+        missingCaption: this.getNestedValue(comparison, 'bookingPhotos.missingCaption', 0)
+      },
       
       // Airbnb photo data
-      airbnb_photos: this.getNestedValue(comparison, 'airbnbPhotos.count', 0),
-      airbnb_captioned: this.getNestedValue(comparison, 'airbnbPhotos.withCaption', 0),
-      airbnb_missing: this.getNestedValue(comparison, 'airbnbPhotos.missingCaption', 0),
+      airbnbPhotos: {
+        count: this.getNestedValue(comparison, 'airbnbPhotos.count', 0),
+        withCaption: this.getNestedValue(comparison, 'airbnbPhotos.withCaption', 0),
+        missingCaption: this.getNestedValue(comparison, 'airbnbPhotos.missingCaption', 0)
+      },
       
       // VRBO photo data
-      vrbo_photos: this.getNestedValue(comparison, 'vrboPhotos.count', 0),
-      vrbo_captioned: this.getNestedValue(comparison, 'vrboPhotos.withCaption', 0),
-      vrbo_missing: this.getNestedValue(comparison, 'vrboPhotos.missingCaption', 0),
+      vrboPhotos: {
+        count: this.getNestedValue(comparison, 'vrboPhotos.count', 0),
+        withCaption: this.getNestedValue(comparison, 'vrboPhotos.withCaption', 0),
+        missingCaption: this.getNestedValue(comparison, 'vrboPhotos.missingCaption', 0)
+      },
       
       // Review data
-      booking_reviews: this.getNestedValue(comparison, 'bookingReviews.total', 0),
-      booking_score: this.getNestedValue(comparison, 'bookingReviews.score', 0),
-      airbnb_reviews: this.getNestedValue(comparison, 'airbnbReviews.total', 0),
-      airbnb_score: this.getNestedValue(comparison, 'airbnbReviews.score', 0),
-      vrbo_reviews: this.getNestedValue(comparison, 'vrboReviews.total', 0),
-      vrbo_score: this.getNestedValue(comparison, 'vrboReviews.score', 0),
+      bookingReviews: {
+        total: this.getNestedValue(comparison, 'bookingReviews.total', 0),
+        score: this.getNestedValue(comparison, 'bookingReviews.score', 0)
+      },
+      airbnbReviews: {
+        total: this.getNestedValue(comparison, 'airbnbReviews.total', 0),
+        score: this.getNestedValue(comparison, 'airbnbReviews.score', 0)
+      },
+      vrboReviews: {
+        total: this.getNestedValue(comparison, 'vrboReviews.total', 0),
+        score: this.getNestedValue(comparison, 'vrboReviews.score', 0)
+      },
       
       // Competitors data
       competitors: Array.isArray(comparison.competitors) ? comparison.competitors : []
@@ -217,17 +224,37 @@ export class ContentComponent implements OnInit, OnDestroy {
   }
 
   getTotalMissingCaptions(): number {
-    return this.photoComparisonData.reduce((sum, property) => sum + property.missing_captions, 0);
+    return this.photoComparisonData.reduce((sum, property) => {
+      const bookingMissing = property.bookingPhotos?.missingCaption || 0;
+      const airbnbMissing = property.airbnbPhotos?.missingCaption || 0;
+      const vrboMissing = property.vrboPhotos?.missingCaption || 0;
+      return sum + bookingMissing + airbnbMissing + vrboMissing;
+    }, 0);
   }
 
   getAveragePhotos(): number {
-    const total = this.photoComparisonData.reduce((sum, property) => sum + property.num_photos, 0);
+    const total = this.photoComparisonData.reduce((sum, property) => {
+      const bookingCount = property.bookingPhotos?.count || 0;
+      const airbnbCount = property.airbnbPhotos?.count || 0;
+      const vrboCount = property.vrboPhotos?.count || 0;
+      return sum + bookingCount + airbnbCount + vrboCount;
+    }, 0);
     return Math.round(total / this.photoComparisonData.length);
   }
 
   getAverageCaptionRate(): number {
     const totalRate = this.photoComparisonData.reduce((sum, property) => {
-      return sum + (property.captioned_count / property.num_photos * 100);
+      const bookingTotal = property.bookingPhotos?.count || 0;
+      const bookingCaptioned = property.bookingPhotos?.withCaption || 0;
+      const airbnbTotal = property.airbnbPhotos?.count || 0;
+      const airbnbCaptioned = property.airbnbPhotos?.withCaption || 0;
+      const vrboTotal = property.vrboPhotos?.count || 0;
+      const vrboCaptioned = property.vrboPhotos?.withCaption || 0;
+      
+      const totalPhotos = bookingTotal + airbnbTotal + vrboTotal;
+      const totalCaptioned = bookingCaptioned + airbnbCaptioned + vrboCaptioned;
+      
+      return sum + (totalPhotos > 0 ? (totalCaptioned / totalPhotos * 100) : 0);
     }, 0);
     return Math.round(totalRate / this.photoComparisonData.length);
   }
@@ -235,23 +262,26 @@ export class ContentComponent implements OnInit, OnDestroy {
   // Table helper methods
   getGapClass(photoGap: number): string {
     if (photoGap > 0) {
-      return photoGap > 20 ? 'gap-critical' : 'gap-behind';
-    } else {
+      return 'gap-behind';
+    } else if (photoGap < 0) {
       return 'gap-ahead';
+    } else {
+      return 'gap-neutral';
     }
   }
 
   // Photo gap methods
   getPhotoGap(property: any): number {
-    return this.calculatePhotoGap(property, 'competitorBookingPhotos.count', property.num_photos);
+    const totalPhotos = (property.bookingPhotos?.count || 0) + (property.airbnbPhotos?.count || 0) + (property.vrboPhotos?.count || 0);
+    return this.calculatePhotoGap(property, 'competitorBookingPhotos.count', totalPhotos);
   }
 
   getAirbnbPhotoGap(property: any): number {
-    return this.calculatePhotoGap(property, 'competitorAirbnbPhotos.count', property.airbnb_photos);
+    return this.calculatePhotoGap(property, 'competitorAirbnbPhotos.count', property.airbnbPhotos?.count || 0);
   }
 
   getBookingPhotoGap(property: any): number {
-    return this.calculatePhotoGap(property, 'competitorBookingPhotos.count', property.num_photos);
+    return this.calculatePhotoGap(property, 'competitorBookingPhotos.count', property.bookingPhotos?.count || 0);
   }
 
   // Pricelabs methods - commented out for future use
@@ -280,9 +310,11 @@ export class ContentComponent implements OnInit, OnDestroy {
 
   getPlatformGapClass(photoGap: number): string {
     if (photoGap > 0) {
-      return photoGap > 20 ? 'gap-critical' : 'gap-behind';
-    } else {
+      return 'gap-behind';
+    } else if (photoGap < 0) {
       return 'gap-ahead';
+    } else {
+      return 'gap-neutral';
     }
   }
 
@@ -294,11 +326,11 @@ export class ContentComponent implements OnInit, OnDestroy {
 
   // Photo count methods
   getAirbnbPhotoCount(property: any): { count: number; types: string[] } {
-    return this.createPhotoCountResponse(property.airbnb_photos, property.property_photos);
+    return this.createPhotoCountResponse(property.airbnbPhotos?.count || 0, property.photos?.airbnb);
   }
 
   getBookingPhotoCount(property: any): { count: number; types: string[] } {
-    return this.createPhotoCountResponse(property.num_photos, property.property_photos);
+    return this.createPhotoCountResponse(property.bookingPhotos?.count || 0, property.photos?.booking);
   }
 
   // getPricelabPhotoCount(property: any): { count: number; types: string[] } {
@@ -323,11 +355,11 @@ export class ContentComponent implements OnInit, OnDestroy {
 
   // Review count methods
   getAirbnbReviewCount(property: any): { count: number; score: number } {
-    return this.createReviewCountResponse(property.airbnb_reviews, property.airbnb_score);
+    return this.createReviewCountResponse(property.airbnbReviews?.total || 0, property.airbnbReviews?.score || 0);
   }
 
   getBookingReviewCount(property: any): { count: number; score: number } {
-    return this.createReviewCountResponse(property.booking_reviews, property.booking_score);
+    return this.createReviewCountResponse(property.bookingReviews?.total || 0, property.bookingReviews?.score || 0);
   }
 
   // getPricelabReviewCount(property: any): { count: number; score: number } {
@@ -383,25 +415,33 @@ export class ContentComponent implements OnInit, OnDestroy {
   // }
 
   getCaptionPercentage(property: any): number {
-    const total = property.num_photos || 0;
-    const captioned = property.captioned_count || 0;
-    return total > 0 ? Math.round((captioned / total) * 100) : 0;
+    const bookingTotal = property.bookingPhotos?.count || 0;
+    const bookingCaptioned = property.bookingPhotos?.withCaption || 0;
+    const airbnbTotal = property.airbnbPhotos?.count || 0;
+    const airbnbCaptioned = property.airbnbPhotos?.withCaption || 0;
+    const vrboTotal = property.vrboPhotos?.count || 0;
+    const vrboCaptioned = property.vrboPhotos?.withCaption || 0;
+    
+    const totalPhotos = bookingTotal + airbnbTotal + vrboTotal;
+    const totalCaptioned = bookingCaptioned + airbnbCaptioned + vrboCaptioned;
+    
+    return totalPhotos > 0 ? Math.round((totalCaptioned / totalPhotos) * 100) : 0;
   }
 
   // Caption status methods
   getAirbnbCaptionStatus(property: any): { percentage: number; captioned: number; total: number; missing: number } {
     return this.createCaptionStatusResponse(
-      property.airbnb_photos,
-      property.airbnb_captioned,
-      property.airbnb_missing
+      property.airbnbPhotos?.count || 0,
+      property.airbnbPhotos?.withCaption || 0,
+      property.airbnbPhotos?.missingCaption || 0
     );
   }
 
   getBookingCaptionStatus(property: any): { percentage: number; captioned: number; total: number; missing: number } {
     return this.createCaptionStatusResponse(
-      property.num_photos,
-      property.captioned_count,
-      property.missing_captions
+      property.bookingPhotos?.count || 0,
+      property.bookingPhotos?.withCaption || 0,
+      property.bookingPhotos?.missingCaption || 0
     );
   }
 

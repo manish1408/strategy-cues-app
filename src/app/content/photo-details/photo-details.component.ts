@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Location } from "@angular/common";
-import photoComparisonData from "../../json_data/photo_comparison_data.json";
+// import photoComparisonData from "../../json_data/photo_comparison_data.json";
 import { GalleryItem, ImageItem } from "ng-gallery";
 import { CompetitorComparisonService } from "../../_services/competitor-comparison.servie";
 import { SummaryPipe } from "../../summary.pipe";
@@ -313,6 +313,45 @@ export class PhotoDetailsComponent implements OnInit {
     return (
       this.getCompetitorPhotosCount(competitor) - this.getTotalPropertyPhotos()
     );
+  }
+
+  // Get platform-specific photo gap for a competitor
+  getCompetitorPlatformPhotoGap(competitor: any, platform: string): number {
+    if (!competitor) return 0;
+    
+    // Get competitor count for specific platform
+    let competitorCount = 0;
+    switch (platform) {
+      case 'airbnb':
+        competitorCount = competitor.propertyAirbnbPhotos?.length || 0;
+        break;
+      case 'booking':
+        competitorCount = competitor.propertyBookingPhotos?.length || 0;
+        break;
+      case 'vrbo':
+        competitorCount = competitor.propertyVrboPhotos?.length || 0;
+        break;
+    }
+    
+    const propertyCount = this.getPropertyPlatformPhotoCount(platform);
+    
+    return competitorCount - propertyCount;
+  }
+
+  // Get platform photo count for a specific competitor
+  getCompetitorPlatformPhotoCountForCompetitor(competitor: any, platform: string): number {
+    if (!competitor) return 0;
+    
+    switch (platform) {
+      case 'airbnb':
+        return competitor.propertyAirbnbPhotos?.length || 0;
+      case 'booking':
+        return competitor.propertyBookingPhotos?.length || 0;
+      case 'vrbo':
+        return competitor.propertyVrboPhotos?.length || 0;
+      default:
+        return 0;
+    }
   }
 
   getTotalCompetitorPhotos(): number {
@@ -951,36 +990,7 @@ export class PhotoDetailsComponent implements OnInit {
 
     // Fallback data if no recommendations in JSON
     return [
-      {
-        title: "Floor plan",
-        available: false,
-        description:
-          "A floor plan helps guests understand the layout and space distribution of your property.",
-      },
-      {
-        title: "Aerial photo",
-        available: true,
-        description:
-          "Aerial photos show the property's location, surroundings, and neighborhood context.",
-      },
-      {
-        title: "Best reviews",
-        available: false,
-        description:
-          "Highlight your best guest reviews to build trust and showcase positive experiences.",
-      },
-      {
-        title: "High speed internet",
-        available: false,
-        description:
-          "Show your internet setup and speed test results to attract business travelers.",
-      },
-      {
-        title: "Map with points of interest",
-        available: false,
-        description:
-          "A map showing nearby attractions, restaurants, and transportation options.",
-      },
+   
     ];
   }
 
@@ -1360,5 +1370,59 @@ export class PhotoDetailsComponent implements OnInit {
   getCurrentPhotoId(): string {
     const photoData = this.getCurrentPhotoData();
     return photoData?.id || '';
+  }
+
+  // Get the first available photo from any platform for a competitor
+  getCompetitorFirstPhoto(competitor: any): string {
+    if (!competitor) return 'assets/images/placeholder.jpg';
+
+    // Try to get first photo from any platform
+    if (competitor.propertyAirbnbPhotos && competitor.propertyAirbnbPhotos.length > 0) {
+      return competitor.propertyAirbnbPhotos[0].url;
+    }
+    if (competitor.propertyBookingPhotos && competitor.propertyBookingPhotos.length > 0) {
+      return competitor.propertyBookingPhotos[0].url;
+    }
+    if (competitor.propertyVrboPhotos && competitor.propertyVrboPhotos.length > 0) {
+      return competitor.propertyVrboPhotos[0].url;
+    }
+
+    return 'assets/images/placeholder.jpg';
+  }
+
+  // Get user-friendly gap message
+  getUserFriendlyGapMessage(gap: number): string {
+    if (gap > 0) {
+      return `${gap} photos behind`;
+    } else if (gap < 0) {
+      return `${Math.abs(gap)} photos ahead`;
+    } else {
+      return 'Same photo count';
+    }
+  }
+
+  // Get photo by ID from all platforms
+  getPhotoById(photoId: string): any {
+    if (!this.propertyData?.Photos) return null;
+    
+    // Check Airbnb photos
+    if (this.propertyData.Photos.airbnb) {
+      const photo = this.propertyData.Photos.airbnb.find((p: any) => p.id === photoId);
+      if (photo) return photo;
+    }
+    
+    // Check Booking photos
+    if (this.propertyData.Photos.booking) {
+      const photo = this.propertyData.Photos.booking.find((p: any) => p.id === photoId);
+      if (photo) return photo;
+    }
+    
+    // Check VRBO photos
+    if (this.propertyData.Photos.vrbo) {
+      const photo = this.propertyData.Photos.vrbo.find((p: any) => p.id === photoId);
+      if (photo) return photo;
+    }
+    
+    return null;
   }
 }

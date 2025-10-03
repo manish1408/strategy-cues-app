@@ -21,7 +21,7 @@
               <i class="fas fa-arrow-left"></i> Back to Content
             </button>
             <div class="title-info">
-              <h1 class="mb-1 text-truncate" [title]="propertyData?.Listing_Name">{{ propertyData?.Listing_Name }}</h1>
+              <h1 class="mb-1 text-truncate" style="text-wrap: auto;" [title]="propertyData?.Listing_Name">{{ propertyData?.Listing_Name }}</h1>
               <div class="property-meta">
                 <!-- <span class="badge bg-light text-dark me-2">{{ propertyData?.listing_id }}</span> -->
                 <span class="badge bg-primary" *ngIf="propertyData?.Photos?.airbnb?.length + propertyData?.Photos?.booking?.length + propertyData?.Photos?.vrbo?.length"> 
@@ -131,16 +131,16 @@
            [class.active]="selectedCompetitorIndex === i" 
            (click)="selectCompetitor(i)">
         <div class="nav-card-image">
-          <img [src]="competitor.photos && competitor.photos.length > 0 ? competitor.photos[0].url : 'assets/images/placeholder.jpg'" 
+          <img [src]="getCompetitorFirstPhoto(competitor)" 
                [alt]="competitor.propertyName" 
                (error)="onImageError($event)">
         </div>
         <div class="nav-card-content">
           <h4 [title]="competitor.propertyName">{{competitor.propertyName | summary: 10}}</h4>
-          <span class="photo-count">{{getCompetitorPhotosCount(competitor)}} photos</span>
+          <span class="photo-count">{{getCompetitorPlatformPhotoCountForCompetitor(competitor, selectedPropertyPlatform)}} photos</span>
           <span class="gap-indicator" 
-                [ngClass]="getGapClass(getCompetitorPhotoGap(competitor))">
-            {{getCompetitorPhotoGap(competitor) > 0 ? '+' : ''}}{{getCompetitorPhotoGap(competitor)}} {{getCompetitorPhotoGap(competitor) > 0 ? 'more than you' : 'less than you'}}
+                [ngClass]="getGapClass(getCompetitorPlatformPhotoGap(competitor, selectedPropertyPlatform))">Your property is
+            {{getUserFriendlyGapMessage(getCompetitorPlatformPhotoGap(competitor, selectedPropertyPlatform))}}
           </span>
         </div>
         <div class="nav-card-links">
@@ -390,11 +390,13 @@
   </div>
 
   <!-- Additional Photo Suggestions -->
-  <div class="photo-suggestions-section" *ngIf="getPhotoSuggestions().length > 0">
+  <div class="photo-suggestions-section">
     <div class="suggestions-header">
       <h2>Additional photo suggestions</h2>
     </div>
-    <div class="suggestions-list">
+    
+    <!-- Suggestions List -->
+    <div class="suggestions-list" *ngIf="getPhotoSuggestions().length > 0">
       <div class="suggestion-item" *ngFor="let suggestion of getPhotoSuggestions()">
         <div class="suggestion-status">
           <i class="fas" [ngClass]="suggestion.available ? 'fa-check' : 'fa-times'" 
@@ -416,6 +418,14 @@
           </div>
         </div>
       </div>
+    </div>
+    
+    <!-- Empty State -->
+    <div class="suggestions-empty-state" *ngIf="getPhotoSuggestions().length === 0">
+      <app-empty-state 
+        icon="fas fa-lightbulb"
+        title="No Photo Suggestions Available">
+      </app-empty-state>
     </div>
   </div>
 
@@ -447,7 +457,10 @@
     <div class="missing-list">
       <div class="missing-item" *ngFor="let photoId of getMissingCaptionPhotos()">
         <i class="fas fa-exclamation-triangle"></i>
-        <span>Photo {{photoId}} needs a caption</span>
+        <img style="width: 40px; height: 40px;     object-fit: fill;" [src]="getPhotoById(photoId)?.url" [alt]="'Photo ' + photoId" (error)="onImageError($event)">
+        <span *ngIf="!getPhotoById(photoId)?.caption">Photo {{photoId}} needs a caption</span>
+        <span *ngIf="getPhotoById(photoId)?.caption">{{getPhotoById(photoId)?.caption}}</span>
+     
         <button 
           class="btn btn-sm btn-primary" 
           (click)="generateCaption(photoId)"

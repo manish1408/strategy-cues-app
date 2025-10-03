@@ -39,9 +39,16 @@
         </div>
 
         <!-- Error State -->
-        <div *ngIf="error && !loading" class="alert alert-warning" role="alert">
-          <i class="fas fa-exclamation-triangle me-2"></i>
-          {{ error }}
+        <div *ngIf="error && !loading" class="text-center py-5">
+          <app-empty-state 
+            icon="fas fa-exclamation-triangle"
+            title="Unable to Load Content Data">
+          </app-empty-state>
+          <div class="mt-3">
+            <button class="btn btn-primary" (click)="loadCompetitorComparisonData()">
+              <i class="fas fa-refresh me-2"></i>Try Again
+            </button>
+          </div>
         </div>
 
 
@@ -66,12 +73,12 @@
                         <div class="property-info">
                           <div class="property-image">
                             <img [src]="getPropertyImage(property)" 
-                                 [alt]="property.property_title || property.listing_name"
+                                 [alt]="property.listingName"
                                  (error)="onImageError($event)"
                                  loading="lazy">
                           </div>
                           <div class="property-details">
-                            <h4>{{property.listing_name}}</h4>
+                            <h4>{{property.listingName}}</h4>
                             <!-- <span class="property-id">{{property.property_id}}</span> -->
                             <div class="competitor-info" *ngIf="hasCompetitors(property)">
                               <small class="text-muted">
@@ -79,12 +86,18 @@
                               </small>
                             </div>
                             <div class="property-links">
-                              <a [href]="property.airbnb_link" target="_blank" class="platform-link airbnb">
+                              <a *ngIf="property.airbnbLink && property.airbnbLink !== null && property.airbnbLink !== ''" [href]="property.airbnbLink" target="_blank" class="platform-link airbnb">
                                 <i class="fab fa-airbnb"></i>
                               </a>
-                              <a [href]="property.booking_link" target="_blank" class="platform-link booking">
+                              <span *ngIf="!property.airbnbLink || property.airbnbLink === null || property.airbnbLink === ''" class="platform-link airbnb disabled">
+                                <i class="fab fa-airbnb"></i>
+                              </span>
+                              <a *ngIf="property.bookingLink && property.bookingLink !== null && property.bookingLink !== ''" [href]="property.bookingLink" target="_blank" class="platform-link booking">
                                 <i class="fas fa-bed"></i>
                               </a>
+                              <span *ngIf="!property.bookingLink || property.bookingLink === null || property.bookingLink === ''" class="platform-link booking disabled">
+                                <i class="fas fa-bed"></i>
+                              </span>
                               <!-- Pricelabs link - commented out for future use
                               <a *ngIf="property.pricelabs_link" [href]="property.pricelabs_link" target="_blank" class="platform-link pricelab" title="View on Pricelab">
                                 <i class="fas fa-chart-line"></i>
@@ -357,7 +370,7 @@
                       </td>
                       <td class="actions-cell">
                         <div class="btn-group btn-group-sm">
-                          <button class="btn btn-outline-primary btn-sm" (click)="viewPhotoDetails(property.listing_id)">
+                          <button class="btn btn-outline-primary btn-sm" (click)="viewPhotoDetails(property.propertyId)">
                             <i class="fas fa-eye"></i>
                           </button>
                         </div>
@@ -397,15 +410,14 @@
 
       <!-- Empty State -->
       <div *ngIf="!loading && !error && (!photoComparisonData || photoComparisonData.length === 0)" class="text-center py-5">
-        <div class="card">
-          <div class="card-body">
-            <i class="fas fa-images fa-3x text-muted mb-3"></i>
-            <h5 class="card-title">No Content Found</h5>
-            <p class="card-text">No content comparison data found matching your criteria. Try adjusting your search terms or check back later.</p>
-            <button class="btn btn-primary" (click)="clearSearch()">
-              <i class="fas fa-refresh me-2"></i>Clear Search
-            </button>
-          </div>
+        <app-empty-state 
+          icon="fas fa-images"
+          title="No Content Data Available">
+        </app-empty-state>
+        <div class="mt-3">
+          <button class="btn btn-primary" (click)="clearSearch()" *ngIf="searchTerm">
+            <i class="fas fa-refresh me-2"></i>Clear Search
+          </button>
         </div>
       </div>
     </div>

@@ -778,21 +778,15 @@ $transition: all 0.3s ease;
         }
 
         &.gap-ahead {
-          //  background: rgba(255, 90, 95, 0.1);
-          // border-color: rgba(255, 90, 95, 0.2);
-          color: #c53030;
+          color: #FF5A5F; // Red for ahead
         }
         
         &.gap-behind {
-          // background: rgba(255, 90, 95, 0.15);
-          // border-color: rgba(255, 90, 95, 0.3);
-          color: #9c1a1a;
+          color: #FF5A5F; // Red for behind
         }
         
-        &.gap-critical {
-          // background: rgba(255, 90, 95, 0.2);
-          // border-color: rgba(255, 90, 95, 0.4);
-          color: #742a2a;
+        &.gap-neutral {
+          color: #FF5A5F; // Gray for neutral
         }
       }
       
@@ -809,21 +803,15 @@ $transition: all 0.3s ease;
         }
         
         &.gap-ahead {
-          // background: rgba(0, 53, 128, 0.1);
-          // border-color: rgba(0, 53, 128, 0.2);
-          color: #1e40af;
+          color: #003580; // Blue for ahead
         }
         
         &.gap-behind {
-          // background: rgba(0, 53, 128, 0.15);
-          // border-color: rgba(0, 53, 128, 0.3);
-          color: #1e3a8a;
+          color: #003580; // Blue for behind
         }
         
-        &.gap-critical {
-          // background: rgba(0, 53, 128, 0.2);
-          // border-color: rgba(0, 53, 128, 0.4);
-          color: #1e293b;
+        &.gap-neutral {
+          color: #003580; // Gray for neutral
         }
       }
 
@@ -839,23 +827,15 @@ $transition: all 0.3s ease;
         }
 
         &.gap-ahead {
-          // background: rgba(107, 70, 193, 0.1);
-          // border-color: rgba(107, 70, 193, 0.2);
-          color: #553C9A;
+          color: #6B46C1; // Purple for ahead
         }
-        
         
         &.gap-behind {
-          // background: rgba(107, 70, 193, 0.15);
-          // border-color: rgba(107, 70, 193, 0.3);
-          color: #553C9A;
+          color: #6B46C1; // Purple for behind
         }
         
-        
-        &.gap-critical {
-          // background: rgba(107, 70, 193, 0.2);
-          // border-color: rgba(107, 70, 193, 0.4);
-          color: #553C9A;
+        &.gap-neutral {
+          color: #6B46C1; // Gray for neutral
         }
       }
 
@@ -869,21 +849,15 @@ $transition: all 0.3s ease;
         }
         
         &.gap-ahead {
-          background: rgba(0, 166, 153, 0.1);
-          border-color: rgba(0, 166, 153, 0.2);
-          color: #059669;
+          color: #059669; // Green for ahead
         }
         
         &.gap-behind {
-          background: rgba(0, 166, 153, 0.15);
-          border-color: rgba(0, 166, 153, 0.3);
-          color: #047857;
+          color: #059669; // Green for behind
         }
         
-        &.gap-critical {
-          background: rgba(0, 166, 153, 0.2);
-          border-color: rgba(0, 166, 153, 0.4);
-          color: #065f46;
+        &.gap-neutral {
+          color: #6b7280; // Gray for neutral
         }
       } */
 
