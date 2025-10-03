@@ -5,6 +5,9 @@ import { Location } from "@angular/common";
 import { GalleryItem, ImageItem } from "ng-gallery";
 import { CompetitorComparisonService } from "../../_services/competitor-comparison.servie";
 import { SummaryPipe } from "../../summary.pipe";
+import { ImageCaptionService } from "../../_services/image-caption.service";
+import { ToastService } from "../../_services/toast.service";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: "app-photo-details",
@@ -48,6 +51,7 @@ export class PhotoDetailsComponent implements OnInit {
   // Caption generation properties
   isGeneratingCaption: boolean = false;
   generatingPhotoId: string = "";
+  generatingPhotoUrl: string = "";
   
   // Store photo metadata separately since ImageItem doesn't support custom data
   currentPlatformPhotos: any[] = [];
@@ -67,7 +71,9 @@ export class PhotoDetailsComponent implements OnInit {
     private router: Router,
     private location: Location,
     private competitorComparisonService: CompetitorComparisonService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private imageCaptionService: ImageCaptionService,
+    private toastService: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -1281,29 +1287,38 @@ export class PhotoDetailsComponent implements OnInit {
   }
 
   // Caption generation methods
-  generateCaption(photoId: string): void {
+  generateCaption(photoUrl: string): void {
     if (this.isGeneratingCaption) {
       return;
     }
 
     this.isGeneratingCaption = true;
-    this.generatingPhotoId = photoId;
+    this.generatingPhotoUrl = photoUrl;
 
-    this.competitorComparisonService.generateCaption(this.propertyId, photoId, this.operatorId)
+    this.imageCaptionService.generateCaption(photoUrl)
       .subscribe({
         next: (response: any) => {
           console.log('Caption generated successfully:', response);
           
-          // Update the photo caption in the property data
-          this.updatePhotoCaption(photoId, response.data?.caption || response.caption);
+          // Show success toast
+          if (response.success) {
+            this.toastService.showSuccess('Caption generated successfully!');
+            
+            // Update the photo caption in the property data
+            const caption = response.data?.caption || response.caption;
+            this.updatePhotoCaptionByUrl(photoUrl, caption);
+          }
           
           this.isGeneratingCaption = false;
-          this.generatingPhotoId = "";
+          this.generatingPhotoUrl = "";
+          this.loadPropertyCompetitors(this.propertyId);
         },
         error: (error) => {
-          console.error('Error generating caption:', error);
+          console.error('Error generating caption:', error.message);
+          this.toastService.showError('Failed to generate caption. Please try again.');
           this.isGeneratingCaption = false;
-          this.generatingPhotoId = "";
+          this.generatingPhotoUrl = "";
+          this.loadPropertyCompetitors(this.propertyId);
         }
       });
   }
@@ -1351,8 +1366,61 @@ export class PhotoDetailsComponent implements OnInit {
     }
   }
 
+  private updatePhotoCaptionByUrl(photoUrl: string, caption: string): void {
+    if (!this.propertyData?.Photos) return;
+
+    // Update Airbnb photos
+    if (this.propertyData.Photos.airbnb) {
+      const photo = this.propertyData.Photos.airbnb.find((p: any) => p.url === photoUrl);
+      if (photo) {
+        photo.caption = caption;
+        // Update current platform photos if it's the same platform
+        if (this.selectedPropertyPlatform === 'airbnb') {
+          this.updatePropertyPlatformImages();
+        }
+        // Trigger change detection to update the UI
+        this.cdr.detectChanges();
+        return;
+      }
+    }
+
+    // Update Booking photos
+    if (this.propertyData.Photos.booking) {
+      const photo = this.propertyData.Photos.booking.find((p: any) => p.url === photoUrl);
+      if (photo) {
+        photo.caption = caption;
+        // Update current platform photos if it's the same platform
+        if (this.selectedPropertyPlatform === 'booking') {
+          this.updatePropertyPlatformImages();
+        }
+        // Trigger change detection to update the UI
+        this.cdr.detectChanges();
+        return;
+      }
+    }
+
+    // Update VRBO photos
+    if (this.propertyData.Photos.vrbo) {
+      const photo = this.propertyData.Photos.vrbo.find((p: any) => p.url === photoUrl);
+      if (photo) {
+        photo.caption = caption;
+        // Update current platform photos if it's the same platform
+        if (this.selectedPropertyPlatform === 'vrbo') {
+          this.updatePropertyPlatformImages();
+        }
+        // Trigger change detection to update the UI
+        this.cdr.detectChanges();
+        return;
+      }
+    }
+  }
+
   isGeneratingCaptionForPhoto(photoId: string): boolean {
     return this.isGeneratingCaption && this.generatingPhotoId === photoId;
+  }
+
+  isGeneratingCaptionForPhotoUrl(photoUrl: string): boolean {
+    return this.isGeneratingCaption && this.generatingPhotoUrl === photoUrl;
   }
 
   // Get current photo data for caption generation

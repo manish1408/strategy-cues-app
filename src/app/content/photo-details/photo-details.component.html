@@ -463,11 +463,13 @@
      
         <button 
           class="btn btn-sm btn-primary" 
-          (click)="generateCaption(photoId)"
-          [disabled]="isGeneratingCaptionForPhoto(photoId)">
-          <span *ngIf="isGeneratingCaptionForPhoto(photoId)" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-          {{ isGeneratingCaptionForPhoto(photoId) ? 'Generating...' : 'Generate Caption' }}
+          (click)="generateCaption(getPhotoById(photoId)?.url)"
+          [disabled]="isGeneratingCaptionForPhotoUrl(getPhotoById(photoId)?.url)">
+          <span *ngIf="isGeneratingCaptionForPhotoUrl(getPhotoById(photoId)?.url)" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          Generate Caption
         </button>
+
+        
       </div>
     </div>
   </div>
