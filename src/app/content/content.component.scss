@@ -395,6 +395,18 @@ $transition: all 0.3s ease;
             background: #008a7d;
           }
         } */
+        
+        &.disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+          background: #6c757d !important;
+          color: #fff !important;
+          
+          &:hover {
+            background: #6c757d !important;
+            transform: none;
+          }
+        }
       }
     }
   }

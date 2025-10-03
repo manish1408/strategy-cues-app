@@ -89,7 +89,7 @@ export class ContentComponent implements OnInit, OnDestroy {
 
   private handleApiResponse(response: any): void {
     if (response?.data?.comparisons) {
-      this.photoComparisonData = this.transformApiDataToPhotoComparison(response.data.comparisons);
+      this.photoComparisonData = response.data.comparisons;
       this.filteredData = [...this.photoComparisonData];
       
       // Update pagination data from response
@@ -131,71 +131,7 @@ export class ContentComponent implements OnInit, OnDestroy {
     this.error = null;
   }
 
-  private transformApiDataToPhotoComparison(comparisons: any[]): any[] {
-    if (!Array.isArray(comparisons)) {
-      return [];
-    }
 
-    return comparisons.map(comparison => this.transformSingleComparison(comparison));
-  }
-
-  private transformSingleComparison(comparison: any): any {
-    return {
-      // Basic property information
-      propertyId: comparison.propertyId || '',
-      listingId: comparison.listingId || comparison.propertyId || '',
-      listingName: comparison.listingName || '',
-      
-      // Platform IDs and links
-      bookingId: comparison.bookingId || '',
-      bookingLink: comparison.bookingLink || '',
-      airbnbId: comparison.airbnbId || '',
-      airbnbLink: comparison.airbnbLink || '',
-      vrboId: comparison.vrboId || '',
-      vrboLink: comparison.vrboLink || '',
-      
-      // Photos data - preserve the full photos object
-      photos: comparison.photos || null,
-      
-      // Booking.com photo data
-      bookingPhotos: {
-        count: this.getNestedValue(comparison, 'bookingPhotos.count', 0),
-        withCaption: this.getNestedValue(comparison, 'bookingPhotos.withCaption', 0),
-        missingCaption: this.getNestedValue(comparison, 'bookingPhotos.missingCaption', 0)
-      },
-      
-      // Airbnb photo data
-      airbnbPhotos: {
-        count: this.getNestedValue(comparison, 'airbnbPhotos.count', 0),
-        withCaption: this.getNestedValue(comparison, 'airbnbPhotos.withCaption', 0),
-        missingCaption: this.getNestedValue(comparison, 'airbnbPhotos.missingCaption', 0)
-      },
-      
-      // VRBO photo data
-      vrboPhotos: {
-        count: this.getNestedValue(comparison, 'vrboPhotos.count', 0),
-        withCaption: this.getNestedValue(comparison, 'vrboPhotos.withCaption', 0),
-        missingCaption: this.getNestedValue(comparison, 'vrboPhotos.missingCaption', 0)
-      },
-      
-      // Review data
-      bookingReviews: {
-        total: this.getNestedValue(comparison, 'bookingReviews.total', 0),
-        score: this.getNestedValue(comparison, 'bookingReviews.score', 0)
-      },
-      airbnbReviews: {
-        total: this.getNestedValue(comparison, 'airbnbReviews.total', 0),
-        score: this.getNestedValue(comparison, 'airbnbReviews.score', 0)
-      },
-      vrboReviews: {
-        total: this.getNestedValue(comparison, 'vrboReviews.total', 0),
-        score: this.getNestedValue(comparison, 'vrboReviews.score', 0)
-      },
-      
-      // Competitors data
-      competitors: Array.isArray(comparison.competitors) ? comparison.competitors : []
-    };
-  }
 
   private getNestedValue(obj: any, path: string, defaultValue: any = 0): any {
     return path.split('.').reduce((current, key) => current?.[key], obj) ?? defaultValue;
