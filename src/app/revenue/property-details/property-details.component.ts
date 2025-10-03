@@ -157,6 +157,29 @@ export class PropertyDetailsComponent implements OnInit {
     return textArray || '';
   }
 
+  // Helper method to filter out Booking.com payment references
+  getFilteredPrepaymentText(prepaymentText: string): string {
+    if (!prepaymentText) return '';
+    
+    // Remove "thanks to Payments by Booking.com" and similar phrases
+    let filteredText = prepaymentText
+      .replace(/thanks to Payments by Booking\.com/gi, '')
+      .replace(/Payments by Booking\.com/gi, '')
+      .replace(/thanks to booking\.com/gi, '')
+      .replace(/booking\.com/gi, '')
+      .trim();
+    
+    // Fix punctuation issues - remove comma before period
+    filteredText = filteredText.replace(/,\s*\./g, '.');
+    
+    // Ensure proper ending punctuation
+    if (filteredText && !filteredText.endsWith('.') && !filteredText.endsWith('!') && !filteredText.endsWith('?')) {
+      filteredText += '.';
+    }
+    
+    return filteredText;
+  }
+
   // Methods to handle booking platform links
   openBookingLink(platform: 'Booking' | 'Airbnb' | 'VRBO'): void {
     if(platform === 'Booking') {

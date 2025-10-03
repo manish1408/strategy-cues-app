@@ -588,18 +588,18 @@
                               [ngClass]="getPolicyTypeClass(policy.policy_group_title)">
                               {{ policy.policy_group_title }}
                             </span>
-                            <span class="badge badge-info ms-2" *ngIf="policy.is_general_policy === 1">
+                            <!-- <span class="badge badge-info ms-2" *ngIf="policy.is_general_policy === 1">
                               General
                             </span>
                             <span class="badge badge-warning ms-2" *ngIf="policy.is_non_refundable_policy === 1">
                               Non-Refundable
-                            </span>
+                            </span> -->
                           </div>
                           <div class="policy-description">
                             {{ getPolicyText(policy.text) }}
                           </div>
-                          <div class="policy-meta" *ngIf="policy.prepayment?.text">
-                            <small class="text-muted" [innerHTML]="policy.prepayment.text"></small>
+                          <div class="policy-meta" *ngIf="policy.prepayment?.text && getFilteredPrepaymentText(policy.prepayment.text)">
+                            <small class="text-muted" [innerHTML]="getFilteredPrepaymentText(policy.prepayment.text)"></small>
                           </div>
                         </div>
                       </ng-container>
