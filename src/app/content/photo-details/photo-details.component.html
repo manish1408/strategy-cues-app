@@ -442,13 +442,19 @@
   </div> -->
 
   <!-- Missing Captions Section -->
-  <div class="missing-captions-section" *ngIf="propertyData?.missing_captions > 0">
-    <h2>Missing Captions</h2>
+  <div class="missing-captions-section" *ngIf="getMissingCaptionsCount() > 0">
+    <h2>Missing Captions ({{ getMissingCaptionsCount() }})</h2>
     <div class="missing-list">
       <div class="missing-item" *ngFor="let photoId of getMissingCaptionPhotos()">
         <i class="fas fa-exclamation-triangle"></i>
         <span>Photo {{photoId}} needs a caption</span>
-        <button class="btn btn-sm btn-primary" (click)="openCaptionModal(photoId)">Add Caption</button>
+        <button 
+          class="btn btn-sm btn-primary" 
+          (click)="generateCaption(photoId)"
+          [disabled]="isGeneratingCaptionForPhoto(photoId)">
+          <span *ngIf="isGeneratingCaptionForPhoto(photoId)" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          {{ isGeneratingCaptionForPhoto(photoId) ? 'Generating...' : 'Generate Caption' }}
+        </button>
       </div>
     </div>
   </div>
@@ -498,52 +504,6 @@
       </button>
       <button class="nav-btn next" (click)="nextPhoto()" *ngIf="selectedPhotoIndex < propertyData.property_photos.length - 1">
         <i class="fas fa-chevron-right"></i>
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- Caption Modal -->
-<div class="caption-modal" *ngIf="showCaptionModal" (click)="closeCaptionModal()">
-  <div class="modal-content" (click)="$event.stopPropagation()">
-    <div class="modal-header">
-      <h3>Add Caption</h3>
-      <button class="close-btn" (click)="closeCaptionModal()">
-        <i class="fas fa-times"></i>
-      </button>
-    </div>
-    <div class="modal-body">
-      <div class="property-info">
-        <h4 [title]="propertyData?.listing_name || 'Property'">{{ propertyData?.listing_name || 'Property' }}</h4>
-        <p class="photo-id">Photo ID: {{ selectedPhotoId }}</p>
-      </div>
-      <div class="form-group">
-        <label for="caption-textarea">Caption</label>
-        <textarea 
-          id="caption-textarea"
-          class="form-control" 
-          [(ngModel)]="captionText" 
-          placeholder="Enter a descriptive caption for this photo..."
-          rows="4"
-          [disabled]="isSubmittingCaption">
-        </textarea>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button 
-        type="button" 
-        class="btn btn-secondary" 
-        (click)="closeCaptionModal()"
-        [disabled]="isSubmittingCaption">
-        Cancel
-      </button>
-      <button 
-        type="button" 
-        class="btn btn-primary" 
-        (click)="submitCaption()"
-        [disabled]="isSubmittingCaption || !captionText.trim()">
-        <span *ngIf="isSubmittingCaption" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-        {{ isSubmittingCaption ? 'Adding...' : 'Add Caption' }}
       </button>
     </div>
   </div>

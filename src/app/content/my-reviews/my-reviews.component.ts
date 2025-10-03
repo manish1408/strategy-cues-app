@@ -25,9 +25,16 @@ export class MyReviewsComponent implements OnInit {
    guestLovedLoading: boolean = false;
    whatToImproveLoading: boolean = false;
    
-   error: string | null = null;
    operatorId: string = "";
    propertyId: string = "";
+
+   // Check if all data is empty
+   get isAllDataEmpty(): boolean {
+     return (!this.guestDidntLikeData || this.guestDidntLikeData.length === 0) &&
+            (!this.guestWishesData || this.guestWishesData.length === 0) &&
+            (!this.guestLovedData || this.guestLovedData.length === 0) &&
+            (!this.whatToImproveData || this.whatToImproveData.length === 0);
+   }
 
   // My Reviews Data
   myDislikes = [
@@ -125,13 +132,11 @@ export class MyReviewsComponent implements OnInit {
       this.loadGuestWishData();
       this.loadWhatToImproveData();
     } else {
-      this.error = "Operator ID not available";
     }
   }
 
   loadGuestDidntLikeData(): void {
     this.guestDidntLikeLoading = true;
-    this.error = null;
 
     this.competitorComparisonService
       .getGuestDidntLikeInMyProperty(this.propertyId, this.operatorId)
@@ -148,7 +153,6 @@ export class MyReviewsComponent implements OnInit {
           console.log("Guest didn't like data loaded:", response);
         },
         error: (error) => {
-          this.error = "Failed to load guest insights data";
           this.guestDidntLikeLoading = false;
           this.checkAllDataLoaded();
           console.error("Error loading guest didn't like data:", error);

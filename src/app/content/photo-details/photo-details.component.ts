@@ -45,11 +45,12 @@ export class PhotoDetailsComponent implements OnInit {
   private isThumbnailMouseDown: boolean = false;
   private currentThumbnailSwipeType: "main" | "competitor" | null = null;
 
-  // Caption modal properties
-  showCaptionModal: boolean = false;
-  selectedPhotoId: string = "";
-  captionText: string = "";
-  isSubmittingCaption: boolean = false;
+  // Caption generation properties
+  isGeneratingCaption: boolean = false;
+  generatingPhotoId: string = "";
+  
+  // Store photo metadata separately since ImageItem doesn't support custom data
+  currentPlatformPhotos: any[] = [];
 
   // Loading state
   isLoading: boolean = true;
@@ -671,8 +672,13 @@ export class PhotoDetailsComponent implements OnInit {
     const allPhotos = this.getAllPropertyPhotos();
     if (!allPhotos) return [];
     return allPhotos
-      .filter((photo: any) => !photo.caption)
+      .filter((photo: any) => !photo.caption || photo.caption.trim() === '')
       .map((photo: any) => photo.id || "Unknown");
+  }
+
+  // Get count of missing captions
+  getMissingCaptionsCount(): number {
+    return this.getMissingCaptionPhotos().length;
   }
 
   // Review methods
@@ -816,8 +822,15 @@ export class PhotoDetailsComponent implements OnInit {
         break;
     }
 
+    // Store photo metadata separately
+    this.currentPlatformPhotos = platformPhotos;
+
     this.images = platformPhotos.map(
-      (photo: any) => new ImageItem({ src: photo.url, thumb: photo.url })
+      (photo: any) => new ImageItem({ 
+        src: photo.url, 
+        thumb: photo.url,
+        alt: photo.caption || photo.accessibility_label || 'Property photo'
+      })
     );
   }
 
@@ -1250,41 +1263,102 @@ export class PhotoDetailsComponent implements OnInit {
     }
   }
 
-  // Caption modal methods
-  openCaptionModal(photoId: string): void {
-    this.selectedPhotoId = photoId;
-    this.captionText = "";
-    this.showCaptionModal = true;
-  }
-
-  closeCaptionModal(): void {
-    this.showCaptionModal = false;
-    this.selectedPhotoId = "";
-    this.captionText = "";
-    this.isSubmittingCaption = false;
-  }
-
-  submitCaption(): void {
-    if (!this.captionText.trim()) {
+  // Caption generation methods
+  generateCaption(photoId: string): void {
+    if (this.isGeneratingCaption) {
       return;
     }
 
-    this.isSubmittingCaption = true;
+    this.isGeneratingCaption = true;
+    this.generatingPhotoId = photoId;
 
-    // Simulate API call - replace with actual API call
-    setTimeout(() => {
-      // Here you would typically make an API call to save the caption
-      console.log(
-        `Adding caption for photo ${this.selectedPhotoId}:`,
-        this.captionText
-      );
+    this.competitorComparisonService.generateCaption(this.propertyId, photoId, this.operatorId)
+      .subscribe({
+        next: (response: any) => {
+          console.log('Caption generated successfully:', response);
+          
+          // Update the photo caption in the property data
+          this.updatePhotoCaption(photoId, response.data?.caption || response.caption);
+          
+          this.isGeneratingCaption = false;
+          this.generatingPhotoId = "";
+        },
+        error: (error) => {
+          console.error('Error generating caption:', error);
+          this.isGeneratingCaption = false;
+          this.generatingPhotoId = "";
+        }
+      });
+  }
 
-      // Simulate success
-      this.isSubmittingCaption = false;
-      this.closeCaptionModal();
+  private updatePhotoCaption(photoId: string, caption: string): void {
+    if (!this.propertyData?.Photos) return;
 
-      // You might want to show a success message here
-      // this.showSuccessMessage('Caption added successfully!');
-    }, 2000);
+    // Update Airbnb photos
+    if (this.propertyData.Photos.airbnb) {
+      const photo = this.propertyData.Photos.airbnb.find((p: any) => p.id === photoId);
+      if (photo) {
+        photo.caption = caption;
+        // Update current platform photos if it's the same platform
+        if (this.selectedPropertyPlatform === 'airbnb') {
+          this.updatePropertyPlatformImages();
+        }
+        return;
+      }
+    }
+
+    // Update Booking photos
+    if (this.propertyData.Photos.booking) {
+      const photo = this.propertyData.Photos.booking.find((p: any) => p.id === photoId);
+      if (photo) {
+        photo.caption = caption;
+        // Update current platform photos if it's the same platform
+        if (this.selectedPropertyPlatform === 'booking') {
+          this.updatePropertyPlatformImages();
+        }
+        return;
+      }
+    }
+
+    // Update VRBO photos
+    if (this.propertyData.Photos.vrbo) {
+      const photo = this.propertyData.Photos.vrbo.find((p: any) => p.id === photoId);
+      if (photo) {
+        photo.caption = caption;
+        // Update current platform photos if it's the same platform
+        if (this.selectedPropertyPlatform === 'vrbo') {
+          this.updatePropertyPlatformImages();
+        }
+        return;
+      }
+    }
+  }
+
+  isGeneratingCaptionForPhoto(photoId: string): boolean {
+    return this.isGeneratingCaption && this.generatingPhotoId === photoId;
+  }
+
+  // Get current photo data for caption generation
+  getCurrentPhotoData(): any {
+    if (!this.currentPlatformPhotos || this.currentPlatformPhotos.length === 0) return null;
+    
+    // Get the current image index from the gallery
+    // This might need to be adjusted based on how the gallery component works
+    const currentIndex = this.currentImageIndex || 0;
+    const currentPhoto = this.currentPlatformPhotos[currentIndex];
+    
+    return currentPhoto || null;
+  }
+
+  // Check if current photo has a caption
+  hasCurrentPhotoCaption(): boolean {
+    const photoData = this.getCurrentPhotoData();
+    return photoData?.caption && photoData.caption.trim() !== '';
+  }
+
+  // Get current photo ID
+  getCurrentPhotoId(): string {
+    const photoData = this.getCurrentPhotoData();
+    return photoData?.id || '';
   }
 }

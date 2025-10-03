@@ -103,6 +103,11 @@ export class AmenitiesAnalyzerComponent implements OnInit {
 
   constructor(private competitorComparisonService: CompetitorComparisonService) { }
 
+  // Check if all data is empty
+  get isAllDataEmpty(): boolean {
+    return this.rankingBoosters.length === 0 && this.topRankingAmenities.length === 0;
+  }
+
   ngOnInit(): void {
     if (this.propertyId && this.operatorId) {
       this.loadConversionBoostersAndAmenities();

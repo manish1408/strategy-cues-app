@@ -12,8 +12,17 @@
 
   <!-- Main Content (hidden while loading) -->
   <div *ngIf="!isLoading" class="main-content">
-    <!-- Ranking & Conversion Boosters Section -->
-    <div class="section">
+    <!-- Comprehensive Empty State when all data is empty -->
+    <app-empty-state 
+      *ngIf="isAllDataEmpty"
+      icon="fas fa-chart-bar"
+      title="No Amenities Analysis Data Available">
+    </app-empty-state>
+
+    <!-- Individual sections when data is available -->
+    <div *ngIf="!isAllDataEmpty">
+      <!-- Ranking & Conversion Boosters Section -->
+      <div class="section">
       <div class="section-header">
         <h2>Ranking & Conversion Boosters</h2>
         <p class="section-description">
@@ -37,18 +46,11 @@
       </div>
       
       <!-- No data message for conversion boosters -->
-      <div *ngIf="rankingBoosters.length === 0" class="no-data-message">
-        <div class="no-data-icon">
-          <i class="fas fa-info-circle"></i>
-        </div>
-        <h3>No Conversion Boosters Data Available</h3>
-        <p>We don't have conversion booster data for this property yet. This could be because:</p>
-        <ul>
-          <li>The property is new to our system</li>
-          <li>Insufficient data for analysis</li>
-          <li>Data is still being processed</li>
-        </ul>
-      </div>
+      <app-empty-state 
+        *ngIf="rankingBoosters.length === 0"
+        icon="fas fa-chart-line"
+        title="No Conversion Boosters Data Available">
+      </app-empty-state>
     </div>
 
     <!-- Top Ranking Amenities Section -->
@@ -77,18 +79,12 @@
       </div>
       
       <!-- No data message for top area amenities -->
-      <div *ngIf="topRankingAmenities.length === 0" class="no-data-message">
-        <div class="no-data-icon">
-          <i class="fas fa-info-circle"></i>
-        </div>
-        <h3>No Area Amenities Data Available</h3>
-        <p>We don't have area amenities data for this property yet. This could be because:</p>
-        <ul>
-          <li>The property is in a new or less analyzed area</li>
-          <li>Insufficient competitor data for comparison</li>
-          <li>Data is still being processed</li>
-        </ul>
-      </div>
+      <app-empty-state 
+        *ngIf="topRankingAmenities.length === 0"
+        icon="fas fa-map-marker-alt"
+        title="No Area Amenities Data Available">
+      </app-empty-state>
     </div>
+    </div><!-- End of individual sections -->
   </div><!-- End of main-content -->
 </div>

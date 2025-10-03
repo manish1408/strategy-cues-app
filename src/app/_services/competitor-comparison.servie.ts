@@ -93,4 +93,11 @@ export class CompetitorComparisonService {
   
   return this.http.get<any>(`${this._url}/conversion-boosters-and-amenities/${property_id}`, { params });
 }
+
+  generateCaption(property_id: string, photo_id: string, operator_id: string) {
+    const params = new HttpParams()
+      .set('operator_id', operator_id);
+    
+    return this.http.post<any>(`${this._url}/generate-caption/${property_id}/${photo_id}`, {}, { params });
+  }
 }

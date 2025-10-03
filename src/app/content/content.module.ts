@@ -10,6 +10,7 @@ import { MyReviewsComponent } from './my-reviews/my-reviews.component';
 import { AmenitiesAnalyzerComponent } from './amenities-analyzer/amenities-analyzer.component';
 import { GalleryModule } from 'ng-gallery';
 import { SummaryPipe } from '../_pipes/summary.pipe';
+import { SharedModule } from '../shared/sharedModule';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { SummaryPipe } from '../_pipes/summary.pipe';
     CommonModule,
     FormsModule,
     ContentRoutingModule,
- GalleryModule,
+    GalleryModule,
+    SharedModule
 ],
   providers: [SummaryPipe]
 })

@@ -1,0 +1,53 @@
+.empty-state {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 2px dashed #dee2e6;
+  margin-top: 1.5rem;
+
+  .empty-state-icon {
+    margin-bottom: 1.5rem;
+
+    i {
+      font-size: 3rem;
+      color: #6c757d;
+    }
+  }
+
+  .empty-state-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #495057;
+    margin: 0;
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .empty-state {
+    padding: 2rem 1rem;
+
+    .empty-state-icon i {
+      font-size: 2.5rem;
+    }
+
+    .empty-state-title {
+      font-size: 1.3rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .empty-state {
+    padding: 1.5rem 0.75rem;
+
+    .empty-state-icon i {
+      font-size: 2rem;
+    }
+
+    .empty-state-title {
+      font-size: 1.2rem;
+    }
+  }
+}

@@ -15,6 +15,7 @@ import { MarkdownModule, MARKED_OPTIONS, MarkedRenderer } from "ngx-markdown";
 import { NgxEditorModule } from "ngx-editor";
 import { PhoneDropdownComponent } from "./component/phone-dropdown/phone-dropdown.component";
 import { WarningModalComponent } from "./component/warning-modal/warning-modal.component";
+import { EmptyStateComponent } from "./empty-state/empty-state.component";
 
 const renderer = new MarkedRenderer();
 renderer.link = (href: string, title: string, text: string) => {
@@ -51,6 +52,7 @@ renderer.link = (href: string, title: string, text: string) => {
     ClickOutsideDirective,
     MultiFilterComponent,
     WarningModalComponent,
+    EmptyStateComponent,
     FormatTextPipe
   ],
   providers: [],
@@ -59,6 +61,7 @@ renderer.link = (href: string, title: string, text: string) => {
     ClickOutsideDirective,
     MultiFilterComponent,
     WarningModalComponent,
+    EmptyStateComponent,
     FormatTextPipe
    
   ],

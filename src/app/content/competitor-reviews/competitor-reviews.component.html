@@ -18,11 +18,16 @@
 
   <!-- Main Content (hidden while loading) -->
   <div *ngIf="!loading" class="main-content">
-    <!-- Error State -->
-    <div *ngIf="error" class="error-section">
-      <p class="error-message">{{ error }}</p>
-      <button (click)="loadGuestDidntLikeData()" class="retry-btn">Retry</button>
-    </div>
+    <!-- Comprehensive Empty State when all data is empty -->
+    <app-empty-state 
+      *ngIf="isAllDataEmpty"
+      icon="fas fa-users"
+      title="No Competitor Review Analysis Available">
+    </app-empty-state>
+
+    <!-- Individual sections when data is available -->
+    <div *ngIf="!isAllDataEmpty">
+    
 
     
 
@@ -37,9 +42,11 @@
         <p>{{ item.description }}</p>
       </div>
     </div>
-    <div *ngIf="!guestDidntLikeData || guestDidntLikeData.length === 0">
-      <p>No guest didn't like data available.</p>
-    </div>
+    <app-empty-state 
+      *ngIf="!guestDidntLikeData || guestDidntLikeData.length === 0"
+      icon="fas fa-thumbs-down"
+      title="No Competitor Dislikes Data Available">
+    </app-empty-state>
   </div>
 
   <div class="reviews-section">
@@ -50,9 +57,11 @@
         <p>{{ item.description }}</p>
       </div>
     </div>
-    <div *ngIf="!guestWishesData || guestWishesData.length === 0">
-      <p>No guest wishes data available.</p>
-    </div>
+    <app-empty-state 
+      *ngIf="!guestWishesData || guestWishesData.length === 0"
+      icon="fas fa-wishlist"
+      title="No Area Wishes Data Available">
+    </app-empty-state>
   </div>
 
   <div class="reviews-section">
@@ -63,9 +72,11 @@
         <p>{{ item.description }}</p>
       </div>
     </div>
-    <div *ngIf="!guestLovedData || guestLovedData.length === 0">
-      <p>No guest loved data available.</p>
-    </div>
+    <app-empty-state 
+      *ngIf="!guestLovedData || guestLovedData.length === 0"
+      icon="fas fa-heart"
+      title="No Competitor Love Data Available">
+    </app-empty-state>
   </div>
 
   <div class="reviews-section">
@@ -81,10 +92,13 @@
         </div>
       </div>
     </div>
-    <div *ngIf="!whatToImproveData || whatToImproveData.length === 0">
-      <p>No improvement suggestions available.</p>
-    </div>
+    <app-empty-state 
+      *ngIf="!whatToImproveData || whatToImproveData.length === 0"
+      icon="fas fa-tools"
+      title="No Improvement Suggestions Available">
+    </app-empty-state>
   </div>
+    </div><!-- End of individual sections -->
 
     <!-- Help Button -->
     <div class="help-button">
