@@ -13,7 +13,7 @@ $transition: all 0.3s ease;
 
 /* Content Section Styles */
 .content-section {
-  min-height: 100vh;
+  min-height: 90vh;
   animation: fadeIn 0.5s ease-out;
 }
 
@@ -78,51 +78,73 @@ $transition: all 0.3s ease;
   }
 }
 
-// Table View Styles
-.table-view {
-  .table-card {
-    background: white;
-    border-radius: $border-radius;
-    box-shadow: $box-shadow;
-    border: 1px solid #e9ecef;
-    overflow: hidden;
+// Table View Styles - Match revenue page structure
+.table-container {
+  width: 100%;
+  max-width: 87vw;
+  height: auto; /* enable vertical scroll */
+  overflow: auto; /* allows both X and Y scroll */
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  margin: 0 12px;
+}
 
-    .table-responsive {
-      .table {
-        margin: 0;
+table {
+  border-collapse: collapse;
+  width: auto; /* wider than container -> horizontal scroll */
+  margin: 0 -12px;
+}
 
-        thead th {
-          background-color: #f8f9fa;
-          border-bottom: 2px solid #dee2e6;
-          font-weight: 600;
-          color: $dark-color;
-          padding: 1rem 0.75rem;
-          white-space: nowrap;
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+  font-weight: 600;
+  color: $dark-color;
+  padding: 1rem 0.75rem;
+  white-space: nowrap;
 
-          &:first-child {
-            max-width: 260px;
-          }
-        }
+  &:first-child {
+    width: 260px;
+    min-width: 260px;
+  }
 
-        tbody tr {
-          transition: $transition;
+  // Set specific widths for other columns
+  &:nth-child(2) { width: 150px; min-width: 150px; } // Your Photos
+  &:nth-child(3) { width: 100px; min-width: 100px; } // Reviews
+  &:nth-child(4) { width: 120px; min-width: 120px; } // Photo Gap
+  &:nth-child(5) { width: 140px; min-width: 140px; } // Caption Status
+  &:nth-child(6) { width: 120px; min-width: 120px; } // Deep Dive
+}
 
-          &:hover {
-            background-color: #f8f9fa;
-          }
+tbody tr {
+  transition: $transition;
 
-          td {
-            padding: 5px 10px;
-            vertical-align: middle;
-            border-bottom: 1px solid #e9ecef;
+  &:hover {
+    background-color: #f8f9fa;
+  }
 
-            &:first-child {
-              max-width: 260px;
-            }
-          }
-        }
-      }
+  td {
+    padding: 5px 10px;
+    vertical-align: middle;
+    border-bottom: 1px solid #e9ecef;
+    overflow: hidden; // Prevent content from breaking layout
+    text-overflow: ellipsis; // Add ellipsis for overflow content
+
+    &:first-child {
+      width: 260px;
+      min-width: 260px;
+      max-width: 260px;
     }
+
+    // Set specific widths for other columns to match header
+    &:nth-child(2) { width: 150px; min-width: 150px; max-width: 150px; } // Your Photos
+    &:nth-child(3) { width: 100px; min-width: 100px; max-width: 100px; } // Reviews
+    &:nth-child(4) { width: 120px; min-width: 120px; max-width: 120px; } // Photo Gap
+    &:nth-child(5) { width: 140px; min-width: 140px; max-width: 140px; } // Caption Status
+    &:nth-child(6) { width: 120px; min-width: 120px; max-width: 120px; } // Deep Dive
   }
 }
 
@@ -1417,4 +1439,76 @@ $transition: all 0.3s ease;
   100% {
     left: 100%;
   }
+}
+.table-container {
+  width: 100%;
+  max-width: 100%;
+  max-height: 77vh; /* maximum height, but can be smaller based on content */
+  overflow: auto; /* allows both X and Y scroll */
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  margin: 0;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0;
+  table-layout: fixed; /* Fixed table layout for consistent column widths */
+  min-height: auto; /* Let table height be determined by content */
+}
+
+th, td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid #dee2e6;
+  background: #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+thead th {
+  position: sticky;
+  top: 0; /* stick only vertically */
+  background: #f8f9fa;
+  z-index: 1;
+  font-weight: 600;
+  color: #343a40;
+  font-size: var(--font-size-sm);
+  padding: 1rem 0.75rem;
+  border-bottom: 2px solid #dee2e6;
+  
+  /* Set specific column widths */
+  &:first-child {
+    width: 300px;
+    min-width: 300px;
+  }
+  &:nth-child(2) { width: 150px; min-width: 150px; } // Your Photos
+  &:nth-child(3) { width: 120px; min-width: 120px; } // Reviews
+  &:nth-child(4) { width: 120px; min-width: 120px; } // Photo Gap
+  &:nth-child(5) { width: 140px; min-width: 140px; } // Caption Status
+  &:nth-child(6) { width: 120px; min-width: 120px; } // Deep Dive
+}
+
+tbody tr {
+  height: auto; /* Let row height be determined by content */
+  
+  &:hover {
+    background: #e9ecef;
+  }
+}
+
+tbody td {
+  /* Match column widths with header */
+  &:first-child {
+    width: 300px;
+    min-width: 300px;
+    max-width: 300px;
+  }
+  &:nth-child(2) { width: 150px; min-width: 150px; max-width: 150px; } // Your Photos
+  &:nth-child(3) { width: 120px; min-width: 120px; max-width: 120px; } // Reviews
+  &:nth-child(4) { width: 120px; min-width: 120px; max-width: 120px; } // Photo Gap
+  &:nth-child(5) { width: 140px; min-width: 140px; max-width: 140px; } // Caption Status
+  &:nth-child(6) { width: 120px; min-width: 120px; max-width: 120px; } // Deep Dive
 }
