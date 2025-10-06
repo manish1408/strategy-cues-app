@@ -260,8 +260,8 @@ export class CompetitorReviewsComponent implements OnInit {
       .subscribe({
         next: (response: any) => {
           // Handle the case where data might be empty or undefined
-          if (response?.data?.insights && Array.isArray(response.data.insights)) {
-            this.whatToImproveData = response.data.insights;
+          if (response?.data?.suggestions && Array.isArray(response.data.suggestions)) {
+            this.whatToImproveData = response.data.suggestions;
           } else {
             this.whatToImproveData = [];
           }
