@@ -11,6 +11,39 @@
 
   <!-- Main Content - Hidden when loading -->
   <div *ngIf="!isLoading">
+    <!-- Tab Navigation -->
+  <div class="tab-navigation">
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link" 
+           [class.active]="activeTab === 'photos'"
+           (click)="setActiveTab('photos')">
+          Photos
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" 
+           [class.active]="activeTab === 'competitor-reviews'"
+           (click)="setActiveTab('competitor-reviews')">
+          Competitor Reviews 
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" 
+           [class.active]="activeTab === 'my-reviews'"
+           (click)="setActiveTab('my-reviews')">
+          My Reviews 
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" 
+           [class.active]="activeTab === 'amenities'"
+           (click)="setActiveTab('amenities')">
+          Amenities Analyser
+        </a>
+      </li>
+    </ul>
+  </div>
   <!-- Header Section -->
   <div class="details-header">
     <div class="container-fluid">
@@ -74,39 +107,7 @@
     </div>
   </div>
 
-  <!-- Tab Navigation -->
-  <div class="tab-navigation">
-    <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <a class="nav-link" 
-           [class.active]="activeTab === 'photos'"
-           (click)="setActiveTab('photos')">
-          Photos
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" 
-           [class.active]="activeTab === 'competitor-reviews'"
-           (click)="setActiveTab('competitor-reviews')">
-          Competitor Reviews 
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" 
-           [class.active]="activeTab === 'my-reviews'"
-           (click)="setActiveTab('my-reviews')">
-          My Reviews 
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" 
-           [class.active]="activeTab === 'amenities'"
-           (click)="setActiveTab('amenities')">
-          Amenities Analyser
-        </a>
-      </li>
-    </ul>
-  </div>
+  
 
   <!-- Tab Content -->
   <div class="tab-content">
@@ -313,59 +314,24 @@
         </div>
         <div class="competitor-stats">
           <div class="platform-stats-badges">
-            <!-- Airbnb Stats -->
+            <!-- Current Platform Stats -->
             <div class="platform-badge-group">
               <span class="platform-label">
-                <i class="fab fa-airbnb"></i> Airbnb
+                <i class="fas" [ngClass]="selectedPlatform === 'airbnb' ? 'fab fa-airbnb' : selectedPlatform === 'booking' ? 'fas fa-bed' : 'fas fa-home'"></i> 
+                {{ selectedPlatform | titlecase }}
               </span>
               <span class="badge bg-light text-dark">
-                {{comp.propertyAirbnbPhotos?.length || 0}} Competitor photos
+                {{getCompetitorPlatformPhotoCountForCompetitor(comp, selectedPlatform)}} Competitor photos
               </span>
-              <span class="badge gap-badge" [ngClass]="getGapStatusClass(getPlatformPhotoGap(comp, 'airbnb'))">
-                <ng-container *ngIf="getPlatformPhotoGap(comp, 'airbnb') === 0">
+              <span class="badge gap-badge" [ngClass]="getGapStatusClass(getPlatformPhotoGap(comp, selectedPlatform))">
+                <ng-container *ngIf="getPlatformPhotoGap(comp, selectedPlatform) === 0">
                   Your photos Equal
                 </ng-container>
-                <ng-container *ngIf="getPlatformPhotoGap(comp, 'airbnb') !== 0">
-                  Your photos {{getAbsolutePhotoGap(getPlatformPhotoGap(comp, 'airbnb'))}} {{getPhotoGapStatus(getPlatformPhotoGap(comp, 'airbnb'))}}
+                <ng-container *ngIf="getPlatformPhotoGap(comp, selectedPlatform) !== 0">
+                  Your photos {{getAbsolutePhotoGap(getPlatformPhotoGap(comp, selectedPlatform))}} {{getPhotoGapStatus(getPlatformPhotoGap(comp, selectedPlatform))}}
                 </ng-container>
               </span>
             </div>
-            
-            <!-- Booking Stats -->
-            <div class="platform-badge-group">
-              <span class="platform-label">
-                <i class="fas fa-bed"></i> Booking
-              </span>
-              <span class="badge bg-light text-dark">
-                {{comp.propertyBookingPhotos?.length || 0}} Competitor photos
-              </span>
-              <span class="badge gap-badge" [ngClass]="getGapStatusClass(getPlatformPhotoGap(comp, 'booking'))">
-                <ng-container *ngIf="getPlatformPhotoGap(comp, 'booking') === 0">
-                  Your photos Equal
-                </ng-container>
-                <ng-container *ngIf="getPlatformPhotoGap(comp, 'booking') !== 0">
-                  Your photos {{getAbsolutePhotoGap(getPlatformPhotoGap(comp, 'booking'))}} {{getPhotoGapStatus(getPlatformPhotoGap(comp, 'booking'))}}
-                </ng-container>
-              </span>
-            </div>
-            
-            <!-- VRBO Stats -->
-            <!-- <div class="platform-badge-group">
-              <span class="platform-label">
-                <i class="fas fa-home"></i> VRBO
-              </span>
-              <span class="badge bg-light text-dark">
-                {{comp.propertyVrboPhotos?.length || 0}} Competitor photos
-              </span>
-              <span class="badge gap-badge" [ngClass]="getGapStatusClass(getPlatformPhotoGap(comp, 'vrbo'))">
-                <ng-container *ngIf="getPlatformPhotoGap(comp, 'vrbo') === 0">
-                  Your photos Equal
-                </ng-container>
-                <ng-container *ngIf="getPlatformPhotoGap(comp, 'vrbo') !== 0">
-                  Your photos {{getAbsolutePhotoGap(getPlatformPhotoGap(comp, 'vrbo'))}} {{getPhotoGapStatus(getPlatformPhotoGap(comp, 'vrbo'))}}
-                </ng-container>
-              </span>
-            </div> -->
           </div>
         </div>
         <div class="competitor-links">
@@ -392,12 +358,12 @@
   <!-- Additional Photo Suggestions -->
   <div class="photo-suggestions-section">
     <div class="suggestions-header">
-      <h2>Additional photo suggestions</h2>
+      <h2>Additional photo suggestions for {{ selectedPlatform | titlecase }}</h2>
     </div>
     
     <!-- Suggestions List -->
-    <div class="suggestions-list" *ngIf="getPhotoSuggestions().length > 0">
-      <div class="suggestion-item" *ngFor="let suggestion of getPhotoSuggestions()">
+    <div class="suggestions-list" *ngIf="getPhotoSuggestionsForPlatform(selectedPlatform).length > 0">
+      <div class="suggestion-item" *ngFor="let suggestion of getPhotoSuggestionsForPlatform(selectedPlatform)">
         <div class="suggestion-status">
           <i class="fas" [ngClass]="suggestion.available ? 'fa-check' : 'fa-times'" 
              [class.status-available]="suggestion.available" 
@@ -421,10 +387,10 @@
     </div>
     
     <!-- Empty State -->
-    <div class="suggestions-empty-state" *ngIf="getPhotoSuggestions().length === 0">
+    <div class="suggestions-empty-state" *ngIf="getPhotoSuggestionsForPlatform(selectedPlatform).length === 0">
       <app-empty-state 
         icon="fas fa-lightbulb"
-        title="No Photo Suggestions Available">
+        title="No Photo Suggestions Available for {{ selectedPlatform | titlecase }}">
       </app-empty-state>
     </div>
   </div>
@@ -451,22 +417,30 @@
     </div>
   </div> -->
 
-  <!-- Missing Captions Section -->
-  <div class="missing-captions-section" *ngIf="getMissingCaptionsCount() > 0">
-    <h2>Missing Captions ({{ getMissingCaptionsCount() }})</h2>
+  <!-- Photo Captions Section -->
+  <div class="missing-captions-section" *ngIf="getMissingCaptionPhotosForPlatform(selectedPlatform).length > 0">
+    <h2>Missing Photo Captions for {{ selectedPlatform | titlecase }} ({{ getMissingCaptionsCountForPlatform(selectedPlatform) }} missing)</h2>
     <div class="missing-list">
-      <div class="missing-item" *ngFor="let photoId of getMissingCaptionPhotos()">
-        <i class="fas fa-exclamation-triangle"></i>
+      <div class="missing-item" *ngFor="let photoId of getMissingCaptionPhotosForPlatform(selectedPlatform)">
+        <i class="fas fa-exclamation-triangle" *ngIf="!getPhotoById(photoId)?.caption"></i>
+        <i class="fas fa-check-circle text-success" *ngIf="getPhotoById(photoId)?.caption"></i>
         <img style="width: 40px; height: 40px; object-fit: fill; cursor: pointer;" [src]="getPhotoById(photoId)?.url" [alt]="'Photo ' + photoId" (error)="onImageError($event)" (click)="openPhotoInNewWindow(photoId)">
-        <span *ngIf="!getPhotoById(photoId)?.caption">Photo {{photoId}} needs a caption</span>
-        <span *ngIf="getPhotoById(photoId)?.caption">{{getPhotoById(photoId)?.caption}}</span>
+        
+        <div class="photo-info">
+          <span *ngIf="!getPhotoById(photoId)?.caption" class="needs-caption">Photo {{photoId}} needs a caption</span>
+          <div *ngIf="getPhotoById(photoId)?.caption" class="generated-caption">
+            <strong>Generated Caption:</strong>
+            <p class="caption-text">{{getPhotoById(photoId)?.caption}}</p>
+          </div>
+        </div>
      
         <button 
           class="btn btn-sm btn-primary" 
           (click)="generateCaption(getPhotoById(photoId)?.url)"
-          [disabled]="isGeneratingCaptionForPhotoUrl(getPhotoById(photoId)?.url)">
+          [disabled]="isGeneratingCaptionForPhotoUrl(getPhotoById(photoId)?.url) || getPhotoById(photoId)?.caption">
           <span *ngIf="isGeneratingCaptionForPhotoUrl(getPhotoById(photoId)?.url)" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-          Generate Caption
+          <span *ngIf="!getPhotoById(photoId)?.caption">Generate Caption</span>
+          <span *ngIf="getPhotoById(photoId)?.caption">Caption Generated</span>
         </button>
 
         

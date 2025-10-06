@@ -39,7 +39,7 @@
     <div class="cards-grid" *ngIf="guestDidntLikeData && guestDidntLikeData.length > 0">
       <div class="review-card dislike-card" *ngFor="let item of guestDidntLikeData">
         <h3>{{ item.title }}</h3>
-        <p>{{ item.description }}</p>
+        <!-- <p>{{ item.description }}</p> -->
       </div>
     </div>
     <app-empty-state 
@@ -54,7 +54,7 @@
     <div class="cards-grid" *ngIf="guestWishesData && guestWishesData.length > 0">
       <div class="review-card wish-card" *ngFor="let item of guestWishesData">
         <h3>{{ item.title }}</h3>
-        <p>{{ item.description }}</p>
+        <!-- <p>{{ item.description }}</p> -->
       </div>
     </div>
     <app-empty-state 
@@ -69,7 +69,7 @@
     <div class="cards-grid" *ngIf="guestLovedData && guestLovedData.length > 0">
       <div class="review-card love-card" *ngFor="let item of guestLovedData">
         <h3>{{ item.title }}</h3>
-        <p>{{ item.description }}</p>
+        <!-- <p>{{ item.description }}</p> -->
       </div>
     </div>
     <app-empty-state 
@@ -88,7 +88,7 @@
         </div>
         <div class="action-content">
           <h3>{{ item.title }}</h3>
-          <p>{{ item.description }}</p>
+          <!-- <p>{{ item.description }}</p> -->  
         </div>
       </div>
     </div>

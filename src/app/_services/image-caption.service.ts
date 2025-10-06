@@ -14,6 +14,10 @@ import { HttpClient } from '@angular/common/http';
     return this.http.post<any>(`${this._url}/get-caption?image_url=${encodeURIComponent(image_url)}`, {});
   }
 
+  getGeneratedCaptions(image_urls: string[]){
+    const queryParams = image_urls.map(url => `image_urls=${encodeURIComponent(url)}`).join('&');
+    return this.http.get<any>(`${this._url}/bulk-captions?${queryParams}`);
+  }
 
 
             }

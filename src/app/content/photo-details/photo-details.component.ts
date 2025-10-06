@@ -58,6 +58,7 @@ export class PhotoDetailsComponent implements OnInit {
 
   // Loading state
   isLoading: boolean = true;
+  isRefreshingCaptions: boolean = false;
 
   // Platform tabs
   selectedPlatform: string = "airbnb";
@@ -73,7 +74,7 @@ export class PhotoDetailsComponent implements OnInit {
     private competitorComparisonService: CompetitorComparisonService,
     private cdr: ChangeDetectorRef,
     private imageCaptionService: ImageCaptionService,
-    private toastService: ToastService
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -144,6 +145,9 @@ export class PhotoDetailsComponent implements OnInit {
 
             // Set loading to false after data is loaded
             this.isLoading = false;
+            
+            // Fetch captions for the default platform (Airbnb)
+            this.fetchAllCaptionsForPlatform('airbnb');
           }
         },
         error: (error: any) => {
@@ -733,6 +737,171 @@ export class PhotoDetailsComponent implements OnInit {
     return this.getMissingCaptionPhotos().length;
   }
 
+  // Get all photos for specific platform (both with and without captions)
+  getMissingCaptionPhotosForPlatform(platform: string): string[] {
+    if (!this.propertyData?.Photos) return [];
+    
+    let platformPhotos: any[] = [];
+    switch (platform) {
+      case 'airbnb':
+        platformPhotos = this.propertyData.Photos.airbnb || [];
+        break;
+      case 'booking':
+        platformPhotos = this.propertyData.Photos.booking || [];
+        break;
+      case 'vrbo':
+        platformPhotos = this.propertyData.Photos.vrbo || [];
+        break;
+      default:
+        return [];
+    }
+    
+    // Return all photos, not just missing captions
+    return platformPhotos.map((photo: any) => photo.id || "Unknown");
+  }
+
+  // Get count of photos without captions for specific platform
+  getMissingCaptionsCountForPlatform(platform: string): number {
+    if (!this.propertyData?.Photos) return 0;
+    
+    let platformPhotos: any[] = [];
+    switch (platform) {
+      case 'airbnb':
+        platformPhotos = this.propertyData.Photos.airbnb || [];
+        break;
+      case 'booking':
+        platformPhotos = this.propertyData.Photos.booking || [];
+        break;
+      case 'vrbo':
+        platformPhotos = this.propertyData.Photos.vrbo || [];
+        break;
+      default:
+        return 0;
+    }
+    
+    return platformPhotos.filter((photo: any) => !photo.caption || photo.caption.trim() === '').length;
+  }
+
+  // Fetch all captions for current platform photos
+  fetchAllCaptionsForPlatform(platform: string): void {
+    if (!this.propertyData?.Photos) return;
+    
+    this.isRefreshingCaptions = true;
+    
+    let platformPhotos: any[] = [];
+    switch (platform) {
+      case 'airbnb':
+        platformPhotos = this.propertyData.Photos.airbnb || [];
+        break;
+      case 'booking':
+        platformPhotos = this.propertyData.Photos.booking || [];
+        break;
+      case 'vrbo':
+        platformPhotos = this.propertyData.Photos.vrbo || [];
+        break;
+      default:
+        this.isRefreshingCaptions = false;
+        return;
+    }
+    
+    // Get all photo URLs for the platform
+    const photoUrls = platformPhotos.map((photo: any) => photo.url).filter((url: string) => url);
+    
+    if (photoUrls.length === 0) {
+      this.isRefreshingCaptions = false;
+      return;
+    }
+    
+    // Fetch captions from the service
+    this.imageCaptionService.getGeneratedCaptions(photoUrls)
+      .subscribe({
+        next: (response: any) => {
+          console.log('Fetched captions response:', response);
+          console.log('Photo URLs sent:', photoUrls);
+          
+          if (response.success && response.data) {
+            console.log('Captions data received:', response.data);
+            // Update captions in the property data
+            this.updateCaptionsFromBulkResponse(response.data, platform);
+            // Trigger change detection to update the UI
+            this.cdr.detectChanges();
+          } else {
+            console.log('No captions found or invalid response structure');
+          }
+          
+          this.isRefreshingCaptions = false;
+        },
+        error: (error) => {
+          console.error('Error fetching captions:', error);
+          this.isRefreshingCaptions = false;
+        }
+      });
+  }
+
+  // Update captions from bulk response
+  private updateCaptionsFromBulkResponse(captionsData: any, platform: string): void {
+    console.log('Updating captions from bulk response:', captionsData);
+    console.log('Platform:', platform);
+    
+    if (!this.propertyData?.Photos || !captionsData) {
+      console.log('No property data or captions data available');
+      return;
+    }
+    
+    let platformPhotos: any[] = [];
+    switch (platform) {
+      case 'airbnb':
+        platformPhotos = this.propertyData.Photos.airbnb || [];
+        break;
+      case 'booking':
+        platformPhotos = this.propertyData.Photos.booking || [];
+        break;
+      case 'vrbo':
+        platformPhotos = this.propertyData.Photos.vrbo || [];
+        break;
+      default:
+        return;
+    }
+    
+    console.log('Platform photos:', platformPhotos);
+    
+    let updatedCount = 0;
+    // Update captions for each photo
+    platformPhotos.forEach((photo: any, index: number) => {
+      console.log(`Processing photo ${index}:`, photo.url);
+      
+      if (photo.url) {
+        let caption = null;
+        
+        // Handle the specific API response structure: data is an array with imageUrl and caption
+        if (Array.isArray(captionsData)) {
+          const captionObj = captionsData.find((item: any) => {
+            // Match by imageUrl property
+            return item.imageUrl === photo.url;
+          });
+          
+          if (captionObj && captionObj.caption) {
+            caption = captionObj.caption;
+          }
+        }
+        // Fallback for other possible structures
+        else if (captionsData[photo.url]) {
+          caption = captionsData[photo.url];
+        }
+        
+        if (caption) {
+          console.log(`Found caption for ${photo.url}:`, caption);
+          photo.caption = caption;
+          updatedCount++;
+        } else {
+          console.log(`No caption found for ${photo.url}`);
+        }
+      }
+    });
+    
+    console.log(`Updated ${updatedCount} captions for ${platform} platform`);
+  }
+
   // Review methods
   getReviewCount(): number {
     // Mock data - replace with actual review count from your data
@@ -797,6 +966,9 @@ export class PhotoDetailsComponent implements OnInit {
       this.updateCompetitorPlatformImages();
       this.isPropertyGalleryLoading = false;
       this.isCompetitorGalleryLoading = false;
+      
+      // Fetch all captions for the selected platform
+      this.fetchAllCaptionsForPlatform(platform);
     }, 300);
   }
 
@@ -1005,6 +1177,19 @@ export class PhotoDetailsComponent implements OnInit {
     return [
    
     ];
+  }
+
+  // Get photo suggestions filtered by platform
+  getPhotoSuggestionsForPlatform(platform: string): any[] {
+    const allSuggestions = this.getPhotoSuggestions();
+    
+    // Filter suggestions based on platform
+    // You can add platform-specific logic here
+    return allSuggestions.filter((suggestion: any) => {
+      // For now, return all suggestions, but you can add platform-specific filtering
+      // Example: return suggestion.platform === platform || !suggestion.platform;
+      return true;
+    });
   }
 
   refreshSuggestions(): void {
@@ -1302,7 +1487,7 @@ export class PhotoDetailsComponent implements OnInit {
           
           // Show success toast
           if (response.success) {
-            this.toastService.showSuccess('Caption generated successfully!');
+            this.toastr.success('Caption generated successfully!');
             
             // Update the photo caption in the property data
             const caption = response.data?.caption || response.caption;
@@ -1311,14 +1496,16 @@ export class PhotoDetailsComponent implements OnInit {
           
           this.isGeneratingCaption = false;
           this.generatingPhotoUrl = "";
-          this.loadPropertyCompetitors(this.propertyId);
+          // Trigger change detection to update the UI
+          this.cdr.detectChanges();
         },
         error: (error) => {
           console.error('Error generating caption:', error.message);
-          this.toastService.showError('Failed to generate caption. Please try again.');
+          this.toastr.error('Failed to generate caption. Please try again.');
           this.isGeneratingCaption = false;
           this.generatingPhotoUrl = "";
-          this.loadPropertyCompetitors(this.propertyId);
+          // Trigger change detection to update the UI
+          this.cdr.detectChanges();
         }
       });
   }
@@ -1378,8 +1565,6 @@ export class PhotoDetailsComponent implements OnInit {
         if (this.selectedPropertyPlatform === 'airbnb') {
           this.updatePropertyPlatformImages();
         }
-        // Trigger change detection to update the UI
-        this.cdr.detectChanges();
         return;
       }
     }
@@ -1393,8 +1578,6 @@ export class PhotoDetailsComponent implements OnInit {
         if (this.selectedPropertyPlatform === 'booking') {
           this.updatePropertyPlatformImages();
         }
-        // Trigger change detection to update the UI
-        this.cdr.detectChanges();
         return;
       }
     }
@@ -1408,8 +1591,6 @@ export class PhotoDetailsComponent implements OnInit {
         if (this.selectedPropertyPlatform === 'vrbo') {
           this.updatePropertyPlatformImages();
         }
-        // Trigger change detection to update the UI
-        this.cdr.detectChanges();
         return;
       }
     }
