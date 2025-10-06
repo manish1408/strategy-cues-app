@@ -504,32 +504,49 @@
                 <td *ngIf="columnVisibility.cxlPolicy">
                   <div class="cxl-policy-cell">
                     <!-- Booking.com Policy -->
-                    <div class="policy-item" *ngIf="property.CXL_Policy?.Booking">
+                    <div class="policy-item" *ngIf="hasBookingPolicies(property.CXL_Policy?.Booking)">
                       <i class="fas fa-bed"></i>
                       <div class="policy-details">
-                        <div class="policy-type">{{ property.CXL_Policy.Booking?.type | formatText }}</div>
+                        <!-- Handle array format -->
+                        <div *ngIf="isArray(property.CXL_Policy?.Booking)" class="policy-type">
+                          <div *ngFor="let bookingPolicy of getBookingPoliciesArray(property.CXL_Policy?.Booking); let isLast = last" 
+                               class="policy-item-row"
+                               [class.general-policy]="bookingPolicy?.is_general_policy" 
+                               [class.non-refundable]="bookingPolicy?.is_non_refundable_policy">
+                            {{ bookingPolicy?.policy_group_title | formatText }}
+                          </div>
+                        </div>
+                        <!-- Handle object format -->
+                        <!-- <div class="policy-type" *ngIf="!isArray(property.CXL_Policy?.Booking)">
+                          {{ property.CXL_Policy.Booking?.type | formatText }}
+                        </div> -->
                       </div>
                     </div>
-                    <div class="policy-item no-policy" *ngIf="!property.CXL_Policy?.Booking">
+                    <div class="policy-item no-policy" *ngIf="!hasBookingPolicies(property.CXL_Policy?.Booking)">
                       <i class="fas fa-bed text-muted"></i>
                       <span class="no-policy-type" style="font-size: var(--font-size-xs);">No policy</span>
                     </div>
                     
                     <!-- Airbnb Policy -->
-                    <div class="policy-item" *ngIf="property.CXL_Policy?.Airbnb">
+                    <div class="policy-item" *ngIf="hasValidAirbnbPolicy(property.CXL_Policy?.Airbnb)">
                       <i class="fab fa-airbnb text-danger"></i>
                       <div class="policy-details">
                         <div class="policy-type">{{ property.CXL_Policy.Airbnb?.type | formatText }}</div>
-                       
+                        <!-- <div class="policy-description" *ngIf="property.CXL_Policy.Airbnb?.description">
+                          {{ property.CXL_Policy.Airbnb?.description }}
+                        </div>
+                        <div class="policy-free-cancellation" *ngIf="property.CXL_Policy.Airbnb?.free_cancellation_until">
+                          Free until: {{ property.CXL_Policy.Airbnb?.free_cancellation_until }}
+                        </div> -->
                       </div>
                     </div>
-                    <div class="policy-item no-policy" *ngIf="!property.CXL_Policy?.Airbnb">
+                    <div class="policy-item no-policy" *ngIf="!hasValidAirbnbPolicy(property.CXL_Policy?.Airbnb)">
                       <i class="fab fa-airbnb text-muted"></i>
                       <span class="no-policy-type" style="font-size: var(--font-size-xs);">No policy</span>
                     </div>
                     
                     <!-- VRBO Policy -->
-                    <!-- <div class="policy-item" *ngIf="property.CXL_Policy?.VRBO">
+                    <div class="policy-item" *ngIf="property.CXL_Policy?.VRBO">
                       <i class="fas fa-home text-warning"></i>
                       <div class="policy-details">
                         <div class="policy-type">{{ property.CXL_Policy.VRBO?.type }}</div>
@@ -538,11 +555,11 @@
                           Free until: {{ property.CXL_Policy.VRBO?.free_cancellation_until }}
                         </div>
                       </div>
-                    </div> -->
-                    <!-- <div class="policy-item no-policy" *ngIf="!property.CXL_Policy?.VRBO">
+                    </div>
+                    <div class="policy-item no-policy" *ngIf="!property.CXL_Policy?.VRBO">
                       <i class="fas fa-home text-muted"></i>
-                      <span class="no-policy-text" style="font-size: var(--font-size-xs);">No policy</span>
-                    </div> -->
+                      <span class="no-policy-type" style="font-size: var(--font-size-xs);">No policy</span>
+                    </div>
                   </div>
                 </td>
                 <td *ngIf="columnVisibility.adultChildConfig">
