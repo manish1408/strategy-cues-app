@@ -362,6 +362,7 @@ export class RevenueComponent implements OnInit {
       // Load filter presets after operatorId is set
       this.loadFilterPresets();
     });
+
   }
 
   loadProperties(): void {
@@ -2741,4 +2742,5 @@ export class RevenueComponent implements OnInit {
     const match = text.match(/\d+/);
     return match ? parseInt(match[0], 10) : 0;
   }
+
 }
