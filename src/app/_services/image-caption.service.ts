@@ -47,6 +47,7 @@ export interface CaptionsBySourceResponse {
   success: boolean;
 }
 
+
 @Injectable({
   providedIn: 'root',
 })
@@ -71,20 +72,7 @@ export class ImageCaptionService {
     return this.http.post<ImageCaptionResponse>(`${this.baseUrl}/get-caption`, {}, { params });
   }
 
-  /**
-   * Generate captions for multiple images
-   * @param imageUrls - Array of image URLs
-   * @returns Observable of bulk caption response
-   */
-  getGeneratedCaptions(imageUrls: string[]): Observable<BulkCaptionResponse> {
-    if (!imageUrls || imageUrls.length === 0) {
-      throw new Error('Image URLs array cannot be empty');
-    }
 
-    const params = new HttpParams().set('image_urls', imageUrls.join(','));
-
-    return this.http.get<BulkCaptionResponse>(`${this.baseUrl}/bulk-captions`, { params });
-  }
 
   /**
    * Get image captions by source platform
@@ -99,6 +87,7 @@ export class ImageCaptionService {
 
     return this.http.get<CaptionsBySourceResponse>(`${this.baseUrl}/captions-by-source`, { params });
   }
+
 
   /**
    * Generate caption for a single image URL (legacy method for backward compatibility)

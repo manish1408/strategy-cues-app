@@ -418,10 +418,10 @@
   </div> -->
 
   <!-- Photo Captions Section -->
-  <div class="missing-captions-section" *ngIf="getMissingCaptionPhotosForPlatform(selectedPlatform).length > 0">
-    <h2>Missing Photo Captions for {{ selectedPlatform | titlecase }} ({{ getMissingCaptionsCountForPlatform(selectedPlatform) }} missing)</h2>
+  <div class="missing-captions-section" *ngIf="getAllPhotosForPlatform(selectedPlatform).length > 0">
+    <h2>Photo Captions for {{ selectedPlatform | titlecase }} ({{ getAllPhotosForPlatform(selectedPlatform).length }} photos)</h2>
     <div class="missing-list">
-      <div class="missing-item" *ngFor="let photoId of getMissingCaptionPhotosForPlatform(selectedPlatform)">
+      <div class="missing-item" *ngFor="let photoId of getAllPhotosForPlatform(selectedPlatform)">
         <i class="fas fa-exclamation-triangle" *ngIf="!getPhotoById(photoId)?.caption"></i>
         <i class="fas fa-check-circle text-success" *ngIf="getPhotoById(photoId)?.caption"></i>
         <img style="width: 40px; height: 40px; object-fit: fill; cursor: pointer;" [src]="getPhotoById(photoId)?.url" [alt]="'Photo ' + photoId" (error)="onImageError($event)" (click)="openPhotoInNewWindow(photoId)">
@@ -442,8 +442,6 @@
           <span *ngIf="!getPhotoById(photoId)?.caption">Generate Caption</span>
           <span *ngIf="getPhotoById(photoId)?.caption">Caption Generated</span>
         </button>
-
-        
       </div>
     </div>
   </div>

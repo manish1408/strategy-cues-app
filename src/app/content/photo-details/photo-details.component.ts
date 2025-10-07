@@ -737,7 +737,7 @@ export class PhotoDetailsComponent implements OnInit {
     return this.getMissingCaptionPhotos().length;
   }
 
-  // Get all photos for specific platform (both with and without captions)
+  // Get photos missing captions for specific platform
   getMissingCaptionPhotosForPlatform(platform: string): string[] {
     if (!this.propertyData?.Photos) return [];
     
@@ -756,8 +756,10 @@ export class PhotoDetailsComponent implements OnInit {
         return [];
     }
     
-    // Return all photos, not just missing captions
-    return platformPhotos.map((photo: any) => photo.id || "Unknown");
+    // Return only photos that are missing captions
+    return platformPhotos
+      .filter((photo: any) => !photo.caption || photo.caption.trim() === '')
+      .map((photo: any) => photo.id || "Unknown");
   }
 
   // Get count of photos without captions for specific platform
@@ -782,11 +784,9 @@ export class PhotoDetailsComponent implements OnInit {
     return platformPhotos.filter((photo: any) => !photo.caption || photo.caption.trim() === '').length;
   }
 
-  // Fetch all captions for current platform photos
-  fetchAllCaptionsForPlatform(platform: string): void {
-    if (!this.propertyData?.Photos) return;
-    
-    this.isRefreshingCaptions = true;
+  // Get all photos for specific platform
+  getAllPhotosForPlatform(platform: string): string[] {
+    if (!this.propertyData?.Photos) return [];
     
     let platformPhotos: any[] = [];
     switch (platform) {
@@ -800,51 +800,79 @@ export class PhotoDetailsComponent implements OnInit {
         platformPhotos = this.propertyData.Photos.vrbo || [];
         break;
       default:
-        this.isRefreshingCaptions = false;
-        return;
+        return [];
     }
     
-    // Get all photo URLs for the platform
-    const photoUrls = platformPhotos.map((photo: any) => photo.url).filter((url: string) => url);
-    
-    if (photoUrls.length === 0) {
-      this.isRefreshingCaptions = false;
-      return;
-    }
-    
-    // Fetch captions from the service
-    this.imageCaptionService.getGeneratedCaptions(photoUrls)
-      .subscribe({
-        next: (response: any) => {
-          console.log('Fetched captions response:', response);
-          console.log('Photo URLs sent:', photoUrls);
-          
-          if (response.success && response.data) {
-            console.log('Captions data received:', response.data);
-            // Update captions in the property data
-            this.updateCaptionsFromBulkResponse(response.data, platform);
-            // Trigger change detection to update the UI
-            this.cdr.detectChanges();
-          } else {
-            console.log('No captions found or invalid response structure');
-          }
-          
-          this.isRefreshingCaptions = false;
-        },
-        error: (error) => {
-          console.error('Error fetching captions:', error);
-          this.isRefreshingCaptions = false;
-        }
-      });
+    return platformPhotos.map((photo: any) => photo.id || "Unknown");
   }
 
-  // Update captions from bulk response
-  private updateCaptionsFromBulkResponse(captionsData: any, platform: string): void {
-    console.log('Updating captions from bulk response:', captionsData);
+  // Get photos with generated captions for specific platform
+  getGeneratedCaptionPhotosForPlatform(platform: string): string[] {
+    if (!this.propertyData?.Photos) return [];
+    
+    let platformPhotos: any[] = [];
+    switch (platform) {
+      case 'airbnb':
+        platformPhotos = this.propertyData.Photos.airbnb || [];
+        break;
+      case 'booking':
+        platformPhotos = this.propertyData.Photos.booking || [];
+        break;
+      case 'vrbo':
+        platformPhotos = this.propertyData.Photos.vrbo || [];
+        break;
+      default:
+        return [];
+    }
+    
+    // Return only photos that have captions
+    return platformPhotos
+      .filter((photo: any) => photo.caption && photo.caption.trim() !== '')
+      .map((photo: any) => photo.id || "Unknown");
+  }
+
+  // Fetch all captions for current platform photos
+  fetchAllCaptionsForPlatform(platform: string): void {
+    if (!this.propertyData?.Photos) return;
+    
+    this.isRefreshingCaptions = true;
+    
+    // Get captions by source (saved captions)
+    this.imageCaptionService.getCaptionsBySource({
+      operator_id: this.operatorId,
+      property_id: this.propertyId,
+      source: platform as 'airbnb' | 'booking' | 'vrbo'
+    }).subscribe({
+      next: (response: any) => {
+        console.log('Fetched saved captions response:', response);
+        
+        if (response.success && response.data && Array.isArray(response.data)) {
+          console.log('Saved captions data received:', response.data);
+          // Update captions from saved data
+          this.updateCaptionsFromSavedData(response.data, platform);
+        } else {
+          console.log('No saved captions found');
+        }
+        
+        this.isRefreshingCaptions = false;
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        console.error('Error fetching saved captions:', error);
+        this.isRefreshingCaptions = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+
+  // Update captions from saved data
+  private updateCaptionsFromSavedData(savedCaptions: any[], platform: string): void {
+    console.log('Updating captions from saved data:', savedCaptions);
     console.log('Platform:', platform);
     
-    if (!this.propertyData?.Photos || !captionsData) {
-      console.log('No property data or captions data available');
+    if (!this.propertyData?.Photos || !savedCaptions) {
+      console.log('No property data or saved captions available');
       return;
     }
     
@@ -866,41 +894,29 @@ export class PhotoDetailsComponent implements OnInit {
     console.log('Platform photos:', platformPhotos);
     
     let updatedCount = 0;
-    // Update captions for each photo
+    // Update captions for each photo from saved data
     platformPhotos.forEach((photo: any, index: number) => {
       console.log(`Processing photo ${index}:`, photo.url);
       
       if (photo.url) {
-        let caption = null;
+        // Try to find by url or imageId field
+        const savedCaption = savedCaptions.find((item: any) => 
+          item.url === photo.url || item.imageId === photo.url
+        );
         
-        // Handle the specific API response structure: data is an array with imageUrl and caption
-        if (Array.isArray(captionsData)) {
-          const captionObj = captionsData.find((item: any) => {
-            // Match by imageUrl property
-            return item.imageUrl === photo.url;
-          });
-          
-          if (captionObj && captionObj.caption) {
-            caption = captionObj.caption;
-          }
-        }
-        // Fallback for other possible structures
-        else if (captionsData[photo.url]) {
-          caption = captionsData[photo.url];
-        }
-        
-        if (caption) {
-          console.log(`Found caption for ${photo.url}:`, caption);
-          photo.caption = caption;
+        if (savedCaption && savedCaption.caption) {
+          console.log(`Found saved caption for ${photo.url}:`, savedCaption.caption);
+          photo.caption = savedCaption.caption;
           updatedCount++;
         } else {
-          console.log(`No caption found for ${photo.url}`);
+          console.log(`No saved caption found for ${photo.url}`);
         }
       }
     });
     
-    console.log(`Updated ${updatedCount} captions for ${platform} platform`);
+    console.log(`Updated ${updatedCount} captions from saved data for ${platform} platform`);
   }
+
 
   // Review methods
   getReviewCount(): number {
@@ -1481,8 +1497,8 @@ export class PhotoDetailsComponent implements OnInit {
     this.generatingPhotoUrl = photoUrl;
 
     this.imageCaptionService.generateCaption({
-      operator_id: this.propertyData.operator_id,
-      property_id: this.propertyData.id,
+      operator_id: this.operatorId,
+      property_id: this.propertyId,
       source: this.selectedPropertyPlatform as 'airbnb' | 'booking' | 'vrbo',
       image_url: photoUrl,
       image_id: photoUrl
@@ -1493,11 +1509,20 @@ export class PhotoDetailsComponent implements OnInit {
           
           // Show success toast
           if (response.success) {
-            this.toastr.success('Caption generated successfully!');
-            
-            // Update the photo caption in the property data
             const caption = response.data?.caption || response.caption;
-            this.updatePhotoCaptionByUrl(photoUrl, caption);
+            
+            if (caption) {
+              // Update the photo caption immediately in the UI
+              this.updatePhotoCaptionByUrl(photoUrl, caption);
+              this.toastr.success('Caption generated and saved successfully!');
+            } else {
+              this.toastr.warning('Caption generated but no caption text received.');
+            }
+            
+            // Also refresh captions for the current platform to ensure consistency
+            this.fetchAllCaptionsForPlatform(this.selectedPropertyPlatform);
+          } else {
+            this.toastr.error('Failed to generate caption. Please try again.');
           }
           
           this.isGeneratingCaption = false;
