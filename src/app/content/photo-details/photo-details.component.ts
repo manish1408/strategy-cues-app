@@ -1472,7 +1472,7 @@ export class PhotoDetailsComponent implements OnInit {
   }
 
   // Caption generation methods
-  generateCaption(photoUrl: string): void {
+  generateCaption(photoUrl: string, photoId: string): void {
     if (this.isGeneratingCaption) {
       return;
     }
@@ -1480,7 +1480,13 @@ export class PhotoDetailsComponent implements OnInit {
     this.isGeneratingCaption = true;
     this.generatingPhotoUrl = photoUrl;
 
-    this.imageCaptionService.generateCaption(photoUrl)
+    this.imageCaptionService.generateCaption({
+      operator_id: this.propertyData.operator_id,
+      property_id: this.propertyData.id,
+      source: this.selectedPropertyPlatform as 'airbnb' | 'booking' | 'vrbo',
+      image_url: photoUrl,
+      image_id: photoUrl
+    })
       .subscribe({
         next: (response: any) => {
           console.log('Caption generated successfully:', response);

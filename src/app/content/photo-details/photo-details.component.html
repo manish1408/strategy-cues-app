@@ -436,7 +436,7 @@
      
         <button 
           class="btn btn-sm btn-primary" 
-          (click)="generateCaption(getPhotoById(photoId)?.url)"
+          (click)="generateCaption(getPhotoById(photoId)?.url, photoId)"
           [disabled]="isGeneratingCaptionForPhotoUrl(getPhotoById(photoId)?.url) || getPhotoById(photoId)?.caption">
           <span *ngIf="isGeneratingCaptionForPhotoUrl(getPhotoById(photoId)?.url)" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
           <span *ngIf="!getPhotoById(photoId)?.caption">Generate Caption</span>
