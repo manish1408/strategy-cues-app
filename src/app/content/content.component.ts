@@ -23,11 +23,13 @@ export class ContentComponent implements OnInit, OnDestroy {
   exportLoading: boolean = false;
   error: string | null = null;
   
-  // Pagination properties
+  // Infinite scroll properties
   currentPage: number = 1;
   itemsPerPage: number = 20;
   totalPages: number = 0;
   totalItems: number = 0;
+  hasMoreData: boolean = true;
+  isLoadingMore: boolean = false;
   
   // Configuration properties
   operatorId: string = '';
@@ -72,7 +74,10 @@ export class ContentComponent implements OnInit, OnDestroy {
   }
 
   loadCompetitorComparisonData(): void {
-    this.setLoadingState(true);
+    // Only set main loading state for first page load, not for infinite scroll
+    if (this.currentPage === 1) {
+      this.setLoadingState(true);
+    }
     this.clearError();
     
     this.competitorComparisonService.getCompetitorById(this.operatorId, this.currentPage, this.itemsPerPage)
@@ -89,28 +94,40 @@ export class ContentComponent implements OnInit, OnDestroy {
 
   private handleApiResponse(response: any): void {
     if (response?.data?.comparisons) {
-      this.photoComparisonData = response.data.comparisons;
-      this.filteredData = [...this.photoComparisonData];
+      const newData = response.data.comparisons;
+      
+      // For infinite scroll: append data instead of replacing
+      if (this.currentPage === 1) {
+        this.photoComparisonData = newData;
+        this.filteredData = [...newData];
+      } else {
+        this.photoComparisonData = [...this.photoComparisonData, ...newData];
+        this.filteredData = [...this.photoComparisonData];
+      }
       
       // Update pagination data from response
       if (response.data.pagination) {
         this.totalItems = response.data.pagination.total || 0;
         this.totalPages = response.data.pagination.totalPages || 0;
         this.currentPage = response.data.pagination.page || 1;
+        this.hasMoreData = this.currentPage < this.totalPages;
       } else {
         // Fallback if pagination data is not available
         this.totalItems = response.data.comparisons.length;
         this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
+        this.hasMoreData = this.currentPage < this.totalPages;
       }
       
-      
       this.setLoadingState(false);
+      this.isLoadingMore = false;
     } else {
       this.handleError('No comparison data available');
     }
   }
 
   private handleApiError(error: any): void {
+    console.error('API Error:', error);
+    this.isLoadingMore = false; // Reset loading state for infinite scroll
     this.toastr.error('Error loading competitor comparison data. Please try again later.');
     this.handleError('Failed to load competitor data. Please try again later.');
   }
@@ -118,6 +135,7 @@ export class ContentComponent implements OnInit, OnDestroy {
   private handleError(message: string): void {
     this.error = message;
     this.setLoadingState(false);
+    this.isLoadingMore = false;
     // Clear data when there's an error
     this.photoComparisonData = [];
     this.filteredData = [];
@@ -460,7 +478,7 @@ export class ContentComponent implements OnInit, OnDestroy {
   }
 
   getDisplayData(): any[] {
-    // For API-based pagination, return the current page data
+    // For infinite scroll, return all filtered data
     return this.filteredData;
   }
 
@@ -616,7 +634,10 @@ export class ContentComponent implements OnInit, OnDestroy {
 
   onImageError(event: any): void {
     // Set fallback image when image fails to load
+    console.log('Image failed to load:', event.target.src);
     event.target.src = 'assets/images/placeholder.jpg';
+    // Prevent infinite loop if placeholder also fails
+    event.target.onerror = null;
   }
 
   // Navigation methods
@@ -631,5 +652,32 @@ export class ContentComponent implements OnInit, OnDestroy {
 
   nextCompetitor(): void {
     // Legacy method for backward compatibility
+  }
+
+  // ==================== INFINITE SCROLL METHODS ====================
+  
+  loadMoreData(): void {
+    if (this.hasMoreData && !this.isLoadingMore && !this.loading) {
+      this.isLoadingMore = true;
+      this.currentPage++;
+      this.loadCompetitorComparisonData();
+    }
+  }
+
+  // Scroll event handler for infinite scroll
+  onScroll(event: any): void {
+    try {
+      const element = event.target;
+      const threshold = 50; // pixels from bottom
+      
+      // Check if element has valid scroll properties
+      if (element && element.scrollTop !== undefined && element.clientHeight && element.scrollHeight) {
+        if (element.scrollTop + element.clientHeight >= element.scrollHeight - threshold) {
+          this.loadMoreData();
+        }
+      }
+    } catch (error) {
+      console.error('Scroll event error:', error);
+    }
   }
 }

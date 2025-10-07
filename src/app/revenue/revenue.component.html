@@ -314,7 +314,7 @@
 
 
     <!-- Table View -->
-    <div class="table-container" *ngIf="!loading && !error && propertyData && propertyData.length > 0">
+    <div class="table-container" *ngIf="!loading && !error && propertyData && propertyData.length > 0" (scroll)="onScroll($event)">
       <table>
         <thead>
           <tr>
@@ -713,24 +713,24 @@
           </tr>
         </tbody>
       </table>
-    </div>
-
-      <!-- Pagination -->
-      <div class="pagination-section" *ngIf="totalPages > 1 && !loading">
-        <nav>
-          <ul class="pagination justify-content-center">
-            <li class="page-item" [class.disabled]="currentPage === 1">
-              <a class="page-link" (click)="changePage(currentPage - 1)">Previous</a>
-            </li>
-            <li class="page-item" *ngFor="let page of getPageNumbers()" [class.active]="page === currentPage">
-              <a class="page-link" (click)="changePage(page)">{{ page }}</a>
-            </li>
-            <li class="page-item" [class.disabled]="currentPage === totalPages">
-              <a class="page-link" (click)="changePage(currentPage + 1)">Next</a>
-            </li>
-          </ul>
-        </nav>
+      
+      <!-- Infinite Scroll Loading Indicator -->
+      <div class="infinite-scroll-loading" *ngIf="isLoadingMore">
+        <div class="text-center py-3">
+          <div class="spinner-border spinner-border-sm" role="status">
+            <span class="visually-hidden">Loading more...</span>
+          </div>
+          <span class="ms-2">Loading more properties...</span>
+        </div>
       </div>
+      
+      <!-- End of Data Indicator -->
+      <div class="end-of-data" *ngIf="!hasMoreData && propertyData && propertyData.length > 0 && !loading">
+        <div class="text-center py-3 text-muted">
+          <small>You've reached the end of the list</small>
+        </div>
+      </div>
+    </div>
  
 
     <!-- Empty State -->

@@ -204,10 +204,12 @@ export class RevenueComponent implements OnInit {
   tempVrboTotalRevMin: number | null = null;
   tempVrboTotalRevMax: number | null = null;
 
-  // Pagination properties
+  // Infinite scroll properties
   currentPage: number = 1;
   itemsPerPage: number = 20;
   totalPages: number = 1;
+  hasMoreData: boolean = true;
+  isLoadingMore: boolean = false;
 
   // Sorting properties
   sortField: string = "";
@@ -385,19 +387,27 @@ export class RevenueComponent implements OnInit {
         next: (response: any) => {
           
           if (response.success) {
-            this.propertyData =
-              PropertiesService.extractPropertiesArray(response);
+            const newData = PropertiesService.extractPropertiesArray(response);
+
+            // For infinite scroll: append data instead of replacing
+            if (this.currentPage === 1) {
+              this.propertyData = newData;
+            } else {
+              this.propertyData = [...this.propertyData, ...newData];
+            }
 
             // Update pagination data from API response
             if (response.pagination) {
               this.totalPages = response.pagination.total_pages;
               this.currentPage = response.pagination.page;
               this.itemsPerPage = response.pagination.limit;
+              this.hasMoreData = this.currentPage < this.totalPages;
             } else if (response.data && response.data.pagination) {
               // Fallback for nested pagination structure
               this.totalPages = response.data.pagination.total_pages;
               this.currentPage = response.data.pagination.page;
               this.itemsPerPage = response.data.pagination.limit;
+              this.hasMoreData = this.currentPage < this.totalPages;
             }
 
             // Calculate range values and filter options from current data
@@ -410,16 +420,21 @@ export class RevenueComponent implements OnInit {
             this.error = response.message || "Failed to load properties data";
           }
           this.loading = false;
+          this.isLoadingMore = false;
         },
         error: (error: any) => {
           this.error = "Error loading properties. Please try again.";
           this.loading = false;
+          this.isLoadingMore = false;
         },
         complete: () => {
           // Ensure loading is set to false even if there's an issue
           setTimeout(() => {
             if (this.loading) {
               this.loading = false;
+            }
+            if (this.isLoadingMore) {
+              this.isLoadingMore = false;
             }
           }, 1000);
         }
@@ -781,10 +796,11 @@ export class RevenueComponent implements OnInit {
 
   // Filter data based on search term, area, room type, and all range filters
   filterData(): void {
-    // For server-side pagination, we need to reload data with filters
+    // For infinite scroll, we need to reload data with filters
     // Reset to first page when applying filters
     this.loading = true;
     this.currentPage = 1;
+    this.hasMoreData = true;
     this.loadFilteredPropertiesData();
   }
 
@@ -839,21 +855,23 @@ export class RevenueComponent implements OnInit {
     });
   }
 
-  // Pagination methods
+  // Legacy pagination methods - kept for backward compatibility but not used with infinite scroll
   updatePagination(): void {
     // Pagination data is now updated from API response in loadFilteredPropertiesData()
     // This method is kept for backward compatibility but pagination is handled by API
   }
 
   changePage(page: number): void {
+    // Legacy method - not used with infinite scroll
     if (page >= 1 && page !== this.currentPage && page <= this.totalPages) {
       this.loading = true;
       this.currentPage = page;
-      this.loadFilteredPropertiesData(); // Load new data from API for the new page
+      this.loadFilteredPropertiesData();
     }
   }
 
   getPageNumbers(): number[] {
+    // Legacy method - not used with infinite scroll
     const pages: number[] = [];
     const startPage = Math.max(1, this.currentPage - 2);
     const endPage = Math.min(this.totalPages, this.currentPage + 2);
@@ -2076,6 +2094,25 @@ export class RevenueComponent implements OnInit {
     this.selectedPresetId = '';
 
     this.filterData();
+  }
+
+  // Infinite scroll method
+  loadMoreData(): void {
+    if (this.hasMoreData && !this.isLoadingMore && !this.loading) {
+      this.isLoadingMore = true;
+      this.currentPage++;
+      this.loadFilteredPropertiesData();
+    }
+  }
+
+  // Scroll event handler for infinite scroll
+  onScroll(event: any): void {
+    const element = event.target;
+    const threshold = 100; // pixels from bottom
+    
+    if (element.scrollTop + element.clientHeight >= element.scrollHeight - threshold) {
+      this.loadMoreData();
+    }
   }
 
   // Column visibility methods

@@ -317,7 +317,7 @@
             <!-- Current Platform Stats -->
             <div class="platform-badge-group">
               <span class="platform-label">
-                <i class="fas" [ngClass]="selectedPlatform === 'airbnb' ? 'fab fa-airbnb' : selectedPlatform === 'booking' ? 'fas fa-bed' : 'fas fa-home'"></i> 
+                <i [ngClass]="selectedPlatform === 'airbnb' ? 'fab fa-airbnb' : selectedPlatform === 'booking' ? 'fas fa-bed' : 'fas fa-home'"></i> 
                 {{ selectedPlatform | titlecase }}
               </span>
               <span class="badge bg-light text-dark">
@@ -358,7 +358,7 @@
   <!-- Additional Photo Suggestions -->
   <div class="photo-suggestions-section">
     <div class="suggestions-header">
-      <h2>AI Photo Analysis & Suggestions</h2>
+      <h2>Additional Photo Suggestions</h2>
       <div class="analysis-status" *ngIf="isAnalyzingPhotos">
         <i class="fas fa-spinner fa-spin"></i>
         <span>Analyzing photos with AI...</span>
