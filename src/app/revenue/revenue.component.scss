@@ -2614,4 +2614,66 @@ $transition: all 0.3s ease;
     }
   }
 
+// Property Selection Styles
+.select-column {
+  width: 50px;
+  text-align: center;
+  vertical-align: middle;
+  
+  input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: $primary-color;
+    
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+  }
+  
+  // Header checkbox styling
+  th.select-column {
+    background-color: $light-color;
+    border-bottom: 2px solid $primary-color;
+  }
+}
+
+// Selected row styling
+.table-container tbody tr {
+  &.selected {
+    background-color: rgba($primary-color, 0.1);
+  }
+  
+  &:hover {
+    background-color: rgba($primary-color, 0.05);
+  }
+}
+
+// Property selection counter styling
+.filters-header {
+  .ms-2 {
+    color: $primary-color;
+    font-weight: 500;
+    
+    i {
+      color: $success-color;
+    }
+  }
+}
+
+// Responsive Design for Property Selection
+@media (max-width: 768px) {
+  .revenue-dashboard {
+    .select-column {
+      width: 40px;
+      
+      input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+}
+
 

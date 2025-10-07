@@ -4,6 +4,7 @@ export interface FilterPreset {
   description?: string;
   createdAt: Date;
   updatedAt: Date;
+  propertyIds?: string[];
   filters: {
     // Basic filters
     selectedArea?: string;

@@ -73,7 +73,8 @@
                 <div class="dropdown-item-text px-3 py-2">
                   <div class="btn-group btn-group-sm w-100" role="group">
                     <button type="button" class="btn btn-outline-success me-1" (click)="showSavePresetDialog()" 
-                      [disabled]="!hasActiveFilters() || presetSaving" title="Save current filters as preset">
+                      [disabled]="(!hasActiveFilters() && getCurrentPropertyIds().length === 0) || presetSaving" 
+                      title="Save current filters or property selection as preset">
                       <i *ngIf="!presetSaving" class="fas fa-save me-1"></i>
                       <i *ngIf="presetSaving" class="fas fa-spinner fa-spin me-1"></i>Save
                     </button>
@@ -269,12 +270,30 @@
         <div class="filters-header">
           <h6 class="mb-0">
             <i class="fas fa-filter me-2"></i>Applied Filters ({{ getAppliedFilters().length }})
+            <span *ngIf="getSelectedPropertiesCount() > 0" class="ms-2">
+              <i class="fas fa-check-square me-1"></i>Selected Properties ({{ getSelectedPropertiesCount() }})
+            </span>
           </h6>
           <div class="filter-actions">
             <button class="btn btn-sm btn-outline-success me-2" (click)="showSavePresetDialog()" 
-              [disabled]="presetSaving" title="Save current filters as preset">
+              [disabled]="(!hasActiveFilters() && getCurrentPropertyIds().length === 0) || presetSaving" 
+              title="Save current filters or property selection as preset">
               <i *ngIf="!presetSaving" class="fas fa-bookmark me-1"></i>
               <i *ngIf="presetSaving" class="fas fa-spinner fa-spin me-1"></i>Save as Preset
+            </button>
+            <button class="btn btn-sm btn-outline-warning me-2" (click)="clearPropertySelection()" 
+              [disabled]="getSelectedPropertiesCount() === 0"
+              title="Clear property selection">
+              <i class="fas fa-check-square me-1"></i>Clear Selection
+            </button>
+            <button class="btn btn-sm me-2" 
+              [class.btn-primary]="!showOnlySelected"
+              [class.btn-success]="showOnlySelected"
+              (click)="toggleShowOnlySelected()" 
+              [disabled]="!shouldShowToggleButton()"
+              [title]="showOnlySelected ? 'Show all properties' : 'Show only selected properties'">
+              <i [class]="showOnlySelected ? 'fas fa-filter me-1' : 'fas fa-eye me-1'"></i>
+              {{ showOnlySelected ? 'Show All' : 'Show Selected Only' }}
             </button>
             <button class="btn btn-sm btn-outline-danger" (click)="clearAllFilters()">
               <i class="fas fa-times me-1"></i>Clear All
@@ -314,10 +333,17 @@
 
 
     <!-- Table View -->
-    <div class="table-container" *ngIf="!loading && !error && propertyData && propertyData.length > 0" (scroll)="onScroll($event)">
+    <div class="table-container" *ngIf="!loading && !error && getFilteredPropertyData() && getFilteredPropertyData().length > 0" (scroll)="onScroll($event)">
       <table>
         <thead>
           <tr>
+            <th class="select-column" *ngIf="hasActiveFilters()">
+              <input type="checkbox" 
+                     [(ngModel)]="selectAllProperties" 
+                     (change)="toggleSelectAllProperties()"
+                     [indeterminate]="getSelectedPropertiesCount() > 0 && getSelectedPropertiesCount() < getFilteredPropertyData().length"
+                     title="Select/Deselect all visible properties">
+            </th>
             <th *ngIf="columnVisibility.propertyName">Property Name</th>
             <th *ngIf="columnVisibility.occupancyTM">Occupancy TM</th>
                 <th *ngIf="columnVisibility.occupancyNM">Occupancy NM</th>
@@ -337,7 +363,14 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let property of propertyData">
+          <tr *ngFor="let property of getFilteredPropertyData()">
+            <td class="select-column" *ngIf="hasActiveFilters()">
+              <input type="checkbox" 
+                     [checked]="isPropertySelected(property._id)"
+                     (change)="togglePropertySelection(property._id)"
+                     [disabled]="!property._id"
+                     title="Select this property">
+            </td>
             <td class="property-cell" *ngIf="columnVisibility.propertyName">
               <div class="property-info">
                 <div class="property-image">
@@ -743,6 +776,25 @@
           <button class="btn btn-primary" (click)="clearAllFilters()">
             <i class="fas fa-refresh me-2"></i>Clear Filters
           </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Selected Properties State -->
+    <div *ngIf="!loading && !error && showOnlySelected && getSelectedPropertiesCount() === 0 && propertyData && propertyData.length > 0" class="text-center py-5">
+      <div class="card">
+        <div class="card-body">
+          <i class="fas fa-filter fa-3x text-muted mb-3"></i>
+          <h5 class="card-title">No Selected Properties</h5>
+          <p class="card-text">You are currently viewing selected properties only, but no properties are selected. Select some properties or switch to view all properties.</p>
+          <div class="d-flex justify-content-center gap-2">
+            <button class="btn btn-primary" (click)="showOnlySelected = false">
+              <i class="fas fa-eye me-2"></i>Show All Properties
+            </button>
+            <button class="btn btn-outline-secondary" (click)="clearPropertySelection()">
+              <i class="fas fa-check-square me-2"></i>Clear Selection
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -1527,15 +1579,27 @@
               
               <!-- Current Filters Preview -->
               <div class="mb-3">
-                <label class="form-label">Current Filters to Save:</label>
+                <label class="form-label">Current Selection to Save:</label>
                 <div class="current-filters-preview">
                   <div class="filters-badges">
+                    <!-- Show active filters if any -->
                     <span *ngFor="let filter of getAppliedFilters().slice(0, 5)" 
                       class="filter-badge filter-preview">
                       {{ filter.label }}: {{ filter.value }}
                     </span>
                     <span *ngIf="getAppliedFilters().length > 5" class="filter-badge filter-preview">
-                      +{{ getAppliedFilters().length - 5 }} more
+                      +{{ getAppliedFilters().length - 5 }} more filters
+                    </span>
+                    
+                    <!-- Show property selection info -->
+                    <span *ngIf="getCurrentPropertyIds().length > 0" class="filter-badge filter-preview">
+                      {{ getCurrentPropertyIds().length }} selected properties
+                    </span>
+                    
+                    <!-- Show message if neither filters nor properties are selected -->
+                    <span *ngIf="getAppliedFilters().length === 0 && getCurrentPropertyIds().length === 0" 
+                      class="filter-badge filter-preview text-warning">
+                      No filters or properties selected
                     </span>
                   </div>
                 </div>
@@ -1549,7 +1613,7 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" (click)="cancelSavePreset()">Cancel</button>
             <button type="button" class="btn btn-success" (click)="saveCurrentFiltersAsPreset()" 
-              [disabled]="!newPresetName.trim() || presetSaving">
+              [disabled]="!newPresetName.trim() || presetSaving || (getAppliedFilters().length === 0 && getCurrentPropertyIds().length === 0)">
               <i *ngIf="!presetSaving" class="fas fa-save me-2"></i>
               <i *ngIf="presetSaving" class="fas fa-spinner fa-spin me-2"></i>Save Preset
             </button>

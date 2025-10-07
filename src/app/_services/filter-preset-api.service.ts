@@ -39,6 +39,7 @@ export class FilterPresetApiService {
     name: string;
     description?: string;
     filters: any;
+    propertyIds?: string[];
   }): Observable<ApiResponse<ApiFilterPreset>> {
     const requestData = {
       ...presetData,

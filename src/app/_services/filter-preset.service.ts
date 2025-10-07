@@ -43,6 +43,7 @@ export class FilterPresetService {
               description: apiPreset.description,
               createdAt: this.safeDateConversion(apiPreset.createdAt),
               updatedAt: this.safeDateConversion(apiPreset.updatedAt),
+              propertyIds: apiPreset.propertyIds || [],
               filters: apiPreset.filters
             }));
             this.presetsSubject.next(presets);
@@ -77,13 +78,21 @@ export class FilterPresetService {
   /**
    * Save a new preset
    */
-  savePreset(name: string, filters: FilterPreset['filters'], description?: string, operatorId?: string): FilterPreset {
+  savePreset(name: string, filters: FilterPreset['filters'], description?: string, operatorId?: string, propertyIds?: string[]): FilterPreset {
     if (!name || name.trim().length === 0) {
       throw new Error('Preset name is required');
     }
 
     if (!operatorId) {
       throw new Error('Operator ID is required to save preset');
+    }
+
+    // Validate that either filters or propertyIds is provided and not empty
+    const hasActiveFilters = this.hasActiveFilters(filters);
+    const hasPropertyIds = propertyIds && propertyIds.length > 0;
+    
+    if (!hasActiveFilters && !hasPropertyIds) {
+      throw new Error('Either filters or property IDs must be provided to save a preset');
     }
 
     // Check if name already exists
@@ -96,7 +105,8 @@ export class FilterPresetService {
     this.filterPresetApiService.createFilterPreset(operatorId, {
       name: name.trim(),
       description: description?.trim(),
-      filters: { ...filters }
+      filters: { ...filters },
+      propertyIds: propertyIds
     }).subscribe({
       next: (response) => {
         if (response.success && response.data) {
@@ -328,6 +338,64 @@ export class FilterPresetService {
       return isNaN(parsed.getTime()) ? new Date() : parsed;
     }
     return new Date();
+  }
+
+  /**
+   * Check if filters object has any active filters
+   */
+  private hasActiveFilters(filters: FilterPreset['filters']): boolean {
+    // Basic filters
+    if (filters.selectedArea || filters.selectedRoomType) return true;
+
+    // Range filters
+    if (filters.adrMin !== null || filters.adrMax !== null ||
+        filters.revparMin !== null || filters.revparMax !== null ||
+        filters.mpiMin !== null || filters.mpiMax !== null ||
+        filters.minRateThresholdMin !== null || filters.minRateThresholdMax !== null) {
+      return true;
+    }
+
+    // Occupancy filters
+    if (filters.occupancyTMMin !== null || filters.occupancyTMMax !== null ||
+        filters.occupancyNMMin !== null || filters.occupancyNMMax !== null ||
+        filters.occupancy7DaysMin !== null || filters.occupancy7DaysMax !== null ||
+        filters.occupancy30DaysMin !== null || filters.occupancy30DaysMax !== null ||
+        filters.pickUpOcc7DaysMin !== null || filters.pickUpOcc7DaysMax !== null ||
+        filters.pickUpOcc14DaysMin !== null || filters.pickUpOcc14DaysMax !== null ||
+        filters.pickUpOcc30DaysMin !== null || filters.pickUpOcc30DaysMax !== null) {
+      return true;
+    }
+
+    // Performance filters
+    if (filters.stlyVarOccMin !== null || filters.stlyVarOccMax !== null ||
+        filters.stlyVarADRMin !== null || filters.stlyVarADRMax !== null ||
+        filters.stlyVarRevPARMin !== null || filters.stlyVarRevPARMax !== null ||
+        filters.stlmVarOccMin !== null || filters.stlmVarOccMax !== null ||
+        filters.stlmVarADRMin !== null || filters.stlmVarADRMax !== null ||
+        filters.stlmVarRevPARMin !== null || filters.stlmVarRevPARMax !== null) {
+      return true;
+    }
+
+    // Platform filters
+    const platformFilters = [
+      filters.bookingGeniusFilter, filters.bookingMobileFilter, filters.bookingPrefFilter,
+      filters.bookingWeeklyFilter, filters.bookingMonthlyFilter, filters.bookingLMDiscFilter,
+      filters.airbnbWeeklyFilter, filters.airbnbMonthlyFilter, filters.airbnbMemberFilter,
+      filters.airbnbLMDiscFilter, filters.vrboWeeklyFilter, filters.vrboMonthlyFilter
+    ];
+    if (platformFilters.some(f => f && f !== 'not-present')) return true;
+
+    // Reviews filters
+    if (filters.bookingRevScoreMin !== null || filters.bookingRevScoreMax !== null ||
+        filters.bookingTotalRevMin !== null || filters.bookingTotalRevMax !== null ||
+        filters.airbnbRevScoreMin !== null || filters.airbnbRevScoreMax !== null ||
+        filters.airbnbTotalRevMin !== null || filters.airbnbTotalRevMax !== null ||
+        filters.vrboRevScoreMin !== null || filters.vrboRevScoreMax !== null ||
+        filters.vrboTotalRevMin !== null || filters.vrboTotalRevMax !== null) {
+      return true;
+    }
+
+    return false;
   }
 
   /**
