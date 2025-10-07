@@ -358,12 +358,17 @@
   <!-- Additional Photo Suggestions -->
   <div class="photo-suggestions-section">
     <div class="suggestions-header">
-      <h2>Additional photo suggestions for {{ selectedPlatform | titlecase }}</h2>
+      <h2>AI Photo Analysis & Suggestions</h2>
+      <div class="analysis-status" *ngIf="isAnalyzingPhotos">
+        <i class="fas fa-spinner fa-spin"></i>
+        <span>Analyzing photos with AI...</span>
+      </div>
     </div>
     
     <!-- Suggestions List -->
-    <div class="suggestions-list" *ngIf="getPhotoSuggestionsForPlatform(selectedPlatform).length > 0">
-      <div class="suggestion-item" *ngFor="let suggestion of getPhotoSuggestionsForPlatform(selectedPlatform)">
+    <div class="suggestions-list" *ngIf="getPhotoSuggestions().length > 0">
+      <div class="suggestion-item" *ngFor="let suggestion of getPhotoSuggestions()" 
+           [ngClass]="'suggestion-' + suggestion.type">
         <div class="suggestion-status">
           <i class="fas" [ngClass]="suggestion.available ? 'fa-check' : 'fa-times'" 
              [class.status-available]="suggestion.available" 
@@ -387,10 +392,10 @@
     </div>
     
     <!-- Empty State -->
-    <div class="suggestions-empty-state" *ngIf="getPhotoSuggestionsForPlatform(selectedPlatform).length === 0">
+    <div class="suggestions-empty-state" *ngIf="getPhotoSuggestions().length === 0">
       <app-empty-state 
         icon="fas fa-lightbulb"
-        title="No Photo Suggestions Available for {{ selectedPlatform | titlecase }}">
+        title="No Photo Suggestions Available">
       </app-empty-state>
     </div>
   </div>

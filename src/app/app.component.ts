@@ -96,7 +96,6 @@ export class AppComponent {
           this.avatar = "https://milodocs.blob.core.windows.net/public-docs/profile-picture.webp";
         }
       } catch (error) {
-        console.error('Error parsing user data:', error);
         this.avatar = "https://milodocs.blob.core.windows.net/public-docs/profile-picture.webp";
       }
     }

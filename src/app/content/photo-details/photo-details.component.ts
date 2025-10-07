@@ -59,6 +59,7 @@ export class PhotoDetailsComponent implements OnInit {
   // Loading state
   isLoading: boolean = true;
   isRefreshingCaptions: boolean = false;
+  isAnalyzingPhotos: boolean = false;
 
   // Platform tabs
   selectedPlatform: string = "airbnb";
@@ -80,8 +81,6 @@ export class PhotoDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.propertyId = this.route.snapshot.params["id"];
     this.operatorId = this.route.snapshot.queryParams["operatorId"] || "";
-    console.log("Property ID:", this.propertyId);
-    console.log("Operator ID:", this.operatorId);
 
     // API call to get property competitors
     this.loadPropertyCompetitors(this.propertyId);
@@ -104,23 +103,8 @@ export class PhotoDetailsComponent implements OnInit {
                 ...response.data.property,
               };
 
-              // Debug: Log the Photos structure from API
-              console.log(
-                "Property Photos from API:",
-                this.propertyData.Photos
-              );
-              console.log("Property full data:", this.propertyData);
-
               // Update images array after receiving property data
               this.updatePropertyPlatformImages();
-              console.log(
-                "Updated Your Photos Images Array after API:",
-                this.images
-              );
-              console.log(
-                "Updated Your Photos URLs:",
-                this.images.map((img) => img.data?.src)
-              );
             }
 
             // Update competitors data
@@ -137,7 +121,6 @@ export class PhotoDetailsComponent implements OnInit {
             } else {
               // Show default competitors when no data from backend
               this.propertyData.competitor = this.getDefaultCompetitors();
-              console.log("No competitors found, showing default competitors");
             }
 
             // Trigger change detection to update the UI
@@ -148,12 +131,13 @@ export class PhotoDetailsComponent implements OnInit {
             
             // Fetch captions for the default platform (Airbnb)
             this.fetchAllCaptionsForPlatform('airbnb');
+            
+            // Fetch AI photo analysis
+            this.fetchAIPhotoAnalysis();
           }
         },
         error: (error: any) => {
-          console.log("Error loading property competitors:", error);
-          console.log("Error details:", error?.error);
-
+          this.toastr.error('Error loading property data. Please try again.');
           // Trigger change detection to update the UI
           this.cdr.detectChanges();
 
@@ -478,15 +462,9 @@ export class PhotoDetailsComponent implements OnInit {
   // Force refresh galleries
   refreshGalleries(): void {
     this.galleryRefreshKey++;
-    console.log("Refreshing galleries with key:", this.galleryRefreshKey);
   }
 
   updateCompetitorImages(): void {
-    console.log(
-      "Updating competitor images. Selected index:",
-      this.selectedCompetitorIndex
-    );
-
     // Use platform-specific images based on selected tab
     this.updateCompetitorPlatformImages();
   }
@@ -648,13 +626,6 @@ export class PhotoDetailsComponent implements OnInit {
   }
 
   nextCompetitor(): void {
-    console.log(
-      "Next competitor clicked. Current index:",
-      this.selectedCompetitorIndex
-    );
-    console.log("Total competitors:", this.propertyData?.competitor?.length);
-    console.log("Current competitor:", this.getCurrentCompetitor());
-
     if (
       this.propertyData?.competitor &&
       this.selectedCompetitorIndex < this.propertyData.competitor.length - 1
@@ -662,10 +633,6 @@ export class PhotoDetailsComponent implements OnInit {
       this.selectedCompetitorIndex++;
       this.currentCompetitorImageIndex = 0;
       this.updateCompetitorImages();
-      console.log("Moved to competitor index:", this.selectedCompetitorIndex);
-      console.log("New competitor:", this.getCurrentCompetitor());
-    } else {
-      console.log("Cannot move to next competitor - at end or no competitors");
     }
   }
 
@@ -831,6 +798,38 @@ export class PhotoDetailsComponent implements OnInit {
       .map((photo: any) => photo.id || "Unknown");
   }
 
+  // Fetch AI photo analysis
+  fetchAIPhotoAnalysis(): void {
+    if (!this.propertyId || !this.operatorId) {
+      return;
+    }
+
+    this.isAnalyzingPhotos = true;
+    
+    this.competitorComparisonService.getAIPhotoAnalysis(this.propertyId, this.operatorId)
+      .subscribe({
+        next: (response: any) => {
+          if (response.success && response.data) {
+            // Store the AI analysis data in propertyData
+            this.propertyData = {
+              ...this.propertyData,
+              aiAnalysis: response.data
+            };
+            
+            // Trigger change detection to update suggestions
+            this.cdr.detectChanges();
+          }
+          
+          this.isAnalyzingPhotos = false;
+        },
+        error: (error) => {
+          this.toastr.error('Error analyzing photos with AI. Please try again.');
+          this.isAnalyzingPhotos = false;
+          this.cdr.detectChanges();
+        }
+      });
+  }
+
   // Fetch all captions for current platform photos
   fetchAllCaptionsForPlatform(platform: string): void {
     if (!this.propertyData?.Photos) return;
@@ -844,21 +843,16 @@ export class PhotoDetailsComponent implements OnInit {
       source: platform as 'airbnb' | 'booking' | 'vrbo'
     }).subscribe({
       next: (response: any) => {
-        console.log('Fetched saved captions response:', response);
-        
         if (response.success && response.data && Array.isArray(response.data)) {
-          console.log('Saved captions data received:', response.data);
           // Update captions from saved data
           this.updateCaptionsFromSavedData(response.data, platform);
-        } else {
-          console.log('No saved captions found');
         }
         
         this.isRefreshingCaptions = false;
         this.cdr.detectChanges();
       },
       error: (error) => {
-        console.error('Error fetching saved captions:', error);
+        this.toastr.error('Error fetching captions. Please try again.');
         this.isRefreshingCaptions = false;
         this.cdr.detectChanges();
       }
@@ -868,11 +862,7 @@ export class PhotoDetailsComponent implements OnInit {
 
   // Update captions from saved data
   private updateCaptionsFromSavedData(savedCaptions: any[], platform: string): void {
-    console.log('Updating captions from saved data:', savedCaptions);
-    console.log('Platform:', platform);
-    
     if (!this.propertyData?.Photos || !savedCaptions) {
-      console.log('No property data or saved captions available');
       return;
     }
     
@@ -891,13 +881,8 @@ export class PhotoDetailsComponent implements OnInit {
         return;
     }
     
-    console.log('Platform photos:', platformPhotos);
-    
-    let updatedCount = 0;
     // Update captions for each photo from saved data
     platformPhotos.forEach((photo: any, index: number) => {
-      console.log(`Processing photo ${index}:`, photo.url);
-      
       if (photo.url) {
         // Try to find by url or imageId field
         const savedCaption = savedCaptions.find((item: any) => 
@@ -905,16 +890,10 @@ export class PhotoDetailsComponent implements OnInit {
         );
         
         if (savedCaption && savedCaption.caption) {
-          console.log(`Found saved caption for ${photo.url}:`, savedCaption.caption);
           photo.caption = savedCaption.caption;
-          updatedCount++;
-        } else {
-          console.log(`No saved caption found for ${photo.url}`);
         }
       }
     });
-    
-    console.log(`Updated ${updatedCount} captions from saved data for ${platform} platform`);
   }
 
 
@@ -1178,45 +1157,95 @@ export class PhotoDetailsComponent implements OnInit {
 
   // Photo suggestions methods
   getPhotoSuggestions(): any[] {
-    if (this.propertyData?.recommendations) {
-      return this.propertyData.recommendations.map((rec: any) => ({
-        title: rec.title,
-        available: rec.impact === "high" || rec.impact === "medium",
-        description: rec.details,
-        impact: rec.impact,
-        effort: rec.effort,
-        id: rec.id,
+    // Check if we have AI analysis data
+    if (this.propertyData?.aiAnalysis?.summary?.recommendations) {
+      return this.propertyData.aiAnalysis.summary.recommendations.map((rec: string, index: number) => ({
+        title: rec,
+        available: true,
+        description: rec,
+        impact: this.getImpactFromRecommendation(rec),
+        effort: this.getEffortFromRecommendation(rec),
+        id: `ai_rec_${index}`,
+        type: 'ai_recommendation'
       }));
     }
 
-    // Fallback data if no recommendations in JSON
-    return [
-   
-    ];
+    // Check for coverage gaps from AI analysis
+    if (this.propertyData?.aiAnalysis?.coverage) {
+      const missingItems = this.propertyData.aiAnalysis.coverage.filter((item: any) => item.status === 'missing');
+      const partialItems = this.propertyData.aiAnalysis.coverage.filter((item: any) => item.status === 'partial');
+      
+      const suggestions: any[] = [];
+      
+      // Add missing items as suggestions
+      missingItems.forEach((item: any, index: number) => {
+        suggestions.push({
+          title: `Add ${item.label}`,
+          available: false,
+          description: item.gap_note || `Missing ${item.label}`,
+          impact: 'high',
+          effort: 'medium',
+          id: `missing_${item.checklist_item_id}`,
+          type: 'missing_coverage'
+        });
+      });
+      
+      // Add partial items as suggestions
+      partialItems.forEach((item: any, index: number) => {
+        suggestions.push({
+          title: `Improve ${item.label}`,
+          available: false,
+          description: item.gap_note || `Need more ${item.label} photos`,
+          impact: 'medium',
+          effort: 'low',
+          id: `partial_${item.checklist_item_id}`,
+          type: 'partial_coverage'
+        });
+      });
+      
+      return suggestions;
+    }
+
+    // Fallback data if no AI analysis available
+    return [];
   }
 
-  // Get photo suggestions filtered by platform
+  // Helper methods for AI analysis
+  getImpactFromRecommendation(rec: string): string {
+    const lowerRec = rec.toLowerCase();
+    if (lowerRec.includes('luxury') || lowerRec.includes('hero') || lowerRec.includes('signature')) {
+      return 'high';
+    } else if (lowerRec.includes('wide') || lowerRec.includes('detail') || lowerRec.includes('appliances')) {
+      return 'medium';
+    } else {
+      return 'low';
+    }
+  }
+
+  getEffortFromRecommendation(rec: string): string {
+    const lowerRec = rec.toLowerCase();
+    if (lowerRec.includes('floor plan') || lowerRec.includes('graphic')) {
+      return 'high';
+    } else if (lowerRec.includes('wide') || lowerRec.includes('detail')) {
+      return 'medium';
+    } else {
+      return 'low';
+    }
+  }
+
+  // Get photo suggestions filtered by platform (deprecated - now using common suggestions)
   getPhotoSuggestionsForPlatform(platform: string): any[] {
-    const allSuggestions = this.getPhotoSuggestions();
-    
-    // Filter suggestions based on platform
-    // You can add platform-specific logic here
-    return allSuggestions.filter((suggestion: any) => {
-      // For now, return all suggestions, but you can add platform-specific filtering
-      // Example: return suggestion.platform === platform || !suggestion.platform;
-      return true;
-    });
+    // This method is kept for backward compatibility but now returns common suggestions
+    return this.getPhotoSuggestions();
   }
 
   refreshSuggestions(): void {
     // This could trigger a refresh of suggestions based on current property data
-    console.log("Refreshing photo suggestions...");
     // You could add logic here to regenerate suggestions based on current property analysis
   }
 
   showSuggestionInfo(suggestion: any): void {
     // This could show a modal or tooltip with more detailed information
-    console.log("Showing info for:", suggestion.title);
     // You could implement a modal or detailed view here
   }
 
@@ -1505,8 +1534,6 @@ export class PhotoDetailsComponent implements OnInit {
     })
       .subscribe({
         next: (response: any) => {
-          console.log('Caption generated successfully:', response);
-          
           // Show success toast
           if (response.success) {
             const caption = response.data?.caption || response.caption;

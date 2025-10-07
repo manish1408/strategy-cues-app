@@ -107,8 +107,8 @@ export class ListingComponent implements OnInit, OnDestroy {
     this.apiLoading = true;
    
     this.listingService.getListings(this.currentPage, this.itemsPerPage, this.operatorId || '', this.sortOrder)
-  .subscribe(
-    (res: any) => {
+  .subscribe({
+    next: (res: any) => {
       if (res.success) {
         // Ensure properties is an array
         if (Array.isArray(res.data.properties)) {
@@ -137,14 +137,16 @@ export class ListingComponent implements OnInit, OnDestroy {
         this.totalPages = res.data.pagination.total_pages;
         this.currentPage = res.data.pagination.page;
         this.itemsPerPage = res.data.pagination.limit;
+      } else {
+        this.toastr.error(res.message || 'Failed to load listings');
       }
       this.apiLoading = false;
     },
-    (error: any) => {
-      console.error('Error loading listings:', error);
+    error: (error: any) => {
+      this.toastr.error('Error loading listings. Please try again.');
       this.apiLoading = false;
     }
-  );
+  });
   }
 
   initializePropertyStatuses(properties: any[]) {
@@ -268,7 +270,6 @@ export class ListingComponent implements OnInit, OnDestroy {
           }
         },
         error: (error: any) => {
-          console.error(`Error polling status for property ${propertyId}:`, error);
         }
       });
     }
@@ -340,8 +341,6 @@ export class ListingComponent implements OnInit, OnDestroy {
       // Fetch existing competitor data
       this.loadCompetitorData(listing.id);
       
-    } else {
-      console.error('Invalid listing object:', listing);
     }
   }
 
@@ -364,7 +363,6 @@ export class ListingComponent implements OnInit, OnDestroy {
               this.loadListings();
             },
             error: (error: any) => {
-              console.error("Error deleting listing:", error);
               this.toastr.error("Failed to delete listing");
             },
           });
@@ -402,7 +400,6 @@ export class ListingComponent implements OnInit, OnDestroy {
         // Then update/create the listing
         this.saveListing(bookingCom, airbnb, vrbo, pricelab);
       }).catch((error) => {
-        console.error("Error creating competitors:", error);
         this.toastr.error("Failed to create competitors");
         this.loading = false;
       });
@@ -434,7 +431,6 @@ export class ListingComponent implements OnInit, OnDestroy {
           resolve();
         },
         error: (error: any) => {
-          console.error('Error creating competitors:', error);
           reject(error);
         }
       });
@@ -524,7 +520,6 @@ export class ListingComponent implements OnInit, OnDestroy {
             this.closeModal();
           },
           error: (error: any) => {
-            console.error("Error updating listing:", error);
             this.toastr.error("Failed to update listing");
           },
         });
@@ -540,7 +535,6 @@ export class ListingComponent implements OnInit, OnDestroy {
             this.closeModal();
           },
           error: (error: any) => {
-            console.error("Error creating listing:", error);
             this.toastr.error("Failed to create listing");
           },
         });
@@ -631,7 +625,6 @@ export class ListingComponent implements OnInit, OnDestroy {
 
   scrapeAndMapListing(bookingId: string, airbnbId: string, vrboId: string, pricelabsId: string) {
     if (!this.operatorId) {
-      console.error('Field required: operator_id');
       this.toastr.error('Operator ID is required');
       return;
     }

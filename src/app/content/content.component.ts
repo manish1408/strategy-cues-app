@@ -111,7 +111,7 @@ export class ContentComponent implements OnInit, OnDestroy {
   }
 
   private handleApiError(error: any): void {
-    console.error('Error loading competitor comparison data:', error);
+    this.toastr.error('Error loading competitor comparison data. Please try again later.');
     this.handleError('Failed to load competitor data. Please try again later.');
   }
 

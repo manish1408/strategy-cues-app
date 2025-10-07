@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { CompetitorComparisonService } from "../../_services/competitor-comparison.servie";
 import { ActivatedRoute } from "@angular/router";
 import { LocalStorageService } from "../../_services/local-storage.service";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: 'app-my-reviews',
@@ -111,7 +112,8 @@ export class MyReviewsComponent implements OnInit {
   constructor(
     private competitorComparisonService: CompetitorComparisonService,
     private route: ActivatedRoute,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -153,9 +155,9 @@ export class MyReviewsComponent implements OnInit {
           console.log("Guest didn't like data loaded:", response);
         },
         error: (error) => {
+          this.toastr.error("Error loading guest didn't like data. Please try again.");
           this.guestDidntLikeLoading = false;
           this.checkAllDataLoaded();
-          console.error("Error loading guest didn't like data:", error);
         },
       });
   }
@@ -178,10 +180,10 @@ export class MyReviewsComponent implements OnInit {
           console.log("Guest wishes data loaded:", response);
         },
         error: (error) => {
+          this.toastr.error("Error loading guest wishes data. Please try again.");
           this.guestWishesData = [];
           this.guestWishesLoading = false;
           this.checkAllDataLoaded();
-          console.error("Error loading guest wishes data:", error);
         },
       });
   }
@@ -204,10 +206,10 @@ export class MyReviewsComponent implements OnInit {
           console.log("Guest loved data loaded:", response);
         },
         error: (error) => {
+          this.toastr.error("Error loading guest loved data. Please try again.");
           this.guestLovedData = [];
           this.guestLovedLoading = false;
           this.checkAllDataLoaded();
-          console.error("Error loading guest loved data:", error);
         },
       });
   }
@@ -230,10 +232,10 @@ export class MyReviewsComponent implements OnInit {
           console.log("What to improve data loaded:", response);
         },
         error: (error) => {
+          this.toastr.error("Error loading what to improve data. Please try again.");
           this.whatToImproveData = [];
           this.whatToImproveLoading = false;
           this.checkAllDataLoaded();
-          console.error("Error loading what to improve data:", error);
         },
       });
   }

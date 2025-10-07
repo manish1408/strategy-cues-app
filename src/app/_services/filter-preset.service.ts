@@ -226,7 +226,6 @@ export class FilterPresetService {
             observer.next(true);
             observer.complete();
           } else {
-            console.warn('Delete preset API returned unexpected response:', response);
             // Still remove from local state as user requested deletion
             const filteredPresets = existingPresets.filter(preset => preset.id !== id);
             this.presetsSubject.next(filteredPresets);
@@ -235,45 +234,31 @@ export class FilterPresetService {
           }
         },
         error: (error) => {
-          console.error('Error deleting preset from API:', error);
-          console.log('Error details:', {
-            status: error.status,
-            statusText: error.statusText,
-            error: error.error,
-            message: error.message
-          });
-          console.log('Full error object:', JSON.stringify(error, null, 2));
           
           // Handle different error scenarios based on API documentation
           if (error.status === 404) {
-            console.warn('Preset not found on backend (404), removing from local state only');
             const filteredPresets = existingPresets.filter(preset => preset.id !== id);
             this.presetsSubject.next(filteredPresets);
             observer.next(true); // Success because preset is gone
             observer.complete();
           } else if (error.status === 400) {
-            console.error('Bad request (400):', error.error);
             // Check if it's the specific "Filter preset not found" error
             const errorMessage = error.error?.detail?.error || error.error?.message || '';
             if (errorMessage.includes('Filter preset not found') || errorMessage.includes('not found')) {
-              console.warn('Preset not found on backend, removing from local state only');
               const filteredPresets = existingPresets.filter(preset => preset.id !== id);
               this.presetsSubject.next(filteredPresets);
               observer.next(true); // Success because preset is gone
               observer.complete();
             } else {
-              console.error('Other 400 error - API operation failed');
               // Don't remove from local state for other 400 errors
               observer.next(false); // Failure - API error
               observer.complete();
             }
           } else if (error.status === 422) {
-            console.error('Validation error (422):', error.error);
             // Don't remove from local state for validation errors
             observer.next(false); // Failure - validation error
             observer.complete();
           } else {
-            console.error('Unexpected error - API operation failed');
             // Don't remove from local state for unexpected errors
             observer.next(false); // Failure - unexpected error
             observer.complete();

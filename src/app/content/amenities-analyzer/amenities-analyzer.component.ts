@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CompetitorComparisonService } from '../../_services/competitor-comparison.servie';
+import { ToastrService } from 'ngx-toastr';
 
 // Interface for the API response
 interface ConversionBoostersResponse {
@@ -101,7 +102,7 @@ export class AmenitiesAnalyzerComponent implements OnInit {
   // Loading state
   isLoading: boolean = false;
 
-  constructor(private competitorComparisonService: CompetitorComparisonService) { }
+  constructor(private competitorComparisonService: CompetitorComparisonService, private toastr: ToastrService) { }
 
   // Check if all data is empty
   get isAllDataEmpty(): boolean {
@@ -125,7 +126,7 @@ export class AmenitiesAnalyzerComponent implements OnInit {
           this.isLoading = false;
         },
         error: (error) => {
-          console.error('Error loading conversion boosters and amenities:', error);
+          this.toastr.error('Error loading conversion boosters and amenities. Please try again.');
           this.isLoading = false;
         }
       });

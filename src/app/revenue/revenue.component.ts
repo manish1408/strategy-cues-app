@@ -407,13 +407,11 @@ export class RevenueComponent implements OnInit {
 
             this.calculateSummaryData();
           } else {
-            console.error('API Response not successful:', response);
             this.error = response.message || "Failed to load properties data";
           }
           this.loading = false;
         },
         error: (error: any) => {
-          console.error('Revenue API Error:', error);
           this.error = "Error loading properties. Please try again.";
           this.loading = false;
         },
@@ -961,7 +959,6 @@ export class RevenueComponent implements OnInit {
   // Action methods
   viewDetails(propertyId: string) {
     if (!propertyId) {
-      console.error("Property ID is undefined");
       return;
     }
     this.router.navigate(["/revenue/property-details", propertyId]);
@@ -1019,7 +1016,6 @@ export class RevenueComponent implements OnInit {
       },
       error: (error) => {
         this.exportLoading = false;
-        console.error('Export error:', error);
         this.toastr.error(error.error?.error || error.message || "Failed to export properties");
       },
     });
@@ -2149,10 +2145,6 @@ export class RevenueComponent implements OnInit {
     
     if (url) {
       window.open(url, "_blank", "noopener,noreferrer");
-    } else {
-      console.warn(
-        `No URL found for ${platform} platform for property: ${property.Listing_Name}`
-      );
     }
   }
 
@@ -2161,25 +2153,19 @@ export class RevenueComponent implements OnInit {
     this.presetLoading = true;
     
     if (!this.operatorId) {
-      console.error('Operator ID is required to load presets');
       this.presetLoading = false;
       this.toastr.error('Operator ID is required to load presets');
       return;
     }
     
-    console.log('Loading presets for operatorId:', this.operatorId);
     this.filterPresetService.loadPresets(this.operatorId);
     
     this.filterPresetService.presets$.subscribe({
       next: (presets) => {
         this.filterPresets = presets;
         this.presetLoading = false;
-        console.log('Filter presets loaded:', presets.length, presets);
-        console.log('Component filterPresets array:', this.filterPresets);
-        console.log('Component filterPresets length:', this.filterPresets.length);
       },
       error: (error) => {
-        console.error('Error loading filter presets:', error);
         this.presetLoading = false;
         this.toastr.error('Failed to load filter presets');
       }
@@ -2188,24 +2174,16 @@ export class RevenueComponent implements OnInit {
 
   // Method to refresh presets (useful for debugging)
   refreshPresets(): void {
-    console.log('Refreshing presets...');
     this.loadFilterPresets();
   }
 
   // Debug method to check current presets state
   debugPresets(): void {
-    console.log('=== DEBUG PRESETS ===');
-    console.log('Component filterPresets:', this.filterPresets);
-    console.log('Component filterPresets length:', this.filterPresets.length);
-    console.log('Service presets:', this.filterPresetService.getAllPresets());
-    console.log('Service presets length:', this.filterPresetService.getAllPresets().length);
-    console.log('Operator ID:', this.operatorId);
-    console.log('===================');
+    // Debug method - no console output needed
   }
 
   // Test method to simulate preset click
   testPresetClick(presetId: string): void {
-    console.log('Testing preset click with ID:', presetId);
     this.selectedPresetId = presetId;
     this.onPresetSelectionChange();
   }
@@ -2222,8 +2200,6 @@ export class RevenueComponent implements OnInit {
     if (preset) {
       console.log('Attempting to delete preset:', preset.name);
       this.deletePreset(presetId);
-    } else {
-      console.error('Preset not found with ID:', presetId);
     }
   }
 
@@ -2428,12 +2404,8 @@ export class RevenueComponent implements OnInit {
         console.log('Applying preset:', preset.name, preset.filters);
         this.applyPresetFilters(preset.filters);
       } else {
-        console.error('Preset not found with ID:', this.selectedPresetId);
-        console.log('Available presets:', this.filterPresetService.getAllPresets());
         this.toastr.error('Preset not found');
       }
-    } else {
-      console.warn('No preset ID selected');
     }
   }
 

@@ -116,10 +116,20 @@ export class SignupComponent {
         // phone: this.signupForm.value.phone,
         password: this.signupForm.value.password,
       };
-      this.authService.signup(reqObj).subscribe((res: any) => {
-        this.toastr.success('Sign up successful!');
-        this.router.navigate(['/signin']);
-        this.loading = false;
+      this.authService.signup(reqObj).subscribe({
+        next: (res: any) => {
+          if (res.success) {
+            this.toastr.success('Sign up successful!');
+            this.router.navigate(['/signin']);
+          } else {
+            this.toastr.error(res.message || 'Sign up failed. Please try again.');
+          }
+          this.loading = false;
+        },
+        error: (error: any) => {
+          this.toastr.error(error.error?.message || 'An error occurred during sign up. Please try again.');
+          this.loading = false;
+        }
       });
      
     }

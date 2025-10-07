@@ -191,15 +191,6 @@ export class PropertiesService {
     .set('limit', limit.toString())
     .set('sort_order', sortOrder);
     
-    console.log('PropertiesService.getProperties called with:', {
-      url: `${this._url}/get-properties`,
-      params: {
-        operator_id: operatorId,
-        page: page.toString(),
-        limit: limit.toString(),
-        sort_order: sortOrder
-      }
-    });
     
     return this.http.get<ApiResponse<PropertyData[]>>(`${this._url}/get-properties`, { params });
   }
@@ -214,21 +205,14 @@ export class PropertiesService {
 
   // Helper method to extract properties array from different response structures
   static extractPropertiesArray(response: any): PropertyData[] {
-    console.log('PropertiesService.extractPropertiesArray called with:', response);
     
     if (!response || !response.success) {
-      console.warn('API response not successful:', response);
       return [];
     }
 
-    console.log('Response data structure:', response.data);
-    console.log('Is response.data an array?', Array.isArray(response.data));
-    console.log('Does response.data.properties exist?', response.data && response.data.properties);
-    console.log('Is response.data.properties an array?', response.data && Array.isArray(response.data.properties));
 
     // Handle different possible response structures
     if (Array.isArray(response.data)) {
-      console.log('Using response.data directly (array)');
       return response.data;
     } else if (response.data && Array.isArray(response.data.properties)) {
       console.log('Using response.data.properties (new API structure)');
@@ -347,8 +331,6 @@ export class PropertiesService {
       console.log('Using response.data.results');
       return response.data.results;
     } else {
-      console.warn('Unexpected API response structure:', response);
-      console.log('Attempting to return response.data directly as fallback');
       // Fallback: try to return response.data directly if it exists
       if (response.data) {
         return Array.isArray(response.data) ? response.data : [response.data];
@@ -382,7 +364,6 @@ export class PropertiesService {
   updateProperty(propertyData: any, propertyId: string): Observable<ApiResponse<any>> {
     return this.http.put<ApiResponse<any>>(`${this._url}/update-property/${propertyId}`, propertyData).pipe(
       catchError((error) => {
-        console.error('Error updating property:', error);
         return throwError(() => new Error('Failed to update property'));
       })
     );
