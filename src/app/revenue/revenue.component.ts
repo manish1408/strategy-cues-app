@@ -491,7 +491,9 @@ export class RevenueComponent implements OnInit {
               this.selectedPropertyIds.clear();
               presetPropertyIds.forEach(id => this.selectedPropertyIds.add(id));
               this.updateSelectAllState();
-              console.log('Property selection restored. Selected count:', this.selectedPropertyIds.size);
+              // Show only selected properties when preset has property IDs
+              this.showOnlySelected = true;
+              console.log('Property selection restored. Selected count:', this.selectedPropertyIds.size, 'Show only selected:', this.showOnlySelected);
             } else {
               this.clearPropertySelection();
             }
@@ -2442,8 +2444,16 @@ export class RevenueComponent implements OnInit {
   togglePropertySelection(propertyId: string): void {
     if (this.selectedPropertyIds.has(propertyId)) {
       this.selectedPropertyIds.delete(propertyId);
+      // If no properties are selected after this deletion, switch to show all
+      if (this.selectedPropertyIds.size === 0) {
+        this.showOnlySelected = false;
+      }
     } else {
       this.selectedPropertyIds.add(propertyId);
+      // When first property is selected, switch to show selected only
+      if (this.selectedPropertyIds.size === 1) {
+        this.showOnlySelected = true;
+      }
     }
     this.updateSelectAllState();
   }
@@ -2463,6 +2473,10 @@ export class RevenueComponent implements OnInit {
         }
       });
       this.selectAllProperties = false;
+      // If no properties are selected, switch to show all
+      if (this.selectedPropertyIds.size === 0) {
+        this.showOnlySelected = false;
+      }
     } else {
       // Select all visible properties
       filteredData.forEach(property => {
@@ -2471,6 +2485,8 @@ export class RevenueComponent implements OnInit {
         }
       });
       this.selectAllProperties = true;
+      // Switch to show selected only when properties are selected
+      this.showOnlySelected = true;
     }
   }
 
@@ -2502,7 +2518,11 @@ export class RevenueComponent implements OnInit {
         property._id && this.selectedPropertyIds.has(property._id)
       );
     }
-    // Otherwise show all properties (when no selection or when showOnlySelected is false)
+    // If no properties are selected, always show all properties
+    if (this.selectedPropertyIds.size === 0) {
+      return this.propertyData;
+    }
+    // When showOnlySelected is false but we have selections, show all
     return this.propertyData;
   }
 
@@ -2521,7 +2541,7 @@ export class RevenueComponent implements OnInit {
   clearPropertySelection(): void {
     this.selectedPropertyIds.clear();
     this.selectAllProperties = false;
-    this.showOnlySelected = true; // Reset to default (show selected only)
+    this.showOnlySelected = false; // When no selection, show all properties
   }
 
   applyPresetFilters(filters: FilterPreset['filters'], propertyIds?: string[]): void {

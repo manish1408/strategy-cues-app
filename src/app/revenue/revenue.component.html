@@ -780,24 +780,6 @@
       </div>
     </div>
 
-    <!-- No Selected Properties State -->
-    <div *ngIf="!loading && !error && showOnlySelected && getSelectedPropertiesCount() === 0 && propertyData && propertyData.length > 0" class="text-center py-5">
-      <div class="card">
-        <div class="card-body">
-          <i class="fas fa-filter fa-3x text-muted mb-3"></i>
-          <h5 class="card-title">No Selected Properties</h5>
-          <p class="card-text">You are currently viewing selected properties only, but no properties are selected. Select some properties or switch to view all properties.</p>
-          <div class="d-flex justify-content-center gap-2">
-            <button class="btn btn-primary" (click)="showOnlySelected = false">
-              <i class="fas fa-eye me-2"></i>Show All Properties
-            </button>
-            <button class="btn btn-outline-secondary" (click)="clearPropertySelection()">
-              <i class="fas fa-check-square me-2"></i>Clear Selection
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <!-- Filter Modal -->
     <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
