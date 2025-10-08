@@ -592,7 +592,7 @@
 
 /* Header Section */
 .details-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #1e1e1e;
   color: white;
   padding: 2rem 0;
   margin-bottom: 0;
@@ -755,9 +755,9 @@
         }
 
         &.active {
-          color: #667eea;
+          color: #1e1e1e;
           background-color: transparent;
-          border-top: 3px solid #667eea !important;
+          border-top: 3px solid #fcdf46 !important;
           border-bottom: none !important;
         }
 

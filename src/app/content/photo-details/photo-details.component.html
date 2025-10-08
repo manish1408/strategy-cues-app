@@ -57,7 +57,7 @@
               <h1 class="mb-1 text-truncate" style="text-wrap: auto;" [title]="propertyData?.Listing_Name">{{ propertyData?.Listing_Name }}</h1>
               <div class="property-meta">
                 <!-- <span class="badge bg-light text-dark me-2">{{ propertyData?.listing_id }}</span> -->
-                <span class="badge bg-primary" *ngIf="propertyData?.Photos?.airbnb?.length + propertyData?.Photos?.booking?.length + propertyData?.Photos?.vrbo?.length"> 
+                <span style="background-color: #fcdf46; color: #000000;" class="badge" *ngIf="propertyData?.Photos?.airbnb?.length + propertyData?.Photos?.booking?.length + propertyData?.Photos?.vrbo?.length"> 
                   {{ propertyData?.Photos?.airbnb?.length + propertyData?.Photos?.booking?.length + propertyData?.Photos?.vrbo?.length }} Photos
                 </span>
               </div>
