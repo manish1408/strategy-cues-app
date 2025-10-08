@@ -1,7 +1,29 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, catchError } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { BehaviorSubject, Observable, of, catchError, map } from 'rxjs';
 import { FilterPreset } from '../_models/filter-preset.interface';
-import { FilterPresetApiService } from './filter-preset-api.service';
+import { environment } from '../../environments/environment.development';
+
+// API interfaces
+export interface ApiFilterPreset {
+  _id: string;
+  name: string;
+  description?: string;
+  filters: any;
+  propertyIds?: string[]; // Added propertyIds field
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ApiResponse<T> {
+  data: T;
+  success: boolean;
+  message?: string;
+}
+
+export interface FilterPresetsResponse {
+  filterPresets: ApiFilterPreset[];
+}
 
 @Injectable({
   providedIn: 'root'
@@ -9,8 +31,9 @@ import { FilterPresetApiService } from './filter-preset-api.service';
 export class FilterPresetService {
   private presetsSubject = new BehaviorSubject<FilterPreset[]>([]);
   public presets$ = this.presetsSubject.asObservable();
+  private _url = environment.APIUrl + "filter-presets";
 
-  constructor(private filterPresetApiService: FilterPresetApiService) {
+  constructor(private http: HttpClient) {
     // No automatic loading - will be called explicitly
   }
 
@@ -23,7 +46,7 @@ export class FilterPresetService {
       return;
     }
 
-    this.filterPresetApiService.getFilterPresets(operatorId).subscribe({
+    this.getFilterPresets(operatorId).subscribe({
       next: (response) => {
         if (response.success && response.data) {
           // Handle the response structure - data might be an object with filterPresets property
@@ -76,6 +99,33 @@ export class FilterPresetService {
   }
 
   /**
+   * Fetch a specific preset from API
+   */
+  fetchPresetById(presetId: string, operatorId: string): Observable<FilterPreset> {
+    return this.getFilterPreset(presetId, operatorId).pipe(
+      map(response => {
+        if (!response.success || !response.data) {
+          throw new Error('Failed to fetch preset from API');
+        }
+        
+        // Convert API response to FilterPreset format
+        const apiPreset = response.data;
+        const preset: FilterPreset = {
+          id: apiPreset._id,
+          name: apiPreset.name,
+          description: apiPreset.description,
+          filters: apiPreset.filters || {},
+          propertyIds: apiPreset.propertyIds || [], // Fixed: propertyIds are at root level, not inside filters
+          createdAt: new Date(apiPreset.createdAt),
+          updatedAt: new Date(apiPreset.updatedAt)
+        };
+        
+        return preset;
+      })
+    );
+  }
+
+  /**
    * Save a new preset
    */
   savePreset(name: string, filters: FilterPreset['filters'], description?: string, operatorId?: string, propertyIds?: string[]): FilterPreset {
@@ -102,7 +152,7 @@ export class FilterPresetService {
     }
 
     // Create preset via API
-    this.filterPresetApiService.createFilterPreset(operatorId, {
+    this.createFilterPreset(operatorId, {
       name: name.trim(),
       description: description?.trim(),
       filters: { ...filters },
@@ -170,7 +220,7 @@ export class FilterPresetService {
     }
 
     // Update via API
-    this.filterPresetApiService.updateFilterPreset(id, {
+    this.updateFilterPreset(id, {
       name: updates.name?.trim(),
       description: updates.description?.trim(),
       filters: updates.filters
@@ -223,13 +273,10 @@ export class FilterPresetService {
     }
     
     return new Observable<boolean>(observer => {
-      this.filterPresetApiService.deleteFilterPreset(id, operatorId).subscribe({
+      this.deleteFilterPreset(id, operatorId).subscribe({
         next: (response) => {
-          console.log('Delete preset API response:', response);
-          
           // According to API docs, successful response should be: { "data": {}, "success": true }
           if (response && response.success === true) {
-            console.log('Preset deleted successfully from API');
             // Remove from local state
             const filteredPresets = existingPresets.filter(preset => preset.id !== id);
             this.presetsSubject.next(filteredPresets);
@@ -444,5 +491,96 @@ export class FilterPresetService {
     }
 
     return summary.length > 0 ? summary : ['No active filters'];
+  }
+
+  // ===== API METHODS =====
+
+  /**
+   * Create a new filter preset
+   * POST /api/v1/filter-presets/create-filter-preset
+   */
+  private createFilterPreset(operatorId: string, presetData: {
+    name: string;
+    description?: string;
+    filters: any;
+    propertyIds?: string[];
+  }): Observable<ApiResponse<ApiFilterPreset>> {
+    const requestData = {
+      ...presetData,
+      operator_id: operatorId
+    };
+    
+
+    return this.http.post<ApiResponse<ApiFilterPreset>>(`${this._url}/create-filter-preset`, requestData);
+  }
+
+  /**
+   * Get all filter presets
+   * GET /api/v1/filter-presets/get-filter-presets
+   */
+  private getFilterPresets(operatorId: string): Observable<ApiResponse<FilterPresetsResponse>> {
+    const params = new HttpParams().set('operator_id', operatorId);
+    
+
+    return this.http.get<ApiResponse<FilterPresetsResponse>>(`${this._url}/get-filter-presets`, { params });
+  }
+
+  /**
+   * Get a specific filter preset by ID
+   * GET /api/v1/filter-presets/get-filter-preset/{filter_preset_id}
+   */
+  private getFilterPreset(filterPresetId: string, operatorId: string): Observable<ApiResponse<ApiFilterPreset>> {
+    const params = new HttpParams().set('operator_id', operatorId);
+    
+
+    return this.http.get<ApiResponse<ApiFilterPreset>>(`${this._url}/get-filter-preset/${filterPresetId}`, { params });
+  }
+
+  /**
+   * Update an existing filter preset
+   * PUT /api/v1/filter-presets/update-filter-preset/{filter_preset_id}
+   */
+  private updateFilterPreset(filterPresetId: string, presetData: {
+    name?: string;
+    description?: string;
+    filters?: any;
+  }): Observable<ApiResponse<ApiFilterPreset>> {
+    console.log('FilterPresetService.updateFilterPreset called with:', {
+      url: `${this._url}/update-filter-preset/${filterPresetId}`,
+      filterPresetId,
+      data: presetData
+    });
+
+    return this.http.put<ApiResponse<ApiFilterPreset>>(`${this._url}/update-filter-preset/${filterPresetId}`, presetData);
+  }
+
+  /**
+   * Delete a filter preset
+   * DELETE /api/v1/filter-presets/delete-filter-preset/{filter_preset_id}
+   * 
+   * Expected successful response: { "data": {}, "success": true }
+   * Possible error responses: 404 (not found), 422 (validation error)
+   */
+  private deleteFilterPreset(filterPresetId: string, operatorId: string): Observable<ApiResponse<any>> {
+    const params = new HttpParams().set('operator_id', operatorId);
+    
+
+    return this.http.delete<ApiResponse<any>>(`${this._url}/delete-filter-preset/${filterPresetId}`, { 
+      params,
+      observe: 'response' // Get full response to handle different status codes
+    }).pipe(
+      // Transform the response to match our ApiResponse interface
+      map(response => {
+        return {
+          data: response.body?.data || {},
+          success: response.body?.success || false,
+          message: response.body?.message
+        };
+      }),
+      catchError(error => {
+        // Re-throw the error to be handled by the service
+        throw error;
+      })
+    );
   }
 }

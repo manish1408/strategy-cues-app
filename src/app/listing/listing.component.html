@@ -1,23 +1,45 @@
 <div class="container-fluid listing-dashboard">
   <div class="row">
-    <div class="col-12 d-flex justify-content-between align-items-center">
-      <div>
-        <h4 class="title text-dark">Listings</h4>
-        <p class="desc">Manage your property listings here</p>
+    <div class="col-12">
+      <div class="row align-items-end mb-2">
+        <div class="col-12 col-md-6 mb-2 mb-md-0">
+          <div>
+            <h4 class="title text-dark">Listings</h4>
+            <p class="desc">Manage your property listings here</p>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="d-flex gap-2 float-end">
+            <button class="btn btn-outline-secondary" 
+                    (click)="syncPriceLabsListings()" 
+                    [disabled]="syncPriceLabsLoading">
+              <span *ngIf="syncPriceLabsLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              Sync PriceLabs Data
+            </button>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addListing">
+              Add Listing
+            </button>
+          </div>
+        </div>
       </div>
-      <div class="d-flex gap-2">
-        <button class="btn btn-outline-secondary float-end" 
-                (click)="syncPriceLabsListings()" 
-                [disabled]="syncPriceLabsLoading">
-          <span *ngIf="syncPriceLabsLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-          Sync PriceLabs Data
-        </button>
-        <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#addListing">
-          Add Listing
-        </button>
-       
+      
+      <!-- Search Bar -->
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search by property name ..."
+              [(ngModel)]="searchTerm" (keyup.enter)="performSearch()">
+            <span *ngIf="searchTerm" (click)="searchTerm = ''; performSearch()" class="cursor-pointer input-group-text" 
+                  title="Clear search">
+              <i class="fas fa-times"></i>
+            </span>
+            <span (click)="performSearch()" class="cursor-pointer input-group-text" 
+                  title="Search">
+              <i class="fas fa-search"></i>
+            </span>
+          </div>
+        </div>
       </div>
-     
     </div>
   </div>
 
@@ -32,18 +54,17 @@
     <!-- Show table when listings exist -->
     <div class="table-view mt-3" *ngIf="allListingList && allListingList.length > 0">
       <div class="table-card">
-        <div class="table-responsive">
-          <table class="table table-hover">
+        <div class="table-container" (scroll)="onScroll($event)">
+          <table>
             <thead>
               <tr>
-              
-                <th scope="col" style="width: 300px;">Property</th>
-                <th scope="col">Booking ID</th>
-                <th scope="col">Airbnb ID</th>
-                <th scope="col">VRBO ID</th>
-                <th scope="col">Pricelab ID</th>
-                <th scope="col">Status</th>
-                <th scope="col">Action</th>
+                <th style="width: 300px;">Property</th>
+                <th>Booking ID</th>
+                <th>Airbnb ID</th>
+                <th>VRBO ID</th>
+                <th>Pricelab ID</th>
+                <th>Status</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -151,24 +172,21 @@
               </tr>
             </tbody>
           </table>
+          
+          <!-- Loading More Indicator -->
+          <div *ngIf="isLoadingMore" class="text-center py-3">
+            <div class="spinner-border spinner-border-sm text-primary" role="status">
+              <span class="visually-hidden">Loading more...</span>
+            </div>
+            <p class="mt-2 text-muted small">Loading more listings...</p>
+          </div>
+          
+          <!-- No More Data Indicator -->
+          <div *ngIf="!hasMoreData && allListingList.length > 0 && !isLoadingMore" class="text-center py-3">
+            <p class="text-muted small">No more listings to load</p>
+          </div>
         </div>
       </div>
-       <!-- Pagination -->
-   <div class="pagination-section" *ngIf="totalPages > 1">
-    <nav>
-      <ul class="pagination justify-content-center">
-        <li class="page-item" [class.disabled]="currentPage === 1">
-          <a class="page-link" (click)="changePage(currentPage - 1)">Previous</a>
-        </li>
-        <li class="page-item" *ngFor="let page of getPageNumbers()" [class.active]="page === currentPage">
-          <a class="page-link" (click)="changePage(page)">{{ page }}</a>
-        </li>
-        <li class="page-item" [class.disabled]="currentPage === totalPages">
-          <a class="page-link" (click)="changePage(currentPage + 1)">Next</a>
-        </li>
-      </ul>
-    </nav>
-  </div>
     </div>
 
     <!-- Show empty state when no listings -->

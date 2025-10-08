@@ -378,4 +378,9 @@ export class PropertiesService {
     const params = new HttpParams().set('operator_id', operatorId);
     return this.http.get<ApiResponse<PropertyData>>(`${this._url}/get-property/${propertyId}`, { params });
   }
+
+  searchProperties(search_query: string, operator_id: string): Observable<ApiResponse<PropertyData[]>> {
+    const params = new HttpParams().set('operator_id', operator_id).set('search_query', search_query);
+    return this.http.get<ApiResponse<PropertyData[]>>(`${this._url}/search-properties`, { params });
+  }
 }

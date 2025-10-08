@@ -86,7 +86,8 @@ $transition: all 0.3s ease;
   overflow: auto; /* allows both X and Y scroll */
   border: 1px solid #dee2e6;
   border-radius: 6px;
-  margin: 0 12px;
+  position: relative; /* Create positioning context for dropdowns */
+  
   
   /* Show scrollbars with custom styling */
   scrollbar-width: thin; /* Firefox */
@@ -176,7 +177,7 @@ table {
 thead th {
   position: sticky;
   top: 0;
-  z-index: 2;
+  z-index: 10;
   background-color: #f8f9fa;
   border-bottom: 2px solid #dee2e6;
   font-weight: 600;
@@ -226,6 +227,62 @@ tbody tr {
   }
 }
 
+/* Comprehensive Dropdown Menu Fix for Table Overflow Issues */
+.content-dashboard {
+  // Ensure dropdowns appear above table content
+  .dropdown-menu {
+    z-index: 1050 !important;
+    position: absolute !important;
+  }
+
+  // Fix for Bootstrap dropdowns in table
+  .table {
+    td, th {
+      // Allow dropdowns to overflow
+      overflow: visible !important;
+      position: relative; /* Allow dropdowns to position relative to cells */
+    }
+    
+    .dropdown {
+      position: static;
+    }
+    
+    .btn-group {
+      position: relative;
+      
+      .dropdown-menu {
+        position: absolute;
+        z-index: 1050;
+      }
+    }
+  }
+  
+  // Ensure action buttons and dropdowns are clickable
+  td {
+    .dropdown-toggle::after {
+      vertical-align: middle;
+    }
+  }
+}
+
+// Bootstrap tooltip and popover z-index fix
+.tooltip {
+  z-index: 1060 !important;
+}
+
+.popover {
+  z-index: 1060 !important;
+}
+
+// Modal backdrop and modal z-index
+.modal-backdrop {
+  z-index: 1040 !important;
+}
+
+.modal {
+  z-index: 1050 !important;
+}
+
 /* Table Controls */
 .table-controls {
   padding: 1.5rem 2rem;
@@ -251,7 +308,7 @@ tbody tr {
       position: absolute;
       left: 1rem;
       color: #666;
-      z-index: 2;
+      z-index: 10;
     }
     
     .search-input {
@@ -284,7 +341,7 @@ tbody tr {
       padding: 0.25rem;
       border-radius: 4px;
       transition: all 0.2s ease;
-      z-index: 2;
+      z-index: 10;
       
       &:hover {
         background: #f0f0f0;
@@ -384,25 +441,7 @@ tbody tr {
   }
 }
 
-// Property name styling to match revenue page
-.property-name {
-  max-width: 260px;
 
-  strong {
-    color: $dark-color;
-    font-weight: 600;
-    display: block;
-    white-space: normal;
-    overflow: visible;
-    text-overflow: clip;
-  }
-
-  .property-details {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-}
 
 /* Property Cell */
 .property-cell {
@@ -411,21 +450,7 @@ tbody tr {
     gap: 1rem;
     align-items: center;
   }
-  
-  .property-image {
-    width: 80px;
-    height: 80px;
-    border-radius: 8px;
-    overflow: hidden;
-    flex-shrink: 0;
-    
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
-  
+
   .property-details {
     h4 {
       font-size: var(--font-size-sm);
@@ -510,6 +535,22 @@ tbody tr {
       }
     }
   }
+  
+  .property-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  
+ 
 }
 
 /* Photos Cell */
@@ -1356,49 +1397,7 @@ tbody tr {
   }
 }
 
-// Pagination Styles
-.pagination-section {
-  margin-top: 2rem;
 
-
-  .pagination {
-    margin: 0;
-
-    .page-link {
-      color: $primary-color;
-      border-color: #dee2e6;
-      padding: 0.5rem 0.75rem;
-      transition: $transition;
-
-      &:hover {
-        background-color: $primary-color;
-        border-color: $primary-color;
-        color: white;
-        transform: translateY(-1px);
-      }
-    }
-
-    .page-item.active .page-link {
-      background-color: $primary-color;
-      border-color: $primary-color;
-      color: white;
-      box-shadow: 0 2px 4px rgba(0, 102, 204, 0.3);
-    }
-
-    .page-item.disabled .page-link {
-      color: #6c757d;
-      background-color: #fff;
-      border-color: #dee2e6;
-      cursor: not-allowed;
-
-      &:hover {
-        transform: none;
-        background-color: #fff;
-        color: #6c757d;
-      }
-    }
-  }
-}
 
 @media (max-width: 480px) {
   .table-controls {
@@ -1415,14 +1414,7 @@ tbody tr {
     }
   }
   
-  .pagination-section {
-    .pagination {
-      .page-item .page-link {
-        padding: 0.375rem 0.5rem;
-        font-size: 0.875rem;
-      }
-    }
-  }
+  
 }
 
 // Animation Keyframes
@@ -1493,7 +1485,7 @@ thead th {
   position: sticky;
   top: 0; /* stick only vertically */
   background: #f8f9fa;
-  z-index: 1;
+  z-index: 10;
   font-weight: 600;
   color: #343a40;
   font-size: var(--font-size-sm);
@@ -1502,8 +1494,8 @@ thead th {
   
   /* Set specific column widths */
   &:first-child {
-    width: 300px;
-    min-width: 300px;
+    width: 280px;
+    min-width: 280px;
   }
   &:nth-child(2) { width: 150px; min-width: 150px; } // Your Photos
   &:nth-child(3) { width: 120px; min-width: 120px; } // Reviews
@@ -1523,9 +1515,9 @@ tbody tr {
 tbody td {
   /* Match column widths with header */
   &:first-child {
-    width: 300px;
-    min-width: 300px;
-    max-width: 300px;
+    width: 280px;
+    min-width: 280px;
+    max-width: 280px;
   }
   &:nth-child(2) { width: 150px; min-width: 150px; max-width: 150px; } // Your Photos
   &:nth-child(3) { width: 120px; min-width: 120px; max-width: 120px; } // Reviews

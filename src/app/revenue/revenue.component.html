@@ -7,16 +7,22 @@
       <div class="row align-items-end mb-2">
         <div class="col-12 col-md-6 mb-2 mb-md-0">
           <div class="input-group">
-           
-            <input type="text" class="form-control" placeholder="Search by name, area, or room type..."
-            [(ngModel)]="searchTerm" (keyup.enter)="performSearch()" >
-              <span (click)="performSearch()" class="cursor-pointer input-group-text"><i class="fas fa-search"></i></span>
+            <input type="text" class="form-control" placeholder="Search by listing name ..."
+            [(ngModel)]="searchTerm" (keyup.enter)="performSearch()" [disabled]="presetLoading">
+            <span *ngIf="searchTerm" (click)="searchTerm = ''; performSearch()" class="cursor-pointer input-group-text" 
+                  [class.disabled]="presetLoading" title="Clear search">
+              <i class="fas fa-times"></i>
+            </span>
+            <span (click)="performSearch()" class="cursor-pointer input-group-text" 
+                  [class.disabled]="presetLoading" title="Search">
+              <i class="fas fa-search"></i>
+            </span>
           </div>
         </div> 
         <div class="col-12 col-md-3 mb-2 mb-md-0">
           <div class="d-flex gap-2 flex-wrap">
             <button class="btn btn-outline-secondary" (click)="openFilterModal()" [class.btn-primary]="hasActiveFilters()"
-              [class.text-white]="hasActiveFilters()">
+              [class.text-white]="hasActiveFilters()" [disabled]="presetLoading">
               <i class="fas fa-filter me-2"></i>
               Filters
               <span *ngIf="getActiveFilterCount() > 0" class="badge bg-white  ms-2">
@@ -27,9 +33,13 @@
             <!-- Filter Presets Dropdown -->
             <div class="dropdown">
               <button class="btn btn-outline-info dropdown-toggle" type="button" id="filterPresetsDropdown"
-                data-bs-toggle="dropdown" aria-expanded="false" title="Filter Presets">
-                <i class="fas fa-bookmark me-1"></i>
+                data-bs-toggle="dropdown" aria-expanded="false" title="Filter Presets"
+                [class.btn-success]="isPresetMode"
+                [disabled]="presetLoading">
+                <i *ngIf="!presetLoading" class="fas fa-bookmark me-1"></i>
+                <i *ngIf="presetLoading" class="fas fa-spinner fa-spin me-1"></i>
                 Presets
+                <span *ngIf="isPresetMode && !presetLoading" class="badge bg-success ms-2" title="Preset mode active">Active</span>
               </button>
               <div class="dropdown-menu dropdown-menu-end filter-presets-dropdown" aria-labelledby="filterPresetsDropdown">
                 <div class="dropdown-header">
@@ -94,7 +104,7 @@
 
             <button class="btn btn-outline-success" 
                     (click)="exportToCSV()" 
-                    [disabled]="exportLoading" 
+                    [disabled]="exportLoading || presetLoading" 
                     title="Export to CSV">
               <div *ngIf="exportLoading" class="spinner-border spinner-border-sm me-2" role="status">
                 <span class="visually-hidden">Loading...</span>
@@ -104,7 +114,7 @@
             </button>
             <div class="dropdown">
               <button class="btn btn-outline-info dropdown-toggle" type="button" id="columnVisibilityDropdown"
-                data-bs-toggle="dropdown" aria-expanded="false">
+                data-bs-toggle="dropdown" aria-expanded="false" [disabled]="presetLoading">
                 <i class="fas fa-columns me-2"></i>
                 Columns ({{ getVisibleColumnsCount() }})
               </button>
@@ -265,64 +275,87 @@
     </div>
 
     <!-- Applied Filters Section -->
-    <div class="applied-filters-section" *ngIf="getAppliedFilters().length > 0">
+    <div class="applied-filters-section" *ngIf="getAppliedFilters().length > 0 || getSelectedForPresetCount() > 0 || presetLoading">
       <div class="applied-filters-card">
-        <div class="filters-header">
-          <h6 class="mb-0">
-            <i class="fas fa-filter me-2"></i>Applied Filters ({{ getAppliedFilters().length }})
-            <span *ngIf="getSelectedPropertiesCount() > 0" class="ms-2">
-              <i class="fas fa-check-square me-1"></i>Selected Properties ({{ getSelectedPropertiesCount() }})
-            </span>
-          </h6>
+        <!-- Loading State for Preset -->
+        <div *ngIf="presetLoading" class="text-center py-4">
+          <div class="spinner-border text-info mb-3" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mb-0 text-info">
+            <i class="fas fa-bookmark me-2"></i>Loading preset...
+          </p>
+        </div>
+        
+        <!-- Normal Filter Content -->
+        <div *ngIf="!presetLoading">
+          <div class="filters-header">
+            <h6 class="mb-0">
+              <i class="fas fa-filter me-2"></i>Applied Filters ({{ getAppliedFilters().length }})
+              <span *ngIf="getSelectedForPresetCount() > 0" class="ms-2">
+                <i class="fas fa-check-square me-1"></i>Selected Properties ({{ getSelectedForPresetCount() }})
+              </span>
+            </h6>
           <div class="filter-actions">
             <button class="btn btn-sm btn-outline-success me-2" (click)="showSavePresetDialog()" 
-              [disabled]="(!hasActiveFilters() && getCurrentPropertyIds().length === 0) || presetSaving" 
+              [disabled]="(!hasActiveFilters() && getSelectedForPresetCount() === 0) || presetSaving || presetLoading" 
               title="Save current filters or property selection as preset">
               <i *ngIf="!presetSaving" class="fas fa-bookmark me-1"></i>
               <i *ngIf="presetSaving" class="fas fa-spinner fa-spin me-1"></i>Save as Preset
             </button>
-            <button class="btn btn-sm btn-outline-warning me-2" (click)="clearPropertySelection()" 
-              [disabled]="getSelectedPropertiesCount() === 0"
-              title="Clear property selection">
+            <button class="btn btn-sm btn-outline-warning me-2" (click)="clearPresetSelection()" 
+              [disabled]="getSelectedForPresetCount() === 0 || isPresetMode || presetLoading"
+              title="Clear preset property selection">
               <i class="fas fa-check-square me-1"></i>Clear Selection
             </button>
             <button class="btn btn-sm me-2" 
               [class.btn-primary]="!showOnlySelected"
               [class.btn-success]="showOnlySelected"
               (click)="toggleShowOnlySelected()" 
-              [disabled]="!shouldShowToggleButton()"
+              [disabled]="!shouldShowToggleButton() || isPresetMode || presetLoading"
               [title]="showOnlySelected ? 'Show all properties' : 'Show only selected properties'">
               <i [class]="showOnlySelected ? 'fas fa-filter me-1' : 'fas fa-eye me-1'"></i>
               {{ showOnlySelected ? 'Show All' : 'Show Selected Only' }}
             </button>
-            <button class="btn btn-sm btn-outline-danger" (click)="clearAllFilters()">
+            <button class="btn btn-sm btn-outline-danger" (click)="clearAllFilters()"
+              [disabled]="presetLoading">
               <i class="fas fa-times me-1"></i>Clear All
             </button>
           </div>
-        </div>
-        <div class="filters-badges">
-          <span *ngFor="let filter of getAppliedFilters()" class="filter-badge" [ngClass]="'filter-' + filter.type">
-            <span class="filter-label">{{ filter.label }}:</span>
-            <span class="filter-value">{{ filter.value }}</span>
-            <button class="remove-filter" (click)="removeFilter(filter.key)" title="Remove filter">
-              <i class="fas fa-times"></i>
-            </button>
-          </span>
+          </div>
+          <div class="filters-badges">
+            <span *ngFor="let filter of getAppliedFilters()" class="filter-badge" [ngClass]="'filter-' + filter.type">
+              <span class="filter-label">{{ filter.label }}:</span>
+              <span class="filter-value">{{ filter.value }}</span>
+              <button class="remove-filter" (click)="removeFilter(filter.key)" title="Remove filter">
+                <i class="fas fa-times"></i>
+              </button>
+            </span>
+            <span *ngFor="let property of getSelectedForPresetNames()" class="filter-badge filter-property">
+              <span class="filter-label">Property:</span>
+              <span class="filter-value">{{ property.name }}</span>
+              <button class="remove-filter" (click)="removePropertyFromPresetSelection(property.id)" title="Remove property from preset selection">
+                <i class="fas fa-times"></i>
+              </button>
+            </span>
+          </div>
         </div>
       </div>
     </div>
 
 
+
     <!-- Loading State -->
-    <div *ngIf="loading" class="text-center py-5">
+    <div *ngIf="loading && !presetLoading" class="text-center py-5">
       <div class="spinner-border " role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
       <p class="mt-3">Loading properties...</p>
     </div>
 
+
     <!-- Error State -->
-    <div *ngIf="error && !loading" class="alert alert-danger" role="alert">
+    <div *ngIf="error && !loading && !presetLoading" class="alert alert-danger" role="alert">
       <h4 class="alert-heading">Error!</h4>
       <p>{{ error }}</p>
       <hr>
@@ -333,43 +366,56 @@
 
 
     <!-- Table View -->
-    <div class="table-container" *ngIf="!loading && !error && getFilteredPropertyData() && getFilteredPropertyData().length > 0" (scroll)="onScroll($event)">
+    <div class="table-container" *ngIf="!loading && !presetLoading && !error && getFilteredPropertyData() && getFilteredPropertyData().length > 0" (scroll)="onScroll($event)">
       <table>
         <thead>
           <tr>
-            <th class="select-column" *ngIf="hasActiveFilters()">
-              <input type="checkbox" 
-                     [(ngModel)]="selectAllProperties" 
-                     (change)="toggleSelectAllProperties()"
-                     [indeterminate]="getSelectedPropertiesCount() > 0 && getSelectedPropertiesCount() < getFilteredPropertyData().length"
-                     title="Select/Deselect all visible properties">
+            <th class="preset-select-column">
+              <div class="d-flex align-items-center justify-content-center">
+                <!-- Show minus button ONLY when some items are selected (indeterminate state) and not in preset mode -->
+                <button *ngIf="!isPresetMode && getSelectedForPresetCount() > 0 && getSelectedForPresetCount() < getFilteredPropertyData().length" 
+                        type="button" 
+                        class="btn btn-sm btn-outline-secondary preset-header-control" 
+                        (click)="deselectSelectedForPreset()"
+                        title="Deselect selected items">
+                  <i class="fas fa-minus"></i>
+                </button>
+                
+                <!-- Show checkbox ONLY when no items are selected OR all items are selected, and not in preset mode -->
+                <input *ngIf="!isPresetMode && ((getSelectedForPresetCount() === 0) || (getSelectedForPresetCount() === getFilteredPropertyData().length))" 
+                       type="checkbox" 
+                       class="preset-header-control"
+                       [checked]="selectAllForPreset"
+                       (change)="toggleSelectAllForPreset()"
+                       title="Select/Deselect all for preset creation">
+              </div>
             </th>
-            <th *ngIf="columnVisibility.propertyName">Property Name</th>
-            <th *ngIf="columnVisibility.occupancyTM">Occupancy TM</th>
-                <th *ngIf="columnVisibility.occupancyNM">Occupancy NM</th>
-                <th *ngIf="columnVisibility.adr">ADR</th>
-                <th *ngIf="columnVisibility.revpar">RevPAR</th>
-                <th *ngIf="columnVisibility.mpi">MPI</th>
-                <th *ngIf="columnVisibility.reviews">Reviews</th>
-                <th *ngIf="columnVisibility.cxlPolicy">CXL Policy</th>
-                <th *ngIf="columnVisibility.adultChildConfig">Adult Child</th>
-                <th *ngIf="columnVisibility.pickupOcc">Pick up Occ</th>
-                <th *ngIf="columnVisibility.minRateThreshold">Min Rate <br /> Threshold</th>
+            <th *ngIf="columnVisibility.propertyName">Listing Name</th>
+            <th *ngIf="columnVisibility.occupancyTM">Occupancy This Month</th>
+                <th *ngIf="columnVisibility.occupancyNM">Occupancy Next Month</th>
+                <th *ngIf="columnVisibility.adr">Average Daily Rate</th>
+                <th *ngIf="columnVisibility.revpar">Revenue Per Available Room</th>
+                <th *ngIf="columnVisibility.mpi">Market Penetration Index</th>
                 <th *ngIf="columnVisibility.stlyVarOcc">STLY <br />Var Occ</th>
                 <th *ngIf="columnVisibility.stlyVarRevPAR">STLY Var <br /> RevPAR</th>
+                <th *ngIf="columnVisibility.minRateThreshold">Min Rate <br /> Threshold</th>
+                <th *ngIf="columnVisibility.pickupOcc">Pick up Occ</th>
+                <th *ngIf="columnVisibility.reviews">Reviews</th>
                 <th *ngIf="columnVisibility.lastReviewScore">Last Review <br /> Score</th>
                 <th *ngIf="columnVisibility.lastReviewDate">Last Review <br /> Date</th>
+                <th *ngIf="columnVisibility.cxlPolicy">Cancellation Policy</th>
+                <th *ngIf="columnVisibility.adultChildConfig">Adult Child <br /> Config</th>
                 <th *ngIf="columnVisibility.actions">Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let property of getFilteredPropertyData()">
-            <td class="select-column" *ngIf="hasActiveFilters()">
+            <td class="preset-select-column">
               <input type="checkbox" 
-                     [checked]="isPropertySelected(property._id)"
-                     (change)="togglePropertySelection(property._id)"
-                     [disabled]="!property._id"
-                     title="Select this property">
+                     [checked]="isPropertySelectedForPreset(property._id)"
+                     (change)="togglePropertySelectionForPreset(property._id)"
+                     [disabled]="!property._id || isPresetMode"
+                     title="Select for preset creation">
             </td>
             <td class="property-cell" *ngIf="columnVisibility.propertyName">
               <div class="property-info">
@@ -479,6 +525,53 @@
                 </div>
               </div>
             </td>
+            <td *ngIf="columnVisibility.stlyVarOcc">
+              <div class="stly-var-single-cell">
+                <span class="badge" [ngClass]="getPerformanceClass(property.STLY_Var.Occ)">
+                  {{ property.STLY_Var.Occ }}
+                </span>
+              </div>
+            </td>
+            <td *ngIf="columnVisibility.stlyVarRevPAR">
+              <div class="stly-var-single-cell">
+                <span class="badge" [ngClass]="getPerformanceClass(property.STLY_Var.RevPAR)">
+                  {{ property.STLY_Var.RevPAR }}
+                </span>
+              </div>
+            </td>
+            <td *ngIf="columnVisibility.minRateThreshold">
+              <div class="min-rate-threshold-cell">
+                <span class="threshold-value">{{ property.Min_Rate_Threshold || 'N/A' }}</span>
+              </div>
+            </td>
+            <td *ngIf="columnVisibility.pickupOcc">
+              <div class="pickup-occ-cell">
+                <div class="pickup-item" *ngIf="property.Pick_Up_Occ && property.Pick_Up_Occ['7_Days'] !== null && property.Pick_Up_Occ['7_Days'] !== undefined">
+                  <span class="pickup-label">7D:</span>
+                  <span class="pickup-value">{{ property.Pick_Up_Occ['7_Days'] }}</span>
+                </div>
+                <div class="pickup-item" *ngIf="!property.Pick_Up_Occ || property.Pick_Up_Occ['7_Days'] === null || property.Pick_Up_Occ['7_Days'] === undefined">
+                  <span class="pickup-label">7D:</span>
+                  <span class="pickup-value na-value">N/A</span>
+                </div>
+                <div class="pickup-item" *ngIf="property.Pick_Up_Occ && property.Pick_Up_Occ['14_Days'] !== null && property.Pick_Up_Occ['14_Days'] !== undefined">
+                  <span class="pickup-label">14D:</span>
+                  <span class="pickup-value">{{ property.Pick_Up_Occ['14_Days'] }}</span>
+                </div>
+                <div class="pickup-item" *ngIf="!property.Pick_Up_Occ || property.Pick_Up_Occ['14_Days'] === null || property.Pick_Up_Occ['14_Days'] === undefined">
+                  <span class="pickup-label">14D:</span>
+                  <span class="pickup-value na-value">N/A</span>
+                </div>
+                <div class="pickup-item" *ngIf="property.Pick_Up_Occ && property.Pick_Up_Occ['30_Days'] !== null && property.Pick_Up_Occ['30_Days'] !== undefined">
+                  <span class="pickup-label">30D:</span>
+                  <span class="pickup-value">{{ property.Pick_Up_Occ['30_Days'] }}</span>
+                </div>
+                <div class="pickup-item" *ngIf="!property.Pick_Up_Occ || property.Pick_Up_Occ['30_Days'] === null || property.Pick_Up_Occ['30_Days'] === undefined">
+                  <span class="pickup-label">30D:</span>
+                  <span class="pickup-value na-value">N/A</span>
+                </div>
+              </div>
+            </td>
             <td *ngIf="columnVisibility.reviews">
               <div class="reviews-cell-compact">
                 <!-- Booking.com Reviews -->
@@ -532,133 +625,6 @@
                   <i class="fas fa-home text-muted"></i>
                   <span class="no-reviews-text" style="font-size: var(--font-size-xs);">No Reviews</span>
                 </div> -->
-              </div>
-            </td>
-            <td *ngIf="columnVisibility.cxlPolicy">
-              <div class="cxl-policy-cell">
-                <!-- Booking.com Policy -->
-                <div class="policy-item" *ngIf="hasBookingPolicies(property.CXL_Policy?.Booking)">
-                  <i class="fas fa-bed"></i>
-                  <div class="policy-details">
-                    <!-- Handle array format -->
-                    <div *ngIf="isArray(property.CXL_Policy?.Booking)" class="policy-type">
-                      <div *ngFor="let bookingPolicy of getBookingPoliciesArray(property.CXL_Policy?.Booking); let isLast = last" 
-                           class="policy-item-row"
-                           [class.general-policy]="bookingPolicy?.is_general_policy" 
-                           [class.non-refundable]="bookingPolicy?.is_non_refundable_policy">
-                        {{ bookingPolicy?.policy_group_title | formatText }}
-                      </div>
-                    </div>
-                    <!-- Handle object format -->
-                    <!-- <div class="policy-type" *ngIf="!isArray(property.CXL_Policy?.Booking)">
-                      {{ property.CXL_Policy.Booking?.type | formatText }}
-                    </div> -->
-                  </div>
-                </div>
-                <div class="policy-item no-policy" *ngIf="!hasBookingPolicies(property.CXL_Policy?.Booking)">
-                  <i class="fas fa-bed text-muted"></i>
-                  <span class="no-policy-type" style="font-size: var(--font-size-xs);">No policy</span>
-                </div>
-                
-                <!-- Airbnb Policy -->
-                <div class="policy-item" *ngIf="hasValidAirbnbPolicy(property.CXL_Policy?.Airbnb)">
-                  <i class="fab fa-airbnb text-danger"></i>
-                  <div class="policy-details">
-                    <div class="policy-type">{{ property.CXL_Policy.Airbnb?.type | formatText }}</div>
-                    <!-- <div class="policy-description" *ngIf="property.CXL_Policy.Airbnb?.description">
-                      {{ property.CXL_Policy.Airbnb?.description }}
-                    </div>
-                    <div class="policy-free-cancellation" *ngIf="property.CXL_Policy.Airbnb?.free_cancellation_until">
-                      Free until: {{ property.CXL_Policy.Airbnb?.free_cancellation_until }}
-                    </div> -->
-                  </div>
-                </div>
-                <div class="policy-item no-policy" *ngIf="!hasValidAirbnbPolicy(property.CXL_Policy?.Airbnb)">
-                  <i class="fab fa-airbnb text-muted"></i>
-                  <span class="no-policy-type" style="font-size: var(--font-size-xs);">No policy</span>
-                </div>
-                
-                <!-- VRBO Policy -->
-                <div class="policy-item" *ngIf="property.CXL_Policy?.VRBO">
-                  <i class="fas fa-home text-warning"></i>
-                  <div class="policy-details">
-                    <div class="policy-type">{{ property.CXL_Policy.VRBO?.type }}</div>
-                    <div class="policy-description">{{ property.CXL_Policy.VRBO?.description }}</div>
-                    <div class="policy-free-cancellation" *ngIf="property.CXL_Policy.VRBO?.free_cancellation_until">
-                      Free until: {{ property.CXL_Policy.VRBO?.free_cancellation_until }}
-                    </div>
-                  </div>
-                </div>
-                <div class="policy-item no-policy" *ngIf="!property.CXL_Policy?.VRBO">
-                  <i class="fas fa-home text-muted"></i>
-                  <span class="no-policy-type" style="font-size: var(--font-size-xs);">No policy</span>
-                </div>
-              </div>
-            </td>
-            <td *ngIf="columnVisibility.adultChildConfig">
-              <div class="adult-child-config-cell">
-                <div class="config-item" *ngIf="property.Adult_Child_Config?.Booking">
-                  <i class="fas fa-bed "></i>
-                  <span class="config-text">Max guests: {{ formatGuestConfig(property.Adult_Child_Config.Booking) }}</span>
-                </div>
-                <div class="config-item" *ngIf="property.Adult_Child_Config?.Airbnb">
-                  <i class="fab fa-airbnb text-danger"></i>
-                  <span class="config-text">Max guests: {{ formatGuestConfig(property.Adult_Child_Config.Airbnb) }}</span>
-                </div>
-                <!-- <div class="config-item" *ngIf="property.Adult_Child_Config?.VRBO">
-                  <i class="fas fa-home text-warning"></i>
-                  <span class="config-text">Max guests: {{ formatGuestConfig(property.Adult_Child_Config.VRBO) }}</span>
-                </div> -->
-                <div class="no-config-text" *ngIf="!property.Adult_Child_Config?.Booking && !property.Adult_Child_Config?.Airbnb && !property.Adult_Child_Config?.VRBO">
-                  <small class="text-muted" style="font-size: var(--font-size-xs);">No configuration</small>
-                </div>
-              </div>
-            </td>
-            <td *ngIf="columnVisibility.pickupOcc">
-              <div class="pickup-occ-cell">
-                <div class="pickup-item" *ngIf="property.Pick_Up_Occ && property.Pick_Up_Occ['7_Days'] !== null && property.Pick_Up_Occ['7_Days'] !== undefined">
-                  <span class="pickup-label">7D:</span>
-                  <span class="pickup-value">{{ property.Pick_Up_Occ['7_Days'] }}</span>
-                </div>
-                <div class="pickup-item" *ngIf="!property.Pick_Up_Occ || property.Pick_Up_Occ['7_Days'] === null || property.Pick_Up_Occ['7_Days'] === undefined">
-                  <span class="pickup-label">7D:</span>
-                  <span class="pickup-value na-value">N/A</span>
-                </div>
-                <div class="pickup-item" *ngIf="property.Pick_Up_Occ && property.Pick_Up_Occ['14_Days'] !== null && property.Pick_Up_Occ['14_Days'] !== undefined">
-                  <span class="pickup-label">14D:</span>
-                  <span class="pickup-value">{{ property.Pick_Up_Occ['14_Days'] }}</span>
-                </div>
-                <div class="pickup-item" *ngIf="!property.Pick_Up_Occ || property.Pick_Up_Occ['14_Days'] === null || property.Pick_Up_Occ['14_Days'] === undefined">
-                  <span class="pickup-label">14D:</span>
-                  <span class="pickup-value na-value">N/A</span>
-                </div>
-                <div class="pickup-item" *ngIf="property.Pick_Up_Occ && property.Pick_Up_Occ['30_Days'] !== null && property.Pick_Up_Occ['30_Days'] !== undefined">
-                  <span class="pickup-label">30D:</span>
-                  <span class="pickup-value">{{ property.Pick_Up_Occ['30_Days'] }}</span>
-                </div>
-                <div class="pickup-item" *ngIf="!property.Pick_Up_Occ || property.Pick_Up_Occ['30_Days'] === null || property.Pick_Up_Occ['30_Days'] === undefined">
-                  <span class="pickup-label">30D:</span>
-                  <span class="pickup-value na-value">N/A</span>
-                </div>
-              </div>
-            </td>
-            <td *ngIf="columnVisibility.minRateThreshold">
-              <div class="min-rate-threshold-cell">
-                <span class="threshold-value">{{ property.Min_Rate_Threshold || 'N/A' }}</span>
-              </div>
-            </td>
-            <td *ngIf="columnVisibility.stlyVarOcc">
-              <div class="stly-var-single-cell">
-                <span class="badge" [ngClass]="getPerformanceClass(property.STLY_Var.Occ)">
-                  {{ property.STLY_Var.Occ }}
-                </span>
-              </div>
-            </td>
-            <td *ngIf="columnVisibility.stlyVarRevPAR">
-              <div class="stly-var-single-cell">
-                <span class="badge" [ngClass]="getPerformanceClass(property.STLY_Var.RevPAR)">
-                  {{ property.STLY_Var.RevPAR }}
-                </span>
               </div>
             </td>
             <td *ngIf="columnVisibility.lastReviewScore">
@@ -733,6 +699,85 @@
                 </div> -->
               </div>
             </td>
+            <td *ngIf="columnVisibility.cxlPolicy">
+              <div class="cxl-policy-cell">
+                <!-- Booking.com Policy -->
+                <div class="policy-item" *ngIf="hasBookingPolicies(property.CXL_Policy?.Booking)">
+                  <i class="fas fa-bed"></i>
+                  <div class="policy-details">
+                    <!-- Handle array format - show only first policy -->
+                    <div *ngIf="isArray(property.CXL_Policy?.Booking)" class="policy-type">
+                      <div class="policy-item-row"
+                           [class.general-policy]="getBookingPoliciesArray(property.CXL_Policy?.Booking)[0]?.is_general_policy" 
+                           [class.non-refundable]="getBookingPoliciesArray(property.CXL_Policy?.Booking)[0]?.is_non_refundable_policy">
+                        {{ getBookingPoliciesArray(property.CXL_Policy?.Booking)[0]?.policy_group_title | formatText }}
+                      </div>
+                    </div>
+                    <!-- Handle object format -->
+                    <!-- <div class="policy-type" *ngIf="!isArray(property.CXL_Policy?.Booking)">
+                      {{ property.CXL_Policy.Booking?.type | formatText }}
+                    </div> -->
+                  </div>
+                </div>
+                <div class="policy-item no-policy" *ngIf="!hasBookingPolicies(property.CXL_Policy?.Booking)">
+                  <i class="fas fa-bed text-muted"></i>
+                  <span class="no-policy-type" style="font-size: var(--font-size-xs);">No policy</span>
+                </div>
+                
+                <!-- Airbnb Policy -->
+                <div class="policy-item" *ngIf="hasValidAirbnbPolicy(property.CXL_Policy?.Airbnb)">
+                  <i class="fab fa-airbnb text-danger"></i>
+                  <div class="policy-details">
+                    <div class="policy-type">{{ property.CXL_Policy.Airbnb?.type | formatText }}</div>
+                    <!-- <div class="policy-description" *ngIf="property.CXL_Policy.Airbnb?.description">
+                      {{ property.CXL_Policy.Airbnb?.description }}
+                    </div>
+                    <div class="policy-free-cancellation" *ngIf="property.CXL_Policy.Airbnb?.free_cancellation_until">
+                      Free until: {{ property.CXL_Policy.Airbnb?.free_cancellation_until }}
+                    </div> -->
+                  </div>
+                </div>
+                <div class="policy-item no-policy" *ngIf="!hasValidAirbnbPolicy(property.CXL_Policy?.Airbnb)">
+                  <i class="fab fa-airbnb text-muted"></i>
+                  <span class="no-policy-type" style="font-size: var(--font-size-xs);">No policy</span>
+                </div>
+                
+                <!-- VRBO Policy -->
+                <div class="policy-item" *ngIf="property.CXL_Policy?.VRBO">
+                  <i class="fas fa-home text-warning"></i>
+                  <div class="policy-details">
+                    <div class="policy-type">{{ property.CXL_Policy.VRBO?.type }}</div>
+                    <div class="policy-description">{{ property.CXL_Policy.VRBO?.description }}</div>
+                    <div class="policy-free-cancellation" *ngIf="property.CXL_Policy.VRBO?.free_cancellation_until">
+                      Free until: {{ property.CXL_Policy.VRBO?.free_cancellation_until }}
+                    </div>
+                  </div>
+                </div>
+                <div class="policy-item no-policy" *ngIf="!property.CXL_Policy?.VRBO">
+                  <i class="fas fa-home text-muted"></i>
+                  <span class="no-policy-type" style="font-size: var(--font-size-xs);">No policy</span>
+                </div>
+              </div>
+            </td>
+            <td *ngIf="columnVisibility.adultChildConfig">
+              <div class="adult-child-config-cell">
+                <div class="config-item" *ngIf="property.Adult_Child_Config?.Booking">
+                  <i class="fas fa-bed "></i>
+                  <span class="config-text">Max guests: {{ formatGuestConfig(property.Adult_Child_Config.Booking) }}</span>
+                </div>
+                <div class="config-item" *ngIf="property.Adult_Child_Config?.Airbnb">
+                  <i class="fab fa-airbnb text-danger"></i>
+                  <span class="config-text">Max guests: {{ formatGuestConfig(property.Adult_Child_Config.Airbnb) }}</span>
+                </div>
+                <!-- <div class="config-item" *ngIf="property.Adult_Child_Config?.VRBO">
+                  <i class="fas fa-home text-warning"></i>
+                  <span class="config-text">Max guests: {{ formatGuestConfig(property.Adult_Child_Config.VRBO) }}</span>
+                </div> -->
+                <div class="no-config-text" *ngIf="!property.Adult_Child_Config?.Booking && !property.Adult_Child_Config?.Airbnb && !property.Adult_Child_Config?.VRBO">
+                  <small class="text-muted" style="font-size: var(--font-size-xs);">No configuration</small>
+                </div>
+              </div>
+            </td>
             <td *ngIf="columnVisibility.actions">
               <div class="btn-group btn-group-sm">
                 <button class="btn btn-outline-primary btn-sm" (click)="viewDetails(property._id)">
@@ -747,21 +792,17 @@
         </tbody>
       </table>
       
-      <!-- Infinite Scroll Loading Indicator -->
-      <div class="infinite-scroll-loading" *ngIf="isLoadingMore">
-        <div class="text-center py-3">
-          <div class="spinner-border spinner-border-sm" role="status">
-            <span class="visually-hidden">Loading more...</span>
-          </div>
-          <span class="ms-2">Loading more properties...</span>
+      <!-- Loading More Indicator -->
+      <div *ngIf="isLoadingMore" class="text-center py-3">
+        <div class="spinner-border spinner-border-sm text-primary" role="status">
+          <span class="visually-hidden">Loading more...</span>
         </div>
+        <p class="mt-2 text-muted small">Loading more properties...</p>
       </div>
       
-      <!-- End of Data Indicator -->
-      <div class="end-of-data" *ngIf="!hasMoreData && propertyData && propertyData.length > 0 && !loading">
-        <div class="text-center py-3 text-muted">
-          <small>You've reached the end of the list</small>
-        </div>
+      <!-- No More Data Indicator -->
+      <div *ngIf="!hasMoreData && propertyData && propertyData.length > 0 && !isLoadingMore" class="text-center py-3">
+        <p class="text-muted small">No more properties to load</p>
       </div>
     </div>
  
@@ -1578,8 +1619,13 @@
                       {{ getCurrentPropertyIds().length }} selected properties
                     </span>
                     
+                    <!-- Show preset-selected properties info -->
+                    <span *ngIf="getSelectedForPresetCount() > 0" class="filter-badge filter-preview">
+                      {{ getSelectedForPresetCount() }} preset-selected properties
+                    </span>
+                    
                     <!-- Show message if neither filters nor properties are selected -->
-                    <span *ngIf="getAppliedFilters().length === 0 && getCurrentPropertyIds().length === 0" 
+                    <span *ngIf="getAppliedFilters().length === 0 && getCurrentPropertyIds().length === 0 && getSelectedForPresetCount() === 0" 
                       class="filter-badge filter-preview text-warning">
                       No filters or properties selected
                     </span>
@@ -1595,7 +1641,7 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" (click)="cancelSavePreset()">Cancel</button>
             <button type="button" class="btn btn-success" (click)="saveCurrentFiltersAsPreset()" 
-              [disabled]="!newPresetName.trim() || presetSaving || (getAppliedFilters().length === 0 && getCurrentPropertyIds().length === 0)">
+              [disabled]="!newPresetName.trim() || presetSaving || (getAppliedFilters().length === 0 && getCurrentPropertyIds().length === 0 && getSelectedForPresetCount() === 0)">
               <i *ngIf="!presetSaving" class="fas fa-save me-2"></i>
               <i *ngIf="presetSaving" class="fas fa-spinner fa-spin me-2"></i>Save Preset
             </button>

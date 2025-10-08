@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { ListingRoutingModule } from './listing-routing.module';
 import { ListingComponent } from './listing.component';
@@ -12,6 +12,7 @@ import { ListingComponent } from './listing.component';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     ListingRoutingModule
   ]
 })

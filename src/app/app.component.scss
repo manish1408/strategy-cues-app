@@ -31,8 +31,7 @@
   position: fixed;
   left: 0;
   height: 100vh;
-  border-top-right-radius: 12px;
-  border-bottom-right-radius: 12px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -42,10 +41,10 @@
   overflow-y: auto;
 }
 .top-nav {
-  background-color: #ffffff;
+  background-color: #1E1E1E;
   position: fixed;
   top: 0;
-  z-index: 1;
+  z-index: 1040; /* Higher than content but lower than dropdowns */
   .collapse-arrow {
     rotate: 180deg;
   }
@@ -146,6 +145,8 @@
   width: 100vw;
   background-color: #ffffff;
   padding-top: 80px;
+  position: relative;
+  z-index: 1; /* Lower than header elements */
 }
 
 /* Responsive */
@@ -214,6 +215,7 @@
   inset: unset !important;
   // top: 0 !important;
   right: 0 !important;
+  z-index: 1070 !important; /* Higher than all other elements */
 }
 .user-drop {
   border-radius: 12px;
@@ -249,6 +251,8 @@
   width: 100%;
   padding: 0;
   border: none;
+  position: relative;
+  z-index: 1061; /* Higher than top-nav */
 }
 .profile-dropdown:hover {
   background-color: none;
@@ -271,7 +275,7 @@
   object-fit: cover;
 }
 .profile-dropdown h4 {
-  color: #1e1e1e;
+  color: #ffffff;
   font-size: var(--font-size-base);
   font-weight: 500;
 }
@@ -311,6 +315,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
+  z-index: 1061; /* Higher than top-nav */
 }
 
 .chat-drop-btn:hover {

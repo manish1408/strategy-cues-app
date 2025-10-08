@@ -21,19 +21,30 @@ import { Status, PropertyStatus } from "../_models/status.model";
 export class ListingComponent implements OnInit, OnDestroy {
   @ViewChild("closeButton") closeButton!: ElementRef;
 
+  // Pagination and infinite scroll properties
   currentPage: number = 1;
   itemsPerPage: number = 20;
   totalPages: number = 0;
+  totalItems: number = 0;
+  hasMoreData: boolean = true;
+  isLoadingMore: boolean = false;
+  
+  // Loading states
   apiLoading: boolean = false;
   syncPriceLabsLoading: boolean = false;
   loading: boolean = false;
   loadingCompetitors: boolean = false;
+  
+  // Data
   allListingList: any[] = [];
   isEdit: boolean = false;
   editingListingId: string | null = null;
   operatorId: string | null = null;
   addListingForm: FormGroup;
   sortOrder: string = 'desc';
+  
+  // Search
+  searchTerm: string = '';
   bookingComId: string | null = null;
   airbnbId: string | null = null;
   vrboId: string | null = null;
@@ -104,7 +115,10 @@ export class ListingComponent implements OnInit, OnDestroy {
  
 
   loadListings() {
-    this.apiLoading = true;
+    // Only set main loading state for first page load, not for infinite scroll
+    if (this.currentPage === 1) {
+      this.apiLoading = true;
+    }
    
     this.listingService.getListings(this.currentPage, this.itemsPerPage, this.operatorId || '', this.sortOrder)
   .subscribe({
@@ -112,7 +126,7 @@ export class ListingComponent implements OnInit, OnDestroy {
       if (res.success) {
         // Ensure properties is an array
         if (Array.isArray(res.data.properties)) {
-          this.allListingList = res.data.properties.map((listing: any) => ({
+          const newListings = res.data.properties.map((listing: any) => ({
             id: listing.id,
             urls: {
               BookingId: listing.urls?.BookingId,
@@ -129,22 +143,33 @@ export class ListingComponent implements OnInit, OnDestroy {
             }
           }));
           
+          // For infinite scroll: append data instead of replacing
+          if (this.currentPage === 1) {
+            this.allListingList = newListings;
+          } else {
+            this.allListingList = [...this.allListingList, ...newListings];
+          }
+          
           // Initialize property statuses from the main API response
           this.initializePropertyStatuses(res.data.properties);
         }
 
         // Update pagination data
         this.totalPages = res.data.pagination.total_pages;
+        this.totalItems = res.data.pagination.total || 0;
         this.currentPage = res.data.pagination.page;
         this.itemsPerPage = res.data.pagination.limit;
+        this.hasMoreData = this.currentPage < this.totalPages;
       } else {
         this.toastr.error(res.message || 'Failed to load listings');
       }
       this.apiLoading = false;
+      this.isLoadingMore = false;
     },
     error: (error: any) => {
       this.toastr.error('Error loading listings. Please try again.');
       this.apiLoading = false;
+      this.isLoadingMore = false;
     }
   });
   }
@@ -592,36 +617,91 @@ export class ListingComponent implements OnInit, OnDestroy {
   }
 
  
-  // Pagination methods
-  updatePagination(): void {
-    // For API-based pagination, we'll need to get total count from the API response
-    this.totalPages = Math.ceil(this.allListingList.length / this.itemsPerPage);
-  }
-
-  changePage(page: number): void {
-    if (page >= 1 && page !== this.currentPage && page <= this.totalPages) {
-      this.currentPage = page;
-      this.loadListings(); // Trigger API call with new page
+  // Infinite scroll methods
+  loadMoreData(): void {
+    if (this.hasMoreData && !this.isLoadingMore && !this.apiLoading) {
+      this.isLoadingMore = true;
+      this.currentPage++;
+      this.loadListings();
     }
   }
 
-  getPageNumbers(): number[] {
-    const pages: number[] = [];
-    const startPage = Math.max(1, this.currentPage - 2);
-    const endPage = Math.min(this.totalPages, this.currentPage + 2);
-
-    for (let i = startPage; i <= endPage; i++) {
-      pages.push(i);
+  // Scroll event handler for infinite scroll
+  onScroll(event: any): void {
+    try {
+      const element = event.target;
+      const threshold = 50; // pixels from bottom
+      
+      // Check if element has valid scroll properties
+      if (element && element.scrollTop !== undefined && element.clientHeight && element.scrollHeight) {
+        if (element.scrollTop + element.clientHeight >= element.scrollHeight - threshold) {
+          this.loadMoreData();
+        }
+      }
+    } catch (error) {
+      console.error('Scroll event error:', error);
     }
-    return pages;
   }
 
-  getPaginatedListings(): any[] {
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    const endIndex = startIndex + this.itemsPerPage;
-    return this.allListingList.slice(startIndex, endIndex);
+  // Search functionality
+  performSearch(): void {
+    // Reset to first page
+    this.currentPage = 1;
+    this.hasMoreData = true;
+    
+    if (this.searchTerm && this.searchTerm.trim()) {
+      // Use search API if search term exists
+      this.apiLoading = true;
+      this.propertiesService.searchProperties(this.searchTerm.trim(), this.operatorId || '')
+        .subscribe({
+          next: (response: any) => {
+            if (response.success && response.data && response.data.properties) {
+              // Map search results to listing format
+              this.allListingList = response.data.properties.map((listing: any) => ({
+                id: listing._id || listing.id,
+                urls: {
+                  BookingId: listing.BookingId || listing.urls?.BookingId,
+                  BookingUrl: listing.BookingUrl || listing.urls?.BookingUrl,
+                  AirbnbId: listing.AirbnbId || listing.urls?.AirbnbId,
+                  AirbnbUrl: listing.AirbnbUrl || listing.urls?.AirbnbUrl,
+                  VRBOId: listing.VRBOId || listing.urls?.VRBOId,
+                  VRBOUrl: listing.VRBOUrl || listing.urls?.VRBOUrl,
+                  PricelabsId: listing.PricelabsId || listing.urls?.PricelabsId,
+                  PricelabsUrl: listing.PricelabsUrl || listing.urls?.PricelabsUrl,
+                  status: listing.status || listing.urls?.status,
+                  PropertyName: listing.Listing_Name || listing.PropertyName || listing.urls?.PropertyName,
+                  Photos: listing.Photos || listing.urls?.Photos
+                }
+              }));
+              
+              // Initialize property statuses for search results
+              this.initializePropertyStatuses(response.data.properties);
+              
+              // Disable infinite scroll for search results
+              this.hasMoreData = false;
+              this.totalItems = this.allListingList.length;
+              this.totalPages = 1;
+            } else {
+              this.allListingList = [];
+              this.toastr.info('No listings found matching your search');
+            }
+            this.apiLoading = false;
+          },
+          error: (error: any) => {
+            this.toastr.error('Error searching listings. Please try again.');
+            this.apiLoading = false;
+          }
+        });
+    } else {
+      // If search term is empty, reload all data
+      this.loadListings();
+    }
   }
 
+  clearSearch(): void {
+    this.searchTerm = '';
+    this.performSearch();
+  }
 
   scrapeAndMapListing(bookingId: string, airbnbId: string, vrboId: string, pricelabsId: string) {
     if (!this.operatorId) {

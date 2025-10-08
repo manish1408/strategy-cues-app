@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { CompetitorComparisonService } from '../_services/competitor-comparison.servie';
+import { PropertiesService } from '../_services/properties.service';
 import { LocalStorageService } from '../_services/local-storage.service';
 import { ExportService } from '../_services/export.service';
 import { ToastrService } from 'ngx-toastr';
@@ -42,6 +43,7 @@ export class ContentComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private competitorComparisonService: CompetitorComparisonService,
+    private propertiesService: PropertiesService,
     private localStorageService: LocalStorageService,
     private exportService: ExportService,
     private toastr: ToastrService,
@@ -85,6 +87,38 @@ export class ContentComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response: any) => {
           this.handleApiResponse(response);
+        },
+        error: (error: any) => {
+          this.handleApiError(error);
+        }
+      });
+  }
+
+  loadCompetitorComparisonDataForProperties(propertyIds: string[]): void {
+    // Fetch competitor comparison data for specific properties
+    this.competitorComparisonService.getCompetitorById(this.operatorId, this.currentPage, this.itemsPerPage)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response: any) => {
+          if (response?.data?.comparisons) {
+            // Filter the comparison data to only include the searched properties
+            const allComparisons = response.data.comparisons;
+            const filteredComparisons = allComparisons.filter((comparison: any) => 
+              propertyIds.includes(comparison.propertyId) || 
+              propertyIds.includes(comparison._id) ||
+              propertyIds.includes(comparison.listing_id)
+            );
+            
+            // Update the data with filtered results
+            this.photoComparisonData = filteredComparisons;
+            this.filteredData = [...filteredComparisons];
+            this.totalItems = filteredComparisons.length;
+            this.totalPages = 1; // Search results don't support pagination
+            this.hasMoreData = false; // No more data to load for search results
+            this.loading = false;
+          } else {
+            this.handleError('No comparison data available');
+          }
         },
         error: (error: any) => {
           this.handleApiError(error);
@@ -462,58 +496,49 @@ export class ContentComponent implements OnInit, OnDestroy {
   // ==================== SEARCH FUNCTIONALITY ====================
   
   performSearch(): void {
-    if (!this.searchTerm.trim()) {
-      this.resetFilter();
-      return;
+    // Reset to first page
+    this.currentPage = 1;
+    this.hasMoreData = true;
+    
+    if (this.searchTerm && this.searchTerm.trim()) {
+      // Use search API if search term exists
+      this.loading = true;
+      this.propertiesService.searchProperties(this.searchTerm.trim(), this.operatorId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (response: any) => {
+            if (response.success && response.data && response.data.properties) {
+              // Extract property IDs from search results
+              const propertyIds = response.data.properties.map((property: any) => property._id);
+              
+              if (propertyIds.length > 0) {
+                // Fetch competitor comparison data for these specific properties
+                this.loadCompetitorComparisonDataForProperties(propertyIds);
+              } else {
+                this.handleError('No properties found');
+              }
+            } else {
+              this.handleError('No results found');
+            }
+          },
+          error: (error: any) => {
+            this.handleApiError(error);
+          }
+        });
+    } else {
+      // If search term is empty, reload all data
+      this.loadCompetitorComparisonData();
     }
-
-    this.filteredData = this.photoComparisonData.filter(property => 
-      this.matchesSearchTerm(property, this.searchTerm.toLowerCase())
-    );
   }
 
   clearSearch(): void {
     this.searchTerm = '';
-    this.resetFilter();
+    this.performSearch();
   }
 
   getDisplayData(): any[] {
     // For infinite scroll, return all filtered data
     return this.filteredData;
-  }
-
-  private resetFilter(): void {
-    this.filteredData = [...this.photoComparisonData];
-  }
-
-  private matchesSearchTerm(property: any, searchTerm: string): boolean {
-    const searchFields = [
-      property.listing_name,
-      property.property_id,
-      property.booking_id,
-      property.airbnb_id,
-      property.vrbo_id
-    ];
-
-    // Check basic property fields
-    if (searchFields.some(field => field?.toLowerCase().includes(searchTerm))) {
-      return true;
-    }
-
-    // Check competitor data
-    return this.hasMatchingCompetitor(property, searchTerm);
-  }
-
-  private hasMatchingCompetitor(property: any, searchTerm: string): boolean {
-    const competitors = this.getCompetitorsForProperty(property);
-    return competitors.some((competitor: any) => {
-      const competitorFields = [
-        competitor.bookingId,
-        competitor.airbnbId,
-        competitor.vrboId
-      ];
-      return competitorFields.some(field => field?.toLowerCase().includes(searchTerm));
-    });
   }
 
   // CSV Export functionality

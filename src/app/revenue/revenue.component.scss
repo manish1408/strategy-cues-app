@@ -2343,11 +2343,12 @@ $transition: all 0.3s ease;
   .table-container {
     width: 100%;
     max-width: 87vw;
-    height: 77vh; /* enable vertical scroll */
+    height: 85vh; /* enable vertical scroll */
     overflow: auto; /* allows both X and Y scroll */
     border: 1px solid #dee2e6;
     border-radius: 6px;
     margin: 0 12px;
+    position: relative; /* Create positioning context for dropdowns */
     
     /* Show scrollbars with custom styling */
     scrollbar-width: thin; /* Firefox */
@@ -2440,17 +2441,32 @@ $transition: all 0.3s ease;
     border-bottom: 1px solid #dee2e6;
     min-width: 150px;
     background: #fff;
+    position: relative; /* Allow dropdowns to position relative to cells */
+    overflow: visible !important; /* Allow dropdowns to overflow */
+    &:first-child {
+      min-width: 50px;
+    }
+  &:nth-child(2) {
+    min-width: 280px; 
+  }
   }
 
   thead th {
     position: sticky;
-    top: 0; /* stick only vertically */
-    background: #f8f9fa;
-    z-index: 1;
+  top: 0; /* stick only vertically */
+  background: #f8f9fa;
+  z-index: 10;
     font-weight: 600;
     color: #343a40;
     font-size: var(--font-size-sm);
     padding: 1rem 0.75rem;
+
+    &:first-child {
+      min-width: 50px;
+    }
+    &:nth-child(2) {
+      min-width: 280px; 
+    }
 
   }
 
@@ -2571,48 +2587,7 @@ $transition: all 0.3s ease;
   
 }
 
-.pagination-section {
-    margin-top: 2rem;
 
-
-    .pagination {
-      margin: 0;
-
-      .page-link {
-        color: #0066cc;
-        border-color: #dee2e6;
-        padding: 0.5rem 0.75rem;
-        transition: all 0.3s ease;
-
-        &:hover {
-          background-color: #0066cc;
-          border-color: #0066cc;
-          color: white;
-          transform: translateY(-1px);
-        }
-      }
-
-      .page-item.active .page-link {
-        background-color: #0066cc;
-        border-color: #0066cc;
-        color: white;
-        box-shadow: 0 2px 4px rgba(0, 102, 204, 0.3);
-      }
-
-      .page-item.disabled .page-link {
-        color: #6c757d;
-        background-color: #fff;
-        border-color: #dee2e6;
-        cursor: not-allowed;
-
-        &:hover {
-          transform: none;
-          background-color: #fff;
-          color: #6c757d;
-        }
-      }
-    }
-  }
 
 // Property Selection Styles
 .select-column {
@@ -2662,6 +2637,61 @@ $transition: all 0.3s ease;
   }
 }
 
+/* Comprehensive Dropdown Menu Fix for Table Overflow Issues */
+.revenue-dashboard {
+  // Ensure dropdowns appear above table content
+  .dropdown-menu {
+    z-index: 1050 !important;
+    position: absolute !important;
+  }
+
+  // Fix for Bootstrap dropdowns in table
+  .table {
+    td, th {
+      // Allow dropdowns to overflow
+      overflow: visible !important;
+    }
+    
+    .dropdown {
+      position: static;
+    }
+    
+    .btn-group {
+      position: relative;
+      
+      .dropdown-menu {
+        position: absolute;
+        z-index: 1050;
+      }
+    }
+  }
+  
+  // Ensure action buttons and dropdowns are clickable
+  td {
+    .dropdown-toggle::after {
+      vertical-align: middle;
+    }
+  }
+}
+
+// Bootstrap tooltip and popover z-index fix
+.tooltip {
+  z-index: 1060 !important;
+}
+
+.popover {
+  z-index: 1060 !important;
+}
+
+// Modal backdrop and modal z-index
+.modal-backdrop {
+  z-index: 1040 !important;
+}
+
+.modal {
+  z-index: 1050 !important;
+}
+
 // Responsive Design for Property Selection
 @media (max-width: 768px) {
   .revenue-dashboard {
@@ -2673,6 +2703,61 @@ $transition: all 0.3s ease;
         height: 16px;
       }
     }
+  }
+}
+
+// Consistent styling for preset header controls (checkbox and minus button)
+.preset-header-control {
+  width: 16px !important;
+  height: 16px !important;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #6c757d;
+  border-radius: 3px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #495057;
+    background-color: #f8f9fa;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  }
+}
+
+// Override button styling to match checkbox
+.btn.preset-header-control {
+  border: 1px solid #6c757d !important;
+  background-color: white !important;
+  color: #6c757d !important;
+  font-size: 10px !important;
+  line-height: 1 !important;
+  min-width: 16px !important;
+  max-width: 16px !important;
+  min-height: 16px !important;
+  max-height: 16px !important;
+
+  &:hover {
+    border-color: #495057 !important;
+    background-color: #f8f9fa !important;
+    color: #495057 !important;
+  }
+
+  &:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25) !important;
+  }
+
+  i {
+    font-size: 8px !important;
+    margin: 0 !important;
   }
 }
 

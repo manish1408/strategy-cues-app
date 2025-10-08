@@ -293,6 +293,13 @@ export class RevenueComponent implements OnInit {
   selectedPropertyIds: Set<string> = new Set();
   selectAllProperties: boolean = false;
   showOnlySelected: boolean = true; // Default to showing only selected properties
+  
+  // Preset selection state
+  selectedForPresetIds: Set<string> = new Set();
+  selectAllForPreset: boolean = false;
+  
+  // Track if we're in preset mode (preset with propertyIds selected)
+  isPresetMode: boolean = false;
 
   constructor(
     private propertiesService: PropertiesService, 
@@ -446,7 +453,7 @@ export class RevenueComponent implements OnInit {
       });
   }
 
-  loadFilteredPropertiesDataWithPropertyRestore(presetPropertyIds: string[]): void {
+  loadFilteredPropertiesDataWithPropertyRestore(presetPropertyIds: string[], presetName?: string): void {
     // Build filter parameters
     const filterParams = this.buildFilterParams();
     
@@ -487,28 +494,70 @@ export class RevenueComponent implements OnInit {
 
             // Restore property selection from preset
             if (presetPropertyIds && presetPropertyIds.length > 0) {
-              console.log('Restoring property selection:', presetPropertyIds);
-              this.selectedPropertyIds.clear();
-              presetPropertyIds.forEach(id => this.selectedPropertyIds.add(id));
-              this.updateSelectAllState();
-              // Show only selected properties when preset has property IDs
-              this.showOnlySelected = true;
-              console.log('Property selection restored. Selected count:', this.selectedPropertyIds.size, 'Show only selected:', this.showOnlySelected);
+              // Filter preset property IDs to only include those that exist in current data
+              const validPropertyIds = presetPropertyIds.filter(id => 
+                this.propertyData.some(property => property._id === id)
+              );
+              
+              if (validPropertyIds.length > 0) {
+                // Restore to main property selection (for filtering/view)
+                this.selectedPropertyIds.clear();
+                validPropertyIds.forEach(id => this.selectedPropertyIds.add(id));
+                this.updateSelectAllState();
+                
+                // Also restore to preset selection (for checkbox display)
+                this.selectedForPresetIds.clear();
+                validPropertyIds.forEach(id => {
+                  this.selectedForPresetIds.add(id);
+                });
+                this.updateSelectAllForPresetState();
+                
+                // In preset mode, show only selected properties; otherwise show all
+                this.showOnlySelected = this.isPresetMode;
+                
+              } else {
+                this.clearPropertySelection();
+                this.clearPresetSelection();
+              }
             } else {
               this.clearPropertySelection();
+              this.clearPresetSelection();
             }
 
             this.calculateSummaryData();
+            
+            // End preset loading and show success message
+            if (this.presetLoading) {
+              this.presetLoading = false;
+              this.loading = false; // Also ensure main loading is false
+              if (presetName) {
+                this.toastr.success(`Applied preset: ${presetName}`);
+              } else {
+                this.toastr.success('Preset filters applied successfully!');
+              }
+            }
           } else {
             this.error = response.message || "Failed to load properties data";
           }
-          this.loading = false;
+          
+          // Only set loading = false if not in preset loading mode
+          if (!this.presetLoading) {
+            this.loading = false;
+          }
           this.isLoadingMore = false;
         },
         error: (error: any) => {
           this.error = "Error loading properties. Please try again.";
-          this.loading = false;
+          
+          // Only set loading = false if not in preset loading mode
+          if (!this.presetLoading) {
+            this.loading = false;
+          }
           this.isLoadingMore = false;
+          if (this.presetLoading) {
+            this.presetLoading = false;
+            this.loading = false; // Also ensure main loading is false
+          }
         },
         complete: () => {
           // Ensure loading is set to false even if there's an issue
@@ -756,7 +805,46 @@ export class RevenueComponent implements OnInit {
   performSearch(): void {
     // Clear property selection when performing search since results might change
     this.clearPropertySelection();
-    this.filterData();
+    
+    // Reset to first page
+    this.currentPage = 1;
+    this.hasMoreData = true;
+    
+    if (this.searchTerm && this.searchTerm.trim()) {
+      // Use search API if search term exists
+      this.loading = true;
+      this.propertiesService.searchProperties(this.searchTerm.trim(), this.operatorId!).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            const newData = PropertiesService.extractPropertiesArray(response);
+            this.propertyData = newData;
+            this.totalListings = newData.length;
+            this.totalPages = Math.ceil(this.totalListings / this.itemsPerPage);
+            this.hasMoreData = false; // Search results don't support pagination
+            
+            // Calculate range values and filter options from search results
+            this.calculateRangeValues();
+            this.extractFilterOptions();
+            this.initializeTempFilters();
+            this.calculateSummaryData();
+            
+            this.error = null;
+          } else {
+            this.error = response.message || "Search failed";
+            this.propertyData = [];
+          }
+          this.loading = false;
+        },
+        error: (error: any) => {
+          this.error = "Error searching properties. Please try again.";
+          this.propertyData = [];
+          this.loading = false;
+        }
+      });
+    } else {
+      // If no search term, use filter data
+      this.filterData();
+    }
   }
 
   // Build filter parameters for the API
@@ -766,6 +854,11 @@ export class RevenueComponent implements OnInit {
       page: this.currentPage,
       limit: this.itemsPerPage
     };
+
+    // Search term
+    if (this.searchTerm && this.searchTerm.trim()) {
+      params.search_query = this.searchTerm.trim();
+    }
 
     // Basic filters
     if (this.selectedArea) params.area = this.selectedArea;
@@ -1203,6 +1296,7 @@ export class RevenueComponent implements OnInit {
 
   hasActiveFilters(): boolean {
     return !!(
+      this.searchTerm?.trim() ||
       this.selectedArea ||
       this.selectedRoomType ||
       // Basic filters
@@ -1273,6 +1367,8 @@ export class RevenueComponent implements OnInit {
 
   getActiveFilterCount(): number {
     let count = 0;
+    // Search term
+    if (this.searchTerm?.trim()) count++;
     // Basic filters
     if (this.selectedArea) count++;
     if (this.selectedRoomType) count++;
@@ -2108,6 +2204,9 @@ export class RevenueComponent implements OnInit {
   // Update clear all filters method
   clearAllFilters(): void { 
     this.loading = true;
+    // Clear search term
+    this.searchTerm = "";
+    
     // Clear active filters
     this.selectedArea = "";
     this.selectedRoomType = "";
@@ -2186,8 +2285,96 @@ export class RevenueComponent implements OnInit {
 
     // Clear property selection when clearing all filters
     this.clearPropertySelection();
+    
+    // Exit preset mode
+    this.isPresetMode = false;
 
     this.filterData();
+  }
+
+  // Clear filters only without triggering filterData (for internal use)
+  clearFiltersOnly(): void {
+    // Clear search term
+    this.searchTerm = "";
+    
+    // Clear active filters
+    this.selectedArea = "";
+    this.selectedRoomType = "";
+    this.adrMin = null;
+    this.adrMax = null;
+    this.revparMin = null;
+    this.revparMax = null;
+    this.mpiMin = null;
+    this.mpiMax = null;
+    this.minRateThresholdMin = null;
+    this.minRateThresholdMax = null;
+
+    // Occupancy filters
+    this.occupancyTMMin = null;
+    this.occupancyTMMax = null;
+    this.occupancyNMMin = null;
+    this.occupancyNMMax = null;
+    this.occupancy7DaysMin = null;
+    this.occupancy7DaysMax = null;
+    this.occupancy30DaysMin = null;
+    this.occupancy30DaysMax = null;
+    this.pickUpOcc7DaysMin = null;
+    this.pickUpOcc7DaysMax = null;
+    this.pickUpOcc14DaysMin = null;
+    this.pickUpOcc14DaysMax = null;
+    this.pickUpOcc30DaysMin = null;
+    this.pickUpOcc30DaysMax = null;
+
+    // Performance filters
+    this.stlyVarOccMin = null;
+    this.stlyVarOccMax = null;
+    this.stlyVarADRMin = null;
+    this.stlyVarADRMax = null;
+    this.stlyVarRevPARMin = null;
+    this.stlyVarRevPARMax = null;
+    this.stlmVarOccMin = null;
+    this.stlmVarOccMax = null;
+    this.stlmVarADRMin = null;
+    this.stlmVarADRMax = null;
+    this.stlmVarRevPARMin = null;
+    this.stlmVarRevPARMax = null;
+
+    // Platform filters
+    this.bookingGeniusFilter = "not-present";
+    this.bookingMobileFilter = "not-present";
+    this.bookingPrefFilter = "not-present";
+    this.bookingWeeklyFilter = "not-present";
+    this.bookingMonthlyFilter = "not-present";
+    this.bookingLMDiscFilter = "not-present";
+    this.airbnbWeeklyFilter = "not-present";
+    this.airbnbMonthlyFilter = "not-present";
+    this.airbnbMemberFilter = "not-present";
+    this.airbnbLMDiscFilter = "not-present";
+    this.vrboWeeklyFilter = "not-present";
+    this.vrboMonthlyFilter = "not-present";
+
+    // Reviews filters
+    this.bookingRevScoreMin = null;
+    this.bookingRevScoreMax = null;
+    this.bookingTotalRevMin = null;
+    this.bookingTotalRevMax = null;
+    this.airbnbRevScoreMin = null;
+    this.airbnbRevScoreMax = null;
+    this.airbnbTotalRevMin = null;
+    this.airbnbTotalRevMax = null;
+    this.vrboRevScoreMin = null;
+    this.vrboRevScoreMax = null;
+    this.vrboTotalRevMin = null;
+    this.vrboTotalRevMax = null;
+
+    // Clear temporary filters
+    this.initializeTempFilters();
+
+    // Clear selected preset
+    this.selectedPresetId = '';
+
+    // Clear property selection when clearing all filters
+    this.clearPropertySelection();
   }
 
   // Infinite scroll method
@@ -2307,15 +2494,11 @@ export class RevenueComponent implements OnInit {
     });
   }
 
-  // Method to refresh presets (useful for debugging)
+  // Method to refresh presets
   refreshPresets(): void {
     this.loadFilterPresets();
   }
 
-  // Debug method to check current presets state
-  debugPresets(): void {
-    // Debug method - no console output needed
-  }
 
   // Test method to simulate preset click
   testPresetClick(presetId: string): void {
@@ -2323,20 +2506,6 @@ export class RevenueComponent implements OnInit {
     this.onPresetSelectionChange();
   }
 
-  // Test method to debug delete functionality
-  testDeletePreset(presetId: string): void {
-    console.log('=== TESTING DELETE PRESET ===');
-    console.log('Preset ID to delete:', presetId);
-    console.log('Operator ID:', this.operatorId);
-    
-    const preset = this.filterPresetService.getPresetById(presetId);
-    console.log('Found preset:', preset);
-    
-    if (preset) {
-      console.log('Attempting to delete preset:', preset.name);
-      this.deletePreset(presetId);
-    }
-  }
 
   // Helper method to safely handle dates
   getSafeDate(date: any): Date {
@@ -2510,6 +2679,134 @@ export class RevenueComponent implements OnInit {
     return this.selectedPropertyIds.size;
   }
 
+  // Preset selection methods
+  togglePropertySelectionForPreset(propertyId: string): void {
+    if (this.selectedForPresetIds.has(propertyId)) {
+      this.selectedForPresetIds.delete(propertyId);
+    } else {
+      this.selectedForPresetIds.add(propertyId);
+    }
+    this.updateSelectAllForPresetState();
+  }
+
+  isPropertySelectedForPreset(propertyId: string): boolean {
+    const isSelected = this.selectedForPresetIds.has(propertyId);
+    // Only log if there's a mismatch or if debugging is needed
+    return isSelected;
+  }
+
+  toggleSelectAllForPreset(): void {
+    const filteredData = this.getFilteredPropertyData();
+    const visiblePropertyIds = filteredData
+      .filter(property => property._id)
+      .map(property => property._id);
+    
+    const selectedCount = this.getSelectedForPresetCount();
+    const visibleCount = visiblePropertyIds.length;
+    
+    // Determine current state
+    const allVisibleSelected = visibleCount > 0 && 
+      visiblePropertyIds.every(id => this.selectedForPresetIds.has(id));
+    const someVisibleSelected = visiblePropertyIds.some(id => this.selectedForPresetIds.has(id));
+    
+    if (allVisibleSelected) {
+      // State 3: All selected → Deselect all
+      filteredData.forEach(property => {
+        if (property._id) {
+          this.selectedForPresetIds.delete(property._id);
+        }
+      });
+    } else if (someVisibleSelected) {
+      // State 2: Some selected (indeterminate) → Select all remaining
+      filteredData.forEach(property => {
+        if (property._id) {
+          this.selectedForPresetIds.add(property._id);
+        }
+      });
+    } else {
+      // State 1: None selected (blank) → Select all
+      filteredData.forEach(property => {
+        if (property._id) {
+          this.selectedForPresetIds.add(property._id);
+        }
+      });
+    }
+    
+    // Update the select all state
+    this.updateSelectAllForPresetState();
+  }
+
+  updateSelectAllForPresetState(): void {
+    const filteredData = this.getFilteredPropertyData();
+    if (filteredData.length === 0) {
+      this.selectAllForPreset = false;
+      return;
+    }
+    
+    const visiblePropertyIds = filteredData
+      .filter(property => property._id)
+      .map(property => property._id);
+    
+    this.selectAllForPreset = visiblePropertyIds.length > 0 && visiblePropertyIds.every(id => 
+      this.selectedForPresetIds.has(id)
+    );
+  }
+
+  getSelectedForPresetCount(): number {
+    return this.selectedForPresetIds.size;
+  }
+
+  getSelectedForPresetNames(): Array<{
+    id: string;
+    name: string;
+  }> {
+    const selectedProperties: Array<{id: string, name: string}> = [];
+    
+    this.selectedForPresetIds.forEach(propertyId => {
+      const property = this.propertyData.find(p => p._id === propertyId);
+      if (property && property.Listing_Name) {
+        selectedProperties.push({
+          id: propertyId,
+          name: property.Listing_Name
+        });
+      }
+    });
+    
+    return selectedProperties;
+  }
+
+  removePropertyFromPresetSelection(propertyId: string): void {
+    this.selectedForPresetIds.delete(propertyId);
+    this.updateSelectAllForPresetState();
+  }
+
+  clearPresetSelection(): void {
+    this.selectedForPresetIds.clear();
+    this.selectAllForPreset = false;
+    this.isPresetMode = false;
+    this.showOnlySelected = false;
+  }
+
+
+  // New function for minus button behavior - deselect only selected items
+  deselectSelectedForPreset(): void {
+    const filteredData = this.getFilteredPropertyData();
+    const visiblePropertyIds = filteredData
+      .filter(property => property._id)
+      .map(property => property._id);
+    
+    // Only deselect the currently selected visible items
+    visiblePropertyIds.forEach(id => {
+      if (this.selectedForPresetIds.has(id)) {
+        this.selectedForPresetIds.delete(id);
+      }
+    });
+    
+    // Update the select all state
+    this.updateSelectAllForPresetState();
+  }
+
+
   // Get filtered data based on selection state
   getFilteredPropertyData(): any[] {
     // If we have selected properties and showOnlySelected is true, show only selected
@@ -2544,18 +2841,80 @@ export class RevenueComponent implements OnInit {
     this.showOnlySelected = false; // When no selection, show all properties
   }
 
-  applyPresetFilters(filters: FilterPreset['filters'], propertyIds?: string[]): void {
-    console.log('applyPresetFilters called with filters:', filters, 'propertyIds:', propertyIds);
-    this.loading = true;
+  // Check if preset has any active filters
+  hasActiveFiltersFromPreset(filters: FilterPreset['filters']): boolean {
+    // Basic filters
+    if (filters.selectedArea || filters.selectedRoomType) {
+      return true;
+    }
+
+    // Range filters
+    if (filters.adrMin !== null || filters.adrMax !== null ||
+        filters.revparMin !== null || filters.revparMax !== null ||
+        filters.mpiMin !== null || filters.mpiMax !== null ||
+        filters.minRateThresholdMin !== null || filters.minRateThresholdMax !== null) {
+      return true;
+    }
+
+    // Occupancy filters
+    if (filters.occupancyTMMin !== null || filters.occupancyTMMax !== null ||
+        filters.occupancyNMMin !== null || filters.occupancyNMMax !== null ||
+        filters.occupancy7DaysMin !== null || filters.occupancy7DaysMax !== null ||
+        filters.occupancy30DaysMin !== null || filters.occupancy30DaysMax !== null ||
+        filters.pickUpOcc7DaysMin !== null || filters.pickUpOcc7DaysMax !== null ||
+        filters.pickUpOcc14DaysMin !== null || filters.pickUpOcc14DaysMax !== null ||
+        filters.pickUpOcc30DaysMin !== null || filters.pickUpOcc30DaysMax !== null) {
+      return true;
+    }
+
+    // Performance filters
+    if (filters.stlyVarOccMin !== null || filters.stlyVarOccMax !== null ||
+        filters.stlyVarADRMin !== null || filters.stlyVarADRMax !== null ||
+        filters.stlyVarRevPARMin !== null || filters.stlyVarRevPARMax !== null ||
+        filters.stlmVarOccMin !== null || filters.stlmVarOccMax !== null ||
+        filters.stlmVarADRMin !== null || filters.stlmVarADRMax !== null ||
+        filters.stlmVarRevPARMin !== null || filters.stlmVarRevPARMax !== null) {
+      return true;
+    }
+
+    // Platform filters
+    const platformFilters = [
+      filters.bookingGeniusFilter, filters.bookingMobileFilter, filters.bookingPrefFilter,
+      filters.bookingWeeklyFilter, filters.bookingMonthlyFilter, filters.bookingLMDiscFilter,
+      filters.airbnbWeeklyFilter, filters.airbnbMonthlyFilter, filters.airbnbMemberFilter,
+      filters.airbnbLMDiscFilter, filters.vrboWeeklyFilter, filters.vrboMonthlyFilter
+    ];
+    const hasPlatformFilters = platformFilters.some(f => f && f !== 'not-present');
+    if (hasPlatformFilters) return true;
+
+    // Reviews filters
+    if (filters.bookingRevScoreMin !== null || filters.bookingRevScoreMax !== null ||
+        filters.bookingTotalRevMin !== null || filters.bookingTotalRevMax !== null ||
+        filters.airbnbRevScoreMin !== null || filters.airbnbRevScoreMax !== null ||
+        filters.airbnbTotalRevMin !== null || filters.airbnbTotalRevMax !== null ||
+        filters.vrboRevScoreMin !== null || filters.vrboRevScoreMax !== null ||
+        filters.vrboTotalRevMin !== null || filters.vrboTotalRevMax !== null) {
+      return true;
+    }
+
+    return false;
+  }
+
+  applyPresetFilters(filters: FilterPreset['filters'], propertyIds?: string[], presetName?: string): void {
+    // Don't set main loading when preset is loading - use only presetLoading
+    if (!this.presetLoading) {
+      this.loading = true;
+    }
     
     // Store property IDs to restore after data is loaded
     const presetPropertyIds = propertyIds || [];
     
+    // Check if preset has any filters or just property selection
+    const hasFilters = this.hasActiveFiltersFromPreset(filters);
+    
     // Basic filters
     this.selectedArea = filters.selectedArea || '';
     this.selectedRoomType = filters.selectedRoomType || '';
-    
-    console.log('Applied basic filters - Area:', this.selectedArea, 'RoomType:', this.selectedRoomType);
     
     // Range filters
     this.adrMin = filters.adrMin || null;
@@ -2628,38 +2987,178 @@ export class RevenueComponent implements OnInit {
     // Update temporary filters to match
     this.initializeTempFilters();
     
-    console.log('All filters applied, reloading data...');
-    console.log('Current filter state:', {
-      selectedArea: this.selectedArea,
-      selectedRoomType: this.selectedRoomType,
-      adrMin: this.adrMin,
-      adrMax: this.adrMax
-    });
+    // Enable preset mode if preset has propertyIds (regardless of filters)
+    this.isPresetMode = presetPropertyIds.length > 0;
     
     // Apply the filters by reloading data with new filter values
-    this.loadFilteredPropertiesDataWithPropertyRestore(presetPropertyIds);
-    this.toastr.success('Preset filters applied successfully!');
+    if (hasFilters) {
+      this.loadFilteredPropertiesDataWithPropertyRestore(presetPropertyIds, presetName);
+    } else if (presetPropertyIds.length > 0) {
+      // Load all data without filters, then restore property selection
+      this.loadAllDataWithPropertyRestore(presetPropertyIds, presetName);
+    } else {
+      // Load all data without any filters
+      this.loadAllDataWithPropertyRestore([], presetName);
+    }
+  }
+
+  // Load all data without filters and restore property selection
+  loadAllDataWithPropertyRestore(presetPropertyIds: string[], presetName?: string): void {
+    
+    // Clear all filters first (without triggering filterData)
+    this.clearFiltersOnly();
+    
+    // Load all data without any filters
+    if (!this.operatorId) {
+      this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
+      
+      if (!this.operatorId) {
+        this.loading = false;
+        return;
+      }
+    }
+    
+    this.propertiesService
+      .getProperties(this.currentPage, this.itemsPerPage, this.operatorId, 'desc')
+      .subscribe({
+        next: (response: any) => {
+          
+          if (response.success) {
+            const newData = PropertiesService.extractPropertiesArray(response);
+
+            // For infinite scroll: append data instead of replacing
+            if (this.currentPage === 1) {
+              this.propertyData = newData;
+            } else {
+              this.propertyData = [...this.propertyData, ...newData];
+            }
+
+            // Update pagination data from API response
+            if (response.pagination) {
+              this.totalPages = response.pagination.total_pages;
+              this.currentPage = response.pagination.page;
+              this.itemsPerPage = response.pagination.limit;
+              this.hasMoreData = this.currentPage < this.totalPages;
+            } else if (response.data && response.data.pagination) {
+              // Fallback for nested pagination structure
+              this.totalPages = response.data.pagination.total_pages;
+              this.currentPage = response.data.pagination.page;
+              this.itemsPerPage = response.data.pagination.limit;
+              this.hasMoreData = this.currentPage < this.totalPages;
+            }
+
+            // Calculate range values and filter options from current data
+            this.calculateRangeValues();
+            this.extractFilterOptions();
+            this.initializeTempFilters();
+
+            // Restore property selection from preset
+            if (presetPropertyIds && presetPropertyIds.length > 0) {
+              // Filter preset property IDs to only include those that exist in current data
+              const validPropertyIds = presetPropertyIds.filter(id => 
+                this.propertyData.some(property => property._id === id)
+              );
+              
+              if (validPropertyIds.length > 0) {
+                // Restore to main property selection (for filtering/view)
+                this.selectedPropertyIds.clear();
+                validPropertyIds.forEach(id => this.selectedPropertyIds.add(id));
+                this.updateSelectAllState();
+                
+                // Also restore to preset selection (for checkbox display)
+                this.selectedForPresetIds.clear();
+                validPropertyIds.forEach(id => {
+                  this.selectedForPresetIds.add(id);
+                });
+                this.updateSelectAllForPresetState();
+                
+                // In preset mode, show only selected properties; otherwise show all
+                this.showOnlySelected = this.isPresetMode;
+                
+              } else {
+                this.clearPropertySelection();
+                this.clearPresetSelection();
+              }
+            } else {
+              this.clearPropertySelection();
+              this.clearPresetSelection();
+            }
+
+            this.calculateSummaryData();
+            
+            // End preset loading and show success message
+            if (this.presetLoading) {
+              this.presetLoading = false;
+              if (presetName) {
+                this.toastr.success(`Applied preset: ${presetName}`);
+              } else {
+                this.toastr.success('Preset property selection applied successfully!');
+              }
+            }
+          } else {
+            this.error = response.message || "Failed to load properties data";
+          }
+          
+          // Only set loading = false if not in preset loading mode
+          if (!this.presetLoading) {
+            this.loading = false;
+          }
+        },
+        error: (error) => {
+          this.error = 'Failed to load properties. Please try again.';
+          
+          // Only set loading = false if not in preset loading mode
+          if (!this.presetLoading) {
+            this.loading = false;
+          }
+          if (this.presetLoading) {
+            this.presetLoading = false;
+            this.loading = false; // Also ensure main loading is false
+          }
+        }
+      });
   }
 
   onPresetSelectionChange(): void {
-    console.log('onPresetSelectionChange called with selectedPresetId:', this.selectedPresetId);
-    if (this.selectedPresetId) {
+    // Exit preset mode when changing presets
+    this.isPresetMode = false;
+    
+    if (this.selectedPresetId && this.operatorId) {
+      // Show preset loading state
+      this.presetLoading = true;
+      
+      // Fetch preset from API
+      this.filterPresetService.fetchPresetById(this.selectedPresetId, this.operatorId).subscribe({
+        next: (preset) => {
+          this.applyPresetFilters(preset.filters, preset.propertyIds, preset.name);
+        },
+        error: (error) => {
+          this.presetLoading = false;
+          this.toastr.error('Failed to load preset. Please try again.');
+        }
+      });
+    } else if (this.selectedPresetId) {
+      // Fallback to local cache if no operatorId
       const preset = this.filterPresetService.getPresetById(this.selectedPresetId);
-      console.log('Found preset:', preset);
       if (preset) {
-        console.log('Applying preset:', preset.name, preset.filters, preset.propertyIds);
-        this.applyPresetFilters(preset.filters, preset.propertyIds);
+        this.applyPresetFilters(preset.filters, preset.propertyIds, preset.name);
       } else {
+        this.presetLoading = false;
         this.toastr.error('Preset not found');
       }
+    } else {
+      // No preset selected, exit preset mode
+      this.isPresetMode = false;
+      this.showOnlySelected = false;
     }
   }
 
   showSavePresetDialog(): void {
     const hasActiveFilters = this.hasActiveFilters();
     const hasPropertyIds = this.getCurrentPropertyIds().length > 0;
+    const hasPresetSelectedProperties = this.getSelectedForPresetCount() > 0;
     
-    if (!hasActiveFilters && !hasPropertyIds) {
+    if (!hasActiveFilters && !hasPropertyIds && !hasPresetSelectedProperties) {
       this.toastr.warning('Either filters or property selection is required to save a preset. Please apply some filters or select properties first.');
       return;
     }
@@ -2689,15 +3188,21 @@ export class RevenueComponent implements OnInit {
       const currentFilters = this.getCurrentFilters();
       console.log('Saving preset with filters:', currentFilters);
       
-      // Get current property IDs (if any are selected)
+      // Get current property IDs (if any are selected for filters)
       const currentPropertyIds = this.getCurrentPropertyIds();
+      
+      // Get preset-selected property IDs
+      const presetSelectedPropertyIds = Array.from(this.selectedForPresetIds);
+      
+      // Combine both property ID arrays, removing duplicates
+      const allPropertyIds = [...new Set([...currentPropertyIds, ...presetSelectedPropertyIds])];
       
       const savedPreset = this.filterPresetService.savePreset(
         this.newPresetName.trim(),
         currentFilters,
         this.newPresetDescription.trim() || undefined,
         this.operatorId || undefined,
-        currentPropertyIds
+        allPropertyIds.length > 0 ? allPropertyIds : undefined
       );
       
       // Note: The actual API call is asynchronous, so we'll handle the loading state in the service
@@ -2705,6 +3210,8 @@ export class RevenueComponent implements OnInit {
       setTimeout(() => {
         this.presetSaving = false;
         this.cancelSavePreset();
+        // Clear preset selection after successful save
+        this.clearPresetSelection();
         this.toastr.success(`Filter preset "${this.newPresetName}" saved successfully!`);
         console.log('Preset saved:', savedPreset);
       }, 1000);
@@ -2923,10 +3430,6 @@ export class RevenueComponent implements OnInit {
     event.target.src = 'assets/images/placeholder.jpg';
   }
 
-  // Debug method to check property URLs
-  debugPropertyUrls(property: PropertyData): void {
-    // Method for debugging property URLs if needed
-  }
 
   // Get color based on occupancy percentage
   getOccupancyColor(percentage: number, isLight: boolean = false): string {
