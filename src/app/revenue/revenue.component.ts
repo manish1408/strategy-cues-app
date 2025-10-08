@@ -5,7 +5,7 @@ import {
 } from "../_services/properties.service";
 import { LocalStorageService } from "../_services/local-storage.service";
 import { FilterPresetService } from '../_services/filter-preset.service';
-import { FilterPreset } from '../_models/filter-preset.interface';
+
 import { Router, ActivatedRoute } from "@angular/router";
 import { ExportService } from "../_services/export.service";
 import { ToastrService } from "ngx-toastr";
@@ -273,7 +273,7 @@ export class RevenueComponent implements OnInit {
   vrboTotalRevMaxRange: number = 1000;
 
   // Filter preset properties
-  filterPresets: FilterPreset[] = [];
+  filterPresets: any[] = [];
   selectedPresetId: string = '';
   showSavePresetForm: boolean = false;
   newPresetName: string = '';
@@ -2529,7 +2529,7 @@ export class RevenueComponent implements OnInit {
     return false;
   }
 
-  getCurrentFilters(): FilterPreset['filters'] {
+  getCurrentFilters(): any {
     return {
       // Basic filters
       selectedArea: this.selectedArea || undefined,
@@ -2842,7 +2842,7 @@ export class RevenueComponent implements OnInit {
   }
 
   // Check if preset has any active filters
-  hasActiveFiltersFromPreset(filters: FilterPreset['filters']): boolean {
+  hasActiveFiltersFromPreset(filters: any): boolean {
     // Basic filters
     if (filters.selectedArea || filters.selectedRoomType) {
       return true;
@@ -2900,7 +2900,7 @@ export class RevenueComponent implements OnInit {
     return false;
   }
 
-  applyPresetFilters(filters: FilterPreset['filters'], propertyIds?: string[], presetName?: string): void {
+  applyPresetFilters(filters: any, propertyIds?: string[], presetName?: string): void {
     // Don't set main loading when preset is loading - use only presetLoading
     if (!this.presetLoading) {
       this.loading = true;
@@ -2911,7 +2911,7 @@ export class RevenueComponent implements OnInit {
     
     // Check if preset has any filters or just property selection
     const hasFilters = this.hasActiveFiltersFromPreset(filters);
-    
+
     // Basic filters
     this.selectedArea = filters.selectedArea || '';
     this.selectedRoomType = filters.selectedRoomType || '';
@@ -3304,7 +3304,7 @@ export class RevenueComponent implements OnInit {
     }
   }
 
-  getPresetSummary(preset: FilterPreset): string[] {
+  getPresetSummary(preset: any): string[] {
     return this.filterPresetService.getPresetSummary(preset);
   }
 
@@ -3348,7 +3348,7 @@ export class RevenueComponent implements OnInit {
       reader.onload = (e) => {
         try {
           const jsonData = e.target?.result as string;
-          const importedPresets = JSON.parse(jsonData) as FilterPreset[];
+          const importedPresets = JSON.parse(jsonData) as any[];
           
           // Validate imported data
           if (!Array.isArray(importedPresets)) {

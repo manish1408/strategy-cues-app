@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { environment } from "../../environments/environment";
 import { LocalStorageService } from "./local-storage.service";
 
+
 @Injectable({
   providedIn: "root",
 })
@@ -61,5 +62,25 @@ export class AuthenticationService {
     return this.http.put<any>(`${this._url}/change-password`, data);
   }
 
+  // User Management CRUD Operations
+  getUsersByAdmin() {
+    return this.http.get<any>(`${this._url}/admin/users`);
+  }
+
+  createUserByAdmin(data: any) {
+    return this.http.post<any>(`${this._url}/admin/create-user`, data);
+  }
+
+  deleteUser(userId: string) {
+    return this.http.delete<any>(`${this._url}/users/delete-user/${userId}`);
+  }
+
+  updateUser(userId: string, data: any) {
+    return this.http.put<any>(`${this._url}/admin/users/${userId}`, data);
+  }
+
+  getUserById(userId: string) {
+    return this.http.get<any>(`${this._url}/admin/users/${userId}`);
+  }
 
 }

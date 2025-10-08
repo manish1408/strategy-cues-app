@@ -70,6 +70,12 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: "all-users",
+    loadChildren: () =>
+      import("./all-users/all-users.module").then((m) => m.AllUsersModule),
+    canActivate: [AuthGuard],
+  },
+  {
     path: "listing",
     loadChildren: () =>
       import("./listing/listing.module").then((m) => m.ListingModule),
