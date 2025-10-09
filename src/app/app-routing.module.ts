@@ -69,12 +69,12 @@ const routes: Routes = [
       import("./all-operators/all-operators.module").then((m) => m.AllOperatorsModule),
     canActivate: [AuthGuard],
   },
-  {
-    path: "all-users",
-    loadChildren: () =>
-      import("./all-users/all-users.module").then((m) => m.AllUsersModule),
-    canActivate: [AuthGuard],
-  },
+  // {
+  //   path: "all-users",
+  //   loadChildren: () =>
+  //     import("./all-users/all-users.module").then((m) => m.AllUsersModule),
+  //   canActivate: [AuthGuard],
+  // },
   {
     path: "listing",
     loadChildren: () =>
