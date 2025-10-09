@@ -75,12 +75,13 @@ export class AuthenticationService {
     return this.http.delete<any>(`${this._url}/users/delete-user/${userId}`);
   }
 
-  updateUser(userId: string, data: any) {
+  updateUserByAdmin(userId: string, data: any) {
     return this.http.put<any>(`${this._url}/admin/users/${userId}`, data);
   }
 
   getUserById(userId: string) {
     return this.http.get<any>(`${this._url}/admin/users/${userId}`);
   }
+
 
 }

@@ -34,41 +34,7 @@ a {
   opacity: 1;
 }
 
-.modal-body {
-  h1 {
-    font-size: 30px;
-    font-weight: 700;
-    color: #12234c;
-  }
 
-  p {
-    font-family: Roboto;
-    font-size: 28px;
-    font-weight: 300;
-    color: #7995b5;
-  }
-  a {
-    font-family: Roboto;
-    font-size: 14px;
-    font-weight: 500;
-    text-decoration: underline !important;
-  }
-  span {
-    color: #00c7c7;
-    font-size: 14px;
-    font-weight: 500;
-  }
-  label {
-    font-size: 14px;
-    font-weight: 500;
-  }
-  .logo-image {
-    height: 48px;
-  }
-}
-.modal-header {
-  border: none !important;
-}
 .btn-close {
   color: #1e1e1e !important;
   font-size: 10px;
@@ -100,10 +66,7 @@ a {
 .middle-section {
   border-top: 1px solid #f1f3f5;
 }
-.modal-section2 {
-  padding: 40px 0px;
-  background-color: #f1f3f5;
-}
+
 .top-row {
   height: 80vh;
 }
@@ -113,9 +76,7 @@ a {
 .part-2 {
   background-color: #dfe9f2;
 }
-.modal-header-div {
-  padding: 30px;
-}
+
 
 .custom-invalid-leads {
   display: flex;

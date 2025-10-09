@@ -433,7 +433,10 @@ input:checked+.slider {
 }
 
 .modal {
-  --bs-modal-zindex: 99999
+  --bs-modal-zindex: 99999;
+}
+.modal-backdrop {
+ z-index :0 !important;
 }
 
 @media (min-width: 1200px) {

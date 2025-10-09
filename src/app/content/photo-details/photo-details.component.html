@@ -473,23 +473,4 @@
   </div><!-- End of *ngIf="!isLoading" -->
 </div><!-- End of photo-details-container -->
 
-<!-- Photo Modal -->
-<div class="photo-modal" *ngIf="selectedPhotoIndex !== null" (click)="closePhotoModal()">
-  <div class="modal-content" (click)="$event.stopPropagation()">
-    <button class="close-btn" (click)="closePhotoModal()">
-      <i class="fas fa-times"></i>
-    </button>
-    <div class="modal-image">
-      <img [src]="getSelectedPhoto()?.url" [alt]="getSelectedPhoto()?.caption" (error)="onImageError($event)">
-    </div>
-    <div class="modal-info">
-      <h3>{{getSelectedPhoto()?.type}}</h3>
-      <p *ngIf="getSelectedPhoto()?.caption">{{getSelectedPhoto()?.caption}}</p>
-      <p *ngIf="!getSelectedPhoto()?.caption" class="no-caption">
-        <i class="fas fa-exclamation-triangle"></i>
-        This photo needs a caption
-      </p>
-    </div>
-   
-  </div>
-</div>
+

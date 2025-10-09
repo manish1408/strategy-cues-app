@@ -1,0 +1,267 @@
+<div class="row">
+  <div class="col-12 d-flex justify-content-between align-items-center">
+    <div>
+      <h4 class="title">Users</h4>
+      <p class="desc">Manage your users here</p>
+    </div>
+   
+    <button
+      class="btn btn-primary float-end"
+      data-bs-toggle="modal"
+      data-bs-target="#addUser"
+    >
+      Add User
+    </button>
+  </div>
+</div>
+
+<div *ngIf="apiLoading" class="mt-5 d-flex justify-content-center">
+  <div class="spinner-border text-dark" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+
+<ng-container *ngIf="!apiLoading">
+  <!-- Show table when users exist -->
+  <div *ngIf="allUsersList && allUsersList.length > 0">
+    <div class="row mt-4">
+      <div class="col-12">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Full Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone</th>
+                <th scope="col">User Type</th>
+                <th scope="col">Address</th>
+                <th scope="col">City</th>
+                <th scope="col">Country</th>
+                <th scope="col">Zip</th>
+                <th scope="col">Profile Picture</th>
+                
+                <th scope="col" [width]="'100px'">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of allUsersList; let i = index">
+                <th scope="row">{{ i + 1 }}</th>
+                <td>{{ user?.fullName }}</td>
+                <td>{{ user?.email }}</td>
+                <td>{{ user?.phone }}</td>
+                <td>{{ user?.userType }}</td>
+                <td>{{ user?.address || 'N/A' }}</td>
+                <td>{{ user?.city || 'N/A' }}</td>
+                <td>{{ user?.country || 'N/A' }}</td>
+                <td>{{ user?.zip || 'N/A' }}</td>
+                <td>
+                  <img *ngIf="user?.profilePicture" [src]="user?.profilePicture" alt="Profile Picture" width="50" height="50"/>
+                  <span *ngIf="!user?.profilePicture">N/A</span>
+                </td>
+              
+                <td>
+                  <img
+                    src="assets/icons/edit.svg"
+                    class="cursor-pointer me-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#addUser"
+                    (click)="editUser(user)"
+                  />
+                  <img
+                    src="assets/icons/trash.svg"
+                    (click)="deleteUser(user?._id || user?.id)"
+                    class="cursor-pointer"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Show empty state when no users -->
+  <div *ngIf="!allUsersList || allUsersList.length === 0" class="mt-5 text-center">
+    <div class="">
+      <div class="card-body">
+        <h5 class="card-title mb-3">No Users Found</h5>
+        <p class="card-text">No users found yet. Click on "Add User" to add a new user.</p>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<!-- Add/Edit User Modal -->
+<div
+  class="modal fade"
+  id="addUser"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content" style="background: white">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">
+          {{ isEdit ? "Update" : "Create" }} User
+        </h5>
+        <i class="fa-solid fa-xmark" data-bs-dismiss="modal"></i>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="addUserForm">
+          <div class="row">
+            <div class="mb-3">
+                <label for="tax" class="form-label">Profile Image</label>
+                <div class="form-control">
+                  <img class="avatar-img cursor-pointer" [src]="profileImage" (click)="fileInput.click()" />
+                  <input type="file" #fileInput class="d-none" (change)="onFileSelected($event, 'profilePicture')" accept="image/*" />
+                </div>
+              </div>
+            <!-- Left Column -->
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="fullName" class="form-label">Full Name</label>
+                <input
+                  type="text"
+                  id="fullName"
+                  formControlName="fullName"
+                  [ngClass]="{ 'is-invalid': hasError('fullName') }"
+                  class="form-control"
+                  placeholder="Enter full name"
+                />
+                <div class="invalid-feedback">Full name is required</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="email" class="form-label">Email Address</label>
+                <input
+                  type="email"
+                  id="email"
+                  formControlName="email"
+                  [ngClass]="{ 'is-invalid': hasError('email') }"
+                  class="form-control"
+                  placeholder="Enter email address"
+                />
+                <div class="invalid-feedback">
+                  <span *ngIf="addUserForm.get('email')?.errors?.['required']">Email is required</span>
+                  <span *ngIf="addUserForm.get('email')?.errors?.['email']">Please enter a valid email</span>
+                </div>
+              </div>
+
+              <div class="mb-3" *ngIf="!isEdit">
+                <label for="password" class="form-label">Password</label>
+                <div class="input-group">
+                  <input
+                    [type]="showPassword ? 'text' : 'password'"
+                    id="password"
+                    formControlName="password"
+                    [ngClass]="{ 'is-invalid': hasError('password') }"
+                    class="form-control"
+                    placeholder="Enter password"
+                  />
+                  <button 
+                    class="btn btn-outline-secondary" 
+                    type="button"
+                    (click)="togglePasswordVisibility()"
+                  >
+                    <i [class]="showPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"></i>
+                  </button>
+                  <div class="invalid-feedback">
+                    <span *ngIf="addUserForm.get('password')?.errors?.['required']">Password is required</span>
+                    <span *ngIf="addUserForm.get('password')?.errors?.['minlength']">Password must be at least 8 characters</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  formControlName="phone"
+                  [ngClass]="{ 'is-invalid': hasError('phone') }"
+                  class="form-control"
+                  placeholder="Enter phone number"
+                />
+                <div class="invalid-feedback">Phone number is required</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="address" class="form-label">Address</label>
+                <input
+                  type="text"
+                  id="address"
+                  formControlName="address"
+                  class="form-control"
+                  placeholder="Enter address"
+                />
+              </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="city" class="form-label">City</label>
+                <input
+                  type="text"
+                  id="city"
+                  formControlName="city"
+                  class="form-control"
+                  placeholder="Enter city"
+                />
+              </div>
+
+              <div class="mb-3">
+                <label for="country" class="form-label">Country</label>
+                <input
+                  type="text"
+                  id="country"
+                  formControlName="country"
+                  class="form-control"
+                  placeholder="Enter country"
+                />
+              </div>
+
+              <div class="mb-3">
+                <label for="zip" class="form-label">Zip Code</label>
+                <input
+                  type="text"
+                  id="zip"
+                  formControlName="zip"
+                  class="form-control"
+                  placeholder="Enter zip code"
+                />
+              </div>
+
+              
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer d-flex justify-content-end">
+        <button
+          #closeButton
+          data-bs-dismiss="modal"
+          class="btn btn-outline-secondary"
+          (click)="resetForm()"
+        >
+          Cancel
+        </button>
+        <button 
+          type="submit" 
+          class="btn btn-primary d-flex align-items-center justify-content-center gap-2" 
+          (click)="onSubmit()" 
+          [disabled]="loading"
+        >
+          <div *ngIf="loading" class="spinner-border spinner-border-sm" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          {{ isEdit ? 'Update' : 'Create' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ThemeComponent } from './theme.component';
+import { AllUsersComponent } from './all-users.component';
 
-describe('ThemeComponent', () => {
-  let component: ThemeComponent;
-  let fixture: ComponentFixture<ThemeComponent>;
+describe('AllUsersComponent', () => {
+  let component: AllUsersComponent;
+  let fixture: ComponentFixture<AllUsersComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ThemeComponent]
+      declarations: [AllUsersComponent]
     })
     .compileComponents();
-
-    fixture = TestBed.createComponent(ThemeComponent);
+    
+    fixture = TestBed.createComponent(AllUsersComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -21,3 +21,4 @@ describe('ThemeComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+
