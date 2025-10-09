@@ -15,12 +15,13 @@
     </div>
   </div>
   
-  <div *ngIf="apiLoading" class="mt-5 d-flex justify-content-center">
+  <div *ngIf="apiLoading" class="mt-5 text-center ">
     <div class="spinner-border text-dark" role="status">
       <span class="visually-hidden">Loading...</span>
     </div>
+    <p class="mt-3">Loading operators...</p>
   </div>
-  
+
  
   
   <ng-container *ngIf="!apiLoading">
