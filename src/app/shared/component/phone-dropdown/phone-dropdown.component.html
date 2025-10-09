@@ -1,7 +1,7 @@
 <div appClickOutside (clickOutside)="closeDropdown()">
-  <div class="main-container"  [ngStyle]="{ width: fullWidth ? '100%' : 'fit-content' }" (click)="toggleDropdown()">
+  <div class="main-container"  [ngStyle]="{ width: fullWidth ? '100%' : 'fit-content' }" (click)="!disabled && toggleDropdown()">
     <div class="selected-country justify-content-space-between"
-    [ngClass]="{ 'full-width': fullWidth }"
+    [ngClass]="{ 'full-width': fullWidth, 'integrated-phone': customClass === 'integrated-phone', 'disabled': disabled }"
     [ngStyle]="{ width: fullWidth ? '100%' : '100px' }">
     <div class="d-flex align-items-center" *ngIf="loadingIp">
       <div class="spinner-border spinner-border-sm" role="status">

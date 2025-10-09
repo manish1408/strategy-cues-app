@@ -103,7 +103,8 @@
   id="addUser"
   tabindex="-1"
   aria-labelledby="staticBackdropLabel"
-  aria-hidden="true"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
 >
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content" style="background: white">
@@ -177,11 +178,13 @@
                 type="tel"
                 id="phone"
                 formControlName="phone"
-                [ngClass]="{ 'is-invalid': hasError('phone') }"
                 class="form-control"
-                placeholder="Enter phone number"
+                placeholder="Enter phone number with country code (e.g., +1234567890)"
               />
-              <div class="invalid-feedback">Phone number is required</div>
+              <div class="invalid-feedback" *ngIf="hasError('phone')">
+                <span *ngIf="addUserForm.get('phone')?.errors?.['required']">Phone number is required</span>
+                <span *ngIf="addUserForm.get('phone')?.errors?.['pattern']">Please enter a valid phone number (9-15 digits)</span>
+              </div>
             </div>
           </div>
 
@@ -235,11 +238,13 @@
                     type="tel"
                     id="phone"
                     formControlName="phone"
-                    [ngClass]="{ 'is-invalid': hasError('phone') }"
                     class="form-control"
-                    placeholder="Enter phone number"
+                    placeholder="Enter phone number with country code (e.g., +1234567890)"
                   />
-                  <div class="invalid-feedback">Phone number is required</div>
+                  <div class="invalid-feedback" *ngIf="hasError('phone')">
+                    <span *ngIf="addUserForm.get('phone')?.errors?.['required']">Phone number is required</span>
+                    <span *ngIf="addUserForm.get('phone')?.errors?.['pattern']">Please enter a valid phone number (9-15 digits)</span>
+                  </div>
                 </div>
 
                 <div class="mb-3">

@@ -28,6 +28,7 @@ export class AllUsersComponent {
   allowedMimes = ['image/jpeg', 'image/webp','image/jpg','image/png'];
   maxSize = 3 * 1024 * 1024;
   profileImage = 'https://milodocs.blob.core.windows.net/public-docs/profile-picture.webp';
+  
 
   constructor(
     private authService: AuthenticationService,
@@ -40,7 +41,7 @@ export class AllUsersComponent {
       fullName: ["", Validators.required],
       email: ["", [Validators.required, Validators.email]],
       password: ["", [Validators.required, Validators.minLength(8)]],
-      phone: ["", Validators.required],
+      phone: ["", [Validators.required, Validators.pattern(/^\+?1?\d{9,15}$/)]],
       address: [""],
       city: [""],
       country: [""],
@@ -51,6 +52,26 @@ export class AllUsersComponent {
 
   ngOnInit() {
     this.loadUsers();
+
+    // Ensure proper modal accessibility
+    this.setupModalAccessibility();
+  }
+
+  setupModalAccessibility() {
+    // Wait for the modal element to be available
+    setTimeout(() => {
+      const modalElement = document.getElementById("addUser");
+      if (modalElement) {
+        // Listen for modal show/hide events to manage aria-hidden
+        modalElement.addEventListener('show.bs.modal', () => {
+          modalElement.setAttribute('aria-hidden', 'false');
+        });
+        
+        modalElement.addEventListener('hide.bs.modal', () => {
+          modalElement.setAttribute('aria-hidden', 'true');
+        });
+      }
+    }, 100);
   }
 
   loadUsers() {
@@ -86,6 +107,8 @@ export class AllUsersComponent {
       
       // Set profile image for preview
       this.profileImage = user.profilePicture || this.profileImage;
+      
+      
       // Remove password requirement when editing
       this.addUserForm.get("password")?.clearValidators();
       this.addUserForm.get("password")?.updateValueAndValidity();
@@ -225,7 +248,7 @@ export class AllUsersComponent {
     if (this.isEdit && this.editingUserId) {
       // Update existing user
       this.authService
-        .updateUserByAdmin(this.editingUserId, reqObj)
+        .updateUser(this.editingUserId, reqObj)
         .pipe(finalize(() => (this.loading = false)))
         .subscribe({
           next: (res: any) => {
@@ -273,17 +296,26 @@ export class AllUsersComponent {
     this.editingUserId = null;
     this.showPassword = false;
     this.profileImage = 'https://milodocs.blob.core.windows.net/public-docs/profile-picture.webp';
+    
     this.imgFiles = [];
+    
     // Reset password validators
     this.addUserForm
       .get("password")
       ?.setValidators([Validators.required, Validators.minLength(8)]);
     this.addUserForm.get("password")?.updateValueAndValidity();
+    
+    // Reset phone validators
+    this.addUserForm
+      .get("phone")
+      ?.setValidators([Validators.required, Validators.pattern(/^\+?1?\d{9,15}$/)]);
+    this.addUserForm.get("phone")?.updateValueAndValidity();
   }
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
+
 
   closeModal() {
     const modalElement = document.getElementById("addUser");

@@ -16,6 +16,8 @@ export class PhoneDropdownComponent {
   @Input() loadingIp = false;
   @Input() selectedCountry: any = PHONE_BOOK[231];
   @Input() fullWidth: boolean = false;
+  @Input() customClass: string = '';
+  @Input() disabled: boolean = false;
   @Output() countrySelected = new EventEmitter<any>();
   // constructor(private locationService: LocationService) {}
 

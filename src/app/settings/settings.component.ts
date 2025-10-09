@@ -4,7 +4,6 @@ import { AuthenticationService } from '../_services/authentication.service';
 import { Route, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
-import { PHONE_BOOK } from '../shared/component/phone-dropdown/phone-codes';
 import { ProfileService } from '../_services/profile.service';
 import { LocalStorageService } from '../_services/local-storage.service';
 import { EventService } from '../_services/event.service';
@@ -16,6 +15,7 @@ import { CommonService } from '../_services/common.service';
   styleUrl: './settings.component.scss',
 })
 export class SettingsComponent {
+  loadingIp: boolean = false;
   loading: boolean = false;
   settingsForm!: FormGroup;
   user: any;
@@ -24,7 +24,6 @@ export class SettingsComponent {
   allowedMimes = ['image/jpeg', 'image/webp','image/jpg','image/png'];
   maxSize = 3 * 1024 * 1024;
   widgetImageDetail:any;
-  countries: any = PHONE_BOOK;  
   profileImage = 'https://milodocs.blob.core.windows.net/public-docs/profile-picture.webp';
   initialFormValues: any = {}; // Store initial form values
 
@@ -35,12 +34,13 @@ export class SettingsComponent {
     private toastr: ToastrService,
     private localStorageService: LocalStorageService,
     private eventService: EventService<any>,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private authService: AuthenticationService
   ) {
     this.settingsForm = this.fb.group({
       fullName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', Validators.required],
+      phone: ['', [Validators.required, Validators.pattern(/^\+?1?\d{9,15}$/)]],
       address: [''],
       city: [''],
       country: [''],
@@ -64,6 +64,8 @@ export class SettingsComponent {
     }
   }
 
+
+  
   fetchUserProfile() {
     this.profileService.fetchUserDetail().subscribe({
       next: (response: any) => {
@@ -101,6 +103,7 @@ export class SettingsComponent {
     
     this.settingsForm.patchValue(formData);
     this.profileImage = this.user.profilePicture || this.profileImage;
+    
     
     // Store initial form values for comparison
     this.initialFormValues = { ...formData };
@@ -187,10 +190,10 @@ export class SettingsComponent {
     
     // console.log('Updating user profile with:', reqObj);
     
-    this.profileService.updateUser(reqObj)
+    this.authService.updateUser(this.user.id, reqObj)
       .pipe(finalize(() => (this.loading = false)))
       .subscribe({
-        next: (res) => {
+        next: (res: any) => {
           // console.log('Update profile response:', res);
           if (res.success) {
             // Update localStorage with new user data
@@ -294,23 +297,25 @@ export class SettingsComponent {
 				this.toastr.error('File exceeds the maximum size of 10MB.');
 				return;
 			}
-			const reader = new FileReader();
-			reader.onload = (e: any) => {
-				if (type === 'profilePicture') {
-					this.profileImage = e.target.result;
-				}
-			
-			};
-			reader.readAsDataURL(file);
-
-			const existingIndex = this.imgFiles.findIndex((img) => img.type === type);
-
-			if (existingIndex !== -1) {
-				this.imgFiles[existingIndex] = { type, file };
-			} else {
-				this.imgFiles.push({ type, file });
+		const reader = new FileReader();
+		reader.onload = (e: any) => {
+			if (type === 'profilePicture') {
+				this.profileImage = e.target.result;
 			}
+		
+		};
+		reader.readAsDataURL(file);
+
+		const existingIndex = this.imgFiles.findIndex((img) => img.type === type);
+
+		if (existingIndex !== -1) {
+			this.imgFiles[existingIndex] = { type, file };
+		} else {
+			this.imgFiles.push({ type, file });
 		}
 	}
+}
 
+
+ 
 }

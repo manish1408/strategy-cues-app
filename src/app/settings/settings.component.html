@@ -55,27 +55,30 @@
           placeholder="name@example.com"
           formControlName="email"
           [ngClass]="{ 'is-invalid': hasError('email') }"
-          [disabled]="true"
           readonly
         />
         <div class="invalid-feedback">Email is required</div>
       </div>
-    </div>
-    <div class="col-12 col-md-6">
+
+
       <div class="mb-3">
         <label for="phone" class="form-label">Phone Number</label>
         <input
-          type="text"
-          class="form-control"
+          type="tel"
           id="phone"
-          [maxlength]="100"
-          placeholder="Phone Number"
+          class="form-control"
+          placeholder="Enter phone number with country code (e.g., +1234567890)"
           formControlName="phone"
           [ngClass]="{ 'is-invalid': hasError('phone') }"
         />
-        <div class="invalid-feedback">Phone number is required</div>
+        <div class="invalid-feedback" *ngIf="hasError('phone')">
+          <span *ngIf="settingsForm.get('phone')?.errors?.['required']">Phone number is required</span>
+          <span *ngIf="settingsForm.get('phone')?.errors?.['pattern']">Please enter a valid phone number (9-15 digits)</span>
+        </div>
+  
       </div>
     </div>
+    
 
     <div class="col-12 col-md-6">
       <div class="mb-3">
