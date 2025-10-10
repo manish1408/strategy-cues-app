@@ -39,6 +39,7 @@
   padding: 16px;
   overflow-x: hidden;
   overflow-y: auto;
+  z-index: 1040;
 }
 .top-nav {
   background-color: #1E1E1E;
@@ -146,7 +147,7 @@
   background-color: #ffffff;
   padding-top: 80px;
   position: relative;
-  z-index: 1; /* Lower than header elements */
+  // z-index: 1; /* Lower than header elements */
 }
 
 /* Responsive */
