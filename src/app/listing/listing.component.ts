@@ -705,50 +705,13 @@ export class ListingComponent implements OnInit, OnDestroy {
     this.performSearch();
   }
 
-  scrapeAndMapListing(bookingId: string, airbnbId: string, vrboId: string, pricelabsId: string) {
-    if (!this.operatorId) {
-      this.toastr.error('Operator ID is required');
-      return;
-    }
-
-    if (!bookingId && !airbnbId && !vrboId && !pricelabsId) {
-      this.toastr.error('No valid ID found. Please ensure the listing has at least one platform ID (Booking.com, Airbnb, VRBO, or Pricelabs)');
-      return;
-    }
-
-    // Find the property ID for error handling
-    const matchingProperty = this.allListingList.find((listing: any) => {
-      const listingBookingId = listing?.urls?.BookingId;
-      const listingAirbnbId = listing?.urls?.AirbnbId;
-      const listingVrboId = listing?.urls?.VRBOId;
-      const listingPricelabId = listing?.urls?.PricelabsId;
-      
-      return (bookingId && listingBookingId === bookingId) ||
-             (airbnbId && listingAirbnbId === airbnbId) ||
-             (vrboId && listingVrboId === vrboId) ||
-             (pricelabsId && listingPricelabId === pricelabsId);
-    });
-
-    this.listingService.scrapeAndMapListing(this.operatorId, bookingId, airbnbId, vrboId, pricelabsId).subscribe({
+  scrapeAndMapListing(id: string) {
+    this.listingService.scrapeAndMapListing(id).subscribe({
       next: (res: any) => {
         this.toastr.success(res.data.message || 'Scraping and mapping started successfully');
-        // Start polling for status updates
-        this.fetchUpdatedPropertyStatus(bookingId, airbnbId, vrboId, pricelabsId);
       },
       error: (error: any) => {
         console.error('Scrape and map error:', error);
-        this.toastr.error(`Failed to scrape and map listing for Property ID: ${matchingProperty?.id || 'Unknown'}. ${error.error?.detail || error.message || 'Unknown error'}`);
-        
-        // Update status to scraping error
-        if (matchingProperty && matchingProperty.id) {
-          this.propertyStatuses[matchingProperty.id] = {
-            propertyId: matchingProperty.id,
-            operatorId: this.operatorId!,
-            syncStatus: 'error_in_scraping',
-            mappingStatus: 'error_in_scraping',
-            lastUpdated: new Date()
-          };
-        }
       }
     });
   }

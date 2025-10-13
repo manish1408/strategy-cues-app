@@ -59,26 +59,10 @@ export class ListingService {
     return this.http.get<any>(`${this._url}/get-property/${propertyId}`, { params });
   }
 
-  scrapeAndMapListing(operatorId: string, bookingId?: string, airbnbId?: string, vrboId?: string, pricelabsId?: string): Observable<any> {
+  scrapeAndMapListing( id: string): Observable<any> {
     const payload: any = {
-      operatorId: operatorId
+      id: id
     };
-
-    if (bookingId) {
-      payload.bookingId = bookingId;
-    }
-
-    if (airbnbId) {
-      payload.airbnbId = airbnbId;
-    }
-
-    if (vrboId) {
-      payload.vrboId = vrboId;
-    }
-
-    if (pricelabsId) {
-      payload.pricelabsId = pricelabsId;
-    }
 
     return this.http.post<any>(`${this._url}/scrape-and-map-listing`, payload);
   }
