@@ -3338,3 +3338,16 @@ $transition: all 0.3s ease;
 }
 
 
+.pickup-case {
+  padding: 0.5rem;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  background-color: #f8f9fa;
+  color: #6c757d;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  .action-badge {
+    color: #008a7e;
+  }
+}
