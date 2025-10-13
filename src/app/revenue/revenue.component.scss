@@ -1395,6 +1395,26 @@ $transition: all 0.3s ease;
           cursor: not-allowed;
         }
       }
+    }
+  }
+
+  // Sync checkbox styling - black checkbox
+  .sync-checkbox {
+    cursor: not-allowed !important;
+    
+    &:checked {
+      background-color: #000000 !important;
+      border-color: #000000 !important;
+    }
+
+    &:disabled {
+      opacity: 1 !important;
+    }
+  }
+
+  // Override global dropdown-item styles specifically for this dropdown
+  .dropdown-item {
+    cursor: default !important;
 
       .form-check-label {
           font-size: var(--font-size-xs);
@@ -1439,7 +1459,6 @@ $transition: all 0.3s ease;
       color: inherit !important;
     }
   }
-}
 
 // Export and controls button styling
 .d-flex.gap-2 {

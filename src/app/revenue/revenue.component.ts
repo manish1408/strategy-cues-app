@@ -221,6 +221,7 @@ export class RevenueComponent implements OnInit {
   // Column visibility properties
   columnVisibility = {
     propertyName: true,
+    sync: true,
     occupancyTM: true,
     occupancyNM: true,
     adr: true,
@@ -2413,6 +2414,7 @@ export class RevenueComponent implements OnInit {
   resetToDefaultColumns(): void {
     this.columnVisibility = {
       propertyName: true,
+      sync: true,
       occupancyTM: true,
       occupancyNM: true,
       adr: true,
