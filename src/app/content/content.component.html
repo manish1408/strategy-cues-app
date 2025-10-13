@@ -67,7 +67,7 @@
                 <th>Property</th>
                 <th>Your Photos</th>
                 <th>Reviews</th>
-                <th>Photo Gap</th>
+                <!-- <th>Photo Gap</th> -->
                 <th>Caption Status</th>
                 <th>Deep Dive</th>
               </tr>
@@ -255,60 +255,7 @@
                           </div> -->
                         </div>
                       </td>
-                      <td class="gap-cell">
-                        <div class="platform-gaps">
-                          <!-- Airbnb Photo Gap -->
-                          <div class="platform-gap airbnb-gap" [ngClass]="hasCompetitors(property) ? getPlatformGapClass(getAirbnbPhotoGap(property)) : 'gap-no-competitor'">
-                            <div class="platform-icon">
-                              <i class="fab fa-airbnb"></i>
-                            </div>
-                            <div class="gap-info" *ngIf="hasCompetitors(property)">
-                              <span class="gap-number">{{Math.abs(getAirbnbPhotoGap(property))}}</span>
-                              <span class="gap-direction">{{getAirbnbPhotoGap(property) > 0 ? 'behind' : 'ahead'}}</span>
-                            </div>
-                            <div class="gap-info no-competitor-text" *ngIf="!hasCompetitors(property)">
-                              <span class="gap-text">No Competitor</span>
-                            </div>
-                          </div>
-                          
-                          <!-- Booking.com Photo Gap -->
-                          <div class="platform-gap booking-gap" [ngClass]="hasCompetitors(property) ? getPlatformGapClass(getBookingPhotoGap(property)) : 'gap-no-competitor'">
-                            <div class="platform-icon">
-                              <i class="fas fa-bed"></i>
-                            </div>
-                            <div class="gap-info" *ngIf="hasCompetitors(property)">
-                              <span class="gap-number">{{Math.abs(getBookingPhotoGap(property))}}</span>
-                              <span class="gap-direction">{{getBookingPhotoGap(property) > 0 ? 'behind' : 'ahead'}}</span>
-                            </div>
-                            <div class="gap-info no-competitor-text" *ngIf="!hasCompetitors(property)">
-                              <span class="gap-text">No Competitor</span>
-                            </div>
-                          </div>
-
-                          <!-- Pricelab Photo Gap - commented out for future use
-                          <div class="platform-gap pricelab-gap" [ngClass]="getPlatformGapClass(getPricelabPhotoGap(property))">
-                            <div class="platform-icon">
-                              <i class="fas fa-chart-line"></i>
-                            </div>
-                            <div class="gap-info">
-                              <span class="gap-number">{{Math.abs(getPricelabPhotoGap(property))}}</span>
-                              <span class="gap-direction">{{getPricelabPhotoGap(property) > 0 ? 'behind' : 'ahead'}}</span>
-                            </div>
-                          </div>
-                          -->
-                          
-                          <!-- VRBO Photo Gap -->
-                          <!-- <div class="platform-gap vrbo-gap" [ngClass]="getPlatformGapClass(getVrboPhotoGap(property))">
-                            <div class="platform-icon">
-                              <i class="fas fa-home"></i>
-                            </div>
-                            <div class="gap-info">
-                              <span class="gap-number">{{Math.abs(getVrboPhotoGap(property))}}</span>
-                              <span class="gap-direction">{{getVrboPhotoGap(property) > 0 ? 'behind' : 'ahead'}}</span>
-                            </div>
-                          </div> -->
-                        </div>
-                      </td>
+                     
                       <td class="caption-cell">
                         <div class="platform-captions">
                           <!-- Airbnb Caption Status -->

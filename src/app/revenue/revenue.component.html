@@ -177,7 +177,7 @@
                   <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
                     <input class="form-check-input" type="checkbox" id="col-adr" [(ngModel)]="columnVisibility.adr">
                     <label class="form-check-label">
-                      ADR
+                      Average Daily Rate
                     </label>
                   </div>
 
@@ -192,7 +192,7 @@
                   <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
                     <input class="form-check-input" type="checkbox" id="col-mpi" [(ngModel)]="columnVisibility.mpi">
                     <label class="form-check-label">
-                      MPI
+                      Market Penetration Index
                     </label>
                   </div>
 
@@ -513,9 +513,9 @@
             <td *ngIf="columnVisibility.adr">
               <div class="dual-value-cell">
                 <div class="value-pair" *ngIf="property.ADR">
-                  <span class="badge badge-light-gray me-1">TM: {{ property.ADR.TM || 'N/A'
+                  <span class="badge badge-light-gray me-1">This Month: {{ property.ADR.TM || 'N/A'
                     }}</span>
-                  <span class="badge badge-light-gray">NM: {{ property.ADR.NM || 'N/A'
+                  <span class="badge badge-light-gray">Next Month: {{ property.ADR.NM || 'N/A'
                     }}</span>
                 </div>
                 <div class="value-pair" *ngIf="!property.ADR">
@@ -526,9 +526,9 @@
             <td *ngIf="columnVisibility.revpar">
               <div class="dual-value-cell">
                 <div class="value-pair" *ngIf="property.RevPAR">
-                  <span class="badge badge-light-gray me-1">TM: {{ property.RevPAR.TM || 'N/A'
+                  <span class="badge badge-light-gray me-1">This Month: {{ property.RevPAR.TM || 'N/A'
                     }}</span>
-                  <span class="badge badge-light-gray">NM: {{ property.RevPAR.NM || 'N/A'
+                  <span class="badge badge-light-gray">Next Month: {{ property.RevPAR.NM || 'N/A'
                     }}</span>
                 </div>
                 <div class="value-pair" *ngIf="!property.RevPAR">
@@ -539,9 +539,9 @@
             <td *ngIf="columnVisibility.mpi">
               <div class="dual-value-cell">
                 <div class="value-pair" *ngIf="property.MPI">
-                  <span class="badge badge-light-gray me-1">TM: {{ safeParseNumber(property.MPI.TM) }}%</span>
-                  <span class="badge badge-light-gray me-1">NM: {{ safeParseNumber(property.MPI.NM) }}%</span>
-                  <span class="badge badge-light-gray me-1">LYTM: {{ safeParseNumber(property.MPI.LYTM) }}%</span>
+                  <span class="badge badge-light-gray me-1">This Month: {{ safeParseNumber(property.MPI.TM) }}%</span>
+                  <span class="badge badge-light-gray me-1">Next Month: {{ safeParseNumber(property.MPI.NM) }}%</span>
+                  <span class="badge badge-light-gray me-1">Last Year This Month: {{ safeParseNumber(property.MPI.LYTM) }}%</span>
                 </div>
                 <div class="value-pair" *ngIf="!property.MPI">
                   <span class="text-muted">N/A</span>
@@ -776,7 +776,7 @@
                 </div>
 
                 <!-- VRBO Policy -->
-                <div class="policy-item" *ngIf="property.CXL_Policy?.VRBO">
+                <!-- <div class="policy-item" *ngIf="property.CXL_Policy?.VRBO">
                   <i class="fas fa-home text-warning"></i>
                   <div class="policy-details">
                     <div class="policy-type">{{ property.CXL_Policy.VRBO?.type }}</div>
@@ -785,7 +785,7 @@
                       Free until: {{ property.CXL_Policy.VRBO?.free_cancellation_until }}
                     </div>
                   </div>
-                </div>
+                </div> -->
                 <div class="policy-item no-policy" *ngIf="!property.CXL_Policy?.VRBO">
                   <i class="fas fa-home text-muted"></i>
                   <span class="no-policy-type" style="font-size: var(--font-size-xs);">No policy</span>
