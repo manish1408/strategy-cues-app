@@ -62,8 +62,8 @@ renderer.link = (href: string, title: string, text: string) => {
     MultiFilterComponent,
     WarningModalComponent,
     EmptyStateComponent,
-    FormatTextPipe
-   
+    FormatTextPipe,
+    SelectDropDownModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
