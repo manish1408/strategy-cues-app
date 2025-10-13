@@ -26,157 +26,156 @@
     <div class="tab-pane" [class.active]="activeTab === 'cues'" *ngIf="activeTab === 'cues'">
       <div class="deployment-cues-container">
         <div class="deployment-cues-grid">
-          <!-- Demo Cue Card 1 -->
+          <!-- Deployment Cues 1 -->
           <div class="cue-card">
             <div class="cue-card-header">
               <div class="cue-card-title">
-                <h6>Low Occupancy Alert</h6>
-                <span class="badge bg-secondary">Active</span>
+                <h6>Deployment Cues 1</h6>
+                <span class="badge bg-secondary">Critical</span>
               </div>
               <div class="cue-card-actions">
-                <button class="btn btn-sm btn-outline-primary me-1" (click)="openCueFormModal('cue1')" title="Edit">
+                <button class="btn btn-sm btn-outline-primary me-1" (click)="openCueFormModal('deployment1')" title="Edit">
                   <i class="fas fa-edit"></i>
                 </button>
-                <button class="btn btn-sm btn-outline-danger" (click)="deleteCue('cue1')" title="Delete">
+                <button class="btn btn-sm btn-outline-danger" (click)="deleteCue('deployment1')" title="Delete">
                   <i class="fas fa-trash"></i>
                 </button>
               </div>
             </div>
             <div class="cue-card-body">
-              <div class="cue-properties">
-                <strong>Properties:</strong>
-                <div class="mt-1">
-                  <span class="badge bg-light text-dark me-1 mb-1">Sunset Beach Villa</span>
-                  <span class="badge bg-light text-dark me-1 mb-1">Downtown Luxury Apartment</span>
+              <div class="cue-conditions">
+                <div class="condition-row">
+                  <strong>Days left:</strong> 45-28
+                </div>
+                <div class="condition-row">
+                  <strong>Base occupancy:</strong> 20%
                 </div>
               </div>
-              <div class="cue-description">
-                <strong>Description:</strong> Property occupancy below 30% for the current month
-              </div>
-              <div class="cue-actions-list">
-                <strong>Actions:</strong>
-                <div class="mt-2">
-                  <span class="badge bg-secondary me-1">Adjust Pricing</span>
-                  <span class="badge bg-secondary me-1">Promote Listing</span>
-                  <span class="badge bg-secondary me-1">Review Calendar</span>
+              <div class="cue-pickup-cases">
+                <div class="pickup-case">
+                  <strong>Pickup Case 1:</strong> 0
+                  <div class="action-badge">Reduce the month by 15%</div>
+                </div>
+                <div class="pickup-case">
+                  <strong>Pickup Case 2:</strong> 1-10% in last 7 days
+                  <div class="action-badge">Reduce the month by 10%</div>
+                </div>
+                <div class="pickup-case">
+                  <strong>Pickup Case 3:</strong> 10-20%
+                  <div class="action-badge">No change</div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Demo Cue Card 2 -->
+          <!-- Deployment Cues 2 -->
           <div class="cue-card">
             <div class="cue-card-header">
               <div class="cue-card-title">
-                <h6>High Demand Period</h6>
-                <span class="badge bg-secondary">Active</span>
+                <h6>Deployment Cues 2</h6>
+                <span class="badge bg-secondary">Critical</span>
               </div>
               <div class="cue-card-actions">
-                <button class="btn btn-sm btn-outline-primary me-1" (click)="openCueFormModal('cue2')" title="Edit">
+                <button class="btn btn-sm btn-outline-primary me-1" (click)="openCueFormModal('deployment2')" title="Edit">
                   <i class="fas fa-edit"></i>
                 </button>
-                <button class="btn btn-sm btn-outline-danger" (click)="deleteCue('cue2')" title="Delete">
+                <button class="btn btn-sm btn-outline-danger" (click)="deleteCue('deployment2')" title="Delete">
                   <i class="fas fa-trash"></i>
                 </button>
               </div>
             </div>
             <div class="cue-card-body">
-              <div class="cue-properties">
-                <strong>Properties:</strong>
-                <div class="mt-1">
-                  <span class="badge bg-light text-dark me-1 mb-1">Downtown Luxury Apartment</span>
-                  <span class="badge bg-light text-dark me-1 mb-1">Beachfront Bungalow</span>
-                  <span class="badge bg-light text-dark me-1 mb-1">Mountain View Cabin</span>
+              <div class="cue-conditions">
+                <div class="condition-row">
+                  <strong>Days left:</strong> 27-20
+                </div>
+                <div class="condition-row">
+                  <strong>Base occupancy:</strong> 40%
                 </div>
               </div>
-              <div class="cue-description">
-                <strong>Description:</strong> High booking demand detected for upcoming holiday season
-              </div>
-              <div class="cue-actions-list">
-                <strong>Actions:</strong>
-                <div class="mt-2">
-                  <span class="badge bg-secondary me-1">Increase Rate</span>
-                  <span class="badge bg-secondary me-1">Update Availability</span>
+              <div class="cue-pickup-cases">
+                <div class="pickup-case">
+                  <strong>Pickup Case 1:</strong> 0
+                  <div class="action-badge">Reduce the month by 10%</div>
+                </div>
+                <div class="pickup-case">
+                  <strong>Pickup Case 2:</strong> 1-10% in last 7 days
+                  <div class="action-badge">Reduce the weekdays by 10%</div>
+                </div>
+                <div class="pickup-case">
+                  <strong>Pickup Case 3:</strong> 10-20%
+                  <div class="action-badge">Reduce weekdays of next 10 days by 10%</div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Demo Cue Card 3 -->
+          <!-- Deployment Cues 3 -->
           <div class="cue-card">
             <div class="cue-card-header">
               <div class="cue-card-title">
-                <h6>Maintenance Required</h6>
-                <span class="badge bg-secondary">Urgent</span>
+                <h6>Deployment Cues 3</h6>
+                <span class="badge bg-secondary">Critical</span>
               </div>
               <div class="cue-card-actions">
-                <button class="btn btn-sm btn-outline-primary me-1" (click)="openCueFormModal('cue3')" title="Edit">
+                <button class="btn btn-sm btn-outline-primary me-1" (click)="openCueFormModal('deployment3')" title="Edit">
                   <i class="fas fa-edit"></i>
                 </button>
-                <button class="btn btn-sm btn-outline-danger" (click)="deleteCue('cue3')" title="Delete">
+                <button class="btn btn-sm btn-outline-danger" (click)="deleteCue('deployment3')" title="Delete">
                   <i class="fas fa-trash"></i>
                 </button>
               </div>
             </div>
             <div class="cue-card-body">
-              <div class="cue-properties">
-                <strong>Properties:</strong>
-                <div class="mt-1">
-                  <span class="badge bg-light text-dark me-1 mb-1">Mountain View Cabin</span>
+              <div class="cue-conditions">
+                <div class="condition-row">
+                  <strong>Days left:</strong> 19-10
+                </div>
+                <div class="condition-row">
+                  <strong>Base occupancy:</strong> 60%
                 </div>
               </div>
-              <div class="cue-description">
-                <strong>Description:</strong> Scheduled maintenance and inspection required
-              </div>
-              <div class="cue-actions-list">
-                <strong>Actions:</strong>
-                <div class="mt-2">
-                  <span class="badge bg-secondary me-1">Schedule Service</span>
-                  <span class="badge bg-secondary me-1">Block Dates</span>
+              <div class="cue-pickup-cases">
+                <div class="pickup-case">
+                  <strong>Pickup Case 1:</strong> 0
+                  <div class="action-badge">Reduce the month by 15%</div>
+                </div>
+                <div class="pickup-case">
+                  <strong>Pickup Case 2:</strong> 1-10% in last 7 days
+                  <div class="action-badge">Reduce by 10%</div>
+                </div>
+                <div class="pickup-case">
+                  <strong>Pickup Case 3:</strong> 10-20%
+                  <div class="action-badge">Reduce weekdays by 10%</div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Demo Cue Card 4 -->
+          <!-- Deployment Last minute 1 -->
           <div class="cue-card">
             <div class="cue-card-header">
               <div class="cue-card-title">
-                <h6>Price Optimization</h6>
-                <span class="badge bg-secondary">Pending</span>
+                <h6>Deployment Last minute 1</h6>
+                <span class="badge bg-secondary">Critical</span>
               </div>
               <div class="cue-card-actions">
-                <button class="btn btn-sm btn-outline-primary me-1" (click)="openCueFormModal('cue4')" title="Edit">
+                <button class="btn btn-sm btn-outline-primary me-1" (click)="openCueFormModal('lastminute1')" title="Edit">
                   <i class="fas fa-edit"></i>
                 </button>
-                <button class="btn btn-sm btn-outline-danger" (click)="deleteCue('cue4')" title="Delete">
+                <button class="btn btn-sm btn-outline-danger" (click)="deleteCue('lastminute1')" title="Delete">
                   <i class="fas fa-trash"></i>
                 </button>
               </div>
             </div>
             <div class="cue-card-body">
-              <div class="cue-properties">
-                <strong>Properties:</strong>
-                <div class="mt-1">
-                  <span class="badge bg-light text-dark me-1 mb-1">Beachfront Bungalow</span>
-                  <span class="badge bg-light text-dark me-1 mb-1">Sunset Beach Villa</span>
-                  <span class="badge bg-light text-dark me-1 mb-1">Downtown Luxury Apartment</span>
-                  <span class="badge bg-light text-dark me-1 mb-1">Mountain View Cabin</span>
-                </div>
-              </div>
-              <div class="cue-description">
-                <strong>Description:</strong> Review and optimize pricing strategy based on market trends
-              </div>
               <div class="cue-actions-list">
-                <strong>Actions:</strong>
-                <div class="mt-2">
-                  <span class="badge bg-secondary me-1">Analyze Competition</span>
-                  <span class="badge bg-secondary me-1">Update Rates</span>
-                  <span class="badge bg-secondary me-1">Set Dynamic Pricing</span>
-                </div>
+                <strong>Action:</strong>
+                <div class="action-badge">Drop next 7 days by 10%</div>
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </div>
