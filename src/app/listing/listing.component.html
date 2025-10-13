@@ -107,24 +107,24 @@
                         </span>
 
                         <!-- VRBO Link -->
-                        <a *ngIf="listing?.urls?.VRBOUrl" [href]="listing?.urls?.VRBOUrl" target="_blank"
+                        <!-- <a *ngIf="listing?.urls?.VRBOUrl" [href]="listing?.urls?.VRBOUrl" target="_blank"
                           class="platform-link vrbo" title="View on VRBO">
                           <i class="fas fa-home"></i>
                         </a>
                         <span *ngIf="!listing?.urls?.VRBOUrl" class="platform-link vrbo disabled"
                           title="No VRBO URL available">
                           <i class="fas fa-home"></i>
-                        </span>
+                        </span> -->
 
                         <!-- Pricelab Link -->
-                        <a *ngIf="listing?.urls?.PricelabsUrl" [href]="listing?.urls?.PricelabsUrl" target="_blank"
+                        <!-- <a *ngIf="listing?.urls?.PricelabsUrl" [href]="listing?.urls?.PricelabsUrl" target="_blank"
                           class="platform-link pricelab" title="View on Pricelab">
                           <i class="fas fa-chart-line"></i>
                         </a>
                         <span *ngIf="!listing?.urls?.PricelabsUrl" class="platform-link pricelab disabled"
                           title="No Pricelab URL available">
                           <i class="fas fa-chart-line"></i>
-                        </span>
+                        </span> -->
                       </div>
                     </div>
                   </div>
@@ -162,12 +162,12 @@
                   <img src="assets/icons/trash.svg" (click)="deleteListing(listing?.id)" class="cursor-pointer me-2" />
 
                   <!-- Scrape and Map Button -->
-                  <img src="assets/icons/sync.svg" style="width: 28px; height: 28px;" class="me-2"
+                  <!-- <img src="assets/icons/sync.svg" style="width: 28px; height: 28px;" class="me-2"
                     [class.cursor-pointer]="!isScrapeAndMapDisabled(listing?.id)"
                     [class.cursor-not-allowed]="isScrapeAndMapDisabled(listing?.id)"
                     [style.opacity]="isScrapeAndMapDisabled(listing?.id) ? '0.5' : '1'"
                     [title]="'Scrape and Map: ' + getCombinedStatusText(listing?.id)"
-                    (click)="!isScrapeAndMapDisabled(listing?.id) && scrapeAndMapListing(listing?.urls?.BookingId, listing?.urls?.AirbnbId, listing?.urls?.VRBOId, listing?.urls?.PricelabsId)" />
+                    (click)="!isScrapeAndMapDisabled(listing?.id) && scrapeAndMapListing(listing?.urls?.BookingId, listing?.urls?.AirbnbId, listing?.urls?.VRBOId, listing?.urls?.PricelabsId)" /> -->
 
                 </td>
               </tr>
