@@ -500,9 +500,9 @@
             <td *ngIf="columnVisibility.adr">
               <div class="dual-value-cell">
                 <div class="value-pair" *ngIf="property.ADR">
-                  <span class="badge badge-light-gray me-1">TM: ${{ property.ADR.TM || 'N/A'
+                  <span class="badge badge-light-gray me-1">TM: {{ property.ADR.TM || 'N/A'
                     }}</span>
-                  <span class="badge badge-light-gray">NM: ${{ property.ADR.NM || 'N/A'
+                  <span class="badge badge-light-gray">NM: {{ property.ADR.NM || 'N/A'
                     }}</span>
                 </div>
                 <div class="value-pair" *ngIf="!property.ADR">
@@ -513,9 +513,9 @@
             <td *ngIf="columnVisibility.revpar">
               <div class="dual-value-cell">
                 <div class="value-pair" *ngIf="property.RevPAR">
-                  <span class="badge badge-light-gray me-1">TM: ${{ property.RevPAR.TM || 'N/A'
+                  <span class="badge badge-light-gray me-1">TM: {{ property.RevPAR.TM || 'N/A'
                     }}</span>
-                  <span class="badge badge-light-gray">NM: ${{ property.RevPAR.NM || 'N/A'
+                  <span class="badge badge-light-gray">NM: {{ property.RevPAR.NM || 'N/A'
                     }}</span>
                 </div>
                 <div class="value-pair" *ngIf="!property.RevPAR">
@@ -909,8 +909,8 @@
                     <label class="form-label">ADR Range (TM)</label>
                     <div class="range-slider-container">
                       <div class="range-values">
-                        <span class="min-value">${{ tempAdrMin || adrMinRange }}</span>
-                        <span class="max-value">${{ tempAdrMax || adrMaxRange }}</span>
+                        <span class="min-value">{{ tempAdrMin || adrMinRange }}</span>
+                        <span class="max-value">{{ tempAdrMax || adrMaxRange }}</span>
                       </div>
                       <div class="dual-range-slider">
                         <input type="range" [min]="adrMinRange" [max]="adrMaxRange" [value]="tempAdrMin || adrMinRange"
@@ -926,8 +926,8 @@
                     <label class="form-label">RevPAR Range (TM)</label>
                     <div class="range-slider-container">
                       <div class="range-values">
-                        <span class="min-value">${{ tempRevparMin || revparMinRange }}</span>
-                        <span class="max-value">${{ tempRevparMax || revparMaxRange }}</span>
+                        <span class="min-value">{{ tempRevparMin || revparMinRange }}</span>
+                        <span class="max-value">{{ tempRevparMax || revparMaxRange }}</span>
                       </div>
                       <div class="dual-range-slider">
                         <input type="range" [min]="revparMinRange" [max]="revparMaxRange"
