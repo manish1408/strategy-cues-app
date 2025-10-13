@@ -60,11 +60,10 @@ export class ListingService {
   }
 
   scrapeAndMapListing( id: string): Observable<any> {
-    const payload: any = {
-      id: id
-    };
+    const params = new HttpParams()
+      .set('id', id);
 
-    return this.http.post<any>(`${this._url}/scrape-and-map-listing`, payload);
+    return this.http.post<any>(`${this._url}/scrape-and-map-listing`, null, { params });
   }
 
   uploadExcelForListing(file: File, operatorId: string): Observable<any> {
