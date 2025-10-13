@@ -10,31 +10,37 @@
         </div>
         <div class="col-12 col-md-6">
           <div class="d-flex gap-2 float-end">
-            <button class="btn btn-outline-secondary" 
-                    (click)="syncPriceLabsListings()" 
-                    [disabled]="syncPriceLabsLoading">
-              <span *ngIf="syncPriceLabsLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-              Sync PriceLabs Data
+            <button class="btn btn-outline-secondary" (click)="uploadListings()" [disabled]="uploadingFile">
+              <span *ngIf="uploadingFile" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              <i *ngIf="!uploadingFile" class="fas fa-upload me-2"></i>
+              {{ uploadingFile ? 'Uploading...' : 'Upload Listings' }}
             </button>
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addListing">
               Add Listing
             </button>
           </div>
+          <!-- Hidden file input -->
+          <input 
+            #fileInput 
+            type="file" 
+            accept=".xlsx,.xls" 
+            (change)="onFileSelected($event)" 
+            style="display: none;"
+          />
         </div>
       </div>
-      
+
       <!-- Search Bar -->
       <div class="row">
         <div class="col-12 col-md-6">
           <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search by property name ..."
-              [(ngModel)]="searchTerm" (keyup.enter)="performSearch()">
-            <span *ngIf="searchTerm" (click)="searchTerm = ''; performSearch()" class="cursor-pointer input-group-text" 
-                  title="Clear search">
+            <input type="text" class="form-control" placeholder="Search by property name ..." [(ngModel)]="searchTerm"
+              (keyup.enter)="performSearch()">
+            <span *ngIf="searchTerm" (click)="searchTerm = ''; performSearch()" class="cursor-pointer input-group-text"
+              title="Clear search">
               <i class="fas fa-times"></i>
             </span>
-            <span (click)="performSearch()" class="cursor-pointer input-group-text" 
-                  title="Search">
+            <span (click)="performSearch()" class="cursor-pointer input-group-text" title="Search">
               <i class="fas fa-search"></i>
             </span>
           </div>
@@ -61,7 +67,7 @@
                 <th style="width: 300px;">Property</th>
                 <th>Booking ID</th>
                 <th>Airbnb ID</th>
-                <th>VRBO ID</th>
+                <!-- <th>VRBO ID</th> -->
                 <th>Pricelab ID</th>
                 <th>Status</th>
                 <th>Action</th>
@@ -69,57 +75,54 @@
             </thead>
             <tbody>
               <tr *ngFor="let listing of allListingList; let i = index">
-               
+
                 <td class="property-cell">
                   <div class="property-info">
                     <div class="property-image">
-                      <img [src]="getListingPropertyImage(listing)" [alt]="getListingPropertyName(listing)" 
-                           (error)="onListingImageError($event)" class="property-thumbnail">
+                      <img [src]="getListingPropertyImage(listing)" [alt]="getListingPropertyName(listing)"
+                        (error)="onListingImageError($event)" class="property-thumbnail">
                     </div>
                     <div class="property-details">
-                      <h4 [title]="getListingPropertyName(listing)" [attr.aria-label]="getListingPropertyName(listing)" class="property-title">{{ getListingPropertyName(listing) }}</h4>
+                      <h4 [title]="getListingPropertyName(listing)" [attr.aria-label]="getListingPropertyName(listing)"
+                        class="property-title">{{ getListingPropertyName(listing) }}</h4>
                       <div class="property-links">
                         <!-- Booking.com Link -->
-                        <a *ngIf="listing?.urls?.BookingUrl" 
-                           [href]="listing?.urls?.BookingUrl" 
-                           target="_blank" class="platform-link booking" title="View on Booking.com">
+                        <a *ngIf="listing?.urls?.BookingUrl" [href]="listing?.urls?.BookingUrl" target="_blank"
+                          class="platform-link booking" title="View on Booking.com">
                           <i class="fas fa-bed"></i>
                         </a>
-                        <span *ngIf="!listing?.urls?.BookingUrl" 
-                              class="platform-link booking disabled" title="No Booking.com URL available">
+                        <span *ngIf="!listing?.urls?.BookingUrl" class="platform-link booking disabled"
+                          title="No Booking.com URL available">
                           <i class="fas fa-bed"></i>
                         </span>
-                        
+
                         <!-- Airbnb Link -->
-                        <a *ngIf="listing?.urls?.AirbnbUrl" 
-                           [href]="listing?.urls?.AirbnbUrl" 
-                           target="_blank" class="platform-link airbnb" title="View on Airbnb">
+                        <a *ngIf="listing?.urls?.AirbnbUrl" [href]="listing?.urls?.AirbnbUrl" target="_blank"
+                          class="platform-link airbnb" title="View on Airbnb">
                           <i class="fab fa-airbnb"></i>
                         </a>
-                        <span *ngIf="!listing?.urls?.AirbnbUrl" 
-                              class="platform-link airbnb disabled" title="No Airbnb URL available">
+                        <span *ngIf="!listing?.urls?.AirbnbUrl" class="platform-link airbnb disabled"
+                          title="No Airbnb URL available">
                           <i class="fab fa-airbnb"></i>
                         </span>
-                        
+
                         <!-- VRBO Link -->
-                        <a *ngIf="listing?.urls?.VRBOUrl" 
-                           [href]="listing?.urls?.VRBOUrl" 
-                           target="_blank" class="platform-link vrbo" title="View on VRBO">
+                        <a *ngIf="listing?.urls?.VRBOUrl" [href]="listing?.urls?.VRBOUrl" target="_blank"
+                          class="platform-link vrbo" title="View on VRBO">
                           <i class="fas fa-home"></i>
                         </a>
-                        <span *ngIf="!listing?.urls?.VRBOUrl" 
-                              class="platform-link vrbo disabled" title="No VRBO URL available">
+                        <span *ngIf="!listing?.urls?.VRBOUrl" class="platform-link vrbo disabled"
+                          title="No VRBO URL available">
                           <i class="fas fa-home"></i>
                         </span>
-                        
+
                         <!-- Pricelab Link -->
-                        <a *ngIf="listing?.urls?.PricelabsUrl" 
-                           [href]="listing?.urls?.PricelabsUrl" 
-                           target="_blank" class="platform-link pricelab" title="View on Pricelab">
+                        <a *ngIf="listing?.urls?.PricelabsUrl" [href]="listing?.urls?.PricelabsUrl" target="_blank"
+                          class="platform-link pricelab" title="View on Pricelab">
                           <i class="fas fa-chart-line"></i>
                         </a>
-                        <span *ngIf="!listing?.urls?.PricelabsUrl" 
-                              class="platform-link pricelab disabled" title="No Pricelab URL available">
+                        <span *ngIf="!listing?.urls?.PricelabsUrl" class="platform-link pricelab disabled"
+                          title="No Pricelab URL available">
                           <i class="fas fa-chart-line"></i>
                         </span>
                       </div>
@@ -128,9 +131,9 @@
                 </td>
                 <td>{{ listing?.urls?.BookingId || 'N/A' }}</td>
                 <td>{{ listing?.urls?.AirbnbId || 'N/A' }}</td>
-                <td>{{ listing?.urls?.VRBOId || 'N/A' }}</td>
+                <!-- <td>{{ listing?.urls?.VRBOId || 'N/A' }}</td> -->
                 <td>{{ listing?.urls?.PricelabsId || 'N/A' }}</td>
-                
+
                 <!-- Combined Status Column -->
                 <td>
                   <!-- Loading State -->
@@ -140,13 +143,13 @@
                     </div>
                     <small class="text-muted">Loading...</small>
                   </div>
-                  
+
                   <!-- Combined Status Badge -->
                   <div *ngIf="!isStatusLoading(listing?.id)" class="d-flex align-items-center gap-1">
-                    <span class="badge" 
-                          [class]="getCombinedStatusClass(listing?.id)">
-                        <i class="fas fa-cogs me-1" 
-                           [class.fa-spin]="isPollingActive(listing?.id) && (getCombinedStatusText(listing?.id) === 'scraping_in_progress' || getCombinedStatusText(listing?.id) === 'mapping_in_progress')"></i>{{ getCombinedStatusText(listing?.id) }}
+                    <span class="badge" [class]="getCombinedStatusClass(listing?.id)">
+                      <i class="fas fa-cogs me-1"
+                        [class.fa-spin]="isPollingActive(listing?.id) && (getCombinedStatusText(listing?.id) === 'scraping_in_progress' || getCombinedStatusText(listing?.id) === 'mapping_in_progress')"></i>{{
+                      getCombinedStatusText(listing?.id) }}
                     </span>
                     <small *ngIf="isPollingActive(listing?.id)" class="text-muted">
                       <i class="fas fa-circle" style="font-size: 6px; color: #28a745;"></i> Live
@@ -154,25 +157,23 @@
                   </div>
                 </td>
                 <td>
-                  <img src="assets/icons/edit.svg" class="cursor-pointer me-2" data-bs-toggle="modal" data-bs-target="#addListing" (click)="editListing(listing)" />
+                  <img src="assets/icons/edit.svg" class="cursor-pointer me-2" data-bs-toggle="modal"
+                    data-bs-target="#addListing" (click)="editListing(listing)" />
                   <img src="assets/icons/trash.svg" (click)="deleteListing(listing?.id)" class="cursor-pointer me-2" />
-                  
+
                   <!-- Scrape and Map Button -->
-                  <img 
-                    src="assets/icons/sync.svg" 
-                    style="width: 28px; height: 28px;" 
-                    class="me-2"
+                  <img src="assets/icons/sync.svg" style="width: 28px; height: 28px;" class="me-2"
                     [class.cursor-pointer]="!isScrapeAndMapDisabled(listing?.id)"
                     [class.cursor-not-allowed]="isScrapeAndMapDisabled(listing?.id)"
                     [style.opacity]="isScrapeAndMapDisabled(listing?.id) ? '0.5' : '1'"
                     [title]="'Scrape and Map: ' + getCombinedStatusText(listing?.id)"
                     (click)="!isScrapeAndMapDisabled(listing?.id) && scrapeAndMapListing(listing?.urls?.BookingId, listing?.urls?.AirbnbId, listing?.urls?.VRBOId, listing?.urls?.PricelabsId)" />
-               
-                  </td>
+
+                </td>
               </tr>
             </tbody>
           </table>
-          
+
           <!-- Loading More Indicator -->
           <div *ngIf="isLoadingMore" class="text-center py-3">
             <div class="spinner-border spinner-border-sm text-primary" role="status">
@@ -180,7 +181,7 @@
             </div>
             <p class="mt-2 text-muted small">Loading more listings...</p>
           </div>
-          
+
           <!-- No More Data Indicator -->
           <div *ngIf="!hasMoreData && allListingList.length > 0 && !isLoadingMore" class="text-center py-3">
             <p class="text-muted small">No more listings to load</p>
@@ -190,27 +191,22 @@
     </div>
 
     <!-- Show empty state when no listings -->
-  <div *ngIf="!allListingList || allListingList.length === 0" class="mt-5 text-center">
-    <div class="card-body">
-      <h5 class="card-title mb-3">No Listings Found</h5>
-      <p class="card-text">No listings found yet. Click on "Add Listing" to add a new listing.</p>
+    <div *ngIf="!allListingList || allListingList.length === 0" class="mt-5 text-center">
+      <div class="card-body">
+        <h5 class="card-title mb-3">No Listings Found</h5>
+        <p class="card-text">No listings found yet. Click on "Add Listing" to add a new listing.</p>
+      </div>
     </div>
+
+
+
   </div>
 
 
-   
-  </div>
-
-  
 </div>
 <!-- Add Form Modal -->
-<div
-  class="modal fade"
-  id="addListing"
-  tabindex="-1"
-  aria-hidden="true"
-  >
- 
+<div class="modal fade" id="addListing" tabindex="-1" aria-hidden="true">
+
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content" style="background: white">
       <div class="modal-header">
@@ -223,12 +219,14 @@
         <!-- Tab Navigation -->
         <ul class="nav nav-tabs mb-3" id="listingTabs" role="tablist">
           <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="listing-tab" data-bs-toggle="tab" data-bs-target="#listing" type="button" role="tab" aria-controls="listing" aria-selected="true">
+            <button class="nav-link active" id="listing-tab" data-bs-toggle="tab" data-bs-target="#listing"
+              type="button" role="tab" aria-controls="listing" aria-selected="true">
               <i class="fas fa-home me-2"></i>Listing Details
             </button>
           </li>
           <li class="nav-item" role="presentation">
-            <button class="nav-link" id="competitors-tab" data-bs-toggle="tab" data-bs-target="#competitors" type="button" role="tab" aria-controls="competitors" aria-selected="false">
+            <button class="nav-link" id="competitors-tab" data-bs-toggle="tab" data-bs-target="#competitors"
+              type="button" role="tab" aria-controls="competitors" aria-selected="false">
               <i class="fas fa-users me-2"></i>Competitors
             </button>
           </li>
@@ -244,27 +242,19 @@
                 <div class="row">
                   <div class="col-md-6 mb-2">
                     <label class="form-label">Booking.com ID</label>
-                    <input
-                      type="text"
-                      formControlName="id"
-                      class="form-control"
-                      placeholder="Enter Booking.com ID"
-                      [ngClass]="{ 'is-invalid': hasError('bookingCom.id') }"
-                    />
-                    <div *ngIf="addListingForm.get('bookingCom.id')?.errors?.['required'] && addListingForm.get('bookingCom')?.touched">
+                    <input type="text" formControlName="id" class="form-control" placeholder="Enter Booking.com ID"
+                      [ngClass]="{ 'is-invalid': hasError('bookingCom.id') }" />
+                    <div
+                      *ngIf="addListingForm.get('bookingCom.id')?.errors?.['required'] && addListingForm.get('bookingCom')?.touched">
                       <span class="text-danger">{{ addListingForm.get('bookingCom.id')?.errors?.['required'] }}</span>
                     </div>
                   </div>
                   <div class="col-md-6 mb-2">
                     <label class="form-label">Booking.com URL</label>
-                    <input
-                      type="text"
-                      formControlName="url"
-                      class="form-control"
-                      placeholder="Enter Booking.com URL"
-                      [ngClass]="{ 'is-invalid': hasError('bookingCom.url') }"
-                    />
-                    <div *ngIf="addListingForm.get('bookingCom.url')?.errors?.['required'] && addListingForm.get('bookingCom')?.touched">
+                    <input type="text" formControlName="url" class="form-control" placeholder="Enter Booking.com URL"
+                      [ngClass]="{ 'is-invalid': hasError('bookingCom.url') }" />
+                    <div
+                      *ngIf="addListingForm.get('bookingCom.url')?.errors?.['required'] && addListingForm.get('bookingCom')?.touched">
                       <span class="text-danger">{{ addListingForm.get('bookingCom.url')?.errors?.['required'] }}</span>
                     </div>
                   </div>
@@ -276,27 +266,19 @@
                 <div class="row">
                   <div class="col-md-6 mb-2">
                     <label class="form-label">Airbnb ID</label>
-                    <input
-                      type="text"
-                      formControlName="id"
-                      class="form-control"
-                      placeholder="Enter Airbnb ID"
-                      [ngClass]="{ 'is-invalid': hasError('airbnb.id') }"
-                    />
-                    <div *ngIf="addListingForm.get('airbnb.id')?.errors?.['required'] && addListingForm.get('airbnb')?.touched">
+                    <input type="text" formControlName="id" class="form-control" placeholder="Enter Airbnb ID"
+                      [ngClass]="{ 'is-invalid': hasError('airbnb.id') }" />
+                    <div
+                      *ngIf="addListingForm.get('airbnb.id')?.errors?.['required'] && addListingForm.get('airbnb')?.touched">
                       <span class="text-danger">{{ addListingForm.get('airbnb.id')?.errors?.['required'] }}</span>
                     </div>
                   </div>
                   <div class="col-md-6 mb-2">
                     <label class="form-label">Airbnb URL</label>
-                    <input
-                      type="text"
-                      formControlName="url"
-                      class="form-control"
-                      placeholder="Enter Airbnb URL"
-                      [ngClass]="{ 'is-invalid': hasError('airbnb.url') }"
-                    />
-                    <div *ngIf="addListingForm.get('airbnb.url')?.errors?.['required'] && addListingForm.get('airbnb')?.touched">
+                    <input type="text" formControlName="url" class="form-control" placeholder="Enter Airbnb URL"
+                      [ngClass]="{ 'is-invalid': hasError('airbnb.url') }" />
+                    <div
+                      *ngIf="addListingForm.get('airbnb.url')?.errors?.['required'] && addListingForm.get('airbnb')?.touched">
                       <span class="text-danger">{{ addListingForm.get('airbnb.url')?.errors?.['required'] }}</span>
                     </div>
                   </div>
@@ -308,27 +290,19 @@
                 <div class="row">
                   <div class="col-md-6 mb-2">
                     <label class="form-label">VRBO ID</label>
-                    <input
-                      type="text"
-                      formControlName="id"
-                      class="form-control"
-                      placeholder="Enter VRBO ID"
-                      [ngClass]="{ 'is-invalid': hasError('vrbo.id') }"
-                    />
-                    <div *ngIf="addListingForm.get('vrbo.id')?.errors?.['required'] && addListingForm.get('vrbo')?.touched">
+                    <input type="text" formControlName="id" class="form-control" placeholder="Enter VRBO ID"
+                      [ngClass]="{ 'is-invalid': hasError('vrbo.id') }" />
+                    <div
+                      *ngIf="addListingForm.get('vrbo.id')?.errors?.['required'] && addListingForm.get('vrbo')?.touched">
                       <span class="text-danger">{{ addListingForm.get('vrbo.id')?.errors?.['required'] }}</span>
                     </div>
                   </div>
                   <div class="col-md-6 mb-2">
                     <label class="form-label">VRBO URL</label>
-                    <input
-                      type="text"
-                      formControlName="url"
-                      class="form-control"
-                      placeholder="Enter VRBO URL"
-                      [ngClass]="{ 'is-invalid': hasError('vrbo.url') }"
-                    />
-                    <div *ngIf="addListingForm.get('vrbo.url')?.errors?.['required'] && addListingForm.get('vrbo')?.touched">
+                    <input type="text" formControlName="url" class="form-control" placeholder="Enter VRBO URL"
+                      [ngClass]="{ 'is-invalid': hasError('vrbo.url') }" />
+                    <div
+                      *ngIf="addListingForm.get('vrbo.url')?.errors?.['required'] && addListingForm.get('vrbo')?.touched">
                       <span class="text-danger">{{ addListingForm.get('vrbo.url')?.errors?.['required'] }}</span>
                     </div>
                   </div>
@@ -340,27 +314,19 @@
                 <div class="row">
                   <div class="col-md-6 mb-2">
                     <label class="form-label">Pricelab ID</label>
-                    <input
-                      type="text"
-                      formControlName="id"
-                      class="form-control"
-                      placeholder="Enter Pricelab ID"
-                      [ngClass]="{ 'is-invalid': hasError('pricelab.id') }"
-                    />
-                    <div *ngIf="addListingForm.get('pricelab.id')?.errors?.['required'] && addListingForm.get('pricelab')?.touched">
+                    <input type="text" formControlName="id" class="form-control" placeholder="Enter Pricelab ID"
+                      [ngClass]="{ 'is-invalid': hasError('pricelab.id') }" />
+                    <div
+                      *ngIf="addListingForm.get('pricelab.id')?.errors?.['required'] && addListingForm.get('pricelab')?.touched">
                       <span class="text-danger">{{ addListingForm.get('pricelab.id')?.errors?.['required'] }}</span>
                     </div>
                   </div>
                   <div class="col-md-6 mb-2">
                     <label class="form-label mb-2 text-dark fs-6">Pricelab URL</label>
-                    <input
-                      type="text"
-                      formControlName="url"
-                      class="form-control"
-                      placeholder="Enter Pricelab URL"
-                      [ngClass]="{ 'is-invalid': hasError('pricelab.url') }"
-                    />
-                    <div *ngIf="addListingForm.get('pricelab.url')?.errors?.['required'] && addListingForm.get('pricelab')?.touched">
+                    <input type="text" formControlName="url" class="form-control" placeholder="Enter Pricelab URL"
+                      [ngClass]="{ 'is-invalid': hasError('pricelab.url') }" />
+                    <div
+                      *ngIf="addListingForm.get('pricelab.url')?.errors?.['required'] && addListingForm.get('pricelab')?.touched">
                       <span class="text-danger">{{ addListingForm.get('pricelab.url')?.errors?.['required'] }}</span>
                     </div>
                   </div>
@@ -375,7 +341,7 @@
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <h6 class="mb-0">Competitor Listings</h6>
               </div>
-              
+
               <!-- Loading state for competitors -->
               <div *ngIf="loadingCompetitors" class="text-center py-4">
                 <div class="spinner-border text-primary" role="status">
@@ -383,112 +349,75 @@
                 </div>
                 <p class="mt-2 text-muted">Loading competitors...</p>
               </div>
-              
+
               <div formArrayName="competitors" class="competitors-list" *ngIf="!loadingCompetitors">
-              <div *ngFor="let competitor of competitorsFormArray.controls; let i = index" 
-                   [formGroupName]="i" 
-                   class="competitor-form mb-3 p-3 border rounded">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                  <h6 class="mb-0">Competitor {{ i + 1 }}</h6>
-                  <button type="button" class="btn btn-outline-danger btn-sm" (click)="deleteCompetitor(i)" *ngIf="competitorsFormArray.length > 1">
-                    <i class="fas fa-trash"></i>
-                  </button>
-                </div>
-                
-                <div class="row">
-                  <div class="col-md-6 mb-2">
-                    <label class="form-label">Booking.com ID</label>
-                    <input
-                      type="text"
-                      formControlName="bookingComId"
-                      class="form-control"
-                      placeholder="Enter Booking.com ID"
-                    />
+                <div *ngFor="let competitor of competitorsFormArray.controls; let i = index" [formGroupName]="i"
+                  class="competitor-form mb-3 p-3 border rounded">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6 class="mb-0">Competitor {{ i + 1 }}</h6>
+                    <button type="button" class="btn btn-outline-danger btn-sm" (click)="deleteCompetitor(i)"
+                      *ngIf="competitorsFormArray.length > 1">
+                      <i class="fas fa-trash"></i>
+                    </button>
                   </div>
-                  <div class="col-md-6 mb-2">
-                    <label class="form-label">Booking.com URL</label>
-                    <input
-                      type="text"
-                      formControlName="bookingComUrl"
-                      class="form-control"
-                      placeholder="Enter Booking.com URL"
-                    />
-                  </div>
-                  <div class="col-md-6 mb-2">
-                    <label class="form-label">Airbnb ID</label>
-                    <input
-                      type="text"
-                      formControlName="airbnbId"
-                      class="form-control"
-                      placeholder="Enter Airbnb ID"
-                    />
-                  </div>
-                  <div class="col-md-6 mb-2">
-                    <label class="form-label">Airbnb URL</label>
-                    <input
-                      type="text"
-                      formControlName="airbnbUrl"
-                      class="form-control"
-                      placeholder="Enter Airbnb URL"
-                    />
-                  </div>
-                  <div class="col-md-6 mb-2">
-                    <label class="form-label">VRBO ID</label>
-                    <input
-                      type="text"
-                      formControlName="vrboId"
-                      class="form-control"
-                      placeholder="Enter VRBO ID"
-                    />
-                  </div>
-                  <div class="col-md-6 mb-2">
-                    <label class="form-label">VRBO URL</label>
-                    <input
-                      type="text"
-                      formControlName="vrboUrl"
-                      class="form-control"
-                      placeholder="Enter VRBO URL"
-                    />
+
+                  <div class="row">
+                    <div class="col-md-6 mb-2">
+                      <label class="form-label">Booking.com ID</label>
+                      <input type="text" formControlName="bookingComId" class="form-control"
+                        placeholder="Enter Booking.com ID" />
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="form-label">Booking.com URL</label>
+                      <input type="text" formControlName="bookingComUrl" class="form-control"
+                        placeholder="Enter Booking.com URL" />
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="form-label">Airbnb ID</label>
+                      <input type="text" formControlName="airbnbId" class="form-control"
+                        placeholder="Enter Airbnb ID" />
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="form-label">Airbnb URL</label>
+                      <input type="text" formControlName="airbnbUrl" class="form-control"
+                        placeholder="Enter Airbnb URL" />
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="form-label">VRBO ID</label>
+                      <input type="text" formControlName="vrboId" class="form-control" placeholder="Enter VRBO ID" />
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="form-label">VRBO URL</label>
+                      <input type="text" formControlName="vrboUrl" class="form-control" placeholder="Enter VRBO URL" />
+                    </div>
                   </div>
                 </div>
+
+                <div *ngIf="competitorsFormArray.length === 0" class="text-center py-4 text-muted">
+                  <i class="fas fa-users fa-2x mb-2"></i>
+                  <p>No competitors added yet. Click "Add Competitor" to get started.</p>
+                </div>
               </div>
-              
-              <div *ngIf="competitorsFormArray.length === 0" class="text-center py-4 text-muted">
-                <i class="fas fa-users fa-2x mb-2"></i>
-                <p>No competitors added yet. Click "Add Competitor" to get started.</p>
+
+              <!-- Add Competitor Button -->
+              <div class="d-flex justify-content-end mt-3" *ngIf="!loadingCompetitors">
+                <button type="button" class="btn btn-outline-primary" (click)="addCompetitor()"
+                  [disabled]="savingCompetitor">
+                  <span *ngIf="savingCompetitor" class="spinner-border spinner-border-sm me-2" role="status"
+                    aria-hidden="true"></span>
+                  <i class="fas fa-plus me-1"></i>Add Competitor
+                </button>
               </div>
-            </div>
-            
-            <!-- Add Competitor Button -->
-            <div class="d-flex justify-content-end mt-3" *ngIf="!loadingCompetitors">
-              <button 
-                type="button" 
-                class="btn btn-outline-primary" 
-                (click)="addCompetitor()" 
-                [disabled]="savingCompetitor">
-                <span *ngIf="savingCompetitor" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                <i class="fas fa-plus me-1"></i>Add Competitor
-              </button>
-            </div>
             </form>
           </div>
         </div>
       </div>
       <div class="modal-footer d-flex justify-content-end">
-        <button
-          #closeButton
-          data-bs-dismiss="modal"
-          class="btn btn-outline-secondary"
-          (click)="resetForm()"
-        >
+        <button #closeButton data-bs-dismiss="modal" class="btn btn-outline-secondary" (click)="resetForm()">
           Cancel
         </button>
-        <button 
-          type="submit" 
-          class="btn btn-primary d-flex align-items-center justify-content-center gap-2" 
-          (click)="onSubmit()" 
-          [disabled]="loading"
-        >
+        <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center gap-2"
+          (click)="onSubmit()" [disabled]="loading">
           <div *ngIf="loading" class="spinner-border spinner-border-sm" role="status">
             <span class="visually-hidden">Loading...</span>
           </div>

@@ -83,5 +83,13 @@ export class ListingService {
     return this.http.post<any>(`${this._url}/scrape-and-map-listing`, payload);
   }
 
+  uploadExcelForListing(file: File, operatorId: string): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('operator_id', operatorId);
+
+    return this.http.post<any>(`${this._url}/upload_excel_for_listing`, formData);
+  }
+
   
 }   

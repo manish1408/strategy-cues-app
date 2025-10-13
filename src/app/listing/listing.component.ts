@@ -20,6 +20,7 @@ import { Status, PropertyStatus } from "../_models/status.model";
 })
 export class ListingComponent implements OnInit, OnDestroy {
   @ViewChild("closeButton") closeButton!: ElementRef;
+  @ViewChild("fileInput") fileInput!: ElementRef;
 
   // Pagination and infinite scroll properties
   currentPage: number = 1;
@@ -34,6 +35,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   syncPriceLabsLoading: boolean = false;
   loading: boolean = false;
   loadingCompetitors: boolean = false;
+  uploadingFile: boolean = false;
   
   // Data
   allListingList: any[] = [];
@@ -993,6 +995,73 @@ export class ListingComponent implements OnInit, OnDestroy {
     // Check if we already have competitors with these IDs
     // This is a basic check - you might want to enhance this based on your data structure
     return this.competitorIds.length > 0;
+  }
+
+  // Upload Excel file for listings
+  uploadListings(): void {
+    // Trigger the hidden file input
+    this.fileInput.nativeElement.click();
+  }
+
+  onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+    
+    if (!file) {
+      return;
+    }
+
+    // Validate file type
+    const validExtensions = ['xlsx', 'xls'];
+    const fileExtension = file.name.split('.').pop()?.toLowerCase();
+    
+    if (!fileExtension || !validExtensions.includes(fileExtension)) {
+      this.toastr.error('Please upload a valid Excel file (.xlsx or .xls)');
+      // Reset file input
+      this.fileInput.nativeElement.value = '';
+      return;
+    }
+
+    // Validate file size (e.g., max 10MB)
+    const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+    if (file.size > maxSize) {
+      this.toastr.error('File size should not exceed 10MB');
+      // Reset file input
+      this.fileInput.nativeElement.value = '';
+      return;
+    }
+
+    if (!this.operatorId) {
+      this.toastr.error('Operator ID is required to upload listings');
+      // Reset file input
+      this.fileInput.nativeElement.value = '';
+      return;
+    }
+
+    // Upload the file
+    this.uploadingFile = true;
+    this.listingService.uploadExcelForListing(file, this.operatorId).pipe(
+      finalize(() => {
+        this.uploadingFile = false;
+        // Reset file input
+        this.fileInput.nativeElement.value = '';
+      })
+    ).subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          this.toastr.success(response.message || 'Listings uploaded successfully');
+          // Reload listings to show the newly uploaded data
+          this.currentPage = 1;
+          this.loadListings();
+        } else {
+          this.toastr.error(response.message || 'Failed to upload listings');
+        }
+      },
+      error: (error: any) => {
+        console.error('Upload error:', error);
+        const errorMessage = error?.error?.detail || error?.error?.message || error?.message || 'Failed to upload Excel file';
+        this.toastr.error(errorMessage);
+      }
+    });
   }
 
 }
