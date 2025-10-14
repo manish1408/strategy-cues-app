@@ -71,7 +71,7 @@ export class ListingService {
     formData.append('file', file);
     formData.append('operator_id', operatorId);
 
-    return this.http.post<any>(`${this._url}/upload_excel_for_listing`, formData);
+    return this.http.post<any>(`${this._url}/upload-excel-for-listing`, formData);
   }
 
   
