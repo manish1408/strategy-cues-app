@@ -131,13 +131,13 @@
                 <div class="row" *ngIf="property.ADR">
                   <div class="col-6">
                     <div class="metric-card">
-                      <div class="metric-label">ADR (TM)</div>
+                      <div class="metric-label">Active Day Rate (This Month)</div>
                       <div class="metric-value large">{{ property.ADR.TM || 'N/A' }}</div>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="metric-card">
-                      <div class="metric-label">ADR (NM)</div>
+                      <div class="metric-label">Active Day Rate (Next Month)</div>
                       <div class="metric-value large">{{ property.ADR.NM || 'N/A' }}</div>
                     </div>
                   </div>
@@ -145,13 +145,13 @@
                 <div class="row mt-3" *ngIf="property.RevPAR">
                   <div class="col-6">
                     <div class="metric-card">
-                      <div class="metric-label">RevPAR (TM)</div>
+                      <div class="metric-label">RevPAR (This Month)</div>
                       <div class="metric-value large">{{ property.RevPAR.TM || 'N/A' }}</div>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="metric-card">
-                      <div class="metric-label">RevPAR (NM)</div>
+                      <div class="metric-label">RevPAR (Next Month)</div>
                       <div class="metric-value large">{{ property.RevPAR.NM || 'N/A' }}</div>
                     </div>
                   </div>
@@ -192,18 +192,18 @@
                 <div class="row mt-3">
                   <div class="col-md-6" *ngIf="property.MPI !== null">
                     <div class="metric-card">
-                      <div class="metric-label text-center mb-3">MPI</div>
+                      <div class="metric-label text-center mb-3">Market Penetration Index</div>
                       <div class="row">
                         <div class="col-md-4 text-center">
-                          <div class="metric-sub-label">(TM)</div>
+                          <div class="metric-sub-label">(This Month)</div>
                           <div class="metric-value">{{ property.MPI.TM }}%</div>
                         </div>
                         <div class="col-md-4 text-center">
-                          <div class="metric-sub-label">(NM)</div>
+                          <div class="metric-sub-label">(Next Month)</div>
                           <div class="metric-value">{{ property.MPI.NM }}%</div>
                         </div>
                         <div class="col-md-4 text-center">
-                          <div class="metric-sub-label">(LYTM)</div>
+                          <div class="metric-sub-label">(Last Year This Month)</div>
                           <div class="metric-value">{{ property.MPI.LYTM }}%</div>
                         </div>
                       </div>
