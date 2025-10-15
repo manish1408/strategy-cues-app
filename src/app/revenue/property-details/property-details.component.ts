@@ -193,4 +193,31 @@ export class PropertyDetailsComponent implements OnInit {
     // You can implement a proper modal later if needed
     window.open(photoUrl, '_blank');
   }
+
+  // Helper method to check if there are any cancellation policies
+  hasCancellationPolicies(): boolean {
+    if (!this.property?.CXL_Policy) return false;
+    
+    // Check Booking.com policies
+    const hasBookingPolicies = this.property.CXL_Policy.Booking && 
+                              Array.isArray(this.property.CXL_Policy.Booking) && 
+                              this.property.CXL_Policy.Booking.length > 0;
+    
+    // Check other platforms
+    const hasAirbnbPolicy = !!this.property.CXL_Policy.Airbnb;
+    const hasVRBOPolicy = !!this.property.CXL_Policy.VRBO;
+    const hasPricelabsPolicy = !!this.property.CXL_Policy.Pricelabs;
+    
+    return hasBookingPolicies || hasAirbnbPolicy || hasVRBOPolicy || hasPricelabsPolicy;
+  }
+
+  // Helper method to check if there is any guest configuration
+  hasGuestConfig(): boolean {
+    if (!this.property?.Adult_Child_Config) return false;
+    
+    return !!(this.property.Adult_Child_Config.Booking ||
+              this.property.Adult_Child_Config.Airbnb ||
+              this.property.Adult_Child_Config.VRBO ||
+              this.property.Adult_Child_Config.Pricelabs);
+  }
 }

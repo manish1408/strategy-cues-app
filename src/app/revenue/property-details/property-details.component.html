@@ -598,7 +598,7 @@
         </div>
 
         <!-- Cancellation Policies -->
-        <div class="row" *ngIf="property.CXL_Policy || property.Adult_Child_Config">
+        <div class="row" *ngIf="hasCancellationPolicies() || hasGuestConfig()">
           <div class="col-12 mb-4">
             <div class="card">
               <div class="card-header">
@@ -606,7 +606,7 @@
               </div>
               <div class="card-body">
                 <!-- Cancellation Policies Section -->
-                <div *ngIf="property.CXL_Policy" class="mb-4">
+                <div *ngIf="hasCancellationPolicies()" class="mb-4">
                   <h6 class="mb-3"><i class="fas fa-list-alt me-2"></i>Cancellation Policies</h6>
                   <div class="row">
                     <!-- Booking.com Policies -->
@@ -623,17 +623,20 @@
                             <div class="policy-card">
                               <div class="policy-header">
                                 <span class="policy-type badge badge-primary">
-                                  {{ policy.policyInfo.name }}
+                                  {{ policy.policy_group_title }}
                                 </span>
-                                <span class="rate-plan-name">{{ policy.ratePlanName }}</span>
+                                <span class="rate-plan-name" *ngIf="policy.rtm.rooms && policy.rtm.rooms !== '0'">
+                                  {{ policy.rtm.rooms }} rooms
+                                </span>
                               </div>
                               
-                              <div class="policy-description">
-                                <strong>Cancellation:</strong> {{ policy.policyInfo.cancellation_desc }}
+                              <div class="policy-description" *ngIf="policy.text && policy.text.length > 0">
+                                <strong>Cancellation:</strong> {{ policy.text[0] }}
                               </div>
                               
-                              <div class="policy-description">
-                                <strong>Prepayment:</strong> {{ policy.policyInfo.prepay_desc }}
+                              <div class="policy-description" *ngIf="policy.prepayment && policy.prepayment.text">
+                                <strong>Prepayment:</strong> 
+                                <span [innerHTML]="policy.prepayment.text"></span>
                               </div>
                             </div>
                           </div>
@@ -700,19 +703,11 @@
                         </div>
                       </div>
                     </div>
-
-                    <!-- No Policies Message -->
-                    <div *ngIf="!property.CXL_Policy.Booking && !property.CXL_Policy.Airbnb && !property.CXL_Policy.VRBO && !property.CXL_Policy.Pricelabs" class="col-12">
-                      <div class="policy-card text-center text-muted py-4">
-                        <i class="fas fa-info-circle me-2"></i>
-                        No cancellation policies configured
-                      </div>
-                    </div>
                   </div>
                 </div>
                 
                 <!-- Guest Configuration Section -->
-                <div *ngIf="property.Adult_Child_Config" class="guest-config-section">
+                <div *ngIf="hasGuestConfig()" class="guest-config-section">
                   <h6 class="mb-3"><i class="fas fa-users me-2"></i>Guest Configuration</h6>
                   <div class="row">
                     <!-- Booking.com Guest Config -->
