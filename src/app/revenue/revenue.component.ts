@@ -10,6 +10,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { ExportService } from "../_services/export.service";
 import { ToastrService } from "ngx-toastr";
 import { ToastService } from "../_services/toast.service";
+import { DeploymentCuesService } from "../_services/deploymentCues.service";
 
 // Declare global variables for jQuery and Bootstrap
 declare var $: any;
@@ -23,6 +24,7 @@ declare var bootstrap: any;
 export class RevenueComponent implements OnInit { 
   // Data from API
   propertyData: PropertyData[] = [];
+  deploymentCuesId: string | null = null;
   loading: boolean = false;
   exportLoading: boolean = false;
   error: string | null = null;
@@ -310,7 +312,8 @@ export class RevenueComponent implements OnInit {
     private route: ActivatedRoute,
     private exportService: ExportService,
     private toastr: ToastrService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private deploymentCuesService: DeploymentCuesService
   ) {
     this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
   }
@@ -3531,6 +3534,38 @@ export class RevenueComponent implements OnInit {
 
 
   optmimiseProperties(): void {
-    this.toastr.success('Sent to Deployment Cues');
+    // Check both selection states - main selection and preset selection
+    const mainSelectedIds = Array.from(this.selectedPropertyIds);
+    const presetSelectedIds = Array.from(this.selectedForPresetIds);
+    
+    // Use preset selection if available, otherwise fall back to main selection
+    const selectedPropertyIds = presetSelectedIds.length > 0 ? presetSelectedIds : mainSelectedIds;
+    
+    if (selectedPropertyIds.length === 0) {
+      this.toastr.warning('Please select a property before uploading to deployment cues');
+      return;
+    }
+
+    // Allow only single property selection
+    if (selectedPropertyIds.length > 1) {
+      this.toastr.warning('Please select only one property for deployment cues');
+      return;
+    }
+
+    this.deploymentCuesService.createDeploymentCues({
+      operatorId: this.operatorId || "",
+      propertyId: selectedPropertyIds[0], // Send single property ID as string
+      deploymentCueName: `Optimization ${new Date().toLocaleDateString()}`
+    }).subscribe({
+      next: (response: any) => {
+        this.toastr.success('Sent to Deployment Cues');
+        this.deploymentCuesId = response.data._id;
+      },
+      error: (error: any) => {
+        this.toastr.error('Failed to send to Deployment Cues');
+      }
+    });
   }
 }
+
+
