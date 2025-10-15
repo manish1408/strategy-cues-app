@@ -48,10 +48,10 @@
 
                 <!-- Quick Apply Presets -->
                 <div *ngIf="filterPresets.length > 0" class="preset-list">
-                  <div *ngFor="let preset of filterPresets" class="dropdown-item preset-item"
+                  <div *ngFor="let preset of filterPresets" class="dropdown-item preset-item "
                     (click)="selectedPresetId = preset.id; onPresetSelectionChange()"
                     [class.selected]="selectedPresetId === preset.id">
-                    <div class="preset-info">
+                    <div class="preset-info cursor-pointer">
                       <div class="preset-name">
                         <i class="fas fa-bookmark  me-2"></i>
                         {{ preset.name }}
@@ -82,21 +82,7 @@
 
                 <div class="dropdown-divider"></div> 
 
-                <!-- Preset Management Actions -->
-                <!-- <div class="dropdown-item-text px-3 py-2">
-                  <div class="btn-group btn-group-sm w-100" role="group">
-                    <button type="button" class="btn btn-outline-success me-1" (click)="showSavePresetDialog()"
-                      [disabled]="(!hasActiveFilters() && getCurrentPropertyIds().length === 0) || presetSaving"
-                      title="Save current filters or property selection as preset">
-                      <i *ngIf="!presetSaving" class="fas fa-save me-1"></i>
-                      <i *ngIf="presetSaving" class="fas fa-spinner fa-spin me-1"></i>Save
-                    </button>
-                    <button type="button" class="btn btn-outline-secondary ms-1" (click)="togglePresetManagement()"
-                      title="Manage presets">
-                      <i class="fas fa-cog me-1"></i>Manage
-                    </button>
-                  </div>
-                </div> -->
+                
               </div>
             </div>
           </div>
@@ -314,7 +300,7 @@
                 <i *ngIf="presetSaving" class="fas fa-spinner fa-spin me-1"></i>Save as Preset
               </button>
               <button class="btn btn-sm btn-outline-success me-2" (click)="optmimiseProperties()">
-              <i class="fas fa-cogs me-1"></i>Optimise
+              <i class="fas fa-cogs me-1"></i>Upload to DC
             </button>
             </div>
           </div>

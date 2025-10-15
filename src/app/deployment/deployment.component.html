@@ -1,205 +1,181 @@
 <div class="revenue-dashboard">
-  <!-- Tab Navigation -->
-  <!-- <div class="deployment-tabs-header">
-    <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <a class="nav-link" [class.active]="activeTab === 'cues'" (click)="switchTab('cues')">
-          Deployment Cues
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" [class.active]="activeTab === 'table'" (click)="switchTab('table')">
-         Properties
-        </a>
-      </li>
-    </ul>
-    <div class="tab-actions" *ngIf="activeTab === 'cues'">
-      <button class="btn btn-primary" (click)="openCueFormModal(null)">
-        <i class="fas fa-plus me-2"></i>Create Deployment Cue
-      </button>
-    </div>
-  </div> -->
 
-  <!-- Tab Content -->
-  <div class="tab-content">
-    <!-- Deployment Cues Tab -->
-    <div class="tab-pane" [class.active]="activeTab === 'cues'" *ngIf="activeTab === 'cues'">
-      <div class="deployment-cues-container">
-        <div class="deployment-cues-grid">
-          <!-- Deployment Cues 1 -->
-          <div class="cue-card">
-            <div class="cue-card-header">
-              <div class="cue-card-title">
-                <h6>Deployment Cues 1</h6>
-                <span class="badge bg-secondary">Critical</span>
-              </div>
-              <div class="cue-card-actions">
-                <button class="btn btn-sm btn-outline-primary me-1" (click)="openCueFormModal('deployment1')"
-                  title="Edit">
-                  <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn btn-sm btn-outline-danger" (click)="deleteCue('deployment1')" title="Delete">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </div>
-            </div>
-            <div class="cue-card-body">
-              <div class="cue-conditions">
-                <div class="condition-row">
-                  <strong>Days left:</strong> 45-28
-                </div>
-                <div class="condition-row">
-                  <strong>Base occupancy:</strong> 20%
-                </div>
-              </div>
-              <div class="cue-pickup-cases">
-                <div class="pickup-case">
-                  <strong>Pickup Case 1:</strong> 0
-                  <div class="action-badge">Reduce the month by 15%</div>
-                  <button class="btn btn-sm btn-primary" title="Add Note">Add deployment cues</button>
-                </div>
-                <div class="pickup-case">
-                  <strong>Pickup Case 2:</strong> 1-10% in last 7 days
-                  <div class="action-badge">Reduce the month by 10%</div>
-                  <button class="btn btn-sm btn-primary" title="Add Note">Add deployment cues</button>
-                </div>
-                <div class="pickup-case">
-                  <strong>Pickup Case 3:</strong> 10-20%
-                  <div class="action-badge">No change</div>
-                  <button class="btn btn-sm btn-primary" title="Add Note">Add deployment cues</button>
-                </div>
-              </div>
-            </div>
+
+  <div class="deployment-cues-container">
+    <div class="deployment-cues-grid">
+      <!-- Deployment Cues 1 -->
+      <div class="cue-card">
+        <div class="cue-card-header">
+          <div class="cue-card-title">
+            <h6>Deployment Cues 1</h6>
+            <span class="badge bg-secondary">Critical</span>
           </div>
-
-          <!-- Deployment Cues 2 -->
-          <div class="cue-card">
-            <div class="cue-card-header">
-              <div class="cue-card-title">
-                <h6>Deployment Cues 2</h6>
-                <span class="badge bg-secondary">Critical</span>
-              </div>
-              <div class="cue-card-actions">
-                <button class="btn btn-sm btn-outline-primary me-1" (click)="openCueFormModal('deployment2')"
-                  title="Edit">
-                  <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn btn-sm btn-outline-danger" (click)="deleteCue('deployment2')" title="Delete">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </div>
-            </div>
-            <div class="cue-card-body">
-              <div class="cue-conditions">
-                <div class="condition-row">
-                  <strong>Days left:</strong> 27-20
-                </div>
-                <div class="condition-row">
-                  <strong>Base occupancy:</strong> 40%
-                </div>
-              </div>
-              <div class="cue-pickup-cases">
-                <div class="pickup-case">
-                  <strong>Pickup Case 1:</strong> 0
-                  <div class="action-badge">Reduce the month by 10%</div>
-                  <button class="btn btn-sm btn-primary" title="Add Note">Add deployment cues</button>
-
-                </div>
-                <div class="pickup-case">
-                  <strong>Pickup Case 2:</strong> 1-10% in last 7 days
-                  <div class="action-badge">Reduce the weekdays by 10%</div>
-                  <button class="btn btn-sm btn-primary" title="Add Note">Add deployment cues</button>
-
-                </div>
-                <div class="pickup-case">
-                  <strong>Pickup Case 3:</strong> 10-20%
-                  <div class="action-badge">Reduce weekdays of next 10 days by 10%</div>
-                  <button class="btn btn-sm btn-primary" title="Add Note">Add deployment cues</button>
-
-                </div>
-              </div>
-            </div>
+          <div class="cue-card-actions">
+            <button class="btn btn-sm btn-outline-primary me-1" (click)="openCueFormModal('deployment1')" title="Edit">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-danger" (click)="deleteCue('deployment1')" title="Delete">
+              <i class="fas fa-trash"></i>
+            </button>
           </div>
-
-          <!-- Deployment Cues 3 -->
-          <div class="cue-card">
-            <div class="cue-card-header">
-              <div class="cue-card-title">
-                <h6>Deployment Cues 3</h6>
-                <span class="badge bg-secondary">Critical</span>
-              </div>
-              <div class="cue-card-actions">
-                <button class="btn btn-sm btn-outline-primary me-1" (click)="openCueFormModal('deployment3')"
-                  title="Edit">
-                  <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn btn-sm btn-outline-danger" (click)="deleteCue('deployment3')" title="Delete">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </div>
-            </div>
-            <div class="cue-card-body">
-              <div class="cue-conditions">
-                <div class="condition-row">
-                  <strong>Days left:</strong> 19-10
-                </div>
-                <div class="condition-row">
-                  <strong>Base occupancy:</strong> 60%
-                </div>
-              </div>
-              <div class="cue-pickup-cases">
-                <div class="pickup-case">
-                  <strong>Pickup Case 1:</strong> 0
-                  <div class="action-badge">Reduce the month by 15%</div>
-                  <button class="btn btn-sm btn-primary" title="Add Note">Add deployment cues</button>
-
-                </div>
-                <div class="pickup-case">
-                  <strong>Pickup Case 2:</strong> 1-10% in last 7 days
-                  <div class="action-badge">Reduce by 10%</div>
-                  <button class="btn btn-sm btn-primary" title="Add Note">Add deployment cues</button>
-
-                </div>
-                <div class="pickup-case">
-                  <strong>Pickup Case 3:</strong> 10-20%
-                  <div class="action-badge">Reduce weekdays by 10%</div>
-                  <button class="btn btn-sm btn-primary" title="Add Note">Add deployment cues</button>
-
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Deployment Last minute 1 -->
-          <div class="cue-card">
-            <div class="cue-card-header">
-              <div class="cue-card-title">
-                <h6>Deployment Last minute 1</h6>
-                <span class="badge bg-secondary">Critical</span>
-              </div>
-              <div class="cue-card-actions">
-                <button class="btn btn-sm btn-outline-primary me-1" (click)="openCueFormModal('lastminute1')"
-                  title="Edit">
-                  <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn btn-sm btn-outline-danger" (click)="deleteCue('lastminute1')" title="Delete">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </div>
-            </div>
-            <div class="cue-card-body">
-              <div class="cue-actions-list">
-                <strong>Action:</strong>
-                <div class="action-badge">Drop next 7 days by 10%</div>
-              </div>
-            </div>
-          </div>
-
         </div>
+        <div class="cue-card-body">
+          <div class="cue-conditions">
+            <div class="condition-row">
+              <strong>Days left:</strong> 45-28
+            </div>
+            <div class="condition-row">
+              <strong>Base occupancy:</strong> 20%
+            </div>
+          </div>
+          <div class="cue-pickup-cases">
+            <div class="pickup-case">
+              <strong>Pickup Case 1:</strong> 0
+              <div class="action-badge">Reduce the month by 15%</div>
+              <button class="btn btn-sm btn-primary" title="Add Note">Add deployment cues</button>
+            </div>
+            <div class="pickup-case">
+              <strong>Pickup Case 2:</strong> 1-10% in last 7 days
+              <div class="action-badge">Reduce the month by 10%</div>
+              <button class="btn btn-sm btn-primary" title="Add Note">Add deployment cues</button>
+            </div>
+            <div class="pickup-case">
+              <strong>Pickup Case 3:</strong> 10-20%
+              <div class="action-badge">No change</div>
+              <button class="btn btn-sm btn-primary" title="Add Note">Add deployment cues</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        <div class="table-container"
-        *ngIf="!loading && !presetLoading && !error && getFilteredPropertyData() && getFilteredPropertyData().length > 0"
-        (scroll)="onScroll($event)">
+      <!-- Deployment Cues 2 -->
+      <div class="cue-card">
+        <div class="cue-card-header">
+          <div class="cue-card-title">
+            <h6>Deployment Cues 2</h6>
+            <span class="badge bg-secondary">Critical</span>
+          </div>
+          <div class="cue-card-actions">
+            <button class="btn btn-sm btn-outline-primary me-1" (click)="openCueFormModal('deployment2')" title="Edit">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-danger" (click)="deleteCue('deployment2')" title="Delete">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+        <div class="cue-card-body">
+          <div class="cue-conditions">
+            <div class="condition-row">
+              <strong>Days left:</strong> 27-20
+            </div>
+            <div class="condition-row">
+              <strong>Base occupancy:</strong> 40%
+            </div>
+          </div>
+          <div class="cue-pickup-cases">
+            <div class="pickup-case">
+              <strong>Pickup Case 1:</strong> 0
+              <div class="action-badge">Reduce the month by 10%</div>
+              <button class="btn btn-sm btn-primary" title="Add Note">Add deployment cues</button>
+
+            </div>
+            <div class="pickup-case">
+              <strong>Pickup Case 2:</strong> 1-10% in last 7 days
+              <div class="action-badge">Reduce the weekdays by 10%</div>
+              <button class="btn btn-sm btn-primary" title="Add Note">Add deployment cues</button>
+
+            </div>
+            <div class="pickup-case">
+              <strong>Pickup Case 3:</strong> 10-20%
+              <div class="action-badge">Reduce weekdays of next 10 days by 10%</div>
+              <button class="btn btn-sm btn-primary" title="Add Note">Add deployment cues</button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Deployment Cues 3 -->
+      <div class="cue-card">
+        <div class="cue-card-header">
+          <div class="cue-card-title">
+            <h6>Deployment Cues 3</h6>
+            <span class="badge bg-secondary">Critical</span>
+          </div>
+          <div class="cue-card-actions">
+            <button class="btn btn-sm btn-outline-primary me-1" (click)="openCueFormModal('deployment3')" title="Edit">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-danger" (click)="deleteCue('deployment3')" title="Delete">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+        <div class="cue-card-body">
+          <div class="cue-conditions">
+            <div class="condition-row">
+              <strong>Days left:</strong> 19-10
+            </div>
+            <div class="condition-row">
+              <strong>Base occupancy:</strong> 60%
+            </div>
+          </div>
+          <div class="cue-pickup-cases">
+            <div class="pickup-case">
+              <strong>Pickup Case 1:</strong> 0
+              <div class="action-badge">Reduce the month by 15%</div>
+              <button class="btn btn-sm btn-primary" title="Add Note">Add deployment cues</button>
+
+            </div>
+            <div class="pickup-case">
+              <strong>Pickup Case 2:</strong> 1-10% in last 7 days
+              <div class="action-badge">Reduce by 10%</div>
+              <button class="btn btn-sm btn-primary" title="Add Note">Add deployment cues</button>
+
+            </div>
+            <div class="pickup-case">
+              <strong>Pickup Case 3:</strong> 10-20%
+              <div class="action-badge">Reduce weekdays by 10%</div>
+              <button class="btn btn-sm btn-primary" title="Add Note">Add deployment cues</button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Deployment Last minute 1 -->
+      <div class="cue-card">
+        <div class="cue-card-header">
+          <div class="cue-card-title">
+            <h6>Deployment Last minute 1</h6>
+            <span class="badge bg-secondary">Critical</span>
+          </div>
+          <div class="cue-card-actions">
+            <button class="btn btn-sm btn-outline-primary me-1" (click)="openCueFormModal('lastminute1')" title="Edit">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-danger" (click)="deleteCue('lastminute1')" title="Delete">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+        <div class="cue-card-body">
+          <div class="cue-actions-list">
+            <strong>Action:</strong>
+            <div class="action-badge">Drop next 7 days by 10%</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div *ngIf="loading" class="text-center py-3">
+      <div class="spinner-border spinner-border-sm text-primary" role="status">
+        <span class="visually-hidden">Loading ...</span>
+      </div>
+    </div>
+    <div class="table-container">
+      <div  *ngIf="!loading && getFilteredPropertyData() && getFilteredPropertyData().length > 0">
         <table>
           <thead>
             <tr>
@@ -364,247 +340,7 @@
               </td>
             </tr>
           </tbody>
-        </table>
-
-        <!-- Loading More Indicator -->
-        <div *ngIf="isLoadingMore" class="text-center py-3">
-          <div class="spinner-border spinner-border-sm text-primary" role="status">
-            <span class="visually-hidden">Loading more...</span>
-          </div>
-          <p class="mt-2 text-muted small">Loading more properties...</p>
-        </div>
-
-        <!-- No More Data Indicator -->
-        <div *ngIf="!hasMoreData && propertyData && propertyData.length > 0 && !isLoadingMore" class="text-center py-3">
-          <p class="text-muted small">No more properties to load</p>
-        </div>
-      </div>
-      
-      </div>
-
-    
-
-    </div>
-
-    <!-- Properties Table Tab -->
-    <div class="tab-pane" [class.active]="activeTab === 'table'" *ngIf="activeTab === 'table'">
-      <div class="row mb-4">
-
-        <!-- Loading State -->
-        <div *ngIf="loading && !presetLoading" class="text-center py-5">
-          <div class="spinner-border " role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-          <p class="mt-3">Loading properties...</p>
-        </div>
-
-
-
-        <!-- Table View -->
-        <div class="table-container"
-          *ngIf="!loading && !presetLoading && !error && getFilteredPropertyData() && getFilteredPropertyData().length > 0"
-          (scroll)="onScroll($event)">
-          <table>
-            <thead>
-              <tr>
-                <th>Listing Name</th>
-                <th>Deployment Cue</th>
-                <th>Assigned To</th>
-                <th>Notes</th>
-                <th>Occupancy This Month</th>
-                <th>Occupancy Next Month</th>
-                <th>Average Daily Rate</th>
-                <th>Revenue Per Available Room</th>
-                <th>Market Penetration Index</th>
-                <th>STLY <br />Var Occ</th>
-                <th>STLY Var <br /> RevPAR</th>
-                <th>Min Rate <br /> Threshold</th>
-                <th>Pick up Occ</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let property of getFilteredPropertyData()">
-                <td class="property-cell">
-                  <div class="property-info">
-                    <div class="property-details">
-                      <h4 [title]="property.Listing_Name" [attr.aria-label]="property.Listing_Name">{{
-                        property.Listing_Name
-                        }}</h4>
-
-                    </div>
-                  </div>
-                </td>
-                <td class="deployment-cues-cell">
-                  <!-- Hardcoded Demo Cues -->
-                  <div class="cues-container">
-                    <div class="cue-item">
-                      <div class="cue-name">High Demand Period</div>
-                      <div class="cue-actions">
-                        <span class="badge bg-secondary me-1">Increase Rate</span>
-                        <span class="badge bg-secondary me-1">Update Availability</span>
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                <td class="assigned-to-cell">
-                  <select class="form-select form-select-sm">
-                    <option value="">Select Assignee</option>
-                    <option value="ishan">Ishan</option>
-                    <option value="manish">Manish</option>
-                  </select>
-                </td>
-                <td class="notes-cell">
-                  <div class="notes-container">
-                    <button class="btn btn-sm btn-outline-secondary" (click)="openNotesModal(property._id)">
-                      <i class="fas fa-sticky-note me-1"></i>
-                      <span class="notes-count">3 Notes</span>
-                    </button>
-                  </div>
-                </td>
-                <td>
-                  <span class="badge badge-light-gray me-1">
-                    {{ safeParseNumber(property.Occupancy.TM) || 0 }} %
-                  </span>
-                </td>
-                <td>
-                  <span class="badge badge-light-gray me-1">
-                    {{ safeParseNumber(property.Occupancy.NM) || 0 }} %
-                  </span>
-                </td>
-                <td>
-                  <div class="dual-value-cell">
-                    <div class="value-pair" *ngIf="property.ADR">
-                      <span class="badge badge-light-gray me-1">TM: {{ property.ADR.TM || 'N/A'
-                        }}</span>
-                      <span class="badge badge-light-gray">NM: {{ property.ADR.NM || 'N/A'
-                        }}</span>
-                    </div>
-                    <div class="value-pair" *ngIf="!property.ADR">
-                      <span class="text-muted">N/A</span>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <div class="dual-value-cell">
-                    <div class="value-pair" *ngIf="property.RevPAR">
-                      <span class="badge badge-light-gray me-1">TM: {{ property.RevPAR.TM || 'N/A'
-                        }}</span>
-                      <span class="badge badge-light-gray">NM: {{ property.RevPAR.NM || 'N/A'
-                        }}</span>
-                    </div>
-                    <div class="value-pair" *ngIf="!property.RevPAR">
-                      <span class="text-muted">N/A</span>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <div class="dual-value-cell">
-                    <div class="value-pair" *ngIf="property.MPI">
-                      <span class="badge badge-light-gray me-1">TM: {{ safeParseNumber(property.MPI.TM) }}%</span>
-                      <span class="badge badge-light-gray me-1">NM: {{ safeParseNumber(property.MPI.NM) }}%</span>
-                      <span class="badge badge-light-gray me-1">LYTM: {{ safeParseNumber(property.MPI.LYTM) }}%</span>
-                    </div>
-                    <div class="value-pair" *ngIf="!property.MPI">
-                      <span class="text-muted">N/A</span>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <div class="stly-var-single-cell">
-                    <span class="badge" [ngClass]="getPerformanceClass(property.STLY_Var.Occ)">
-                      {{ property.STLY_Var.Occ }}
-                    </span>
-                  </div>
-                </td>
-                <td>
-                  <div class="stly-var-single-cell">
-                    <span class="badge" [ngClass]="getPerformanceClass(property.STLY_Var.RevPAR)">
-                      {{ property.STLY_Var.RevPAR }}
-                    </span>
-                  </div>
-                </td>
-                <td>
-                  <div class="min-rate-threshold-cell">
-                    <span class="threshold-value">{{ property.Min_Rate_Threshold || 'N/A' }}</span>
-                  </div>
-                </td>
-                <td>
-                  <div class="pickup-occ-cell">
-                    <div class="pickup-item"
-                      *ngIf="property.Pick_Up_Occ && property.Pick_Up_Occ['7_Days'] !== null && property.Pick_Up_Occ['7_Days'] !== undefined">
-                      <span class="pickup-label">7D:</span>
-                      <span class="pickup-value">{{ property.Pick_Up_Occ['7_Days'] }}</span>
-                    </div>
-                    <div class="pickup-item"
-                      *ngIf="!property.Pick_Up_Occ || property.Pick_Up_Occ['7_Days'] === null || property.Pick_Up_Occ['7_Days'] === undefined">
-                      <span class="pickup-label">7D:</span>
-                      <span class="pickup-value na-value">N/A</span>
-                    </div>
-                    <div class="pickup-item"
-                      *ngIf="property.Pick_Up_Occ && property.Pick_Up_Occ['14_Days'] !== null && property.Pick_Up_Occ['14_Days'] !== undefined">
-                      <span class="pickup-label">14D:</span>
-                      <span class="pickup-value">{{ property.Pick_Up_Occ['14_Days'] }}</span>
-                    </div>
-                    <div class="pickup-item"
-                      *ngIf="!property.Pick_Up_Occ || property.Pick_Up_Occ['14_Days'] === null || property.Pick_Up_Occ['14_Days'] === undefined">
-                      <span class="pickup-label">14D:</span>
-                      <span class="pickup-value na-value">N/A</span>
-                    </div>
-                    <div class="pickup-item"
-                      *ngIf="property.Pick_Up_Occ && property.Pick_Up_Occ['30_Days'] !== null && property.Pick_Up_Occ['30_Days'] !== undefined">
-                      <span class="pickup-label">30D:</span>
-                      <span class="pickup-value">{{ property.Pick_Up_Occ['30_Days'] }}</span>
-                    </div>
-                    <div class="pickup-item"
-                      *ngIf="!property.Pick_Up_Occ || property.Pick_Up_Occ['30_Days'] === null || property.Pick_Up_Occ['30_Days'] === undefined">
-                      <span class="pickup-label">30D:</span>
-                      <span class="pickup-value na-value">N/A</span>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <div class="btn-group btn-group-sm">
-                    <button class="btn btn-outline-primary btn-sm" (click)="viewDetails(property._id)">
-                      <i class="fas fa-eye"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-
-          <!-- Loading More Indicator -->
-          <div *ngIf="isLoadingMore" class="text-center py-3">
-            <div class="spinner-border spinner-border-sm text-primary" role="status">
-              <span class="visually-hidden">Loading more...</span>
-            </div>
-            <p class="mt-2 text-muted small">Loading more properties...</p>
-          </div>
-
-          <!-- No More Data Indicator -->
-          <div *ngIf="!hasMoreData && propertyData && propertyData.length > 0 && !isLoadingMore"
-            class="text-center py-3">
-            <p class="text-muted small">No more properties to load</p>
-          </div>
-        </div>
-
-
-        <!-- Empty State -->
-        <div *ngIf="!loading && !error && (!propertyData || propertyData.length === 0)" class="text-center py-5">
-          <div class="card">
-            <div class="card-body">
-              <i class="fas fa-building fa-3x text-muted mb-3"></i>
-              <h5 class="card-title">No Properties Found</h5>
-              <p class="card-text">No properties found matching your criteria. Try adjusting your filters or search
-                terms.
-              </p>
-              <button class="btn btn-primary" (click)="clearAllFilters()">
-                <i class="fas fa-refresh me-2"></i>Clear Filters
-              </button>
-            </div>
-          </div>
-        </div>
+        </table> 
       </div>
     </div>
   </div>

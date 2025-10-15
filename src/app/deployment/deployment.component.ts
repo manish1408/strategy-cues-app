@@ -99,13 +99,12 @@ export class DeploymentComponent implements OnInit {
   }
 
   loadProperties(): void {
-    this.loading = true;
-    this.error = null;
     this.loadFilteredPropertiesData();
   }
-
+  
   loadFilteredPropertiesData(): void {
     // Build filter parameters
+    this.loading = true;
     const filterParams = this.buildFilterParams();
 
     // Load current page data using filter endpoint
@@ -123,23 +122,14 @@ export class DeploymentComponent implements OnInit {
               this.propertyData = [...this.propertyData, ...newData];
             }
 
-            // Update pagination data from API response
-            if (response.pagination) {
-              this.totalPages = response.pagination.total_pages;
-              this.currentPage = response.pagination.page;
-              this.itemsPerPage = response.pagination.limit;
-              this.hasMoreData = this.currentPage < this.totalPages;
-            } else if (response.data && response.data.pagination) {
-              this.totalPages = response.data.pagination.total_pages;
+            this.totalPages = response.data.pagination.total_pages;
               this.currentPage = response.data.pagination.page;
               this.itemsPerPage = response.data.pagination.limit;
               this.hasMoreData = this.currentPage < this.totalPages;
-            }
           } else {
             this.error = response.message || "Failed to load properties data";
           }
           this.loading = false;
-          this.isLoadingMore = false;
         },
         error: (error: any) => {
           this.error = "Error loading properties. Please try again.";
@@ -147,14 +137,7 @@ export class DeploymentComponent implements OnInit {
           this.isLoadingMore = false;
         },
         complete: () => {
-          setTimeout(() => {
-            if (this.loading) {
-              this.loading = false;
-            }
-            if (this.isLoadingMore) {
-              this.isLoadingMore = false;
-            }
-          }, 1000);
+         
         }
       });
   }

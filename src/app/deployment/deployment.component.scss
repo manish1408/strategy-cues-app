@@ -2347,7 +2347,6 @@ $transition: all 0.3s ease;
     overflow: auto; /* allows both X and Y scroll */
     border: 1px solid #dee2e6;
     border-radius: 6px;
-    margin: 0 12px;
     position: relative; /* Create positioning context for dropdowns */
     
     /* Show scrollbars with custom styling */
@@ -2432,7 +2431,6 @@ $transition: all 0.3s ease;
   table {
     border-collapse: collapse;
     width: auto; /* wider than container -> horizontal scroll */
-   margin: 0 -12px;
   }
 
   th, td {
