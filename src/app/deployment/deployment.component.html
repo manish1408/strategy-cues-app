@@ -26,8 +26,14 @@
                 title="Edit">
                 <i class="fas fa-edit"></i>
               </button>
-              <button class="btn btn-sm btn-outline-danger" (click)="deleteCue(deploymentCue.id)" title="Delete">
-                <i class="fas fa-trash"></i>
+              <button class="btn btn-sm btn-outline-danger" 
+                      (click)="deleteCue(deploymentCue.id)" 
+                      [disabled]="deleteLoading && deletingCueId === deploymentCue.id"
+                      title="Delete">
+                <div *ngIf="deleteLoading && deletingCueId === deploymentCue.id" class="spinner-border spinner-border-sm" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+                <i *ngIf="!(deleteLoading && deletingCueId === deploymentCue.id)" class="fas fa-trash"></i>
               </button>
             </div>
           </div>

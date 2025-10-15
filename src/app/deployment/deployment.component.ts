@@ -7,6 +7,7 @@ import { LocalStorageService } from "../_services/local-storage.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { DeploymentCuesService } from "../_services/deploymentCues.service";
+import { ToastService } from "../_services/toast.service";
 
 @Component({
   selector: 'app-deployment',
@@ -44,6 +45,8 @@ export class DeploymentComponent implements OnInit {
   editingCueId: string | null = null;
   editingDeploymentCue: any = null;
   cueFormLoading: boolean = false;
+  deleteLoading: boolean = false;
+  deletingCueId: string | null = null;
   cueFormData: any = {
     deploymentCueName: '',
     properties: null, // Single property object for both create and edit
@@ -100,7 +103,8 @@ export class DeploymentComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private toastr: ToastrService,
-    private deploymentCuesService: DeploymentCuesService
+    private deploymentCuesService: DeploymentCuesService,
+    private toastService: ToastService
   ) {
     this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
   }
@@ -887,10 +891,31 @@ export class DeploymentComponent implements OnInit {
   }
 
   deleteCue(cueId: string): void {
-    if (confirm('Are you sure you want to delete this deployment cue?')) {
-      this.toastr.success('Deployment cue deleted successfully!');
-      console.log('Delete cue:', cueId);
-    }
+    this.toastService.showConfirm(
+      'Are you sure?',
+      'Delete the selected deployment cue?',
+      'Yes, delete it!',
+      'No, cancel',
+      () => {
+        this.deleteLoading = true;
+        this.deletingCueId = cueId;
+        
+        this.deploymentCuesService.deleteDeploymentCue(cueId).subscribe({
+          next: (res: any) => {
+            this.toastr.success('Deployment cue deleted successfully!');
+            this.deleteLoading = false;
+            this.deletingCueId = null;
+            this.loadDeploymentCues();
+          },
+          error: (error: any) => {
+            console.error('Error deleting deployment cue:', error);
+            this.toastr.error('Failed to delete deployment cue. Please try again.');
+            this.deleteLoading = false;
+            this.deletingCueId = null;
+          }
+        });
+      }
+    );
   }
 
   // Notes Management Methods

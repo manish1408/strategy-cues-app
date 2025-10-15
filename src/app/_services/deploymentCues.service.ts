@@ -26,4 +26,11 @@ export class DeploymentCuesService {
   updateDeploymentCue(deployment_cue_id: string, updateData: any) {
     return this.http.put<any>(`${this._url}/update/${deployment_cue_id}`, updateData);
   }
+
+  deleteDeploymentCue(deployment_cue_id: string) {
+    return this.http.delete<any>(`${this._url}/delete/${deployment_cue_id}`);
+  }
+
+ 
+  
 }
