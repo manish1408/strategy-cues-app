@@ -20,7 +20,7 @@ declare var bootstrap: any;
   templateUrl: "./revenue.component.html",
   styleUrl: "./revenue.component.scss",
 })
-export class RevenueComponent implements OnInit {
+export class RevenueComponent implements OnInit { 
   // Data from API
   propertyData: PropertyData[] = [];
   loading: boolean = false;
@@ -206,7 +206,7 @@ export class RevenueComponent implements OnInit {
 
   // Infinite scroll properties
   currentPage: number = 1;
-  itemsPerPage: number = 20;
+  itemsPerPage: number = 15;
   totalPages: number = 1;
   hasMoreData: boolean = true;
   isLoadingMore: boolean = false;
@@ -3273,46 +3273,46 @@ export class RevenueComponent implements OnInit {
     );
   }
 
-  duplicatePreset(presetId: string): void {
-    const preset = this.filterPresetService.getPresetById(presetId);
-    if (preset) {
-      this.toastService.showInput(
-        'Duplicate Preset',
-        'Enter name for the duplicate preset:',
-        `${preset.name} (Copy)`,
-        'Enter preset name',
-        'Duplicate',
-        'Cancel',
-        (newName: string) => {
-          if (newName && newName.trim()) {
-            this.presetDuplicating = true;
+  // duplicatePreset(presetId: string): void {
+  //   const preset = this.filterPresetService.getPresetById(presetId);
+  //   if (preset) {
+  //     this.toastService.showInput(
+  //       'Duplicate Preset',
+  //       'Enter name for the duplicate preset:',
+  //       `${preset.name} (Copy)`,
+  //       'Enter preset name',
+  //       'Duplicate',
+  //       'Cancel',
+  //       (newName: string) => {
+  //         if (newName && newName.trim()) {
+  //           this.presetDuplicating = true;
             
-            try {
-              const duplicatedPreset = this.filterPresetService.duplicatePreset(presetId, newName.trim(), this.operatorId || undefined);
-              // Note: The actual API call is asynchronous, so we'll handle the loading state in the service
-              setTimeout(() => {
-                this.presetDuplicating = false;
-                this.toastr.success(`Preset duplicated as "${newName}"`);
-                console.log('Preset duplicated:', duplicatedPreset);
-              }, 1000);
-            } catch (error: any) {
-              console.error('Error duplicating preset:', error);
-              this.presetDuplicating = false;
-              this.toastr.error(error.message || 'Failed to duplicate preset');
-            }
-          }
-        }
-      );
-    }
-  }
+  //           try {
+  //             const duplicatedPreset = this.filterPresetService.duplicatePreset(presetId, newName.trim(), this.operatorId || undefined);
+  //             // Note: The actual API call is asynchronous, so we'll handle the loading state in the service
+  //             setTimeout(() => {
+  //               this.presetDuplicating = false;
+  //               this.toastr.success(`Preset duplicated as "${newName}"`);
+  //               console.log('Preset duplicated:', duplicatedPreset);
+  //             }, 1000);
+  //           } catch (error: any) {
+  //             console.error('Error duplicating preset:', error);
+  //             this.presetDuplicating = false;
+  //             this.toastr.error(error.message || 'Failed to duplicate preset');
+  //           }
+  //         }
+  //       }
+  //     );
+  //   }
+  // }
 
   getPresetSummary(preset: any): string[] {
     return this.filterPresetService.getPresetSummary(preset);
   }
 
-  togglePresetManagement(): void {
-    this.showPresetManagement = !this.showPresetManagement;
-  }
+  // togglePresetManagement(): void {
+  //   this.showPresetManagement = !this.showPresetManagement;
+  // }
 
   exportPresets(): void {
     this.presetExporting = true;
@@ -3474,4 +3474,8 @@ export class RevenueComponent implements OnInit {
     return match ? parseInt(match[0], 10) : 0;
   }
 
+
+  optmimiseProperties(): void {
+    this.toastr.success('Sent to Deployment Cues');
+  }
 }

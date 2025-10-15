@@ -80,10 +80,10 @@
 
 
 
-                <div class="dropdown-divider"></div>
+                <div class="dropdown-divider"></div> 
 
                 <!-- Preset Management Actions -->
-                <div class="dropdown-item-text px-3 py-2">
+                <!-- <div class="dropdown-item-text px-3 py-2">
                   <div class="btn-group btn-group-sm w-100" role="group">
                     <button type="button" class="btn btn-outline-success me-1" (click)="showSavePresetDialog()"
                       [disabled]="(!hasActiveFilters() && getCurrentPropertyIds().length === 0) || presetSaving"
@@ -96,7 +96,7 @@
                       <i class="fas fa-cog me-1"></i>Manage
                     </button>
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
@@ -313,21 +313,9 @@
                 <i *ngIf="!presetSaving" class="fas fa-bookmark me-1"></i>
                 <i *ngIf="presetSaving" class="fas fa-spinner fa-spin me-1"></i>Save as Preset
               </button>
-              <button class="btn btn-sm btn-outline-warning me-2" (click)="clearPresetSelection()"
-                [disabled]="getSelectedForPresetCount() === 0 || isPresetMode || presetLoading"
-                title="Clear preset property selection">
-                <i class="fas fa-check-square me-1"></i>Clear Selection
-              </button>
-              <button class="btn btn-sm me-2" [class.btn-primary]="!showOnlySelected"
-                [class.btn-success]="showOnlySelected" (click)="toggleShowOnlySelected()"
-                [disabled]="!shouldShowToggleButton() || isPresetMode || presetLoading"
-                [title]="showOnlySelected ? 'Show all properties' : 'Show only selected properties'">
-                <i [class]="showOnlySelected ? 'fas fa-filter me-1' : 'fas fa-eye me-1'"></i>
-                {{ showOnlySelected ? 'Show All' : 'Show Selected Only' }}
-              </button>
-              <button class="btn btn-sm btn-outline-danger" (click)="clearAllFilters()" [disabled]="presetLoading">
-                <i class="fas fa-times me-1"></i>Clear All
-              </button>
+              <button class="btn btn-sm btn-outline-success me-2" (click)="optmimiseProperties()">
+              <i class="fas fa-cogs me-1"></i>Optimise
+            </button>
             </div>
           </div>
           <div class="filters-badges">
@@ -739,17 +727,12 @@
                   <i class="fas fa-bed"></i>
                   <div class="policy-details">
                     <!-- Handle array format - show only first policy -->
-                    <div *ngIf="isArray(property.CXL_Policy?.Booking)" class="policy-type">
-                      <div class="policy-item-row"
-                        [class.general-policy]="getBookingPoliciesArray(property.CXL_Policy?.Booking)[0]?.is_general_policy"
-                        [class.non-refundable]="getBookingPoliciesArray(property.CXL_Policy?.Booking)[0]?.is_non_refundable_policy">
-                        {{ getBookingPoliciesArray(property.CXL_Policy?.Booking)[0]?.policy_group_title | formatText }}
+                    <div *ngIf="property.CXL_Policy?.Booking.length > 0" class="policy-type">
+                      <div class="policy-item-row">
+                        {{property.CXL_Policy?.Booking[0]?.ratePlanName}}
                       </div>
                     </div>
-                    <!-- Handle object format -->
-                    <!-- <div class="policy-type" *ngIf="!isArray(property.CXL_Policy?.Booking)">
-                      {{ property.CXL_Policy.Booking?.type | formatText }}
-                    </div> -->
+                   
                   </div>
                 </div>
                 <div class="policy-item no-policy" *ngIf="!hasBookingPolicies(property.CXL_Policy?.Booking)">
@@ -762,12 +745,6 @@
                   <i class="fab fa-airbnb text-danger"></i>
                   <div class="policy-details">
                     <div class="policy-type">{{ property.CXL_Policy.Airbnb?.type | formatText }}</div>
-                    <!-- <div class="policy-description" *ngIf="property.CXL_Policy.Airbnb?.description">
-                      {{ property.CXL_Policy.Airbnb?.description }}
-                    </div>
-                    <div class="policy-free-cancellation" *ngIf="property.CXL_Policy.Airbnb?.free_cancellation_until">
-                      Free until: {{ property.CXL_Policy.Airbnb?.free_cancellation_until }}
-                    </div> -->
                   </div>
                 </div>
                 <div class="policy-item no-policy" *ngIf="!hasValidAirbnbPolicy(property.CXL_Policy?.Airbnb)">
@@ -785,11 +762,11 @@
                       Free until: {{ property.CXL_Policy.VRBO?.free_cancellation_until }}
                     </div>
                   </div>
-                </div> -->
+                </div>
                 <div class="policy-item no-policy" *ngIf="!property.CXL_Policy?.VRBO">
                   <i class="fas fa-home text-muted"></i>
                   <span class="no-policy-type" style="font-size: var(--font-size-xs);">No policy</span>
-                </div>
+                </div>  -->
               </div>
             </td>
             <td *ngIf="columnVisibility.adultChildConfig">
@@ -899,8 +876,7 @@
               <!-- Basic Filters Tab -->
               <div class="tab-pane fade show active" id="basic" role="tabpanel" aria-labelledby="basic-tab">
                 <div class="row">
-                  <!-- Area Filter -->
-                  <div class="col-md-6 mb-3">
+                  <!-- <div class="col-md-6 mb-3">
                     <label class="form-label">Area</label>
                     <select class="form-select" [(ngModel)]="tempSelectedArea">
                       <option value="">All Areas</option>
@@ -908,18 +884,17 @@
                     </select>
                   </div>
 
-                  <!-- Room Type Filter -->
                   <div class="col-md-6 mb-3">
                     <label class="form-label">Room Type</label>
                     <select class="form-select" [(ngModel)]="tempSelectedRoomType">
                       <option value="">All Types</option>
                       <option *ngFor="let type of roomTypes" [value]="type">{{ type }}</option>
                     </select>
-                  </div>
+                  </div> -->
 
                   <!-- ADR Range Filter -->
                   <div class="col-md-6 mb-3">
-                    <label class="form-label">ADR Range (TM)</label>
+                    <label class="form-label">ADR Range (This month)</label>
                     <div class="range-slider-container">
                       <div class="range-values">
                         <span class="min-value">{{ tempAdrMin || adrMinRange }}</span>
@@ -936,7 +911,7 @@
 
                   <!-- RevPAR Range Filter -->
                   <div class="col-md-6 mb-3">
-                    <label class="form-label">RevPAR Range (TM)</label>
+                    <label class="form-label">RevPAR Range (This month)</label>
                     <div class="range-slider-container">
                       <div class="range-values">
                         <span class="min-value">{{ tempRevparMin || revparMinRange }}</span>
@@ -955,7 +930,7 @@
 
                   <!-- MPI Range Filter -->
                   <div class="col-md-6 mb-3">
-                    <label class="form-label">MPI Range</label>
+                    <label class="form-label">MPI Range (This month)</label>
                     <div class="range-slider-container">
                       <div class="range-values">
                         <span class="min-value">{{ tempMpiMin || mpiMinRange }}%</span>
@@ -1003,7 +978,7 @@
                       </div>
                       <div class="dual-range-slider">
                         <input type="range" min="0" max="100" [value]="tempOccupancyTMMin || 0"
-                          (input)="onOccupancyTMMinChange($event)" class="range-min">
+                          (input)="onOccupancyTMMinChange($event)" class="range-min"> 
                         <input type="range" min="0" max="100" [value]="tempOccupancyTMMax || 100"
                           (input)="onOccupancyTMMaxChange($event)" class="range-max">
                       </div>
@@ -1688,7 +1663,7 @@
     </div>
 
     <!-- Preset Management Modal -->
-    <div class="modal fade" id="presetManagementModal" tabindex="-1" aria-labelledby="presetManagementModalLabel"
+    <!-- <div class="modal fade" id="presetManagementModal" tabindex="-1" aria-labelledby="presetManagementModalLabel"
       aria-hidden="true" [class.show]="showPresetManagement" [style.display]="showPresetManagement ? 'block' : 'none'">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -1778,12 +1753,12 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- Modal backdrop for custom modals -->
-    <div class="modal-backdrop fade" [class.show]="showSavePresetForm || showPresetManagement"
+    <!-- <div class="modal-backdrop fade" [class.show]="showSavePresetForm || showPresetManagement"
       *ngIf="showSavePresetForm || showPresetManagement"
       (click)="showSavePresetForm ? cancelSavePreset() : togglePresetManagement()">
-    </div>
+    </div> -->
   </div>
 </div>
