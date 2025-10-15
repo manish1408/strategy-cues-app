@@ -25,6 +25,7 @@ $transition: all 0.3s ease;
     padding: 2rem;
 
     .section-header {
+      padding: 0 !important;
       margin-bottom: 2rem;
 
       h2 {
@@ -66,16 +67,16 @@ $transition: all 0.3s ease;
     }
 
     .amenities-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      display: flex;
+      flex-wrap: wrap;
       gap: 1rem;
       margin-top: 1.5rem;
 
       .amenity-chip {
         display: flex;
         align-items: center;
-        padding: 0.75rem 1rem;
-        border-radius: 25px;
+        padding: 0.5rem 0.75rem;
+        border-radius: 8px;
         font-size: 0.9rem;
         font-weight: 500;
         transition: $transition;
@@ -107,29 +108,14 @@ $transition: all 0.3s ease;
           color: var(--brand-black);
         }
 
-        .info-icon {
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin-left: 0.5rem;
-          flex-shrink: 0;
-          cursor: pointer;
-
-          i {
-            font-size: 0.7rem;
-          }
-        }
 
         &.has-amenity {
-          background: #d4edda;
-          border: 1px solid #c3e6cb;
+          background: #e3e3e3;
+    border: 1px solid #dadada;
 
           .amenity-icon {
-            background: $success-color;
-            color: white;
+            color: $success-color;
+          
           }
 
           .info-icon {
@@ -143,12 +129,12 @@ $transition: all 0.3s ease;
         }
 
         &.missing-amenity {
-          background: #f8d7da;
-          border: 1px solid #f5c6cb;
+          background: #e3e3e3;
+          border: 1px solid #dadada;
 
           .amenity-icon {
-            background: $danger-color;
-            color: white;
+            color: $danger-color;
+          
           }
 
           .info-icon {

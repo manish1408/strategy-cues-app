@@ -35,11 +35,18 @@
 
   <!-- Competitor Reviews Section -->
   <div class="reviews-section">
-    <h2>What guests didn't like about your competitors (Static Data):</h2>
+    <div class="section-header">
+      
+      <h2>What guests didn't like about your competitors</h2>
+    </div>
     <div class="cards-grid" *ngIf="guestDidntLikeData && guestDidntLikeData.length > 0">
       <div class="review-card dislike-card" *ngFor="let item of guestDidntLikeData">
-        <h3>{{ item.title }}</h3>
-        <!-- <p>{{ item.description }}</p> -->
+        <div class="card-icon">
+          <i class="fas fa-times-circle"></i>
+        </div>
+        <div class="card-content">
+          <h3>{{ item.title }}</h3>
+        </div>
       </div>
     </div>
     <app-empty-state 
@@ -50,11 +57,18 @@
   </div>
 
   <div class="reviews-section">
-    <h2>What do guests wish they had in your area:</h2>
+    <div class="section-header">
+     
+      <h2>What do guests wish they had in your area</h2>
+    </div>
     <div class="cards-grid" *ngIf="guestWishesData && guestWishesData.length > 0">
       <div class="review-card wish-card" *ngFor="let item of guestWishesData">
-        <h3>{{ item.title }}</h3>
-        <!-- <p>{{ item.description }}</p> -->
+        <div class="card-icon">
+          <i class="fas fa-star"></i>
+        </div>
+        <div class="card-content">
+          <h3>{{ item.title }}</h3>
+        </div>
       </div>
     </div>
     <app-empty-state 
@@ -65,11 +79,18 @@
   </div>
 
   <div class="reviews-section">
-    <h2>What guests love about your competitors:</h2>
+    <div class="section-header">
+      
+      <h2>What guests love about your competitors</h2>
+    </div>
     <div class="cards-grid" *ngIf="guestLovedData && guestLovedData.length > 0">
       <div class="review-card love-card" *ngFor="let item of guestLovedData">
-        <h3>{{ item.title }}</h3>
-        <!-- <p>{{ item.description }}</p> -->
+        <div class="card-icon">
+          <i class="fas fa-heart"></i>
+        </div>
+        <div class="card-content">
+          <h3 class="text-black">{{ item.title }}</h3>
+        </div>
       </div>
     </div>
     <app-empty-state 
@@ -79,16 +100,33 @@
     </app-empty-state>
   </div>
 
-  <div class="reviews-section">
-    <h2>Based on competitor reviews, what can you change?</h2>
+  <div class="reviews-section improvement-section">
+    <div class="section-header">
+    
+      <h2>Based on competitor reviews, what can you change?</h2>
+    </div>
+    <div class="improvement-input-container" *ngIf="whatToImproveData && whatToImproveData.length > 0">
+      <div class="improvement-input">
+        <textarea 
+          placeholder="Share your thoughts on what you can improve based on competitor analysis..."
+          class="improvement-textarea"
+          rows="4">
+        </textarea>
+        <div class="input-footer">
+          <div class="help-tooltip">
+            <i class="fas fa-question-circle"></i>
+            <span class="tooltip-text">Use this space to note actionable insights from competitor reviews</span>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="cards-grid" *ngIf="whatToImproveData && whatToImproveData.length > 0">
       <div class="review-card action-card" *ngFor="let item of whatToImproveData">
-        <!-- <div class="action-icon">
-          <i class="fas fa-plus"></i>
-        </div> -->
-        <div class="action-content">
+        <div class="card-icon">
+          <i class="fas fa-arrow-up"></i>
+        </div>
+        <div class="card-content">
           <h3>{{ item.title }}</h3>
-          <!-- <p>{{ item.description }}</p> -->  
         </div>
       </div>
     </div>

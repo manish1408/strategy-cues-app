@@ -234,7 +234,7 @@
           <div class="tab-pane fade show active" id="listing" role="tabpanel" aria-labelledby="listing-tab">
             <form [formGroup]="addListingForm">
               <div class="mb-3" [formGroupName]="'bookingCom'">
-                <label class="form-label mb-2 text-dark fs-6">Booking.com</label>
+               
                 <div class="row">
                   <div class="col-md-6 mb-2">
                     <label class="form-label">Booking.com ID</label>
@@ -258,7 +258,7 @@
               </div>
 
               <div class="mb-3" [formGroupName]="'airbnb'">
-                <label class="form-label mb-2 text-dark fs-6">Airbnb</label>
+           
                 <div class="row">
                   <div class="col-md-6 mb-2">
                     <label class="form-label">Airbnb ID</label>
@@ -282,7 +282,7 @@
               </div>
 
               <div class="mb-3" [formGroupName]="'vrbo'">
-                <label class="form-label  mb-2 text-dark fs-6">VRBO</label>
+              
                 <div class="row">
                   <div class="col-md-6 mb-2">
                     <label class="form-label">VRBO ID</label>
@@ -306,7 +306,7 @@
               </div>
 
               <div class="mb-3" [formGroupName]="'pricelab'">
-                <label class="form-label">Pricelab</label>
+             
                 <div class="row">
                   <div class="col-md-6 mb-2">
                     <label class="form-label">Pricelab ID</label>
@@ -334,9 +334,7 @@
           <!-- Competitors Tab -->
           <div class="tab-pane fade" id="competitors" role="tabpanel" aria-labelledby="competitors-tab">
             <form [formGroup]="addListingForm">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <h6 class="mb-0">Competitor Listings</h6>
-              </div>
+           
 
               <!-- Loading state for competitors -->
               <div *ngIf="loadingCompetitors" class="text-center py-4">
@@ -349,7 +347,7 @@
               <div formArrayName="competitors" class="competitors-list" *ngIf="!loadingCompetitors">
                 <div *ngFor="let competitor of competitorsFormArray.controls; let i = index" [formGroupName]="i"
                   class="competitor-form mb-3 p-3 border rounded">
-                  <div class="d-flex justify-content-between align-items-center mb-2">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
                     <h6 class="mb-0">Competitor {{ i + 1 }}</h6>
                     <button type="button" class="btn btn-outline-danger btn-sm" (click)="deleteCompetitor(i)"
                       *ngIf="competitorsFormArray.length > 1">
@@ -357,36 +355,38 @@
                     </button>
                   </div>
 
-                  <div class="row">
-                    <div class="col-md-6 mb-2">
-                      <label class="form-label">Booking.com ID</label>
-                      <input type="text" formControlName="bookingComId" class="form-control"
-                        placeholder="Enter Booking.com ID" />
-                    </div>
-                    <div class="col-md-6 mb-2">
-                      <label class="form-label">Booking.com URL</label>
-                      <input type="text" formControlName="bookingComUrl" class="form-control"
-                        placeholder="Enter Booking.com URL" />
-                    </div>
-                    <div class="col-md-6 mb-2">
-                      <label class="form-label">Airbnb ID</label>
-                      <input type="text" formControlName="airbnbId" class="form-control"
-                        placeholder="Enter Airbnb ID" />
-                    </div>
-                    <div class="col-md-6 mb-2">
-                      <label class="form-label">Airbnb URL</label>
-                      <input type="text" formControlName="airbnbUrl" class="form-control"
-                        placeholder="Enter Airbnb URL" />
-                    </div>
-                    <div class="col-md-6 mb-2">
-                      <label class="form-label">VRBO ID</label>
-                      <input type="text" formControlName="vrboId" class="form-control" placeholder="Enter VRBO ID" />
-                    </div>
-                    <div class="col-md-6 mb-2">
-                      <label class="form-label">VRBO URL</label>
-                      <input type="text" formControlName="vrboUrl" class="form-control" placeholder="Enter VRBO URL" />
+                  <!-- Platform Selection -->
+                  <div class="row mb-3">
+                    <div class="col-12">
+                      <label class="form-label">Select Platform</label>
+                      <select formControlName="platform" class="form-select" (change)="onPlatformChange(i, $event)">
+                        <option value="">Choose Platform</option>
+                        <option value="booking">Booking.com</option>
+                        <option value="airbnb">Airbnb</option>
+                        <option value="vrbo">VRBO</option>
+                        <option value="pricelab">Pricelab</option>
+                      </select>
                     </div>
                   </div>
+
+                  <!-- Platform-specific ID and URL inputs -->
+                  <div class="row" *ngIf="competitor.get('platform')?.value">
+                    <div class="col-md-6 mb-2">
+                     
+                      <input type="text" formControlName="platformId" class="form-control"
+                        [placeholder]="'Enter ' + getPlatformName(competitor.get('platform')?.value) + ' ID'" />
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <!-- <label class="form-label">
+                        <i [ngClass]="getPlatformIcon(competitor.get('platform')?.value)" class="me-2"></i>
+                        {{ getPlatformName(competitor.get('platform')?.value) }} URL
+                      </label> -->
+                      <input type="text" formControlName="platformUrl" class="form-control"
+                        [placeholder]="'Enter ' + getPlatformName(competitor.get('platform')?.value) + ' URL'" />
+                    </div>
+                  </div>
+
+                 
                 </div>
 
                 <div *ngIf="competitorsFormArray.length === 0" class="text-center py-4 text-muted">

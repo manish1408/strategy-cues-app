@@ -1,4 +1,4 @@
-<div class="property-details" *ngIf="property">
+<div class="property-details" *ngIf="!loading && property">
   <!-- Header Section -->
   <div class="details-nav">
     <div class="container-fluid">
@@ -32,14 +32,16 @@
       <div class="row align-items-center">
         <div class="col-md-8">
           <div class="property-title">
-            <button class="btn btn-outline-secondary me-3" (click)="goBack()">
-              <i class="fas fa-arrow-left"></i> Back to Revenue
-            </button>
+           
             <div class="title-info">
+              <button class="btn btn-outline-secondary mb-3" (click)="goBack()">
+                <i class="fas fa-arrow-left"></i> Back to Revenue
+              </button>
               <h1 class="mb-1">{{ property.Listing_Name }}</h1>
               <div class="property-meta">
                 <span class="badge bg-light text-dark me-2">{{ property.Area }}</span>
               </div>
+             
             </div>
           </div>
         </div>
@@ -85,21 +87,15 @@
                   <div class="col-6">
                     <div class="metric-card">
                       <div class="metric-label">This Month</div>
-                      <div class="metric-value large">{{ property.Occupancy.TM || 'N/A' }}%</div>
-                      <div class="progress mt-2" style="height: 8px;" *ngIf="property.Occupancy.TM !== null">
-                        <div class="progress-bar" [ngClass]="getOccupancyClass(property.Occupancy.TM)"
-                          [style.width.%]="property.Occupancy.TM.toString()"></div>
-                      </div>
+                      <div class="metric-value large">{{ property.Occupancy.TM ? property.Occupancy.TM + '%' : 'N/A' }}</div>
+                      
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="metric-card">
                       <div class="metric-label">Next Month</div>
-                      <div class="metric-value large">{{ property.Occupancy.NM || 'N/A' }}%</div>
-                      <div class="progress mt-2" style="height: 8px;" *ngIf="property.Occupancy.NM !== null">
-                        <div class="progress-bar" [ngClass]="getOccupancyClass(property.Occupancy.NM)"
-                          [style.width.%]="property.Occupancy.NM.toString()"></div>
-                      </div>
+                      <div class="metric-value large">{{ property.Occupancy.NM ? property.Occupancy.NM + '%' : 'N/A' }}</div>
+                     
                     </div>
                   </div>
                 </div>
@@ -107,13 +103,13 @@
                   <div class="col-6">
                     <div class="metric-card small">
                       <div class="metric-label">7 Days</div>
-                      <div class="metric-value">{{ property.Occupancy['7_days'] || 'N/A' }}%</div>
+                      <div class="metric-value">{{ property.Occupancy['7_days'] ? property.Occupancy['7_days'] + '%' : 'N/A' }}</div>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="metric-card small">
                       <div class="metric-label">30 Days</div>
-                      <div class="metric-value">{{ property.Occupancy['30_days'] || 'N/A' }}%</div>
+                      <div class="metric-value">{{ property.Occupancy['30_days'] ? property.Occupancy['30_days'] + '%' : 'N/A' }}</div>
                     </div>
                   </div>
                 </div>
@@ -132,13 +128,13 @@
                   <div class="col-6">
                     <div class="metric-card">
                       <div class="metric-label">Active Day Rate (This Month)</div>
-                      <div class="metric-value large">{{ property.ADR.TM || 'N/A' }}</div>
+                      <div class="metric-value large">{{ property.ADR.TM ? property.ADR.TM + '%' : 'N/A' }}</div>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="metric-card">
                       <div class="metric-label">Active Day Rate (Next Month)</div>
-                      <div class="metric-value large">{{ property.ADR.NM || 'N/A' }}</div>
+                      <div class="metric-value large">{{ property.ADR.NM ? property.ADR.NM + '%' : 'N/A' }}</div>
                     </div>
                   </div>
                 </div>
@@ -146,13 +142,13 @@
                   <div class="col-6">
                     <div class="metric-card">
                       <div class="metric-label">RevPAR (This Month)</div>
-                      <div class="metric-value large">{{ property.RevPAR.TM || 'N/A' }}</div>
+                      <div class="metric-value large">{{ property.RevPAR.TM ? property.RevPAR.TM + '%' : 'N/A' }}</div>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="metric-card">
                       <div class="metric-label">RevPAR (Next Month)</div>
-                      <div class="metric-value large">{{ property.RevPAR.NM || 'N/A' }}</div>
+                      <div class="metric-value large">{{ property.RevPAR.NM ? property.RevPAR.NM + '%' : 'N/A' }}</div>
                     </div>
                   </div>
                 </div>
@@ -173,19 +169,19 @@
                   <div class="col-md-4">
                     <div class="metric-card">
                       <div class="metric-label">7 Days</div>
-                      <div class="metric-value">{{ property.Pick_Up_Occ['7_Days'] || 'N/A' }}%</div>
+                      <div class="metric-value">{{ property.Pick_Up_Occ['7_Days'] ? property.Pick_Up_Occ['7_Days'] + '%' : 'N/A' }}</div>
                     </div>
                   </div>
                   <div class="col-md-4">
                     <div class="metric-card">
                       <div class="metric-label">14 Days</div>
-                      <div class="metric-value">{{ property.Pick_Up_Occ['14_Days'] || 'N/A' }}%</div>
+                      <div class="metric-value">{{ property.Pick_Up_Occ['14_Days'] ? property.Pick_Up_Occ['14_Days'] + '%' : 'N/A' }}</div>
                     </div>
                   </div>
                   <div class="col-md-4">
                     <div class="metric-card">
                       <div class="metric-label">30 Days</div>
-                      <div class="metric-value">{{ property.Pick_Up_Occ['30_Days'] || 'N/A' }}%</div>
+                      <div class="metric-value">{{ property.Pick_Up_Occ['30_Days'] ? property.Pick_Up_Occ['30_Days'] + '%' : 'N/A' }}</div>
                     </div>
                   </div>
                 </div>
@@ -196,15 +192,15 @@
                       <div class="row">
                         <div class="col-md-4 text-center">
                           <div class="metric-sub-label">(This Month)</div>
-                          <div class="metric-value">{{ property.MPI.TM }}%</div>
+                          <div class="metric-value">{{ property.MPI.TM ? property.MPI.TM + '%' : 'N/A' }}</div>
                         </div>
                         <div class="col-md-4 text-center">
                           <div class="metric-sub-label">(Next Month)</div>
-                          <div class="metric-value">{{ property.MPI.NM }}%</div>
+                          <div class="metric-value">{{ property.MPI.NM ? property.MPI.NM + '%' : 'N/A' }}</div>
                         </div>
                         <div class="col-md-4 text-center">
                           <div class="metric-sub-label">(Last Year This Month)</div>
-                          <div class="metric-value">{{ property.MPI.LYTM }}%</div>
+                          <div class="metric-value">{{ property.MPI.LYTM ? property.MPI.LYTM + '%' : 'N/A' }}</div>
                         </div>
                       </div>
                     </div>
@@ -212,7 +208,7 @@
                   <div class="col-md-6" *ngIf="property.Min_Rate_Threshold !== null">
                     <div class="metric-card">
                       <div class="metric-label">Min Rate Threshold</div>
-                      <div class="metric-value large">{{ property.Min_Rate_Threshold }}</div>
+                      <div class="metric-value large">{{ property.Min_Rate_Threshold || 'N/A' }}</div>
                     </div>
                   </div>
 
@@ -237,8 +233,12 @@
                     <h6><i class="fas fa-bed me-2"></i>Booking.com Photos ({{ property.Photos.booking.length }})</h6>
                     <div class="photo-grid">
                       <div class="photo-item" *ngFor="let photo of property.Photos.booking.slice(0, 6)">
-                        <img [src]="photo.url" [alt]="photo.accessibility_label || 'Property photo'" 
-                             class="img-fluid rounded" (click)="openPhotoModal(photo.url, photo.accessibility_label)">
+                        <img [src]="photo.url || placeholderImage" 
+                             [alt]="photo.accessibility_label || 'Property photo'" 
+                             class="img-fluid rounded" 
+                             (click)="openPhotoModal(photo.url, photo.accessibility_label)"
+                             (error)="onImageError($event)"
+                             loading="lazy">
                       </div>
                     </div>
                     <small class="text-muted" *ngIf="property.Photos.booking.length > 6">
@@ -246,23 +246,53 @@
                     </small>
                   </div>
                   
+                  <!-- Booking.com Photos Placeholder -->
+                  <div class="col-md-6 mb-3" *ngIf="!property.Photos.booking || property.Photos.booking.length === 0">
+                    <h6><i class="fas fa-bed me-2"></i>Booking.com Photos</h6>
+                    <div class="photo-grid">
+                      <div class="photo-item">
+                        <img [src]="placeholderImage" 
+                             alt="No Booking.com photos available" 
+                             class="img-fluid rounded placeholder-image">
+                      </div>
+                    </div>
+                    <small class="text-muted">No Booking.com photos available</small>
+                  </div>
+                  
                   <!-- Airbnb Photos -->
                   <div class="col-md-6 mb-3" *ngIf="property.Photos.airbnb && property.Photos.airbnb.length > 0">
                     <h6><i class="fab fa-airbnb me-2"></i>Airbnb Photos ({{ property.Photos.airbnb.length }})</h6>
                     <div class="photo-grid">
                       <div class="photo-item" *ngFor="let photo of property.Photos.airbnb.slice(0, 6)">
-                        <img [src]="photo.url" [alt]="photo.accessibility_label || 'Property photo'" 
-                             class="img-fluid rounded" (click)="openPhotoModal(photo.url, photo.accessibility_label)">
+                        <img [src]="photo.url || placeholderImage" 
+                             [alt]="photo.accessibility_label || 'Property photo'" 
+                             class="img-fluid rounded" 
+                             (click)="openPhotoModal(photo.url, photo.accessibility_label)"
+                             (error)="onImageError($event)"
+                             loading="lazy">
                       </div>
                     </div>
                     <small class="text-muted" *ngIf="property.Photos.airbnb.length > 6">
                       Showing first 6 of {{ property.Photos.airbnb.length }} photos
                     </small>
                   </div>
+                  
+                  <!-- Airbnb Photos Placeholder -->
+                  <div class="col-md-6 mb-3" *ngIf="!property.Photos.airbnb || property.Photos.airbnb.length === 0">
+                    <h6><i class="fab fa-airbnb me-2"></i>Airbnb Photos</h6>
+                    <div class="photo-grid">
+                      <div class="photo-item">
+                        <img [src]="placeholderImage" 
+                             alt="No Airbnb photos available" 
+                             class="img-fluid rounded placeholder-image">
+                      </div>
+                    </div>
+                    <small class="text-muted">No Airbnb photos available</small>
+                  </div>
                 </div>
                 
-                <!-- No Photos Message -->
-                <div class="text-center py-3" *ngIf="(!property.Photos.booking || property.Photos.booking.length === 0) && (!property.Photos.airbnb || property.Photos.airbnb.length === 0)">
+                <!-- No Photos Message - Only show if no Photos object at all -->
+                <div class="text-center py-3" *ngIf="!property.Photos">
                   <i class="fas fa-image fa-2x text-muted mb-2"></i>
                   <p class="text-muted mb-0">No photos available for this property</p>
                 </div>
@@ -299,19 +329,19 @@
                   <div class="metric-row">
                     <span class="metric-name">Occupancy</span>
                     <span class="metric-value" [ngClass]="getPerformanceClass(property.STLY_Var.Occ)">
-                      {{ property.STLY_Var.Occ }}%
+                      {{ property.STLY_Var.Occ ? property.STLY_Var.Occ + '%' : 'N/A' }}
                     </span>
                   </div>
                   <div class="metric-row">
                     <span class="metric-name">ADR</span>
                     <span class="metric-value" [ngClass]="getPerformanceClass(property.STLY_Var.ADR)">
-                      {{ property.STLY_Var.ADR }}
+                      {{ property.STLY_Var.ADR ? property.STLY_Var.ADR + '%' : 'N/A' }}
                     </span>
                   </div>
                   <div class="metric-row">
                     <span class="metric-name">RevPAR</span>
                     <span class="metric-value" [ngClass]="getPerformanceClass(property.STLY_Var.RevPAR)">
-                      {{ property.STLY_Var.RevPAR }}
+                      {{ property.STLY_Var.RevPAR ? property.STLY_Var.RevPAR + '%' : 'N/A' }}
                     </span>
                   </div>
                 </div>
@@ -329,19 +359,19 @@
                   <div class="metric-row">
                     <span class="metric-name">Occupancy</span>
                     <span class="metric-value" [ngClass]="getPerformanceClass(property.STLM_Var.Occ)">
-                      {{ property.STLM_Var.Occ || 'N/A' }}
+                      {{ property.STLM_Var.Occ ? property.STLM_Var.Occ + '%' : 'N/A' }}
                     </span>
                   </div>
                   <div class="metric-row">
                     <span class="metric-name">ADR</span>
                     <span class="metric-value" [ngClass]="getPerformanceClass(property.STLM_Var.ADR)">
-                      {{ property.STLM_Var.ADR || 'N/A' }}
+                      {{ property.STLM_Var.ADR ? property.STLM_Var.ADR + '%' : 'N/A' }}
                     </span>
                   </div>
                   <div class="metric-row">
                     <span class="metric-name">RevPAR</span>
                     <span class="metric-value" [ngClass]="getPerformanceClass(property.STLM_Var.RevPAR)">
-                      {{ property.STLM_Var.RevPAR || 'N/A' }}
+                        {{ property.STLM_Var.RevPAR ? property.STLM_Var.RevPAR + '%' : 'N/A' }}
                     </span>
                   </div>
                 </div>
@@ -575,101 +605,249 @@
                 <h5 class="mb-0"><i class="fas fa-shield-alt me-2"></i>Cancellation Policies & Configuration</h5>
               </div>
               <div class="card-body">
-                <div class="row">
-                  <div class="col-md-6" *ngIf="property.CXL_Policy">
-                    <div class="policy-list">
-                      <!-- Booking.com Policies (Array) -->
-                      <ng-container *ngIf="hasBookingPolicies(property)">
-                        <div class="policy-section-header">
-                          <span class="platform-name"><i class="fas fa-bed me-1"></i>Booking.com:</span>
+                <!-- Cancellation Policies Section -->
+                <div *ngIf="property.CXL_Policy" class="mb-4">
+                  <h6 class="mb-3"><i class="fas fa-list-alt me-2"></i>Cancellation Policies</h6>
+                  <div class="row">
+                    <!-- Booking.com Policies -->
+                    <div *ngIf="property.CXL_Policy.Booking && property.CXL_Policy.Booking.length > 0" class="col-12 mb-3">
+                      <div class="policy-platform-card">
+                        <div class="policy-platform-header">
+                          <span class="platform-name">
+                            <i class="fas fa-bed me-1"></i>
+                            Booking.com
+                          </span>
                         </div>
-                        <div class="policy-item" *ngFor="let policy of property?.CXL_Policy?.Booking?.slice(0, 1); let i = index">
-                          <div class="policy-header">
-                            <span class="policy-type badge"
-                              [ngClass]="getPolicyTypeClass(policy.policy_group_title)">
-                              {{ policy.policy_group_title }}
-                            </span>
-                          </div>
-                          <div class="policy-description">
-                            {{ getPolicyText(policy.text) }}
-                          </div>
-                          <!-- <div class="policy-meta" *ngIf="policy.prepayment?.text && getFilteredPrepaymentText(policy.prepayment.text)">
-                            <small class="text-muted" [innerHTML]="getFilteredPrepaymentText(policy.prepayment.text)"></small>
-                          </div> -->
-                        </div>
-                      </ng-container>
-
-                      <!-- Airbnb Policy (Single Object) -->
-                      <div class="policy-section" *ngIf="property.CXL_Policy.Airbnb">
-                        <div class="policy-section-header">
-                          <span class="platform-name"><i class="fab fa-airbnb me-1"></i>Airbnb:</span>
-                        </div>
-                        <div class="policy-item">
-                          <div class="policy-header">
-                            <span class="policy-type badge"
-                              [ngClass]="getPolicyTypeClass(property.CXL_Policy.Airbnb.type)">
-                              {{ property.CXL_Policy.Airbnb.type | formatText }}
-                            </span>
-                          </div>
-                          <div class="policy-description">
-                            {{ property.CXL_Policy.Airbnb.description }}
-                          </div>
-                          <div class="policy-details" *ngIf="property.CXL_Policy.Airbnb.free_cancellation_until">
-                            <small class="text-muted">
-                              <i class="fas fa-clock me-1"></i>
-                              Free cancellation until: {{ property.CXL_Policy.Airbnb.free_cancellation_until }}
-                            </small>
+                        <div class="row">
+                          <div class="col-md-6 col-lg-4 mb-3" *ngFor="let policy of property.CXL_Policy.Booking">
+                            <div class="policy-card">
+                              <div class="policy-header">
+                                <span class="policy-type badge badge-primary">
+                                  {{ policy.policyInfo.name }}
+                                </span>
+                                <span class="rate-plan-name">{{ policy.ratePlanName }}</span>
+                              </div>
+                              
+                              <div class="policy-description">
+                                <strong>Cancellation:</strong> {{ policy.policyInfo.cancellation_desc }}
+                              </div>
+                              
+                              <div class="policy-description">
+                                <strong>Prepayment:</strong> {{ policy.policyInfo.prepay_desc }}
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
+                    </div>
 
-                      <!-- VRBO Policy -->
-                      <!-- <div class="policy-section" *ngIf="property.CXL_Policy.VRBO">
-                        <div class="policy-section-header">
-                          <span class="platform-name"><i class="fas fa-home me-1"></i>VRBO:</span>
+                    <!-- Airbnb Policy -->
+                    <div *ngIf="property.CXL_Policy.Airbnb" class="col-md-6 col-lg-4 mb-3">
+                      <div class="policy-card">
+                        <div class="policy-platform-header">
+                          <span class="platform-name">
+                            <i class="fab fa-airbnb me-1"></i>
+                            Airbnb
+                          </span>
                         </div>
-                        <div class="policy-item">
-                          <div class="policy-header">
-                            <span class="policy-type badge" [ngClass]="getPolicyTypeClass(property.CXL_Policy.VRBO.type)">
-                              {{ property.CXL_Policy.VRBO.type | formatText }}
-                            </span>
-                          </div>
-                          <div class="policy-description">
-                            {{ property.CXL_Policy.VRBO.description }}
-                          </div>
-                          <div class="policy-details" *ngIf="property.CXL_Policy.VRBO.free_cancellation_until">
-                            <small class="text-muted">
-                              <i class="fas fa-clock me-1"></i>
-                              Free cancellation until: {{ property.CXL_Policy.VRBO.free_cancellation_until }}
-                            </small>
-                          </div>
+                        <div class="policy-header">
+                          <span class="policy-type badge badge-success">
+                            {{ property.CXL_Policy.Airbnb.type }}
+                          </span>
                         </div>
-                      </div> -->
+                        <div class="policy-description">
+                          {{ property.CXL_Policy.Airbnb.description }}
+                        </div>
+                      </div>
+                    </div>
 
-                      <!-- Show message if no policies available -->
-                      <div class="policy-item"
-                        *ngIf="!hasBookingPolicies(property) && !property.CXL_Policy.Airbnb && !property.CXL_Policy.VRBO">
-                        <span class="text-muted">No cancellation policies configured</span>
+                    <!-- VRBO Policy -->
+                    <div *ngIf="property.CXL_Policy.VRBO" class="col-md-6 col-lg-4 mb-3">
+                      <div class="policy-card">
+                        <div class="policy-platform-header">
+                          <span class="platform-name">
+                            <i class="fas fa-home me-1"></i>
+                            VRBO
+                          </span>
+                        </div>
+                        <div class="policy-header">
+                          <span class="policy-type badge badge-info">
+                            {{ property.CXL_Policy.VRBO.type }}
+                          </span>
+                        </div>
+                        <div class="policy-description">
+                          {{ property.CXL_Policy.VRBO.description }}
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Pricelabs Policy (Future) -->
+                    <div *ngIf="property.CXL_Policy.Pricelabs" class="col-md-6 col-lg-4 mb-3">
+                      <div class="policy-card">
+                        <div class="policy-platform-header">
+                          <span class="platform-name">
+                            <i class="fas fa-chart-line me-1"></i>
+                            Pricelabs
+                          </span>
+                        </div>
+                        <div class="policy-header">
+                          <span class="policy-type badge badge-warning">
+                            {{ property.CXL_Policy.Pricelabs.type }}
+                          </span>
+                        </div>
+                        <div class="policy-description">
+                          {{ property.CXL_Policy.Pricelabs.description }}
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- No Policies Message -->
+                    <div *ngIf="!property.CXL_Policy.Booking && !property.CXL_Policy.Airbnb && !property.CXL_Policy.VRBO && !property.CXL_Policy.Pricelabs" class="col-12">
+                      <div class="policy-card text-center text-muted py-4">
+                        <i class="fas fa-info-circle me-2"></i>
+                        No cancellation policies configured
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-6" *ngIf="property.Adult_Child_Config">
-                    <h6>Adult/Child Configuration</h6>
-                    <div class="policy-list">
-                      <div class="policy-item" *ngIf="property.Adult_Child_Config.Booking">
-                        <span class="platform-name">Booking.com:</span>
-                        <span class="policy-value">Max guests: {{ formatGuestConfig(property.Adult_Child_Config.Booking) }}</span>
+                </div>
+                
+                <!-- Guest Configuration Section -->
+                <div *ngIf="property.Adult_Child_Config" class="guest-config-section">
+                  <h6 class="mb-3"><i class="fas fa-users me-2"></i>Guest Configuration</h6>
+                  <div class="row">
+                    <!-- Booking.com Guest Config -->
+                    <div class="col-md-6 col-lg-4 mb-3" *ngIf="property.Adult_Child_Config.Booking">
+                      <div class="guest-config-card">
+                        <div class="guest-config-header">
+                          <i class="fas fa-bed me-2"></i>
+                          <strong>Booking.com</strong>
+                        </div>
+                        <div class="guest-config-content">
+                          <div class="guest-details">
+                            <div class="guest-item">
+                              <i class="fas fa-users me-2"></i>
+                              <strong>Max Guests:</strong> {{ property.Adult_Child_Config.Booking.max_guests }}
+                            </div>
+                            <div class="guest-item">
+                              <i class="fas fa-user me-2"></i>
+                              <strong>Max Adults:</strong> {{ property.Adult_Child_Config.Booking.max_adults }}
+                            </div>
+                            <div class="guest-item">
+                              <i class="fas fa-child me-2"></i>
+                              <strong>Max Children:</strong> {{ property.Adult_Child_Config.Booking.max_children }}
+                            </div>
+                            <div class="guest-item" *ngIf="property.Adult_Child_Config.Booking.max_infants">
+                              <i class="fas fa-baby me-2"></i>
+                              <strong>Max Infants:</strong> {{ property.Adult_Child_Config.Booking.max_infants }}
+                            </div>
+                            <div class="guest-item">
+                              <i class="fas fa-door-open me-2"></i>
+                              <strong>Room Count:</strong> {{ property.Adult_Child_Config.Booking.room_count }}
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div class="policy-item" *ngIf="property.Adult_Child_Config.Airbnb">
-                        <span class="platform-name">Airbnb:</span>
-                        <span class="policy-value">Max guests: {{ formatGuestConfig(property.Adult_Child_Config.Airbnb) }}</span>
+                    </div>
+                    
+                    <!-- Airbnb Guest Config -->
+                    <div class="col-md-6 col-lg-4 mb-3" *ngIf="property.Adult_Child_Config.Airbnb">
+                      <div class="guest-config-card">
+                        <div class="guest-config-header">
+                          <i class="fab fa-airbnb me-2"></i>
+                          <strong>Airbnb</strong>
+                        </div>
+                        <div class="guest-config-content">
+                          <div class="guest-details">
+                            <div class="guest-item">
+                              <i class="fas fa-users me-2"></i>
+                              <strong>Max Guests:</strong> {{ property.Adult_Child_Config.Airbnb.max_guests }}
+                            </div>
+                            <div class="guest-item">
+                              <i class="fas fa-user me-2"></i>
+                              <strong>Max Adults:</strong> {{ property.Adult_Child_Config.Airbnb.max_adults }}
+                            </div>
+                            <div class="guest-item">
+                              <i class="fas fa-child me-2"></i>
+                              <strong>Max Children:</strong> {{ property.Adult_Child_Config.Airbnb.max_children }}
+                            </div>
+                            <div class="guest-item" *ngIf="property.Adult_Child_Config.Airbnb.max_infants">
+                              <i class="fas fa-baby me-2"></i>
+                              <strong>Max Infants:</strong> {{ property.Adult_Child_Config.Airbnb.max_infants }}
+                            </div>
+                            <div class="guest-item">
+                              <i class="fas fa-door-open me-2"></i>
+                              <strong>Room Count:</strong> {{ property.Adult_Child_Config.Airbnb.room_count }}
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div class="policy-item" *ngIf="property.Adult_Child_Config.VRBO">
-                        <span class="platform-name">VRBO:</span>
-                        <span class="policy-value">Max guests: {{ formatGuestConfig(property.Adult_Child_Config.VRBO) }}</span>
+                    </div>
+                    
+                    <!-- VRBO Guest Config -->
+                    <div class="col-md-6 col-lg-4 mb-3" *ngIf="property.Adult_Child_Config.VRBO">
+                      <div class="guest-config-card">
+                        <div class="guest-config-header">
+                          <i class="fas fa-home me-2"></i>
+                          <strong>VRBO</strong>
+                        </div>
+                        <div class="guest-config-content">
+                          <div class="guest-details">
+                            <div class="guest-item">
+                              <i class="fas fa-users me-2"></i>
+                              <strong>Max Guests:</strong> {{ property.Adult_Child_Config.VRBO.max_guests }}
+                            </div>
+                            <div class="guest-item">
+                              <i class="fas fa-user me-2"></i>
+                              <strong>Max Adults:</strong> {{ property.Adult_Child_Config.VRBO.max_adults }}
+                            </div>
+                            <div class="guest-item">
+                              <i class="fas fa-child me-2"></i>
+                              <strong>Max Children:</strong> {{ property.Adult_Child_Config.VRBO.max_children }}
+                            </div>
+                            <div class="guest-item" *ngIf="property.Adult_Child_Config.VRBO.max_infants">
+                              <i class="fas fa-baby me-2"></i>
+                              <strong>Max Infants:</strong> {{ property.Adult_Child_Config.VRBO.max_infants }}
+                            </div>
+                            <div class="guest-item">
+                              <i class="fas fa-door-open me-2"></i>
+                              <strong>Room Count:</strong> {{ property.Adult_Child_Config.VRBO.room_count }}
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div class="policy-item" *ngIf="!property.Adult_Child_Config.Booking && !property.Adult_Child_Config.Airbnb && !property.Adult_Child_Config.VRBO">
-                        <span class="text-muted">No guest configuration available</span>
+                    </div>
+                    
+                    <!-- Pricelabs Guest Config (Future) -->
+                    <div class="col-md-6 col-lg-4 mb-3" *ngIf="property.Adult_Child_Config.Pricelabs">
+                      <div class="guest-config-card">
+                        <div class="guest-config-header">
+                          <i class="fas fa-chart-line me-2"></i>
+                          <strong>Pricelabs</strong>
+                        </div>
+                        <div class="guest-config-content">
+                          <div class="guest-details">
+                            <div class="guest-item">
+                              <i class="fas fa-users me-2"></i>
+                              <strong>Max Guests:</strong> {{ property.Adult_Child_Config.Pricelabs.max_guests }}
+                            </div>
+                            <div class="guest-item">
+                              <i class="fas fa-user me-2"></i>
+                              <strong>Max Adults:</strong> {{ property.Adult_Child_Config.Pricelabs.max_adults }}
+                            </div>
+                            <div class="guest-item">
+                              <i class="fas fa-child me-2"></i>
+                              <strong>Max Children:</strong> {{ property.Adult_Child_Config.Pricelabs.max_children }}
+                            </div>
+                            <div class="guest-item" *ngIf="property.Adult_Child_Config.Pricelabs.max_infants">
+                              <i class="fas fa-baby me-2"></i>
+                              <strong>Max Infants:</strong> {{ property.Adult_Child_Config.Pricelabs.max_infants }}
+                            </div>
+                            <div class="guest-item">
+                              <i class="fas fa-door-open me-2"></i>
+                              <strong>Room Count:</strong> {{ property.Adult_Child_Config.Pricelabs.room_count }}
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

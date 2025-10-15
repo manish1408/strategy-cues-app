@@ -580,7 +580,7 @@ export class PhotoDetailsComponent implements OnInit {
     };
   }
 
-  getAmenityIcon(iconString: string): string {
+  getAmenityIcon(iconString: string, title?: string): string {
     const iconMap: { [key: string]: string } = {
       // Airbnb system icons
       SYSTEM_COOKING_BASICS: "fa-utensils",
@@ -592,12 +592,15 @@ export class PhotoDetailsComponent implements OnInit {
       SYSTEM_AIR_CONDITIONING: "fa-snowflake",
       SYSTEM_BALCONY: "fa-home",
       SYSTEM_VIEW: "fa-eye",
+      SYSTEM_VIEW_CITY: "fa-city",
       SYSTEM_KITCHEN: "fa-utensils",
       SYSTEM_INTERNET: "fa-wifi",
       SYSTEM_PRIVATE_POOL: "fa-swimming-pool",
       SYSTEM_OUTDOOR_POOL: "fa-swimming-pool",
       SYSTEM_SMOKE_FREE: "fa-ban-smoking",
       SYSTEM_GENERAL: "fa-check-circle",
+      SYSTEM_WORKSPACE: "fa-laptop",
+      SYSTEM_MAPS_CAR_RENTAL: "fa-car",
       // Booking icons
       pool: "fa-swimming-pool",
       wifi: "fa-wifi",
@@ -614,7 +617,32 @@ export class PhotoDetailsComponent implements OnInit {
       smoke_free: "fa-ban-smoking",
     };
 
-    return iconMap[iconString] || "fa-check-circle";
+    // If icon string is provided, use it
+    if (iconString) {
+      return iconMap[iconString] || "fa-check-circle";
+    }
+
+    // If no icon but title is provided, try to derive icon from title
+    if (title) {
+      const lowerTitle = title.toLowerCase();
+      
+      // Title-based icon mapping for Booking amenities
+      if (lowerTitle.includes('parking')) return 'fa-parking';
+      if (lowerTitle.includes('wifi') || lowerTitle.includes('internet')) return 'fa-wifi';
+      if (lowerTitle.includes('pool')) return 'fa-swimming-pool';
+      if (lowerTitle.includes('kitchen')) return 'fa-utensils';
+      if (lowerTitle.includes('tv')) return 'fa-tv';
+      if (lowerTitle.includes('elevator') || lowerTitle.includes('lift')) return 'fa-elevator';
+      if (lowerTitle.includes('air conditioning') || lowerTitle.includes('ac')) return 'fa-snowflake';
+      if (lowerTitle.includes('balcony')) return 'fa-home';
+      if (lowerTitle.includes('view')) return 'fa-eye';
+      if (lowerTitle.includes('bathroom')) return 'fa-bath';
+      if (lowerTitle.includes('smoke-free') || lowerTitle.includes('non-smoking')) return 'fa-ban-smoking';
+      if (lowerTitle.includes('pet')) return 'fa-paw';
+      if (lowerTitle.includes('workspace') || lowerTitle.includes('desk')) return 'fa-laptop';
+    }
+
+    return "fa-check-circle";
   }
 
   previousCompetitor(): void {
@@ -977,7 +1005,13 @@ export class PhotoDetailsComponent implements OnInit {
         case 'airbnb':
           return this.propertyData.Amenities.Airbnb || [];
         case 'booking':
-          return this.propertyData.Amenities.Booking || [];
+          // Booking has a different structure - extract from accommodationHighlights
+          if (this.propertyData.Amenities.Booking) {
+            const bookingAmenities = this.propertyData.Amenities.Booking;
+            // Return accommodationHighlights if available, otherwise try facilities
+            return bookingAmenities.accommodationHighlights || bookingAmenities.facilities || [];
+          }
+          return [];
         case 'vrbo':
           return this.propertyData.Amenities.VRBO || [];
         default:
@@ -990,7 +1024,13 @@ export class PhotoDetailsComponent implements OnInit {
       case 'airbnb':
         return this.propertyData.amenitiesAirbnb || [];
       case 'booking':
-        return this.propertyData.amenitiesBooking || [];
+        // Booking has a different structure - extract from accommodationHighlights
+        if (this.propertyData.amenitiesBooking) {
+          const bookingAmenities = this.propertyData.amenitiesBooking;
+          // Return accommodationHighlights if available, otherwise try facilities
+          return bookingAmenities.accommodationHighlights || bookingAmenities.facilities || [];
+        }
+        return [];
       case 'vrbo':
         return this.propertyData.amenitiesVrbo || [];
       default:
@@ -1008,7 +1048,13 @@ export class PhotoDetailsComponent implements OnInit {
       case 'airbnb':
         return competitor.amenitiesAirbnb || [];
       case 'booking':
-        return competitor.amenitiesBooking || [];
+        // Booking has a different structure - extract from accommodationHighlights
+        if (competitor.amenitiesBooking) {
+          const bookingAmenities = competitor.amenitiesBooking;
+          // Return accommodationHighlights if available, otherwise try facilities
+          return bookingAmenities.accommodationHighlights || bookingAmenities.facilities || [];
+        }
+        return [];
       case 'vrbo':
         return competitor.amenitiesVrbo || [];
       default:
