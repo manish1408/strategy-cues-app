@@ -26,6 +26,28 @@
         object-fit: cover;
         border-radius: 0.375rem;
       }
+
+      // Placeholder image styling
+      .placeholder-image {
+        opacity: 0.6;
+        filter: grayscale(20%);
+        background-color: #f8f9fa;
+        border: 2px dashed #dee2e6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6c757d;
+        font-size: 0.875rem;
+        text-align: center;
+        padding: 1rem;
+        
+        &::before {
+          content: "📷";
+          font-size: 2rem;
+          display: block;
+          margin-bottom: 0.5rem;
+        }
+      }
     }
   }
 
@@ -243,33 +265,52 @@
 
   .details-nav {
     background: white;
-    border-bottom: 1px solid #dee2e6;
+    // border-bottom: 1px solid #dee2e6;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    .container-fluid {
+      padding-left: 0;
+      padding-right: 0;
+    }
 
     .nav-tabs {
       border-bottom: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      width: 100%;
 
       .nav-item {
+       
+        
         .nav-link {
           border: none;
           color: #6c757d;
           padding: 1rem 1.5rem;
           font-weight: 500;
           transition: all 0.3s ease;
+          margin: 0;
+          text-align: center;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
 
           &:hover {
             color: #495057;
-            background-color: #f8f9fa;
+            cursor: pointer;
+            border-bottom: none !important;
           }
 
           &.active {
-            color: #667eea;
-            background-color: transparent;
-            border-bottom: 3px solid #667eea;
+            color: white;
+            background-color: black;
+            border-bottom: none !important;
           }
 
           i {
             font-size: 0.875rem;
+            margin-right: 0.5rem;
           }
         }
       }
@@ -281,6 +322,305 @@
 
     .tab-pane {
       animation: fadeIn 0.3s ease-in-out;
+    }
+
+    // Policy Display Styles - Grid Layout
+    .policy-platform-card {
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .policy-platform-header {
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid #e9ecef;
+      
+      .platform-name {
+        font-weight: 700;
+        color: #495057;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        
+        i {
+          margin-right: 0.5rem;
+          opacity: 0.8;
+        }
+      }
+    }
+
+    .policy-card {
+      background: #ffffff;
+      border: 1px solid #e9ecef;
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      height: 100%;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+      &:hover {
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        transform: translateY(-2px);
+       
+      }
+
+      .policy-header {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+
+        .policy-type {
+          font-size: 0.875rem;
+          font-weight: 600;
+          padding: 0.5rem 1rem;
+          border-radius: 1.5rem;
+          display: inline-block;
+          width: fit-content;
+        }
+
+        .rate-plan-name {
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: #495057;
+          background: #f8f9fa;
+          padding: 0.375rem 0.75rem;
+          border-radius: 0.5rem;
+          border: 1px solid #dee2e6;
+          display: inline-block;
+          width: fit-content;
+        }
+      }
+
+      .policy-description {
+        color: #495057;
+        line-height: 1.6;
+        margin-bottom: 0.75rem;
+        font-size: 0.9rem;
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        strong {
+          color: #343a40;
+          font-weight: 600;
+        }
+      }
+    }
+
+    .guest-config-display {
+      background: #e8f5e8;
+      border: 1px solid #c3e6c3;
+      border-radius: 0.375rem;
+      padding: 1rem;
+      color: #155724;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    // Guest Configuration Section
+    .guest-config-section {
+      border-top: 2px solid #e9ecef;
+      padding-top: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .guest-config-card {
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      transition: all 0.2s ease;
+      height: 100%;
+
+      &:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transform: translateY(-1px);
+      }
+
+      .guest-config-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.75rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #dee2e6;
+        color: #495057;
+        font-size: 0.95rem;
+
+        i {
+          color: #6c757d;
+          width: 16px;
+          text-align: center;
+        }
+      }
+
+      .guest-config-content {
+        color: #495057;
+        font-size: 0.9rem;
+        line-height: 1.4;
+        background: #ffffff;
+        border: 1px solid #e9ecef;
+        border-radius: 0.375rem;
+        padding: 0.75rem;
+        font-weight: 500;
+
+        .guest-details {
+          .guest-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            padding: 0.25rem 0;
+            
+            &:last-child {
+              margin-bottom: 0;
+            }
+
+            i {
+              color: #6c757d;
+              width: 16px;
+              text-align: center;
+              margin-right: 0.5rem;
+            }
+
+            strong {
+              color: #495057;
+              margin-right: 0.5rem;
+              min-width: 100px;
+            }
+          }
+        }
+      }
+    }
+
+    // Enhanced styling for policy sections
+    .policy-list {
+      .policy-platform-group {
+        &:first-child {
+          margin-top: 0;
+        }
+      }
+    }
+
+    // Badge styling for policy types
+    .badge-primary {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .badge-success {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .badge-warning {
+      background-color: #ffc107;
+      color: #212529;
+    }
+
+    .badge-danger {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .badge-info {
+      background-color: #17a2b8;
+      color: white;
+    }
+
+    // Policy description styling
+    .policy-description {
+      strong {
+        color: #495057;
+        font-weight: 600;
+      }
+    }
+
+    // Platform-specific styling
+    .platform-name {
+      i {
+        &.fa-bed {
+          color: #003580; // Booking.com blue
+        }
+        
+        &.fa-airbnb {
+          color: #FF5A5F; // Airbnb red
+        }
+        
+        &.fa-home {
+          color: #00A699; // VRBO green
+        }
+        
+        &.fa-chart-line {
+          color: #FF6B35; // Pricelabs orange
+        }
+      }
+    }
+
+    // Guest config platform icons
+    .guest-config-header {
+      i {
+        &.fa-bed {
+          color: #003580; // Booking.com blue
+        }
+        
+        &.fa-airbnb {
+          color: #FF5A5F; // Airbnb red
+        }
+        
+        &.fa-home {
+          color: #00A699; // VRBO green
+        }
+        
+        &.fa-chart-line {
+          color: #FF6B35; // Pricelabs orange
+        }
+      }
+    }
+
+    // Responsive adjustments
+    @media (max-width: 768px) {
+      .policy-card {
+        padding: 1rem;
+        
+        .policy-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.5rem;
+        }
+      }
+
+      .guest-config-card {
+        margin-bottom: 1rem;
+      }
+
+      .policy-platform-card {
+        padding: 1rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .policy-card {
+        padding: 0.75rem;
+      }
+
+      .policy-platform-card {
+        padding: 0.75rem;
+      }
+    }
+
+    // Enhanced visual hierarchy
+    .policy-section-header {
+      .platform-name {
+        font-size: 1.1rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
     }
 
     .card {
@@ -455,7 +795,7 @@
       }
 
       .policy-item {
-        padding: 1rem 0;
+        padding: 1rem;
         border-bottom: 1px solid #f1f3f4;
 
         &:last-child {

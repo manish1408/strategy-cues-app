@@ -54,7 +54,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   savingCompetitor: boolean = false;
   competitorIds: string[] = [];
   // Keep original snapshots of prefilled competitors to verify before delete
-  private competitorOriginalById: { [id: string]: { bookingComId: string; bookingComUrl: string; airbnbId: string; airbnbUrl: string; vrboId: string; vrboUrl: string; } } = {};
+  private competitorOriginalById: { [id: string]: { platform: string; platformId: string; platformUrl: string; } } = {};
   // Status management
   Status = Status; // Make Status enum available in template
   propertyStatuses: { [key: string]: PropertyStatus } = {}; // Store status for each property
@@ -473,25 +473,36 @@ export class ListingComponent implements OnInit, OnDestroy {
       
       // Check if this is a new competitor (no ID or has temp ID)
       if (!competitorId || competitorId.startsWith('temp_')) {
-        const bookingId = form.get('bookingComId')?.value || "";
-        const airbnbId = form.get('airbnbId')?.value || "";
-        const vrboId = form.get('vrboId')?.value || "";
-        const bookingLink = form.get('bookingComUrl')?.value || "";
-        const airbnbLink = form.get('airbnbUrl')?.value || "";
-        const vrboLink = form.get('vrboUrl')?.value || "";
+        const platform = form.get('platform')?.value || "";
+        const platformId = form.get('platformId')?.value || "";
+        const platformUrl = form.get('platformUrl')?.value || "";
         
-        // Only create competitor if at least one field has data
-        if (bookingId || airbnbId || vrboId || bookingLink || airbnbLink || vrboLink) {
-          const competitorData = {
+        // Only create competitor if platform is selected and has data
+        if (platform && (platformId || platformUrl)) {
+          // Map platform data to the expected API format
+          const competitorData: any = {
             operatorId: this.operatorId,
-            bookingId: bookingId,
-            airbnbId: airbnbId,
-            vrboId: vrboId,
-            bookingLink: bookingLink,
-            airbnbLink: airbnbLink,
-            vrboLink: vrboLink,
-            status: "pending"
+            bookingId: '',
+            airbnbId: '',
+            vrboId: '',
+            bookingLink: '',
+            airbnbLink: '',
+            vrboLink: ''
           };
+          
+          // Set the appropriate fields based on selected platform
+          if (platform === 'booking') {
+            competitorData.bookingId = platformId;
+            competitorData.bookingLink = platformUrl;
+          } else if (platform === 'airbnb') {
+            competitorData.airbnbId = platformId;
+            competitorData.airbnbLink = platformUrl;
+          } else if (platform === 'vrbo') {
+            competitorData.vrboId = platformId;
+            competitorData.vrboLink = platformUrl;
+          }
+          
+          competitorData.status = "pending";
           
           newCompetitors.push(competitorData);
           
@@ -809,12 +820,9 @@ export class ListingComponent implements OnInit, OnDestroy {
       const original = this.competitorOriginalById[competitorId];
       if (original) {
         const current = {
-          bookingComId: form.get('bookingComId')?.value || '',
-          bookingComUrl: form.get('bookingComUrl')?.value || '',
-          airbnbId: form.get('airbnbId')?.value || '',
-          airbnbUrl: form.get('airbnbUrl')?.value || '',
-          vrboId: form.get('vrboId')?.value || '',
-          vrboUrl: form.get('vrboUrl')?.value || ''
+          platform: form.get('platform')?.value || '',
+          platformId: form.get('platformId')?.value || '',
+          platformUrl: form.get('platformUrl')?.value || ''
         };
         const matches = JSON.stringify(original) === JSON.stringify(current);
         if (!matches) {
@@ -891,13 +899,30 @@ export class ListingComponent implements OnInit, OnDestroy {
           // Populate forms with existing competitor data
           competitors.forEach((competitor: any, index: number) => {
             const competitorForm = this.createCompetitorForm();
+            
+            // Determine which platform has data and set it as the selected platform
+            let selectedPlatform = '';
+            let platformId = '';
+            let platformUrl = '';
+            
+            if (competitor.bookingId || competitor.bookingLink) {
+              selectedPlatform = 'booking';
+              platformId = competitor.bookingId || '';
+              platformUrl = competitor.bookingLink || '';
+            } else if (competitor.airbnbId || competitor.airbnbLink) {
+              selectedPlatform = 'airbnb';
+              platformId = competitor.airbnbId || '';
+              platformUrl = competitor.airbnbLink || '';
+            } else if (competitor.vrboId || competitor.vrboLink) {
+              selectedPlatform = 'vrbo';
+              platformId = competitor.vrboId || '';
+              platformUrl = competitor.vrboLink || '';
+            }
+            
             const formData = {
-              bookingComId: competitor.bookingId || '',
-              bookingComUrl: competitor.bookingLink || '',
-              airbnbId: competitor.airbnbId || '',
-              airbnbUrl: competitor.airbnbLink || '',
-              vrboId: competitor.vrboId || '',
-              vrboUrl: competitor.vrboLink || ''
+              platform: selectedPlatform,
+              platformId: platformId,
+              platformUrl: platformUrl
             };
             competitorForm.patchValue(formData);
             
@@ -931,14 +956,44 @@ export class ListingComponent implements OnInit, OnDestroy {
 
   createCompetitorForm(): FormGroup {
     return this.fb.group({
-      bookingComId: [''],
-      bookingComUrl: [''],
-      airbnbId: [''],
-      airbnbUrl: [''],
-      vrboId: [''],
-      vrboUrl: ['']
+      platform: [''],
+      platformId: [''],
+      platformUrl: ['']
     });
   }
+
+  // Platform-related helper methods
+  getPlatformName(platform: string): string {
+    const platformNames: { [key: string]: string } = {
+      'booking': 'Booking.com',
+      'airbnb': 'Airbnb',
+      'vrbo': 'VRBO',
+      'pricelab': 'Pricelab'
+    };
+    return platformNames[platform] || platform;
+  }
+
+  getPlatformIcon(platform: string): string {
+    const platformIcons: { [key: string]: string } = {
+      'booking': 'fas fa-bed',
+      'airbnb': 'fab fa-airbnb',
+      'vrbo': 'fas fa-home',
+      'pricelab': 'fas fa-chart-line'
+    };
+    return platformIcons[platform] || 'fas fa-globe';
+  }
+
+  onPlatformChange(competitorIndex: number, event: any): void {
+    const selectedPlatform = event.target.value;
+    const competitorForm = this.competitorsFormArray.at(competitorIndex);
+    
+    // Clear the ID and URL fields when platform changes
+    competitorForm.patchValue({
+      platformId: '',
+      platformUrl: ''
+    });
+  }
+
 
   // Check if a competitor with the same IDs already exists
   private checkForExistingCompetitor(bookingId: string, airbnbId: string, vrboId: string): boolean {

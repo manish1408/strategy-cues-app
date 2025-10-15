@@ -5,6 +5,7 @@ import { PropertiesService } from '../../_services/properties.service';
 import { LocalStorageService } from '../../_services/local-storage.service';
 
 
+
 @Component({
   selector: 'app-property-details',
   templateUrl: './property-details.component.html',
@@ -20,9 +21,20 @@ export class PropertyDetailsComponent implements OnInit {
   // Utility property for template
   Math = Math;
 
+  // Simplified policy display - no complex mapping needed
+
   // Helper method to check if value is an object
   isObject(value: any): boolean {
     return typeof value === 'object' && value !== null;
+  }
+
+  // Placeholder image path
+  placeholderImage = 'assets/images/placeholder.jpg';
+
+  // Handle image loading errors
+  onImageError(event: any): void {
+    event.target.src = this.placeholderImage;
+    event.target.alt = 'Image not available';
   }
 
   constructor(
@@ -116,46 +128,7 @@ export class PropertyDetailsComponent implements OnInit {
     return value.toLowerCase() === 'yes';
   }
 
-  // Helper method to get CSS class for policy type badges
-  getPolicyTypeClass(policyType: string | null): string {
-    if (!policyType) return 'badge-secondary';
-    
-    const lowerType = policyType.toLowerCase();
-    
-    // Check for flexible policies
-    if (lowerType.includes('flexible')) {
-      return 'badge-success';
-    }
-    // Check for non-refundable policies
-    if (lowerType.includes('non-refundable') || lowerType.includes('non refundable')) {
-      return 'badge-danger';
-    }
-    // Check for moderate/strict policies
-    if (lowerType.includes('moderate')) {
-      return 'badge-warning';
-    }
-    if (lowerType.includes('strict')) {
-      return 'badge-danger';
-    }
-    if (lowerType.includes('hotel_policy')) {
-      return 'badge-info';
-    }
-    
-    return 'badge-secondary';
-  }
-
-  // Helper method to check if Booking policies exist
-  hasBookingPolicies(property: any): boolean {
-    return property?.CXL_Policy?.Booking && Array.isArray(property.CXL_Policy.Booking) && property.CXL_Policy.Booking.length > 0;
-  }
-
-  // Helper method to get policy text as string
-  getPolicyText(textArray: string[] | string): string {
-    if (Array.isArray(textArray)) {
-      return textArray.join(' ');
-    }
-    return textArray || '';
-  }
+  // Simplified policy display - direct access to CXL_Policy data
 
   // Helper method to filter out Booking.com payment references
   getFilteredPrepaymentText(prepaymentText: string): string {
@@ -191,31 +164,27 @@ export class PropertyDetailsComponent implements OnInit {
     }
   }
 
-  // Format guest configuration for display
+  /**
+   * Format guest configuration for display
+   */
   formatGuestConfig(guestConfig: any): string {
-    if (!guestConfig) {
-      return 'N/A';
+    if (!guestConfig) return 'No guest configuration available';
+    
+    const configs: string[] = [];
+    if (guestConfig.Booking) {
+      const booking = guestConfig.Booking;
+      configs.push(`Booking.com: ${booking.max_adults} adults, ${booking.max_children} children, ${booking.max_infants} infants`);
     }
-
-    // Handle different structures for Booking vs Airbnb
-    if (guestConfig.max_guests && typeof guestConfig.max_guests === 'number') {
-      // Airbnb structure: max_guests is a number
-      return `${guestConfig.max_guests}`;
-    } else {
-      // Booking structure: extract numbers from strings like "6 adults", "5 children"
-      const adults = this.extractNumber(guestConfig.max_adults) || 0;
-      const children = this.extractNumber(guestConfig.max_children) || 0;
-      const total = adults + children;
-
-      return `${total} (${adults}+${children})`;
+    if (guestConfig.Airbnb) {
+      const airbnb = guestConfig.Airbnb;
+      configs.push(`Airbnb: ${airbnb.max_guests} guests (${airbnb.max_adults} adults, ${airbnb.max_children} children, ${airbnb.max_infants} infants)`);
     }
-  }
-
-  // Helper method to extract number from string like "6 adults" -> 6
-  private extractNumber(text: string): number {
-    if (!text) return 0;
-    const match = text.match(/\d+/);
-    return match ? parseInt(match[0], 10) : 0;
+    if (guestConfig.VRBO) {
+      const vrbo = guestConfig.VRBO;
+      configs.push(`VRBO: ${vrbo.max_guests} guests (${vrbo.max_adults} adults, ${vrbo.max_children} children)`);
+    }
+    
+    return configs.length > 0 ? configs.join(' | ') : 'No guest configuration available';
   }
 
   // Method to open photo in modal or new tab
