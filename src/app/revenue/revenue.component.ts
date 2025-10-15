@@ -1901,6 +1901,41 @@ export class RevenueComponent implements OnInit {
       });
     }
 
+    // Pickup Occupancy filters
+    if (this.pickUpOcc7DaysMin !== null || this.pickUpOcc7DaysMax !== null) {
+      const value = `${this.pickUpOcc7DaysMin || 0}% - ${
+        this.pickUpOcc7DaysMax || 100
+      }%`;
+      filters.push({
+        type: "range",
+        label: "Pickup 7 Days",
+        value: value,
+        key: "pickUpOcc7Days",
+      });
+    }
+    if (this.pickUpOcc14DaysMin !== null || this.pickUpOcc14DaysMax !== null) {
+      const value = `${this.pickUpOcc14DaysMin || 0}% - ${
+        this.pickUpOcc14DaysMax || 100
+      }%`;
+      filters.push({
+        type: "range",
+        label: "Pickup 14 Days",
+        value: value,
+        key: "pickUpOcc14Days",
+      });
+    }
+    if (this.pickUpOcc30DaysMin !== null || this.pickUpOcc30DaysMax !== null) {
+      const value = `${this.pickUpOcc30DaysMin || 0}% - ${
+        this.pickUpOcc30DaysMax || 100
+      }%`;
+      filters.push({
+        type: "range",
+        label: "Pickup 30 Days",
+        value: value,
+        key: "pickUpOcc30Days",
+      });
+    }
+
     // Performance filters
     if (this.stlyVarOccMin !== null || this.stlyVarOccMax !== null) {
       const value = `${this.stlyVarOccMin || this.stlyVarOccMinRange}% - ${
@@ -2119,6 +2154,24 @@ export class RevenueComponent implements OnInit {
         this.occupancy30DaysMax = null;
         this.tempOccupancy30DaysMin = null;
         this.tempOccupancy30DaysMax = null;
+        break;
+      case "pickUpOcc7Days":
+        this.pickUpOcc7DaysMin = null;
+        this.pickUpOcc7DaysMax = null;
+        this.tempPickUpOcc7DaysMin = null;
+        this.tempPickUpOcc7DaysMax = null;
+        break;
+      case "pickUpOcc14Days":
+        this.pickUpOcc14DaysMin = null;
+        this.pickUpOcc14DaysMax = null;
+        this.tempPickUpOcc14DaysMin = null;
+        this.tempPickUpOcc14DaysMax = null;
+        break;
+      case "pickUpOcc30Days":
+        this.pickUpOcc30DaysMin = null;
+        this.pickUpOcc30DaysMax = null;
+        this.tempPickUpOcc30DaysMin = null;
+        this.tempPickUpOcc30DaysMax = null;
         break;
       case "stlyVarOcc":
         this.stlyVarOccMin = null;
