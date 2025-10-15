@@ -69,6 +69,34 @@ $transition: all 0.3s ease;
       }
     }
 
+    .table-container {
+      max-width: 95vw;
+      height: 80vh;
+    }
+
+    .fixed-column {
+      min-width: 200px;
+      max-width: 250px;
+      
+      .fixed-table {
+        .fixed-header,
+        .fixed-cell {
+          padding: 8px 10px;
+          font-size: 0.85rem;
+        }
+      }
+    }
+
+    .scrollable-columns {
+      .scrollable-table {
+        th,
+        td {
+          padding: 8px 10px;
+          font-size: 0.85rem;
+          min-width: 100px;
+        }
+      }
+    }
 
     .table-responsive {
       font-size: 0.85rem;
@@ -79,8 +107,6 @@ $transition: all 0.3s ease;
       }
     }
 
-
-
     .card-platform-tabs {
       .nav-link {
         font-size: 0.75rem;
@@ -88,6 +114,38 @@ $transition: all 0.3s ease;
 
         i {
           display: none;
+        }
+      }
+    }
+  }
+
+  // Extra small screens
+  @media (max-width: 576px) {
+    .table-container {
+      max-width: 98vw;
+      height: 75vh;
+    }
+
+    .fixed-column {
+      min-width: 180px;
+      max-width: 200px;
+      
+      .fixed-table {
+        .fixed-header,
+        .fixed-cell {
+          padding: 6px 8px;
+          font-size: 0.8rem;
+        }
+      }
+    }
+
+    .scrollable-columns {
+      .scrollable-table {
+        th,
+        td {
+          padding: 6px 8px;
+          font-size: 0.8rem;
+          min-width: 80px;
         }
       }
     }
@@ -166,6 +224,91 @@ $transition: all 0.3s ease;
       &.me-1 {
         margin-bottom: 0.125rem;
       }
+    }
+  }
+}
+
+// Pick Up Case cell styles
+.pickup-case-cell {
+  .pickup-case-container {
+    .pickup-case-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: flex-start;
+
+      .pickup-case-name {
+        font-weight: 600;
+        color: #495057;
+        font-size: 0.9rem;
+        line-height: 1.3;
+      }
+
+      .pickup-case-status {
+        .badge {
+          font-size: 0.75rem;
+          font-weight: 600;
+          padding: 0.25rem 0.5rem;
+          border-radius: 0.375rem;
+          white-space: nowrap;
+
+          &.badge-warning {
+            background-color: #ffc107;
+            color: #212529;
+          }
+
+          &.badge-success {
+            background-color: #28a745;
+            color: white;
+          }
+
+          &.badge-danger {
+            background-color: #dc3545;
+            color: white;
+          }
+
+          &.badge-info {
+            background-color: #17a2b8;
+            color: white;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Status cell styles
+.status-cell {
+  .status-dropdown {
+    min-width: 120px;
+    font-size: 0.85rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease;
+
+    &:focus {
+      border-color: #0066cc;
+      box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.25);
+    }
+
+    &:hover {
+      border-color: #adb5bd;
+    }
+
+    // Style options based on their values
+    option[value="pending"] {
+      color: #ffc107;
+      font-weight: 500;
+    }
+
+    option[value="working"] {
+      color: #17a2b8;
+      font-weight: 500;
+    }
+
+    option[value="done"] {
+      color: #28a745;
+      font-weight: 500;
     }
   }
 }
@@ -2344,7 +2487,7 @@ $transition: all 0.3s ease;
     width: 100%;
     max-width: 87vw;
     height: 85vh; /* enable vertical scroll */
-    overflow: auto; /* allows both X and Y scroll */
+    overflow: hidden; /* Changed from auto to hidden to control scrolling */
     border: 1px solid #dee2e6;
     border-radius: 6px;
     position: relative; /* Create positioning context for dropdowns */
@@ -2370,6 +2513,104 @@ $transition: all 0.3s ease;
       
       &:hover {
         background: #a8a8a8;
+      }
+    }
+  }
+
+  // Fixed table wrapper styles
+  .fixed-table-wrapper {
+    display: flex;
+    height: 100%;
+    position: relative;
+  }
+
+  // Fixed column styles
+  .fixed-column {
+    position: sticky;
+    left: 0;
+    z-index: 10;
+    background: white;
+    border-right: 2px solid #dee2e6;
+    min-width: 250px;
+    max-width: 300px;
+    flex-shrink: 0;
+    
+    .fixed-table {
+      width: 100%;
+      border-collapse: collapse;
+      height: 100%;
+      
+      .fixed-header {
+        background: #f8f9fa;
+        font-weight: 600;
+        padding: 12px 15px;
+        border-bottom: 2px solid #dee2e6;
+        position: sticky;
+        top: 0;
+        z-index: 11;
+        color: #495057;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      
+      .fixed-cell {
+        padding: 12px 15px;
+        border-bottom: 1px solid #dee2e6;
+        vertical-align: top;
+        background: white;
+        
+        .property-info {
+          .property-details {
+            h4 {
+              font-size: 0.95rem;
+              font-weight: 600;
+              color: #212529;
+              margin: 0;
+              line-height: 1.3;
+              word-break: break-word;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Scrollable columns styles
+  .scrollable-columns {
+    flex: 1;
+    overflow-x: auto;
+    overflow-y: auto;
+    height: 100%;
+    
+    .scrollable-table {
+      width: auto;
+      min-width: 100%;
+      border-collapse: collapse;
+      
+      th {
+        background: #f8f9fa;
+        font-weight: 600;
+        padding: 12px 15px;
+        border-bottom: 2px solid #dee2e6;
+        position: sticky;
+        top: 0;
+        z-index: 9;
+        color: #495057;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+        min-width: 120px;
+      }
+      
+      td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #dee2e6;
+        vertical-align: top;
+        background: white;
+        white-space: nowrap;
+        min-width: 120px;
       }
     }
   }
@@ -3024,7 +3265,7 @@ $transition: all 0.3s ease;
   }
   
   .modal-header {
-    background: linear-gradient(135deg, $primary-color 0%, #0052a3 100%);
+    background: black;
     color: white;
     border-bottom: none;
     padding: 1.25rem 1.5rem;
@@ -3078,7 +3319,7 @@ $transition: all 0.3s ease;
           margin-bottom: 0.25rem;
           
           &:checked {
-            background: linear-gradient(135deg, $primary-color 0%, #0052a3 100%);
+            background: black;
             color: white;
           }
           
