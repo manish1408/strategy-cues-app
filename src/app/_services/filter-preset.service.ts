@@ -108,7 +108,7 @@ export class FilterPresetService {
   /**
    * Save a new preset
    */
-  savePreset(name: string, filters: any, description?: string, operatorId?: string, propertyIds?: string[]): any {
+  savePreset(name: string, filters: any, description?: string, operatorId?: string, propertyIds?: string[], isAllPropertiesSelected?: boolean): any {
     if (!name || name.trim().length === 0) {
       throw new Error('Preset name is required');
     }
@@ -131,13 +131,16 @@ export class FilterPresetService {
       throw new Error('A preset with this name already exists');
     }
 
+    // Use the passed isAllPropertiesSelected parameter, default to false if not provided
+    const isAllPropertiesSelectedValue = isAllPropertiesSelected ?? false;
+
     // Create preset via API
     this.createFilterPreset(operatorId, {
       name: name.trim(),
       description: description?.trim(),
       filters: { ...filters },
       propertyIds: propertyIds
-    }).subscribe({
+    }, isAllPropertiesSelectedValue).subscribe({
       next: (response) => {
         if (response.success && response.data) {
           const newPreset = {
@@ -484,11 +487,11 @@ export class FilterPresetService {
     description?: string;
     filters: any;
     propertyIds?: string[];
-  }): Observable<any> {
+  }, isAllPropertiesSelected: boolean = false): Observable<any> {
     const requestData = {
       ...presetData,
       operator_id: operatorId,
-      isAllpropertiesSelected: true
+      isAllpropertiesSelected: isAllPropertiesSelected
     };
     
 

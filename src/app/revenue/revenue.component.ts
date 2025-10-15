@@ -3199,16 +3199,18 @@ export class RevenueComponent implements OnInit {
       // Combine both property ID arrays, removing duplicates
       const allPropertyIds = [...new Set([...currentPropertyIds, ...presetSelectedPropertyIds])];
       
+      // Determine if all properties are selected based on selectAllForPreset checkbox
+      const isAllPropertiesSelected = this.selectAllForPreset;
+      
       const savedPreset = this.filterPresetService.savePreset(
         this.newPresetName.trim(),
         currentFilters,
         this.newPresetDescription.trim() || undefined,
         this.operatorId || undefined,
-        allPropertyIds.length > 0 ? allPropertyIds : undefined
+        isAllPropertiesSelected ? undefined : (allPropertyIds.length > 0 ? allPropertyIds : undefined),
+        isAllPropertiesSelected
       );
       
-      // Note: The actual API call is asynchronous, so we'll handle the loading state in the service
-      // For now, we'll set a timeout to reset the loading state
       setTimeout(() => {
         this.presetSaving = false;
         this.cancelSavePreset();
