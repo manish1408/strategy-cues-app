@@ -41,15 +41,17 @@
                 </button>
               </div>
             </div>
-            <div class="cue-card-body">
-              <div class="cue-conditions">
-                <div class="condition-row">
-                  <strong>{{ getCurrentCue()?.description1 }}</strong>
-                </div>
-                <div class="condition-row">
-                  <strong>{{ getCurrentCue()?.description2 }}</strong>
-                </div>
-              </div>
+             <div class="cue-card-body">
+               <div class="cue-conditions">
+                 <div class="condition-row">
+                   <strong>{{ getCurrentCue()?.description1 }}</strong>
+                 </div>
+                 <div class="condition-row">
+                   <strong>{{ getCurrentCue()?.description2 }}</strong>
+                 </div>
+               </div>
+               
+          
 
               <div class="pickup-case" *ngFor="let pickup of getCurrentCue()?.pickups">
                 <div class="row">
@@ -57,9 +59,15 @@
                     <strong>{{ pickup?.name }}:</strong>
                     <div class="action-badge">{{ pickup?.description }}</div>
                   </div>
-                  <div class="col-4">
-                    <button class="btn btn-sm btn-primary float-end" title="Add Note">Add</button>
-                  </div>
+                   <div class="col-4">
+                     <button class="btn btn-sm btn-primary float-end" 
+                             (click)="assignPickupToSelectedProperties(pickup)"
+                             [disabled]="isAssigningPickup"
+                             title="Assign this pickup to selected properties">
+                       <i class="fas fa-spinner fa-spin me-1" *ngIf="isAssigningPickup"></i>
+                       {{ isAssigningPickup ? 'Assigning...' : 'Add' }}
+                     </button>
+                   </div>
                 </div>
               </div>
 
@@ -113,7 +121,6 @@
               <th>STLY Var <br /> RevPAR</th>
               <th>Min Rate <br /> Threshold</th>
               <th>Pick up Occ</th>
-              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -134,16 +141,16 @@
               </td>
               <td class="deployment-cues-cell">
                 <!-- Hardcoded Demo Cues -->
-                <div class="cues-container">
+                <div class="cues-container" *ngIf="property?.deploymentCueName">
                   <div class="cue-item">
-                    <div class="cue-name">Deployment Cue 1</div>
+                    <div class="cue-name">{{property?.deploymentCueName}}</div>
                   </div>
                 </div>
               </td>
               <td class="pickup-case-cell">
-                <div class="pickup-case-container">
+                <div class="pickup-case-container" *ngIf="property?.pickup">
                   <div class="pickup-case-item">
-                    <div class="pickup-case-name">Pick Up Case 2</div>
+                    <div class="pickup-case-name">{{property?.pickup?.name}}</div>
                   </div>
                 </div>
               </td>
@@ -284,13 +291,7 @@
                   </div>
                 </div>
               </td>
-              <td>
-                <div class="btn-group btn-group-sm">
-                  <button class="btn btn-outline-primary btn-sm" (click)="viewDetails(property?.propertyData?._id)">
-                    <i class="fas fa-eye"></i>
-                  </button>
-                </div>
-              </td>
+              
             </tr>
           </tbody>
         </table>

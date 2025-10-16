@@ -78,6 +78,9 @@ export class DeploymentComponent implements OnInit {
   // Assignee update loading state
   updatingAssigneePropertyIds: Set<string> = new Set();
   
+  // Pickup assignment loading state
+  isAssigningPickup: boolean = false;
+  
   allUsers: any[] = [];
   selectedPropertyForNotes: any[] = [];
   loggedInUser: any = null;
@@ -982,6 +985,90 @@ export class DeploymentComponent implements OnInit {
   // Check if property assignee is being updated
   isPropertyAssigneeUpdating(propertyId: string): boolean {
     return this.updatingAssigneePropertyIds.has(propertyId);
+  }
+
+  // Assign pickup to all selected properties
+  assignPickupToSelectedProperties(pickup: any): void {
+    if (this.selectedPropertyIds.size === 0) {
+      this.toastr.error('Please select at least one property');
+      return;
+    }
+
+  
+    const currentCue = this.getCurrentCue();
+    if (!currentCue) {
+      this.toastr.error('No deployment cue selected');
+      return;
+    }
+
+    this.isAssigningPickup = true;
+    const selectedPropertyIds = Array.from(this.selectedPropertyIds);
+    let completedRequests = 0;
+    let successfulRequests = 0;
+    let failedRequests = 0;
+
+    // Process each selected property
+    selectedPropertyIds.forEach(propertyId => {
+      const property = this.cueProperties.find(p => p._id === propertyId);
+      if (!property) {
+        completedRequests++;
+        failedRequests++;
+        this.checkPickupAssignmentComplete(completedRequests, selectedPropertyIds.length, successfulRequests, failedRequests);
+        return;
+      }
+
+      // Prepare the update data
+      const updateData = {
+        deploymentCueId: currentCue._id,
+        deploymentCueName: currentCue.name,
+        pickup: {
+          name: pickup.name,
+          description: pickup.description
+        },
+        assignedTo: property.assignedTo || null,
+        status: property.status || 'pending',
+        notes: property.notes || null
+      };
+
+      // Make API call for each property
+      this.cuePropertiesService.updateCueProperty(propertyId, updateData).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            successfulRequests++;
+            // Update local property data
+            property.deploymentCueId = updateData.deploymentCueId;
+            property.deploymentCueName = updateData.deploymentCueName;
+            property.pickup = updateData.pickup;
+          } else {
+            failedRequests++;
+          }
+        },
+        error: (error: any) => {
+          failedRequests++;
+          console.error('Pickup assignment error for property:', propertyId, error);
+        },
+        complete: () => {
+          completedRequests++;
+          this.checkPickupAssignmentComplete(completedRequests, selectedPropertyIds.length, successfulRequests, failedRequests);
+        }
+      });
+    });
+  }
+
+  // Check if all pickup assignments are complete
+  private checkPickupAssignmentComplete(completed: number, total: number, successful: number, failed: number): void {
+    if (completed === total) {
+      this.isAssigningPickup = false;
+      
+      if (successful === total) {
+        this.toastr.success(`Pickup assigned successfully to ${successful} properties!`);
+        this.clearSelection(); // Clear selection after successful assignment
+      } else if (successful > 0) {
+        this.toastr.warning(`Pickup assigned to ${successful} properties, ${failed} failed`);
+      } else {
+        this.toastr.error('Failed to assign pickup to any properties');
+      }
+    }
   }
 
   // Debug method to check property data structure
