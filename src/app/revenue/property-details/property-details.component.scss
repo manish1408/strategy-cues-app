@@ -297,9 +297,10 @@
           width: 100%;
 
           &:hover {
-            color: #495057;
+            color: white;
             cursor: pointer;
             border-bottom: none !important;
+            background-color: black;
           }
 
           &.active {
