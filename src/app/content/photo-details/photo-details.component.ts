@@ -52,7 +52,7 @@ export class PhotoDetailsComponent implements OnInit {
   isGeneratingCaption: boolean = false;
   generatingPhotoId: string = "";
   generatingPhotoUrl: string = "";
-  
+
   // Store photo metadata separately since ImageItem doesn't support custom data
   currentPlatformPhotos: any[] = [];
 
@@ -62,7 +62,7 @@ export class PhotoDetailsComponent implements OnInit {
   isAnalyzingPhotos: boolean = false;
 
   // Platform tabs
-  selectedPlatform: string = "airbnb";
+  selectedPlatform = "airbnb";
   selectedPropertyPlatform: string = "airbnb";
   selectedCompetitorPlatform: string = "airbnb";
   isPropertyGalleryLoading: boolean = false;
@@ -76,7 +76,7 @@ export class PhotoDetailsComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private imageCaptionService: ImageCaptionService,
     private toastr: ToastrService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.propertyId = this.route.snapshot.params["id"];
@@ -94,57 +94,24 @@ export class PhotoDetailsComponent implements OnInit {
       .getPropertyCompetitors(propertyId)
       .subscribe({
         next: (response: any) => {
-          // Bind the API data to component properties
           if (response?.data) {
-            // Update property data with API response
-            if (response.data.property) {
-              this.propertyData = {
-                ...this.propertyData,
-                ...response.data.property,
-              };
-
-              // Update images array after receiving property data
+            if (response.data) {
+              this.propertyData = response.data.property;
+              this.propertyData.competitor = response.data.competitors;
+            if (this.propertyData.competitor.length > 0) {
+              this.updateCompetitorImages();
+            }
               this.updatePropertyPlatformImages();
             }
 
-            // Update competitors data
-            if (
-              response.data.competitors &&
-              Array.isArray(response.data.competitors)
-            ) {
-              this.propertyData.competitor = response.data.competitors;
-
-              // Ensure the selected competitor matches the active platform (default airbnb)
-              this.alignSelectedCompetitorWithPlatform();
-
-              // Update competitor images if we have competitors
-              if (this.propertyData.competitor.length > 0) {
-                this.updateCompetitorImages();
-              }
-            } else {
-              // Show default competitors when no data from backend
-              this.propertyData.competitor = this.getDefaultCompetitors();
-            }
-
-            // Trigger change detection to update the UI
             this.cdr.detectChanges();
-
-            // Set loading to false after data is loaded
-            this.isLoading = false;
-            
-            // Fetch captions for the default platform (Airbnb)
             this.fetchAllCaptionsForPlatform('airbnb');
-            
-            // Fetch AI photo analysis
             this.fetchAIPhotoAnalysis();
+            this.isLoading = false;
           }
         },
         error: (error: any) => {
           this.toastr.error('Error loading property data. Please try again.');
-          // Trigger change detection to update the UI
-          this.cdr.detectChanges();
-
-          // Set loading to false even on error
           this.isLoading = false;
         },
       });
@@ -315,7 +282,7 @@ export class PhotoDetailsComponent implements OnInit {
   // Get platform-specific photo gap for a competitor
   getCompetitorPlatformPhotoGap(competitor: any, platform: string): number {
     if (!competitor) return 0;
-    
+
     // Get competitor count for specific platform
     let competitorCount = 0;
     switch (platform) {
@@ -329,16 +296,16 @@ export class PhotoDetailsComponent implements OnInit {
         competitorCount = competitor.propertyVrboPhotos?.length || 0;
         break;
     }
-    
+
     const propertyCount = this.getPropertyPlatformPhotoCount(platform);
-    
+
     return competitorCount - propertyCount;
   }
 
   // Get platform photo count for a specific competitor
   getCompetitorPlatformPhotoCountForCompetitor(competitor: any, platform: string): number {
     if (!competitor) return 0;
-    
+
     switch (platform) {
       case 'airbnb':
         return competitor.propertyAirbnbPhotos?.length || 0;
@@ -492,72 +459,6 @@ export class PhotoDetailsComponent implements OnInit {
     ].map((photo) => new ImageItem({ src: photo.url, thumb: photo.url }));
   }
 
-  // Default competitors when backend data is not available
-  getDefaultCompetitors(): any[] {
-    return [
-      {
-        id: "default-competitor-1",
-        name: "Sample Competitor 1",
-        num_photos: 2,
-        reviews_score: 4.5,
-        reviews_count: 25,
-        location_score: 4.2,
-        propertyAirbnbPhotos: [
-          {
-            id: "default-airbnb-1",
-            url: "assets/images/placeholder.jpg",
-            caption: "Default Airbnb photo",
-            accessibility_label: "Default competitor image",
-            source: "airbnb",
-          },
-        ],
-        propertyBookingPhotos: [
-          {
-            id: "default-booking-1",
-            url: "assets/images/placeholder.jpg",
-            caption: "Default Booking photo",
-            accessibility_label: "Default competitor image",
-            source: "booking",
-          },
-        ],
-        propertyVrboPhotos: null,
-        airbnb_link: "#",
-        booking_link: "#",
-        pricelabs_link: null,
-      },
-      {
-        id: "default-competitor-2",
-        name: "Sample Competitor 2",
-        num_photos: 2,
-        reviews_score: 4.3,
-        reviews_count: 18,
-        location_score: 4.0,
-        propertyAirbnbPhotos: [
-          {
-            id: "default-airbnb-2",
-            url: "assets/images/placeholder.jpg",
-            caption: "Default Airbnb photo",
-            accessibility_label: "Default competitor image",
-            source: "airbnb",
-          },
-        ],
-        propertyBookingPhotos: [
-          {
-            id: "default-booking-2",
-            url: "assets/images/placeholder.jpg",
-            caption: "Default Booking photo",
-            accessibility_label: "Default competitor image",
-            source: "booking",
-          },
-        ],
-        propertyVrboPhotos: null,
-        airbnb_link: "#",
-        booking_link: "#",
-        pricelabs_link: null,
-      },
-    ];
-  }
-
   // Default property data when no data is available
   getDefaultPropertyData(): any {
     return {
@@ -628,7 +529,7 @@ export class PhotoDetailsComponent implements OnInit {
     // If no icon but title is provided, try to derive icon from title
     if (title) {
       const lowerTitle = title.toLowerCase();
-      
+
       // Title-based icon mapping for Booking amenities
       if (lowerTitle.includes('parking')) return 'fa-parking';
       if (lowerTitle.includes('wifi') || lowerTitle.includes('internet')) return 'fa-wifi';
@@ -677,40 +578,40 @@ export class PhotoDetailsComponent implements OnInit {
 
   getTotalPhotos(): number {
     if (!this.propertyData?.Photos) return 0;
-    
+
     const airbnbCount = this.propertyData.Photos.airbnb?.length || 0;
     const bookingCount = this.propertyData.Photos.booking?.length || 0;
     const vrboCount = this.propertyData.Photos.vrbo?.length || 0;
-    
+
     return airbnbCount + bookingCount + vrboCount;
   }
 
   getCaptionedCount(): number {
     if (!this.propertyData?.Photos) return 0;
-    
+
     let captionedCount = 0;
-    
+
     // Count captioned photos from Airbnb
     if (this.propertyData.Photos.airbnb) {
-      captionedCount += this.propertyData.Photos.airbnb.filter((photo: any) => 
+      captionedCount += this.propertyData.Photos.airbnb.filter((photo: any) =>
         photo.caption && photo.caption.trim() !== ''
       ).length;
     }
-    
+
     // Count captioned photos from Booking
     if (this.propertyData.Photos.booking) {
-      captionedCount += this.propertyData.Photos.booking.filter((photo: any) => 
+      captionedCount += this.propertyData.Photos.booking.filter((photo: any) =>
         photo.caption && photo.caption.trim() !== ''
       ).length;
     }
-    
+
     // Count captioned photos from VRBO
     if (this.propertyData.Photos.vrbo) {
-      captionedCount += this.propertyData.Photos.vrbo.filter((photo: any) => 
+      captionedCount += this.propertyData.Photos.vrbo.filter((photo: any) =>
         photo.caption && photo.caption.trim() !== ''
       ).length;
     }
-    
+
     return captionedCount;
   }
 
@@ -738,7 +639,7 @@ export class PhotoDetailsComponent implements OnInit {
   // Get photos missing captions for specific platform
   getMissingCaptionPhotosForPlatform(platform: string): string[] {
     if (!this.propertyData?.Photos) return [];
-    
+
     let platformPhotos: any[] = [];
     switch (platform) {
       case 'airbnb':
@@ -753,7 +654,7 @@ export class PhotoDetailsComponent implements OnInit {
       default:
         return [];
     }
-    
+
     // Return only photos that are missing captions
     return platformPhotos
       .filter((photo: any) => !photo.caption || photo.caption.trim() === '')
@@ -763,7 +664,7 @@ export class PhotoDetailsComponent implements OnInit {
   // Get count of photos without captions for specific platform
   getMissingCaptionsCountForPlatform(platform: string): number {
     if (!this.propertyData?.Photos) return 0;
-    
+
     let platformPhotos: any[] = [];
     switch (platform) {
       case 'airbnb':
@@ -778,14 +679,14 @@ export class PhotoDetailsComponent implements OnInit {
       default:
         return 0;
     }
-    
+
     return platformPhotos.filter((photo: any) => !photo.caption || photo.caption.trim() === '').length;
   }
 
   // Get all photos for specific platform
   getAllPhotosForPlatform(platform: string): string[] {
     if (!this.propertyData?.Photos) return [];
-    
+
     let platformPhotos: any[] = [];
     switch (platform) {
       case 'airbnb':
@@ -800,14 +701,14 @@ export class PhotoDetailsComponent implements OnInit {
       default:
         return [];
     }
-    
+
     return platformPhotos.map((photo: any) => photo.id || "Unknown");
   }
 
   // Get photos with generated captions for specific platform
   getGeneratedCaptionPhotosForPlatform(platform: string): string[] {
     if (!this.propertyData?.Photos) return [];
-    
+
     let platformPhotos: any[] = [];
     switch (platform) {
       case 'airbnb':
@@ -822,7 +723,7 @@ export class PhotoDetailsComponent implements OnInit {
       default:
         return [];
     }
-    
+
     // Return only photos that have captions
     return platformPhotos
       .filter((photo: any) => photo.caption && photo.caption.trim() !== '')
@@ -836,7 +737,7 @@ export class PhotoDetailsComponent implements OnInit {
     }
 
     this.isAnalyzingPhotos = true;
-    
+
     this.competitorComparisonService.getAIPhotoAnalysis(this.propertyId, this.operatorId)
       .subscribe({
         next: (response: any) => {
@@ -846,11 +747,11 @@ export class PhotoDetailsComponent implements OnInit {
               ...this.propertyData,
               aiAnalysis: response.data
             };
-            
+
             // Trigger change detection to update suggestions
             this.cdr.detectChanges();
           }
-          
+
           this.isAnalyzingPhotos = false;
         },
         error: (error) => {
@@ -864,9 +765,9 @@ export class PhotoDetailsComponent implements OnInit {
   // Fetch all captions for current platform photos
   fetchAllCaptionsForPlatform(platform: string): void {
     if (!this.propertyData?.Photos) return;
-    
+
     this.isRefreshingCaptions = true;
-    
+
     // Get captions by source (saved captions)
     this.imageCaptionService.getCaptionsBySource({
       operator_id: this.operatorId,
@@ -878,7 +779,7 @@ export class PhotoDetailsComponent implements OnInit {
           // Update captions from saved data
           this.updateCaptionsFromSavedData(response.data, platform);
         }
-        
+
         this.isRefreshingCaptions = false;
         this.cdr.detectChanges();
       },
@@ -896,7 +797,7 @@ export class PhotoDetailsComponent implements OnInit {
     if (!this.propertyData?.Photos || !savedCaptions) {
       return;
     }
-    
+
     let platformPhotos: any[] = [];
     switch (platform) {
       case 'airbnb':
@@ -911,15 +812,15 @@ export class PhotoDetailsComponent implements OnInit {
       default:
         return;
     }
-    
+
     // Update captions for each photo from saved data
     platformPhotos.forEach((photo: any, index: number) => {
       if (photo.url) {
         // Try to find by url or imageId field
-        const savedCaption = savedCaptions.find((item: any) => 
+        const savedCaption = savedCaptions.find((item: any) =>
           item.url === photo.url || item.imageId === photo.url
         );
-        
+
         if (savedCaption && savedCaption.caption) {
           photo.caption = savedCaption.caption;
         }
@@ -974,43 +875,44 @@ export class PhotoDetailsComponent implements OnInit {
 
   // Unified platform selection method
   selectPlatform(platform: string): void {
-    // Skip VRBO if it's commented out
-    if (platform === 'vrbo') {
-      return;
-    }
-    
     this.selectedPlatform = platform;
-    this.selectedPropertyPlatform = platform;
-    this.selectedCompetitorPlatform = platform;
-    
-    // If current competitor doesn't have this platform, switch to the first matching competitor
-    const current = this.getCurrentCompetitor();
-    if (!current || !this.hasCompetitorPlatform(current, platform)) {
-      const filtered = this.getCompetitorsForSelectedPlatform();
-      if (filtered.length > 0) {
-        this.selectCompetitorByObject(filtered[0]);
-      }
-    }
 
-    this.isPropertyGalleryLoading = true;
-    this.isCompetitorGalleryLoading = true;
-    
-    // Update images based on selected platform
-    setTimeout(() => {
-      this.updatePropertyPlatformImages();
-      this.updateCompetitorPlatformImages();
-      this.isPropertyGalleryLoading = false;
-      this.isCompetitorGalleryLoading = false;
-      
-      // Fetch all captions for the selected platform
-      this.fetchAllCaptionsForPlatform(platform);
-    }, 300);
+    // // Skip VRBO if it's commented out
+    // if (platform === 'vrbo') {
+    //   return;
+    // }
+
+    // this.selectedPropertyPlatform = platform;
+    // this.selectedCompetitorPlatform = platform;
+
+    // // If current competitor doesn't have this platform, switch to the first matching competitor
+    // const current = this.getCurrentCompetitor();
+    // if (!current || !this.hasCompetitorPlatform(current, platform)) {
+    //   const filtered = this.getCompetitorsForSelectedPlatform();
+    //   if (filtered.length > 0) {
+    //     this.selectCompetitorByObject(filtered[0]);
+    //   }
+    // }
+
+    // this.isPropertyGalleryLoading = true;
+    // this.isCompetitorGalleryLoading = true;
+
+    // // Update images based on selected platform
+    // setTimeout(() => {
+    //   this.updatePropertyPlatformImages();
+    //   this.updateCompetitorPlatformImages();
+    //   this.isPropertyGalleryLoading = false;
+    //   this.isCompetitorGalleryLoading = false;
+
+    //   // Fetch all captions for the selected platform
+    //   this.fetchAllCaptionsForPlatform(platform);
+    // }, 300);
   }
 
   // Get amenities for selected platform
   getPropertyAmenitiesForPlatform(platform: string): any[] {
     if (!this.propertyData) return [];
-    
+
     // Check if Amenities object exists (API response structure)
     if (this.propertyData.Amenities) {
       switch (platform) {
@@ -1030,7 +932,7 @@ export class PhotoDetailsComponent implements OnInit {
           return [];
       }
     }
-    
+
     // Fallback to old structure if Amenities object doesn't exist
     switch (platform) {
       case 'airbnb':
@@ -1054,7 +956,7 @@ export class PhotoDetailsComponent implements OnInit {
   getCompetitorAmenitiesForPlatform(platform: string): any[] {
     const competitor = this.getCurrentCompetitor();
     if (!competitor) return [];
-    
+
     // API response structure: competitors use lowercase camelCase properties
     switch (platform) {
       case 'airbnb':
@@ -1103,8 +1005,8 @@ export class PhotoDetailsComponent implements OnInit {
     this.currentPlatformPhotos = platformPhotos;
 
     this.images = platformPhotos.map(
-      (photo: any) => new ImageItem({ 
-        src: photo.url, 
+      (photo: any) => new ImageItem({
+        src: photo.url,
         thumb: photo.url,
         alt: photo.caption || photo.accessibility_label || 'Property photo'
       })
@@ -1151,24 +1053,19 @@ export class PhotoDetailsComponent implements OnInit {
     }
   }
 
-  // Get competitors filtered for the currently selected platform
-  getCompetitorsForSelectedPlatform(): any[] {
-    const competitors = this.propertyData?.competitor || [];
-    return competitors.filter((c: any) => this.hasCompetitorPlatform(c, this.selectedPlatform));
-  }
 
   // After competitors load or platform changes, make sure selection is a competitor with that platform
-  private alignSelectedCompetitorWithPlatform(): void {
-    const list = this.getCompetitorsForSelectedPlatform();
-    if (list.length === 0) {
-      // No competitors for this platform; keep index but images will be empty
-      return;
-    }
-    const current = this.getCurrentCompetitor();
-    if (!current || !this.hasCompetitorPlatform(current, this.selectedPlatform)) {
-      this.selectCompetitorByObject(list[0]);
-    }
-  }
+  // private alignSelectedCompetitorWithPlatform(): void {
+  //   const list = this.getCompetitorsForSelectedPlatform();
+  //   if (list.length === 0) {
+  //     // No competitors for this platform; keep index but images will be empty
+  //     return;
+  //   }
+  //   const current = this.getCurrentCompetitor();
+  //   if (!current || !this.hasCompetitorPlatform(current, this.selectedPlatform)) {
+  //     this.selectCompetitorByObject(list[0]);
+  //   }
+  // }
 
   // Select competitor by object (maps to original index)
   selectCompetitorByObject(competitor: any): void {
@@ -1281,9 +1178,9 @@ export class PhotoDetailsComponent implements OnInit {
     if (this.propertyData?.aiAnalysis?.coverage) {
       const missingItems = this.propertyData.aiAnalysis.coverage.filter((item: any) => item.status === 'missing');
       const partialItems = this.propertyData.aiAnalysis.coverage.filter((item: any) => item.status === 'partial');
-      
+
       const suggestions: any[] = [];
-      
+
       // Add missing items as suggestions
       missingItems.forEach((item: any, index: number) => {
         suggestions.push({
@@ -1296,7 +1193,7 @@ export class PhotoDetailsComponent implements OnInit {
           type: 'missing_coverage'
         });
       });
-      
+
       // Add partial items as suggestions
       partialItems.forEach((item: any, index: number) => {
         suggestions.push({
@@ -1309,7 +1206,7 @@ export class PhotoDetailsComponent implements OnInit {
           type: 'partial_coverage'
         });
       });
-      
+
       return suggestions;
     }
 
@@ -1399,8 +1296,7 @@ export class PhotoDetailsComponent implements OnInit {
     link.setAttribute("href", url);
     link.setAttribute(
       "download",
-      `${this.propertyData.listing_id}_details_${
-        new Date().toISOString().split("T")[0]
+      `${this.propertyData.listing_id}_details_${new Date().toISOString().split("T")[0]
       }.csv`
     );
     link.style.visibility = "hidden";
@@ -1644,7 +1540,7 @@ export class PhotoDetailsComponent implements OnInit {
           // Show success toast
           if (response.success) {
             const caption = response.data?.caption || response.caption;
-            
+
             if (caption) {
               // Update the photo caption immediately in the UI
               this.updatePhotoCaptionByUrl(photoUrl, caption);
@@ -1652,13 +1548,13 @@ export class PhotoDetailsComponent implements OnInit {
             } else {
               this.toastr.warning('Caption generated but no caption text received.');
             }
-            
+
             // Also refresh captions for the current platform to ensure consistency
             this.fetchAllCaptionsForPlatform(this.selectedPropertyPlatform);
           } else {
             this.toastr.error('Failed to generate caption. Please try again.');
           }
-          
+
           this.isGeneratingCaption = false;
           this.generatingPhotoUrl = "";
           // Trigger change detection to update the UI
@@ -1772,12 +1668,12 @@ export class PhotoDetailsComponent implements OnInit {
   // Get current photo data for caption generation
   getCurrentPhotoData(): any {
     if (!this.currentPlatformPhotos || this.currentPlatformPhotos.length === 0) return null;
-    
+
     // Get the current image index from the gallery
     // This might need to be adjusted based on how the gallery component works
     const currentIndex = this.currentImageIndex || 0;
     const currentPhoto = this.currentPlatformPhotos[currentIndex];
-    
+
     return currentPhoto || null;
   }
 
@@ -1825,25 +1721,25 @@ export class PhotoDetailsComponent implements OnInit {
   // Get photo by ID from all platforms
   getPhotoById(photoId: string): any {
     if (!this.propertyData?.Photos) return null;
-    
+
     // Check Airbnb photos
     if (this.propertyData.Photos.airbnb) {
       const photo = this.propertyData.Photos.airbnb.find((p: any) => p.id === photoId);
       if (photo) return photo;
     }
-    
+
     // Check Booking photos
     if (this.propertyData.Photos.booking) {
       const photo = this.propertyData.Photos.booking.find((p: any) => p.id === photoId);
       if (photo) return photo;
     }
-    
+
     // Check VRBO photos
     if (this.propertyData.Photos.vrbo) {
       const photo = this.propertyData.Photos.vrbo.find((p: any) => p.id === photoId);
       if (photo) return photo;
     }
-    
+
     return null;
   }
 }

@@ -80,30 +80,21 @@
       </ul>
     </div>
 
-    <!-- Competitor Dropdown -->
-    <div class="competitor-dropdown-container" *ngIf="getCompetitorsForSelectedPlatform().length > 0">
-      <div class="dropdown">
-        <button class="btn btn-outline-primary dropdown-toggle" 
-                type="button" 
-                id="competitorDropdown" 
-                data-bs-toggle="dropdown" 
-                aria-expanded="false">
-          
-          {{ getCurrentCompetitor()?.propertyName || 'Select Competitor' }}
-         
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="competitorDropdown">
-         
-         
-          <li *ngFor="let competitor of getCompetitorsForSelectedPlatform(); let i = index">
-            <a class="dropdown-item" 
-               (click)="selectCompetitorByObject(competitor)"
-               [class.active]="isCompetitorSelected(competitor)">
-               <div>{{ competitor.propertyName }}</div>
-            </a>
-          </li>
-        </ul>
-      </div>
+    <!-- Competitor Select -->
+    <div class="competitor-select-container" >
+      <select class="form-select">
+        <option value="">Select Competitor</option>
+        <ng-container *ngFor="let competitor of propertyData.competitor; let i = index">
+          <option *ngIf="competitor.bookingLink !== null && selectedPlatform == 'booking'" [value]="competitor.propertyName">
+            {{ competitor.propertyName }}
+          </option>
+
+          <option *ngIf="competitor.airbnbLink !== null && selectedPlatform == 'airbnb'" [value]="competitor.propertyName">
+            {{ competitor.propertyName }}
+          </option>
+
+        </ng-container>
+      </select>
     </div>
   </div>
 
