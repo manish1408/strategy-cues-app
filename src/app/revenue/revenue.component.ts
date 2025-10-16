@@ -11,6 +11,8 @@ import { ExportService } from "../_services/export.service";
 import { ToastrService } from "ngx-toastr";
 import { ToastService } from "../_services/toast.service";
 import { DeploymentCuesService } from "../_services/deploymentCues.service";
+import { CuePropertiesService } from "../_services/cue-properties.service";
+import { finalize } from "rxjs/operators";
 
 // Declare global variables for jQuery and Bootstrap
 declare var $: any;
@@ -304,6 +306,12 @@ export class RevenueComponent implements OnInit {
   // Track if we're in preset mode (preset with propertyIds selected)
   isPresetMode: boolean = false;
 
+  // Preset property IDs
+  presetPropertyIds: string[] = [];
+
+  // Loading states
+  cuePropertiesLoading: boolean = false;
+
   constructor(
     private propertiesService: PropertiesService, 
     private localStorageService: LocalStorageService, 
@@ -313,7 +321,8 @@ export class RevenueComponent implements OnInit {
     private exportService: ExportService,
     private toastr: ToastrService,
     private toastService: ToastService,
-    private deploymentCuesService: DeploymentCuesService
+    private deploymentCuesService: DeploymentCuesService,
+    private cuePropertiesService: CuePropertiesService,
   ) {
     this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
   }
@@ -2966,7 +2975,7 @@ export class RevenueComponent implements OnInit {
     
     // Store property IDs to restore after data is loaded
     const presetPropertyIds = propertyIds || [];
-    
+    this.presetPropertyIds = presetPropertyIds;
     // Check if preset has any filters or just property selection
     const hasFilters = this.hasActiveFiltersFromPreset(filters);
 
@@ -3533,37 +3542,65 @@ export class RevenueComponent implements OnInit {
   }
 
 
-  optmimiseProperties(): void {
-    // Check both selection states - main selection and preset selection
-    const mainSelectedIds = Array.from(this.selectedPropertyIds);
-    const presetSelectedIds = Array.from(this.selectedForPresetIds);
+  // optmimiseProperties(): void {
+  //   // Check both selection states - main selection and preset selection
+  //   const mainSelectedIds = Array.from(this.selectedPropertyIds);
+  //   const presetSelectedIds = Array.from(this.selectedForPresetIds);
     
-    // Use preset selection if available, otherwise fall back to main selection
-    const selectedPropertyIds = presetSelectedIds.length > 0 ? presetSelectedIds : mainSelectedIds;
+  //   // Use preset selection if available, otherwise fall back to main selection
+  //   const selectedPropertyIds = presetSelectedIds.length > 0 ? presetSelectedIds : mainSelectedIds;
     
-    if (selectedPropertyIds.length === 0) {
-      this.toastr.warning('Please select a property before uploading to deployment cues');
-      return;
-    }
+  //   if (selectedPropertyIds.length === 0) {
+  //     this.toastr.warning('Please select a property before uploading to deployment cues');
+  //     return;
+  //   }
 
-    // Allow only single property selection
-    if (selectedPropertyIds.length > 1) {
-      this.toastr.warning('Please select only one property for deployment cues');
-      return;
-    }
+  //   // Allow only single property selection
+  //   if (selectedPropertyIds.length > 1) {
+  //     this.toastr.warning('Please select only one property for deployment cues');
+  //     return;
+  //   }
 
-    this.deploymentCuesService.createDeploymentCues({
-      operatorId: this.operatorId || "",
-      propertyId: selectedPropertyIds[0], // Send single property ID as string
-      deploymentCueName: `Optimization ${new Date().toLocaleDateString()}`
-    }).subscribe({
-      next: (response: any) => {
-        this.toastr.success('Sent to Deployment Cues');
-        this.deploymentCuesId = response.data._id;
-      },
-      error: (error: any) => {
-        this.toastr.error('Failed to send to Deployment Cues');
-      }
+  //   this.deploymentCuesService.createDeploymentCues({
+  //     operatorId: this.operatorId || "",
+  //     propertyId: selectedPropertyIds[0], // Send single property ID as string
+  //     deploymentCueName: `Optimization ${new Date().toLocaleDateString()}`
+  //   }).subscribe({
+  //     next: (response: any) => {
+  //       this.toastr.success('Sent to Deployment Cues');
+  //       this.deploymentCuesId = response.data._id;
+  //     },
+  //     error: (error: any) => {
+  //       this.toastr.error('Failed to send to Deployment Cues');
+  //     }
+  //   });
+  // }
+
+  onUploadToDC(): void {
+ 
+    this.cuePropertiesLoading = true;
+    this.presetPropertyIds.forEach(propertyId => {
+      this.cuePropertiesService
+      .createCueProperty({
+        operatorId: this.operatorId || "",
+        propertyId: propertyId, // Send single property ID as string
+      })
+      .pipe(
+        finalize(() => this.cuePropertiesLoading = false)
+      )
+      .subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            this.toastr.success('Sent to Deployment Cues');
+          } else {
+            this.toastr.error('Failed to send to Deployment Cues');
+          }
+        },
+        error: (error: any) => {
+          this.toastr.error('Failed to send to Deployment Cues');
+        },
+       
+      });
     });
   }
 }

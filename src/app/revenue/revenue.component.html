@@ -299,8 +299,10 @@
                 <i *ngIf="!presetSaving" class="fas fa-bookmark me-1"></i>
                 <i *ngIf="presetSaving" class="fas fa-spinner fa-spin me-1"></i>Save as Preset
               </button>
-              <button class="btn btn-sm btn-outline-success me-2" (click)="optmimiseProperties()">
-              <i class="fas fa-cogs me-1"></i>Upload to DC
+              <button *ngIf="selectedPresetId" class="btn btn-sm btn-outline-success me-2" (click)="onUploadToDC()" [disabled]="cuePropertiesLoading">
+              <i *ngIf="!cuePropertiesLoading" class="fas fa-cogs me-1"></i>
+              <i *ngIf="cuePropertiesLoading" class="fas fa-spinner fa-spin me-2"></i>
+              Upload to DC
             </button>
             </div>
           </div>
