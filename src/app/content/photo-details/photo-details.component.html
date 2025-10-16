@@ -90,7 +90,7 @@
                 aria-expanded="false">
           
           {{ getCurrentCompetitor()?.propertyName || 'Select Competitor' }}
-          <span class="badge bg-primary ms-2">{{ getCompetitorsForSelectedPlatform().length }}</span>
+         
         </button>
         <ul class="dropdown-menu" aria-labelledby="competitorDropdown">
          
@@ -99,13 +99,7 @@
             <a class="dropdown-item" 
                (click)="selectCompetitorByObject(competitor)"
                [class.active]="isCompetitorSelected(competitor)">
-              <div class="competitor-item">
-                <div class="competitor-info">
-                  <div class="competitor-name">{{ competitor.propertyName }}</div>
-                  
-                </div>
-               
-              </div>
+               <div>{{ competitor.propertyName }}</div>
             </a>
           </li>
         </ul>
