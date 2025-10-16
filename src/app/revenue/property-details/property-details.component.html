@@ -352,26 +352,26 @@
           <div class="col-lg-6 mb-4" *ngIf="property.STLM_Var">
             <div class="card">
               <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-calendar-minus me-2"></i>Same Time Last Month (STLM)</h5>
+                <h5 class="mb-0"><i class="fas fa-calendar-minus me-2"></i>Last month Actuals</h5>
               </div>
               <div class="card-body">
                 <div class="performance-metric">
                   <div class="metric-row">
                     <span class="metric-name">Occupancy</span>
-                    <span class="metric-value" [ngClass]="getPerformanceClass(property.STLM_Var.Occ)">
+                    <span class="metric-value">
                       {{ property.STLM_Var.Occ ? property.STLM_Var.Occ + '%' : 'N/A' }}
                     </span>
                   </div>
                   <div class="metric-row">
                     <span class="metric-name">ADR</span>
-                    <span class="metric-value" [ngClass]="getPerformanceClass(property.STLM_Var.ADR)">
-                      {{ property.STLM_Var.ADR ? property.STLM_Var.ADR + '%' : 'N/A' }}
+                    <span class="metric-value">
+                      {{ property.STLM_Var.ADR ? property.STLM_Var.ADR  : 'N/A' }}
                     </span>
                   </div>
                   <div class="metric-row">
                     <span class="metric-name">RevPAR</span>
-                    <span class="metric-value" [ngClass]="getPerformanceClass(property.STLM_Var.RevPAR)">
-                        {{ property.STLM_Var.RevPAR ? property.STLM_Var.RevPAR + '%' : 'N/A' }}
+                    <span class="metric-value">
+                        {{ property.STLM_Var.RevPAR ? property.STLM_Var.RevPAR  : 'N/A' }}
                     </span>
                   </div>
                 </div>
