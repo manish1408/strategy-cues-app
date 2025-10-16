@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import {
   PropertiesService,
   PropertyData,
@@ -15,6 +15,7 @@ import { finalize } from "rxjs/operators";
   styleUrl: './deployment.component.scss',
 })
 export class DeploymentComponent implements OnInit {
+  @ViewChild('cueFormModalCloseBtn') cueFormModalCloseBtn: any;
 
   // Data from API
   propertyData: PropertyData[] = [];
@@ -461,6 +462,8 @@ export class DeploymentComponent implements OnInit {
 
   closeCueFormModal(): void {
     // this.showCueFormModal = false;
+    this.cueFormModalCloseBtn.nativeElement.click();
+
     this.editingCueId = null;
     this.resetCueForm();
   }
@@ -570,11 +573,13 @@ export class DeploymentComponent implements OnInit {
           } else {  
             this.toastr.error(response.message);
             this.closeCueFormModal();
+
           }
         },
         error: (error: any) => {
           this.toastr.error(error.error?.message || 'Failed to update deployment cue');
           this.closeCueFormModal();
+
         }
       });
     } else {
@@ -584,6 +589,7 @@ export class DeploymentComponent implements OnInit {
             this.toastr.success('Deployment cue created successfully!');
             this.loadDeploymentCues();
             this.closeCueFormModal();
+
           } else {
             this.toastr.error(response.message);
             this.closeCueFormModal();

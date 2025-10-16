@@ -292,7 +292,7 @@
           <h5 class="modal-title" id="cueFormModalLabel">
             <i class="fas fa-edit me-2"></i>{{ editingCueId ? 'Edit' : 'Create' }} Deployment Cue
           </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="closeCueFormModal()" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" #cueFormModalCloseBtn (click)="closeCueFormModal()" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <form #cueForm="ngForm">
@@ -349,7 +349,7 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeCueFormModal()">Cancel</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #cueFormModalCloseBtn (click)="closeCueFormModal()">Cancel</button>
           <button type="button" class="btn btn-primary" (click)="saveCue()" 
             [disabled]="!cueForm.form.valid || cueFormData.pickups.length === 0">
             <i class="fas fa-save me-2"></i>{{ editingCueId ? 'Update' : 'Create' }} Cue
