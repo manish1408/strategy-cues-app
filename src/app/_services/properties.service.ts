@@ -16,163 +16,7 @@ export interface ApiResponse<T> {
   };
 }
 
-export interface PropertyData {
-  _id: string;
-  Listing_Name: string;
-  Area: string;
-  Room_Type: string;
-  Property_Type?: string;
-  Occupancy: {
-    '7_days': string | number;
-    '30_days': string | number;
-    TM: string | number;
-    NM: string | number;
-  };
-  ADR: {
-    TM: string | number;
-    NM: string | number;
-  };
-  RevPAR: {
-    TM: string | number;
-    NM: string | number;
-  };
-  MPI: {
-    TM: string | number;
-    NM: string | number;
-    LYTM: string | number;
-  };
-  STLY_Var: {
-    Occ: string | number;
-    ADR: string | number;
-    RevPAR: string | number;
-  };
-  STLM_Var: {
-    Occ: string | number;
-    ADR: string | number;
-    RevPAR: string | number;
-  };
-  Pick_Up_Occ: {
-    '7_Days': string | number;
-    '14_Days': string | number;
-    '30_Days': string | number;
-  };
-  Min_Rate_Threshold: string | number;
-  BookingCom: any;
-  Airbnb: any;
-  VRBO: any;
-  CXL_Policy: {
-    Booking: {
-      type: string;
-      description: string;
-      free_cancellation_until: string | null;
-    } | null;
-    Airbnb: {
-      type: string;
-      description: string;
-      free_cancellation_until: string | null;
-    } | null;
-    VRBO: {
-      type: string;
-      description: string;
-      free_cancellation_until: string | null;
-    } | null;
-  };
-  Adult_Child_Config: {
-    Booking: {
-      id: string;
-      max_guests: string;
-      max_adults: string;
-      max_children: string;
-      max_infants: string;
-      room_count: string;
-    } | null;
-    Airbnb: {
-      max_guests: number;
-    } | null;
-    VRBO: any | null;
-  };
-  Reviews: {
-    Booking: {
-      Last_Rev_Dt: string;
-      Last_Rev_Score: string | number;
-      Rev_Score: string | number;
-      Total_Rev: string | number;
-      Last_Review_Date: string;
-    };
-    Airbnb: {
-      Last_Rev_Dt: string;
-      Last_Rev_Score: string | number;
-      Rev_Score: string | number;
-      Total_Rev: string | number;
-      Last_Review_Date: string;
-    };
-    VRBO: {
-      Last_Rev_Dt: string;
-      Last_Rev_Score: string | number;
-      Rev_Score: string | number;
-      Total_Rev: string | number;
-      Last_Review_Date: string;
-    };
-  };
-  // New direct URL fields
-  BookingUrl?: string;
-  AirbnbUrl?: string;
-  VRBOUrl?: string;
-  PricelabsUrl?: string;
-  // New ID fields
-  BookingId?: string;
-  AirbnbId?: string;
-  VRBOId?: string;
-  PricelabsId?: string;
-  // Photos object
-  Photos?: {
-    booking?: Array<{
-      id: string;
-      url: string;
-      caption?: string;
-      accessibility_label?: string;
-      source: string;
-    }>;
-    airbnb?: Array<{
-      id: string;
-      url: string;
-      caption?: string;
-      accessibility_label?: string;
-      source: string;
-    }>;
-    vrbo?: Array<{
-      id: string;
-      url: string;
-      caption?: string;
-      accessibility_label?: string;
-      source: string;
-    }>;
-  };
-  // Legacy Property_URLs for backward compatibility
-  Property_URLs?: {
-    Booking?: {
-      url: string;
-      id: string;
-    };
-    Airbnb?: {
-      url: string;
-      id: string;
-    };
-    VRBO?: {
-      url: string;
-      id: string;
-    };
-    Pricelab?: {
-      url: string;
-      id: string;
-    };
-  };
-  // Additional fields
-  operator_id: string;
-  listing_id?: string;
-  createdAt: string;
-  status?: string;
-}
+
 
 @Injectable({
   providedIn: 'root',
@@ -184,7 +28,7 @@ export class PropertiesService {
     private http: HttpClient,
   ) {}
 
-  getProperties(page: number = 1, limit: number = 10, operatorId: string, sortOrder: string): Observable<ApiResponse<PropertyData[]>> {
+  getProperties(page: number = 1, limit: number = 10, operatorId: string, sortOrder: string): Observable<ApiResponse<any[]>> {
     const params = new HttpParams()
     .set('operator_id', operatorId)
     .set('page', page.toString())
@@ -192,11 +36,11 @@ export class PropertiesService {
     .set('sort_order', sortOrder);
     
     
-    return this.http.get<ApiResponse<PropertyData[]>>(`${this._url}/get-properties`, { params });
+    return this.http.get<ApiResponse<any[]>>(`${this._url}/get-properties`, { params });
   }
 
   // getPropertiesByOperatorId(operatorId: string) {
-  //   return this.http.get<ApiResponse<PropertyData[]>>(`${this._url}/get-properties-by-operator-id?operator_id=${operatorId}`);
+  //   return this.http.get<ApiResponse<any[]>>(`${this._url}/get-properties-by-operator-id?operator_id=${operatorId}`);
   // }
 
   // getProperties(page: number, limit: number) {
@@ -204,7 +48,7 @@ export class PropertiesService {
   // }
 
   // Helper method to extract properties array from different response structures
-  static extractPropertiesArray(response: any): PropertyData[] {
+  static extractPropertiesArray(response: any): any[] {
     
     if (!response || !response.success) {
       return [];
@@ -216,7 +60,7 @@ export class PropertiesService {
       return response.data;
     } else if (response.data && Array.isArray(response.data.properties)) {
       console.log('Using response.data.properties (new API structure)');
-      // Map the new API response structure to PropertyData interface
+      // Map the new API response structure to any interface
       const mappedProperties = response.data.properties.map((property: any) => ({
         _id: property._id,
         Listing_Name: property.Listing_Name,
@@ -339,7 +183,7 @@ export class PropertiesService {
     }
   }
 
-  filterProperties(filters: any): Observable<ApiResponse<PropertyData[]>> {
+  filterProperties(filters: any): Observable<ApiResponse<any[]>> {
     let params = new HttpParams();
     
     // Add all filter parameters to the query string
@@ -354,7 +198,7 @@ export class PropertiesService {
       params: params.toString()
     });
     
-    return this.http.get<ApiResponse<PropertyData[]>>(`${this._url}/filter-properties`, { params });
+    return this.http.get<ApiResponse<any[]>>(`${this._url}/filter-properties`, { params });
   }
 
   createProperty(propertyData: any): Observable<ApiResponse<any>> {
@@ -374,13 +218,13 @@ export class PropertiesService {
     return this.http.delete(`${this._url}/delete-property/${listingId}`, { params });
   }
 
-  getProperty(propertyId: string, operatorId: string): Observable<ApiResponse<PropertyData>> {
+  getProperty(propertyId: string, operatorId: string): Observable<ApiResponse<any>> {
     const params = new HttpParams().set('operator_id', operatorId);
-    return this.http.get<ApiResponse<PropertyData>>(`${this._url}/get-property/${propertyId}`, { params });
+    return this.http.get<ApiResponse<any>>(`${this._url}/get-property/${propertyId}`, { params });
   }
 
-  searchProperties(search_query: string, operator_id: string): Observable<ApiResponse<PropertyData[]>> {
+  searchProperties(search_query: string, operator_id: string): Observable<ApiResponse<any[]>> {
     const params = new HttpParams().set('operator_id', operator_id).set('search_query', search_query);
-    return this.http.get<ApiResponse<PropertyData[]>>(`${this._url}/search-properties`, { params });
+    return this.http.get<ApiResponse<any>>(`${this._url}/search-properties`, { params });
   }
 }

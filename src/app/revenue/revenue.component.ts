@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import {
   PropertiesService,
-  PropertyData,
 } from "../_services/properties.service";
 import { LocalStorageService } from "../_services/local-storage.service";
 import { FilterPresetService } from '../_services/filter-preset.service';
@@ -23,9 +22,9 @@ declare var bootstrap: any;
   templateUrl: "./revenue.component.html",
   styleUrl: "./revenue.component.scss",
 })
-export class RevenueComponent implements OnInit { 
+export class RevenueComponent implements OnInit {
   // Data from API
-  propertyData: PropertyData[] = [];
+  propertyData: any[] = [];
   deploymentCuesId: string | null = null;
   loading: boolean = false;
   exportLoading: boolean = false;
@@ -1176,7 +1175,7 @@ export class RevenueComponent implements OnInit {
     this.router.navigate(["/revenue/property-details", propertyId]);
   }
 
-  compareProperty(item: PropertyData): void {
+  compareProperty(item: any): void {
     // Implement property comparison logic
     // This could open a comparison modal, navigate to a comparison page, etc.
   }
@@ -1270,7 +1269,7 @@ export class RevenueComponent implements OnInit {
   // getPaginatedData() method removed - now using server-side pagination
 
   // Helper method to check if property has any last review scores
-  hasLastReviewScore(property: PropertyData): boolean {
+  hasLastReviewScore(property: any): boolean {
     const bookingScore = this.safeParseNumber(property.Reviews.Booking.Last_Rev_Score);
     const airbnbScore = this.safeParseNumber(property.Reviews.Airbnb.Last_Rev_Score);
     const vrboScore = this.safeParseNumber(property.Reviews.VRBO.Last_Rev_Score);
@@ -1279,7 +1278,7 @@ export class RevenueComponent implements OnInit {
   }
 
   // Helper method to check if property has any last review dates
-  hasLastReviewDate(property: PropertyData): boolean {
+  hasLastReviewDate(property: any): boolean {
     const bookingDate = property.Reviews.Booking.Last_Review_Date;
     const airbnbDate = property.Reviews.Airbnb.Last_Review_Date;
     const vrboDate = property.Reviews.VRBO.Last_Review_Date;
@@ -3479,7 +3478,7 @@ export class RevenueComponent implements OnInit {
 
 
   // Property image methods
-  getPropertyImage(property: PropertyData): string {
+  getPropertyImage(property: any): string {
     // Priority order: Booking.com -> Airbnb -> VRBO -> Placeholder
     if (property.Photos?.booking && property.Photos.booking.length > 0) {
       return property.Photos.booking[0].url;

@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import {
   PropertiesService,
-  PropertyData,
 } from "../_services/properties.service";
 import { LocalStorageService } from "../_services/local-storage.service";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -20,7 +19,7 @@ export class DeploymentComponent implements OnInit {
   @ViewChild('notesModalCloseBtn') notesModalCloseBtn: any;
 
   // Data from API
-  propertyData: PropertyData[] = [];
+  propertyData: any[] = [];
   loading: boolean = false;
   error: string | null = null;
   operatorId: string | null = null;
@@ -274,7 +273,7 @@ export class DeploymentComponent implements OnInit {
     return !!(airbnbData.type || airbnbData.description || airbnbData.free_cancellation_until);
   }
 
-  getPropertyImage(property: PropertyData): string {
+  getPropertyImage(property: any): string {
     // Priority order: Booking.com -> Airbnb -> VRBO -> Placeholder
     if (property.Photos?.booking && property.Photos.booking.length > 0) {
       return property.Photos.booking[0].url;
