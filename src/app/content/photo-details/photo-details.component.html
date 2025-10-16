@@ -82,14 +82,14 @@
 
     <!-- Competitor Select -->
     <div class="competitor-select-container" >
-      <select class="form-select">
-        <option value="">Select Competitor</option>
+      <select class="form-select" [ngModel]="selectedCompetitorIndex" (ngModelChange)="selectCompetitor($event)">
+        <option [ngValue]="-1" disabled>Select Competitor</option>
         <ng-container *ngFor="let competitor of propertyData.competitor; let i = index">
-          <option *ngIf="competitor.bookingLink !== null && selectedPlatform == 'booking'" [value]="competitor.propertyName">
+          <option *ngIf="competitor.bookingLink !== null && selectedPlatform == 'booking'" [ngValue]="i">
             {{ competitor.propertyName }}
           </option>
 
-          <option *ngIf="competitor.airbnbLink !== null && selectedPlatform == 'airbnb'" [value]="competitor.propertyName">
+          <option *ngIf="competitor.airbnbLink !== null && selectedPlatform == 'airbnb'" [ngValue]="i">
             {{ competitor.propertyName }}
           </option>
 
@@ -137,9 +137,9 @@
 
       <!-- Gallery -->
       <div *ngIf="!isPropertyGalleryLoading">
-        <div class="your-gallery" *ngIf="images && images.length > 0">
+        <div class="your-gallery" *ngIf="isPropertyGalleryVisible && images && images.length > 0">
           <span class="your-gallery-title">Your Property</span>
-          <gallery [items]="images" bullets="true" bulletPosition='bottom' scrollBehavior='smooth' [ngStyle]="{'background-color': 'white', 'padding': '25px' , 'max-width': '816px'}" gestures="true" imageSize='cover' counter="true" nav="true" itemAutosize="true" thumbs="true"  thumbPosition='bottom' id='your-photos-gallery'></gallery>
+          <gallery [items]="images" bullets="true" bulletPosition='bottom' scrollBehavior='smooth' [ngStyle]="{'background-color': 'white', 'padding': '25px' , 'max-width': '816px'}" gestures="true" imageSize='cover' counter="true" nav="true" itemAutosize="true" thumbs="true"  thumbPosition='bottom' [id]="'your-photos-gallery-' + galleryRefreshKey"></gallery>
         </div>
         
         <!-- No Images Placeholder -->
@@ -189,9 +189,9 @@
 
       <!-- Gallery -->
       <div *ngIf="!isCompetitorGalleryLoading">
-        <div class="competitor-gallery" *ngIf="competitorImages && competitorImages.length > 0">
+        <div class="competitor-gallery" *ngIf="isCompetitorGalleryVisible && competitorImages && competitorImages.length > 0">
           <span class="competitor-gallery-title">Competitor</span>
-          <gallery  [items]="competitorImages" bullets="true" bulletPosition='bottom' scrollBehavior='smooth' [ngStyle]="{'background-color': 'white', 'padding': '25px', 'max-width': '816px'}" gestures="true" imageSize='cover' counter="true" nav="true" itemAutosize="true" thumbs="true"  thumbPosition='bottom' id='competitor-photos-gallery'></gallery>
+          <gallery  [items]="competitorImages" bullets="true" bulletPosition='bottom' scrollBehavior='smooth' [ngStyle]="{'background-color': 'white', 'padding': '25px', 'max-width': '816px'}" gestures="true" imageSize='cover' counter="true" nav="true" itemAutosize="true" thumbs="true"  thumbPosition='bottom' [id]="'competitor-photos-gallery-' + galleryRefreshKey"></gallery>
         </div>
         
         <!-- No Images Placeholder -->
@@ -248,7 +248,7 @@
   </div>
 
   <!-- Additional Photo Suggestions -->
-  <div class="photo-suggestions-section">
+  <div class="photo-suggestions-section" *ngIf="getCurrentCompetitor()">
     <div class="suggestions-header">
       <h2>Additional Photo Suggestions</h2>
       <div class="analysis-status" *ngIf="isAnalyzingPhotos">

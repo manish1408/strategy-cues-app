@@ -37,74 +37,6 @@ export class MyReviewsComponent implements OnInit {
             (!this.whatToImproveData || this.whatToImproveData.length === 0);
    }
 
-  // My Reviews Data
-  myDislikes = [
-    {
-      title: 'Limited Amenities',
-      description: 'Some guests mentioned the lack of certain amenities compared to competitors.'
-    },
-    {
-      title: 'Check-in Process',
-      description: 'Guests found the check-in process somewhat complicated and time-consuming.'
-    },
-    {
-      title: 'Wi-Fi Connectivity',
-      description: 'Some guests experienced Wi-Fi connectivity issues in certain areas of the property.'
-    }
-  ];
-
-  myWishes = [
-    {
-      title: 'More Entertainment Options',
-      description: 'Guests would like to see more entertainment options in the property.'
-    },
-    {
-      title: 'Better Wi-Fi Coverage',
-      description: 'Some guests experienced Wi-Fi connectivity issues in certain areas.'
-    },
-    {
-      title: 'Additional Kitchen Appliances',
-      description: 'Guests requested more kitchen appliances for extended stays.'
-    }
-  ];
-
-  myLoves = [
-    {
-      title: 'Excellent Customer Service',
-      description: 'Guests consistently praised the responsive and helpful customer service.'
-    },
-    {
-      title: 'Prime Location',
-      description: 'The central location and easy access to attractions were highly appreciated.'
-    },
-    {
-      title: 'Clean and Well-Maintained',
-      description: 'Guests loved the cleanliness and overall maintenance of the property.'
-    },
-    {
-      title: 'Value for Money',
-      description: 'Many guests appreciated the competitive pricing and value offered.'
-    }
-  ];
-
-  myActionableChanges = [
-    {
-      title: 'Add More Amenities',
-      description: 'Consider adding amenities that competitors offer to stay competitive.'
-    },
-    {
-      title: 'Streamline Check-in',
-      description: 'Simplify the check-in process to improve guest experience.'
-    },
-    {
-      title: 'Improve Wi-Fi Infrastructure',
-      description: 'Upgrade Wi-Fi equipment to ensure better coverage throughout the property.'
-    },
-    {
-      title: 'Enhance Entertainment Options',
-      description: 'Add more entertainment features to meet guest expectations.'
-    }
-  ];
 
 
 
@@ -155,7 +87,7 @@ export class MyReviewsComponent implements OnInit {
           console.log("Guest didn't like data loaded:", response);
         },
         error: (error) => {
-          this.toastr.error("Error loading guest didn't like data. Please try again.");
+         
           this.guestDidntLikeLoading = false;
           this.checkAllDataLoaded();
         },
@@ -180,7 +112,7 @@ export class MyReviewsComponent implements OnInit {
           console.log("Guest wishes data loaded:", response);
         },
         error: (error) => {
-          this.toastr.error("Error loading guest wishes data. Please try again.");
+        
           this.guestWishesData = [];
           this.guestWishesLoading = false;
           this.checkAllDataLoaded();
@@ -206,7 +138,7 @@ export class MyReviewsComponent implements OnInit {
           console.log("Guest loved data loaded:", response);
         },
         error: (error) => {
-          this.toastr.error("Error loading guest loved data. Please try again.");
+        
           this.guestLovedData = [];
           this.guestLovedLoading = false;
           this.checkAllDataLoaded();
@@ -232,7 +164,7 @@ export class MyReviewsComponent implements OnInit {
           console.log("What to improve data loaded:", response);
         },
         error: (error) => {
-          this.toastr.error("Error loading what to improve data. Please try again.");
+          
           this.whatToImproveData = [];
           this.whatToImproveLoading = false;
           this.checkAllDataLoaded();

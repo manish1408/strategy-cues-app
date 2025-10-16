@@ -67,6 +67,9 @@ export class PhotoDetailsComponent implements OnInit {
   selectedCompetitorPlatform: string = "airbnb";
   isPropertyGalleryLoading: boolean = false;
   isCompetitorGalleryLoading: boolean = false;
+  // Control gallery re-mount to reset internal index
+  isPropertyGalleryVisible: boolean = true;
+  isCompetitorGalleryVisible: boolean = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -99,6 +102,8 @@ export class PhotoDetailsComponent implements OnInit {
               this.propertyData = response.data.property;
               this.propertyData.competitor = response.data.competitors;
             if (this.propertyData.competitor.length > 0) {
+              // Ensure initial selection matches active platform
+              this.alignSelectedCompetitorWithPlatform();
               this.updateCompetitorImages();
             }
               this.updatePropertyPlatformImages();
@@ -877,36 +882,40 @@ export class PhotoDetailsComponent implements OnInit {
   selectPlatform(platform: string): void {
     this.selectedPlatform = platform;
 
-    // // Skip VRBO if it's commented out
-    // if (platform === 'vrbo') {
-    //   return;
-    // }
+    // Keep property and competitor galleries in sync with the selected platform
+    this.selectedPropertyPlatform = platform;
+    this.selectedCompetitorPlatform = platform;
 
-    // this.selectedPropertyPlatform = platform;
-    // this.selectedCompetitorPlatform = platform;
+    this.isPropertyGalleryLoading = true;
+    this.isCompetitorGalleryLoading = true;
 
-    // // If current competitor doesn't have this platform, switch to the first matching competitor
-    // const current = this.getCurrentCompetitor();
-    // if (!current || !this.hasCompetitorPlatform(current, platform)) {
-    //   const filtered = this.getCompetitorsForSelectedPlatform();
-    //   if (filtered.length > 0) {
-    //     this.selectCompetitorByObject(filtered[0]);
-    //   }
-    // }
+    // Ensure a competitor that supports the platform is selected
+    this.alignSelectedCompetitorWithPlatform();
 
-    // this.isPropertyGalleryLoading = true;
-    // this.isCompetitorGalleryLoading = true;
+    // Reset image cursors when platform changes
+    this.currentImageIndex = 0;
+    this.currentCompetitorImageIndex = 0;
 
-    // // Update images based on selected platform
-    // setTimeout(() => {
-    //   this.updatePropertyPlatformImages();
-    //   this.updateCompetitorPlatformImages();
-    //   this.isPropertyGalleryLoading = false;
-    //   this.isCompetitorGalleryLoading = false;
+    // Temporarily unmount galleries to force re-init
+    this.isPropertyGalleryVisible = false;
+    this.isCompetitorGalleryVisible = false;
 
-    //   // Fetch all captions for the selected platform
-    //   this.fetchAllCaptionsForPlatform(platform);
-    // }, 300);
+    // Update images and re-mount galleries on next tick
+    setTimeout(() => {
+      this.updatePropertyPlatformImages();
+      this.updateCompetitorPlatformImages();
+      this.isPropertyGalleryLoading = false;
+      this.isCompetitorGalleryLoading = false;
+      this.isPropertyGalleryVisible = true;
+      this.isCompetitorGalleryVisible = true;
+      this.cdr.detectChanges();
+    }, 0);
+
+    // Refresh captions for the newly selected platform
+    this.fetchAllCaptionsForPlatform(platform);
+
+    // Also bump refresh key for any consumers relying on id changes
+    this.refreshGalleries();
   }
 
   // Get amenities for selected platform
@@ -1053,19 +1062,34 @@ export class PhotoDetailsComponent implements OnInit {
     }
   }
 
+  // Get competitors that support the currently selected platform
+  private getCompetitorsForSelectedPlatform(): any[] {
+    const competitors = this.propertyData?.competitor || [];
+    return competitors.filter((c: any) => this.hasCompetitorPlatform(c, this.selectedPlatform));
+  }
 
-  // After competitors load or platform changes, make sure selection is a competitor with that platform
-  // private alignSelectedCompetitorWithPlatform(): void {
-  //   const list = this.getCompetitorsForSelectedPlatform();
-  //   if (list.length === 0) {
-  //     // No competitors for this platform; keep index but images will be empty
-  //     return;
-  //   }
-  //   const current = this.getCurrentCompetitor();
-  //   if (!current || !this.hasCompetitorPlatform(current, this.selectedPlatform)) {
-  //     this.selectCompetitorByObject(list[0]);
-  //   }
-  // }
+  // After competitors load or platform changes, ensure selection matches platform
+  private alignSelectedCompetitorWithPlatform(): void {
+    const competitorsForPlatform = this.getCompetitorsForSelectedPlatform();
+
+    if (competitorsForPlatform.length === 0) {
+      // No competitors for this platform
+      this.selectedCompetitorIndex = -1;
+      this.competitorImages = [];
+      return;
+    }
+
+    const current = this.getCurrentCompetitor();
+    if (!current || !this.hasCompetitorPlatform(current, this.selectedPlatform)) {
+      // Select the first competitor that supports the platform
+      const first = competitorsForPlatform[0];
+      const idx = (this.propertyData?.competitor || []).indexOf(first);
+      if (idx >= 0) {
+        this.selectedCompetitorIndex = idx;
+        this.currentCompetitorImageIndex = 0;
+      }
+    }
+  }
 
   // Select competitor by object (maps to original index)
   selectCompetitorByObject(competitor: any): void {
