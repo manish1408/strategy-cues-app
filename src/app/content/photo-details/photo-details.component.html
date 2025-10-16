@@ -104,7 +104,43 @@
     <!-- Your Photos Section -->
     <div class="comparison-section your-photos">
       <div class="section-header">
-        <h2>Your property photos</h2>
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>Your property photos</h2>
+          <div class="property-links" *ngIf="propertyData">
+            <!-- Airbnb Link -->
+            <a *ngIf="selectedPlatform === 'airbnb' && propertyData?.AirbnbUrl"
+               [href]="propertyData.AirbnbUrl" target="_blank"
+               class="platform-link airbnb" title="View on Airbnb">
+              <i class="fab fa-airbnb"></i>
+            </a>
+            <span *ngIf="selectedPlatform === 'airbnb' && !propertyData?.AirbnbUrl"
+                  class="platform-link airbnb disabled" title="No Airbnb URL available">
+              <i class="fab fa-airbnb"></i>
+            </span>
+
+            <!-- Booking.com Link -->
+            <a *ngIf="selectedPlatform === 'booking' && propertyData?.BookingUrl"
+               [href]="propertyData.BookingUrl" target="_blank"
+               class="platform-link booking" title="View on Booking.com">
+              <i class="fas fa-bed"></i>
+            </a>
+            <span *ngIf="selectedPlatform === 'booking' && !propertyData?.BookingUrl"
+                  class="platform-link booking disabled" title="No Booking URL available">
+              <i class="fas fa-bed"></i>
+            </span>
+
+            <!-- VRBO Link -->
+            <a *ngIf="selectedPlatform === 'vrbo' && propertyData?.VRBOUrl"
+               [href]="propertyData.VRBOUrl" target="_blank"
+               class="platform-link vrbo" title="View on VRBO">
+              <i class="fas fa-home"></i>
+            </a>
+            <span *ngIf="selectedPlatform === 'vrbo' && !propertyData?.VRBOUrl"
+                  class="platform-link vrbo disabled" title="No VRBO URL available">
+              <i class="fas fa-home"></i>
+            </span>
+          </div>
+        </div>
         <div class="review-summary">
     
           <!-- Amenities Section -->
@@ -156,7 +192,44 @@
     <!-- Competitor Photos Section -->
     <div class="comparison-section competitor-photos" *ngIf="getCurrentCompetitor()">
       <div class="section-header">  
-        <h2>Competitor property photos</h2>
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>Competitor property photos</h2>
+          <div class="property-links" *ngIf="getCurrentCompetitor()">
+            <!-- Airbnb Link -->
+            <a *ngIf="selectedPlatform === 'airbnb' && getCurrentCompetitor().airbnbLink"
+               [href]="getCurrentCompetitor().airbnbLink" target="_blank"
+               class="platform-link airbnb" title="View on Airbnb">
+              <i class="fab fa-airbnb"></i>
+            </a>
+            <span *ngIf="selectedPlatform === 'airbnb' && !getCurrentCompetitor().airbnbLink"
+                  class="platform-link airbnb disabled" title="No Airbnb URL available">
+              <i class="fab fa-airbnb"></i>
+            </span>
+
+            <!-- Booking.com Link -->
+            <a *ngIf="selectedPlatform === 'booking' && getCurrentCompetitor().bookingLink"
+               [href]="getCurrentCompetitor().bookingLink" target="_blank"
+               class="platform-link booking" title="View on Booking.com">
+              <i class="fas fa-bed"></i>
+            </a>
+            <span *ngIf="selectedPlatform === 'booking' && !getCurrentCompetitor().bookingLink"
+                  class="platform-link booking disabled" title="No Booking URL available">
+              <i class="fas fa-bed"></i>
+            </span>
+
+            <!-- VRBO Link -->
+            <a *ngIf="selectedPlatform === 'vrbo' && getCurrentCompetitor().vrboLink"
+               [href]="getCurrentCompetitor().vrboLink" target="_blank"
+               class="platform-link vrbo" title="View on VRBO">
+              <i class="fas fa-home"></i>
+            </a>
+            <span *ngIf="selectedPlatform === 'vrbo' && !getCurrentCompetitor().vrboLink"
+                  class="platform-link vrbo disabled" title="No VRBO URL available">
+              <i class="fas fa-home"></i>
+            </span>
+          </div>
+        </div>
+       
         <div class="review-summary">
        
                <!-- Amenities Section -->
