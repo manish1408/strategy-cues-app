@@ -28,69 +28,103 @@
     <div *ngIf="!isAllDataEmpty">
       <!-- My Reviews Analysis -->
       <div class="reviews-section">
-    <h2>What guests didn't like about my properties:</h2>
-    <div class="cards-grid" *ngIf="guestDidntLikeData && guestDidntLikeData.length > 0">
-      <div class="review-card dislike-card" *ngFor="let item of guestDidntLikeData">
-        <h3>{{ item.title }}</h3>
-        <!-- <p>{{ item.description }}</p> -->
-      </div>
-    </div>
-    <app-empty-state 
-      *ngIf="!guestDidntLikeData || guestDidntLikeData.length === 0"
-      icon="fas fa-thumbs-down"
-      title="No Guest Dislikes Data Available">
-    </app-empty-state>
-  </div>
-
-  <div class="reviews-section">
-    <h2>What guests wish they had from my properties:</h2>
-    <div class="cards-grid" *ngIf="guestWishesData && guestWishesData.length > 0">
-      <div class="review-card wish-card" *ngFor="let item of guestWishesData">
-        <h3>{{ item.title }}</h3>
-        <!-- <p>{{ item.description }}</p> -->
-      </div>
-    </div>
-    <app-empty-state 
-      *ngIf="!guestWishesData || guestWishesData.length === 0"
-      icon="fas fa-wishlist"
-      title="No Guest Wishes Data Available">
-    </app-empty-state>
-  </div>
-
-  <div class="reviews-section">
-    <h2>What guests love about my properties:</h2>
-    <div class="cards-grid" *ngIf="guestLovedData && guestLovedData.length > 0">
-      <div class="review-card love-card" *ngFor="let item of guestLovedData">
-        <h3>{{ item.title }}</h3>
-        <!-- <p>{{ item.description }}</p> -->
-      </div>
-    </div>
-    <app-empty-state 
-      *ngIf="!guestLovedData || guestLovedData.length === 0"
-      icon="fas fa-heart"
-      title="No Guest Love Data Available">
-    </app-empty-state>
-  </div>
-
-  <div class="reviews-section">
-    <h2>Based on my reviews, what can I improve?</h2>
-    <div class="cards-grid" *ngIf="whatToImproveData && whatToImproveData.length > 0">
-      <div class="review-card action-card" *ngFor="let item of whatToImproveData">
-        <!-- <div class="action-icon">
-          <i class="fas fa-plus"></i>
-        </div> -->
-        <div class="action-content">
-          <h3>{{ item.title }}</h3>
-          <!-- <p>{{ item.description }}</p> -->
+        <div class="section-header">
+          <h2>What guests didn't like about my properties</h2>
         </div>
+        <div class="cards-grid" *ngIf="guestDidntLikeData && guestDidntLikeData.length > 0">
+          <div class="review-card dislike-card" *ngFor="let item of guestDidntLikeData">
+            <div class="card-icon">
+              <i class="fas fa-times-circle"></i>
+            </div>
+            <div class="card-content">
+              <h3>{{ item.title }}</h3>
+            </div>
+          </div>
+        </div>
+        <app-empty-state 
+          *ngIf="!guestDidntLikeData || guestDidntLikeData.length === 0"
+          icon="fas fa-thumbs-down"
+          title="No Guest Dislikes Data Available">
+        </app-empty-state>
       </div>
-    </div>
-    <app-empty-state 
-      *ngIf="!whatToImproveData || whatToImproveData.length === 0"
-      icon="fas fa-tools"
-      title="No Improvement Suggestions Available">
-    </app-empty-state>
-    </div>
+
+      <div class="reviews-section">
+        <div class="section-header">
+          <h2>What guests wish they had from my properties</h2>
+        </div>
+        <div class="cards-grid" *ngIf="guestWishesData && guestWishesData.length > 0">
+          <div class="review-card wish-card" *ngFor="let item of guestWishesData">
+            <div class="card-icon">
+              <i class="fas fa-star"></i>
+            </div>
+            <div class="card-content">
+              <h3>{{ item.title }}</h3>
+            </div>
+          </div>
+        </div>
+        <app-empty-state 
+          *ngIf="!guestWishesData || guestWishesData.length === 0"
+          icon="fas fa-wishlist"
+          title="No Guest Wishes Data Available">
+        </app-empty-state>
+      </div>
+
+      <div class="reviews-section">
+        <div class="section-header">
+          <h2>What guests love about my properties</h2>
+        </div>
+        <div class="cards-grid" *ngIf="guestLovedData && guestLovedData.length > 0">
+          <div class="review-card love-card" *ngFor="let item of guestLovedData">
+            <div class="card-icon">
+              <i class="fas fa-heart"></i>
+            </div>
+            <div class="card-content">
+              <h3>{{ item.title }}</h3>
+            </div>
+          </div>
+        </div>
+        <app-empty-state 
+          *ngIf="!guestLovedData || guestLovedData.length === 0"
+          icon="fas fa-heart"
+          title="No Guest Love Data Available">
+        </app-empty-state>
+      </div>
+
+      <div class="reviews-section improvement-section">
+        <div class="section-header">
+          <h2>Based on my reviews, what can I improve?</h2>
+        </div>
+        <div class="improvement-input-container" *ngIf="whatToImproveData && whatToImproveData.length > 0">
+          <div class="improvement-input">
+            <textarea 
+              placeholder="Share your thoughts on what you can improve based on your guest reviews..."
+              class="improvement-textarea"
+              rows="4">
+            </textarea>
+            <div class="input-footer">
+              <div class="help-tooltip">
+                <i class="fas fa-question-circle"></i>
+                <span class="tooltip-text">Use this space to note actionable insights from your guests' reviews</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="cards-grid" *ngIf="whatToImproveData && whatToImproveData.length > 0">
+          <div class="review-card action-card" *ngFor="let item of whatToImproveData">
+            <div class="card-icon">
+              <i class="fas fa-arrow-up"></i>
+            </div>
+            <div class="card-content">
+              <h3>{{ item.title }}</h3>
+            </div>
+          </div>
+        </div>
+        <app-empty-state 
+          *ngIf="!whatToImproveData || whatToImproveData.length === 0"
+          icon="fas fa-tools"
+          title="No Improvement Suggestions Available">
+        </app-empty-state>
+      </div>
     </div><!-- End of individual sections -->
 
   <!-- Help Button -->
