@@ -32,6 +32,10 @@
                 <span class="badge bg-secondary">{{ getCurrentCue()?.tag }}</span>
               </div>
               <div class="cue-card-actions">
+                <button class="btn btn-sm btn-outline-secondary me-1" (click)="copyCue(getCurrentCue())"
+                  title="Copy" >
+                  <i class="fas fa-copy"></i>
+                </button>
                 <button class="btn btn-sm btn-outline-primary me-1" (click)="openCueFormModal(getCurrentCue())"
                   title="Edit" data-bs-toggle="modal" data-bs-target="#cueFormModal">
                   <i class="fas fa-edit"></i>
@@ -149,8 +153,9 @@
               </td>
               <td class="pickup-case-cell">
                 <div class="pickup-case-container" *ngIf="property?.pickup">
-                  <div class="pickup-case-item">
-                    <div class="pickup-case-name">{{property?.pickup?.name}}</div>
+                  <div class="pickup-case-item pickup-case">
+                    <strong>{{property?.pickup?.name}}</strong>
+                    <div class="action-badge">{{property?.pickup?.description}}</div>
                   </div>
                 </div>
               </td>
@@ -417,10 +422,6 @@
                 <div class="note-author">
                   <i class="fas fa-user-circle me-2"></i>
                   <strong>{{ note.userCompleteName || note.userName || 'Unknown User' }}</strong>
-                </div>
-                <div class="note-timestamp">
-                  <i class="fas fa-clock me-1"></i>
-                  <small class="text-muted">{{ note.createdAt ? (note.createdAt | date:'short') : 'Just now' }}</small>
                 </div>
               </div>
               <div class="note-content">

@@ -1082,6 +1082,31 @@ export class DeploymentComponent implements OnInit {
     }
   }
 
+  copyCue(cue: any): void {
+    
+    const copyCue = {
+      operatorId: cue.operatorId,
+      name: cue.name + ' Copy',
+      description1: cue.description1,
+      description2: cue.description2,
+      tag: cue.tag,
+      pickups: cue.pickups,
+    };
+    console.log('Copying cue:', cue);
+    this.deploymentCuesService.createDeploymentCues(copyCue).subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          this.toastr.success('Deployment cue copied successfully!');
+          this.loadDeploymentCues();
 
-
+        } else {
+          this.toastr.error(response.message);
+        }
+      },
+      error: (error: any) => {
+        this.toastr.error(error.error?.message || 'Failed to create deployment cue');
+      }
+    });
+  }
+  
 }
