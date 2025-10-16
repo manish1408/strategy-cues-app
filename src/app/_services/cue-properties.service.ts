@@ -13,8 +13,16 @@ export class CuePropertiesService {
     private http: HttpClient,
   ) {}
 
+  getCueProperties(operatorId: string) {
+    return this.http.get<any>(`${this._url}/get-cue-properties/${operatorId}`);
+  }
+
   createCueProperty(data: any) {
     return this.http.post<any>(`${this._url}/create-cue-property`, data);
+  }
+
+  updateCueProperty(cuePropertyId: string, data: any) {
+    return this.http.put<any>(`${this._url}/update-cue-property/${cuePropertyId}`, data);
   }
 
   

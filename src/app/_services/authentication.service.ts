@@ -83,5 +83,9 @@ export class AuthenticationService {
     return this.http.get<any>(`${this._url}/admin/users/${userId}`);
   }
 
+  getAllUsers(page: number=1, limit: number=50) {
+    return this.http.get<any>(`${this._url}/users/get-all-users?page=${page}&limit=${limit}`);
+  }
+
 
 }

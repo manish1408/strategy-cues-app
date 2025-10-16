@@ -1,14 +1,14 @@
 <div class="container-fluid mb-3">
-    <div class="d-flex justify-content-end">
-      <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#cueFormModal">
-        Add Deployment Cue
-      </button>
-    </div>
-    </div>
+  <div class="d-flex justify-content-end">
+    <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#cueFormModal">
+      Add Deployment Cue
+    </button>
+  </div>
+</div>
 
 <div class="revenue-dashboard">
 
-  
+
   <div class="deployment-cues-container">
 
     <div *ngIf="deploymentCuesLoading" class="text-center py-3">
@@ -17,90 +17,87 @@
       </div>
     </div>
     <ng-container *ngIf="!deploymentCuesLoading">
-    <div class="row" *ngIf=" deploymentCues.length > 0">
-      <div class="col-3 d-flex align-items-center justify-content-center">
-        <button class="btn btn-primary btn-lg" 
-                (click)="goToPreviousCue()" 
-                [disabled]="!canGoToPrevious()"
-                [class.disabled]="!canGoToPrevious()">
-          <i class="fas fa-chevron-left"></i>
-        </button>
-      </div>
-      <div class="col-6">
-        <div class="cue-card" *ngIf="getCurrentCue()">
-          <div class="cue-card-header">
-            <div class="cue-card-title">
-              <h6>{{ getCurrentCue()?.name }}</h6>
-              <span class="badge bg-secondary">{{ getCurrentCue()?.tag }}</span>
-            </div>
-            <div class="cue-card-actions">
-              <button class="btn btn-sm btn-outline-primary me-1" (click)="openCueFormModal(getCurrentCue())"
-                title="Edit" data-bs-toggle="modal" data-bs-target="#cueFormModal">
-                <i class="fas fa-edit"></i>
-              </button>
-              <button class="btn btn-sm btn-outline-danger" (click)="deleteCue(getCurrentCue()._id)" title="Delete">
-                <i class="fas fa-trash"></i>
-              </button>
-            </div>
-          </div>
-          <div class="cue-card-body">
-            <div class="cue-conditions">
-              <div class="condition-row">
-                <strong>{{ getCurrentCue()?.description1 }}</strong>
+      <div class="row" *ngIf=" deploymentCues.length > 0">
+        <div class="col-3 d-flex align-items-center justify-content-center">
+          <button class="btn btn-primary btn-lg" (click)="goToPreviousCue()" [disabled]="!canGoToPrevious()"
+            [class.disabled]="!canGoToPrevious()">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+        </div>
+        <div class="col-6">
+          <div class="cue-card" *ngIf="getCurrentCue()">
+            <div class="cue-card-header">
+              <div class="cue-card-title">
+                <h6>{{ getCurrentCue()?.name }}</h6>
+                <span class="badge bg-secondary">{{ getCurrentCue()?.tag }}</span>
               </div>
-              <div class="condition-row">
-                <strong>{{ getCurrentCue()?.description2 }}</strong>
+              <div class="cue-card-actions">
+                <button class="btn btn-sm btn-outline-primary me-1" (click)="openCueFormModal(getCurrentCue())"
+                  title="Edit" data-bs-toggle="modal" data-bs-target="#cueFormModal">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" (click)="deleteCue(getCurrentCue()._id)" title="Delete">
+                  <i class="fas fa-trash"></i>
+                </button>
               </div>
             </div>
-           
-            <div class="pickup-case" *ngFor="let pickup of getCurrentCue()?.pickups">
-              <div class="row">
-                <div class="col-8">
-                  <strong>{{ pickup?.name }}:</strong> 
-                  <div class="action-badge">{{ pickup?.description }}</div>
+            <div class="cue-card-body">
+              <div class="cue-conditions">
+                <div class="condition-row">
+                  <strong>{{ getCurrentCue()?.description1 }}</strong>
                 </div>
-                <div class="col-4">
-                  <button class="btn btn-sm btn-primary float-end" title="Add Note">Add</button>
+                <div class="condition-row">
+                  <strong>{{ getCurrentCue()?.description2 }}</strong>
                 </div>
               </div>
-            </div>
-           
-          </div>
-        </div>
-      </div>
-      <div class="col-3 d-flex align-items-center justify-content-center">
-        <button class="btn btn-primary btn-lg" 
-                (click)="goToNextCue()" 
-                [disabled]="!canGoToNext()"
-                [class.disabled]="!canGoToNext()">
-          <i class="fas fa-chevron-right"></i>
-        </button>
-      </div>
-    </div>
-    
-    <!-- Empty state when no cues -->
-    <div class="row" *ngIf="deploymentCues.length === 0">
-      <div class="col-12 text-center py-5">
-        <div class="text-muted">
-          <i class="fas fa-info-circle fa-3x mb-3"></i>
-          <h5>No deployment cues found</h5>
-          <p>Create your first deployment cue to get started.</p>
-        </div>
-      </div>
-    </div>
-  </ng-container>
 
-  <!-- <div *ngIf="loading" class="text-center py-3">
-    <div class="spinner-border spinner-border-sm text-primary" role="status">
-      <span class="visually-hidden">Loading ...</span>
-    </div>
-  </div> -->
+              <div class="pickup-case" *ngFor="let pickup of getCurrentCue()?.pickups">
+                <div class="row">
+                  <div class="col-8">
+                    <strong>{{ pickup?.name }}:</strong>
+                    <div class="action-badge">{{ pickup?.description }}</div>
+                  </div>
+                  <div class="col-4">
+                    <button class="btn btn-sm btn-primary float-end" title="Add Note">Add</button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-3 d-flex align-items-center justify-content-center">
+          <button class="btn btn-primary btn-lg" (click)="goToNextCue()" [disabled]="!canGoToNext()"
+            [class.disabled]="!canGoToNext()">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Empty state when no cues -->
+      <div class="row" *ngIf="deploymentCues.length === 0">
+        <div class="col-12 text-center py-5">
+          <div class="text-muted">
+            <i class="fas fa-info-circle fa-3x mb-3"></i>
+            <h5>No deployment cues found</h5>
+            <p>Create your first deployment cue to get started.</p>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
    
-    <div class="table-container mt-4">
-      <div *ngIf="!loading && getFilteredPropertyData() && getFilteredPropertyData().length > 0">
+
+    <div class="table-container mt-4" *ngIf="!loading && cueProperties && cueProperties.length > 0">
+    
+      <div >
         <table>
           <thead>
             <tr>
+              <th class="select-column">
+                <input type="checkbox" [checked]="selectAllProperties" (change)="toggleSelectAll()"
+                  title="Select/Deselect all properties">
+              </th>
               <th>Listing Name</th>
               <th>Deployment Cue</th>
               <th>Pick Up Case</th>
@@ -120,12 +117,16 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let property of getFilteredPropertyData()">
+            <tr *ngFor="let property of cueProperties">
+              <td class="select-column">
+                <input type="checkbox" [checked]="isPropertySelected(property._id)"
+                  (change)="togglePropertySelection(property._id)" [disabled]="!property._id" title="Select property">
+              </td>
               <td class="property-cell">
                 <div class="property-info">
                   <div class="property-details">
                     <h4 [title]="property.Listing_Name" [attr.aria-label]="property.Listing_Name">{{
-                      property.Listing_Name
+                      property?.propertyData?.Listing_Name
                       }}</h4>
 
                   </div>
@@ -147,124 +148,137 @@
                 </div>
               </td>
               <td class="assigned-to-cell">
-                <select class="form-select form-select-sm">
+                <select class="form-select form-select-sm" [(ngModel)]="property.assignedTo.userId"
+                  [disabled]="isPropertyAssigneeUpdating(property._id)" (change)="onAssigneeChange(property, $event)">
                   <option value="">Select Assignee</option>
-                  <option value="ishan">Ishan</option>
-                  <option value="manish">Manish</option>
+                  <option *ngFor="let user of allUsers" [value]="user.id">{{ user.fullName }}</option>
                 </select>
+                <div *ngIf="isPropertyAssigneeUpdating(property._id)" class="assignee-loading">
+                  <i class="fas fa-spinner fa-spin"></i>
+                </div>
+
               </td>
               <td class="status-cell">
-                <select class="form-select form-select-sm status-dropdown">
+                <select class="form-select form-select-sm status-dropdown" [value]="property.status || ''"
+                  [disabled]="isPropertyStatusUpdating(property._id)" (change)="onStatusChange(property, $event)">
                   <option value="">Select Status</option>
                   <option value="pending">Pending</option>
                   <option value="working">Working</option>
                   <option value="done">Done</option>
                 </select>
+                <div *ngIf="isPropertyStatusUpdating(property._id)" class="status-loading">
+                  <i class="fas fa-spinner fa-spin"></i>
+                </div>
               </td>
               <td class="notes-cell">
                 <div class="notes-container">
-                  <button class="btn btn-sm btn-outline-secondary" (click)="openNotesModal(property._id)">
+                  <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="modal"
+                    data-bs-target="#notesModal" (click)="openNotesModal(property)">
                     <i class="fas fa-sticky-note me-1"></i>
-                    <span class="notes-count">3 Notes</span>
+                    <span class="notes-count">{{ property?.notes?.length || 0 }} 
+                      {{ property?.notes?.length === 1 ? 'Note' : 'Notes' }}</span>
                   </button>
                 </div>
               </td>
               <td>
                 <span class="badge badge-light-gray me-1">
-                  {{ safeParseNumber(property.Occupancy.TM) || 0 }} %
+                  {{ safeParseNumber(property?.propertyData?.Occupancy?.TM) || 0 }} %
                 </span>
               </td>
               <td>
                 <span class="badge badge-light-gray me-1">
-                  {{ safeParseNumber(property.Occupancy.NM) || 0 }} %
+                  {{ safeParseNumber(property?.propertyData?.Occupancy?.NM) || 0 }} %
                 </span>
               </td>
               <td>
                 <div class="dual-value-cell">
-                  <div class="value-pair" *ngIf="property.ADR">
-                    <span class="badge badge-light-gray me-1">This Month: {{ property.ADR.TM || 'N/A'
+                  <div class="value-pair" *ngIf="property?.propertyData?.ADR">
+                    <span class="badge badge-light-gray me-1">This Month: {{ property?.propertyData?.ADR?.TM || 'N/A'
                       }}</span>
-                    <span class="badge badge-light-gray">Next Month: {{ property.ADR.NM || 'N/A'
+                    <span class="badge badge-light-gray">Next Month: {{ property?.propertyData?.ADR?.NM || 'N/A'
                       }}</span>
                   </div>
-                  <div class="value-pair" *ngIf="!property.ADR">
+                  <div class="value-pair" *ngIf="!property?.propertyData?.ADR">
                     <span class="text-muted">N/A</span>
                   </div>
                 </div>
               </td>
               <td>
                 <div class="dual-value-cell">
-                  <div class="value-pair" *ngIf="property.RevPAR">
-                    <span class="badge badge-light-gray me-1">This Month: {{ property.RevPAR.TM || 'N/A'
+                  <div class="value-pair" *ngIf="property?.propertyData?.RevPAR">
+                    <span class="badge badge-light-gray me-1">This Month: {{ property?.propertyData?.RevPAR?.TM || 'N/A'
                       }}</span>
-                    <span class="badge badge-light-gray">Next Month: {{ property.RevPAR.NM || 'N/A'
+                    <span class="badge badge-light-gray">Next Month: {{ property?.propertyData?.RevPAR?.NM || 'N/A'
                       }}</span>
                   </div>
-                  <div class="value-pair" *ngIf="!property.RevPAR">
+                  <div class="value-pair" *ngIf="!property?.propertyData?.RevPAR">
                     <span class="text-muted">N/A</span>
                   </div>
                 </div>
               </td>
               <td>
                 <div class="dual-value-cell">
-                  <div class="value-pair" *ngIf="property.MPI">
-                    <span class="badge badge-light-gray me-1">This Month: {{ safeParseNumber(property.MPI.TM) }}%</span>
-                    <span class="badge badge-light-gray me-1">Next Month: {{ safeParseNumber(property.MPI.NM) }}%</span>
-                    <span class="badge badge-light-gray me-1">LYTM: {{ safeParseNumber(property.MPI.LYTM) }}%</span>
+                  <div class="value-pair" *ngIf="property?.propertyData?.MPI">
+                    <span class="badge badge-light-gray me-1">This Month: {{
+                      safeParseNumber(property?.propertyData?.MPI?.TM) }}%</span>
+                    <span class="badge badge-light-gray me-1">Next Month: {{
+                      safeParseNumber(property?.propertyData?.MPI?.NM) }}%</span>
+                    <span class="badge badge-light-gray me-1">LYTM: {{
+                      safeParseNumber(property?.propertyData?.MPI?.LYTM) }}%</span>
                   </div>
-                  <div class="value-pair" *ngIf="!property.MPI">
+                  <div class="value-pair" *ngIf="!property?.propertyData?.MPI">
                     <span class="text-muted">N/A</span>
                   </div>
                 </div>
               </td>
               <td>
                 <div class="stly-var-single-cell">
-                  <span class="badge" [ngClass]="getPerformanceClass(property.STLY_Var.Occ)">
-                    {{ property.STLY_Var.Occ }}
+                  <span class="badge" [ngClass]="getPerformanceClass(property?.propertyData?.STLY_Var?.Occ)">
+                    {{ property?.propertyData?.STLY_Var?.Occ }}
                   </span>
                 </div>
               </td>
               <td>
                 <div class="stly-var-single-cell">
-                  <span class="badge" [ngClass]="getPerformanceClass(property.STLY_Var.RevPAR)">
-                    {{ property.STLY_Var.RevPAR }}
+                  <span class="badge" [ngClass]="getPerformanceClass(property?.propertyData?.STLY_Var?.RevPAR)">
+                    {{ property?.propertyData?.STLY_Var?.RevPAR }}
                   </span>
                 </div>
               </td>
               <td>
                 <div class="min-rate-threshold-cell">
-                  <span class="threshold-value">{{ property.Min_Rate_Threshold || 'N/A' }}</span>
+                  <span class="threshold-value">{{ property?.propertyData?.Min_Rate_Threshold || 'N/A' }}</span>
                 </div>
               </td>
               <td>
                 <div class="pickup-occ-cell">
                   <div class="pickup-item"
-                    *ngIf="property.Pick_Up_Occ && property.Pick_Up_Occ['7_Days'] !== null && property.Pick_Up_Occ['7_Days'] !== undefined">
+                    *ngIf="property?.propertyData?.Pick_Up_Occ && property?.propertyData?.Pick_Up_Occ['7_Days'] !== null && property?.propertyData?.Pick_Up_Occ['7_Days'] !== undefined">
                     <span class="pickup-label">7D:</span>
-                    <span class="pickup-value">{{ property.Pick_Up_Occ['7_Days'] }}</span>
+                    <span class="pickup-value">{{ property?.propertyData?.Pick_Up_Occ['7_Days'] }}</span>
                   </div>
                   <div class="pickup-item"
-                    *ngIf="!property.Pick_Up_Occ || property.Pick_Up_Occ['7_Days'] === null || property.Pick_Up_Occ['7_Days'] === undefined">
+                    *ngIf="!property?.propertyData?.Pick_Up_Occ || property?.propertyData?.Pick_Up_Occ['7_Days'] === null || property?.propertyData?.Pick_Up_Occ['7_Days'] === undefined">
                     <span class="pickup-label">7D:</span>
                     <span class="pickup-value na-value">N/A</span>
                   </div>
                   <div class="pickup-item"
-                    *ngIf="property.Pick_Up_Occ && property.Pick_Up_Occ['14_Days'] !== null && property.Pick_Up_Occ['14_Days'] !== undefined">
+                    *ngIf="property?.propertyData?.Pick_Up_Occ && property?.propertyData?.Pick_Up_Occ['14_Days'] !== null && property?.propertyData?.Pick_Up_Occ['14_Days'] !== undefined">
                     <span class="pickup-label">14D:</span>
-                    <span class="pickup-value">{{ property.Pick_Up_Occ['14_Days'] }}</span>
+                    <span class="pickup-value">{{ property?.propertyData?.Pick_Up_Occ['14_Days'] }}</span>
                   </div>
                   <div class="pickup-item"
-                    *ngIf="!property.Pick_Up_Occ || property.Pick_Up_Occ['14_Days'] === null || property.Pick_Up_Occ['14_Days'] === undefined">
+                    *ngIf="!property?.propertyData?.Pick_Up_Occ || property?.propertyData?.Pick_Up_Occ['14_Days'] === null || property?.propertyData?.Pick_Up_Occ['14_Days'] === undefined">
                     <span class="pickup-label">14D:</span>
                     <span class="pickup-value na-value">N/A</span>
                   </div>
                   <div class="pickup-item"
-                    *ngIf="property.Pick_Up_Occ && property.Pick_Up_Occ['30_Days'] !== null && property.Pick_Up_Occ['30_Days'] !== undefined">
+                    *ngIf="property?.propertyData?.Pick_Up_Occ && property?.propertyData?.Pick_Up_Occ['30_Days'] !== null && property?.propertyData?.Pick_Up_Occ['30_Days'] !== undefined">
                     <span class="pickup-label">30D:</span>
-                    <span class="pickup-value">{{ property.Pick_Up_Occ['30_Days'] }}</span>
+                    <span class="pickup-value">{{ property?.propertyData?.Pick_Up_Occ['30_Days'] }}</span>
                   </div>
                   <div class="pickup-item"
-                    *ngIf="!property.Pick_Up_Occ || property.Pick_Up_Occ['30_Days'] === null || property.Pick_Up_Occ['30_Days'] === undefined">
+                    *ngIf="!property?.propertyData?.Pick_Up_Occ || property?.propertyData?.Pick_Up_Occ['30_Days'] === null || property?.propertyData?.Pick_Up_Occ['30_Days'] === undefined">
                     <span class="pickup-label">30D:</span>
                     <span class="pickup-value na-value">N/A</span>
                   </div>
@@ -272,7 +286,7 @@
               </td>
               <td>
                 <div class="btn-group btn-group-sm">
-                  <button class="btn btn-outline-primary btn-sm" (click)="viewDetails(property._id)">
+                  <button class="btn btn-outline-primary btn-sm" (click)="viewDetails(property?.propertyData?._id)">
                     <i class="fas fa-eye"></i>
                   </button>
                 </div>
@@ -281,201 +295,151 @@
           </tbody>
         </table>
       </div>
+     
     </div>
   </div>
 </div>
-  <!-- Deployment Cue Form Modal -->
-  <div class="modal fade" id="cueFormModal">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="cueFormModalLabel">
-            <i class="fas fa-edit me-2"></i>{{ editingCueId ? 'Edit' : 'Create' }} Deployment Cue
-          </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" #cueFormModalCloseBtn (click)="closeCueFormModal()" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form #cueForm="ngForm">
-            <div class="mb-3">
-              <label for="cueName" class="form-label">Cue Name *</label>
-              <input type="text" class="form-control" id="cueName" [(ngModel)]="cueFormData.name" name="cueName"
-                required placeholder="Enter cue name">
-            </div>
+<!-- Deployment Cue Form Modal -->
+<div class="modal fade" id="cueFormModal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="cueFormModalLabel">
+          <i class="fas fa-edit me-2"></i>{{ editingCueId ? 'Edit' : 'Create' }} Deployment Cue
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" #cueFormModalCloseBtn
+          (click)="closeCueFormModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form #cueForm="ngForm">
+          <div class="mb-3">
+            <label for="cueName" class="form-label">Cue Name *</label>
+            <input type="text" class="form-control" id="cueName" [(ngModel)]="cueFormData.name" name="cueName" required
+              placeholder="Enter cue name">
+          </div>
 
-            <div class="mb-3">
-              <label for="cueTag" class="form-label">Tag *</label>
-              <input type="text" class="form-control" id="cueTag" [(ngModel)]="cueFormData.tag" name="cueTag"
-                required placeholder="Enter tag (e.g., Critical, High Priority, Urgent)">
-            </div>
+          <div class="mb-3">
+            <label for="cueTag" class="form-label">Tag *</label>
+            <input type="text" class="form-control" id="cueTag" [(ngModel)]="cueFormData.tag" name="cueTag" required
+              placeholder="Enter tag (e.g., Critical, High Priority, Urgent)">
+          </div>
 
-            <div class="mb-3">
-              <label for="cueDescription1" class="form-label">Description 1 *</label>
-              <textarea class="form-control" id="cueDescription1" [(ngModel)]="cueFormData.description1"
-                name="cueDescription1" rows="3" required placeholder="Enter primary description"></textarea>
-            </div>
+          <div class="mb-3">
+            <label for="cueDescription1" class="form-label">Description 1 *</label>
+            <textarea class="form-control" id="cueDescription1" [(ngModel)]="cueFormData.description1"
+              name="cueDescription1" rows="3" required placeholder="Enter primary description"></textarea>
+          </div>
 
-            <div class="mb-3">
-              <label for="cueDescription2" class="form-label">Description 2 *</label>
-              <textarea class="form-control" id="cueDescription2" [(ngModel)]="cueFormData.description2"
-                name="cueDescription2" rows="3" required placeholder="Enter secondary description"></textarea>
-            </div>
+          <div class="mb-3">
+            <label for="cueDescription2" class="form-label">Description 2 *</label>
+            <textarea class="form-control" id="cueDescription2" [(ngModel)]="cueFormData.description2"
+              name="cueDescription2" rows="3" required placeholder="Enter secondary description"></textarea>
+          </div>
 
-            <div class="mb-3">
-              <label class="form-label">Pickup Cases *</label>
-              <div class="pickup-cases-container">
-                <div class="pickup-case-item mb-3" *ngFor="let pickup of cueFormData.pickups; let i = index">
-                  <div class="row">
-                    <div class="col-md-5">
-                      <input type="text" class="form-control" [(ngModel)]="pickup.name" 
-                        [name]="'pickupName' + i" placeholder="Pickup Case Name" required>
-                    </div>
-                    <div class="col-md-6">
-                      <input type="text" class="form-control" [(ngModel)]="pickup.description" 
-                        [name]="'pickupDescription' + i" placeholder="Pickup Case Description" required>
-                    </div>
-                    <div class="col-md-1">
-                      <button type="button" class="btn btn-outline-danger btn-sm" 
-                        (click)="removePickupCase(i)" title="Remove">
-                        <i class="fas fa-trash"></i>
-                      </button>
-                    </div>
+          <div class="mb-3">
+            <label class="form-label">Pickup Cases *</label>
+            <div class="pickup-cases-container">
+              <div class="pickup-case-item mb-3" *ngFor="let pickup of cueFormData.pickups; let i = index">
+                <div class="row">
+                  <div class="col-md-5">
+                    <input type="text" class="form-control" [(ngModel)]="pickup.name" [name]="'pickupName' + i"
+                      placeholder="Pickup Case Name" required>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="text" class="form-control" [(ngModel)]="pickup.description"
+                      [name]="'pickupDescription' + i" placeholder="Pickup Case Description" required>
+                  </div>
+                  <div class="col-md-1">
+                    <button type="button" class="btn btn-outline-danger btn-sm" (click)="removePickupCase(i)"
+                      title="Remove">
+                      <i class="fas fa-trash"></i>
+                    </button>
                   </div>
                 </div>
-                <button type="button" class="btn btn-outline-primary btn-sm" (click)="addPickupCase()">
-                  <i class="fas fa-plus me-1"></i>Add Pickup Case
-                </button>
               </div>
+              <button type="button" class="btn btn-outline-primary btn-sm" (click)="addPickupCase()">
+                <i class="fas fa-plus me-1"></i>Add Pickup Case
+              </button>
             </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #cueFormModalCloseBtn
+          (click)="closeCueFormModal()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="saveCue()"
+          [disabled]="!cueForm.form.valid || cueFormData.pickups.length === 0">
+          <i class="fas fa-save me-2"></i>{{ editingCueId ? 'Update' : 'Create' }} Cue
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Notes Modal -->
+<div class="modal fade" id="notesModal" aria-labelledby="notesModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="notesModalLabel">
+          <i class="fas fa-sticky-note me-2"></i>Notes
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" #notesModalCloseBtn (click)="closeNotesModal()"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Add New Note Section -->
+        <div class="add-note-section">
+          <h6 class="mb-3">Add New Note</h6>
+          <form #noteForm="ngForm">
+            <div class="mb-3">
+              <textarea class="form-control" id="newNote" [(ngModel)]="newNoteText" name="newNote" rows="3" required
+                placeholder="Enter your note here..."></textarea>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm" (click)="addNote()"
+              [disabled]="!newNoteText || !newNoteText.trim()">
+              <i class="fas fa-plus me-2"></i>Add Note
+            </button>
           </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #cueFormModalCloseBtn (click)="closeCueFormModal()">Cancel</button>
-          <button type="button" class="btn btn-primary" (click)="saveCue()" 
-            [disabled]="!cueForm.form.valid || cueFormData.pickups.length === 0">
-            <i class="fas fa-save me-2"></i>{{ editingCueId ? 'Update' : 'Create' }} Cue
-          </button>
+
+        <hr class="my-4">
+
+        <!-- Notes Trail -->
+        <div class="notes-trail">
+          <h6 class="mb-3">Notes History</h6>
+          <ng-container *ngIf="selectedPropertyForNotes.length > 0">
+            <!-- Notes from API -->
+            <div class="note-item" *ngFor="let note of selectedPropertyForNotes">
+              <div class="note-header">
+                <div class="note-author">
+                  <i class="fas fa-user-circle me-2"></i>
+                  <strong>{{ note.userCompleteName || note.userName || 'Unknown User' }}</strong>
+                </div>
+                <div class="note-timestamp">
+                  <i class="fas fa-clock me-1"></i>
+                  <small class="text-muted">{{ note.createdAt ? (note.createdAt | date:'short') : 'Just now' }}</small>
+                </div>
+              </div>
+              <div class="note-content">
+                {{ note.note }}
+              </div>
+            </div>
+          </ng-container>
+
+
+          <!-- Empty State -->
+          <div class="text-center py-4 text-muted" *ngIf="selectedPropertyForNotes.length === 0">
+            <i class="fas fa-sticky-note fa-2x mb-2"></i>
+            <p>No notes yet. Add your first note above.</p>
+          </div>
         </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #notesModalCloseBtn
+          (click)="closeNotesModal()">Close</button>
       </div>
     </div>
   </div>
-
-  <!-- Modal Backdrop for Cue Form -->
-  <!-- <div class="modal-backdrop fade" [class.show]="showCueFormModal" *ngIf="showCueFormModal"
-    (click)="closeCueFormModal()"></div> -->
-
-  <!-- Notes Modal -->
-  <div class="modal fade" id="notesModal" tabindex="-1" aria-labelledby="notesModalLabel" aria-hidden="true"
-    [class.show]="showNotesModal" [style.display]="showNotesModal ? 'block' : 'none'">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="notesModalLabel">
-            <i class="fas fa-sticky-note me-2"></i>Notes
-          </h5>
-          <button type="button" class="btn-close" (click)="closeNotesModal()" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <!-- Add New Note Section -->
-          <div class="add-note-section">
-            <h6 class="mb-3">Add New Note</h6>
-            <form #noteForm="ngForm">
-              <div class="mb-3">
-                <textarea class="form-control" id="newNote" [(ngModel)]="newNoteText" name="newNote" rows="3" required
-                  placeholder="Enter your note here..."></textarea>
-              </div>
-              <button type="button" class="btn btn-primary btn-sm" (click)="addNote()"
-                [disabled]="!newNoteText || !newNoteText.trim()">
-                <i class="fas fa-plus me-2"></i>Add Note
-              </button>
-            </form>
-          </div>
-
-          <hr class="my-4">
-
-          <!-- Notes Trail -->
-          <div class="notes-trail">
-            <h6 class="mb-3">Notes History</h6>
-
-            <!-- Demo Note 1 -->
-            <div class="note-item">
-              <div class="note-header">
-                <div class="note-author">
-                  <i class="fas fa-user-circle me-2"></i>
-                  <strong>Manish</strong>
-                </div>
-                <div class="note-timestamp">
-                  <i class="fas fa-clock me-1"></i>
-                  <small class="text-muted">2 hours ago</small>
-                </div>
-              </div>
-              <div class="note-content">
-                Updated pricing strategy based on market analysis. Reduced rates by 10% for weekdays.
-              </div>
-              <div class="note-footer">
-                <button class="btn btn-sm btn-link text-danger p-0" (click)="deleteNote('note1')">
-                  <i class="fas fa-trash me-1"></i>Delete
-                </button>
-              </div>
-            </div>
-
-            <!-- Demo Note 2 -->
-            <div class="note-item">
-              <div class="note-header">
-                <div class="note-author">
-                  <i class="fas fa-user-circle me-2"></i>
-                  <strong>Ishan</strong>
-                </div>
-                <div class="note-timestamp">
-                  <i class="fas fa-clock me-1"></i>
-                  <small class="text-muted">1 day ago</small>
-                </div>
-              </div>
-              <div class="note-content">
-                Guest reported minor maintenance issue with AC. Scheduled technician visit for tomorrow.
-              </div>
-              <div class="note-footer">
-                <button class="btn btn-sm btn-link text-danger p-0" (click)="deleteNote('note2')">
-                  <i class="fas fa-trash me-1"></i>Delete
-                </button>
-              </div>
-            </div>
-
-            <!-- Demo Note 3 -->
-            <div class="note-item">
-              <div class="note-header">
-                <div class="note-author">
-                  <i class="fas fa-user-circle me-2"></i>
-                  <strong>Manish</strong>
-                </div>
-                <div class="note-timestamp">
-                  <i class="fas fa-clock me-1"></i>
-                  <small class="text-muted">3 days ago</small>
-                </div>
-              </div>
-              <div class="note-content">
-                Property photos updated with new furniture. Listing performance expected to improve.
-              </div>
-              <div class="note-footer">
-                <button class="btn btn-sm btn-link text-danger p-0" (click)="deleteNote('note3')">
-                  <i class="fas fa-trash me-1"></i>Delete
-                </button>
-              </div>
-            </div>
-
-            <!-- Empty State -->
-            <div class="text-center py-4 text-muted" *ngIf="false">
-              <i class="fas fa-sticky-note fa-2x mb-2"></i>
-              <p>No notes yet. Add your first note above.</p>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="closeNotesModal()">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal Backdrop for Notes -->
-  <div class="modal-backdrop fade" [class.show]="showNotesModal" *ngIf="showNotesModal" (click)="closeNotesModal()">
-  </div>
+</div>

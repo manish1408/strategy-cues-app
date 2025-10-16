@@ -8,7 +8,8 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { DeploymentCuesService } from "../_services/deploymentCues.service";
 import { finalize } from "rxjs/operators";
-
+import { CuePropertiesService } from "../_services/cue-properties.service";
+import { AuthenticationService } from "../_services/authentication.service";
 @Component({
   selector: 'app-deployment',
   templateUrl: './deployment.component.html',
@@ -16,6 +17,7 @@ import { finalize } from "rxjs/operators";
 })
 export class DeploymentComponent implements OnInit {
   @ViewChild('cueFormModalCloseBtn') cueFormModalCloseBtn: any;
+  @ViewChild('notesModalCloseBtn') notesModalCloseBtn: any;
 
   // Data from API
   propertyData: PropertyData[] = [];
@@ -64,18 +66,40 @@ export class DeploymentComponent implements OnInit {
   currentCuePage: number = 1;
   totalCuePages: number = 1;
   deploymentCuesLoading: boolean = false;
+  cueProperties: any[] = [];
+
+  // Selection state
+  selectedPropertyIds: Set<string> = new Set();
+  selectAllProperties: boolean = false;
+
+  // Status update loading state
+  updatingStatusPropertyIds: Set<string> = new Set();
+  
+  // Assignee update loading state
+  updatingAssigneePropertyIds: Set<string> = new Set();
+  
+  allUsers: any[] = [];
+  selectedPropertyForNotes: any[] = [];
+  loggedInUser: any = null;
   constructor(
     private propertiesService: PropertiesService,
     private localStorageService: LocalStorageService,
     private router: Router,
     private route: ActivatedRoute,
     private toastr: ToastrService,
-    private deploymentCuesService: DeploymentCuesService
+    private deploymentCuesService: DeploymentCuesService,
+    private cuePropertiesService: CuePropertiesService,
+    private authService: AuthenticationService
   ) {
     this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
   }
 
   ngOnInit(): void {
+    const user_ = this.localStorageService.getItem('STRATEGY-CUES-USER');
+    if (user_ && user_ !== 'undefined') {
+        const userData = JSON.parse(user_);
+        this.loggedInUser = userData.user;
+    }
     // Get operatorId from query parameters or localStorage
     this.route.queryParams.subscribe(params => {
       if (params['operatorId']) {
@@ -85,12 +109,25 @@ export class DeploymentComponent implements OnInit {
       }
       this.loadProperties();
       this.loadDeploymentCues();
+      this.loadAllUsers();
     });
 
     // Add keyboard event listener for Escape key
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && this.showCueFormModal) {
         this.closeCueFormModal();
+      }
+    });
+  }
+  loadAllUsers(): void {
+    this.authService.getAllUsers().subscribe({
+      next: (response: any) => {
+        this.allUsers = response.data.users;
+        console.log('Loaded users:', this.allUsers);
+      },
+      error: (error: any) => {
+        console.error('Error loading users:', error);
+        this.toastr.error('Failed to load users');
       }
     });
   }
@@ -127,24 +164,20 @@ export class DeploymentComponent implements OnInit {
     const filterParams = this.buildFilterParams();
 
     // Load current page data using filter endpoint
-    this.propertiesService
-      .filterProperties(filterParams)
+    this
+      .cuePropertiesService.getCueProperties(this.operatorId as string)
       .subscribe({
         next: (response: any) => {
           if (response.success) {
-            const newData = PropertiesService.extractPropertiesArray(response);
-
-            // For infinite scroll: append data instead of replacing
-            if (this.currentPage === 1) {
-              this.propertyData = newData;
-            } else {
-              this.propertyData = [...this.propertyData, ...newData];
+            this.cueProperties = response.data.map((p: any) => ({
+              ...p,
+              assignedTo: p.assignedTo || { userId: '', name: '' }
+            }));
+            console.log('Loaded cue properties:', this.cueProperties);
+            // Debug first property if available
+            if (this.cueProperties.length > 0) {
+              console.log('First property assignedTo:', this.cueProperties[0].assignedTo);
             }
-
-            this.totalPages = response.data.pagination.total_pages;
-              this.currentPage = response.data.pagination.page;
-              this.itemsPerPage = response.data.pagination.limit;
-              this.hasMoreData = this.currentPage < this.totalPages;
           } else {
             this.error = response.message || "Failed to load properties data";
           }
@@ -623,14 +656,14 @@ export class DeploymentComponent implements OnInit {
   }
 
   // Notes Management Methods
-  openNotesModal(propertyId: string): void {
-    this.selectedPropertyIdForNotes = propertyId;
-    this.showNotesModal = true;
+  openNotesModal(property: any): void {
+    this.selectedPropertyForNotes = property.notes || [];
+    this.selectedPropertyIdForNotes = property._id;
     this.newNoteText = '';
   }
 
   closeNotesModal(): void {
-    this.showNotesModal = false;
+    this.notesModalCloseBtn.nativeElement.click();
     this.selectedPropertyIdForNotes = null;
     this.newNoteText = '';
   }
@@ -641,25 +674,96 @@ export class DeploymentComponent implements OnInit {
       return;
     }
 
-    // In production, this would save to the backend
-    const currentUser = 'Manish'; // This would come from auth service
-    const timestamp = new Date();
-    
-    console.log('Adding note:', {
-      propertyId: this.selectedPropertyIdForNotes,
-      note: this.newNoteText,
-      author: currentUser,
-      timestamp: timestamp
-    });
+    if (!this.selectedPropertyIdForNotes) {
+      this.toastr.warning('No property selected for notes');
+      return;
+    }
 
-    this.toastr.success('Note added successfully!');
-    this.newNoteText = '';
+    if (!this.loggedInUser) {
+      this.toastr.warning('User information not available');
+      return;
+    }
+
+    // Create the new note object
+    const newNote = {
+      note: this.newNoteText.trim(),
+      userId: this.loggedInUser.id,
+      userName: this.loggedInUser.fullName || this.loggedInUser.userName,
+      userEmail: this.loggedInUser.email,
+      userCompleteName: this.loggedInUser.fullName,
+    };
+
+    // Get existing notes and add the new note
+    const existingNotes = this.selectedPropertyForNotes || [];
+    const updatedNotes = [...existingNotes, newNote];
+
+    // Prepare the payload
+    const updateData = {
+      notes: updatedNotes
+    };
+
+    // Make API call to update the cue property
+    this.cuePropertiesService.updateCueProperty(this.selectedPropertyIdForNotes, updateData).subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          this.toastr.success('Note added successfully!');
+          // Update the local property notes
+          const property = this.cueProperties.find(p => p._id === this.selectedPropertyIdForNotes);
+          if (property) {
+            property.notes = updatedNotes;
+          }
+          // Update the selected property notes for the modal
+          this.selectedPropertyForNotes = updatedNotes;
+          this.newNoteText = '';
+        } else {
+          this.toastr.error(response.message || 'Failed to add note');
+        }
+      },
+      error: (error: any) => {
+        this.toastr.error(error.error?.message || 'Failed to add note');
+        console.error('Add note error:', error);
+      }
+    });
   }
 
   deleteNote(noteId: string): void {
     if (confirm('Are you sure you want to delete this note?')) {
-      console.log('Deleting note:', noteId);
-      this.toastr.success('Note deleted successfully!');
+      if (!this.selectedPropertyIdForNotes) {
+        this.toastr.warning('No property selected for notes');
+        return;
+      }
+
+      // Remove the note from the local array
+      const updatedNotes = this.selectedPropertyForNotes.filter((note: any) => 
+        (note._id || note.id) !== noteId
+      );
+
+      // Prepare the payload
+      const updateData = {
+        notes: updatedNotes
+      };
+
+      // Make API call to update the cue property
+      this.cuePropertiesService.updateCueProperty(this.selectedPropertyIdForNotes, updateData).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            this.toastr.success('Note deleted successfully!');
+            // Update the local property notes
+            const property = this.cueProperties.find(p => p._id === this.selectedPropertyIdForNotes);
+            if (property) {
+              property.notes = updatedNotes;
+            }
+            // Update the selected property notes for the modal
+            this.selectedPropertyForNotes = updatedNotes;
+          } else {
+            this.toastr.error(response.message || 'Failed to delete note');
+          }
+        },
+        error: (error: any) => {
+          this.toastr.error(error.error?.message || 'Failed to delete note');
+          console.error('Delete note error:', error);
+        }
+      });
     }
   }
 
@@ -687,4 +791,210 @@ export class DeploymentComponent implements OnInit {
   getCurrentCue(): any {
     return this.deploymentCues[this.currentCueIndex] || null;
   }
+
+  // Selection methods
+  togglePropertySelection(propertyId: string): void {
+    if (this.selectedPropertyIds.has(propertyId)) {
+      this.selectedPropertyIds.delete(propertyId);
+    } else {
+      this.selectedPropertyIds.add(propertyId);
+    }
+    this.updateSelectAllState();
+  }
+
+  isPropertySelected(propertyId: string): boolean {
+    return this.selectedPropertyIds.has(propertyId);
+  }
+
+  toggleSelectAll(): void {
+    const visiblePropertyIds = this.cueProperties
+      .filter(property => property._id)
+      .map(property => property._id);
+
+    const allVisibleSelected = visiblePropertyIds.length > 0 && 
+      visiblePropertyIds.every(id => this.selectedPropertyIds.has(id));
+    const someVisibleSelected = visiblePropertyIds.some(id => this.selectedPropertyIds.has(id));
+
+    if (allVisibleSelected) {
+      // All selected → Deselect all
+      visiblePropertyIds.forEach(id => {
+        this.selectedPropertyIds.delete(id);
+      });
+    } else if (someVisibleSelected) {
+      // Some selected → Select all remaining
+      visiblePropertyIds.forEach(id => {
+        this.selectedPropertyIds.add(id);
+      });
+    } else {
+      // None selected → Select all
+      visiblePropertyIds.forEach(id => {
+        this.selectedPropertyIds.add(id);
+      });
+    }
+
+    this.updateSelectAllState();
+  }
+
+  updateSelectAllState(): void {
+    if (this.cueProperties.length === 0) {
+      this.selectAllProperties = false;
+      return;
+    }
+
+    const visiblePropertyIds = this.cueProperties
+      .filter(property => property._id)
+      .map(property => property._id);
+
+    this.selectAllProperties = visiblePropertyIds.length > 0 && 
+      visiblePropertyIds.every(id => this.selectedPropertyIds.has(id));
+  }
+
+  getSelectedCount(): number {
+    return this.selectedPropertyIds.size;
+  }
+
+  getSelectedProperties(): any[] {
+    return this.cueProperties.filter(property => 
+      property._id && this.selectedPropertyIds.has(property._id)
+    );
+  }
+
+  clearSelection(): void {
+    this.selectedPropertyIds.clear();
+    this.selectAllProperties = false;
+  }
+
+  // Example method to demonstrate how to use selected properties
+  logSelectedProperties(): void {
+    const selectedProperties = this.getSelectedProperties();
+    console.log('Selected Properties:', selectedProperties);
+    console.log('Selected Count:', this.getSelectedCount());
+    console.log('Selected IDs:', Array.from(this.selectedPropertyIds));
+  }
+
+  // Status update method
+  updatePropertyStatus(property: any, newStatus: string): void {
+    if (!property._id || !newStatus) {
+      this.toastr.warning('Invalid property or status');
+      return;
+    }
+
+    // Add to loading state
+    this.updatingStatusPropertyIds.add(property._id);
+
+    const updateData = {
+      status: newStatus
+    };
+
+    this.cuePropertiesService.updateCueProperty(property._id, updateData).subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          this.toastr.success('Status updated successfully!');
+          // Update the local property status
+          property.status = newStatus;
+          this.updatingStatusPropertyIds.delete(property._id);
+        } else {
+          this.toastr.error(response.message || 'Failed to update status');
+          this.updatingStatusPropertyIds.delete(property._id);
+        }
+      },
+      error: (error: any) => {
+        this.toastr.error(error.error?.message || 'Failed to update status');
+        console.error('Status update error:', error);
+        this.updatingStatusPropertyIds.delete(property._id);
+      },
+      complete: () => {
+        // Remove from loading state
+        this.updatingStatusPropertyIds.delete(property._id);
+      }
+    });
+  }
+
+  // Handle status dropdown change
+  onStatusChange(property: any, event: any): void {
+    const newStatus = event.target.value;
+    if (newStatus) {
+      this.updatePropertyStatus(property, newStatus);
+    }
+  }
+
+  // Check if property status is being updated
+  isPropertyStatusUpdating(propertyId: string): boolean {
+    return this.updatingStatusPropertyIds.has(propertyId);
+  }
+
+  // Assignee update method
+  updatePropertyAssignee(property: any, userId: string): void {
+    if (!property._id || !userId) {
+      this.toastr.warning('Invalid property or assignee');
+      return;
+    }
+
+    // Find the selected user
+    const selectedUser = this.allUsers.find(user => user.id === userId);
+    if (!selectedUser) {
+      this.toastr.warning('Selected user not found');
+      return;
+    }
+
+    // Add to loading state
+    this.updatingAssigneePropertyIds.add(property._id);
+
+    const updateData = {
+      assignedTo: {
+        name: selectedUser.fullName,
+        userId: selectedUser.id
+      }
+    };
+
+    this.cuePropertiesService.updateCueProperty(property._id, updateData).subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          this.toastr.success('Assignee updated successfully!');
+          // Update the local property assignee
+          property.assignedTo = updateData.assignedTo;
+          this.updatingAssigneePropertyIds.delete(property._id);
+        } else {
+          this.toastr.error(response.message || 'Failed to update assignee');
+          this.updatingAssigneePropertyIds.delete(property._id);
+        }
+      },
+      error: (error: any) => {
+        this.toastr.error(error.error?.message || 'Failed to update assignee');
+        console.error('Assignee update error:', error);
+        this.updatingAssigneePropertyIds.delete(property._id);
+      },
+      complete: () => {
+        // Remove from loading state
+        this.updatingAssigneePropertyIds.delete(property._id);
+      }
+    });
+  }
+
+  // Handle assignee dropdown change
+  onAssigneeChange(property: any, event: any): void {
+    const userId = event.target.value;
+    if (userId) {
+      this.updatePropertyAssignee(property, userId);
+    }
+  }
+
+  // Check if property assignee is being updated
+  isPropertyAssigneeUpdating(propertyId: string): boolean {
+    return this.updatingAssigneePropertyIds.has(propertyId);
+  }
+
+  // Debug method to check property data structure
+  debugPropertyData(property: any): void {
+    console.log('Property data:', property);
+    console.log('AssignedTo:', property.assignedTo);
+    console.log('All users:', this.allUsers);
+    if (property.assignedTo?.userId) {
+      const matchingUser = this.allUsers.find(user => user.id === property.assignedTo.userId);
+      console.log('Matching user:', matchingUser);
+    }
+  }
+
+
+
 }

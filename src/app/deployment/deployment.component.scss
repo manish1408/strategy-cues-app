@@ -3602,3 +3602,124 @@ $transition: all 0.3s ease;
     color: #008a7e;
   }
 }
+
+// Selection styles
+.select-column {
+  width: 50px;
+  text-align: center;
+  vertical-align: middle;
+  
+  input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: $primary-color;
+    
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+  }
+  
+  // Header checkbox styling
+  th.select-column {
+    background-color: $light-color;
+    border-bottom: 2px solid $primary-color;
+  }
+}
+
+// Selected row styling
+.table-container tbody tr {
+  &.selected {
+    background-color: rgba($primary-color, 0.1);
+  }
+  
+  &:hover {
+    background-color: rgba($primary-color, 0.05);
+  }
+}
+
+.select-column {
+  width: 30px !important;
+  min-width: 30px !important;
+  input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+// Status update loading styles
+.status-cell {
+  position: relative;
+  
+  .status-loading {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    color: $primary-color;
+    font-size: 12px;
+    pointer-events: none;
+  }
+  
+  .status-dropdown:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+// Assignee update loading styles
+.assigned-to-cell {
+  position: relative;
+  
+  .assignee-loading {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    color: $primary-color;
+    font-size: 12px;
+    pointer-events: none;
+  }
+  
+  .form-select:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+
+.table-container {
+  width: 100%;
+  max-width: 87vw;
+  height: 85vh; /* enable vertical scroll */
+  overflow: auto; /* allows both X and Y scroll */
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  margin: 0 12px;
+  position: relative; /* Create positioning context for dropdowns */
+  
+  /* Show scrollbars with custom styling */
+  scrollbar-width: thin; /* Firefox */
+  -ms-overflow-style: auto; /* Internet Explorer 10+ */
+  
+  /* Webkit browsers (Chrome, Safari, Edge) */
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+    
+    &:hover {
+      background: #a8a8a8;
+    }
+  }
+}
