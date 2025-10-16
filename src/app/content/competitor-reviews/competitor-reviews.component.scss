@@ -181,7 +181,7 @@ $improvement-text: #2563eb;
         align-items: center;
         justify-content: center;
         font-size: 1.1rem;
-        color: #10b981;
+      
         flex-shrink: 0;
         margin-top: 0.25rem;
       }
@@ -201,36 +201,34 @@ $improvement-text: #2563eb;
       }
 
       &.dislike-card {
-        background: $dislike-bg;
-        border-color: $dislike-border;
+      
+        
 
         &::before {
           background: linear-gradient(90deg, $dislike-text, #ef4444);
         }
 
-        .card-icon {
-          background: linear-gradient(135deg, $dislike-text, #ef4444);
+        card-icon {
+          color: #ef4444;
         }
 
         .card-content h3 {
-          color: $dislike-text;
+
+          color: #000000;
         }
       }
 
       &.wish-card {
-        background: $wish-bg;
-        border-color: $wish-border;
-
+       
         &::before {
           background: linear-gradient(90deg, $wish-text, #f59e0b);
         }
-
         .card-icon {
-          background: linear-gradient(135deg, $wish-text, #f59e0b);
+          color: #f59e0b;
         }
 
         .card-content h3 {
-          color: $wish-text;
+          color: #000000;
         }
       }
 
@@ -241,7 +239,9 @@ $improvement-text: #2563eb;
           background: linear-gradient(90deg, $love-text, #10b981);
         }
 
-     
+        .card-icon {
+          color: #10b981;
+        }
 
         .card-content h3 {
           color: $love-text;
@@ -249,19 +249,18 @@ $improvement-text: #2563eb;
       }
 
       &.action-card {
-        background: $improvement-bg;
-        border-color: $improvement-border;
+       
 
         &::before {
           background: linear-gradient(90deg, $improvement-text, #3b82f6);
         }
 
         .card-icon {
-          background: linear-gradient(135deg, $improvement-text, #3b82f6);
+          color: #3b82f6;
         }
 
         .card-content h3 {
-          color: $improvement-text;
+          color: #000000;
         }
       }
     }
