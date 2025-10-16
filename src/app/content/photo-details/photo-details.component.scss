@@ -374,8 +374,8 @@
 
 /* Main Comparison Layout */
 .comparison-layout {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-wrap: wrap;
   gap: 0;
   min-height: calc(100vh - 275px);
 }
@@ -385,6 +385,11 @@
   border-right: 1px solid #e9ecef;
   display: flex;
   flex-direction: column;
+  width: 50%;
+
+  @media (max-width: 1024px) {
+    width: 100%;
+  }
 
   &:last-child {
     border-right: none;
