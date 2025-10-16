@@ -83,7 +83,9 @@
     <!-- Competitor Select -->
     <div class="competitor-select-container" >
       <select class="form-select" [ngModel]="selectedCompetitorIndex" (ngModelChange)="selectCompetitor($event)">
-        <option [ngValue]="-1" disabled>Select Competitor</option>
+        <option [ngValue]="-1" disabled>
+          {{ getCompetitorsCountForSelectedPlatform() === 0 ? ('No competitor listed for ' + (selectedPlatform | titlecase)) : 'Select Competitor' }}
+        </option>
         <ng-container *ngFor="let competitor of propertyData.competitor; let i = index">
           <option *ngIf="competitor.bookingLink !== null && selectedPlatform == 'booking' && competitor.propertyName" [ngValue]="i">
             {{ competitor.propertyName }}

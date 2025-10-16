@@ -1074,6 +1074,12 @@ export class PhotoDetailsComponent implements OnInit {
     return competitors.filter((c: any) => this.hasCompetitorPlatform(c, this.selectedPlatform));
   }
 
+  // Public accessor for template: count competitors available for the selected platform
+  getCompetitorsCountForSelectedPlatform(): number {
+    const competitors = this.propertyData?.competitor || [];
+    return competitors.filter((c: any) => this.hasCompetitorPlatform(c, this.selectedPlatform)).length;
+  }
+
   // After competitors load or platform changes, ensure selection matches platform
   private alignSelectedCompetitorWithPlatform(): void {
     const competitorsForPlatform = this.getCompetitorsForSelectedPlatform();
