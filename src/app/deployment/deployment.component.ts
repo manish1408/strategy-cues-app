@@ -7,6 +7,7 @@ import { LocalStorageService } from "../_services/local-storage.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { DeploymentCuesService } from "../_services/deploymentCues.service";
+import { finalize } from "rxjs/operators";
 
 @Component({
   selector: 'app-deployment',
@@ -61,6 +62,7 @@ export class DeploymentComponent implements OnInit {
   totalCues: number = 0;
   currentCuePage: number = 1;
   totalCuePages: number = 1;
+  deploymentCuesLoading: boolean = false;
   constructor(
     private propertiesService: PropertiesService,
     private localStorageService: LocalStorageService,
@@ -96,7 +98,13 @@ export class DeploymentComponent implements OnInit {
     this.loadFilteredPropertiesData();
   }
   loadDeploymentCues(): void {
-    this.deploymentCuesService.getDeploymentCues(this.operatorId as string).subscribe({
+    this.deploymentCuesLoading = true;
+    this.deploymentCuesService
+    .getDeploymentCues(this.operatorId as string)
+    .pipe(
+      finalize(() => this.deploymentCuesLoading = false)
+    )
+    .subscribe({
       next: (response: any) => {
         console.log(response);
         this.deploymentCues = response.data.deploymentCues;
@@ -448,19 +456,13 @@ export class DeploymentComponent implements OnInit {
       this.resetCueForm();
     }
     
-    this.showCueFormModal = true;
-    
-    // Prevent body scroll when modal is open
-    document.body.classList.add('modal-open');
+ 
   }
 
   closeCueFormModal(): void {
-    this.showCueFormModal = false;
+    // this.showCueFormModal = false;
     this.editingCueId = null;
     this.resetCueForm();
-    
-    // Remove body scroll prevention when modal is closed
-    document.body.classList.remove('modal-open');
   }
 
   resetCueForm(): void {
@@ -558,7 +560,6 @@ export class DeploymentComponent implements OnInit {
     }
 
     if (this.editingCueId) {
-      console.log('Updated cue:', this.editingCueId, this.cueFormData);
       delete this.cueFormData.createdAt
       this.deploymentCuesService.updateDeploymentCue(this.editingCueId, this.cueFormData).subscribe({
         next: (response: any) => {

@@ -1,12 +1,23 @@
+<div class="container-fluid mb-3">
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#cueFormModal">
+        Add Deployment Cue
+      </button>
+    </div>
+    </div>
+
 <div class="revenue-dashboard">
 
-  <div class="d-flex gap-2 float-end">
-    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cueFormModal">
-      Add Deployment Cue
-    </button>
-  </div>
+  
   <div class="deployment-cues-container">
-    <div class="row" *ngIf="deploymentCues.length > 0">
+
+    <div *ngIf="deploymentCuesLoading" class="text-center py-3">
+      <div class="spinner-border spinner-border-sm text-primary" role="status">
+        <span class="visually-hidden">Loading ...</span>
+      </div>
+    </div>
+    <ng-container *ngIf="!deploymentCuesLoading">
+    <div class="row" *ngIf=" deploymentCues.length > 0">
       <div class="col-3 d-flex align-items-center justify-content-center">
         <button class="btn btn-primary btn-lg" 
                 (click)="goToPreviousCue()" 
@@ -77,14 +88,14 @@
         </div>
       </div>
     </div>
+  </ng-container>
 
-
-
-    <div *ngIf="loading" class="text-center py-3">
-      <div class="spinner-border spinner-border-sm text-primary" role="status">
-        <span class="visually-hidden">Loading ...</span>
-      </div>
+  <!-- <div *ngIf="loading" class="text-center py-3">
+    <div class="spinner-border spinner-border-sm text-primary" role="status">
+      <span class="visually-hidden">Loading ...</span>
     </div>
+  </div> -->
+   
     <div class="table-container mt-4">
       <div *ngIf="!loading && getFilteredPropertyData() && getFilteredPropertyData().length > 0">
         <table>
@@ -272,17 +283,16 @@
       </div>
     </div>
   </div>
-
+</div>
   <!-- Deployment Cue Form Modal -->
-  <div class="modal fade" id="cueFormModal" tabindex="-1" aria-labelledby="cueFormModalLabel" aria-hidden="true"
-    [class.show]="showCueFormModal" [style.display]="showCueFormModal ? 'block' : 'none'">
-    <div class="modal-dialog modal-lg" (click)="$event.stopPropagation()">
+  <div class="modal fade" id="cueFormModal">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="cueFormModalLabel">
             <i class="fas fa-edit me-2"></i>{{ editingCueId ? 'Edit' : 'Create' }} Deployment Cue
           </h5>
-          <button type="button" class="btn-close" (click)="closeCueFormModal()" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="closeCueFormModal()" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <form #cueForm="ngForm">
@@ -339,7 +349,7 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="closeCueFormModal()">Cancel</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeCueFormModal()">Cancel</button>
           <button type="button" class="btn btn-primary" (click)="saveCue()" 
             [disabled]="!cueForm.form.valid || cueFormData.pickups.length === 0">
             <i class="fas fa-save me-2"></i>{{ editingCueId ? 'Update' : 'Create' }} Cue
@@ -350,8 +360,8 @@
   </div>
 
   <!-- Modal Backdrop for Cue Form -->
-  <div class="modal-backdrop fade" [class.show]="showCueFormModal" *ngIf="showCueFormModal"
-    (click)="closeCueFormModal()"></div>
+  <!-- <div class="modal-backdrop fade" [class.show]="showCueFormModal" *ngIf="showCueFormModal"
+    (click)="closeCueFormModal()"></div> -->
 
   <!-- Notes Modal -->
   <div class="modal fade" id="notesModal" tabindex="-1" aria-labelledby="notesModalLabel" aria-hidden="true"
@@ -469,4 +479,3 @@
   <!-- Modal Backdrop for Notes -->
   <div class="modal-backdrop fade" [class.show]="showNotesModal" *ngIf="showNotesModal" (click)="closeNotesModal()">
   </div>
-</div>
