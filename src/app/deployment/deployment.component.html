@@ -35,7 +35,7 @@
             </div>
             <div class="cue-card-actions">
               <button class="btn btn-sm btn-outline-primary me-1" (click)="openCueFormModal(getCurrentCue())"
-                title="Edit">
+                title="Edit" data-bs-toggle="modal" data-bs-target="#cueFormModal">
                 <i class="fas fa-edit"></i>
               </button>
               <button class="btn btn-sm btn-outline-danger" (click)="deleteCue(getCurrentCue()._id)" title="Delete">
