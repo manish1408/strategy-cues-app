@@ -11,6 +11,18 @@ $border-radius: 12px;
 $box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 $transition: all 0.3s ease;
 
+// Navigation button styles
+.btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .revenue-dashboard {
   min-height: 90vh;
 
@@ -3499,13 +3511,13 @@ $transition: all 0.3s ease;
 }
 
 // Modal backdrop and modal z-index
-.modal-backdrop {
-  z-index: 1040 !important;
-}
+// .modal-backdrop {
+//   z-index: 1040 !important;
+// }
 
-.modal {
-  z-index: 1050 !important;
-}
+// .modal {
+//   z-index: 1050 !important;
+// }
 
 // Responsive Design for Property Selection
 @media (max-width: 768px) {

@@ -6,6 +6,7 @@ import {
 import { LocalStorageService } from "../_services/local-storage.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
+import { DeploymentCuesService } from "../_services/deploymentCues.service";
 
 @Component({
   selector: 'app-deployment',
@@ -42,46 +43,31 @@ export class DeploymentComponent implements OnInit {
   showCueFormModal: boolean = false;
   editingCueId: string | null = null;
   cueFormData: any = {
+    operatorId: '',
     name: '',
-    properties: [],
-    description: '',
-    actions: '',
-    status: ''
+    tag: '',
+    description1: '',
+    description2: '',
+    pickups: []
   };
 
   // Notes Modal state
   showNotesModal: boolean = false;
   selectedPropertyIdForNotes: string | null = null;
   newNoteText: string = '';
-
-  // Property dropdown configuration
-  propertyDropdownConfig = {
-    displayKey: "value",
-    search: true,
-    height: "auto",
-    placeholder: "Select Properties",
-    limitTo: 0,
-    moreText: "more",
-    noResultsFound: "No properties found!",
-    searchPlaceholder: "Search properties...",
-    searchOnKey: "value",
-    clearOnSelection: false,
-    inputDirection: "ltr"
-  };
-
-  propertyOptions: any[] = [
-    { value: 'Sunset Beach Villa' },
-    { value: 'Downtown Luxury Apartment' },
-    { value: 'Mountain View Cabin' },
-    { value: 'Beachfront Bungalow' }
-  ];
-
+  // Deployment Cues state
+  deploymentCues: any[] = [];
+  currentCueIndex: number = 0;
+  totalCues: number = 0;
+  currentCuePage: number = 1;
+  totalCuePages: number = 1;
   constructor(
     private propertiesService: PropertiesService,
     private localStorageService: LocalStorageService,
     private router: Router,
     private route: ActivatedRoute,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private deploymentCuesService: DeploymentCuesService
   ) {
     this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
   }
@@ -95,13 +81,37 @@ export class DeploymentComponent implements OnInit {
         this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
       }
       this.loadProperties();
+      this.loadDeploymentCues();
+    });
+
+    // Add keyboard event listener for Escape key
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && this.showCueFormModal) {
+        this.closeCueFormModal();
+      }
     });
   }
 
   loadProperties(): void {
     this.loadFilteredPropertiesData();
   }
-  
+  loadDeploymentCues(): void {
+    this.deploymentCuesService.getDeploymentCues(this.operatorId as string).subscribe({
+      next: (response: any) => {
+        console.log(response);
+        this.deploymentCues = response.data.deploymentCues;
+        this.totalCues = response.data.pagination.total;
+        this.totalCuePages = response.data.pagination.total_pages;
+        this.currentCuePage = response.data.pagination.page;
+        
+        // Reset current cue index when loading new data
+        this.currentCueIndex = 0;
+      },
+      error: (error: any) => {
+        console.log(error);
+      }
+    });
+  }
   loadFilteredPropertiesData(): void {
     // Build filter parameters
     this.loading = true;
@@ -427,33 +437,40 @@ export class DeploymentComponent implements OnInit {
   }
 
   // Deployment Cue Form Modal Methods
-  openCueFormModal(cueId: string | null): void {
-    this.editingCueId = cueId;
+  openCueFormModal(cue: any): void {
+    this.editingCueId = cue._id;
     
-    if (cueId) {
+    if (cue._id) {
       // Load cue data for editing (demo data)
-      this.loadCueData(cueId);
+      this.cueFormData = cue;
     } else {
       // Reset form for creating new cue
       this.resetCueForm();
     }
     
     this.showCueFormModal = true;
+    
+    // Prevent body scroll when modal is open
+    document.body.classList.add('modal-open');
   }
 
   closeCueFormModal(): void {
     this.showCueFormModal = false;
     this.editingCueId = null;
     this.resetCueForm();
+    
+    // Remove body scroll prevention when modal is closed
+    document.body.classList.remove('modal-open');
   }
 
   resetCueForm(): void {
     this.cueFormData = {
+      operatorId: this.operatorId || '',
       name: '',
-      properties: [],
-      description: '',
-      actions: '',
-      status: ''
+      tag: '',
+      description1: '',
+      description2: '',
+      pickups: []
     };
   }
 
@@ -461,46 +478,49 @@ export class DeploymentComponent implements OnInit {
     // Demo data for editing
     const demoCues: any = {
       'cue1': {
+        operatorId: this.operatorId || '',
         name: 'Low Occupancy Alert',
-        properties: [
-          { value: 'Sunset Beach Villa' },
-          { value: 'Downtown Luxury Apartment' }
-        ],
-        description: 'Property occupancy below 30% for the current month',
-        actions: 'Adjust Pricing, Promote Listing, Review Calendar',
-        status: 'Active'
+        tag: 'Critical',
+        description1: 'Property occupancy below 30% for the current month',
+        description2: 'Immediate action required to improve booking rates',
+        pickups: [
+          { name: 'Pickup Case 1', description: 'Reduce the month by 15%' },
+          { name: 'Pickup Case 2', description: 'Promote listing on social media' }
+        ]
       },
       'cue2': {
+        operatorId: this.operatorId || '',
         name: 'High Demand Period',
-        properties: [
-          { value: 'Downtown Luxury Apartment' },
-          { value: 'Beachfront Bungalow' },
-          { value: 'Mountain View Cabin' }
-        ],
-        description: 'High booking demand detected for upcoming holiday season',
-        actions: 'Increase Rate, Update Availability',
-        status: 'Active'
+        tag: 'High Priority',
+        description1: 'High booking demand detected for upcoming holiday season',
+        description2: 'Optimize pricing and availability for maximum revenue',
+        pickups: [
+          { name: 'Pickup Case 1', description: 'Increase Rate by 20%' },
+          { name: 'Pickup Case 2', description: 'Update Availability Calendar' }
+        ]
       },
       'cue3': {
+        operatorId: this.operatorId || '',
         name: 'Maintenance Required',
-        properties: [
-          { value: 'Mountain View Cabin' }
-        ],
-        description: 'Scheduled maintenance and inspection required',
-        actions: 'Schedule Service, Block Dates',
-        status: 'Urgent'
+        tag: 'Urgent',
+        description1: 'Scheduled maintenance and inspection required',
+        description2: 'Block dates and coordinate with maintenance team',
+        pickups: [
+          { name: 'Pickup Case 1', description: 'Schedule Service Appointment' },
+          { name: 'Pickup Case 2', description: 'Block Dates in Calendar' }
+        ]
       },
       'cue4': {
+        operatorId: this.operatorId || '',
         name: 'Price Optimization',
-        properties: [
-          { value: 'Beachfront Bungalow' },
-          { value: 'Sunset Beach Villa' },
-          { value: 'Downtown Luxury Apartment' },
-          { value: 'Mountain View Cabin' }
-        ],
-        description: 'Review and optimize pricing strategy based on market trends',
-        actions: 'Analyze Competition, Update Rates, Set Dynamic Pricing',
-        status: 'Pending'
+        tag: 'Medium Priority',
+        description1: 'Review and optimize pricing strategy based on market trends',
+        description2: 'Analyze competition and adjust rates accordingly',
+        pickups: [
+          { name: 'Pickup Case 1', description: 'Analyze Competition' },
+          { name: 'Pickup Case 2', description: 'Update Rates' },
+          { name: 'Pickup Case 3', description: 'Set Dynamic Pricing' }
+        ]
       }
     };
 
@@ -509,25 +529,89 @@ export class DeploymentComponent implements OnInit {
     }
   }
 
-  onPropertySelectionChange(): void {
-    console.log('Selected properties:', this.cueFormData.properties);
+  addPickupCase(): void {
+    this.cueFormData.pickups.push({ name: '', description: '' });
+  }
+
+  removePickupCase(index: number): void {
+    this.cueFormData.pickups.splice(index, 1);
   }
 
   saveCue(): void {
-    if (this.editingCueId) {
-      this.toastr.success(`Deployment cue "${this.cueFormData.name}" updated successfully!`);
-      console.log('Updated cue:', this.editingCueId, this.cueFormData);
-    } else {
-      this.toastr.success(`Deployment cue "${this.cueFormData.name}" created successfully!`);
-      console.log('Created new cue:', this.cueFormData);
+    // Ensure operatorId is set
+    this.cueFormData.operatorId = this.operatorId || '';
+    
+    // Validate pickup cases
+    if (this.cueFormData.pickups.length === 0) {
+      this.toastr.warning('Please add at least one pickup case');
+      return;
     }
-    this.closeCueFormModal();
+
+    // Validate pickup case fields
+    const invalidPickups = this.cueFormData.pickups.some((pickup: any) => 
+      !pickup.name || !pickup.name.trim() || !pickup.description || !pickup.description.trim()
+    );
+    
+    if (invalidPickups) {
+      this.toastr.warning('Please fill in all pickup case names and descriptions');
+      return;
+    }
+
+    if (this.editingCueId) {
+      console.log('Updated cue:', this.editingCueId, this.cueFormData);
+      delete this.cueFormData.createdAt
+      this.deploymentCuesService.updateDeploymentCue(this.editingCueId, this.cueFormData).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            this.toastr.success('Deployment cue updated successfully!');
+            this.loadDeploymentCues();
+            this.closeCueFormModal();
+          } else {  
+            this.toastr.error(response.message);
+            this.closeCueFormModal();
+          }
+        },
+        error: (error: any) => {
+          this.toastr.error(error.error?.message || 'Failed to update deployment cue');
+          this.closeCueFormModal();
+        }
+      });
+    } else {
+      this.deploymentCuesService.createDeploymentCues(this.cueFormData).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            this.toastr.success('Deployment cue created successfully!');
+            this.loadDeploymentCues();
+            this.closeCueFormModal();
+          } else {
+            this.toastr.error(response.message);
+            this.closeCueFormModal();
+          }
+        },
+        error: (error: any) => {
+          this.toastr.error(error.error?.message || 'Failed to create deployment cue');
+          this.closeCueFormModal();
+        }
+      });
+    }
+    
   }
 
   deleteCue(cueId: string): void {
     if (confirm('Are you sure you want to delete this deployment cue?')) {
-      this.toastr.success('Deployment cue deleted successfully!');
-      console.log('Delete cue:', cueId);
+      this.deploymentCuesService.deleteDeploymentCue(cueId).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            this.toastr.success('Deployment cue deleted successfully!');
+            this.loadDeploymentCues();
+          } else {
+            this.toastr.error(response.message);
+          }
+        },
+        error: (error: any) => {
+          this.toastr.error(error.error?.message || 'Failed to delete deployment cue');
+        }
+      });
     }
   }
 
@@ -570,5 +654,30 @@ export class DeploymentComponent implements OnInit {
       console.log('Deleting note:', noteId);
       this.toastr.success('Note deleted successfully!');
     }
+  }
+
+  // Deployment Cue Navigation Methods
+  goToPreviousCue(): void {
+    if (this.currentCueIndex > 0) {
+      this.currentCueIndex--;
+    }
+  }
+
+  goToNextCue(): void {
+    if (this.currentCueIndex < this.deploymentCues.length - 1) {
+      this.currentCueIndex++;
+    }
+  }
+
+  canGoToPrevious(): boolean {
+    return this.currentCueIndex > 0;
+  }
+
+  canGoToNext(): boolean {
+    return this.currentCueIndex < this.deploymentCues.length - 1;
+  }
+
+  getCurrentCue(): any {
+    return this.deploymentCues[this.currentCueIndex] || null;
   }
 }

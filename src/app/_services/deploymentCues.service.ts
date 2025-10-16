@@ -10,7 +10,7 @@ export class DeploymentCuesService {
   constructor(private http: HttpClient) {}
 
   createDeploymentCues(data: any) {
-    return this.http.post<any>(`${this._url}/create-deployment`, data);
+    return this.http.post<any>(`${this._url}/create`, data);
   }
 
   getDeploymentCues(operator_id: string, page: number = 1, limit: number = 10, sort_order: string = 'desc') {

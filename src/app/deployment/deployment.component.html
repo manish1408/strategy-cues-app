@@ -1,26 +1,33 @@
 <div class="revenue-dashboard">
 
-
+  <div class="d-flex gap-2 float-end">
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cueFormModal">
+      Add Deployment Cue
+    </button>
+  </div>
   <div class="deployment-cues-container">
-    <div class="row">
-      <div class="col-4">
-        <button class="btn btn-primary btn-lg float-end" style="margin-top: 30%;">
+    <div class="row" *ngIf="deploymentCues.length > 0">
+      <div class="col-3 d-flex align-items-center justify-content-center">
+        <button class="btn btn-primary btn-lg" 
+                (click)="goToPreviousCue()" 
+                [disabled]="!canGoToPrevious()"
+                [class.disabled]="!canGoToPrevious()">
           <i class="fas fa-chevron-left"></i>
         </button>
       </div>
-      <div class="col-4">
-        <div class="cue-card">
+      <div class="col-6">
+        <div class="cue-card" *ngIf="getCurrentCue()">
           <div class="cue-card-header">
             <div class="cue-card-title">
-              <h6>Deployment Cues 1 </h6>
-              <span class="badge bg-secondary">Critical</span>
+              <h6>{{ getCurrentCue()?.name }}</h6>
+              <span class="badge bg-secondary">{{ getCurrentCue()?.tag }}</span>
             </div>
             <div class="cue-card-actions">
-              <button class="btn btn-sm btn-outline-primary me-1" (click)="openCueFormModal('deployment1')"
+              <button class="btn btn-sm btn-outline-primary me-1" (click)="openCueFormModal(getCurrentCue())"
                 title="Edit">
                 <i class="fas fa-edit"></i>
               </button>
-              <button class="btn btn-sm btn-outline-danger" (click)="deleteCue('deployment1')" title="Delete">
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteCue(getCurrentCue()._id)" title="Delete">
                 <i class="fas fa-trash"></i>
               </button>
             </div>
@@ -28,17 +35,18 @@
           <div class="cue-card-body">
             <div class="cue-conditions">
               <div class="condition-row">
-                <strong>Days left:</strong> 45-28
+                <strong>{{ getCurrentCue()?.description1 }}</strong>
               </div>
               <div class="condition-row">
-                <strong>Base occupancy:</strong> 20%
+                <strong>{{ getCurrentCue()?.description2 }}</strong>
               </div>
             </div>
-            <div class="pickup-case">
+           
+            <div class="pickup-case" *ngFor="let pickup of getCurrentCue()?.pickups">
               <div class="row">
                 <div class="col-8">
-                  <strong>Pickup Case 1:</strong> 0
-                  <div class="action-badge">Reduce the month by 15%</div>
+                  <strong>{{ pickup?.name }}:</strong> 
+                  <div class="action-badge">{{ pickup?.description }}</div>
                 </div>
                 <div class="col-4">
                   <button class="btn btn-sm btn-primary float-end" title="Add Note">Add</button>
@@ -46,35 +54,27 @@
               </div>
             </div>
            
-            <div class="pickup-case">
-              <div class="row">
-                <div class="col-8">
-                  <strong>Pickup Case 1:</strong> 0
-                  <div class="action-badge">Reduce the month by 15%</div>
-                </div>
-                <div class="col-4">
-                  <button class="btn btn-sm btn-primary float-end" title="Add Note">Add</button>
-                </div>
-              </div>
-            </div>
-            <div class="pickup-case">
-              <div class="row">
-                <div class="col-8">
-                  <strong>Pickup Case 1:</strong> 0
-                  <div class="action-badge">Reduce the month by 15%</div>
-                </div>
-                <div class="col-4">
-                  <button class="btn btn-sm btn-primary float-end" title="Add Note">Add</button>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
-      <div class="col-4">
-        <button class="btn btn-primary btn-lg" style="margin-top: 30%;">
+      <div class="col-3 d-flex align-items-center justify-content-center">
+        <button class="btn btn-primary btn-lg" 
+                (click)="goToNextCue()" 
+                [disabled]="!canGoToNext()"
+                [class.disabled]="!canGoToNext()">
           <i class="fas fa-chevron-right"></i>
         </button>
+      </div>
+    </div>
+    
+    <!-- Empty state when no cues -->
+    <div class="row" *ngIf="deploymentCues.length === 0">
+      <div class="col-12 text-center py-5">
+        <div class="text-muted">
+          <i class="fas fa-info-circle fa-3x mb-3"></i>
+          <h5>No deployment cues found</h5>
+          <p>Create your first deployment cue to get started.</p>
+        </div>
       </div>
     </div>
 
@@ -276,7 +276,7 @@
   <!-- Deployment Cue Form Modal -->
   <div class="modal fade" id="cueFormModal" tabindex="-1" aria-labelledby="cueFormModalLabel" aria-hidden="true"
     [class.show]="showCueFormModal" [style.display]="showCueFormModal ? 'block' : 'none'">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg" (click)="$event.stopPropagation()">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="cueFormModalLabel">
@@ -293,42 +293,55 @@
             </div>
 
             <div class="mb-3">
-              <label for="cueProperties" class="form-label">Properties *</label>
-              <ngx-select-dropdown [config]="propertyDropdownConfig" [options]="propertyOptions"
-                [(ngModel)]="cueFormData.properties" name="cueProperties" [multiple]="true"
-                (change)="onPropertySelectionChange()">
-              </ngx-select-dropdown>
-              <small class="text-muted">Search and select multiple properties</small>
+              <label for="cueTag" class="form-label">Tag *</label>
+              <input type="text" class="form-control" id="cueTag" [(ngModel)]="cueFormData.tag" name="cueTag"
+                required placeholder="Enter tag (e.g., Critical, High Priority, Urgent)">
             </div>
 
             <div class="mb-3">
-              <label for="cueDescription" class="form-label">Description *</label>
-              <textarea class="form-control" id="cueDescription" [(ngModel)]="cueFormData.description"
-                name="cueDescription" rows="3" required placeholder="Enter cue description"></textarea>
+              <label for="cueDescription1" class="form-label">Description 1 *</label>
+              <textarea class="form-control" id="cueDescription1" [(ngModel)]="cueFormData.description1"
+                name="cueDescription1" rows="3" required placeholder="Enter primary description"></textarea>
             </div>
 
             <div class="mb-3">
-              <label for="cueActions" class="form-label">Actions (comma separated) *</label>
-              <input type="text" class="form-control" id="cueActions" [(ngModel)]="cueFormData.actions"
-                name="cueActions" required placeholder="e.g., Adjust Pricing, Promote Listing">
-              <small class="text-muted">Enter actions separated by commas</small>
+              <label for="cueDescription2" class="form-label">Description 2 *</label>
+              <textarea class="form-control" id="cueDescription2" [(ngModel)]="cueFormData.description2"
+                name="cueDescription2" rows="3" required placeholder="Enter secondary description"></textarea>
             </div>
 
             <div class="mb-3">
-              <label for="cueStatus" class="form-label">Status *</label>
-              <select class="form-select" id="cueStatus" [(ngModel)]="cueFormData.status" name="cueStatus" required>
-                <option value="">Select Status</option>
-                <option value="Active">Active</option>
-                <option value="Pending">Pending</option>
-                <option value="Urgent">Urgent</option>
-                <option value="Completed">Completed</option>
-              </select>
+              <label class="form-label">Pickup Cases *</label>
+              <div class="pickup-cases-container">
+                <div class="pickup-case-item mb-3" *ngFor="let pickup of cueFormData.pickups; let i = index">
+                  <div class="row">
+                    <div class="col-md-5">
+                      <input type="text" class="form-control" [(ngModel)]="pickup.name" 
+                        [name]="'pickupName' + i" placeholder="Pickup Case Name" required>
+                    </div>
+                    <div class="col-md-6">
+                      <input type="text" class="form-control" [(ngModel)]="pickup.description" 
+                        [name]="'pickupDescription' + i" placeholder="Pickup Case Description" required>
+                    </div>
+                    <div class="col-md-1">
+                      <button type="button" class="btn btn-outline-danger btn-sm" 
+                        (click)="removePickupCase(i)" title="Remove">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-outline-primary btn-sm" (click)="addPickupCase()">
+                  <i class="fas fa-plus me-1"></i>Add Pickup Case
+                </button>
+              </div>
             </div>
           </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" (click)="closeCueFormModal()">Cancel</button>
-          <button type="button" class="btn btn-primary" (click)="saveCue()" [disabled]="!cueForm.form.valid">
+          <button type="button" class="btn btn-primary" (click)="saveCue()" 
+            [disabled]="!cueForm.form.valid || cueFormData.pickups.length === 0">
             <i class="fas fa-save me-2"></i>{{ editingCueId ? 'Update' : 'Create' }} Cue
           </button>
         </div>
