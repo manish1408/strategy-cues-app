@@ -900,30 +900,8 @@ export class ListingComponent implements OnInit, OnDestroy {
           competitors.forEach((competitor: any, index: number) => {
             const competitorForm = this.createCompetitorForm();
             
-            // Determine which platform has data and set it as the selected platform
-            let selectedPlatform = '';
-            let platformId = '';
-            let platformUrl = '';
-            
-            if (competitor.bookingId || competitor.bookingLink) {
-              selectedPlatform = 'booking';
-              platformId = competitor.bookingId || '';
-              platformUrl = competitor.bookingLink || '';
-            } else if (competitor.airbnbId || competitor.airbnbLink) {
-              selectedPlatform = 'airbnb';
-              platformId = competitor.airbnbId || '';
-              platformUrl = competitor.airbnbLink || '';
-            } else if (competitor.vrboId || competitor.vrboLink) {
-              selectedPlatform = 'vrbo';
-              platformId = competitor.vrboId || '';
-              platformUrl = competitor.vrboLink || '';
-            }
-            
-            const formData = {
-              platform: selectedPlatform,
-              platformId: platformId,
-              platformUrl: platformUrl
-            };
+            // Determine platform from platform-specific ID or Link presence
+            const formData = this.mapCompetitorToFormData(competitor);
             competitorForm.patchValue(formData);
             
             // Disable the form since it's already saved
@@ -960,6 +938,33 @@ export class ListingComponent implements OnInit, OnDestroy {
       platformId: [''],
       platformUrl: ['']
     });
+  }
+
+  // Map raw competitor API object to form data with platform selection strictly by IDs
+  private mapCompetitorToFormData(competitor: any): { platform: string; platformId: string; platformUrl: string } {
+    
+    
+
+    const hasBooking = !!(competitor?.bookingId?.trim()) || !!(competitor?.bookingLink?.trim());
+    const hasAirbnb  = !!(competitor?.airbnbId?.trim())  || !!(competitor?.airbnbLink?.trim());
+    const hasVrbo    = !!(competitor?.vrboId?.trim())    || !!(competitor?.vrboLink?.trim());
+    
+    if (hasBooking) {
+      return { platform: 'booking', platformId: competitor?.bookingId?.trim() || '', platformUrl: competitor?.bookingLink?.trim() || '' };
+    }
+    if (hasAirbnb) {
+      return { platform: 'airbnb', platformId: competitor?.airbnbId?.trim() || '', platformUrl: competitor?.airbnbLink?.trim() || '' };
+    }
+    if (hasVrbo) {
+      return { platform: 'vrbo', platformId: competitor?.vrboId?.trim() || '', platformUrl: competitor?.vrboLink?.trim() || '' };
+    }
+
+    // If no IDs are present, return empty platform; keep URL fields untouched for user visibility
+    return {
+      platform: '',
+      platformId: '',
+      platformUrl: competitor?.bookingLink || competitor?.airbnbLink || competitor?.vrboLink || ''
+    };
   }
 
   // Platform-related helper methods
