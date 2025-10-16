@@ -623,20 +623,13 @@
                             <div class="policy-card">
                               <div class="policy-header">
                                 <span class="policy-type badge badge-primary">
-                                  {{ policy.policy_group_title }}
-                                </span>
-                                <span class="rate-plan-name" *ngIf="policy.rtm.rooms && policy.rtm.rooms !== '0'">
-                                  {{ policy.rtm.rooms }} rooms
+                                  {{ policy.ratePlanName }}
                                 </span>
                               </div>
-                              
-                              <div class="policy-description" *ngIf="policy.text && policy.text.length > 0">
-                                <strong>Cancellation:</strong> {{ policy.text[0] }}
-                              </div>
-                              
-                              <div class="policy-description" *ngIf="policy.prepayment && policy.prepayment.text">
-                                <strong>Prepayment:</strong> 
-                                <span [innerHTML]="policy.prepayment.text"></span>
+                              <div>
+                                <small>
+                                  {{ policy.policyInfo.cancellation_desc }} 
+                                </small>
                               </div>
                             </div>
                           </div>
