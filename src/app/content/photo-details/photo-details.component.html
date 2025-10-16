@@ -81,40 +81,30 @@
     </div>
 
     <!-- Competitor Dropdown -->
-    <div class="competitor-dropdown-container" *ngIf="propertyData?.competitor && propertyData.competitor.length > 0">
+    <div class="competitor-dropdown-container" *ngIf="getCompetitorsForSelectedPlatform().length > 0">
       <div class="dropdown">
         <button class="btn btn-outline-primary dropdown-toggle" 
                 type="button" 
                 id="competitorDropdown" 
                 data-bs-toggle="dropdown" 
                 aria-expanded="false">
-          <i class="fas fa-building me-2"></i>
+          
           {{ getCurrentCompetitor()?.propertyName || 'Select Competitor' }}
-          <span class="badge bg-primary ms-2">{{ propertyData.competitor.length }}</span>
+          <span class="badge bg-primary ms-2">{{ getCompetitorsForSelectedPlatform().length }}</span>
         </button>
         <ul class="dropdown-menu" aria-labelledby="competitorDropdown">
          
          
-          <li *ngFor="let competitor of propertyData.competitor; let i = index">
+          <li *ngFor="let competitor of getCompetitorsForSelectedPlatform(); let i = index">
             <a class="dropdown-item" 
-               (click)="selectCompetitor(i)"
-               [class.active]="selectedCompetitorIndex === i">
+               (click)="selectCompetitorByObject(competitor)"
+               [class.active]="isCompetitorSelected(competitor)">
               <div class="competitor-item">
                 <div class="competitor-info">
                   <div class="competitor-name">{{ competitor.propertyName }}</div>
                   
                 </div>
-                <div class="competitor-platforms">
-                  <span class="platform-badge airbnb" *ngIf="competitor.airbnb_link">
-                    <i class="fab fa-airbnb"></i>
-                  </span>
-                  <span class="platform-badge booking" *ngIf="competitor.booking_link">
-                    <i class="fas fa-bed"></i>
-                  </span>
-                  <span class="platform-badge vrbo" *ngIf="competitor.vrbo_link">
-                    <i class="fas fa-home"></i>
-                  </span>
-                </div>
+               
               </div>
             </a>
           </li>

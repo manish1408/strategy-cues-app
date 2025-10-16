@@ -769,12 +769,12 @@
         &:hover {
           color: #495057;
           background-color: #f8f9fa;
+          cursor: pointer;
         }
 
         &.active {
           color: white !important;
           background-color: #1e1e1e;
-          
         }
 
         i {

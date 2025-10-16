@@ -114,6 +114,9 @@ export class PhotoDetailsComponent implements OnInit {
             ) {
               this.propertyData.competitor = response.data.competitors;
 
+              // Ensure the selected competitor matches the active platform (default airbnb)
+              this.alignSelectedCompetitorWithPlatform();
+
               // Update competitor images if we have competitors
               if (this.propertyData.competitor.length > 0) {
                 this.updateCompetitorImages();
@@ -980,6 +983,15 @@ export class PhotoDetailsComponent implements OnInit {
     this.selectedPropertyPlatform = platform;
     this.selectedCompetitorPlatform = platform;
     
+    // If current competitor doesn't have this platform, switch to the first matching competitor
+    const current = this.getCurrentCompetitor();
+    if (!current || !this.hasCompetitorPlatform(current, platform)) {
+      const filtered = this.getCompetitorsForSelectedPlatform();
+      if (filtered.length > 0) {
+        this.selectCompetitorByObject(filtered[0]);
+      }
+    }
+
     this.isPropertyGalleryLoading = true;
     this.isCompetitorGalleryLoading = true;
     
@@ -1121,6 +1133,55 @@ export class PhotoDetailsComponent implements OnInit {
     this.competitorImages = platformPhotos.map(
       (photo: any) => new ImageItem({ src: photo.url, thumb: photo.url })
     );
+  }
+
+  // Determine whether a competitor has data for a platform via ID or Link
+  private hasCompetitorPlatform(competitor: any, platform: string): boolean {
+    if (!competitor) return false;
+    const trim = (v: any) => (typeof v === 'string' ? v.trim() : v);
+    switch (platform) {
+      case 'airbnb':
+        return !!(trim(competitor.airbnbId) || trim(competitor.airbnbLink) || trim(competitor.airbnb_link));
+      case 'booking':
+        return !!(trim(competitor.bookingId) || trim(competitor.bookingLink) || trim(competitor.booking_link));
+      case 'vrbo':
+        return !!(trim(competitor.vrboId) || trim(competitor.vrboLink) || trim(competitor.vrbo_link));
+      default:
+        return false;
+    }
+  }
+
+  // Get competitors filtered for the currently selected platform
+  getCompetitorsForSelectedPlatform(): any[] {
+    const competitors = this.propertyData?.competitor || [];
+    return competitors.filter((c: any) => this.hasCompetitorPlatform(c, this.selectedPlatform));
+  }
+
+  // After competitors load or platform changes, make sure selection is a competitor with that platform
+  private alignSelectedCompetitorWithPlatform(): void {
+    const list = this.getCompetitorsForSelectedPlatform();
+    if (list.length === 0) {
+      // No competitors for this platform; keep index but images will be empty
+      return;
+    }
+    const current = this.getCurrentCompetitor();
+    if (!current || !this.hasCompetitorPlatform(current, this.selectedPlatform)) {
+      this.selectCompetitorByObject(list[0]);
+    }
+  }
+
+  // Select competitor by object (maps to original index)
+  selectCompetitorByObject(competitor: any): void {
+    const index = (this.propertyData?.competitor || []).indexOf(competitor);
+    if (index >= 0) {
+      this.selectCompetitor(index);
+    }
+  }
+
+  // Check if a competitor object is currently selected
+  isCompetitorSelected(competitor: any): boolean {
+    const index = (this.propertyData?.competitor || []).indexOf(competitor);
+    return index === this.selectedCompetitorIndex;
   }
 
   // Get platform photo count for property
