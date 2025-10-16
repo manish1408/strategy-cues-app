@@ -85,11 +85,11 @@
       <select class="form-select" [ngModel]="selectedCompetitorIndex" (ngModelChange)="selectCompetitor($event)">
         <option [ngValue]="-1" disabled>Select Competitor</option>
         <ng-container *ngFor="let competitor of propertyData.competitor; let i = index">
-          <option *ngIf="competitor.bookingLink !== null && selectedPlatform == 'booking'" [ngValue]="i">
+          <option *ngIf="competitor.bookingLink !== null && selectedPlatform == 'booking' && competitor.propertyName" [ngValue]="i">
             {{ competitor.propertyName }}
           </option>
 
-          <option *ngIf="competitor.airbnbLink !== null && selectedPlatform == 'airbnb'" [ngValue]="i">
+          <option *ngIf="competitor.airbnbLink !== null && selectedPlatform == 'airbnb' && competitor.propertyName" [ngValue]="i">
             {{ competitor.propertyName }}
           </option>
 
@@ -213,7 +213,9 @@
     <div class="competitor-grid">
       <div class="competitor-card">
         <div class="competitor-header">
-          <h3 [title]="getCurrentCompetitor()?.propertyName">{{getCurrentCompetitor()?.propertyName}}</h3>
+          <h3 [title]="getCurrentCompetitor()?.propertyName || 'Competitor'">
+            {{ getCurrentCompetitor()?.propertyName || 'Competitor' }}
+          </h3>
           <div class="competitor-rating">
             <div class="platform-badges" *ngIf="(selectedPlatform === 'airbnb' && getCurrentCompetitor()?.reviewsAirbnb && getCurrentCompetitor()?.reviewsAirbnb.length > 0) || (selectedPlatform === 'booking' && getCurrentCompetitor()?.reviewsBooking && getCurrentCompetitor()?.reviewsBooking.length > 0) || (selectedPlatform === 'vrbo' && getCurrentCompetitor()?.reviewsVrbo && getCurrentCompetitor()?.reviewsVrbo.length > 0)">
               Reviews 

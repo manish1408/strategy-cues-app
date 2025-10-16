@@ -928,10 +928,13 @@ export class PhotoDetailsComponent implements OnInit {
         case 'airbnb':
           return this.propertyData.Amenities.Airbnb || [];
         case 'booking':
-          // Booking has a different structure - extract from accommodationHighlights
+        
           if (this.propertyData.Amenities.Booking) {
-            const bookingAmenities = this.propertyData.Amenities.Booking;
-            // Return accommodationHighlights if available, otherwise try facilities
+            const bookingAmenities = this.propertyData.Amenities.Booking as any;
+            if (Array.isArray(bookingAmenities)) {
+              return bookingAmenities;
+            }
+          
             return bookingAmenities.accommodationHighlights || bookingAmenities.facilities || [];
           }
           return [];
@@ -947,9 +950,12 @@ export class PhotoDetailsComponent implements OnInit {
       case 'airbnb':
         return this.propertyData.amenitiesAirbnb || [];
       case 'booking':
-        // Booking has a different structure - extract from accommodationHighlights
+        // Booking may be an array or an object with accommodationHighlights/facilities
         if (this.propertyData.amenitiesBooking) {
-          const bookingAmenities = this.propertyData.amenitiesBooking;
+          const bookingAmenities = this.propertyData.amenitiesBooking as any;
+          if (Array.isArray(bookingAmenities)) {
+            return bookingAmenities;
+          }
           // Return accommodationHighlights if available, otherwise try facilities
           return bookingAmenities.accommodationHighlights || bookingAmenities.facilities || [];
         }
