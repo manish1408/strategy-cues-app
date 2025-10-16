@@ -6,8 +6,6 @@ import {
 import { LocalStorageService } from "../_services/local-storage.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
-import { DeploymentCuesService } from "../_services/deploymentCues.service";
-import { ToastService } from "../_services/toast.service";
 
 @Component({
   selector: 'app-deployment',
@@ -43,26 +41,13 @@ export class DeploymentComponent implements OnInit {
   // Deployment Cue Form state
   showCueFormModal: boolean = false;
   editingCueId: string | null = null;
-  editingDeploymentCue: any = null;
-  cueFormLoading: boolean = false;
-  deleteLoading: boolean = false;
-  deletingCueId: string | null = null;
   cueFormData: any = {
-    deploymentCueName: '',
-    properties: null, // Single property object for both create and edit
-    assignedTo: '', // Only used in edit mode
-    status: 'pending', // Only used in edit mode
-    notes: '' // Only used in edit mode
+    name: '',
+    properties: [],
+    description: '',
+    actions: '',
+    status: ''
   };
-
-  // Deployment Cues API Response Data
-  deploymentCuesData: any[] = [];
-  deploymentCuesLoading: boolean = false;
-  deploymentCuesError: string | null = null;
-  deploymentCuesPagination: any = null;
-  
-  // Navigation for deployment cues cards
-  currentCueIndex: number = 0;
 
   // Notes Modal state
   showNotesModal: boolean = false;
@@ -71,40 +56,32 @@ export class DeploymentComponent implements OnInit {
 
   // Property dropdown configuration
   propertyDropdownConfig = {
-    displayKey: "Listing_Name",
+    displayKey: "value",
     search: true,
-    height: "300px",
-    placeholder: "Select Property",
+    height: "auto",
+    placeholder: "Select Properties",
     limitTo: 0,
     moreText: "more",
     noResultsFound: "No properties found!",
     searchPlaceholder: "Search properties...",
-    searchOnKey: "Listing_Name",
+    searchOnKey: "value",
     clearOnSelection: false,
-    inputDirection: "ltr",
-    customComparator: undefined,
-    showDropDown: true,
-    enableCheckAll: false,
-    enableSearchFilter: true,
-    maxHeight: "300px",
-    labelKey: "Listing_Name",
-    idKey: "id",
-    // Additional options for better visibility
-    closeOnSelection: true,
-    allowClear: true,
-    showSelectAll: false
+    inputDirection: "ltr"
   };
 
-  propertyOptions: any[] = [];
+  propertyOptions: any[] = [
+    { value: 'Sunset Beach Villa' },
+    { value: 'Downtown Luxury Apartment' },
+    { value: 'Mountain View Cabin' },
+    { value: 'Beachfront Bungalow' }
+  ];
 
   constructor(
     private propertiesService: PropertiesService,
     private localStorageService: LocalStorageService,
     private router: Router,
     private route: ActivatedRoute,
-    private toastr: ToastrService,
-    private deploymentCuesService: DeploymentCuesService,
-    private toastService: ToastService
+    private toastr: ToastrService
   ) {
     this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
   }
@@ -117,73 +94,12 @@ export class DeploymentComponent implements OnInit {
       } else {
         this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
       }
-      // this.loadProperties();
-      this.loadDeploymentCues();
-      this.populatePropertyOptions(); // Load all properties for dropdown
+      this.loadProperties();
     });
   }
 
   loadProperties(): void {
     this.loadFilteredPropertiesData();
-  }
-
-  loadDeploymentCues(): void {
-    if (!this.operatorId) {
-      console.log('No operator ID available');
-      return;
-    }
-
-    this.deploymentCuesLoading = true;
-    this.deploymentCuesError = null;
-
-    // Call with default pagination parameters (page: 1, limit: 10, sort_order: 'desc')
-    this.deploymentCuesService.getDeploymentCues(this.operatorId, 1, 10, 'desc').subscribe({
-      next: (response: any) => {
-        console.log('Deployment Cues Data:', response);
-        console.log('Response details:', {
-          success: response.success,
-          data: response.data,
-          message: response.message
-        });
-
-        // API returns deploymentCues directly in response, not nested in response.data
-        if (response && response.deploymentCues) {
-          this.deploymentCuesData = response.deploymentCues || [];
-          this.deploymentCuesPagination = response.pagination || null;
-          this.currentCueIndex = 0; // Reset to first deployment cue
-          
-          // Populate property options from deployment cues data
-          this.populatePropertyOptions();
-          
-          console.log('Deployment Cues bound to component:', {
-            deploymentCuesCount: response.deploymentCuesCount || this.deploymentCuesData.length,
-            pagination: this.deploymentCuesPagination,
-            deploymentCues: this.deploymentCuesData
-          });
-        } else if (response.success && response.data) {
-          // Fallback for old API structure
-          this.deploymentCuesData = response.data.deploymentCues || [];
-          this.deploymentCuesPagination = response.data.pagination || null;
-          this.currentCueIndex = 0; // Reset to first deployment cue
-          
-          // Populate property options from deployment cues data
-          this.populatePropertyOptions();
-        } else {
-          this.deploymentCuesError = response.message || 'Failed to load deployment cues';
-        }
-        this.deploymentCuesLoading = false;
-      },
-      error: (error: any) => {
-        console.error('Error loading deployment cues:', error);
-        console.error('Error details:', {
-          status: error.status,
-          message: error.message,
-          error: error.error
-        });
-        this.deploymentCuesError = 'Error loading deployment cues. Please try again.';
-        this.deploymentCuesLoading = false;
-      }
-    });
   }
   
   loadFilteredPropertiesData(): void {
@@ -266,199 +182,6 @@ export class DeploymentComponent implements OnInit {
   // Get filtered data for display
   getFilteredPropertyData(): any[] {
     return this.propertyData;
-  }
-
-  // Get deployment cues data for display
-  getDeploymentCuesData(): any[] {
-    return this.deploymentCuesData;
-  }
-
-  // Get all unique properties from deployment cues for table display
-  getDeploymentCuesProperties(): any[] {
-    const allProperties: any[] = [];
-    const seenPropertyIds = new Set<string>();
-
-    this.deploymentCuesData.forEach((deploymentCue: any) => {
-      if (deploymentCue.property && deploymentCue.property.id) {
-        if (!seenPropertyIds.has(deploymentCue.property.id)) {
-          seenPropertyIds.add(deploymentCue.property.id);
-          allProperties.push(deploymentCue.property);
-        }
-      }
-    });
-
-    return allProperties;
-  }
-
-  // Get deployment cues for a specific property
-  getDeploymentCuesForProperty(property: any): any[] {
-    return this.deploymentCuesData.filter((cue: any) => 
-      cue.propertyId === property.id
-    );
-  }
-
-  // Get status badge class for styling
-  getStatusBadgeClass(status: string): string {
-    switch (status?.toLowerCase()) {
-      case 'pending':
-        return 'bg-warning';
-      case 'active':
-        return 'bg-success';
-      case 'urgent':
-        return 'bg-danger';
-      case 'completed':
-        return 'bg-secondary';
-      default:
-        return 'bg-secondary';
-    }
-  }
-
-  // Get notes count for a specific property
-  getNotesCountForProperty(property: any): number {
-    const deploymentCuesForProperty = this.getDeploymentCuesForProperty(property);
-    return deploymentCuesForProperty.reduce((total, cue) => {
-      return total + (cue.notes ? cue.notes.length : 0);
-    }, 0);
-  }
-
-  // Get assigned names as string
-  getAssignedNames(assignedTo: any[]): string {
-    if (!assignedTo || assignedTo.length === 0) {
-      return '';
-    }
-    return assignedTo.map((a: any) => a.name).join(', ');
-  }
-
-  // Navigation methods for deployment cues cards
-  previousCue(): void {
-    if (this.currentCueIndex > 0) {
-      this.currentCueIndex--;
-    }
-  }
-
-  nextCue(): void {
-    if (this.currentCueIndex < this.deploymentCuesData.length - 1) {
-      this.currentCueIndex++;
-    }
-  }
-
-  // Get current deployment cue to display
-  getCurrentDeploymentCue(): any {
-    return this.deploymentCuesData[this.currentCueIndex] || null;
-  }
-
-  // Check if previous button should be disabled
-  isPreviousDisabled(): boolean {
-    return this.currentCueIndex === 0;
-  }
-
-  // Check if next button should be disabled
-  isNextDisabled(): boolean {
-    return this.currentCueIndex >= this.deploymentCuesData.length - 1;
-  }
-
-  // Handle assignee dropdown change
-  onAssigneeChange(property: any, event: any): void {
-    const selectedAssignee = event.target.value;
-    if (!selectedAssignee) return;
-
-    const deploymentCuesForProperty = this.getDeploymentCuesForProperty(property);
-    if (deploymentCuesForProperty.length === 0) return;
-
-    const deploymentCue = deploymentCuesForProperty[0]; // Assuming one deployment cue per property
-    
-    // Create assignedTo array with the selected user
-    const assignedTo = [{
-      name: selectedAssignee,
-      userId: selectedAssignee.toLowerCase() // You might need to map this to actual user IDs
-    }];
-
-    this.updateDeploymentCueStatus(deploymentCue, { assignedTo });
-  }
-
-  // Handle status dropdown change
-  onStatusChange(property: any, event: any): void {
-    const selectedStatus = event.target.value;
-    if (!selectedStatus) return;
-
-    const deploymentCuesForProperty = this.getDeploymentCuesForProperty(property);
-    if (deploymentCuesForProperty.length === 0) return;
-
-    const deploymentCue = deploymentCuesForProperty[0]; // Assuming one deployment cue per property
-    
-    this.updateDeploymentCueStatus(deploymentCue, { status: selectedStatus });
-  }
-
-  // Update deployment cue status
-  private updateDeploymentCueStatus(deploymentCue: any, updateData: any): void {
-    const updatePayload = {
-      operatorId: deploymentCue.operatorId,
-      propertyId: deploymentCue.propertyId, // Send as string, not array
-      deploymentCueName: deploymentCue.deploymentCueName,
-      assignedTo: updateData.assignedTo || deploymentCue.assignedTo,
-      status: updateData.status || deploymentCue.status,
-      notes: deploymentCue.notes || []
-    };
-
-    this.deploymentCuesService.updateDeploymentCue(deploymentCue.id, updatePayload).subscribe({
-      next: (response: any) => {
-        console.log('Deployment cue updated successfully:', response);
-        
-        // Update the local data
-        const cueIndex = this.deploymentCuesData.findIndex(cue => cue.id === deploymentCue.id);
-        if (cueIndex !== -1) {
-          this.deploymentCuesData[cueIndex] = { ...this.deploymentCuesData[cueIndex], ...updateData };
-        }
-        
-        this.toastr.success('Deployment cue updated successfully');
-      },
-      error: (error: any) => {
-        console.error('Error updating deployment cue:', error);
-        this.toastr.error('Failed to update deployment cue');
-      }
-    });
-  }
-
-  // Get current assignee for a property
-  getCurrentAssignee(property: any): string {
-    const deploymentCuesForProperty = this.getDeploymentCuesForProperty(property);
-    if (deploymentCuesForProperty.length > 0 && deploymentCuesForProperty[0].assignedTo && deploymentCuesForProperty[0].assignedTo.length > 0) {
-      return deploymentCuesForProperty[0].assignedTo[0].name;
-    }
-    return '';
-  }
-
-  // Get current status for a property
-  getCurrentStatus(property: any): string {
-    const deploymentCuesForProperty = this.getDeploymentCuesForProperty(property);
-    if (deploymentCuesForProperty.length > 0) {
-      return deploymentCuesForProperty[0].status;
-    }
-    return '';
-  }
-
-  // Populate property options from properties service
-  populatePropertyOptions(): void {
-    if (!this.operatorId) {
-      return;
-    }
-    
-    this.propertiesService.getProperties(1, 100, this.operatorId, 'desc').subscribe({
-      next: (response: any) => {
-        if (response && response.properties) {
-          this.propertyOptions = response.properties;
-        } else if (response && response.data && response.data.properties) {
-          // Fallback for different response structure
-          this.propertyOptions = response.data.properties;
-        } else {
-          this.propertyOptions = [];
-        }
-      },
-      error: (error: any) => {
-        console.error('Error loading properties for dropdown:', error);
-        this.propertyOptions = []; // Set empty array on error
-      }
-    });
   }
 
   // Helper methods for template
@@ -708,46 +431,29 @@ export class DeploymentComponent implements OnInit {
     this.editingCueId = cueId;
     
     if (cueId) {
-      // Find the deployment cue by ID
-      this.editingDeploymentCue = this.deploymentCuesData.find(cue => cue.id === cueId);
-      if (this.editingDeploymentCue) {
-        this.loadCueDataFromDeploymentCue(this.editingDeploymentCue);
-      }
+      // Load cue data for editing (demo data)
+      this.loadCueData(cueId);
     } else {
       // Reset form for creating new cue
       this.resetCueForm();
-      this.editingDeploymentCue = null;
     }
     
     this.showCueFormModal = true;
   }
 
-  // Load cue data from deployment cue for editing
-  loadCueDataFromDeploymentCue(deploymentCue: any): void {
-    this.cueFormData = {
-      deploymentCueName: deploymentCue.deploymentCueName || '',
-      properties: deploymentCue.property || null, // Single property object
-      assignedTo: deploymentCue.assignedTo && deploymentCue.assignedTo.length > 0 ? deploymentCue.assignedTo[0].name : '',
-      status: deploymentCue.status || 'pending',
-      notes: deploymentCue.notes && deploymentCue.notes.length > 0 ? deploymentCue.notes[0].note : ''
-    };
-  }
-
   closeCueFormModal(): void {
     this.showCueFormModal = false;
     this.editingCueId = null;
-    this.editingDeploymentCue = null;
-    this.cueFormLoading = false;
     this.resetCueForm();
   }
 
   resetCueForm(): void {
     this.cueFormData = {
-      deploymentCueName: '',
-      properties: null, // Single property object
-      assignedTo: '', // Only used in edit mode
-      status: 'pending', // Only used in edit mode
-      notes: '' // Only used in edit mode
+      name: '',
+      properties: [],
+      description: '',
+      actions: '',
+      status: ''
     };
   }
 
@@ -809,113 +515,20 @@ export class DeploymentComponent implements OnInit {
 
   saveCue(): void {
     if (this.editingCueId) {
-      // Update existing deployment cue
-      this.updateDeploymentCue();
+      this.toastr.success(`Deployment cue "${this.cueFormData.name}" updated successfully!`);
+      console.log('Updated cue:', this.editingCueId, this.cueFormData);
     } else {
-      // Create new deployment cue
-      this.createDeploymentCue();
+      this.toastr.success(`Deployment cue "${this.cueFormData.name}" created successfully!`);
+      console.log('Created new cue:', this.cueFormData);
     }
-  }
-
-  // Create new deployment cue
-  private createDeploymentCue(): void {
-    this.cueFormLoading = true;
-    
-    const createPayload = {
-      operatorId: this.operatorId,
-      propertyId: this.cueFormData.properties ? [this.cueFormData.properties.id || this.cueFormData.properties._id] : [],
-      deploymentCueName: this.cueFormData.deploymentCueName
-    };
-
-    this.deploymentCuesService.createDeploymentCues(createPayload).subscribe({
-      next: (response: any) => {
-        console.log('Deployment cue created successfully:', response);
-        this.toastr.success(`Deployment cue "${this.cueFormData.deploymentCueName}" created successfully!`);
-        this.cueFormLoading = false;
-        this.loadDeploymentCues(); // Reload data
-        this.closeCueFormModal();
-      },
-      error: (error: any) => {
-        console.error('Error creating deployment cue:', error);
-        this.toastr.error('Failed to create deployment cue');
-        this.cueFormLoading = false;
-      }
-    });
-  }
-
-  // Update existing deployment cue
-  private updateDeploymentCue(): void {
-    if (!this.editingDeploymentCue) return;
-
-    this.cueFormLoading = true;
-
-    // Prepare assignedTo array
-    const assignedTo = this.cueFormData.assignedTo ? [{
-      name: this.cueFormData.assignedTo,
-      userId: this.cueFormData.assignedTo.toLowerCase()
-    }] : [];
-
-    // Prepare notes array
-    const notes = this.cueFormData.notes ? [{
-      note: this.cueFormData.notes,
-      userId: 'current_user_id', // You might need to get this from auth service
-      userName: 'Current User',
-      userEmail: 'user@example.com',
-      userCompleteName: 'Current User',
-      createdAt: new Date().toISOString()
-    }] : [];
-
-    const updatePayload = {
-      operatorId: this.editingDeploymentCue.operatorId,
-      propertyId: this.editingDeploymentCue.propertyId,
-      deploymentCueName: this.cueFormData.deploymentCueName,
-      assignedTo: assignedTo,
-      status: this.cueFormData.status,
-      notes: notes
-    };
-
-    this.deploymentCuesService.updateDeploymentCue(this.editingCueId!, updatePayload).subscribe({
-      next: (response: any) => {
-        console.log('Deployment cue updated successfully:', response);
-        this.toastr.success(`Deployment cue "${this.cueFormData.deploymentCueName}" updated successfully!`);
-        this.cueFormLoading = false;
-        this.loadDeploymentCues(); // Reload data
-        this.closeCueFormModal();
-      },
-      error: (error: any) => {
-        console.error('Error updating deployment cue:', error);
-        this.toastr.error('Failed to update deployment cue');
-        this.cueFormLoading = false;
-      }
-    });
+    this.closeCueFormModal();
   }
 
   deleteCue(cueId: string): void {
-    this.toastService.showConfirm(
-      'Are you sure?',
-      'Delete the selected deployment cue?',
-      'Yes, delete it!',
-      'No, cancel',
-      () => {
-        this.deleteLoading = true;
-        this.deletingCueId = cueId;
-        
-        this.deploymentCuesService.deleteDeploymentCue(cueId).subscribe({
-          next: (res: any) => {
-            this.toastr.success('Deployment cue deleted successfully!');
-            this.deleteLoading = false;
-            this.deletingCueId = null;
-            this.loadDeploymentCues();
-          },
-          error: (error: any) => {
-            console.error('Error deleting deployment cue:', error);
-            this.toastr.error('Failed to delete deployment cue. Please try again.');
-            this.deleteLoading = false;
-            this.deletingCueId = null;
-          }
-        });
-      }
-    );
+    if (confirm('Are you sure you want to delete this deployment cue?')) {
+      this.toastr.success('Deployment cue deleted successfully!');
+      console.log('Delete cue:', cueId);
+    }
   }
 
   // Notes Management Methods

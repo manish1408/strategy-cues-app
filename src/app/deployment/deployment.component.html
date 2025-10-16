@@ -4,36 +4,24 @@
   <div class="deployment-cues-container">
     <div class="row">
       <div class="col-4">
-        <button class="btn btn-primary btn-lg float-end" style="margin-top: 30%;" 
-                (click)="previousCue()" 
-                [disabled]="isPreviousDisabled()">
+        <button class="btn btn-primary btn-lg float-end" style="margin-top: 30%;">
           <i class="fas fa-chevron-left"></i>
         </button>
       </div>
       <div class="col-4">
-        <div class="cue-card" *ngIf="getCurrentDeploymentCue(); let deploymentCue">
+        <div class="cue-card">
           <div class="cue-card-header">
             <div class="cue-card-title">
-              <h6>{{ deploymentCue.deploymentCueName }}</h6>
-              <!-- <span class="badge" [ngClass]="getStatusBadgeClass(deploymentCue.status)">{{ deploymentCue.status | titlecase }}</span> -->
-            <span class="badge bg-secondary">Critical</span>
+              <h6>Deployment Cues 1 </h6>
+              <span class="badge bg-secondary">Critical</span>
             </div>
             <div class="cue-card-actions">
-              <button class="btn btn-sm btn-outline-primary me-1" (click)="openCueFormModal(null)" title="Add">
-                <i class="fas fa-plus"></i>
-              </button>
-              <button class="btn btn-sm btn-outline-primary me-1" (click)="openCueFormModal(deploymentCue.id)"
+              <button class="btn btn-sm btn-outline-primary me-1" (click)="openCueFormModal('deployment1')"
                 title="Edit">
                 <i class="fas fa-edit"></i>
               </button>
-              <button class="btn btn-sm btn-outline-danger" 
-                      (click)="deleteCue(deploymentCue.id)" 
-                      [disabled]="deleteLoading && deletingCueId === deploymentCue.id"
-                      title="Delete">
-                <div *ngIf="deleteLoading && deletingCueId === deploymentCue.id" class="spinner-border spinner-border-sm" role="status">
-                  <span class="visually-hidden">Loading...</span>
-                </div>
-                <i *ngIf="!(deleteLoading && deletingCueId === deploymentCue.id)" class="fas fa-trash"></i>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteCue('deployment1')" title="Delete">
+                <i class="fas fa-trash"></i>
               </button>
             </div>
           </div>
@@ -61,7 +49,7 @@
             <div class="pickup-case">
               <div class="row">
                 <div class="col-8">
-                  <strong>Pickup Case 2:</strong> 0
+                  <strong>Pickup Case 1:</strong> 0
                   <div class="action-badge">Reduce the month by 15%</div>
                 </div>
                 <div class="col-4">
@@ -69,11 +57,10 @@
                 </div>
               </div>
             </div>
-
             <div class="pickup-case">
               <div class="row">
                 <div class="col-8">
-                  <strong>Pickup Case 3:</strong> 0
+                  <strong>Pickup Case 1:</strong> 0
                   <div class="action-badge">Reduce the month by 15%</div>
                 </div>
                 <div class="col-4">
@@ -85,9 +72,7 @@
         </div>
       </div>
       <div class="col-4">
-        <button class="btn btn-primary btn-lg" style="margin-top: 30%;" 
-                (click)="nextCue()" 
-                [disabled]="isNextDisabled()">
+        <button class="btn btn-primary btn-lg" style="margin-top: 30%;">
           <i class="fas fa-chevron-right"></i>
         </button>
       </div>
@@ -101,7 +86,7 @@
       </div>
     </div>
     <div class="table-container mt-4">
-      <div *ngIf="!loading && getDeploymentCuesProperties() && getDeploymentCuesProperties().length > 0">
+      <div *ngIf="!loading && getFilteredPropertyData() && getFilteredPropertyData().length > 0">
         <table>
           <thead>
             <tr>
@@ -124,7 +109,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let property of getDeploymentCuesProperties()">
+            <tr *ngFor="let property of getFilteredPropertyData()">
               <td class="property-cell">
                 <div class="property-info">
                   <div class="property-details">
@@ -136,10 +121,10 @@
                 </div>
               </td>
               <td class="deployment-cues-cell">
-                <!-- Real Deployment Cues Data -->
+                <!-- Hardcoded Demo Cues -->
                 <div class="cues-container">
-                  <div class="cue-item" *ngFor="let deploymentCue of getDeploymentCuesForProperty(property)">
-                    <div class="cue-name">{{ deploymentCue.deploymentCueName }}</div>
+                  <div class="cue-item">
+                    <div class="cue-name">Deployment Cue 1</div>
                   </div>
                 </div>
               </td>
@@ -151,30 +136,25 @@
                 </div>
               </td>
               <td class="assigned-to-cell">
-                <select class="form-select form-select-sm" 
-                        [value]="getCurrentAssignee(property)"
-                        (change)="onAssigneeChange(property, $event)">
+                <select class="form-select form-select-sm">
                   <option value="">Select Assignee</option>
-                  <option value="Ishan">Ishan</option>
-                  <option value="Manish">Manish</option>
-                  <option value="Saket">Saket</option>
+                  <option value="ishan">Ishan</option>
+                  <option value="manish">Manish</option>
                 </select>
               </td>
               <td class="status-cell">
-                <select class="form-select form-select-sm status-dropdown"
-                        [value]="getCurrentStatus(property)"
-                        (change)="onStatusChange(property, $event)">
+                <select class="form-select form-select-sm status-dropdown">
                   <option value="">Select Status</option>
                   <option value="pending">Pending</option>
-                  <option value="completed">Completed</option>
-                  <option value="failed">Failed</option>
+                  <option value="working">Working</option>
+                  <option value="done">Done</option>
                 </select>
               </td>
               <td class="notes-cell">
                 <div class="notes-container">
                   <button class="btn btn-sm btn-outline-secondary" (click)="openNotesModal(property._id)">
                     <i class="fas fa-sticky-note me-1"></i>
-                    <span class="notes-count">{{ getNotesCountForProperty(property) }} Notes</span>
+                    <span class="notes-count">3 Notes</span>
                   </button>
                 </div>
               </td>
@@ -290,24 +270,14 @@
           </tbody>
         </table>
       </div>
-      
-      <!-- Empty State -->
-      <div *ngIf="!loading && (!getDeploymentCuesProperties() || getDeploymentCuesProperties().length === 0)" class="text-center py-5">
-        <div class="empty-state">
-          <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
-          <h5 class="text-muted">No Properties Found</h5>
-          <p class="text-muted">No properties match your current filters.</p>
-        </div>
-      </div>
     </div>
   </div>
-
 
   <!-- Deployment Cue Form Modal -->
   <div class="modal fade" id="cueFormModal" tabindex="-1" aria-labelledby="cueFormModalLabel" aria-hidden="true"
     [class.show]="showCueFormModal" [style.display]="showCueFormModal ? 'block' : 'none'">
     <div class="modal-dialog modal-lg">
-      <div class="modal-content" style="overflow: visible;">
+      <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="cueFormModalLabel">
             <i class="fas fa-edit me-2"></i>{{ editingCueId ? 'Edit' : 'Create' }} Deployment Cue
@@ -317,58 +287,49 @@
         <div class="modal-body">
           <form #cueForm="ngForm">
             <div class="mb-3">
-              <label for="deploymentCueName" class="form-label">Deployment Cue Name *</label>
-              <input type="text" class="form-control" id="deploymentCueName" [(ngModel)]="cueFormData.deploymentCueName" name="deploymentCueName"
-                required placeholder="Enter deployment cue name">
+              <label for="cueName" class="form-label">Cue Name *</label>
+              <input type="text" class="form-control" id="cueName" [(ngModel)]="cueFormData.name" name="cueName"
+                required placeholder="Enter cue name">
             </div>
 
-            <div class="mb-3" style="position: relative; z-index: 9999;">
-              <label for="cueProperties" class="form-label">Property *</label>
+            <div class="mb-3">
+              <label for="cueProperties" class="form-label">Properties *</label>
               <ngx-select-dropdown [config]="propertyDropdownConfig" [options]="propertyOptions"
-                [(ngModel)]="cueFormData.properties" name="cueProperties" [multiple]="false"
-                (change)="onPropertySelectionChange()" style="position: relative; z-index: 9999;">
+                [(ngModel)]="cueFormData.properties" name="cueProperties" [multiple]="true"
+                (change)="onPropertySelectionChange()">
               </ngx-select-dropdown>
-              <small class="text-muted">Search and select a property</small>
+              <small class="text-muted">Search and select multiple properties</small>
             </div>
 
-            <!-- Additional fields only for edit mode -->
-            <div *ngIf="editingCueId">
-              <div class="mb-3">
-                <label for="assignedTo" class="form-label">Assigned To</label>
-                <select class="form-select" id="assignedTo" [(ngModel)]="cueFormData.assignedTo" name="assignedTo">
-                  <option value="">Select Assignee</option>
-                  <option value="Ishan">Ishan</option>
-                  <option value="Manish">Manish</option>
-                  <option value="Saket">Saket</option>
-                </select>
-              </div>
+            <div class="mb-3">
+              <label for="cueDescription" class="form-label">Description *</label>
+              <textarea class="form-control" id="cueDescription" [(ngModel)]="cueFormData.description"
+                name="cueDescription" rows="3" required placeholder="Enter cue description"></textarea>
+            </div>
 
-              <div class="mb-3">
-                <label for="cueStatus" class="form-label">Status *</label>
-                <select class="form-select" id="cueStatus" [(ngModel)]="cueFormData.status" name="cueStatus" required>
-                  <option value="">Select Status</option>
-                  <option value="pending">Pending</option>
-                  <option value="completed">Completed</option>
-                  <option value="failed">Failed</option>
-                </select>
-              </div>
+            <div class="mb-3">
+              <label for="cueActions" class="form-label">Actions (comma separated) *</label>
+              <input type="text" class="form-control" id="cueActions" [(ngModel)]="cueFormData.actions"
+                name="cueActions" required placeholder="e.g., Adjust Pricing, Promote Listing">
+              <small class="text-muted">Enter actions separated by commas</small>
+            </div>
 
-              <div class="mb-3">
-                <label for="notes" class="form-label">Notes</label>
-                <textarea class="form-control" id="notes" [(ngModel)]="cueFormData.notes"
-                  name="notes" rows="3" placeholder="Add any notes for this deployment cue"></textarea>
-              </div>
+            <div class="mb-3">
+              <label for="cueStatus" class="form-label">Status *</label>
+              <select class="form-select" id="cueStatus" [(ngModel)]="cueFormData.status" name="cueStatus" required>
+                <option value="">Select Status</option>
+                <option value="Active">Active</option>
+                <option value="Pending">Pending</option>
+                <option value="Urgent">Urgent</option>
+                <option value="Completed">Completed</option>
+              </select>
             </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="closeCueFormModal()" [disabled]="cueFormLoading">Cancel</button>
-          <button type="button" class="btn btn-primary" (click)="saveCue()" [disabled]="!cueForm.form.valid || cueFormLoading">
-            <div *ngIf="cueFormLoading" class="spinner-border spinner-border-sm me-2" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
-            <i *ngIf="!cueFormLoading" class="fas fa-save me-2"></i>
-            {{ editingCueId ? 'Update' : 'Create' }} Cue
+          <button type="button" class="btn btn-secondary" (click)="closeCueFormModal()">Cancel</button>
+          <button type="button" class="btn btn-primary" (click)="saveCue()" [disabled]="!cueForm.form.valid">
+            <i class="fas fa-save me-2"></i>{{ editingCueId ? 'Update' : 'Create' }} Cue
           </button>
         </div>
       </div>
