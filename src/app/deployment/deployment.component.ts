@@ -83,6 +83,12 @@ export class DeploymentComponent implements OnInit {
   allUsers: any[] = [];
   selectedPropertyForNotes: any[] = [];
   loggedInUser: any = null;
+  
+  // Highlight assigned to cells
+  highlightAssignedTo: boolean = false;
+  
+  // Highlight status cells
+  highlightStatus: boolean = false;
   constructor(
     private propertiesService: PropertiesService,
     private localStorageService: LocalStorageService,
@@ -916,13 +922,95 @@ export class DeploymentComponent implements OnInit {
   onStatusChange(property: any, event: any): void {
     const newStatus = event.target.value;
     if (newStatus) {
-      this.updatePropertyStatus(property, newStatus);
+      // If highlight mode is active, assign to all properties
+      if (this.highlightStatus) {
+        this.assignStatusToAllProperties(newStatus);
+      } else {
+        // Normal single property assignment
+        this.updatePropertyStatus(property, newStatus);
+      }
     }
   }
 
   // Check if property status is being updated
   isPropertyStatusUpdating(propertyId: string): boolean {
     return this.updatingStatusPropertyIds.has(propertyId);
+  }
+
+  // Assign the same status to all properties
+  assignStatusToAllProperties(status: string): void {
+    if (!status) {
+      this.toastr.warning('Please select a valid status');
+      return;
+    }
+
+    // Get all properties that have valid IDs
+    const propertiesToUpdate = this.cueProperties.filter(property => property._id);
+    
+    if (propertiesToUpdate.length === 0) {
+      this.toastr.warning('No properties available to update');
+      return;
+    }
+
+    // Show confirmation dialog
+    const statusDisplayName = status.charAt(0).toUpperCase() + status.slice(1);
+    const confirmMessage = `Are you sure you want to set status "${statusDisplayName}" for all ${propertiesToUpdate.length} properties?`;
+    if (!confirm(confirmMessage)) {
+      return;
+    }
+
+    // Add all property IDs to loading state
+    propertiesToUpdate.forEach(property => {
+      this.updatingStatusPropertyIds.add(property._id);
+    });
+
+    const updateData = {
+      status: status
+    };
+
+    let completedRequests = 0;
+    let successfulRequests = 0;
+    let failedRequests = 0;
+
+    // Process each property
+    propertiesToUpdate.forEach(property => {
+      this.cuePropertiesService.updateCueProperty(property._id, updateData).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            successfulRequests++;
+            // Update the local property status
+            property.status = status;
+          } else {
+            failedRequests++;
+          }
+        },
+        error: (error: any) => {
+          failedRequests++;
+          console.error('Bulk status update error for property:', property._id, error);
+        },
+        complete: () => {
+          completedRequests++;
+          this.updatingStatusPropertyIds.delete(property._id);
+          this.checkBulkStatusAssignmentComplete(completedRequests, propertiesToUpdate.length, successfulRequests, failedRequests);
+        }
+      });
+    });
+  }
+
+  // Check if all bulk status assignments are complete
+  private checkBulkStatusAssignmentComplete(completed: number, total: number, successful: number, failed: number): void {
+    if (completed === total) {
+      // Turn off bulk mode after completion
+      this.highlightStatus = false;
+      
+      if (successful === total) {
+        this.toastr.success(`Successfully updated status for all ${successful} properties!`);
+      } else if (successful > 0) {
+        this.toastr.warning(`Updated status for ${successful} properties, ${failed} failed`);
+      } else {
+        this.toastr.error('Failed to update status for any properties');
+      }
+    }
   }
 
   // Assignee update method
@@ -977,13 +1065,104 @@ export class DeploymentComponent implements OnInit {
   onAssigneeChange(property: any, event: any): void {
     const userId = event.target.value;
     if (userId) {
-      this.updatePropertyAssignee(property, userId);
+      // If highlight mode is active, assign to all properties
+      if (this.highlightAssignedTo) {
+        this.assignToAllProperties(userId);
+      } else {
+        // Normal single property assignment
+        this.updatePropertyAssignee(property, userId);
+      }
     }
   }
 
   // Check if property assignee is being updated
   isPropertyAssigneeUpdating(propertyId: string): boolean {
     return this.updatingAssigneePropertyIds.has(propertyId);
+  }
+
+  // Assign the same user to all properties
+  assignToAllProperties(userId: string): void {
+    if (!userId) {
+      this.toastr.warning('Please select a valid user');
+      return;
+    }
+
+    // Find the selected user
+    const selectedUser = this.allUsers.find(user => user.id === userId);
+    if (!selectedUser) {
+      this.toastr.warning('Selected user not found');
+      return;
+    }
+
+    // Get all properties that have valid IDs
+    const propertiesToUpdate = this.cueProperties.filter(property => property._id);
+    
+    if (propertiesToUpdate.length === 0) {
+      this.toastr.warning('No properties available to update');
+      return;
+    }
+
+    // Show confirmation dialog
+    const confirmMessage = `Are you sure you want to assign "${selectedUser.fullName}" to all ${propertiesToUpdate.length} properties?`;
+    if (!confirm(confirmMessage)) {
+      return;
+    }
+
+    // Add all property IDs to loading state
+    propertiesToUpdate.forEach(property => {
+      this.updatingAssigneePropertyIds.add(property._id);
+    });
+
+    const updateData = {
+      assignedTo: {
+        name: selectedUser.fullName,
+        userId: selectedUser.id
+      }
+    };
+
+    let completedRequests = 0;
+    let successfulRequests = 0;
+    let failedRequests = 0;
+
+    // Process each property
+    propertiesToUpdate.forEach(property => {
+      this.cuePropertiesService.updateCueProperty(property._id, updateData).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            successfulRequests++;
+            // Update the local property assignee
+            property.assignedTo = updateData.assignedTo;
+          } else {
+            failedRequests++;
+          }
+        },
+        error: (error: any) => {
+          failedRequests++;
+          console.error('Bulk assignee update error for property:', property._id, error);
+        },
+        complete: () => {
+          completedRequests++;
+          this.updatingAssigneePropertyIds.delete(property._id);
+          this.checkBulkAssignmentComplete(completedRequests, propertiesToUpdate.length, successfulRequests, failedRequests);
+        }
+      });
+    });
+  }
+
+  // Check if all bulk assignments are complete
+  private checkBulkAssignmentComplete(completed: number, total: number, successful: number, failed: number): void {
+    if (completed === total) {
+      // Turn off bulk mode after completion
+      this.highlightAssignedTo = false;
+      
+      if (successful === total) {
+        this.toastr.success(`Successfully assigned to all ${successful} properties!`);
+      } else if (successful > 0) {
+        this.toastr.warning(`Assigned to ${successful} properties, ${failed} failed`);
+      } else {
+        this.toastr.error('Failed to assign to any properties');
+      }
+    }
   }
 
   // Assign pickup to all selected properties
@@ -1106,6 +1285,20 @@ export class DeploymentComponent implements OnInit {
         this.toastr.error(error.error?.message || 'Failed to create deployment cue');
       }
     });
+  }
+
+  // Toggle highlight for assigned to cells
+  toggleAssignedToHighlight(): void {
+    // The highlightAssignedTo property is already bound to the checkbox
+    // This method can be used for additional logic if needed
+    console.log('Assigned to highlight toggled:', this.highlightAssignedTo);
+  }
+
+  // Toggle highlight for status cells
+  toggleStatusHighlight(): void {
+    // The highlightStatus property is already bound to the checkbox
+    // This method can be used for additional logic if needed
+    console.log('Status highlight toggled:', this.highlightStatus);
   }
   
 }

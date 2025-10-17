@@ -113,8 +113,22 @@
               <th>Listing Name</th>
               <th>Deployment Cue</th>
               <th>Pick Up Case</th>
-              <th>Assigned To</th>
-              <th>Status</th>
+              <th>
+                <div class="d-flex align-items-center select-bulk">
+                  <input type="checkbox" class="me-2" [(ngModel)]="highlightAssignedTo" 
+                         (change)="toggleAssignedToHighlight()" 
+                         [title]="highlightAssignedTo ? 'Bulk assign mode: Selecting an assignee will assign to all properties' : 'Highlight assigned to cells'">
+                  Assigned To 
+                </div>
+              </th>
+              <th>
+                <div class="d-flex align-items-center select-bulk">
+                  <input type="checkbox" class="me-2" [(ngModel)]="highlightStatus" 
+                         (change)="toggleStatusHighlight()" 
+                         [title]="highlightStatus ? 'Bulk status mode: Selecting a status will assign to all properties' : 'Highlight status cells'">
+                  Status
+                </div>
+              </th>
               <th>Notes</th>
               <th>Occupancy This Month</th>
               <th>Occupancy Next Month</th>
@@ -160,27 +174,22 @@
                 </div>
               </td>
               <td class="assigned-to-cell">
-                <select class="form-select form-select-sm" [(ngModel)]="property.assignedTo.userId"
-                  [disabled]="isPropertyAssigneeUpdating(property._id)" (change)="onAssigneeChange(property, $event)">
+                <select class="form-select form-select-sm" [class.highlight-assigned-to]="highlightAssignedTo" [(ngModel)]="property.assignedTo.userId"
+                  [disabled]="isPropertyAssigneeUpdating(property._id)" (change)="onAssigneeChange(property, $event)"
+                  [title]="highlightAssignedTo ? 'Bulk mode: This will assign the selected user to ALL properties' : 'Select assignee for this property'">
                   <option value="">Select Assignee</option>
                   <option *ngFor="let user of allUsers" [value]="user.id">{{ user.fullName }}</option>
                 </select>
-                <div *ngIf="isPropertyAssigneeUpdating(property._id)" class="assignee-loading">
-                  <i class="fas fa-spinner fa-spin"></i>
-                </div>
-
               </td>
               <td class="status-cell">
-                <select class="form-select form-select-sm status-dropdown" [value]="property.status || ''"
-                  [disabled]="isPropertyStatusUpdating(property._id)" (change)="onStatusChange(property, $event)">
+                <select class="form-select form-select-sm status-dropdown" [class.highlight-status]="highlightStatus" [value]="property.status || ''"
+                  [disabled]="isPropertyStatusUpdating(property._id)" (change)="onStatusChange(property, $event)"
+                  [title]="highlightStatus ? 'Bulk mode: This will assign the selected status to ALL properties' : 'Select status for this property'">
                   <option value="">Select Status</option>
                   <option value="pending">Pending</option>
                   <option value="working">Working</option>
                   <option value="done">Done</option>
                 </select>
-                <div *ngIf="isPropertyStatusUpdating(property._id)" class="status-loading">
-                  <i class="fas fa-spinner fa-spin"></i>
-                </div>
               </td>
               <td class="notes-cell">
                 <div class="notes-container">
