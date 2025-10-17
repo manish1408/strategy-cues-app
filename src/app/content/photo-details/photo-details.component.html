@@ -395,29 +395,29 @@
   </div> -->
 
   <!-- Photo Captions Section -->
-  <div class="missing-captions-section" *ngIf="getAllPhotosForPlatform(selectedPlatform).length > 0">
-    <h2>Photo Captions for {{ selectedPlatform | titlecase }} ({{ getAllPhotosForPlatform(selectedPlatform).length }} photos)</h2>
+  <div class="missing-captions-section" *ngIf="currentPlatformPhotos && currentPlatformPhotos.length > 0">
+    <h2>Photo Captions for {{ selectedPlatform | titlecase }} ({{ currentPlatformPhotos.length }} photos)</h2>
     <div class="missing-list">
-      <div class="missing-item" *ngFor="let photoId of getAllPhotosForPlatform(selectedPlatform)">
-        <i class="fas fa-exclamation-triangle" *ngIf="!getPhotoById(photoId)?.caption"></i>
-        <i class="fas fa-check-circle text-success" *ngIf="getPhotoById(photoId)?.caption"></i>
-        <img style="width: 40px; height: 40px; object-fit: fill; cursor: pointer;" [src]="getPhotoById(photoId)?.url" [alt]="'Photo ' + photoId" (error)="onImageError($event)" (click)="openPhotoInNewWindow(photoId)">
+      <div class="missing-item" *ngFor="let photo of currentPlatformPhotos">
+        <i class="fas fa-exclamation-triangle" *ngIf="!photo?.caption"></i>
+        <i class="fas fa-check-circle text-success" *ngIf="photo?.caption"></i>
+        <img style="width: 40px; height: 40px; object-fit: fill; cursor: pointer;" [src]="photo?.url" [alt]="'Photo ' + photo?.id" (error)="onImageError($event)" (click)="openPhotoInNewWindow(photo?.id)">
         
         <div class="photo-info">
-          <span *ngIf="!getPhotoById(photoId)?.caption" class="needs-caption">Photo {{photoId}} needs a caption</span>
-          <div *ngIf="getPhotoById(photoId)?.caption" class="generated-caption">
+          <span *ngIf="!photo?.caption" class="needs-caption">Photo {{photo?.id}} needs a caption</span>
+          <div *ngIf="photo?.caption" class="generated-caption">
             <strong>Generated Caption:</strong>
-            <p class="caption-text">{{getPhotoById(photoId)?.caption}}</p>
+            <p class="caption-text">{{photo?.caption}}</p>
           </div>
         </div>
      
         <button 
           class="btn btn-sm btn-primary" 
-          (click)="generateCaption(getPhotoById(photoId)?.url, photoId)"
-          [disabled]="isGeneratingCaptionForPhotoUrl(getPhotoById(photoId)?.url) || getPhotoById(photoId)?.caption">
-          <span *ngIf="isGeneratingCaptionForPhotoUrl(getPhotoById(photoId)?.url)" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-          <span *ngIf="!getPhotoById(photoId)?.caption">Generate Caption</span>
-          <span *ngIf="getPhotoById(photoId)?.caption">Caption Generated</span>
+          (click)="generateCaption(photo?.url, photo?.id)"
+          [disabled]="isGeneratingCaptionForPhotoUrl(photo?.url) || photo?.caption">
+          <span *ngIf="isGeneratingCaptionForPhotoUrl(photo?.url)" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          <span *ngIf="!photo?.caption">Generate Caption</span>
+          <span *ngIf="photo?.caption">Caption Generated</span>
         </button>
       </div>
     </div>
