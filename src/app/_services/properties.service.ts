@@ -28,24 +28,23 @@ export class PropertiesService {
     private http: HttpClient,
   ) {}
 
-  getProperties(page: number = 1, limit: number = 10, operatorId: string, sortOrder: string): Observable<ApiResponse<any[]>> {
+  getProperties(
+    operatorId: string,
+    page: number = 1,
+    limit: number = 10,
+    sortBy: string = '_id',
+    sortOrder: 'asc' | 'desc' = 'desc'
+  ): Observable<ApiResponse<any[]>> {
     const params = new HttpParams()
-    .set('operator_id', operatorId)
-    .set('page', page.toString())
-    .set('limit', limit.toString())
-    .set('sort_order', sortOrder);
-    
-    
+      .set('operator_id', operatorId)
+      .set('page', page.toString())
+      .set('limit', limit.toString())
+      .set('sort_by', sortBy)
+      .set('sort_order', sortOrder);
+
     return this.http.get<ApiResponse<any[]>>(`${this._url}/get-properties`, { params });
   }
 
-  // getPropertiesByOperatorId(operatorId: string) {
-  //   return this.http.get<ApiResponse<any[]>>(`${this._url}/get-properties-by-operator-id?operator_id=${operatorId}`);
-  // }
-
-  // getProperties(page: number, limit: number) {
-  //   return this.http.get(`/api/properties?page=${page}&limit=${limit}`);
-  // }
 
   // Helper method to extract properties array from different response structures
   static extractPropertiesArray(response: any): any[] {

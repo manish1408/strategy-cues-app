@@ -366,17 +366,43 @@
                   <i class="fas fa-minus"></i>
                 </button>
 
-                <!-- Show checkbox ONLY when no items are selected OR all items are selected, and not in preset mode -->
                 <input
                   *ngIf="!isPresetMode && ((getSelectedForPresetCount() === 0) || (getSelectedForPresetCount() === getFilteredPropertyData().length))"
                   type="checkbox" class="preset-header-control" [checked]="selectAllForPreset"
                   (change)="toggleSelectAllForPreset()" title="Select/Deselect all for preset creation">
               </div>
             </th>
-            <th *ngIf="columnVisibility.propertyName">Listing Name</th>
-            <th *ngIf="columnVisibility.sync">Sync</th>
-            <th *ngIf="columnVisibility.occupancyTM">Occupancy This Month</th>
-            <th *ngIf="columnVisibility.occupancyNM">Occupancy Next Month</th>
+            <th *ngIf="columnVisibility.propertyName">
+              <div class="d-flex align-items-center gap-1 ">
+                <button class="btn btn-md p-0 text-start" (click)="sortBy('listingName')" title="Sort by Listing Name">
+                  <span>Listing Name</span>
+                </button>
+                <svg *ngIf="sortField === 'listingName'" class="sort-arrow" [class.asc]="sortDirection === 'asc'" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 4v16M12 20l6-6M12 20l-6-6" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+            </th>
+            <th class="text-center" *ngIf="columnVisibility.sync">Sync</th>
+            <th *ngIf="columnVisibility.occupancyTM">
+              <div class="d-flex align-items-center gap-1">
+                <button class="btn btn-md p-0 text-start" (click)="sortBy('occupancyTM')" title="Sort by Occupancy TM">
+                  <span>Occupancy This Month</span>
+                </button>
+                <svg *ngIf="sortField === 'occupancyTM'" class="sort-arrow" [class.asc]="sortDirection === 'asc'" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 4v16M12 20l6-6M12 20l-6-6" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+            </th>
+            <th *ngIf="columnVisibility.occupancyNM">
+              <div class="d-flex align-items-center gap-1 ">
+                <button class="btn btn-md p-0 text-start" (click)="sortBy('occupancyNM')" title="Sort by Occupancy NM">
+                  <span>Occupancy Next Month</span>
+                </button>
+                <svg *ngIf="sortField === 'occupancyNM'" class="sort-arrow" [class.asc]="sortDirection === 'asc'" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 4v16M12 20l6-6M12 20l-6-6" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+            </th>
             <th *ngIf="columnVisibility.adr">Average Daily Rate</th>
             <th *ngIf="columnVisibility.revpar">Revenue Per Available Room</th>
             <th *ngIf="columnVisibility.mpi">Market Penetration Index</th>

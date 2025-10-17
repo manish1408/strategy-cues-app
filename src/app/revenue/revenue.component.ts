@@ -31,6 +31,7 @@ export class RevenueComponent implements OnInit {
   error: string | null = null;
   operatorId: string | null = null;
   sortOrder = "desc";
+ 
   // View and tab management
   currentView: "table" | "cards" = "table";
   activeTab: "booking" | "airbnb" | "vrbo" = "booking"; // Keep for backward compatibility
@@ -215,8 +216,11 @@ export class RevenueComponent implements OnInit {
   isLoadingMore: boolean = false;
 
   // Sorting properties
-  sortField: string = "";
-  sortDirection: "asc" | "desc" = "asc";
+  sortDirection: "asc" | "desc" = "desc";
+  sortField: string = "_id";
+  // Server-side sorting
+  sortApiField: string = "_id"; // Default value : _id
+  sortApiOrder: "asc" | "desc" = "desc";
 
   // Utility property for template
   Math = Math;
@@ -394,9 +398,62 @@ export class RevenueComponent implements OnInit {
   loadProperties(): void {
     this.loading = true;
     this.error = null;
+    
+    // Initial load should use get-properties (no filters)
+    if (!this.operatorId) {
+      this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
+      if (!this.operatorId) {
+        this.loading = false;
+        return;
+      }
+    }
 
-    // Load current page data first
-    this.loadFilteredPropertiesData();
+    this.propertiesService
+      .getProperties(this.operatorId!, this.currentPage, this.itemsPerPage, this.sortApiField || '_id', this.sortApiOrder)
+      .subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            const newData = PropertiesService.extractPropertiesArray(response);
+
+            // For infinite scroll: append data instead of replacing
+            if (this.currentPage === 1) {
+              this.propertyData = newData;
+            } else {
+              this.propertyData = [...this.propertyData, ...newData];
+            }
+
+            // Update pagination data from API response
+            if (response.pagination) {
+              this.totalPages = response.pagination.total_pages;
+              this.currentPage = response.pagination.page;
+              this.itemsPerPage = response.pagination.limit;
+              this.hasMoreData = this.currentPage < this.totalPages;
+            } else if (response.data && response.data.pagination) {
+              // Fallback for nested pagination structure
+              this.totalPages = response.data.pagination.total_pages;
+              this.currentPage = response.data.pagination.page;
+              this.itemsPerPage = response.data.pagination.limit;
+              this.hasMoreData = this.currentPage < this.totalPages;
+            }
+
+            // Initialize ranges, options and summary from current data
+            this.calculateRangeValues();
+            this.extractFilterOptions();
+            this.initializeTempFilters();
+            this.calculateSummaryData();
+            this.error = null;
+          } else {
+            this.error = response.message || 'Failed to load properties data';
+          }
+          this.loading = false;
+          this.isLoadingMore = false;
+        },
+        error: () => {
+          this.error = 'Error loading properties. Please try again.';
+          this.loading = false;
+          this.isLoadingMore = false;
+        }
+      });
   }
 
   loadFilteredPropertiesData(): void {
@@ -864,7 +921,10 @@ export class RevenueComponent implements OnInit {
     const params: any = {
       operator_id: this.operatorId,
       page: this.currentPage,
-      limit: this.itemsPerPage
+      limit: this.itemsPerPage,
+      // Sorting
+      sort_by: this.sortApiField || '_id',
+      sort_order: this.sortApiOrder
     };
 
     // Search term
@@ -999,53 +1059,34 @@ export class RevenueComponent implements OnInit {
 
   // Sort data by field
   sortBy(field: string): void {
+    // Map UI field to API sort_by value
+    const fieldMap: Record<string, string> = {
+      listingName: 'Listing_Name',
+      occupancyTM: 'Occupancy.TM',
+      occupancyNM: 'Occupancy.NM',
+    };
+
     if (this.sortField === field) {
-      this.sortDirection = this.sortDirection === "asc" ? "desc" : "asc";
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {
       this.sortField = field;
-      this.sortDirection = "asc";
+      this.sortDirection = 'desc';
     }
 
-    this.propertyData.sort((a, b) => {
-      let aVal: any;
-      let bVal: any;
+    // Set API sort params and reload data from server
+    this.sortApiField = fieldMap[field] || '_id';
+    this.sortApiOrder = this.sortDirection;
 
-      // Handle nested object properties
-      switch (field) {
-        case "occupancyTM":
-          aVal = this.safeParseNumber(a.Occupancy.TM);
-          bVal = this.safeParseNumber(b.Occupancy.TM);
-          break;
-        case "adrTM":
-          aVal = this.safeParseNumber(a.ADR.TM);
-          bVal = this.safeParseNumber(b.ADR.TM);
-          break;
-        case "revparTM":
-          aVal = this.safeParseNumber(a.RevPAR.TM);
-          bVal = this.safeParseNumber(b.RevPAR.TM);
-          break;
-        case "mpi":
-          aVal = this.safeParseNumber(a.MPI?.TM);
-          bVal = this.safeParseNumber(b.MPI?.TM);
-          break;
-        default:
-          aVal = (a as any)[field];
-          bVal = (b as any)[field];
-      }
-
-      if (typeof aVal === "string") {
-        aVal = aVal.toLowerCase();
-        bVal = bVal.toLowerCase();
-      }
-
-      if (aVal < bVal) {
-        return this.sortDirection === "asc" ? -1 : 1;
-      }
-      if (aVal > bVal) {
-        return this.sortDirection === "asc" ? 1 : -1;
-      }
-      return 0;
-    });
+    // Reset to first page and fetch with sorting
+    this.currentPage = 1;
+    this.hasMoreData = true;
+    this.loading = true;
+    // Use filter-aware loader so filtering state is respected
+    if (this.hasActiveFilters()) {
+      this.loadFilteredPropertiesData();
+    } else {
+      this.loadProperties();
+    }
   }
 
   // Legacy pagination methods - kept for backward compatibility but not used with infinite scroll
@@ -3074,7 +3115,7 @@ export class RevenueComponent implements OnInit {
     // Clear all filters first (without triggering filterData)
     this.clearFiltersOnly();
     
-    // Load all data without any filters
+    // Load all data without any filters 
     if (!this.operatorId) {
       this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
       
@@ -3083,12 +3124,12 @@ export class RevenueComponent implements OnInit {
         return;
       }
     }
-    
+
     this.propertiesService
-      .getProperties(this.currentPage, this.itemsPerPage, this.operatorId, 'desc')
+      .getProperties(this.operatorId!, this.currentPage, this.itemsPerPage, this.sortApiField || '_id', this.sortApiOrder)
       .subscribe({
         next: (response: any) => {
-          
+
           if (response.success) {
             const newData = PropertiesService.extractPropertiesArray(response);
 

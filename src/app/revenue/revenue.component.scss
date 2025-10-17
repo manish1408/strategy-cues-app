@@ -1,3 +1,11 @@
+.sort-arrow {
+  width: 16px;
+  height: 16px;
+  stroke: #000;
+  transform: rotate(0deg);
+  transition: transform 0.15s ease-in-out;
+  &.asc { transform: rotate(180deg); }
+}
 // SCSS Variables
 $primary-color: #0066cc;
 $secondary-color: #6c757d;
@@ -2460,7 +2468,7 @@ $transition: all 0.3s ease;
     padding: 5px 10px;
     text-align: left;
     border-bottom: 1px solid #dee2e6;
-    min-width: 150px;
+    min-width: 200px;
     background: #fff;
     position: relative; /* Allow dropdowns to position relative to cells */
     overflow: visible !important; /* Allow dropdowns to overflow */
@@ -2470,6 +2478,16 @@ $transition: all 0.3s ease;
   &:nth-child(2) {
     min-width: 280px; 
   }
+  }
+
+  thead th button {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: #343a40;
   }
 
   thead th {
