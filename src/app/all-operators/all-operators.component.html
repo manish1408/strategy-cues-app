@@ -43,7 +43,7 @@
               </thead>
               <tbody>
                 <tr *ngFor="let operator of allOperatorList; let i = index">
-                  <th scope="row">{{ i + 1 }}</th>
+                  <td scope="row">{{ i + 1 }}</td>
                   <td>{{ operator?.name }}</td>
                   <td>{{ operator?.priceLabs?.apiKey ? 'Configured' : 'Not Set' }}</td>
                   <td>
