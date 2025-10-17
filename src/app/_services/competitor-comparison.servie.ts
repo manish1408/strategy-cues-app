@@ -101,4 +101,13 @@ export class CompetitorComparisonService {
 
   return this.http.get<any>(`${this._url}/ai-photo-analysis`, { params });
  }
+
+ generateComparisonReport(property_id: string, operator_id: string) {
+  const params = new HttpParams()
+  .set('operator_id', operator_id)
+  .set('property_id', property_id);
+
+  return this.http.post<any>(`${this._url}/add-to-queue?${params}`, { });
+ }
+
 }

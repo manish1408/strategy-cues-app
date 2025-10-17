@@ -705,4 +705,15 @@ export class ContentComponent implements OnInit, OnDestroy {
       console.error('Scroll event error:', error);
     }
   }
+
+  generateReport(propertyId: string): void {
+    this.competitorComparisonService.generateComparisonReport(propertyId, this.operatorId).subscribe({
+      next: (response: any) => {
+        this.toastr.success("Report generation scheduled");
+      },
+      error: (error: any) => {
+        this.toastr.error("Failed to schedule report generation");
+      }
+    });
+  }
 }
