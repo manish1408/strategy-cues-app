@@ -400,7 +400,7 @@
           <!-- Booking.com -->
           <div class="col-lg-4 mb-4" *ngIf="property.BookingCom">
             <div class="card platform-card">
-              <div class="card-header bg-primary text-white">
+              <div class="card-header text-white">
                 <h5 class="mb-0"><i class="fas fa-bed me-2"></i>Booking.com</h5>
               </div>
               <div class="card-body">
@@ -626,7 +626,7 @@
                                   {{ policy.ratePlanName }}
                                 </span>
                               </div>
-                              <div>
+                              <div class="policy-description">
                                 <small>
                                   {{ policy.policyInfo.cancellation_desc }} 
                                 </small>
@@ -852,7 +852,7 @@
           <!-- Booking.com Reviews -->
           <div class="col-lg-4 mb-4" *ngIf="property.Reviews.Booking">
             <div class="card review-card">
-              <div class="card-header bg-primary text-white">
+              <div class="card-header text-white">
                 <h5 class="mb-0"><i class="fas fa-bed me-2"></i>Booking.com Reviews</h5>
               </div>
               <div class="card-body">

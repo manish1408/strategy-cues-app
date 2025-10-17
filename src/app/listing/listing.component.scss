@@ -774,22 +774,22 @@ $transition: all 0.3s ease;
   .nav-link {
     border: none;
     border-bottom: 3px solid transparent;
-    color: #6c757d;
+    // color: #6c757d;
     font-weight: 500;
     transition: all 0.3s ease;
 
-    &:hover {
-      border-bottom-color: #007bff;
-      color: #007bff;
-      background: transparent;
-    }
+    // &:hover {
+    //   border-bottom-color: #007bff;
+    //   color: #007bff;
+    //   background: transparent;
+    // }
 
-    &.active {
-      background: transparent;
-      color: #007bff;
-      border-bottom-color: #007bff;
-      font-weight: 600;
-    }
+    // &.active {
+    //   background: transparent;
+    //   color: #007bff;
+    //   border-bottom-color: #007bff;
+    //   font-weight: 600;
+    // }
   }
 }
 
@@ -2011,5 +2011,11 @@ thead th {
   &:first-child {
     width: 260px;
     min-width: 260px;
+  }
+}
+
+.competitor-form{
+  h6{
+    color: var(--brand-black) !important;
   }
 }

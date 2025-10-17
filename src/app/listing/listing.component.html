@@ -389,7 +389,7 @@
                  
                 </div>
 
-                <div *ngIf="competitorsFormArray.length === 0" class="text-center py-4 text-muted">
+                <div *ngIf="competitorsFormArray.length === 0" class="text-center py-4 loading-state">
                   <i class="fas fa-users fa-2x mb-2"></i>
                   <p>No competitors added yet. Click "Add Competitor" to get started.</p>
                 </div>
@@ -397,7 +397,7 @@
 
               <!-- Add Competitor Button -->
               <div class="d-flex justify-content-end mt-3" *ngIf="!loadingCompetitors">
-                <button type="button" class="btn btn-outline-primary" (click)="addCompetitor()"
+                <button type="button" class="btn btn-primary" (click)="addCompetitor()"
                   [disabled]="savingCompetitor">
                   <span *ngIf="savingCompetitor" class="spinner-border spinner-border-sm me-2" role="status"
                     aria-hidden="true"></span>

@@ -509,8 +509,8 @@
 
     // Badge styling for policy types
     .badge-primary {
-      background-color: #007bff;
-      color: white;
+      background-color: var(--brand-black);
+      color: var(--brand-yellow);
     }
 
     .badge-success {
@@ -650,6 +650,9 @@
 
       .card-body {
         padding: 1.5rem;
+        h6{
+          color: var(--brand-black) !important;
+        }
       }
     }
 
@@ -669,6 +672,7 @@
         
         .metric-value {
           font-size: 1.1rem;
+          
         }
       }
 
@@ -722,6 +726,7 @@
         .metric-value {
           font-weight: 700;
           font-size: 1.1rem;
+          color: var(--brand-black) !important;
         }
       }
     }
