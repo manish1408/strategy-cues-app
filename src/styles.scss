@@ -920,3 +920,31 @@ gallery-thumb {
     display: unset;
     --bs-badge-font-weight: 400;
 }
+
+thead {
+  position: sticky;
+  top: 0;
+  background: var(--brand-black);
+  z-index: 10;
+  font-weight: 600;
+  color: var(--brand-yellow);
+  font-size: var(--font-size-sm);
+  padding: 1rem 0.75rem;
+}
+th{
+  color: var(--brand-yellow) !important;
+  background: var(--brand-black) !important;
+}
+td{
+  color: var(--brand-black) !important;
+  // background: #2e2e2e !important;
+  h4{
+    // color: var(--brand-yellow) !important;
+  }
+}
+.spinner-border{
+  border:solid var(--brand-black) !important;
+}
+.loading-state{
+  color: var(--brand-black) !important;
+}

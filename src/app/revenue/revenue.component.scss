@@ -663,6 +663,7 @@ $transition: all 0.3s ease;
           font-weight: 600;
           margin-right: 0.25rem;
           white-space: nowrap;
+          color: var(--brand-yellow) !important;
         }
 
         .filter-value {
@@ -671,6 +672,7 @@ $transition: all 0.3s ease;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
+          color: var(--brand-yellow) !important;
         }
 
         .remove-filter {
