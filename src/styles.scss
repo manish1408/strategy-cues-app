@@ -9,6 +9,9 @@
   --brand-yellow-dark: #e6bc0a;
   --brand-black-light: #1a1a1b;
   --brand-black-lighter: #2a2a2b;
+  --bs-badge-font-weight: 400;
+  --bs-body-color: #FCDF46;
+  --bs-body-color-rgb: 252, 223, 70;
 }
 
 
@@ -64,6 +67,7 @@
   --line-height-tight: 1.25;
   --line-height-normal: 1.5;
   --line-height-relaxed: 1.75;
+  --bs-badge-font-weight: 600;
 }
 
 html {
@@ -905,4 +909,14 @@ gallery-thumb {
   }
 
 
+}
+
+.bg-secondary {
+  --bs-bg-opacity: 1;
+    background-color: var(--brand-black) !important;
+    border: 1px solid #ffa200 !important;
+    color:  var(--brand-yellow) !important;
+    text-transform: uppercase !important;
+    display: unset;
+    --bs-badge-font-weight: 400;
 }

@@ -6,7 +6,8 @@ $danger-color: #dc3545;
 $warning-color: #ffc107;
 $info-color: #17a2b8;
 $light-color: #f8f9fa;
-$dark-color: #343a40;
+// $dark-color: #343a40;
+$dark-color: #fcdf46;
 $border-radius: 12px;
 $box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 $transition: all 0.3s ease;
@@ -3136,7 +3137,7 @@ $transition: all 0.3s ease;
 }
 
 .cue-card {
-  background: white;
+  background: #1e1e1e;
   border: 1px solid #e0e0e0;
   border-radius: $border-radius;
   box-shadow: $box-shadow;
@@ -3153,8 +3154,8 @@ $transition: all 0.3s ease;
     justify-content: space-between;
     align-items: flex-start;
     padding: 1rem;
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    border-bottom: 1px solid #e0e0e0;
+    background: #1e1e1e;
+    border-bottom: 1px solid var(--brand-yellow);
     
     .cue-card-title {
       flex: 1;
@@ -3590,15 +3591,14 @@ $transition: all 0.3s ease;
 
 .pickup-case {
   padding: 0.5rem;
-  border: 1px solid #dee2e6;
   border-radius: 6px;
   margin-bottom: 0.5rem;
-  background-color: #f8f9fa;
-  color: #6c757d;
+  background-color: var(--brand-black);
+  color:  var(--brand-yellow);
   font-size: var(--font-size-sm);
   font-weight: 600;
   .action-badge {
-    color: #008a7e;
+    color:  var(--brand-yellow);
   }
 }
 

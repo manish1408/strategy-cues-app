@@ -48,10 +48,10 @@
              <div class="cue-card-body">
                <div class="cue-conditions">
                  <div class="condition-row">
-                   <strong>{{ getCurrentCue()?.description1 }}</strong>
+                   {{ getCurrentCue()?.description1 }}
                  </div>
                  <div class="condition-row">
-                   <strong>{{ getCurrentCue()?.description2 }}</strong>
+                   {{ getCurrentCue()?.description2 }}
                  </div>
                </div>
                
@@ -60,7 +60,7 @@
               <div class="pickup-case" *ngFor="let pickup of getCurrentCue()?.pickups">
                 <div class="row">
                   <div class="col-8">
-                    <strong>{{ pickup?.name }}:</strong>
+                   {{ pickup?.name }}:
                     <div class="action-badge">{{ pickup?.description }}</div>
                   </div>
                    <div class="col-4">
@@ -154,7 +154,7 @@
               <td class="pickup-case-cell">
                 <div class="pickup-case-container" *ngIf="property?.pickup">
                   <div class="pickup-case-item pickup-case">
-                    <strong>{{property?.pickup?.name}}</strong>
+                   {{property?.pickup?.name}}
                     <div class="action-badge">{{property?.pickup?.description}}</div>
                   </div>
                 </div>
