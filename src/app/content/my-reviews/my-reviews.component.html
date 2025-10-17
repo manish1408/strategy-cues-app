@@ -94,7 +94,7 @@
         <div class="section-header">
           <h2>Based on my reviews, what can I improve?</h2>
         </div>
-        <div class="improvement-input-container" *ngIf="whatToImproveData && whatToImproveData.length > 0">
+        <!-- <div class="improvement-input-container" *ngIf="whatToImproveData && whatToImproveData.length > 0">
           <div class="improvement-input">
             <textarea 
               placeholder="Share your thoughts on what you can improve based on your guest reviews..."
@@ -108,7 +108,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
         <div class="cards-grid" *ngIf="whatToImproveData && whatToImproveData.length > 0">
           <div class="review-card action-card" *ngFor="let item of whatToImproveData">
             <div class="card-icon">
