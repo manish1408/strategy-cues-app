@@ -873,7 +873,7 @@
                     </div>
                     <div class="detail-item">
                       <span class="label">Last Review Date:</span>
-                      <span class="value">{{ property.Reviews.Booking.Last_Rev_Dt || 'N/A' }}</span>
+                      <span class="value">{{ formatReviewDate(property.Reviews.Booking.Last_Review_Date) }}</span>
                     </div>
                     <div class="detail-item">
                       <span class="label">Last Review Score:</span>
@@ -909,7 +909,7 @@
                     </div>
                     <div class="detail-item">
                       <span class="label">Last Review Date:</span>
-                      <span class="value">{{ property.Reviews.Airbnb.Last_Rev_Dt || 'N/A' }}</span>
+                      <span class="value">{{ formatReviewDate(property.Reviews.Airbnb.Last_Review_Date) }}</span>
                     </div>
                     <div class="detail-item">
                       <span class="label">Last Review Score:</span>

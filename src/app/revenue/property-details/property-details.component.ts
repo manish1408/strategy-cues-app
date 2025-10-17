@@ -121,6 +121,39 @@ export class PropertyDetailsComponent implements OnInit {
     return 'text-danger';
   }
 
+  formatReviewDate(value: any): string {
+    if (value === null || value === undefined) {
+      return 'N/A';
+    }
+    if (typeof value === 'string') {
+      const trimmed = value.trim();
+      if (!trimmed || trimmed.toLowerCase() === 'n/a') {
+        return 'N/A';
+      }
+      const parsed = new Date(trimmed);
+      if (isNaN(parsed.getTime())) {
+        return value; // show as-is if not a valid date
+      }
+      const yyyy = parsed.getFullYear();
+      const mm = String(parsed.getMonth() + 1).padStart(2, '0');
+      const dd = String(parsed.getDate()).padStart(2, '0');
+      return `${dd}-${mm}-${yyyy}`;
+    }
+    if (value instanceof Date) {
+      if (isNaN(value.getTime())) return 'N/A';
+      const yyyy = value.getFullYear();
+      const mm = String(value.getMonth() + 1).padStart(2, '0');
+      const dd = String(value.getDate()).padStart(2, '0');
+      return `${dd}-${mm}-${yyyy}`;
+    }
+    const parsed = new Date(value);
+    if (isNaN(parsed.getTime())) return 'N/A';
+    const yyyy = parsed.getFullYear();
+    const mm = String(parsed.getMonth() + 1).padStart(2, '0');
+    const dd = String(parsed.getDate()).padStart(2, '0');
+    return `${dd}-${mm}-${yyyy}`;
+  }
+
   // Helper method to check if a platform feature is enabled
   isFeatureEnabled(value: string | null | object): boolean {
     if (!value) return false;
