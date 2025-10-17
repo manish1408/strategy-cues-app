@@ -275,6 +275,7 @@ $transition: all 0.3s ease;
 
   .modal-title {
     font-weight: 600;
+    color: var(--brand-yellow) !important;
   }
 }
 
@@ -2819,4 +2820,8 @@ tbody tr:hover {
     font-size: 8px !important;
     margin: 0 !important;
   }
+}
+
+.text-black{
+  color: var(--brand-black) !important;
 }
