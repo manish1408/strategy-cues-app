@@ -3781,3 +3781,24 @@ $transition: all 0.3s ease;
     height: 16px;
   }
 }
+
+// Export button styling
+.btn-outline-success{
+  border-color: #28a745;
+  color: #28a745;
+  transition: all 0.3s 
+ease;
+  font-weight: 500;
+  
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+}

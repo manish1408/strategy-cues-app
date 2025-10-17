@@ -1300,5 +1300,111 @@ export class DeploymentComponent implements OnInit {
     // This method can be used for additional logic if needed
     console.log('Status highlight toggled:', this.highlightStatus);
   }
+
+  // Export cueProperties to CSV
+  exportToCSV(): void {
+    if (!this.cueProperties || this.cueProperties.length === 0) {
+      this.toastr.warning('No data available to export');
+      return;
+    }
+
+    // Define CSV headers
+    const headers = [
+      'Listing Name',
+      'Deployment Cue',
+      'Pick Up Case',
+      'Assigned To',
+      'Status',
+      'Notes Count',
+      'Occupancy This Month (%)',
+      'Occupancy Next Month (%)',
+      'ADR This Month',
+      'ADR Next Month',
+      'RevPAR This Month',
+      'RevPAR Next Month',
+      'MPI This Month (%)',
+      'MPI Next Month (%)',
+      'MPI LYTM (%)',
+      'STLY Var Occ',
+      'STLY Var RevPAR',
+      'Min Rate Threshold',
+      'Pick Up Occ 7D',
+      'Pick Up Occ 14D',
+      'Pick Up Occ 30D'
+    ];
+
+    // Convert data to CSV format
+    const csvData = this.cueProperties.map(property => [
+      this.escapeCSV(property?.propertyData?.Listing_Name || ''),
+      this.escapeCSV(property?.deploymentCueName || ''),
+      this.escapeCSV(property?.pickup?.name || ''),
+      this.escapeCSV(property?.assignedTo?.name || ''),
+      this.escapeCSV(property?.status || ''),
+      property?.notes?.length || 0,
+      this.safeParseNumber(property?.propertyData?.Occupancy?.TM) || 0,
+      this.safeParseNumber(property?.propertyData?.Occupancy?.NM) || 0,
+      property?.propertyData?.ADR?.TM || '',
+      property?.propertyData?.ADR?.NM || '',
+      property?.propertyData?.RevPAR?.TM || '',
+      property?.propertyData?.RevPAR?.NM || '',
+      this.safeParseNumber(property?.propertyData?.MPI?.TM) || 0,
+      this.safeParseNumber(property?.propertyData?.MPI?.NM) || 0,
+      this.safeParseNumber(property?.propertyData?.MPI?.LYTM) || 0,
+      property?.propertyData?.STLY_Var?.Occ || '',
+      property?.propertyData?.STLY_Var?.RevPAR || '',
+      property?.propertyData?.Min_Rate_Threshold || '',
+      property?.propertyData?.Pick_Up_Occ?.['7_Days'] || '',
+      property?.propertyData?.Pick_Up_Occ?.['14_Days'] || '',
+      property?.propertyData?.Pick_Up_Occ?.['30_Days'] || ''
+    ]);
+
+    // Create CSV content
+    const csvContent = [
+      headers.join(','),
+      ...csvData.map(row => row.join(','))
+    ].join('\n');
+
+    // Create and download file
+    this.downloadCSV(csvContent, 'deployment-cues-export.csv');
+    
+    this.toastr.success(`Exported ${this.cueProperties.length} properties to CSV`);
+  }
+
+  // Helper method to escape CSV values
+  private escapeCSV(value: string): string {
+    if (value === null || value === undefined) {
+      return '';
+    }
+    
+    const stringValue = String(value);
+    
+    // If the value contains comma, newline, or double quote, wrap it in quotes and escape quotes
+    if (stringValue.includes(',') || stringValue.includes('\n') || stringValue.includes('"')) {
+      return `"${stringValue.replace(/"/g, '""')}"`;
+    }
+    
+    return stringValue;
+  }
+
+  // Helper method to download CSV file
+  private downloadCSV(csvContent: string, filename: string): void {
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    
+    if (link.download !== undefined) {
+      // Feature detection for browsers that support HTML5 download attribute
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', filename);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } else {
+      // Fallback for older browsers
+      this.toastr.error('CSV download not supported in this browser');
+    }
+  }
   
 }
