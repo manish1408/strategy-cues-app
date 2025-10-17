@@ -3297,7 +3297,7 @@ $transition: all 0.3s ease;
   
   .modal-header {
     background: black;
-    color: white;
+    color: var(--brand-yellow) !important;
     border-bottom: none;
     padding: 1.25rem 1.5rem;
     
@@ -3305,6 +3305,7 @@ $transition: all 0.3s ease;
       font-weight: 600;
       display: flex;
       align-items: center;
+      color: var(--brand-yellow) !important;
       
       i {
         font-size: 1.25rem;

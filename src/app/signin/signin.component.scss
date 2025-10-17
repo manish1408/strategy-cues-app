@@ -130,7 +130,7 @@ a {
     // object-fit: cover;
   }
   .forgot-text {
-    color: var(--brand-yellow);
+    color: #fbbf24 !important;
     font-size: 12px;
     font-weight: 400;
     margin-bottom: 24px;
@@ -166,7 +166,7 @@ a {
     margin-top: 16px;
     text-align: center;
     a {
-      color: var(--brand-yellow);
+      color: #fbbf24 !important;
       text-decoration: none !important;
     }
   }
@@ -180,7 +180,7 @@ a {
       font-weight: 400;
       margin: 0;
       a {
-        color: var(--brand-yellow);
+        color: #fbbf24 !important;
         text-decoration: none !important;
       }
     }
@@ -202,4 +202,7 @@ a {
     height: 50px;
     object-fit: cover;
   }
+}
+.subtitle{
+  color:#fbbf24 !important
 }

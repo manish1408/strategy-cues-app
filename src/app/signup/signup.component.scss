@@ -196,7 +196,7 @@ a {
     margin-top: 16px;
     text-align: center;
     a {
-      color: var(--brand-yellow);
+      color: #fbbf24 !important;
       text-decoration: none !important;
     }
   }
@@ -210,9 +210,13 @@ a {
       font-weight: 400;
       margin: 0;
       a {
-        color: var(--brand-yellow);
+        color: #fbbf24 !important;
         text-decoration: none !important;
       }
     }
   }
+}
+
+.subtitle{
+  color:#fbbf24 !important
 }
