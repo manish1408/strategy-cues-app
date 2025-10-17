@@ -62,6 +62,19 @@ export class PropertyDetailsComponent implements OnInit {
       next: (res: any) => {
         if (res.success && res.data) {
           this.property = res.data;
+          
+          // Remove duplicates from CXL_Policy.Booking based on ratePlanName
+          if (this.property.CXL_Policy?.Booking) {
+            const seen = new Set();
+            this.property.CXL_Policy.Booking = this.property.CXL_Policy.Booking.filter((item: any) => {
+              if (seen.has(item.ratePlanName)) {
+                return false;
+              }
+              seen.add(item.ratePlanName);
+              return true;
+            });
+          }
+          
         } else {
           this.error = res.message || 'Property not found';
         }
