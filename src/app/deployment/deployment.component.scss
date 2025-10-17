@@ -3049,7 +3049,7 @@ $transition: all 0.3s ease;
   margin-bottom: 1rem;
   
   h6 {
-    color: $dark-color;
+    color: var(--brand-black) !important;
     font-weight: 600;
     margin-bottom: 1rem;
   }
@@ -3062,9 +3062,15 @@ $transition: all 0.3s ease;
 
 .notes-trail {
   h6 {
-    color: $dark-color;
+    color: var(--brand-black) !important;
     font-weight: 600;
     margin-bottom: 1rem;
+  }
+  p{
+    color: var(--brand-black) !important;
+  }
+  .fa-sticky-note{
+    color: var(--brand-black) !important;
   }
 }
 
@@ -3084,6 +3090,7 @@ $transition: all 0.3s ease;
     margin-bottom: 0;
   }
   
+  
   .note-header {
     display: flex;
     justify-content: space-between;
@@ -3093,7 +3100,7 @@ $transition: all 0.3s ease;
     .note-author {
       display: flex;
       align-items: center;
-      color: $dark-color;
+      color: var(--brand-black) !important;
       
       i {
         font-size: 1.25rem;
@@ -3120,7 +3127,7 @@ $transition: all 0.3s ease;
     padding: 0.75rem;
     background-color: #f8f9fa;
     border-radius: 6px;
-    color: $dark-color;
+    color: var(--brand-black) !important;
     line-height: 1.6;
     margin-bottom: 0.5rem;
   }
@@ -3321,7 +3328,7 @@ $transition: all 0.3s ease;
     
     .form-label {
       font-weight: 500;
-      color: $dark-color;
+      color: var(--brand-black) !important;
       margin-bottom: 0.5rem;
     }
     

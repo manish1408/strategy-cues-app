@@ -184,6 +184,9 @@ $improvement-text: #2563eb;
       
         flex-shrink: 0;
         margin-top: 0.25rem;
+        .fa-times-circle{
+          color: var(--brand-black) !important;
+        }
       }
 
       .card-content {

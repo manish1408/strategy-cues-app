@@ -9,7 +9,7 @@
   }
   
   p {
-    color: var(--text-secondary);
+    color: var(--brand-black) !important;
     font-size: 1.1rem;
     margin: 0;
   }
@@ -70,6 +70,7 @@
     font-size: 1.4rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
+    color: var(--brand-black) !important;
     
     .healthy & {
       color: #28a745;
@@ -178,9 +179,12 @@
     .alert-icon {
       margin-right: 1rem;
       font-size: 1.2rem;
+     i{
+      color: var(--brand-black) !important;
+     }
       
       .warning & i {
-        color: #856404;
+        color: var(--brand-black) !important;
       }
       
       .info & i {
@@ -200,6 +204,7 @@
       flex: 1;
       
       .alert-title {
+        color: var(--brand-black) !important;
         font-weight: 600;
         margin-bottom: 0.25rem;
         

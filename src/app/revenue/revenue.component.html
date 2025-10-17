@@ -824,12 +824,12 @@
         <div class="spinner-border spinner-border-sm text-primary" role="status">
           <span class="visually-hidden">Loading more...</span>
         </div>
-        <p class="mt-2 text-muted small">Loading more properties...</p>
+        <p class="mt-2 small">Loading more properties...</p>
       </div>
 
       <!-- No More Data Indicator -->
-      <div *ngIf="!hasMoreData && propertyData && propertyData.length > 0 && !isLoadingMore" class="text-center py-3">
-        <p class="text-muted small">No more properties to load</p>
+      <div *ngIf="!hasMoreData && propertyData && propertyData.length > 0 && !isLoadingMore" class="text-center py-3 loading-state">
+        <p class="small">No more properties to load</p>
       </div>
     </div>
 

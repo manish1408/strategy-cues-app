@@ -947,4 +947,14 @@ td{
 }
 .loading-state{
   color: var(--brand-black) !important;
+  h4{
+    color: var(--brand-black) !important;
+  }
+  p{
+    color: var(--brand-black) !important;
+  }
+}
+
+.tab-navigation .nav-tabs .nav-item .nav-link.active {
+  color: var(--brand-yellow) !important;
 }

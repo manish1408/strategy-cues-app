@@ -5,8 +5,8 @@
       <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
         <span class="visually-hidden">Loading...</span>
       </div>
-      <h4 class="text-muted">Loading Guest Insights</h4>
-      <p class="text-muted">Analyzing competitor reviews and guest feedback...</p>
+      <h4>Loading Guest Insights</h4>
+      <p>Analyzing competitor reviews and guest feedback...</p>
       <!-- <div class="progress mt-3" style="width: 300px;">
         <div class="progress-bar" role="progressbar" [style.width.%]="getLoadingProgress()" 
              [attr.aria-valuenow]="getLoadingProgress()" aria-valuemin="0" aria-valuemax="100">
@@ -104,21 +104,6 @@
     <div class="section-header">
     
       <h2>Based on competitor reviews, what can you change?</h2>
-    </div>
-    <div class="improvement-input-container" *ngIf="whatToImproveData && whatToImproveData.length > 0">
-      <div class="improvement-input">
-        <textarea 
-          placeholder="Share your thoughts on what you can improve based on competitor analysis..."
-          class="improvement-textarea"
-          rows="4">
-        </textarea>
-        <div class="input-footer">
-          <div class="help-tooltip">
-            <i class="fas fa-question-circle"></i>
-            <span class="tooltip-text">Use this space to note actionable insights from competitor reviews</span>
-          </div>
-        </div>
-      </div>
     </div>
     <div class="cards-grid" *ngIf="whatToImproveData && whatToImproveData.length > 0">
       <div class="review-card action-card" *ngFor="let item of whatToImproveData">
