@@ -1666,7 +1666,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" (click)="cancelSavePreset()">Cancel</button>
-            <button type="button" class="btn btn-success" (click)="saveCurrentFiltersAsPreset()"
+            <button type="button" class="btn btn-primary" (click)="saveCurrentFiltersAsPreset()"
               [disabled]="!newPresetName.trim() || presetSaving || (getAppliedFilters().length === 0 && getCurrentPropertyIds().length === 0 && getSelectedForPresetCount() === 0)">
               <i *ngIf="!presetSaving" class="fas fa-save me-2"></i>
               <i *ngIf="presetSaving" class="fas fa-spinner fa-spin me-2"></i>Save Preset
