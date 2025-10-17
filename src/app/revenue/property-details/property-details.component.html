@@ -127,13 +127,13 @@
                 <div class="row" *ngIf="property.ADR">
                   <div class="col-6">
                     <div class="metric-card">
-                      <div class="metric-label">Active Day Rate (This Month)</div>
+                      <div class="metric-label">Rental Average Day Rate (This Month)</div>
                       <div class="metric-value large">{{ property.ADR.TM ? property.ADR.TM + '%' : 'N/A' }}</div>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="metric-card">
-                      <div class="metric-label">Active Day Rate (Next Month)</div>
+                      <div class="metric-label">Rental Average Day Rate (Next Month)</div>
                       <div class="metric-value large">{{ property.ADR.NM ? property.ADR.NM + '%' : 'N/A' }}</div>
                     </div>
                   </div>
@@ -142,13 +142,13 @@
                   <div class="col-6">
                     <div class="metric-card">
                       <div class="metric-label">RevPAR (This Month)</div>
-                      <div class="metric-value large">{{ property.RevPAR.TM ? property.RevPAR.TM + '%' : 'N/A' }}</div>
+                      <div class="metric-value large">{{ property.RevPAR.TM ? property.RevPAR.TM : 'N/A' }}</div>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="metric-card">
                       <div class="metric-label">RevPAR (Next Month)</div>
-                      <div class="metric-value large">{{ property.RevPAR.NM ? property.RevPAR.NM + '%' : 'N/A' }}</div>
+                      <div class="metric-value large">{{ property.RevPAR.NM ? property.RevPAR.NM  : 'N/A' }}</div>
                     </div>
                   </div>
                 </div>
