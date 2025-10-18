@@ -616,10 +616,20 @@
                   </div>
                   <span class="rating-text">{{ property.Reviews.Booking.Rev_Score }}</span>
                 </div>
-                <div class="review-item no-reviews" *ngIf="safeParseNumber(property.Reviews.Booking.Rev_Score) === 0"
+                <div class="review-item no-reviews" *ngIf="safeParseNumber(property.Reviews.Booking.Rev_Score) === 0 && safeParseNumber(property.Reviews.Booking.Last_Rev_Score) === 0"
                   title="Booking.com: No reviews">
                   <i class="fas fa-bed text-muted"></i>
                   <span class="no-reviews-text" style="font-size: var(--font-size-xs);">No Reviews</span>
+                </div>
+                <div class="review-item clickable" *ngIf="safeParseNumber(property.Reviews.Booking.Rev_Score) === 0 && safeParseNumber(property.Reviews.Booking.Last_Rev_Score) > 0"
+                  title="Booking.com: Last review score {{ property.Reviews.Booking.Last_Rev_Score }}/10 - Click to visit property"
+                  (click)="openPropertyUrl(property, 'Booking')">
+                  <i class="fas fa-bed "></i>
+                  <div class="stars">
+                    <i *ngFor="let star of getStarArray(property.Reviews.Booking.Last_Rev_Score || 0, 10)"
+                      class="fas fa-star" [ngClass]="star.filled ? 'star-filled' : 'star-empty'"></i>
+                  </div>
+                  <span class="rating-text">{{ property.Reviews.Booking.Last_Rev_Score }}</span>
                 </div>
 
                 <!-- Airbnb Reviews -->
@@ -633,10 +643,20 @@
                   </div>
                   <span class="rating-text">{{ property.Reviews.Airbnb.Rev_Score }}</span>
                 </div>
-                <div class="review-item no-reviews" *ngIf="safeParseNumber(property.Reviews.Airbnb.Rev_Score) === 0"
+                <div class="review-item no-reviews" *ngIf="safeParseNumber(property.Reviews.Airbnb.Rev_Score) === 0 && safeParseNumber(property.Reviews.Airbnb.Last_Rev_Score) === 0"
                   title="Airbnb: No reviews">
                   <i class="fab fa-airbnb text-muted"></i>
                   <span class="no-reviews-text" style="font-size: var(--font-size-xs);">No Reviews</span>
+                </div>
+                <div class="review-item clickable" *ngIf="safeParseNumber(property.Reviews.Airbnb.Rev_Score) === 0 && safeParseNumber(property.Reviews.Airbnb.Last_Rev_Score) > 0"
+                  title="Airbnb: Last review score {{ property.Reviews.Airbnb.Last_Rev_Score }}/5 - Click to visit property"
+                  (click)="openPropertyUrl(property, 'Airbnb')">
+                  <i class="fab fa-airbnb text-danger"></i>
+                  <div class="stars">
+                    <i *ngFor="let star of getStarArray(property.Reviews.Airbnb.Last_Rev_Score || 0, 5)" class="fas fa-star"
+                      [ngClass]="star.filled ? 'star-filled' : 'star-empty'"></i>
+                  </div>
+                  <span class="rating-text">{{ property.Reviews.Airbnb.Last_Rev_Score }}</span>
                 </div>
 
                 <!-- VRBO Reviews -->
