@@ -106,6 +106,12 @@ const routes: Routes = [
       import("./status/status.module").then((m) => m.StatusModule),
     canActivate: [AuthGuard,OperatorGuard],
   },
+  {
+    path: "pricelabs-admin",
+    loadChildren: () =>
+      import("./pricelabs-admin/pricelabs-admin.module").then((m) => m.PricelabsAdminModule),
+    canActivate: [AuthGuard,OperatorGuard],
+  }
 ];
 
 @NgModule({

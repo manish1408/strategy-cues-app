@@ -54,6 +54,13 @@
             </li>
 
             <li class="sidebar-menu-item">
+              <a routerLink="/pricelabs-admin" [queryParams]="{ id: selectedOperator?._id }" routerLinkActive="active-link" class="sidebar-link">
+                <i class="fas fa-chart-line me-2"></i>
+                Analytics Cues
+              </a>
+            </li>
+
+            <li class="sidebar-menu-item">
               <a routerLink="/listing" [queryParams]="{ id: selectedOperator?._id }" routerLinkActive="active-link" class="sidebar-link">
                 <i class="fas fa-list me-2"></i>
                 Listings
