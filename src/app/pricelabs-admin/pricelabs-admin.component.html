@@ -52,49 +52,43 @@
         <thead>
             <tr>
              <th class="text-center">#</th>
-              <th>Listing Name</th>
-              <th>Listing ID</th>
-              <th>City</th>
-              <th>Bedroom Count</th>
               <th>ADR</th>
               <th>RevPar</th>
               <th>Occupancy %</th>
-              <th>No of bookings</th>
               <th>Rental Revenue</th>
-              <th>Revenue Forecast</th>
-              <th>Weekday Occ %</th>
-              <th>Weekend Occ %</th>
               <th>Avg Market ADR</th>
               <th>Avg Market Occ %</th>
               <th>Market Penetration Index</th>
               <th>ADR Penetration Index</th>
               <th>RevPar Penetration Index</th>
-              <th>Forecast as on</th>
-              <th>Last Booked</th>
+              <th>Occ Pickup 7</th>
+              <th>Occ Pickup 14</th>
+              <th>Occ Pickup 30</th>
+              <th>ADR YoY %</th>
+              <th>RevPar YoY %</th>
+              <th>Revenue YoY %</th>
+              <th>Occ YoY Diff</th>
             </tr>
           </thead>
       <tbody>
         <tr *ngFor="let row of (data || []); let i = index">
           <td class="text-center">{{ i + 1 }}</td>
-          <td>{{ row['Listing Name'] }}</td>
-          <td>{{ row['Listing ID'] }}</td>
-          <td>{{ row['City'] }}</td>
-          <td>{{ row['Bedroom Count'] }}</td>
           <td>{{ row['ADR'] | number:'1.0-2' }}</td>
           <td>{{ row['RevPar'] | number:'1.0-2' }}</td>
           <td>{{ row['Occupancy'] | number:'1.0-2' }}</td>
-          <td>{{ row['No of bookings'] }}</td>
           <td>{{ row['Rental Revenue'] | number:'1.0-2' }}</td>
-          <td>{{ row['Rental Revenue Forecast'] | number:'1.0-2' }}</td>
-          <td>{{ row['Weekday Occupancy'] | number:'1.0-2' }}</td>
-          <td>{{ row['Weekend Occupancy'] | number:'1.0-2' }}</td>
           <td>{{ row['Average Market ADR'] | number:'1.0-2' }}</td>
           <td>{{ row['Average Market Occupancy'] | number:'1.0-2' }}</td>
           <td>{{ row['Market Penetration Index'] | number:'1.0-2' }}</td>
           <td>{{ row['Market Penetration ADR Index'] | number:'1.0-2' }}</td>
           <td>{{ row['Market Penetration RevPar Index'] | number:'1.0-2' }}</td>
-          <td>{{ row['Forecast as on date'] | date:'yyyy-MM-dd' }}</td>
-          <td>{{ row['Last Booked date'] | date:'yyyy-MM-dd HH:mm' }}</td>
+          <td>{{ row['Occupancy Pickup 7'] | number:'1.0-2' }}</td>
+          <td>{{ row['Occupancy Pickup 14'] | number:'1.0-2' }}</td>
+          <td>{{ row['Occupancy Pickup 30'] | number:'1.0-2' }}</td>
+          <td>{{ row['ADR YoY %'] !== null ? (row['ADR YoY %'] | number:'1.0-2') : '—' }}</td>
+          <td>{{ row['RevPar YoY %'] !== null ? (row['RevPar YoY %'] | number:'1.0-2') : '—' }}</td>
+          <td>{{ row['Rental Revenue YoY %'] !== null ? (row['Rental Revenue YoY %'] | number:'1.0-2') : '—' }}</td>
+          <td>{{ row['Occupancy YoY difference'] | number:'1.0-2' }}</td>
         </tr>
       </tbody>
     </table>
@@ -107,8 +101,8 @@
     <div class="card">
       <div class="card-body">
         <i class="fas fa-building fa-3x text-muted mb-3"></i>
-        <h5 class="card-title">No Data Found</h5>
-        <p class="card-text">No data found for the selected period.
+        <h5 class="card-title text-black">No Data Found</h5>
+        <p class="card-text text-black">No data found for the selected period.
         </p>
        
       </div>
