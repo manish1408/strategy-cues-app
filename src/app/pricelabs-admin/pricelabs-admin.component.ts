@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { PricelabsService } from '../_services/pricelabs.service';
-import { ToastService } from '../_services/toast.service';
 import { ActivatedRoute } from '@angular/router';
 import { LocalStorageService } from '../_services/local-storage.service';
 
@@ -21,7 +20,7 @@ error: string | null = null;
 reportId: string = '';
 private previousOperatorId: string = '';
 
-constructor(private pricelabsService: PricelabsService, private toastService: ToastService, private route: ActivatedRoute, private localStorageService: LocalStorageService) {
+constructor(private pricelabsService: PricelabsService, private route: ActivatedRoute, private localStorageService: LocalStorageService) {
   
 }
 
@@ -48,8 +47,8 @@ analyticsReport() {
   this.error = null;
   this.pricelabsService.createAnalyticsReport(this.operatorId, this.startDate, this.endDate).subscribe({
     next: (resp) => {
-      if (!resp || resp.success === false || !resp.data) {
-        this.error = resp?.error || 'Failed to create analytics report';
+      if (!resp || resp.success === false || resp.data === null) {
+        this.error = resp?.error || '';
         this.data = [];
         this.loading = false;
         return;
@@ -60,7 +59,6 @@ analyticsReport() {
           const rows = reportResp?.data?.reportData;
           if (reportResp?.success === false || !Array.isArray(rows)) {
             this.error = reportResp?.error || '';
-            this.toastService.showError(this.error || '');
             this.loading = false;
             return;
           }
@@ -68,14 +66,14 @@ analyticsReport() {
           this.loading = false;
         },
         error: (err) => {
-          this.error = err?.message || 'Failed to fetch analytics report';
+          this.error = err?.error?.detail?.error || '';
           this.data = [];
           this.loading = false;
         }
       });
     },
     error: (err) => {
-      this.error = err?.message || 'Failed to create analytics report';
+      this.error = err?.error?.detail?.error || '';
       this.data = [];
       this.loading = false;
     }
