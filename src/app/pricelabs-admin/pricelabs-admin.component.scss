@@ -2522,7 +2522,7 @@
       min-width: 50px;
     }
   
-    &:nth-child(2) {
+    &:nth-child(3) {
       min-width: 280px;
     }
   
@@ -2862,9 +2862,9 @@
     // color: #6c757d !important;
     // color: var(--brand-black) !important;
   
-    &:nth-child(2) {
+    &:nth-child(3) {
         font-size: var(--font-size-sm);
-    font-weight: 600;
+    // font-weight: 600;
     color: var(--brand-black);
  
     
