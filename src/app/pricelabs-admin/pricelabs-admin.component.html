@@ -52,6 +52,8 @@
         <thead>
             <tr>
              <th class="text-center">#</th>
+              <th>Listing Name</th>
+              <th>Listing ID</th>
               <th>ADR</th>
               <th>RevPar</th>
               <th>Occupancy %</th>
@@ -68,11 +70,27 @@
               <th>RevPar YoY %</th>
               <th>Revenue YoY %</th>
               <th>Occ YoY Diff</th>
+              <th>Avg Market Price</th>
+              <th>Market P25 Price</th>
+              <th>Market P75 Price</th>
+              <th>Market P90 Price</th>
+              <th>ADR LY</th>
+              <th>RevPar LY</th>
+              <th>Occupancy LY</th>
+              <th>ADR STLY</th>
+              <th>RevPar STLY</th>
+              <th>Occupancy STLY</th>
+              <th>ADR STLY YoY %</th>
+              <th>RevPar STLY YoY %</th>
+              <th>Revenue STLY YoY %</th>
+              <th>Occ STLY YoY Diff</th>
             </tr>
           </thead>
       <tbody>
         <tr *ngFor="let row of (data || []); let i = index">
           <td class="text-center">{{ i + 1 }}</td>
+          <td>{{ row['Listing Name'] }}</td>
+          <td>{{ row['Listing ID'] }}</td>
           <td>{{ row['ADR'] | number:'1.0-2' }}</td>
           <td>{{ row['RevPar'] | number:'1.0-2' }}</td>
           <td>{{ row['Occupancy'] | number:'1.0-2' }}</td>
@@ -85,10 +103,24 @@
           <td>{{ row['Occupancy Pickup 7'] | number:'1.0-2' }}</td>
           <td>{{ row['Occupancy Pickup 14'] | number:'1.0-2' }}</td>
           <td>{{ row['Occupancy Pickup 30'] | number:'1.0-2' }}</td>
-          <td>{{ row['ADR YoY %'] !== null ? (row['ADR YoY %'] | number:'1.0-2') : '—' }}</td>
-          <td>{{ row['RevPar YoY %'] !== null ? (row['RevPar YoY %'] | number:'1.0-2') : '—' }}</td>
-          <td>{{ row['Rental Revenue YoY %'] !== null ? (row['Rental Revenue YoY %'] | number:'1.0-2') : '—' }}</td>
+          <td>{{ row['ADR YoY %'] !== null ? ((row['ADR YoY %'] | number:'1.0-2') + '%') : '—' }}</td>
+          <td>{{ row['RevPar YoY %'] !== null ? ((row['RevPar YoY %'] | number:'1.0-2') + '%') : '—' }}</td>
+          <td>{{ row['Rental Revenue YoY %'] !== null ? ((row['Rental Revenue YoY %'] | number:'1.0-2') + '%') : '—' }}</td>
           <td>{{ row['Occupancy YoY difference'] | number:'1.0-2' }}</td>
+          <td>{{ row['Average Market Price'] | number:'1.0-2' }}</td>
+          <td>{{ row['Market 25Percentile Price'] | number:'1.0-2' }}</td>
+          <td>{{ row['Market 75Percentile Price'] | number:'1.0-2' }}</td>
+          <td>{{ row['Market 90Percentile Price'] | number:'1.0-2' }}</td>
+          <td>{{ row['ADR LY'] | number:'1.0-2' }}</td>
+          <td>{{ row['RevPar LY'] | number:'1.0-2' }}</td>
+          <td>{{ row['Occupancy LY'] | number:'1.0-2' }}</td>
+          <td>{{ row['ADR STLY'] | number:'1.0-2' }}</td>
+          <td>{{ row['RevPar STLY'] | number:'1.0-2' }}</td>
+          <td>{{ row['Occupancy STLY'] | number:'1.0-2' }}</td>
+          <td>{{ row['ADR STLY YoY %'] !== null ? ((row['ADR STLY YoY %'] | number:'1.0-2') + '%') : '—' }}</td>
+          <td>{{ row['RevPar STLY YoY %'] !== null ? ((row['RevPar STLY YoY %'] | number:'1.0-2') + '%') : '—' }}</td>
+          <td>{{ row['Rental Revenue STLY YoY %'] !== null ? ((row['Rental Revenue STLY YoY %'] | number:'1.0-2') + '%') : '—' }}</td>
+          <td>{{ row['Occupancy STLY YoY difference'] | number:'1.0-2' }}</td>
         </tr>
       </tbody>
     </table>
