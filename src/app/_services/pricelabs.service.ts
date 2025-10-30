@@ -22,6 +22,14 @@ export class PricelabsService {
     return this.http.get<any>(`${this._url}/save-price-labs-admin-data?operator_id=${operatorId}`);
   }
 
+  createAnalyticsReport(operatorId: string, startDate: string, endDate: string): Observable<any> {
+    return this.http.get<any>(`${this._url}/analytics-report?operator_id=${operatorId}&start_date=${startDate}&end_date=${endDate}`);
+  }
+
+  getAnalyticsReport(reportId: string): Observable<any> {
+    return this.http.get<any>(`${this._url}/get-analytics-report/${reportId}`);
+  }
+
 
 
  

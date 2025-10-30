@@ -1,0 +1,158 @@
+ 
+ <div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="page-header">
+                <h1>Analytics Cues</h1>
+                <p>This is the Analytics Cues page. Here you can manage the Analytics Cues data.</p>
+            </div>
+         
+           <div class="d-flex justify-content-between align-items-end gap-2">
+             <div class="form-group">
+               <label for="startDate">Start Date</label>
+               <input type="date" class="form-control" id="startDate" [value]="startDate" (change)="onDateInputChange('start', $any($event.target).value)">
+             </div>
+             <div class="form-group">
+               <label for="endDate">End Date</label>
+               <input type="date" class="form-control" id="endDate" [value]="endDate" (change)="onDateInputChange('end', $any($event.target).value)">
+            </div>
+           <button class="btn btn-outline-success" (click)="analyticsReport()">
+            <i class="fas fa-paper-plane me-2"></i>Submit
+          </button>
+         </div>
+        </div>
+      
+  </div>
+ </div>
+ 
+ <!-- Loading State -->
+ <div *ngIf="loading" class="text-center py-5 loading-state">
+    <div class="spinner-border " role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-3">Loading data...</p>
+  </div>
+
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="alert alert-danger" role="alert">
+    <h4 class="alert-heading">Error!</h4>
+    <p>{{ error }}</p>
+  
+ 
+  </div>
+
+
+  <!-- Table View -->
+  <div class="table-container" *ngIf="!loading && !error && data && data.length > 0">
+    <table>
+        <thead>
+            <tr>
+             <th class="text-center">#</th>
+              <th>Listing ID</th>
+              <th>Listing Name</th>
+              <th>Occupancy</th>
+              <th>Occupancy STLY</th>
+              <th>Occupancy STLY YoY difference</th>
+              <th>Occupancy LY</th>
+              <th>Occupancy YoY difference</th>
+              <th>Occupancy Benchmark Completion %</th>
+              <th>Average Market Occupancy</th>
+              <th>Average Market Occupancy STLY</th>
+              <th>Average Market Occupancy LY</th>
+              <th>Market Penetration Index</th>
+              <th>Rental Revenue</th>
+              <th>Rental Revenue STLY</th>
+              <th>Rental Revenue STLY YoY %</th>
+              <th>Rental Revenue LY</th>
+              <th>Rental Revenue YoY %</th>
+              <th>Rental Revenue Benchmark Completion %</th>
+              <th>ADR</th>
+              <th>ADR STLY</th>
+              <th>ADR STLY YoY %</th>
+              <th>ADR LY</th>
+              <th>ADR YoY %</th>
+              <th>Average Market ADR</th>
+              <th>Average Market ADR LY</th>
+              <th>Market Penetration ADR Index</th>
+              <th>RevPar</th>
+              <th>RevPar STLY</th>
+              <th>RevPar STLY YoY %</th>
+              <th>RevPar LY</th>
+              <th>RevPar YoY %</th>
+              <th>RevPar Benchmark Completion %</th>
+              <th>Market Penetration RevPar Index</th>
+              <th>Average Market Price</th>
+              <th>Average Market Price LY</th>
+              <th>Market 25Percentile Price</th>
+              <th>Market 75Percentile Price</th>
+              <th>Market 90Percentile Price</th>
+              <th>Occupancy Pickup 7</th>
+              <th>Occupancy Pickup 14</th>
+              <th>Occupancy Pickup 30</th>
+            </tr>
+          </thead>
+      <tbody>
+        <tr *ngFor="let row of (data || []); let i = index">
+          <td class="text-center">{{ i + 1 }}</td>
+          <td>{{ row['Listing ID'] }}</td>
+          <td>{{ row['Listing Name'] }}</td>
+          <td>{{ row['Occupancy'] | number:'1.0-2' }}</td>
+          <td>{{ row['Occupancy STLY'] | number:'1.0-2' }}</td>
+          <td>{{ row['Occupancy STLY YoY difference'] | number:'1.0-2' }}</td>
+          <td>{{ row['Occupancy LY'] | number:'1.0-2' }}</td>
+          <td>{{ row['Occupancy YoY difference'] | number:'1.0-2' }}</td>
+          <td>{{ row['Occupancy Benchmark Completion %'] !== null ? ((row['Occupancy Benchmark Completion %'] | number:'1.0-2') + '%') : '—' }}</td>
+          <td>{{ row['Average Market Occupancy'] | number:'1.0-2' }}</td>
+          <td>{{ row['Average Market Occupancy STLY'] | number:'1.0-2' }}</td>
+          <td>{{ row['Average Market Occupancy LY'] | number:'1.0-2' }}</td>
+          <td>{{ row['Market Penetration Index'] | number:'1.0-2' }}</td>
+          <td>{{ row['Rental Revenue'] | number:'1.0-2' }}</td>
+          <td>{{ row['Rental Revenue STLY'] | number:'1.0-2' }}</td>
+          <td>{{ row['Rental Revenue STLY YoY %'] !== null ? ((row['Rental Revenue STLY YoY %'] | number:'1.0-2') + '%') : '—' }}</td>
+          <td>{{ row['Rental Revenue LY'] | number:'1.0-2' }}</td>
+          <td>{{ row['Rental Revenue YoY %'] !== null ? ((row['Rental Revenue YoY %'] | number:'1.0-2') + '%') : '—' }}</td>
+          <td>{{ row['Rental Revenue Benchmark Completion %'] !== null ? ((row['Rental Revenue Benchmark Completion %'] | number:'1.0-2') + '%') : '—' }}</td>
+          <td>{{ row['ADR'] | number:'1.0-2' }}</td>
+          <td>{{ row['ADR STLY'] | number:'1.0-2' }}</td>
+          <td>{{ row['ADR STLY YoY %'] !== null ? ((row['ADR STLY YoY %'] | number:'1.0-2') + '%') : '—' }}</td>
+          <td>{{ row['ADR LY'] | number:'1.0-2' }}</td>
+          <td>{{ row['ADR YoY %'] !== null ? ((row['ADR YoY %'] | number:'1.0-2') + '%') : '—' }}</td>
+          <td>{{ row['Average Market ADR'] | number:'1.0-2' }}</td>
+          <td>{{ row['Average Market ADR LY'] | number:'1.0-2' }}</td>
+          <td>{{ row['Market Penetration ADR Index'] | number:'1.0-2' }}</td>
+          <td>{{ row['RevPar'] | number:'1.0-2' }}</td>
+          <td>{{ row['RevPar STLY'] | number:'1.0-2' }}</td>
+          <td>{{ row['RevPar STLY YoY %'] !== null ? ((row['RevPar STLY YoY %'] | number:'1.0-2') + '%') : '—' }}</td>
+          <td>{{ row['RevPar LY'] | number:'1.0-2' }}</td>
+          <td>{{ row['RevPar YoY %'] !== null ? ((row['RevPar YoY %'] | number:'1.0-2') + '%') : '—' }}</td>
+          <td>{{ row['RevPar Benchmark Completion %'] !== null ? ((row['RevPar Benchmark Completion %'] | number:'1.0-2') + '%') : '—' }}</td>
+          <td>{{ row['Market Penetration RevPar Index'] | number:'1.0-2' }}</td>
+          <td>{{ row['Average Market Price'] | number:'1.0-2' }}</td>
+          <td>{{ row['Average Market Price LY'] | number:'1.0-2' }}</td>
+          <td>{{ row['Market 25Percentile Price'] | number:'1.0-2' }}</td>
+          <td>{{ row['Market 75Percentile Price'] | number:'1.0-2' }}</td>
+          <td>{{ row['Market 90Percentile Price'] | number:'1.0-2' }}</td>
+          <td>{{ row['Occupancy Pickup 7'] | number:'1.0-2' }}</td>
+          <td>{{ row['Occupancy Pickup 14'] | number:'1.0-2' }}</td>
+          <td>{{ row['Occupancy Pickup 30'] | number:'1.0-2' }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && !error && (!data || data.length === 0)" class="text-center py-5">
+    <div class="card">
+      <div class="card-body">
+        <i class="fas fa-building fa-3x text-muted mb-3"></i>
+        <h5 class="card-title text-black">No Data Found</h5>
+        <p class="card-text text-black">No data found for the selected period.
+        </p>
+       
+      </div>
+    </div>
+  </div>
