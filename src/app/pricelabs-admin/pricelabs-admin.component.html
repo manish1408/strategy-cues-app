@@ -46,97 +46,540 @@
 
   <!-- Table View -->
   <div class="table-container" *ngIf="!loading && !error && data && data.length > 0">
+
     <table>
-        <thead>
-            <tr>
-             <th class="text-center">#</th>
-              <th>Listing ID</th>
-              <th>Listing Name</th>
-              <th>Occupancy</th>
-              <th>Occupancy STLY</th>
-              <th>Occupancy STLY YoY difference</th>
-              <th>Occupancy LY</th>
-              <th>Occupancy YoY difference</th>
-              <th>Occupancy Benchmark Completion %</th>
-              <th>Average Market Occupancy</th>
-              <th>Average Market Occupancy STLY</th>
-              <th>Average Market Occupancy LY</th>
-              <th>Market Penetration Index</th>
-              <th>Rental Revenue</th>
-              <th>Rental Revenue STLY</th>
-              <th>Rental Revenue STLY YoY %</th>
-              <th>Rental Revenue LY</th>
-              <th>Rental Revenue YoY %</th>
-              <th>Rental Revenue Benchmark Completion %</th>
-              <th>ADR</th>
-              <th>ADR STLY</th>
-              <th>ADR STLY YoY %</th>
-              <th>ADR LY</th>
-              <th>ADR YoY %</th>
-              <th>Average Market ADR</th>
-              <th>Average Market ADR LY</th>
-              <th>Market Penetration ADR Index</th>
-              <th>RevPar</th>
-              <th>RevPar STLY</th>
-              <th>RevPar STLY YoY %</th>
-              <th>RevPar LY</th>
-              <th>RevPar YoY %</th>
-              <th>RevPar Benchmark Completion %</th>
-              <th>Market Penetration RevPar Index</th>
-              <th>Average Market Price</th>
-              <th>Average Market Price LY</th>
-              <th>Market 25Percentile Price</th>
-              <th>Market 75Percentile Price</th>
-              <th>Market 90Percentile Price</th>
-              <th>Occupancy Pickup 7</th>
-              <th>Occupancy Pickup 14</th>
-              <th>Occupancy Pickup 30</th>
-            </tr>
-          </thead>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>
+            <div class="d-flex align-items-center gap-1 ">
+              <span>Listing Name</span>
+            </div>
+          </th>
+          <th class="text-center">Sync</th>
+          <th>
+            <div class="d-flex align-items-center gap-1">
+              <span>Occupancy</span>
+            </div>
+          </th>
+          <th>
+            <div class="d-flex align-items-center gap-1 ">
+              <span>Occupancy STLY</span>
+            </div>
+          </th>
+          <th>Occupancy STLY YoY difference</th>
+          <th>Occupancy LY</th>
+          <th>Occupancy YoY difference</th>
+          <th>Occupancy Benchmark Completion %</th>
+          <th>Average Market Occupancy</th>
+          <th>Average Market Occupancy STLY</th>
+          <th>Average Market Occupancy LY</th>
+          <th>Market Penetration Index</th>
+          <th>Rental Revenue</th>
+          <th>Rental Revenue STLY</th>
+          <th>Rental Revenue STLY YoY %</th>
+          <th>Rental Revenue LY</th>
+          <th>Rental Revenue YoY %</th>
+          <th>Rental Revenue Benchmark Completion %</th>
+          <th>ADR</th>
+          <th>ADR STLY</th>
+          <th>ADR STLY YoY %</th>
+          <th>ADR LY</th>
+          <th>ADR YoY %</th>
+          <th>Average Market ADR</th>
+          <th>Average Market ADR LY</th>
+          <th>Market Penetration ADR Index</th>
+          <th>RevPar</th>
+          <th>RevPar STLY</th>
+          <th>RevPar STLY YoY %</th>
+          <th>RevPar LY</th>
+          <th>RevPar YoY %</th>
+          <th>RevPar Benchmark Completion %</th>
+          <th>Market Penetration RevPar Index</th>
+          <th>Average Market Price</th>
+          <th>Average Market Price LY</th>
+          <th>Market 25Percentile Price</th>
+          <th>Market 75Percentile Price</th>
+          <th>Market 90Percentile Price</th>
+          <th>Occupancy Pickup 7</th>
+          <th>Occupancy Pickup 14</th>
+          <th>Occupancy Pickup 30</th>
+        </tr>
+      </thead>
       <tbody>
         <tr *ngFor="let row of (data || []); let i = index">
-          <td class="text-center">{{ i + 1 }}</td>
-          <td>{{ row['Listing ID'] }}</td>
-          <td>{{ row['Listing Name'] }}</td>
-          <td>{{ row['Occupancy'] | number:'1.0-2' }}</td>
-          <td>{{ row['Occupancy STLY'] | number:'1.0-2' }}</td>
-          <td>{{ row['Occupancy STLY YoY difference'] | number:'1.0-2' }}</td>
-          <td>{{ row['Occupancy LY'] | number:'1.0-2' }}</td>
-          <td>{{ row['Occupancy YoY difference'] | number:'1.0-2' }}</td>
-          <td>{{ row['Occupancy Benchmark Completion %'] !== null ? ((row['Occupancy Benchmark Completion %'] | number:'1.0-2') + '%') : '—' }}</td>
-          <td>{{ row['Average Market Occupancy'] | number:'1.0-2' }}</td>
-          <td>{{ row['Average Market Occupancy STLY'] | number:'1.0-2' }}</td>
-          <td>{{ row['Average Market Occupancy LY'] | number:'1.0-2' }}</td>
-          <td>{{ row['Market Penetration Index'] | number:'1.0-2' }}</td>
-          <td>{{ row['Rental Revenue'] | number:'1.0-2' }}</td>
-          <td>{{ row['Rental Revenue STLY'] | number:'1.0-2' }}</td>
-          <td>{{ row['Rental Revenue STLY YoY %'] !== null ? ((row['Rental Revenue STLY YoY %'] | number:'1.0-2') + '%') : '—' }}</td>
-          <td>{{ row['Rental Revenue LY'] | number:'1.0-2' }}</td>
-          <td>{{ row['Rental Revenue YoY %'] !== null ? ((row['Rental Revenue YoY %'] | number:'1.0-2') + '%') : '—' }}</td>
-          <td>{{ row['Rental Revenue Benchmark Completion %'] !== null ? ((row['Rental Revenue Benchmark Completion %'] | number:'1.0-2') + '%') : '—' }}</td>
-          <td>{{ row['ADR'] | number:'1.0-2' }}</td>
-          <td>{{ row['ADR STLY'] | number:'1.0-2' }}</td>
-          <td>{{ row['ADR STLY YoY %'] !== null ? ((row['ADR STLY YoY %'] | number:'1.0-2') + '%') : '—' }}</td>
-          <td>{{ row['ADR LY'] | number:'1.0-2' }}</td>
-          <td>{{ row['ADR YoY %'] !== null ? ((row['ADR YoY %'] | number:'1.0-2') + '%') : '—' }}</td>
-          <td>{{ row['Average Market ADR'] | number:'1.0-2' }}</td>
-          <td>{{ row['Average Market ADR LY'] | number:'1.0-2' }}</td>
-          <td>{{ row['Market Penetration ADR Index'] | number:'1.0-2' }}</td>
-          <td>{{ row['RevPar'] | number:'1.0-2' }}</td>
-          <td>{{ row['RevPar STLY'] | number:'1.0-2' }}</td>
-          <td>{{ row['RevPar STLY YoY %'] !== null ? ((row['RevPar STLY YoY %'] | number:'1.0-2') + '%') : '—' }}</td>
-          <td>{{ row['RevPar LY'] | number:'1.0-2' }}</td>
-          <td>{{ row['RevPar YoY %'] !== null ? ((row['RevPar YoY %'] | number:'1.0-2') + '%') : '—' }}</td>
-          <td>{{ row['RevPar Benchmark Completion %'] !== null ? ((row['RevPar Benchmark Completion %'] | number:'1.0-2') + '%') : '—' }}</td>
-          <td>{{ row['Market Penetration RevPar Index'] | number:'1.0-2' }}</td>
-          <td>{{ row['Average Market Price'] | number:'1.0-2' }}</td>
-          <td>{{ row['Average Market Price LY'] | number:'1.0-2' }}</td>
-          <td>{{ row['Market 25Percentile Price'] | number:'1.0-2' }}</td>
-          <td>{{ row['Market 75Percentile Price'] | number:'1.0-2' }}</td>
-          <td>{{ row['Market 90Percentile Price'] | number:'1.0-2' }}</td>
-          <td>{{ row['Occupancy Pickup 7'] | number:'1.0-2' }}</td>
-          <td>{{ row['Occupancy Pickup 14'] | number:'1.0-2' }}</td>
-          <td>{{ row['Occupancy Pickup 30'] | number:'1.0-2' }}</td>
+          <td>{{ i + 1 }}</td>
+          <td class="property-cell">
+            <div class="property-info">
+              <div class="property-image">
+                <img [src]="row.listingDetails?.photo?.url || ''" [alt]="row['Listing Name']" (error)="onImageError($event)"
+                  class="property-thumbnail">
+              </div>
+              <div class="property-details">
+                <h4 [title]="row['Listing Name']" [attr.aria-label]="row['Listing Name']">{{ row['Listing Name']
+                  }}</h4>
+                <div class="property-links">
+                  <!-- Airbnb Link -->
+                  <a *ngIf="row.listingDetails?.airbnbUrl" [href]="row.listingDetails.airbnbUrl" target="_blank"
+                    class="platform-link airbnb" title="View on Airbnb">
+                    <i class="fab fa-airbnb"></i>
+                  </a>
+                  <span *ngIf="!row.listingDetails?.airbnbUrl" class="platform-link airbnb disabled"
+                    title="No Airbnb URL available"> 
+                    <i class="fab fa-airbnb"></i>
+                  </span>
+
+                  <!-- Booking.com Link -->
+                  <a *ngIf="row.listingDetails?.bookingUrl" [href]="row.listingDetails.bookingUrl" target="_blank"
+                    class="platform-link booking" title="View on Booking.com">
+                    <i class="fas fa-bed"></i>
+                  </a>
+                  <span *ngIf="!row.listingDetails?.bookingUrl" class="platform-link booking disabled"
+                    title="No Booking.com URL available">
+                    <i class="fas fa-bed"></i>
+                  </span>
+
+                  <!-- VRBO Link -->
+                  <!-- <a *ngIf="property.VRBOUrl" [href]="property.VRBOUrl" target="_blank" class="platform-link vrbo" title="View on VRBO">
+                    <i class="fas fa-home"></i>
+                  </a> -->
+                  <!-- <span *ngIf="!property.VRBOUrl" class="platform-link vrbo disabled" title="No VRBO URL available">
+                    <i class="fas fa-home"></i>
+                  </span> -->
+
+                  <!-- Pricelab Link -->
+                  <!-- <a *ngIf="property.PricelabsUrl" [href]="property.PricelabsUrl" target="_blank"
+                    class="platform-link pricelab" title="View on Pricelab">
+                    <i class="fas fa-chart-line"></i>
+                  </a>
+                  <span *ngIf="!property.PricelabsUrl" class="platform-link pricelab disabled"
+                    title="No Pricelab URL available">
+                    <i class="fas fa-chart-line"></i>
+                  </span> -->
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="text-center">
+            <input type="checkbox" [checked]="true" 
+                   disabled readonly class="form-check-input sync-checkbox">
+          </td>
+          <td>
+            <div class="occupancy-cell" *ngIf="row.Occupancy != null">
+              <circle-progress [percent]="safeParseNumber(row.Occupancy)" [radius]="24"
+                [backgroundPadding]="-3" [backgroundStroke]="'#ccc'" [backgroundStrokeWidth]="6"
+                [outerStrokeWidth]="6" [innerStrokeWidth]="0"
+                [outerStrokeColor]="getOccupancyColor(safeParseNumber(row.Occupancy))"
+                [innerStrokeColor]="getOccupancyColor(safeParseNumber(row.Occupancy), true)"
+                [animation]="true" [animationDuration]="300" [showUnits]="false" [showSubtitle]="false"
+                [title]="safeParseNumber(row.Occupancy) + '%'" [titleFontSize]="'8px'"
+                [titleColor]="getOccupancyColor(safeParseNumber(row.Occupancy))" [titleFontWeight]="'900'">
+              </circle-progress>
+            </div>
+            <div class="occupancy-cell" *ngIf="row.Occupancy == null">
+               <span style="color: #6c757d; font-style: italic;">N/A</span>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['Occupancy STLY'] != null">
+                <span class="">{{ row['Occupancy STLY'] }}</span>
+              
+              </div>
+              <div class="value-pair" *ngIf="row['Occupancy STLY'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['Occupancy STLY YoY difference'] != null">
+                <span class="">{{ row['Occupancy STLY YoY difference'] }}</span>
+              
+              </div>
+              <div class="value-pair" *ngIf="row['Occupancy STLY YoY difference'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['Occupancy LY'] != null">
+                <span class="">{{ row['Occupancy LY'] }}</span>
+              
+              </div>
+              <div class="value-pair" *ngIf="row['Occupancy LY'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['Occupancy YoY difference'] != null">
+                <span class="">{{ row['Occupancy YoY difference'] }}</span>
+              
+              </div>
+              <div class="value-pair" *ngIf="row['Occupancy YoY difference'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['Occupancy Benchmark Completion %'] != null">
+                <span class="">{{ row['Occupancy Benchmark Completion %'] }}</span>
+              
+              </div>
+              <div class="value-pair" *ngIf="row['Occupancy Benchmark Completion %'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td> 
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['Average Market Occupancy'] != null">
+                <span class="">{{ row['Average Market Occupancy'] }}</span>
+              
+              </div>
+              <div class="value-pair" *ngIf="row['Average Market Occupancy'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['Average Market Occupancy STLY'] != null">
+                <span class="">{{ row['Average Market Occupancy STLY'] }}</span>
+              
+              </div>
+              <div class="value-pair" *ngIf="row['Average Market Occupancy STLY'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['Average Market Occupancy LY'] != null">
+                <span class="">{{ row['Average Market Occupancy LY'] }}</span>
+              
+              </div>
+              <div class="value-pair" *ngIf="row['Average Market Occupancy LY'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['Market Penetration Index'] != null">
+                <span class="">{{ row['Market Penetration Index'] }}</span>
+              
+              </div>
+              <div class="value-pair" *ngIf="row['Market Penetration Index'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['Rental Revenue'] != null">
+                <span class="">{{ row['Rental Revenue'] }}</span>
+              
+              </div>
+              <div class="value-pair" *ngIf="row['Rental Revenue'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['Rental Revenue STLY'] != null">
+                <span class="">{{ row['Rental Revenue STLY'] }}</span>
+              
+              </div>
+              <div class="value-pair" *ngIf="row['Rental Revenue STLY'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['Rental Revenue STLY YoY %'] != null">
+                <span class="">{{ row['Rental Revenue STLY YoY %'] }}</span>
+              
+              </div>
+              <div class="value-pair" *ngIf="row['Rental Revenue STLY YoY %'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['Rental Revenue LY'] != null">
+                <span class="">{{ row['Rental Revenue LY'] }}</span>
+              
+              </div>
+              <div class="value-pair" *ngIf="row['Rental Revenue LY'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['Rental Revenue YoY %'] != null">
+                <span class="">{{ row['Rental Revenue YoY %'] }}</span>
+              
+              </div>
+              <div class="value-pair" *ngIf="row['Rental Revenue YoY %'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['Rental Revenue Benchmark Completion %']">
+                <span class="">{{ row['Rental Revenue Benchmark Completion %'] || 'N/A'
+                  }}</span>
+              
+              </div>
+              <div class="value-pair" *ngIf="!row['Rental Revenue Benchmark Completion %']">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['ADR'] != null">
+                <span class="">{{ row['ADR'] }}</span>
+              
+              </div>
+              <div class="value-pair" *ngIf="row['ADR'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['ADR STLY'] != null">
+                <span class="">{{ row['ADR STLY'] }}</span>
+              </div>
+              <div class="value-pair" *ngIf="row['ADR STLY'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['ADR STLY YoY %'] != null">
+                <span class="">{{ row['ADR STLY YoY %'] }}%</span>
+              </div>
+              <div class="value-pair" *ngIf="row['ADR STLY YoY %'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['ADR LY'] != null">
+                <span class="">{{ row['ADR LY'] }}</span>
+              </div>
+              <div class="value-pair" *ngIf="row['ADR LY'] == null">
+                <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['ADR YoY %'] != null">
+                <span class="">{{ row['ADR YoY %'] }}%</span>
+              </div>
+              <div class="value-pair" *ngIf="row['ADR YoY %'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['Average Market ADR'] != null">
+                <span class="">{{ row['Average Market ADR'] }}</span>
+              </div>
+              <div class="value-pair" *ngIf="row['Average Market ADR'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['Average Market ADR LY'] != null">
+                <span class="">{{ row['Average Market ADR LY'] }}</span>
+              </div>
+              <div class="value-pair" *ngIf="row['Average Market ADR LY'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['Market Penetration ADR Index'] != null">
+                <span class="">{{ row['Market Penetration ADR Index'] }}%</span>
+              </div>
+              <div class="value-pair" *ngIf="row['Market Penetration ADR Index'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['RevPar'] != null">
+                <span class="">{{ row['RevPar'] }}</span>
+              </div>
+              <div class="value-pair" *ngIf="row['RevPar'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['RevPar STLY'] != null">
+                <span class="">{{ row['RevPar STLY'] }}</span>
+              </div>
+              <div class="value-pair" *ngIf="row['RevPar STLY'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['RevPar STLY YoY %'] != null">
+                <span class="">{{ row['RevPar STLY YoY %'] }}%</span>
+              </div>
+              <div class="value-pair" *ngIf="row['RevPar STLY YoY %'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['RevPar LY'] != null">
+                <span class="">{{ row['RevPar LY'] }}</span>
+              </div>
+              <div class="value-pair" *ngIf="row['RevPar LY'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['RevPar YoY %'] != null">
+                <span class="">{{ row['RevPar YoY %'] }}%</span>
+              </div>
+              <div class="value-pair" *ngIf="row['RevPar YoY %'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['RevPar Benchmark Completion %'] != null">
+                <span class="">{{ row['RevPar Benchmark Completion %'] }}%</span>
+              </div>
+              <div class="value-pair" *ngIf="row['RevPar Benchmark Completion %'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['Market Penetration RevPar Index'] != null">
+                <span class="">{{ row['Market Penetration RevPar Index'] }}%</span>
+              </div>
+              <div class="value-pair" *ngIf="row['Market Penetration RevPar Index'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['Average Market Price'] != null">
+                <span class="">{{ row['Average Market Price'] }}</span>
+              </div>
+              <div class="value-pair" *ngIf="row['Average Market Price'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['Average Market Price LY'] != null">
+                <span class="">{{ row['Average Market Price LY'] }}</span>
+              </div>
+              <div class="value-pair" *ngIf="row['Average Market Price LY'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['Market 25Percentile Price'] != null">
+                <span class="">{{ row['Market 25Percentile Price'] }}</span>
+              </div>
+              <div class="value-pair" *ngIf="row['Market 25Percentile Price'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['Market 75Percentile Price'] != null">
+                <span class="">{{ row['Market 75Percentile Price'] }}</span>
+              </div>
+              <div class="value-pair" *ngIf="row['Market 75Percentile Price'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['Market 90Percentile Price'] != null">
+                <span class="">{{ row['Market 90Percentile Price'] }}</span>
+              </div>
+              <div class="value-pair" *ngIf="row['Market 90Percentile Price'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['Occupancy Pickup 7'] != null">
+                <span class="">{{ row['Occupancy Pickup 7'] }}%</span>
+              </div>
+              <div class="value-pair" *ngIf="row['Occupancy Pickup 7'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['Occupancy Pickup 14'] != null">
+                <span class="">{{ row['Occupancy Pickup 14'] }}%</span>
+              </div>
+              <div class="value-pair" *ngIf="row['Occupancy Pickup 14'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dual-value-cell">
+              <div class="value-pair" *ngIf="row['Occupancy Pickup 30'] != null">
+                <span class="">{{ row['Occupancy Pickup 30'] }}%</span>
+              </div>
+              <div class="value-pair" *ngIf="row['Occupancy Pickup 30'] == null">
+                 <span style="color: #6c757d; font-style: italic;">N/A</span>
+              </div>
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>

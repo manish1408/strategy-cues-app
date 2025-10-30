@@ -6,7 +6,7 @@ import { LocalStorageService } from '../_services/local-storage.service';
 @Component({
   selector: 'app-pricelabs-admin',
   templateUrl: './pricelabs-admin.component.html',
-  styleUrl: './pricelabs-admin.component.scss'
+  styleUrls: ['./pricelabs-admin.component.scss']
 })
 export class PricelabsAdminComponent {
 loading: boolean = false;
@@ -43,6 +43,12 @@ ngOnInit(): void {
 }
 
 analyticsReport() {
+  if (!this.operatorId) {
+    this.error = 'Operator not selected. Pass ?operatorId=... in URL or select an operator.';
+    this.data = [];
+    this.loading = false;
+    return;
+  }
   this.loading = true;
   this.error = null;
   this.pricelabsService.createAnalyticsReport(this.operatorId, this.startDate, this.endDate).subscribe({
@@ -56,13 +62,20 @@ analyticsReport() {
       this.reportId = resp.data;
       this.pricelabsService.getAnalyticsReport(this.reportId).subscribe({
         next: (reportResp) => {
-          const rows = reportResp?.data?.reportData;
-          if (reportResp?.success === false || !Array.isArray(rows)) {
+          // Support multiple possible response shapes
+          const payload = reportResp?.data ?? reportResp;
+          const rows = Array.isArray(payload)
+            ? payload
+            : (Array.isArray(payload?.reportData) ? payload.reportData : []);
+
+          if (reportResp?.success === false) {
             this.error = reportResp?.error || '';
+            this.data = [];
             this.loading = false;
             return;
           }
-          this.data = rows;
+          
+          this.data = Array.isArray(rows) ? rows : [];
           this.loading = false;
         },
         error: (err) => {
@@ -108,6 +121,29 @@ private formatDate(date: Date): string {
     }
   }
 
+  safeParseNumber(value: any): number {
+    if (value === null || value === undefined) { return 0; }
+    const parsed = typeof value === 'string' ? parseFloat(value) : Number(value);
+    return isFinite(parsed) ? parsed : 0;
+  }
 
+    // Get color based on occupancy percentage
+    getOccupancyColor(percentage: number, isLight: boolean = false): string {
+      if (percentage >= 66) {
+        // Green for high occupancy (70%+)
+        return isLight ? '#C7E596' : '#78C000';
+      } else if (percentage >= 33) {
+        // Amber/Orange for medium occupancy (30-69%)
+        return isLight ? '#FFE4B5' : '#FF8C00';
+      } else {
+        // Red for low occupancy (0-29%)
+        return isLight ? '#FFC0CB' : '#FF6347';
+      }
+    }
+
+    onImageError(event: any): void {
+      // Set fallback image when the main image fails to load
+      event.target.src = 'assets/images/placeholder.jpg';
+    }
   
 }
