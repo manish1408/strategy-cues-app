@@ -367,6 +367,7 @@ $transition: all 0.3s ease;
       padding: 0.25rem 0.5rem;
       border-radius: 0.25rem;
       border: 1px solid #ccc;
+      text-align: center;
     }
 
     .max-value {
@@ -375,6 +376,7 @@ $transition: all 0.3s ease;
       padding: 0.25rem 0.5rem;
       border-radius: 0.25rem;
       border: 1px solid #ccc;
+      text-align: center;
     }
   }
 
@@ -2824,4 +2826,21 @@ tbody tr:hover {
 
 .text-black{
   color: var(--brand-black) !important;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield; /* Standard property for future compatibility */
+}
+.range-percentage{
+  color: #1e1e1e !important;
+  margin-left: 3px !important;
+  font-size: 14px;
+  font-weight: 600;
 }

@@ -34,7 +34,7 @@ export class SigninComponent implements OnDestroy {
     private profileService: ProfileService,
     private operatorService: OperatorService
   ) {
-    this.titleService.setTitle("Sign In: Strategy Cues");
+    this.titleService.setTitle("Sign In: Strategy Cues - Listing Optimization Cues Dashboard");
   }
 
   ngOnInit(): void {

@@ -5,6 +5,7 @@ import { RouterModule } from "@angular/router";
 
 import { ClickOutsideDirective } from "../_directives/click-outside.directive";
 import { FormatTextPipe } from "../_pipes/format-text.pipe";
+import { RoundPipe } from "../_pipes/round.pipe";
 
 import { SelectDropDownModule } from "ngx-select-dropdown";
 import { MultiFilterComponent } from "./component/multi-filter/multi-filter.component";
@@ -53,7 +54,8 @@ renderer.link = (href: string, title: string, text: string) => {
     MultiFilterComponent,
     WarningModalComponent,
     EmptyStateComponent,
-    FormatTextPipe
+    FormatTextPipe,
+    RoundPipe
   ],
   providers: [],
   exports: [
@@ -63,6 +65,7 @@ renderer.link = (href: string, title: string, text: string) => {
     WarningModalComponent,
     EmptyStateComponent,
     FormatTextPipe,
+    RoundPipe,
     SelectDropDownModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

@@ -515,9 +515,9 @@
             <td *ngIf="columnVisibility.adr">
               <div class="dual-value-cell">
                 <div class="value-pair" *ngIf="property.ADR">
-                  <span class="badge badge-light-gray me-1">This Month: {{ property.ADR.TM || 'N/A'
+                  <span class="badge badge-light-gray me-1">This Month: {{ (property.ADR.TM | round) || 'N/A'
                     }}</span>
-                  <span class="badge badge-light-gray">Next Month: {{ property.ADR.NM || 'N/A'
+                  <span class="badge badge-light-gray">Next Month: {{ (property.ADR.NM | round) || 'N/A'
                     }}</span>
                 </div>
                 <div class="value-pair" *ngIf="!property.ADR">
@@ -528,9 +528,9 @@
             <td *ngIf="columnVisibility.revpar">
               <div class="dual-value-cell">
                 <div class="value-pair" *ngIf="property.RevPAR">
-                  <span class="badge badge-light-gray me-1">This Month: {{ property.RevPAR.TM || 'N/A'
+                  <span class="badge badge-light-gray me-1">This Month: {{ (property.RevPAR.TM | round) || 'N/A'
                     }}</span>
-                  <span class="badge badge-light-gray">Next Month: {{ property.RevPAR.NM || 'N/A'
+                  <span class="badge badge-light-gray">Next Month: {{ (property.RevPAR.NM | round) || 'N/A'
                     }}</span>
                 </div>
                 <div class="value-pair" *ngIf="!property.RevPAR">
@@ -541,9 +541,9 @@
             <td *ngIf="columnVisibility.mpi">
               <div class="dual-value-cell">
                 <div class="value-pair" *ngIf="property.MPI">
-                  <span class="badge badge-light-gray me-1">This Month: {{ safeParseNumber(property.MPI.TM) }}%</span>
-                  <span class="badge badge-light-gray me-1">Next Month: {{ safeParseNumber(property.MPI.NM) }}%</span>
-                  <span class="badge badge-light-gray me-1">Last Year This Month: {{ safeParseNumber(property.MPI.LYTM) }}%</span>
+                  <span class="badge badge-light-gray me-1">This Month: {{ safeParseNumber(property.MPI.TM) | round }}%</span>
+                  <span class="badge badge-light-gray me-1">Next Month: {{ safeParseNumber(property.MPI.NM) | round }}%</span>
+                  <span class="badge badge-light-gray me-1">Last Year This Month: {{ safeParseNumber(property.MPI.LYTM) | round }}%</span>
                 </div>
                 <div class="value-pair" *ngIf="!property.MPI">
                   <span class="text-muted">N/A</span>
@@ -763,8 +763,7 @@
                     <!-- Handle array format - show only first policy -->
                     <div *ngIf="property.CXL_Policy?.Booking.length > 0" class="policy-type">
                       <div class="policy-item-row">
-                        {{property.CXL_Policy?.Booking[0]?.ratePlanName}}
-                      </div>
+                        {{property.CXL_Policy?.Booking[0]?.ratePlanName}} ({{property.CXL_Policy?.Booking[0]?.policyInfo?.name}})</div>
                     </div>
                    
                   </div>
@@ -931,8 +930,12 @@
                     <label class="form-label">ADR Range (This month)</label>
                     <div class="range-slider-container">
                       <div class="range-values">
-                        <span class="min-value">{{ tempAdrMin || adrMinRange }}</span>
-                        <span class="max-value">{{ tempAdrMax || adrMaxRange }}</span>
+                        <input type="number" class="min-value" [(ngModel)]="tempAdrMin" 
+                               [placeholder]="adrMinRange" min="{{adrMinRange}}" max="{{adrMaxRange}}"
+                               (ngModelChange)="onAdrMinChange({target: {value: tempAdrMin || adrMinRange}})">
+                        <input type="number" class="max-value" [(ngModel)]="tempAdrMax" 
+                               [placeholder]="adrMaxRange" min="{{adrMinRange}}" max="{{adrMaxRange}}"
+                               (ngModelChange)="onAdrMaxChange({target: {value: tempAdrMax || adrMaxRange}})">
                       </div>
                       <div class="dual-range-slider">
                         <input type="range" [min]="adrMinRange" [max]="adrMaxRange" [value]="tempAdrMin || adrMinRange"
@@ -948,8 +951,12 @@
                     <label class="form-label">RevPAR Range (This month)</label>
                     <div class="range-slider-container">
                       <div class="range-values">
-                        <span class="min-value">{{ tempRevparMin || revparMinRange }}</span>
-                        <span class="max-value">{{ tempRevparMax || revparMaxRange }}</span>
+                        <input type="number" class="min-value" [(ngModel)]="tempRevparMin" 
+                               [placeholder]="revparMinRange" min="{{revparMinRange}}" max="{{revparMaxRange}}"
+                               (ngModelChange)="onRevparMinChange({target: {value: tempRevparMin || revparMinRange}})">
+                        <input type="number" class="max-value" [(ngModel)]="tempRevparMax" 
+                               [placeholder]="revparMaxRange" min="{{revparMinRange}}" max="{{revparMaxRange}}"
+                               (ngModelChange)="onRevparMaxChange({target: {value: tempRevparMax || revparMaxRange}})">
                       </div>
                       <div class="dual-range-slider">
                         <input type="range" [min]="revparMinRange" [max]="revparMaxRange"
@@ -963,38 +970,58 @@
                   </div>
 
                   <!-- MPI Range Filter -->
-                  <div class="col-md-6 mb-3">
-                    <label class="form-label">MPI Range (This month)</label>
-                    <div class="range-slider-container">
-                      <div class="range-values">
-                        <span class="min-value">{{ tempMpiMin || mpiMinRange }}%</span>
-                        <span class="max-value">{{ tempMpiMax || mpiMaxRange }}%</span>
-                      </div>
-                      <div class="dual-range-slider">
-                        <input type="range" [min]="mpiMinRange" [max]="mpiMaxRange" [value]="tempMpiMin || mpiMinRange"
-                          (input)="onMpiMinChange($event)" class="range-min">
-                        <input type="range" [min]="mpiMinRange" [max]="mpiMaxRange" [value]="tempMpiMax || mpiMaxRange"
-                          (input)="onMpiMaxChange($event)" class="range-max">
-                      </div>
-                    </div>
-                  </div>
+<div class="col-md-6 mb-3">
+  <label class="form-label">MPI Range (This month)</label>
+  <div class="range-slider-container">
+    <div class="range-values">
+      <div style="display: inline-flex; align-items: center;">
+        <input type="number" class="min-value" [(ngModel)]="tempMpiMin" 
+               [placeholder]="mpiMinRange" min="{{mpiMinRange}}" max="{{mpiMaxRange}}"
+               (ngModelChange)="onMpiMinChange({target: {value: tempMpiMin || mpiMinRange}})">
+        <span class="range-percentage">%</span>
+      </div>
+      <div style="display: inline-flex; align-items: center;">
+        <input type="number" class="max-value" [(ngModel)]="tempMpiMax" 
+               [placeholder]="mpiMaxRange" min="{{mpiMinRange}}" max="{{mpiMaxRange}}"
+               (ngModelChange)="onMpiMaxChange({target: {value: tempMpiMax || mpiMaxRange}})">
+        <span class="range-percentage">%</span>
+      </div>
+    </div>
+    <div class="dual-range-slider">
+      <input type="range" [min]="mpiMinRange" [max]="mpiMaxRange" [value]="tempMpiMin || mpiMinRange"
+        (input)="onMpiMinChange($event)" class="range-min">
+      <input type="range" [min]="mpiMinRange" [max]="mpiMaxRange" [value]="tempMpiMax || mpiMaxRange"
+        (input)="onMpiMaxChange($event)" class="range-max">
+    </div>
+  </div>
+</div>
 
                   <!-- Min Rate Threshold Filter -->
-                  <div class="col-md-6 mb-3">
-                    <label class="form-label">Min Rate Threshold</label>
-                    <div class="range-slider-container">
-                      <div class="range-values">
-                        <span class="min-value">{{ tempMinRateThresholdMin || 0 }}%</span>
-                        <span class="max-value">{{ tempMinRateThresholdMax || 100 }}%</span>
-                      </div>
-                      <div class="dual-range-slider">
-                        <input type="range" min="0" max="100" [value]="tempMinRateThresholdMin || 0"
-                          (input)="onMinRateThresholdMinChange($event)" class="range-min">
-                        <input type="range" min="0" max="100" [value]="tempMinRateThresholdMax || 100"
-                          (input)="onMinRateThresholdMaxChange($event)" class="range-max">
-                      </div>
-                    </div>
-                  </div>
+<div class="col-md-6 mb-3">
+  <label class="form-label">Min Rate Threshold</label>
+  <div class="range-slider-container">
+    <div class="range-values">
+      <div style="display: inline-flex; align-items: center;">
+        <input type="number" class="min-value" [(ngModel)]="tempMinRateThresholdMin" 
+               placeholder="0" min="0" max="100"
+               (ngModelChange)="onMinRateThresholdMinChange({target: {value: tempMinRateThresholdMin || 0}})">
+        <span class="range-percentage">%</span>
+      </div>
+      <div style="display: inline-flex; align-items: center;">
+        <input type="number" class="max-value" [(ngModel)]="tempMinRateThresholdMax" 
+               placeholder="100" min="0" max="100"
+               (ngModelChange)="onMinRateThresholdMaxChange({target: {value: tempMinRateThresholdMax || 100}})">
+        <span class="range-percentage">%</span>
+      </div>
+    </div>
+    <div class="dual-range-slider">
+      <input type="range" min="0" max="100" [value]="tempMinRateThresholdMin || 0"
+        (input)="onMinRateThresholdMinChange($event)" class="range-min">
+      <input type="range" min="0" max="100" [value]="tempMinRateThresholdMax || 100"
+        (input)="onMinRateThresholdMaxChange($event)" class="range-max">
+    </div>
+  </div>
+</div>
 
                 </div>
               </div>
@@ -1007,8 +1034,18 @@
                     <label class="form-label">Occupancy TM Range</label>
                     <div class="range-slider-container">
                       <div class="range-values">
-                        <span class="min-value">{{ tempOccupancyTMMin || 0 }}%</span>
-                        <span class="max-value">{{ tempOccupancyTMMax || 100 }}%</span>
+                        <div style="display: inline-flex; align-items: center;">
+                          <input type="number" class="min-value" [(ngModel)]="tempOccupancyTMMin" 
+                                 placeholder="0" min="0" max="100"
+                                 (ngModelChange)="onOccupancyTMMinChange({target: {value: tempOccupancyTMMin || 0}})">
+                          <span class="range-percentage">%</span>
+                        </div>
+                        <div style="display: inline-flex; align-items: center;">
+                          <input type="number" class="max-value" [(ngModel)]="tempOccupancyTMMax" 
+                                 placeholder="100" min="0" max="100"
+                                 (ngModelChange)="onOccupancyTMMaxChange({target: {value: tempOccupancyTMMax || 100}})">
+                          <span class="range-percentage">%</span>
+                        </div>
                       </div>
                       <div class="dual-range-slider">
                         <input type="range" min="0" max="100" [value]="tempOccupancyTMMin || 0"
@@ -1024,13 +1061,23 @@
                     <label class="form-label">Occupancy NM Range</label>
                     <div class="range-slider-container">
                       <div class="range-values">
-                        <span class="min-value">{{ occupancyNMMin || 0 }}%</span>
-                        <span class="max-value">{{ occupancyNMMax || 100 }}%</span>
+                        <div style="display: inline-flex; align-items: center;">
+                          <input type="number" class="min-value" [(ngModel)]="tempOccupancyNMMin" 
+                                 placeholder="0" min="0" max="100"
+                                 (ngModelChange)="onOccupancyNMMinChange({target: {value: tempOccupancyNMMin || 0}})">
+                          <span class="range-percentage">%</span>
+                        </div>
+                        <div style="display: inline-flex; align-items: center;">
+                          <input type="number" class="max-value" [(ngModel)]="tempOccupancyNMMax" 
+                                 placeholder="100" min="0" max="100"
+                                 (ngModelChange)="onOccupancyNMMaxChange({target: {value: tempOccupancyNMMax || 100}})">
+                          <span class="range-percentage">%</span>
+                        </div>
                       </div>
                       <div class="dual-range-slider">
-                        <input type="range" min="0" max="100" [value]="occupancyNMMin || 0"
+                        <input type="range" min="0" max="100" [value]="tempOccupancyNMMin || 0"
                           (input)="onOccupancyNMMinChange($event)" class="range-min">
-                        <input type="range" min="0" max="100" [value]="occupancyNMMax || 100"
+                        <input type="range" min="0" max="100" [value]="tempOccupancyNMMax || 100"
                           (input)="onOccupancyNMMaxChange($event)" class="range-max">
                       </div>
                     </div>
@@ -1041,13 +1088,23 @@
                     <label class="form-label">Occupancy 7 Days Range</label>
                     <div class="range-slider-container">
                       <div class="range-values">
-                        <span class="min-value">{{ occupancy7DaysMin || 0 }}%</span>
-                        <span class="max-value">{{ occupancy7DaysMax || 100 }}%</span>
+                        <div style="display: inline-flex; align-items: center;">
+                          <input type="number" class="min-value" [(ngModel)]="tempOccupancy7DaysMin" 
+                                 placeholder="0" min="0" max="100"
+                                 (ngModelChange)="onOccupancy7DaysMinChange({target: {value: tempOccupancy7DaysMin || 0}})">
+                          <span class="range-percentage">%</span>
+                        </div>
+                        <div style="display: inline-flex; align-items: center;">
+                          <input type="number" class="max-value" [(ngModel)]="tempOccupancy7DaysMax" 
+                                 placeholder="100" min="0" max="100"
+                                 (ngModelChange)="onOccupancy7DaysMaxChange({target: {value: tempOccupancy7DaysMax || 100}})">
+                          <span class="range-percentage">%</span>
+                        </div>
                       </div>
                       <div class="dual-range-slider">
-                        <input type="range" min="0" max="100" [value]="occupancy7DaysMin || 0"
+                        <input type="range" min="0" max="100" [value]="tempOccupancy7DaysMin || 0"
                           (input)="onOccupancy7DaysMinChange($event)" class="range-min">
-                        <input type="range" min="0" max="100" [value]="occupancy7DaysMax || 100"
+                        <input type="range" min="0" max="100" [value]="tempOccupancy7DaysMax || 100"
                           (input)="onOccupancy7DaysMaxChange($event)" class="range-max">
                       </div>
                     </div>
@@ -1058,13 +1115,23 @@
                     <label class="form-label">Occupancy 30 Days Range</label>
                     <div class="range-slider-container">
                       <div class="range-values">
-                        <span class="min-value">{{ occupancy30DaysMin || 0 }}%</span>
-                        <span class="max-value">{{ occupancy30DaysMax || 100 }}%</span>
+                        <div style="display: inline-flex; align-items: center;">
+                          <input type="number" class="min-value" [(ngModel)]="tempOccupancy30DaysMin" 
+                                 placeholder="0" min="0" max="100"
+                                 (ngModelChange)="onOccupancy30DaysMinChange({target: {value: tempOccupancy30DaysMin || 0}})">
+                          <span class="range-percentage">%</span>
+                        </div>
+                        <div style="display: inline-flex; align-items: center;">
+                          <input type="number" class="max-value" [(ngModel)]="tempOccupancy30DaysMax" 
+                                 placeholder="100" min="0" max="100"
+                                 (ngModelChange)="onOccupancy30DaysMaxChange({target: {value: tempOccupancy30DaysMax || 100}})">
+                          <span class="range-percentage">%</span>
+                        </div>
                       </div>
                       <div class="dual-range-slider">
-                        <input type="range" min="0" max="100" [value]="occupancy30DaysMin || 0"
+                        <input type="range" min="0" max="100" [value]="tempOccupancy30DaysMin || 0"
                           (input)="onOccupancy30DaysMinChange($event)" class="range-min">
-                        <input type="range" min="0" max="100" [value]="occupancy30DaysMax || 100"
+                        <input type="range" min="0" max="100" [value]="tempOccupancy30DaysMax || 100"
                           (input)="onOccupancy30DaysMaxChange($event)" class="range-max">
                       </div>
                     </div>
@@ -1075,13 +1142,23 @@
                     <label class="form-label">Pick Up Occ 7 Days Range</label>
                     <div class="range-slider-container">
                       <div class="range-values">
-                        <span class="min-value">{{ pickUpOcc7DaysMin || 0 }}%</span>
-                        <span class="max-value">{{ pickUpOcc7DaysMax || 100 }}%</span>
+                        <div style="display: inline-flex; align-items: center;">
+                          <input type="number" class="min-value" [(ngModel)]="tempPickUpOcc7DaysMin" 
+                                 placeholder="0" min="0" max="100"
+                                 (ngModelChange)="onPickUpOcc7DaysMinChange({target: {value: tempPickUpOcc7DaysMin || 0}})">
+                          <span class="range-percentage">%</span>
+                        </div>
+                        <div style="display: inline-flex; align-items: center;">
+                          <input type="number" class="max-value" [(ngModel)]="tempPickUpOcc7DaysMax" 
+                                 placeholder="100" min="0" max="100"
+                                 (ngModelChange)="onPickUpOcc7DaysMaxChange({target: {value: tempPickUpOcc7DaysMax || 100}})">
+                          <span class="range-percentage">%</span>
+                        </div>
                       </div>
                       <div class="dual-range-slider">
-                        <input type="range" min="0" max="100" [value]="pickUpOcc7DaysMin || 0"
+                        <input type="range" min="0" max="100" [value]="tempPickUpOcc7DaysMin || 0"
                           (input)="onPickUpOcc7DaysMinChange($event)" class="range-min">
-                        <input type="range" min="0" max="100" [value]="pickUpOcc7DaysMax || 100"
+                        <input type="range" min="0" max="100" [value]="tempPickUpOcc7DaysMax || 100"
                           (input)="onPickUpOcc7DaysMaxChange($event)" class="range-max">
                       </div>
                     </div>
@@ -1092,13 +1169,23 @@
                     <label class="form-label">Pick Up Occ 14 Days Range</label>
                     <div class="range-slider-container">
                       <div class="range-values">
-                        <span class="min-value">{{ pickUpOcc14DaysMin || 0 }}%</span>
-                        <span class="max-value">{{ pickUpOcc14DaysMax || 100 }}%</span>
+                        <div style="display: inline-flex; align-items: center;">
+                          <input type="number" class="min-value" [(ngModel)]="tempPickUpOcc14DaysMin" 
+                                 placeholder="0" min="0" max="100"
+                                 (ngModelChange)="onPickUpOcc14DaysMinChange({target: {value: tempPickUpOcc14DaysMin || 0}})">
+                          <span class="range-percentage">%</span>
+                        </div>
+                        <div style="display: inline-flex; align-items: center;">
+                          <input type="number" class="max-value" [(ngModel)]="tempPickUpOcc14DaysMax" 
+                                 placeholder="100" min="0" max="100"
+                                 (ngModelChange)="onPickUpOcc14DaysMaxChange({target: {value: tempPickUpOcc14DaysMax || 100}})">
+                          <span class="range-percentage">%</span>
+                        </div>
                       </div>
                       <div class="dual-range-slider">
-                        <input type="range" min="0" max="100" [value]="pickUpOcc14DaysMin || 0"
+                        <input type="range" min="0" max="100" [value]="tempPickUpOcc14DaysMin || 0"
                           (input)="onPickUpOcc14DaysMinChange($event)" class="range-min">
-                        <input type="range" min="0" max="100" [value]="pickUpOcc14DaysMax || 100"
+                        <input type="range" min="0" max="100" [value]="tempPickUpOcc14DaysMax || 100"
                           (input)="onPickUpOcc14DaysMaxChange($event)" class="range-max">
                       </div>
                     </div>
@@ -1109,13 +1196,23 @@
                     <label class="form-label">Pick Up Occ 30 Days Range</label>
                     <div class="range-slider-container">
                       <div class="range-values">
-                        <span class="min-value">{{ pickUpOcc30DaysMin || 0 }}%</span>
-                        <span class="max-value">{{ pickUpOcc30DaysMax || 100 }}%</span>
+                        <div style="display: inline-flex; align-items: center;">
+                          <input type="number" class="min-value" [(ngModel)]="tempPickUpOcc30DaysMin" 
+                                 placeholder="0" min="0" max="100"
+                                 (ngModelChange)="onPickUpOcc30DaysMinChange({target: {value: tempPickUpOcc30DaysMin || 0}})">
+                          <span class="range-percentage">%</span>
+                        </div>
+                        <div style="display: inline-flex; align-items: center;">
+                          <input type="number" class="max-value" [(ngModel)]="tempPickUpOcc30DaysMax" 
+                                 placeholder="100" min="0" max="100"
+                                 (ngModelChange)="onPickUpOcc30DaysMaxChange({target: {value: tempPickUpOcc30DaysMax || 100}})">
+                          <span class="range-percentage">%</span>
+                        </div>
                       </div>
                       <div class="dual-range-slider">
-                        <input type="range" min="0" max="100" [value]="pickUpOcc30DaysMin || 0"
+                        <input type="range" min="0" max="100" [value]="tempPickUpOcc30DaysMin || 0"
                           (input)="onPickUpOcc30DaysMinChange($event)" class="range-min">
-                        <input type="range" min="0" max="100" [value]="pickUpOcc30DaysMax || 100"
+                        <input type="range" min="0" max="100" [value]="tempPickUpOcc30DaysMax || 100"
                           (input)="onPickUpOcc30DaysMaxChange($event)" class="range-max">
                       </div>
                     </div>
@@ -1127,38 +1224,58 @@
               <div class="tab-pane fade" id="performance" role="tabpanel" aria-labelledby="performance-tab">
                 <div class="row">
                   <!-- STLY Var Occupancy -->
-                  <div class="col-md-6 mb-3">
-                    <label class="form-label">STLY Var Occupancy Range</label>
-                    <div class="range-slider-container">
-                      <div class="range-values">
-                        <span class="min-value">{{ stlyVarOccMin || stlyVarOccMinRange }}%</span>
-                        <span class="max-value">{{ stlyVarOccMax || stlyVarOccMaxRange }}%</span>
-                      </div>
-                      <div class="dual-range-slider">
-                        <input type="range" [min]="stlyVarOccMinRange" [max]="stlyVarOccMaxRange"
-                          [value]="stlyVarOccMin || stlyVarOccMinRange" (input)="onStlyVarOccMinChange($event)"
-                          class="range-min">
-                        <input type="range" [min]="stlyVarOccMinRange" [max]="stlyVarOccMaxRange"
-                          [value]="stlyVarOccMax || stlyVarOccMaxRange" (input)="onStlyVarOccMaxChange($event)"
-                          class="range-max">
-                      </div>
-                    </div>
-                  </div>
+<div class="col-md-6 mb-3">
+  <label class="form-label">STLY Var Occupancy Range</label>
+  <div class="range-slider-container">
+    <div class="range-values">
+      <div style="display: inline-flex; align-items: center;">
+        <input type="number" class="min-value" [(ngModel)]="tempStlyVarOccMin" 
+               [placeholder]="stlyVarOccMinRange" min="{{stlyVarOccMinRange}}" max="{{stlyVarOccMaxRange}}"
+               (ngModelChange)="onStlyVarOccMinChange({target: {value: tempStlyVarOccMin || stlyVarOccMinRange}})">
+        <span class="range-percentage">%</span>
+      </div>
+      <div style="display: inline-flex; align-items: center;">
+        <input type="number" class="max-value" [(ngModel)]="tempStlyVarOccMax" 
+               [placeholder]="stlyVarOccMaxRange" min="{{stlyVarOccMinRange}}" max="{{stlyVarOccMaxRange}}"
+               (ngModelChange)="onStlyVarOccMaxChange({target: {value: tempStlyVarOccMax || stlyVarOccMaxRange}})">
+        <span class="range-percentage">%</span>
+      </div>
+    </div>
+    <div class="dual-range-slider">
+      <input type="range" [min]="stlyVarOccMinRange" [max]="stlyVarOccMaxRange"
+        [value]="tempStlyVarOccMin || stlyVarOccMinRange" (input)="onStlyVarOccMinChange($event)"
+        class="range-min">
+      <input type="range" [min]="stlyVarOccMinRange" [max]="stlyVarOccMaxRange"
+        [value]="tempStlyVarOccMax || stlyVarOccMaxRange" (input)="onStlyVarOccMaxChange($event)"
+        class="range-max">
+    </div>
+  </div>
+</div>
 
                   <!-- STLY Var ADR -->
                   <div class="col-md-6 mb-3">
                     <label class="form-label">STLY Var ADR Range</label>
                     <div class="range-slider-container">
                       <div class="range-values">
-                        <span class="min-value">{{ stlyVarADRMin || stlyVarADRMinRange }}%</span>
-                        <span class="max-value">{{ stlyVarADRMax || stlyVarADRMaxRange }}%</span>
+                        <div style="display: inline-flex; align-items: center;">
+                          <input type="number" class="min-value" [(ngModel)]="tempStlyVarADRMin" 
+                                 [placeholder]="stlyVarADRMinRange" min="{{stlyVarADRMinRange}}" max="{{stlyVarADRMaxRange}}"
+                                 (ngModelChange)="onStlyVarADRMinChange({target: {value: tempStlyVarADRMin || stlyVarADRMinRange}})">
+                          <span class="range-percentage">%</span>
+                        </div>
+                        <div style="display: inline-flex; align-items: center;">
+                          <input type="number" class="max-value" [(ngModel)]="tempStlyVarADRMax" 
+                                 [placeholder]="stlyVarADRMaxRange" min="{{stlyVarADRMinRange}}" max="{{stlyVarADRMaxRange}}"
+                                 (ngModelChange)="onStlyVarADRMaxChange({target: {value: tempStlyVarADRMax || stlyVarADRMaxRange}})">
+                          <span class="range-percentage">%</span>
+                        </div>
                       </div>
                       <div class="dual-range-slider">
                         <input type="range" [min]="stlyVarADRMinRange" [max]="stlyVarADRMaxRange"
-                          [value]="stlyVarADRMin || stlyVarADRMinRange" (input)="onStlyVarADRMinChange($event)"
+                          [value]="tempStlyVarADRMin || stlyVarADRMinRange" (input)="onStlyVarADRMinChange($event)"
                           class="range-min">
                         <input type="range" [min]="stlyVarADRMinRange" [max]="stlyVarADRMaxRange"
-                          [value]="stlyVarADRMax || stlyVarADRMaxRange" (input)="onStlyVarADRMaxChange($event)"
+                          [value]="tempStlyVarADRMax || stlyVarADRMaxRange" (input)="onStlyVarADRMaxChange($event)"
                           class="range-max">
                       </div>
                     </div>
@@ -1169,76 +1286,116 @@
                     <label class="form-label">STLY Var RevPAR Range</label>
                     <div class="range-slider-container">
                       <div class="range-values">
-                        <span class="min-value">{{ stlyVarRevPARMin || stlyVarRevPARMinRange }}%</span>
-                        <span class="max-value">{{ stlyVarRevPARMax || stlyVarRevPARMaxRange }}%</span>
+                        <div style="display: inline-flex; align-items: center;">
+                          <input type="number" class="min-value" [(ngModel)]="tempStlyVarRevPARMin" 
+                                 [placeholder]="stlyVarRevPARMinRange" min="{{stlyVarRevPARMinRange}}" max="{{stlyVarRevPARMaxRange}}"
+                                 (ngModelChange)="onStlyVarRevPARMinChange({target: {value: tempStlyVarRevPARMin || stlyVarRevPARMinRange}})">
+                          <span class="range-percentage">%</span>
+                        </div>
+                        <div style="display: inline-flex; align-items: center;">
+                          <input type="number" class="max-value" [(ngModel)]="tempStlyVarRevPARMax" 
+                                 [placeholder]="stlyVarRevPARMaxRange" min="{{stlyVarRevPARMinRange}}" max="{{stlyVarRevPARMaxRange}}"
+                                 (ngModelChange)="onStlyVarRevPARMaxChange({target: {value: tempStlyVarRevPARMax || stlyVarRevPARMaxRange}})">
+                          <span class="range-percentage">%</span>
+                        </div>
                       </div>
                       <div class="dual-range-slider">
                         <input type="range" [min]="stlyVarRevPARMinRange" [max]="stlyVarRevPARMaxRange"
-                          [value]="stlyVarRevPARMin || stlyVarRevPARMinRange" (input)="onStlyVarRevPARMinChange($event)"
+                          [value]="tempStlyVarRevPARMin || stlyVarRevPARMinRange" (input)="onStlyVarRevPARMinChange($event)"
                           class="range-min">
                         <input type="range" [min]="stlyVarRevPARMinRange" [max]="stlyVarRevPARMaxRange"
-                          [value]="stlyVarRevPARMax || stlyVarRevPARMaxRange" (input)="onStlyVarRevPARMaxChange($event)"
+                          [value]="tempStlyVarRevPARMax || stlyVarRevPARMaxRange" (input)="onStlyVarRevPARMaxChange($event)"
                           class="range-max">
                       </div>
                     </div>
                   </div>
 
                   <!-- STLM Var Occupancy -->
-                  <div class="col-md-6 mb-3">
-                    <label class="form-label">STLM Var Occupancy Range</label>
-                    <div class="range-slider-container">
-                      <div class="range-values">
-                        <span class="min-value">{{ stlmVarOccMin || stlmVarOccMinRange }}%</span>
-                        <span class="max-value">{{ stlmVarOccMax || stlmVarOccMaxRange }}%</span>
-                      </div>
-                      <div class="dual-range-slider">
-                        <input type="range" [min]="stlmVarOccMinRange" [max]="stlmVarOccMaxRange"
-                          [value]="stlmVarOccMin || stlmVarOccMinRange" (input)="onStlmVarOccMinChange($event)"
-                          class="range-min">
-                        <input type="range" [min]="stlmVarOccMinRange" [max]="stlmVarOccMaxRange"
-                          [value]="stlmVarOccMax || stlmVarOccMaxRange" (input)="onStlmVarOccMaxChange($event)"
-                          class="range-max">
-                      </div>
-                    </div>
-                  </div>
+<div class="col-md-6 mb-3">
+  <label class="form-label">STLM Var Occupancy Range</label>
+  <div class="range-slider-container">
+    <div class="range-values">
+      <div style="display: inline-flex; align-items: center;">
+        <input type="number" class="min-value" [(ngModel)]="tempStlmVarOccMin" 
+               [placeholder]="stlmVarOccMinRange" min="{{stlmVarOccMinRange}}" max="{{stlmVarOccMaxRange}}"
+               (ngModelChange)="onStlmVarOccMinChange({target: {value: tempStlmVarOccMin || stlmVarOccMinRange}})">
+        <span class="range-percentage">%</span>
+      </div>
+      <div style="display: inline-flex; align-items: center;">
+        <input type="number" class="max-value" [(ngModel)]="tempStlmVarOccMax" 
+               [placeholder]="stlmVarOccMaxRange" min="{{stlmVarOccMinRange}}" max="{{stlmVarOccMaxRange}}"
+               (ngModelChange)="onStlmVarOccMaxChange({target: {value: tempStlmVarOccMax || stlmVarOccMaxRange}})">
+        <span class="range-percentage">%</span>
+      </div>
+    </div>
+    <div class="dual-range-slider">
+      <input type="range" [min]="stlmVarOccMinRange" [max]="stlmVarOccMaxRange"
+        [value]="tempStlmVarOccMin || stlmVarOccMinRange" (input)="onStlmVarOccMinChange($event)"
+        class="range-min">
+      <input type="range" [min]="stlmVarOccMinRange" [max]="stlmVarOccMaxRange"
+        [value]="tempStlmVarOccMax || stlmVarOccMaxRange" (input)="onStlmVarOccMaxChange($event)"
+        class="range-max">
+    </div>
+  </div>
+</div>
 
                   <!-- STLM Var ADR -->
-                  <div class="col-md-6 mb-3">
-                    <label class="form-label">STLM Var ADR Range</label>
-                    <div class="range-slider-container">
-                      <div class="range-values">
-                        <span class="min-value">{{ stlmVarADRMin || stlmVarADRMinRange }}%</span>
-                        <span class="max-value">{{ stlmVarADRMax || stlmVarADRMaxRange }}%</span>
-                      </div>
-                      <div class="dual-range-slider">
-                        <input type="range" [min]="stlmVarADRMinRange" [max]="stlmVarADRMaxRange"
-                          [value]="stlmVarADRMin || stlmVarADRMinRange" (input)="onStlmVarADRMinChange($event)"
-                          class="range-min">
-                        <input type="range" [min]="stlmVarADRMinRange" [max]="stlmVarADRMaxRange"
-                          [value]="stlmVarADRMax || stlmVarADRMaxRange" (input)="onStlmVarADRMaxChange($event)"
-                          class="range-max">
-                      </div>
-                    </div>
-                  </div>
+<div class="col-md-6 mb-3">
+  <label class="form-label">STLM Var ADR Range</label>
+  <div class="range-slider-container">
+    <div class="range-values">
+      <div style="display: inline-flex; align-items: center;">
+        <input type="number" class="min-value" [(ngModel)]="tempStlmVarADRMin" 
+               [placeholder]="stlmVarADRMinRange" min="{{stlmVarADRMinRange}}" max="{{stlmVarADRMaxRange}}"
+               (ngModelChange)="onStlmVarADRMinChange({target: {value: tempStlmVarADRMin || stlmVarADRMinRange}})">
+        <span class="range-percentage">%</span>
+      </div>
+      <div style="display: inline-flex; align-items: center;">
+        <input type="number" class="max-value" [(ngModel)]="tempStlmVarADRMax" 
+               [placeholder]="stlmVarADRMaxRange" min="{{stlmVarADRMinRange}}" max="{{stlmVarADRMaxRange}}"
+               (ngModelChange)="onStlmVarADRMaxChange({target: {value: tempStlmVarADRMax || stlmVarADRMaxRange}})">
+        <span class="range-percentage">%</span>
+      </div>
+    </div>
+    <div class="dual-range-slider">
+      <input type="range" [min]="stlmVarADRMinRange" [max]="stlmVarADRMaxRange"
+        [value]="tempStlmVarADRMin || stlmVarADRMinRange" (input)="onStlmVarADRMinChange($event)"
+        class="range-min">
+      <input type="range" [min]="stlmVarADRMinRange" [max]="stlmVarADRMaxRange"
+        [value]="tempStlmVarADRMax || stlmVarADRMaxRange" (input)="onStlmVarADRMaxChange($event)"
+        class="range-max">
+    </div>
+  </div>
+</div>
 
                   <!-- STLM Var RevPAR -->
-                  <div class="col-md-6 mb-3">
-                    <label class="form-label">STLM Var RevPAR Range</label>
-                    <div class="range-slider-container">
-                      <div class="range-values">
-                        <span class="min-value">{{ stlmVarRevPARMin || stlmVarRevPARMinRange }}%</span>
-                        <span class="max-value">{{ stlmVarRevPARMax || stlmVarRevPARMaxRange }}%</span>
-                      </div>
-                      <div class="dual-range-slider">
-                        <input type="range" [min]="stlmVarRevPARMinRange" [max]="stlmVarRevPARMaxRange"
-                          [value]="stlmVarRevPARMin || stlmVarRevPARMinRange" (input)="onStlmVarRevPARMinChange($event)"
-                          class="range-min">
-                        <input type="range" [min]="stlmVarRevPARMinRange" [max]="stlmVarRevPARMaxRange"
-                          [value]="stlmVarRevPARMax || stlmVarRevPARMaxRange" (input)="onStlmVarRevPARMaxChange($event)"
-                          class="range-max">
-                      </div>
-                    </div>
-                  </div>
+<div class="col-md-6 mb-3">
+  <label class="form-label">STLM Var RevPAR Range</label>
+  <div class="range-slider-container">
+    <div class="range-values">
+      <div style="display: inline-flex; align-items: center;">
+        <input type="number" class="min-value" [(ngModel)]="tempStlmVarRevPARMin" 
+               [placeholder]="stlmVarRevPARMinRange" min="{{stlmVarRevPARMinRange}}" max="{{stlmVarRevPARMaxRange}}"
+               (ngModelChange)="onStlmVarRevPARMinChange({target: {value: tempStlmVarRevPARMin || stlmVarRevPARMinRange}})">
+        <span class="range-percentage">%</span>
+      </div>
+      <div style="display: inline-flex; align-items: center;">
+        <input type="number" class="max-value" [(ngModel)]="tempStlmVarRevPARMax" 
+               [placeholder]="stlmVarRevPARMaxRange" min="{{stlmVarRevPARMinRange}}" max="{{stlmVarRevPARMaxRange}}"
+               (ngModelChange)="onStlmVarRevPARMaxChange({target: {value: tempStlmVarRevPARMax || stlmVarRevPARMaxRange}})">
+        <span class="range-percentage">%</span>
+      </div>
+    </div>
+    <div class="dual-range-slider">
+      <input type="range" [min]="stlmVarRevPARMinRange" [max]="stlmVarRevPARMaxRange"
+        [value]="tempStlmVarRevPARMin || stlmVarRevPARMinRange" (input)="onStlmVarRevPARMinChange($event)"
+        class="range-min">
+      <input type="range" [min]="stlmVarRevPARMinRange" [max]="stlmVarRevPARMaxRange"
+        [value]="tempStlmVarRevPARMax || stlmVarRevPARMaxRange" (input)="onStlmVarRevPARMaxChange($event)"
+        class="range-max">
+    </div>
+  </div>
+</div>
                 </div>
               </div>
 
@@ -1502,8 +1659,12 @@
                     <label class="form-label">Review Score Range</label>
                     <div class="range-slider-container">
                       <div class="range-values">
-                        <span class="min-value">{{ tempBookingRevScoreMin || 0 }}</span>
-                        <span class="max-value">{{ tempBookingRevScoreMax || 10 }}</span>
+                        <input type="number" class="min-value" [(ngModel)]="tempBookingRevScoreMin" 
+                               placeholder="0" min="0" max="10" step="0.1"
+                               (ngModelChange)="onBookingRevScoreMinChange({target: {value: tempBookingRevScoreMin || 0}})">
+                        <input type="number" class="max-value" [(ngModel)]="tempBookingRevScoreMax" 
+                               placeholder="10" min="0" max="10" step="0.1"
+                               (ngModelChange)="onBookingRevScoreMaxChange({target: {value: tempBookingRevScoreMax || 10}})">
                       </div>
                       <div class="dual-range-slider">
                         <input type="range" min="0" max="10" step="0.1" [value]="tempBookingRevScoreMin || 0"
@@ -1517,8 +1678,12 @@
                     <label class="form-label">Total Reviews Range</label>
                     <div class="range-slider-container">
                       <div class="range-values">
-                        <span class="min-value">{{ tempBookingTotalRevMin || bookingTotalRevMinRange }}</span>
-                        <span class="max-value">{{ tempBookingTotalRevMax || bookingTotalRevMaxRange }}</span>
+                        <input type="number" class="min-value" [(ngModel)]="tempBookingTotalRevMin" 
+                               [placeholder]="bookingTotalRevMinRange" min="{{bookingTotalRevMinRange}}" max="{{bookingTotalRevMaxRange}}"
+                               (ngModelChange)="onBookingTotalRevMinChange({target: {value: tempBookingTotalRevMin || bookingTotalRevMinRange}})">
+                        <input type="number" class="max-value" [(ngModel)]="tempBookingTotalRevMax" 
+                               [placeholder]="bookingTotalRevMaxRange" min="{{bookingTotalRevMinRange}}" max="{{bookingTotalRevMaxRange}}"
+                               (ngModelChange)="onBookingTotalRevMaxChange({target: {value: tempBookingTotalRevMax || bookingTotalRevMaxRange}})">
                       </div>
                       <div class="dual-range-slider">
                         <input type="range" [min]="bookingTotalRevMinRange" [max]="bookingTotalRevMaxRange"
@@ -1539,8 +1704,12 @@
                     <label class="form-label">Review Score Range</label>
                     <div class="range-slider-container">
                       <div class="range-values">
-                        <span class="min-value">{{ tempAirbnbRevScoreMin || 0 }}</span>
-                        <span class="max-value">{{ tempAirbnbRevScoreMax || 5 }}</span>
+                        <input type="number" class="min-value" [(ngModel)]="tempAirbnbRevScoreMin" 
+                               placeholder="0" min="0" max="5" step="0.1"
+                               (ngModelChange)="onAirbnbRevScoreMinChange({target: {value: tempAirbnbRevScoreMin || 0}})">
+                        <input type="number" class="max-value" [(ngModel)]="tempAirbnbRevScoreMax" 
+                               placeholder="5" min="0" max="5" step="0.1"
+                               (ngModelChange)="onAirbnbRevScoreMaxChange({target: {value: tempAirbnbRevScoreMax || 5}})">
                       </div>
                       <div class="dual-range-slider">
                         <input type="range" min="0" max="5" step="0.1" [value]="tempAirbnbRevScoreMin || 0"
@@ -1554,8 +1723,12 @@
                     <label class="form-label">Total Reviews Range</label>
                     <div class="range-slider-container">
                       <div class="range-values">
-                        <span class="min-value">{{ tempAirbnbTotalRevMin || airbnbTotalRevMinRange }}</span>
-                        <span class="max-value">{{ tempAirbnbTotalRevMax || airbnbTotalRevMaxRange }}</span>
+                        <input type="number" class="min-value" [(ngModel)]="tempAirbnbTotalRevMin" 
+                               [placeholder]="airbnbTotalRevMinRange" min="{{airbnbTotalRevMinRange}}" max="{{airbnbTotalRevMaxRange}}"
+                               (ngModelChange)="onAirbnbTotalRevMinChange({target: {value: tempAirbnbTotalRevMin || airbnbTotalRevMinRange}})">
+                        <input type="number" class="max-value" [(ngModel)]="tempAirbnbTotalRevMax" 
+                               [placeholder]="airbnbTotalRevMaxRange" min="{{airbnbTotalRevMinRange}}" max="{{airbnbTotalRevMaxRange}}"
+                               (ngModelChange)="onAirbnbTotalRevMaxChange({target: {value: tempAirbnbTotalRevMax || airbnbTotalRevMaxRange}})">
                       </div>
                       <div class="dual-range-slider">
                         <input type="range" [min]="airbnbTotalRevMinRange" [max]="airbnbTotalRevMaxRange"

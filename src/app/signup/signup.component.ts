@@ -32,7 +32,7 @@ export class SignupComponent {
     private titleService: Title,
     private authService: AuthenticationService
   ) {
-    this.titleService.setTitle('Sign Up: Strategy Cues');
+    this.titleService.setTitle('Sign Up: Strategy Cues - Listing Optimization Cues Dashboard');
   }
 
   ngOnInit(): void {

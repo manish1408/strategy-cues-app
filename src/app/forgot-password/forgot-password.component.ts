@@ -59,7 +59,7 @@ export class ForgotPasswordComponent {
       email: ['', [Validators.required, Validators.email]],
       new_password: ['', [Validators.required]],
     });
-    this.titleService.setTitle('Reset Password: MiloAssistant.ai');
+    this.titleService.setTitle('Reset Password: Strategy Cues - Listing Optimization Cues Dashboard');
   }
 
   ngOnInit(): void {

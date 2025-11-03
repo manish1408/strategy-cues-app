@@ -396,7 +396,17 @@
 
   <!-- Photo Captions Section -->
   <div class="missing-captions-section" *ngIf="currentPlatformPhotos && currentPlatformPhotos.length > 0">
-    <h2>Photo Captions for {{ selectedPlatform | titlecase }} ({{ currentPlatformPhotos.length }} photos)</h2>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2>Photo Captions for {{ selectedPlatform | titlecase }} ({{ currentPlatformPhotos.length }} photos)</h2>
+      <button 
+          class="btn btn-sm btn-primary" 
+          (click)="generateAllCaptions()"
+          [disabled]="isGeneratingAllCaptions || isGeneratingCaption">
+          <!-- <span *ngIf="isGeneratingAllCaptions" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> -->
+          <span *ngIf="isGeneratingAllCaptions">Generating captions for all photos...</span>
+          <span *ngIf="!isGeneratingAllCaptions">Generate captions for all photos</span>
+        </button>
+    </div>
     <div class="missing-list">
       <div class="missing-item" *ngFor="let photo of currentPlatformPhotos">
         <i class="fas fa-exclamation-triangle" *ngIf="!photo?.caption"></i>
@@ -414,10 +424,19 @@
         <button 
           class="btn btn-sm btn-primary" 
           (click)="generateCaption(photo?.url, photo?.id)"
-          [disabled]="isGeneratingCaptionForPhotoUrl(photo?.url) || photo?.caption">
-          <span *ngIf="isGeneratingCaptionForPhotoUrl(photo?.url)" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-          <span *ngIf="!photo?.caption">Generate Caption</span>
-          <span *ngIf="photo?.caption">Caption Generated</span>
+          [disabled]="isGeneratingCaptionForPhotoUrl(photo?.url) || photo?.caption || isGeneratingAllCaptions">
+        <!-- Generating state -->
+  <span *ngIf="isGeneratingCaptionForPhotoUrl(photo?.url)">Generating caption...</span>
+
+  <!-- Already generated -->
+  <span *ngIf="!isGeneratingCaptionForPhotoUrl(photo?.url) && photo?.caption">
+    Caption Generated
+  </span>
+
+  <!-- Default -->
+  <span *ngIf="!isGeneratingCaptionForPhotoUrl(photo?.url) && !photo?.caption">
+    Generate Caption
+  </span>
         </button>
       </div>
     </div>

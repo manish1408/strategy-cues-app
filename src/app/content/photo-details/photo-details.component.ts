@@ -8,6 +8,8 @@ import { SummaryPipe } from "../../summary.pipe";
 import { ImageCaptionService } from "../../_services/image-caption.service";
 import { ToastService } from "../../_services/toast.service";
 import { ToastrService } from "ngx-toastr";
+import { catchError, concatMap, finalize, toArray } from "rxjs/operators";
+import { from, of } from "rxjs";
 
 @Component({
   selector: "app-photo-details",
@@ -1778,4 +1780,79 @@ export class PhotoDetailsComponent implements OnInit {
 
     return null;
   }
+  isGeneratingAllCaptions: boolean = false; 
+  generateAllCaptions(): void {
+    console.log('Generating captions for all photos');
+  
+    const photosToProcess = this.currentPlatformPhotos.filter(p => !p.caption);
+  
+    if (photosToProcess.length === 0) {
+      this.toastr.error('All captions are already generated.');
+      return;
+    }
+    this.isGeneratingAllCaptions = true; 
+    this.isGeneratingCaption = true; 
+    from(photosToProcess)
+      .pipe(
+        concatMap((photo:any) =>
+          this.imageCaptionService.generateCaption({
+            operator_id: this.operatorId,
+            property_id: this.propertyId,
+            source: this.selectedPropertyPlatform as 'airbnb' | 'booking' | 'vrbo',
+            image_url: photo.url,
+            image_id: photo.id
+          }).pipe(
+            catchError(err => {
+              console.error('Error generating caption:', err);
+              // return null for failed ones
+              return of({ success: false, error: err });
+            })
+          )
+        ),
+        toArray(), // gather all results into an array after all requests complete
+        finalize(() => {
+          // 👈 always runs after completion or error
+          this.isGeneratingAllCaptions = false;
+          this.isGeneratingCaption = false;
+          this.cdr.detectChanges();
+        })
+      )
+      .subscribe({
+        next: (results: any[]) => {
+          // update captions only once at the end
+          const successResponses = results.filter(r => r?.success);
+          const failedResponses = results.filter(r => !r?.success);
+  
+          if (successResponses.length > 0) {
+            // extract captions and update UI
+            successResponses.forEach(r => {
+              const caption = r.data?.caption || r.caption;
+              const imageUrl = r.image_url || r.image_id; // adjust as needed
+              if (caption && imageUrl) {
+                this.updatePhotoCaptionByUrl(imageUrl, caption);
+              }
+            });
+            this.fetchAllCaptionsForPlatform(this.selectedPropertyPlatform);
+          }
+  
+          // final toast after everything
+          if (failedResponses.length > 0 && successResponses.length === 0) {
+            this.toastr.error('Failed to generate captions for all photos.');
+          } else if (failedResponses.length > 0) {
+            this.toastr.warning(
+              `${failedResponses.length} out of ${results.length} captions failed.`
+            );
+          } else {
+            this.toastr.success('All captions generated and saved successfully!');
+          }
+  
+          this.cdr.detectChanges();
+        },
+        error: (err:any) => {
+          console.error('Unexpected error in caption generation:', err);
+          this.toastr.error('Something went wrong while generating captions.');
+          this.cdr.detectChanges();
+        }
+      });
+    }
 }
