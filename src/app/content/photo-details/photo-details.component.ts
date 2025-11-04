@@ -1559,6 +1559,8 @@ export class PhotoDetailsComponent implements OnInit {
 
   // Caption generation methods
   generateCaption(photoUrl: string, photoId: string): void {
+
+    console.log('Generating caption for photo:', photoUrl, photoId);
     if (this.isGeneratingCaption) {
       return;
     }

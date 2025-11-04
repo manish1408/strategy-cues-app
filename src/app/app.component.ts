@@ -159,8 +159,7 @@ export class AppComponent {
     this.toastr.success(`Operator "${operator.name}" selected successfully!`);
     
     // Auto-navigate to current page with new operator ID
-    const currentUrl = this.router.url.split('?')[0]; // Get current route without query params
-    this.router.navigate([currentUrl], { queryParams: { id: operator._id } });
+    this.router.navigate(['/revenue'], { queryParams: { id: operator._id } });
   }
 
   // Method to check current operator selection

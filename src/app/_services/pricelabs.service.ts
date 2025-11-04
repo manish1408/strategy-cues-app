@@ -30,7 +30,23 @@ export class PricelabsService {
     return this.http.get<any>(`${this._url}/get-analytics-report/${reportId}`);
   }
 
+  // Analytics Cues Presets methods
+  createAnalyticsCuesPreset(operatorId: string, presetName: string, startDate: string, endDate: string): Observable<any> {
+    return this.http.post<any>(`${environment.APIUrl}analytics-cues-presets/create-preset`, {
+      operator_id: operatorId,
+      preset_name: presetName,
+      start_date: startDate,
+      end_date: endDate
+    });
+  }
 
+  getAnalyticsCuesPresets(operatorId: string): Observable<any> {
+    return this.http.get<any>(`${environment.APIUrl}analytics-cues-presets/get-preset-operator?operator_id=${operatorId}`);
+  }
+
+  deleteAnalyticsCuesPreset(presetId: string, operatorId: string): Observable<any> {
+    return this.http.delete<any>(`${environment.APIUrl}analytics-cues-presets/delete-preset/${presetId}?operator_id=${operatorId}`);
+  }
 
  
 

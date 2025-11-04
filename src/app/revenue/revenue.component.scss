@@ -363,20 +363,22 @@ $transition: all 0.3s ease;
 
     .min-value {
       color: #1e1e1e;
-      background: #eee;
-      padding: 0.25rem 0.5rem;
-      border-radius: 0.25rem;
-      border: 1px solid #ccc;
-      text-align: center;
+      // background: #eee;
+      padding: 0.55rem 0.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid #ccc;
+    text-align: center;
+    width: 80px;
     }
 
     .max-value {
       color: #1e1e1e;
-      background: #eee;
-      padding: 0.25rem 0.5rem;
-      border-radius: 0.25rem;
-      border: 1px solid #ccc;
-      text-align: center;
+      // background: #eee;
+      padding: 0.55rem 0.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid #ccc;
+    text-align: center;
+    width: 80px;
     }
   }
 
@@ -657,10 +659,10 @@ $transition: all 0.3s ease;
         &.filter-range {
           border-color: #28a745;
           background: #e8f5e8;
-          color: #1b5e20;
+          color: var(--brand-black);
 
           .filter-label {
-            color: #388e3c;
+            color: var(--brand-black);
           }
         }
 
@@ -678,7 +680,7 @@ $transition: all 0.3s ease;
           font-weight: 600;
           margin-right: 0.25rem;
           white-space: nowrap;
-          color: var(--brand-yellow) !important;
+          color: var(--brand-black);
         }
 
         .filter-value {
@@ -687,7 +689,7 @@ $transition: all 0.3s ease;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
-          color: var(--brand-yellow) !important;
+          color: var(--brand-black);
         }
 
         .remove-filter {
@@ -2834,16 +2836,7 @@ tbody tr:hover {
   color: var(--brand-black) !important;
 }
 
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
-}
 
-input[type=number] {
-  -moz-appearance: textfield;
-  appearance: textfield; /* Standard property for future compatibility */
-}
 .range-percentage{
   color: #1e1e1e !important;
   margin-left: 3px !important;
@@ -2853,5 +2846,13 @@ input[type=number] {
 .th-sub{
   font-size: 12px;
   font-weight: normal;
-  color: #a5a5a5;
+  color: var(--brand-yellow) !important;
+  .d-divider{
+    background: var(--brand-yellow) !important;
+  }
+}
+.d-divider{
+  height: 12px;
+  width: 2px;
+  background: #1e1e1e;
 }

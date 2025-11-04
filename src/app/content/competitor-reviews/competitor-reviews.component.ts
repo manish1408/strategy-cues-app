@@ -4,6 +4,8 @@ import { ActivatedRoute } from "@angular/router";
 import { LocalStorageService } from "../../_services/local-storage.service";
 import { ToastrService } from "ngx-toastr";
 
+declare var bootstrap: any;
+
 @Component({
   selector: "app-competitor-reviews",
   templateUrl: "./competitor-reviews.component.html",
@@ -28,6 +30,8 @@ export class CompetitorReviewsComponent implements OnInit {
   
   operatorId: string = "";
   propertyId: string = "";
+  selectedItem: any = null;
+  private modalInstance: any = null;
 
   // Check if all data is empty
   get isAllDataEmpty(): boolean {
@@ -192,5 +196,16 @@ export class CompetitorReviewsComponent implements OnInit {
     ].filter(Boolean).length;
     
     return Math.round((completedCalls / totalCalls) * 100);
+  }
+
+  // Open modal with item description
+  openDescriptionModal(item: any): void {
+    this.selectedItem = item;
+    const modalElement = document.getElementById('descriptionModal');
+    if (modalElement) {
+      // Get existing instance or create new one
+      this.modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+      this.modalInstance.show();
+    }
   }
 }

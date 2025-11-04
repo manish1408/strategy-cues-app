@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 
 import { PricelabsAdminRoutingModule } from './pricelabs-admin-routing.module';
@@ -12,6 +13,7 @@ import { SharedModule } from '../shared/sharedModule';
   ],
   imports: [
     CommonModule,
+    FormsModule,
     PricelabsAdminRoutingModule,
     SharedModule,
     NgCircleProgressModule.forRoot()

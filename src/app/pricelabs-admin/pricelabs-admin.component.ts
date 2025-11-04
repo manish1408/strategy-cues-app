@@ -2,6 +2,10 @@ import { Component } from '@angular/core';
 import { PricelabsService } from '../_services/pricelabs.service';
 import { ActivatedRoute } from '@angular/router';
 import { LocalStorageService } from '../_services/local-storage.service';
+import { ToastrService } from 'ngx-toastr';
+
+// Declare global variables for Bootstrap
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-pricelabs-admin',
@@ -20,7 +24,25 @@ error: string | null = null;
 reportId: string = '';
 private previousOperatorId: string = '';
 
-constructor(private pricelabsService: PricelabsService, private route: ActivatedRoute, private localStorageService: LocalStorageService) {
+// Preset properties
+filterPresets: any[] = [];
+selectedPresetId: string = '';
+showSavePresetForm: boolean = false;
+newPresetName: string = '';
+presetSaveError: string = '';
+presetLoading: boolean = false;
+presetSaving: boolean = false;
+presetDeleting: boolean = false;
+// Temporary dates for preset modal (editable)
+presetStartDate: string = '';
+presetEndDate: string = '';
+
+constructor(
+  private pricelabsService: PricelabsService, 
+  private route: ActivatedRoute, 
+  private localStorageService: LocalStorageService,
+  private toastr: ToastrService
+) {
   
 }
 
@@ -36,6 +58,8 @@ ngOnInit(): void {
     if (nextOperatorId && nextOperatorId !== this.previousOperatorId) {
       this.operatorId = nextOperatorId;
       this.previousOperatorId = nextOperatorId;
+      // Load presets when operator changes
+      this.loadPresets();
       // Auto-load when operator changes
       this.analyticsReport();
     }
@@ -145,5 +169,174 @@ private formatDate(date: Date): string {
       // Set fallback image when the main image fails to load
       event.target.src = 'assets/images/placeholder.jpg';
     }
+
+  // Preset methods
+  loadPresets(): void {
+    if (!this.operatorId) {
+      this.filterPresets = [];
+      return;
+    }
+
+    this.presetLoading = true;
+    this.pricelabsService.getAnalyticsCuesPresets(this.operatorId).subscribe({
+      next: (response) => {
+        this.presetLoading = false;
+        if (response && response.success && response.data) {
+          // Handle array or object response
+          const presetsArray = Array.isArray(response.data) 
+            ? response.data 
+            : (Array.isArray(response.data.presets) ? response.data.presets : []);
+          
+          this.filterPresets = presetsArray.map((preset: any) => ({
+            id: preset._id || preset.id,
+            name: preset.preset_name || preset.name,
+            startDate: preset.start_date,
+            endDate: preset.end_date,
+            createdAt: preset.createdAt ? new Date(preset.createdAt) : new Date()
+          }));
+        } else {
+          this.filterPresets = [];
+        }
+      },
+      error: (error) => {
+        this.presetLoading = false;
+        console.error('Error loading presets:', error);
+        this.filterPresets = [];
+      }
+    });
+  }
+
+  showSavePresetDialog(): void {
+    // Prefill with current dates
+    this.presetStartDate = this.startDate;
+    this.presetEndDate = this.endDate;
+    this.showSavePresetForm = true;
+    this.newPresetName = '';
+    this.presetSaveError = '';
+  }
+
+  cancelSavePreset(): void {
+    this.showSavePresetForm = false;
+    this.newPresetName = '';
+    this.presetSaveError = '';
+    this.presetStartDate = '';
+    this.presetEndDate = '';
+  }
+
+  onPresetDateChange(kind: 'start' | 'end', value: string): void {
+    if (!value) { return; }
+    const parsed = new Date(value);
+    if (isNaN(parsed.getTime())) { return; }
+    if (kind === 'start') {
+      this.presetStartDate = this.formatDate(parsed);
+    } else {
+      this.presetEndDate = this.formatDate(parsed);
+    }
+  }
+
+  saveCurrentFiltersAsPreset(): void {
+    if (!this.newPresetName.trim()) {
+      this.presetSaveError = 'Please enter a preset name';
+      return;
+    }
+
+    if (!this.operatorId) {
+      this.presetSaveError = 'Operator ID is required';
+      return;
+    }
+
+    if (!this.presetStartDate || !this.presetEndDate) {
+      this.presetSaveError = 'Start date and end date are required';
+      return;
+    }
+
+    this.presetSaving = true;
+    this.presetSaveError = '';
+
+    this.pricelabsService.createAnalyticsCuesPreset(
+      this.operatorId,
+      this.newPresetName.trim(),
+      this.presetStartDate,
+      this.presetEndDate
+    ).subscribe({
+      next: (response) => {
+        this.presetSaving = false;
+        if (response && response.success) {
+          this.toastr.success(`Preset "${this.newPresetName}" saved successfully!`);
+          this.cancelSavePreset();
+          // Reload presets
+          this.loadPresets();
+        } else {
+          this.presetSaveError = response?.error || 'Failed to save preset';
+          this.toastr.error(this.presetSaveError);
+        }
+      },
+      error: (error) => {
+        this.presetSaving = false;
+        this.presetSaveError = error?.error?.detail?.error || error?.error?.message || 'Failed to save preset';
+        this.toastr.error(this.presetSaveError);
+        console.error('Error saving preset:', error);
+      }
+    });
+  }
+
+  onPresetSelectionChange(): void {
+    if (this.selectedPresetId && this.filterPresets.length > 0) {
+      const preset = this.filterPresets.find(p => p.id === this.selectedPresetId);
+      if (preset) {
+        this.startDate = preset.startDate;
+        this.endDate = preset.endDate;
+        // Optionally trigger analytics report
+        // this.analyticsReport();
+      }
+    }
+  }
+
+  deletePreset(presetId: string): void {
+    if (!this.operatorId) {
+      this.toastr.error('Operator ID is required');
+      return;
+    }
+
+    const preset = this.filterPresets.find(p => p.id === presetId);
+    const presetName = preset?.name || 'preset';
+
+    if (!confirm(`Are you sure you want to delete the preset "${presetName}"?`)) {
+      return;
+    }
+
+    this.presetDeleting = true;
+    this.pricelabsService.deleteAnalyticsCuesPreset(presetId, this.operatorId).subscribe({
+      next: (response) => {
+        this.presetDeleting = false;
+        if (response && response.success !== false) {
+          this.toastr.success(`Preset "${presetName}" deleted successfully!`);
+          if (this.selectedPresetId === presetId) {
+            this.selectedPresetId = '';
+          }
+          // Reload presets
+          this.loadPresets();
+        } else {
+          this.toastr.error('Failed to delete preset');
+        }
+      },
+      error: (error) => {
+        console.error('Error deleting preset:', error);
+        this.presetDeleting = false;
+        this.toastr.error('Failed to delete preset');
+      }
+    });
+  }
+
+  getPresetSummary(preset: any): string[] {
+    const summary: string[] = [];
+    if (preset.startDate) {
+      summary.push(`Start: ${preset.startDate}`);
+    }
+    if (preset.endDate) {
+      summary.push(`End: ${preset.endDate}`);
+    }
+    return summary;
+  }
   
 }

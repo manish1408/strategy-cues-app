@@ -198,6 +198,13 @@ $improvement-text: #2563eb;
           margin: 0;
           line-height: 1.4;
           color: #101828;
+
+          &.clickable-title {
+            cursor: pointer;
+            transition: color 0.2s ease;
+
+            
+          }
         }
 
    
@@ -232,6 +239,10 @@ $improvement-text: #2563eb;
 
         .card-content h3 {
           color: #000000;
+
+          &.clickable-title:hover {
+            color: $primary-color;
+          }
         }
       }
 
@@ -248,6 +259,10 @@ $improvement-text: #2563eb;
 
         .card-content h3 {
           color: $love-text;
+
+          &.clickable-title:hover {
+            color: $primary-color;
+          }
         }
       }
 
@@ -264,6 +279,10 @@ $improvement-text: #2563eb;
 
         .card-content h3 {
           color: #000000;
+
+          &.clickable-title:hover {
+            color: $primary-color;
+          }
         }
       }
     }
@@ -687,4 +706,17 @@ $improvement-text: #2563eb;
 .improvement-textarea:focus {
   border-color: $primary-color;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+// Modal styles
+#descriptionModal {
+  .modal-body {
+    .description-text {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #333;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+  }
 }
