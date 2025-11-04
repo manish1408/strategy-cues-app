@@ -999,7 +999,7 @@ $transition: all 0.3s ease;
 
   .pickup-item {
     display: flex;
-    justify-content: center;
+    // justify-content: center;
     align-items: center;
     margin-bottom: 0.25rem;
     padding: 0.125rem 0;
@@ -1036,7 +1036,7 @@ $transition: all 0.3s ease;
 .min-rate-threshold-cell {
   min-width: 80px;
   padding: 0.25rem;
-  text-align: center;
+  // text-align: center;
 
   .threshold-value {
     font-size: var(--font-size-xs);
@@ -1055,7 +1055,7 @@ $transition: all 0.3s ease;
 .stly-var-single-cell {
   min-width: 80px;
   padding: 0.25rem;
-  text-align: center;
+  // text-align: center;
 
   .badge {
     font-size: var(--font-size-xs);
@@ -2526,6 +2526,12 @@ thead th {
   &:nth-child(2) {
     min-width: 280px;
   }
+  &:nth-child(7) {
+    min-width: 300px;
+  }
+  &:nth-child(8) {
+    min-width: 350px;
+  }
 
 }
 
@@ -2843,4 +2849,9 @@ input[type=number] {
   margin-left: 3px !important;
   font-size: 14px;
   font-weight: 600;
+}
+.th-sub{
+  font-size: 12px;
+  font-weight: normal;
+  color: #a5a5a5;
 }
