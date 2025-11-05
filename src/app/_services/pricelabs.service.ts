@@ -48,6 +48,17 @@ export class PricelabsService {
     return this.http.delete<any>(`${environment.APIUrl}analytics-cues-presets/delete-preset/${presetId}?operator_id=${operatorId}`);
   }
 
- 
+  // Excel Schedule Export methods
+  createExcelSchedule(operatorId: string, startDate: string, endDate: string): Observable<any> {
+    return this.http.post<any>(`${environment.APIUrl}excel-schedule/create`, {
+      operator_id: operatorId,
+      start_date: startDate,
+      end_date: endDate
+    });
+  }
+
+  getExcelScheduleStatus(scheduleId: string): Observable<any> {
+    return this.http.get<any>(`${environment.APIUrl}excel-schedule/get/${scheduleId}`);
+  }
 
 }   

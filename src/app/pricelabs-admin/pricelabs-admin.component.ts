@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { PricelabsService } from '../_services/pricelabs.service';
 import { ActivatedRoute } from '@angular/router';
 import { LocalStorageService } from '../_services/local-storage.service';
@@ -12,7 +12,7 @@ declare var bootstrap: any;
   templateUrl: './pricelabs-admin.component.html',
   styleUrls: ['./pricelabs-admin.component.scss']
 })
-export class PricelabsAdminComponent {
+export class PricelabsAdminComponent implements OnDestroy {
 loading: boolean = false;
 data: any[] = [];
 operatorId: string = '';
@@ -36,6 +36,13 @@ presetDeleting: boolean = false;
 // Temporary dates for preset modal (editable)
 presetStartDate: string = '';
 presetEndDate: string = '';
+
+// Export properties
+exportLoading: boolean = false;
+private exportPollingInterval: any = null;
+private exportPollingTimeout: any = null;
+private readonly MAX_POLLING_TIME = 5 * 60 * 1000; // 5 minutes max
+private pollingStartTime: number = 0;
 
 constructor(
   private pricelabsService: PricelabsService, 
@@ -286,8 +293,8 @@ private formatDate(date: Date): string {
       if (preset) {
         this.startDate = preset.startDate;
         this.endDate = preset.endDate;
-        // Optionally trigger analytics report
-        // this.analyticsReport();
+        // Automatically trigger analytics report when preset is selected
+        this.analyticsReport();
       }
     }
   }
@@ -337,6 +344,161 @@ private formatDate(date: Date): string {
       summary.push(`End: ${preset.endDate}`);
     }
     return summary;
+  }
+
+  getSelectedPresetName(): string {
+    if (this.selectedPresetId && this.filterPresets.length > 0) {
+      const preset = this.filterPresets.find(p => p.id === this.selectedPresetId);
+      return preset?.name || '';
+    }
+    return '';
+  }
+
+  clearPreset(): void {
+    this.selectedPresetId = '';
+    // Reset dates to default (7 days ago to today)
+    const today = new Date();
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(today.getDate() - 7);
+    this.startDate = this.formatDate(sevenDaysAgo);
+    this.endDate = this.formatDate(today);
+    // Trigger API call with default dates
+    this.analyticsReport();
+  }
+
+  onManualSubmit(): void {
+    // Clear preset when user manually submits with different dates
+    // Don't reset dates - keep the user's manually entered dates
+    this.selectedPresetId = '';
+    this.analyticsReport();
+  }
+
+  // Export CSV methods
+  exportToCSV(): void {
+    if (!this.operatorId || !this.startDate || !this.endDate) {
+      this.toastr.error('Operator ID, start date, and end date are required');
+      return;
+    }
+
+    this.exportLoading = true;
+
+    this.pricelabsService.createExcelSchedule(this.operatorId, this.startDate, this.endDate).subscribe({
+      next: (response) => {
+        if (response && response.success !== false) {
+          // Handle different response formats
+          const scheduleId = response?.data?.schedule_id || 
+                            response?.data?.id || 
+                            response?.schedule_id || 
+                            response?.id ||
+                            response?.data;
+          
+          if (scheduleId) {
+            this.startExportPolling(scheduleId);
+          } else {
+            this.exportLoading = false;
+            this.toastr.error('Schedule ID not found in response', 'Export CSV');
+          }
+        } else {
+          this.exportLoading = false;
+          const errorMsg = response?.error || response?.message || 'Failed to create export schedule';
+          this.toastr.error(errorMsg);
+        }
+      },
+      error: (error) => {
+        this.exportLoading = false;
+        const errorMsg = error?.error?.detail?.error || error?.error?.message || 'Failed to create export schedule';
+        this.toastr.error(errorMsg);
+        console.error('Error creating export schedule:', error);
+      }
+    });
+  }
+
+  private startExportPolling(scheduleId: string): void {
+    // Clear any existing polling
+    this.stopExportPolling();
+
+    this.pollingStartTime = Date.now();
+
+    // Set timeout to stop polling after max time
+    this.exportPollingTimeout = setTimeout(() => {
+      this.stopExportPolling();
+      this.exportLoading = false;
+      this.toastr.error('Export took too long. Please try again.', 'Export CSV');
+    }, this.MAX_POLLING_TIME);
+
+    // Poll every 3 seconds
+    this.exportPollingInterval = setInterval(() => {
+      // Check if we've exceeded max polling time
+      if (Date.now() - this.pollingStartTime > this.MAX_POLLING_TIME) {
+        this.stopExportPolling();
+        this.exportLoading = false;
+        this.toastr.error('Export took too long. Please try again.', 'Export CSV');
+        return;
+      }
+      this.checkExportStatus(scheduleId);
+    }, 3000);
+
+    // Check immediately
+    this.checkExportStatus(scheduleId);
+  }
+
+  private stopExportPolling(): void {
+    if (this.exportPollingInterval) {
+      clearInterval(this.exportPollingInterval);
+      this.exportPollingInterval = null;
+    }
+    if (this.exportPollingTimeout) {
+      clearTimeout(this.exportPollingTimeout);
+      this.exportPollingTimeout = null;
+    }
+    this.pollingStartTime = 0;
+  }
+
+  private checkExportStatus(scheduleId: string): void {
+    this.pricelabsService.getExcelScheduleStatus(scheduleId).subscribe({
+      next: (response) => {
+        const data = response?.data || response;
+        const status = data?.status || data?.Status;
+
+        if (status === 'completed') {
+          this.stopExportPolling();
+          this.exportLoading = false;
+          
+          const fileUrl = data?.url || data?.file_url || data?.fileUrl;
+          if (fileUrl) {
+            this.downloadFile(fileUrl);
+            this.toastr.success('Export completed successfully!', 'Export CSV');
+          } else {
+            this.toastr.error('Export completed but file URL not found');
+          }
+        } else if (status === 'failed' || status === 'error') {
+          this.stopExportPolling();
+          this.exportLoading = false;
+          const errorMsg = data?.error || data?.message || 'Export failed';
+          this.toastr.error(errorMsg, 'Export CSV');
+        }
+        // If status is 'pending' or 'processing', continue polling
+      },
+      error: (error) => {
+        // Don't stop polling on network errors, but log them
+        console.error('Error checking export status:', error);
+        // Only stop polling if it's a clear failure (not a network issue)
+        if (error?.status === 404) {
+          this.stopExportPolling();
+          this.exportLoading = false;
+          this.toastr.error('Export schedule not found', 'Export CSV');
+        }
+      }
+    });
+  }
+
+  private downloadFile(url: string): void {
+    // Open the URL in a new tab/window to trigger download
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
+  ngOnDestroy(): void {
+    this.stopExportPolling();
   }
   
 }

@@ -1,13 +1,14 @@
 <div class="container-fluid">
-  <div class="row align-items-center">
-    <div class="col-12 col-lg-4">
+  <div class="row align-items-center mb-4">
+    <div class="col-12 col-lg-6">
       <div class="page-header">
         <h4 class="title text-dark">Analytics Cues</h4>
         <p class="desc">This is the Analytics Cues page. Here you can manage the Analytics Cues data.</p>
       </div>
     </div>
-      <div class="col-12 col-lg-8">
-        <div class="d-flex justify-content-end align-items-end gap-2">
+    <div class="col-12 col-lg-6">
+      <div class="d-flex flex-column align-items-end gap-3">
+        <div class="d-flex justify-content-between align-items-end gap-2">
           <div class="form-group">
             <label for="startDate">Start Date</label>
             <input type="date" class="form-control" id="startDate" [value]="startDate"
@@ -18,14 +19,11 @@
             <input type="date" class="form-control" id="endDate" [value]="endDate"
               (change)="onDateInputChange('end', $any($event.target).value)">
           </div>
-          <button class="btn btn-outline-success" (click)="analyticsReport()" [disabled]="presetLoading">
+          <button class="btn btn-outline-success" (click)="onManualSubmit()" [disabled]="presetLoading">
             <i class="fas fa-paper-plane me-2"></i>Submit
           </button>
-          <button class="btn btn-outline-secondary" (click)="showSavePresetDialog()"
-            [disabled]="presetLoading || !startDate || !endDate">
-            <i class="fas fa-bookmark me-2"></i>Create Preset
-          </button>
-
+        </div>
+        <div class="d-flex justify-content-between align-items-end gap-2">
           <!-- Filter Presets Dropdown -->
           <div class="dropdown">
             <button class="btn btn-outline-info dropdown-toggle" type="button" id="filterPresetsDropdown"
@@ -34,13 +32,17 @@
               <i *ngIf="!presetLoading" class="fas fa-bookmark me-1"></i>
               <i *ngIf="presetLoading" class="fas fa-spinner fa-spin me-1"></i>
               Presets
-              <span *ngIf="selectedPresetId && !presetLoading" class="badge bg-success ms-2"
-                title="Preset mode active">Active</span>
+              <span *ngIf="selectedPresetId && !presetLoading && getSelectedPresetName()" class="badge bg-success ms-2"
+                [title]="'Preset: ' + getSelectedPresetName()">{{ getSelectedPresetName() }}</span>
             </button>
             <div class="dropdown-menu dropdown-menu-end filter-presets-dropdown"
               aria-labelledby="filterPresetsDropdown">
-              <div class="dropdown-header">
+              <div class="dropdown-header d-flex justify-content-between align-items-center">
                 <strong>Filter Presets</strong>
+                <div *ngIf="selectedPresetId" class="clear-preset cursor-pointer" (click)="clearPreset()">
+                  <i class="fas fa-times-circle me-2 text-danger"></i>
+                  <span class="text-danger">Clear Preset</span>
+                </div>
               </div>
 
               <!-- Quick Apply Presets -->
@@ -73,12 +75,22 @@
                 No saved presets
               </div>
 
-              <div class="dropdown-divider"></div>
+
             </div>
           </div>
+          <button class="btn btn-outline-secondary" (click)="showSavePresetDialog()"
+          [disabled]="presetLoading || !startDate || !endDate">
+          <i class="fas fa-bookmark me-2"></i>Create Preset
+        </button>
+        <button class="btn btn-outline-success" (click)="exportToCSV()"
+          [disabled]="exportLoading || !operatorId || !startDate || !endDate">
+          <i *ngIf="!exportLoading" class="fas fa-download me-2"></i>
+          <i *ngIf="exportLoading" class="fas fa-spinner fa-spin me-2"></i>Export CSV
+        </button>
         </div>
       </div>
-    
+    </div>
+
   </div>
 
   <!-- Loading State -->
