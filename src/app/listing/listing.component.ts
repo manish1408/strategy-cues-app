@@ -59,6 +59,8 @@ export class ListingComponent implements OnInit, OnDestroy {
   Status = Status; // Make Status enum available in template
   propertyStatuses: { [key: string]: PropertyStatus } = {}; // Store status for each property
   statusPollingIntervals: { [key: string]: any } = {}; // Store polling intervals for each property
+  
+  lastSyncDate: string = '';
   constructor(
     private toastr: ToastrService,
     private fb: FormBuilder,
@@ -126,6 +128,10 @@ export class ListingComponent implements OnInit, OnDestroy {
   .subscribe({
     next: (res: any) => {
       if (res.success) {
+        console.log(res.data);
+        if(res.data.properties && res.data.properties.length > 0) {
+          this.lastSyncDate = res.data.lastSyncDate;
+        }
         // Ensure properties is an array
         if (Array.isArray(res.data.properties)) {
           const newListings = res.data.properties.map((listing: any) => ({

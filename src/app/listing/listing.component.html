@@ -9,7 +9,10 @@
           </div>
         </div>
         <div class="col-12 col-md-6">
-          <div class="d-flex gap-2 float-end">
+          <div class="d-flex gap-2 float-end" >
+            <div *ngIf="lastSyncDate" class="badge bg-secondary d-flex align-items-center justify-content-center">
+              Last Sync: {{ lastSyncDate | date:'dd MMM yyyy' }}
+            </div>
             <button class="btn btn-outline-secondary" (click)="uploadListings()" [disabled]="uploadingFile">
               <span *ngIf="uploadingFile" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
               <i *ngIf="!uploadingFile" class="fas fa-upload me-2"></i>
@@ -188,7 +191,7 @@
 
     <!-- Show empty state when no listings -->
     <div *ngIf="!allListingList || allListingList.length === 0" class="mt-5 text-center">
-      <div class="card-body">
+      <div class="card-body  loading-state">
         <h5 class="card-title mb-3">No Listings Found</h5>
         <p class="card-text">No listings found yet. Click on "Add Listing" to add a new listing.</p>
       </div>

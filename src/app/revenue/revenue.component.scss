@@ -657,12 +657,10 @@ $transition: all 0.3s ease;
         }
 
         &.filter-range {
-          border-color: #28a745;
-          background: #e8f5e8;
-          color: var(--brand-black);
+          background: var(--brand-black);
 
           .filter-label {
-            color: var(--brand-black);
+            // color: var(--brand-black);
           }
         }
 
@@ -680,7 +678,7 @@ $transition: all 0.3s ease;
           font-weight: 600;
           margin-right: 0.25rem;
           white-space: nowrap;
-          color: var(--brand-black);
+          color: var(--brand-yellow);
         }
 
         .filter-value {
@@ -689,7 +687,7 @@ $transition: all 0.3s ease;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
-          color: var(--brand-black);
+          color: var(--brand-yellow);
         }
 
         .remove-filter {
@@ -2386,6 +2384,7 @@ $transition: all 0.3s ease;
   overflow: auto;
   /* allows both X and Y scroll */
   border: 1px solid #dee2e6;
+  background: #fff;
   border-radius: 6px;
   margin: 0 12px;
   position: relative;
@@ -2514,10 +2513,8 @@ thead th button {
 thead th {
   position: sticky;
   top: 0;
-
-  z-index: 10;
+  z-index: 20;
   font-weight: 600;
-
   font-size: var(--font-size-sm);
   padding: 1rem 0.75rem;
 
@@ -2685,11 +2682,11 @@ tbody tr:hover {
 // Selected row styling
 .table-container tbody tr {
   &.selected {
-    background-color: rgba($primary-color, 0.1);
+    background-color: #fff;
   }
 
   &:hover {
-    background-color: rgba($primary-color, 0.05);
+    background-color: #fff;
   }
 }
 
@@ -2856,3 +2853,68 @@ tbody tr:hover {
   width: 2px;
   background: #1e1e1e;
 }
+
+
+
+/// Freeze first two columns (preset select and listing name)
+.table-container {
+  padding: 0;
+  table {
+    // First column - preset select (frozen in body rows)
+    td.preset-select-column {
+      position: sticky;
+      left: 0;
+      z-index: 9; // Lower than header
+      background: #f3f5f2;
+    }
+
+    // Second column - property name (frozen in body rows)
+    td.property-cell {
+      position: sticky;
+      left: 50px; // Adjust based on width of first column
+      z-index: 9; // Lower than header - keep this low
+      background: #f3f5f2;
+    }
+
+    // HEADER ROW - Must have highest z-index to stay on top
+    // First column header (sticky top + sticky left)
+    thead th.preset-select-column {
+      position: sticky !important;
+      left: 0 !important;
+      top: 0 !important;
+      z-index: 100 !important; // Much higher - header with both sticky top and left
+    }
+
+    // Second column header (Listing Name) - MORE SPECIFIC SELECTOR
+    // Target the second th that contains the Listing Name button
+    thead th:nth-child(2) {
+      position: sticky !important;
+      left: 50px !important; // Adjust based on width of first column
+      top: 0 !important;
+      z-index: 98 !important; // Higher than body cells (14) but lower than first column header (100)
+    }
+
+    // Ensure the preset-select-column doesn't get the second column styling
+    thead th.preset-select-column:nth-child(2) {
+      left: 0 !important; // Override if it's the first column
+      z-index: 100 !important; // Keep it highest
+    }
+
+    // Visual separator for frozen columns
+    th.preset-select-column::after,
+    td.preset-select-column::after,
+    th:nth-child(2)::after,
+    td.property-cell::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 1px;
+      // background: #dee2e6;
+      pointer-events: none;
+    }
+  }
+
+}
+
