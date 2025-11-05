@@ -2505,7 +2505,7 @@ thead th button {
   border: none;
   padding: 0;
   margin: 0;
-  font-size: var(--font-size-sm);
+  font-size: 11px;
   font-weight: 600;
   color: var(--brand-yellow);
 }
@@ -2515,7 +2515,7 @@ thead th {
   top: 0;
   z-index: 20;
   font-weight: 600;
-  font-size: var(--font-size-sm);
+  font-size: 11px;
   padding: 1rem 0.75rem;
 
   &:first-child {
@@ -2561,7 +2561,7 @@ tbody tr:hover {
 
   .property-details {
     h4 {
-      font-size: var(--font-size-sm);
+      font-size: 11px;
       font-weight: 600;
       color: var(--brand-black);
       margin: 0 0 0.25rem 0;
@@ -2841,7 +2841,7 @@ tbody tr:hover {
   font-weight: 600;
 }
 .th-sub{
-  font-size: 12px;
+  font-size: 10px;
   font-weight: normal;
   color: var(--brand-yellow) !important;
   .d-divider{

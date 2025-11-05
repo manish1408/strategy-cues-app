@@ -916,6 +916,128 @@ export class RevenueComponent implements OnInit {
     }
   }
 
+  // Build filter parameters for export (without pagination and sorting)
+  buildExportFilterParams(): any {
+    const params: any = {
+      operator_id: this.operatorId
+    };
+
+    // Search term
+    if (this.searchTerm && this.searchTerm.trim()) {
+      params.search_query = this.searchTerm.trim();
+    }
+
+    // Basic filters
+    if (this.selectedArea) params.area = this.selectedArea;
+    if (this.selectedRoomType) params.room_type = this.selectedRoomType;
+
+    // Basic range filters
+    if (this.adrMin !== null) params.adr_min = this.adrMin;
+    if (this.adrMax !== null) params.adr_max = this.adrMax;
+    if (this.revparMin !== null) params.revpar_min = this.revparMin;
+    if (this.revparMax !== null) params.revpar_max = this.revparMax;
+    if (this.mpiMin !== null) params.mpi_min = this.mpiMin;
+    if (this.mpiMax !== null) params.mpi_max = this.mpiMax;
+    if (this.minRateThresholdMin !== null) params.min_rate_threshold_min = this.minRateThresholdMin;
+    if (this.minRateThresholdMax !== null) params.min_rate_threshold_max = this.minRateThresholdMax;
+
+    // Occupancy filters
+    if (this.occupancyTMMin !== null) params.occ_tm_min = this.occupancyTMMin;
+    if (this.occupancyTMMax !== null) params.occ_tm_max = this.occupancyTMMax;
+    if (this.occupancyNMMin !== null) params.occ_nm_min = this.occupancyNMMin;
+    if (this.occupancyNMMax !== null) params.occ_nm_max = this.occupancyNMMax;
+    if (this.occupancy7DaysMin !== null) params.occ_7days_min = this.occupancy7DaysMin;
+    if (this.occupancy7DaysMax !== null) params.occ_7days_max = this.occupancy7DaysMax;
+    if (this.occupancy30DaysMin !== null) params.occ_30days_min = this.occupancy30DaysMin;
+    if (this.occupancy30DaysMax !== null) params.occ_30days_max = this.occupancy30DaysMax;
+
+    // Pickup occupancy filters
+    if (this.pickUpOcc7DaysMin !== null) params.pickup_7days_min = this.pickUpOcc7DaysMin;
+    if (this.pickUpOcc7DaysMax !== null) params.pickup_7days_max = this.pickUpOcc7DaysMax;
+    if (this.pickUpOcc14DaysMin !== null) params.pickup_14days_min = this.pickUpOcc14DaysMin;
+    if (this.pickUpOcc14DaysMax !== null) params.pickup_14days_max = this.pickUpOcc14DaysMax;
+    if (this.pickUpOcc30DaysMin !== null) params.pickup_30days_min = this.pickUpOcc30DaysMin;
+    if (this.pickUpOcc30DaysMax !== null) params.pickup_30days_max = this.pickUpOcc30DaysMax;
+
+    // STLY Variance filters
+    if (this.stlyVarOccMin !== null) params.stly_occ_min = this.stlyVarOccMin;
+    if (this.stlyVarOccMax !== null) params.stly_occ_max = this.stlyVarOccMax;
+    if (this.stlyVarADRMin !== null) params.stly_adr_min = this.stlyVarADRMin;
+    if (this.stlyVarADRMax !== null) params.stly_adr_max = this.stlyVarADRMax;
+    if (this.stlyVarRevPARMin !== null) params.stly_revpar_min = this.stlyVarRevPARMin;
+    if (this.stlyVarRevPARMax !== null) params.stly_revpar_max = this.stlyVarRevPARMax;
+
+    // STLM Variance filters
+    if (this.stlmVarOccMin !== null) params.stlm_occ_min = this.stlmVarOccMin;
+    if (this.stlmVarOccMax !== null) params.stlm_occ_max = this.stlmVarOccMax;
+    if (this.stlmVarADRMin !== null) params.stlm_adr_min = this.stlmVarADRMin;
+    if (this.stlmVarADRMax !== null) params.stlm_adr_max = this.stlmVarADRMax;
+    if (this.stlmVarRevPARMin !== null) params.stlm_revpar_min = this.stlmVarRevPARMin;
+    if (this.stlmVarRevPARMax !== null) params.stlm_revpar_max = this.stlmVarRevPARMax;
+
+    // Platform filters - Booking.com
+    if (this.bookingGeniusFilter !== 'not-present') {
+      params.booking_genius = this.bookingGeniusFilter === 'yes';
+    }
+    if (this.bookingMobileFilter !== 'not-present') {
+      params.booking_mobile = this.bookingMobileFilter === 'yes';
+    }
+    if (this.bookingPrefFilter !== 'not-present') {
+      params.booking_preferred = this.bookingPrefFilter === 'yes';
+    }
+    if (this.bookingWeeklyFilter !== 'not-present') {
+      params.booking_weekly = this.bookingWeeklyFilter === 'yes';
+    }
+    if (this.bookingMonthlyFilter !== 'not-present') {
+      params.booking_monthly = this.bookingMonthlyFilter === 'yes';
+    }
+    if (this.bookingLMDiscFilter !== 'not-present') {
+      params.booking_lastminute = this.bookingLMDiscFilter === 'yes';
+    }
+
+    // Platform filters - Airbnb
+    if (this.airbnbWeeklyFilter !== 'not-present') {
+      params.airbnb_weekly = this.airbnbWeeklyFilter === 'yes';
+    }
+    if (this.airbnbMonthlyFilter !== 'not-present') {
+      params.airbnb_monthly = this.airbnbMonthlyFilter === 'yes';
+    }
+    if (this.airbnbMemberFilter !== 'not-present') {
+      params.airbnb_member = this.airbnbMemberFilter === 'yes';
+    }
+    if (this.airbnbLMDiscFilter !== 'not-present') {
+      params.airbnb_lastminute = this.airbnbLMDiscFilter === 'yes';
+    }
+
+    // Platform filters - VRBO
+    if (this.vrboWeeklyFilter !== 'not-present') {
+      params.vrbo_weekly = this.vrboWeeklyFilter === 'yes';
+    }
+    if (this.vrboMonthlyFilter !== 'not-present') {
+      params.vrbo_monthly = this.vrboMonthlyFilter === 'yes';
+    }
+
+    // Review filters - Booking.com
+    if (this.bookingRevScoreMin !== null) params.booking_review_min = this.bookingRevScoreMin;
+    if (this.bookingRevScoreMax !== null) params.booking_review_max = this.bookingRevScoreMax;
+    if (this.bookingTotalRevMin !== null) params.booking_total_reviews_min = this.bookingTotalRevMin;
+    if (this.bookingTotalRevMax !== null) params.booking_total_reviews_max = this.bookingTotalRevMax;
+
+    // Review filters - Airbnb
+    if (this.airbnbRevScoreMin !== null) params.airbnb_review_min = this.airbnbRevScoreMin;
+    if (this.airbnbRevScoreMax !== null) params.airbnb_review_max = this.airbnbRevScoreMax;
+    if (this.airbnbTotalRevMin !== null) params.airbnb_total_reviews_min = this.airbnbTotalRevMin;
+    if (this.airbnbTotalRevMax !== null) params.airbnb_total_reviews_max = this.airbnbTotalRevMax;
+
+    // Review filters - VRBO
+    if (this.vrboRevScoreMin !== null) params.vrbo_review_min = this.vrboRevScoreMin;
+    if (this.vrboRevScoreMax !== null) params.vrbo_review_max = this.vrboRevScoreMax;
+    if (this.vrboTotalRevMin !== null) params.vrbo_total_reviews_min = this.vrboTotalRevMin;
+    if (this.vrboTotalRevMax !== null) params.vrbo_total_reviews_max = this.vrboTotalRevMax;
+
+    return params;
+  }
+
   // Build filter parameters for the API
   buildFilterParams(): any {
     const params: any = {
@@ -1222,8 +1344,18 @@ export class RevenueComponent implements OnInit {
   }
 
   exportToCSV() {
+    // Check if there are any properties to export
+    if (!this.propertyData || this.propertyData.length === 0) {
+      this.toastr.error("There are no properties to export.");
+      return;
+    }
+
     this.exportLoading = true;
-    this.exportService.exportToCSVProperties(this.operatorId || "").subscribe({
+    
+    // Build filter params without pagination and sorting
+    const filterParams = this.buildExportFilterParams();
+    
+    this.exportService.exportToCSVProperties(this.operatorId || "", filterParams).subscribe({
       next: (response: any) => {
         this.exportLoading = false;
         
