@@ -179,8 +179,8 @@
           <td class="property-cell">
             <div class="property-info">
               <div class="property-image">
-                <img [src]="row.listingDetails?.photo?.url || ''" [alt]="row['Listing Name']"
-                  (error)="onImageError($event)" class="property-thumbnail">
+                <img  [src]="getPropertyImage(row)" [alt]="row['Listing Name']" (error)="onImageError($event)"
+                  class="property-thumbnail">
               </div>
               <div class="property-details">
                 <h4 [title]="row['Listing Name']" [attr.aria-label]="row['Listing Name']">{{ row['Listing Name']
