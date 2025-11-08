@@ -203,7 +203,7 @@ export class FilterPresetService {
     }
 
     // Update via API
-    this.updateFilterPreset(id, {
+    this.updateFilterPreset(id, operatorId, {
       name: updates['name']?.trim(),
       description: updates['description']?.trim(),
       filters: updates['filters']
@@ -524,18 +524,18 @@ export class FilterPresetService {
    * Update an existing filter preset
    * PUT /api/v1/filter-presets/update-filter-preset/{filter_preset_id}
    */
-  private updateFilterPreset(filterPresetId: string, presetData: {
+  private updateFilterPreset(filterPresetId: string,operatorId: string, presetData: {
     name?: string;
     description?: string;
     filters?: any;
   }): Observable<any> {
     console.log('FilterPresetService.updateFilterPreset called with:', {
-      url: `${this._url}/update-filter-preset/${filterPresetId}`,
+      url: `${this._url}/update-filter-preset/${filterPresetId}?operator_id=${operatorId}`,
       filterPresetId,
       data: presetData
     });
 
-    return this.http.put<any>(`${this._url}/update-filter-preset/${filterPresetId}`, presetData);
+    return this.http.put<any>(`${this._url}/update-filter-preset/${filterPresetId}?operator_id=${operatorId}`, presetData);
   }
 
   /**

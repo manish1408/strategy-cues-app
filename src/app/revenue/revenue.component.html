@@ -52,18 +52,37 @@
                     (click)="selectedPresetId = preset.id; onPresetSelectionChange()"
                     [class.selected]="selectedPresetId === preset.id">
                     <div class="preset-info cursor-pointer">
-                      <div class="preset-name">
+                      <div class="d-flex align-items-start">
                         <i class="fas fa-bookmark  me-2"></i>
-                        {{ preset.name }}
-                        <span *ngIf="selectedPresetId === preset.id" class="badge bg-success ms-2">Selected</span>
-                      </div>
-                      <div class="preset-summary">
-                        <small class="text-muted">{{ getPresetSummary(preset).slice(0, 2).join(', ') }}
-                          <span *ngIf="getPresetSummary(preset).length > 2">...</span>
-                        </small>
+                        <div class="d-flex flex-column ">
+                          <div class="preset-name d-flex align-items-center">
+                            {{ preset.name }}
+                            <button
+                            *ngIf="preset.description"
+                            type="button"
+                            class="btn btn-link btn-sm text-muted ms-2 info-btn p-0"
+                            title="View description"
+                            (click)="showPresetDescription(preset, $event)"
+                            >
+                            <i class="fas fa-info-circle"></i>
+                          </button>
+                          <span *ngIf="selectedPresetId === preset.id" class="badge bg-success ms-2">Selected</span>
+                          </div>
+                          <div class="preset-summary">
+                            {{ getPresetSummary(preset).slice(0, 2).join(', ') }}
+                              <ng-container *ngIf="getPresetSummary(preset).length > 2">...</ng-container>
+                          </div>
+                        </div>
+                        
                       </div>
                     </div>
                     <div class="preset-actions">
+                      <button class="btn btn-sm btn-primary me-2"
+                        (click)="openEditPresetDialog(preset, $event)"
+                        [disabled]="presetDeleting || presetEditing"
+                        title="Edit preset">
+                        <i class="fas fa-edit"></i>
+                      </button>
                       <button class="btn btn-sm btn-outline-danger"
                         (click)="$event.stopPropagation(); deletePreset(preset.id)" [disabled]="presetDeleting"
                         title="Delete preset">
@@ -73,16 +92,9 @@
                     </div>
                   </div>
                 </div>
-
                 <div *ngIf="filterPresets.length === 0" class="dropdown-item-text text-muted">
                   No saved presets
                 </div>
-
-
-
-                <div class="dropdown-divider"></div>
-
-
               </div>
             </div>
           </div>
@@ -1634,6 +1646,31 @@
       </div>
     </div>
 
+
+    <!-- Preset Description Modal -->
+    <div class="modal fade" id="presetDescriptionModal" tabindex="-1"
+      aria-labelledby="presetDescriptionModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="presetDescriptionModalLabel">
+              <i class="fas fa-info-circle me-2"></i>
+              {{ selectedPresetForDescription?.name || 'Preset Details' }}
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p class="mb-0 preset-description" *ngIf="selectedPresetForDescription?.description; else noPresetDescription">
+              {{ selectedPresetForDescription?.description }}
+            </p>
+            <ng-template #noPresetDescription>
+              <p class="mb-0 text-muted">No description available for this preset.</p>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Save Preset Modal -->
     <div class="modal fade" id="savePresetModal" tabindex="-1" aria-labelledby="savePresetModalLabel" aria-hidden="true"
       [class.show]="showSavePresetForm" [style.display]="showSavePresetForm ? 'block' : 'none'">
@@ -1703,6 +1740,50 @@
               [disabled]="!newPresetName.trim() || presetSaving || (getAppliedFilters().length === 0 && getCurrentPropertyIds().length === 0 && getSelectedForPresetCount() === 0)">
               <i *ngIf="!presetSaving" class="fas fa-save me-2"></i>
               <i *ngIf="presetSaving" class="fas fa-spinner fa-spin me-2"></i>Save Preset
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Preset Modal -->
+    <div class="modal fade" id="editPresetModal" tabindex="-1" aria-labelledby="editPresetModalLabel" aria-hidden="true"
+      [class.show]="showEditPresetForm" [style.display]="showEditPresetForm ? 'block' : 'none'">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editPresetModalLabel">
+              <i class="fas fa-edit me-2"></i>Edit Preset
+            </h5>
+            <button type="button" class="btn-close" (click)="cancelEditPreset()" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form (ngSubmit)="updatePresetDetails()" #editPresetForm="ngForm">
+              <div class="mb-3">
+                <label for="editPresetName" class="form-label">Preset Name *</label>
+                <input type="text" class="form-control" id="editPresetName" [(ngModel)]="editPresetName"
+                  name="editPresetName" required maxlength="50" placeholder="Enter a name for this preset">
+              </div>
+              <div class="mb-3">
+                <label for="editPresetDescription" class="form-label">Description (Optional)</label>
+                <textarea class="form-control" id="editPresetDescription" [(ngModel)]="editPresetDescription"
+                  name="editPresetDescription" rows="3" maxlength="200"
+                  placeholder="Add a description to help you remember what this preset is for"></textarea>
+              </div>
+
+              <div *ngIf="presetEditError" class="alert alert-danger">
+                {{ presetEditError }}
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="cancelEditPreset()" [disabled]="presetEditing">
+              Cancel
+            </button>
+            <button type="button" class="btn btn-primary" (click)="updatePresetDetails()"
+              [disabled]="presetEditing || !editPresetName.trim()">
+              <i *ngIf="presetEditing" class="fas fa-spinner fa-spin me-2"></i>
+              Save Changes
             </button>
           </div>
         </div>

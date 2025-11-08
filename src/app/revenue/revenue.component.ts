@@ -288,6 +288,11 @@ export class RevenueComponent implements OnInit {
   newPresetDescription: string = '';
   presetSaveError: string = '';
   showPresetManagement: boolean = false;
+  showEditPresetForm: boolean = false;
+  editingPresetId: string = '';
+  editPresetName: string = '';
+  editPresetDescription: string = '';
+  presetEditError: string = '';
   
   // Preset loading states
   presetLoading: boolean = false;
@@ -296,6 +301,7 @@ export class RevenueComponent implements OnInit {
   presetDuplicating: boolean = false;
   presetExporting: boolean = false;
   presetImporting: boolean = false;
+  presetEditing: boolean = false;
 
   // Property selection state
   selectedPropertyIds: Set<string> = new Set();
@@ -314,6 +320,11 @@ export class RevenueComponent implements OnInit {
 
   // Loading states
   cuePropertiesLoading: boolean = false;
+
+  // Preset description modal state
+  selectedPresetForDescription: { name?: string; description?: string } | null = null;
+  private shouldKeepPresetDropdownOpen: boolean = false;
+  private presetDropdownHideListener: ((event: any) => void) | null = null;
 
   constructor(
     private propertiesService: PropertiesService, 
@@ -2546,6 +2557,69 @@ export class RevenueComponent implements OnInit {
     });
   }
 
+  showPresetDescription(preset: any, event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
+
+    if (!preset?.description) {
+      this.selectedPresetForDescription = null;
+      return;
+    }
+
+    this.selectedPresetForDescription = {
+      name: preset.name,
+      description: preset.description,
+    };
+
+    const dropdownToggle = document.getElementById('filterPresetsDropdown');
+    if (dropdownToggle) {
+      this.shouldKeepPresetDropdownOpen = dropdownToggle.classList.contains('show') || dropdownToggle.getAttribute('aria-expanded') === 'true';
+
+      if (this.shouldKeepPresetDropdownOpen) {
+        if (this.presetDropdownHideListener) {
+          dropdownToggle.removeEventListener('hide.bs.dropdown', this.presetDropdownHideListener);
+        }
+
+        this.presetDropdownHideListener = (hideEvent: any) => {
+          if (this.shouldKeepPresetDropdownOpen) {
+            hideEvent.preventDefault();
+          }
+        };
+
+        dropdownToggle.addEventListener('hide.bs.dropdown', this.presetDropdownHideListener);
+      }
+    }
+
+    const modalElement = document.getElementById('presetDescriptionModal');
+    if (modalElement && typeof bootstrap !== 'undefined') {
+      const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
+      modalElement.addEventListener(
+        'hidden.bs.modal',
+        () => {
+          this.closePresetDescriptionModal();
+        },
+        { once: true }
+      );
+      modal.show();
+    }
+  }
+
+  closePresetDescriptionModal(): void {
+    this.selectedPresetForDescription = null;
+    const dropdownToggle = document.getElementById('filterPresetsDropdown');
+
+    this.shouldKeepPresetDropdownOpen = false;
+
+    if (dropdownToggle && this.presetDropdownHideListener) {
+      dropdownToggle.removeEventListener('hide.bs.dropdown', this.presetDropdownHideListener);
+      this.presetDropdownHideListener = null;
+
+      const dropdownInstance = bootstrap.Dropdown.getOrCreateInstance(dropdownToggle);
+      dropdownInstance.show();
+    }
+  }
+
   // Method to refresh presets
   refreshPresets(): void {
     this.loadFilterPresets();
@@ -3274,6 +3348,90 @@ export class RevenueComponent implements OnInit {
       this.presetSaving = false;
       this.presetSaveError = error.message || 'Failed to save preset';
       this.toastr.error(this.presetSaveError);
+    }
+  }
+
+  openEditPresetDialog(preset: any, event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+
+    if (!preset || !preset.id) {
+      this.toastr.error('Preset not found');
+      return;
+    }
+
+    this.editingPresetId = preset.id;
+    this.editPresetName = preset.name || '';
+    this.editPresetDescription = preset.description || '';
+    this.presetEditError = '';
+    this.showEditPresetForm = true;
+
+    const dropdownToggle = document.getElementById('filterPresetsDropdown');
+    if (dropdownToggle && typeof bootstrap !== 'undefined') {
+      const dropdownInstance = bootstrap.Dropdown.getOrCreateInstance(dropdownToggle);
+      dropdownInstance.hide();
+    }
+  }
+
+  cancelEditPreset(): void {
+    this.showEditPresetForm = false;
+    this.editingPresetId = '';
+    this.editPresetName = '';
+    this.editPresetDescription = '';
+    this.presetEditError = '';
+  }
+
+  updatePresetDetails(): void {
+    if (!this.editPresetName.trim()) {
+      this.presetEditError = 'Please enter a preset name';
+      return;
+    }
+
+    if (!this.editingPresetId) {
+      this.presetEditError = 'Preset ID is missing';
+      return;
+    }
+
+    if (!this.operatorId) {
+      this.presetEditError = 'Operator ID is required to update a preset';
+      this.toastr.error(this.presetEditError);
+      return;
+    }
+
+    this.presetEditing = true;
+    this.presetEditError = '';
+   
+
+    try {
+      const updatedPreset = this.filterPresetService.updatePreset(
+        this.editingPresetId,
+        {
+          name: this.editPresetName.trim(),
+          description: this.editPresetDescription.trim() || undefined,
+        },
+        this.operatorId || undefined
+      );
+
+      const presetIndex = this.filterPresets.findIndex(preset => preset.id === this.editingPresetId);
+      if (presetIndex !== -1) {
+        const updatedPresets = [...this.filterPresets];
+        updatedPresets[presetIndex] = {
+          ...updatedPresets[presetIndex],
+          ...updatedPreset,
+        };
+        this.filterPresets = updatedPresets;
+      }
+
+      this.toastr.success('Preset updated successfully!');
+      this.cancelEditPreset();
+    } catch (error: any) {
+      console.error('Error updating preset:', error);
+      this.presetEditError = error?.message || 'Failed to update preset';
+      this.toastr.error(this.presetEditError);
+    } finally {
+      this.presetEditing = false;
     }
   }
 
