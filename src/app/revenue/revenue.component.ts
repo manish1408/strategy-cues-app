@@ -3043,72 +3043,72 @@ export class RevenueComponent implements OnInit {
     this.selectedRoomType = filters.selectedRoomType || '';
     
     // Range filters
-    this.adrMin = filters.adrMin || null;
-    this.adrMax = filters.adrMax || null;
-    this.revparMin = filters.revparMin || null;
-    this.revparMax = filters.revparMax || null;
-    this.mpiMin = filters.mpiMin || null;
-    this.mpiMax = filters.mpiMax || null;
-    this.minRateThresholdMin = filters.minRateThresholdMin || null;
-    this.minRateThresholdMax = filters.minRateThresholdMax || null;
+    this.adrMin = filters.adrMin ?? null;
+    this.adrMax = filters.adrMax ?? null;
+    this.revparMin = filters.revparMin ?? null;
+    this.revparMax = filters.revparMax ?? null;
+    this.mpiMin = filters.mpiMin ?? null;
+    this.mpiMax = filters.mpiMax ?? null;
+    this.minRateThresholdMin = filters.minRateThresholdMin ?? null;
+    this.minRateThresholdMax = filters.minRateThresholdMax ?? null;
     
     // Occupancy filters
-    this.occupancyTMMin = filters.occupancyTMMin || null;
-    this.occupancyTMMax = filters.occupancyTMMax || null;
-    this.occupancyNMMin = filters.occupancyNMMin || null;
-    this.occupancyNMMax = filters.occupancyNMMax || null;
-    this.occupancy7DaysMin = filters.occupancy7DaysMin || null;
-    this.occupancy7DaysMax = filters.occupancy7DaysMax || null;
-    this.occupancy30DaysMin = filters.occupancy30DaysMin || null;
-    this.occupancy30DaysMax = filters.occupancy30DaysMax || null;
-    this.pickUpOcc7DaysMin = filters.pickUpOcc7DaysMin || null;
-    this.pickUpOcc7DaysMax = filters.pickUpOcc7DaysMax || null;
-    this.pickUpOcc14DaysMin = filters.pickUpOcc14DaysMin || null;
-    this.pickUpOcc14DaysMax = filters.pickUpOcc14DaysMax || null;
-    this.pickUpOcc30DaysMin = filters.pickUpOcc30DaysMin || null;
-    this.pickUpOcc30DaysMax = filters.pickUpOcc30DaysMax || null;
+    this.occupancyTMMin = filters.occupancyTMMin ?? null;
+    this.occupancyTMMax = filters.occupancyTMMax ?? null;
+    this.occupancyNMMin = filters.occupancyNMMin ?? null;
+    this.occupancyNMMax = filters.occupancyNMMax ?? null;
+    this.occupancy7DaysMin = filters.occupancy7DaysMin ?? null;
+    this.occupancy7DaysMax = filters.occupancy7DaysMax ?? null;
+    this.occupancy30DaysMin = filters.occupancy30DaysMin ?? null;
+    this.occupancy30DaysMax = filters.occupancy30DaysMax ?? null;
+    this.pickUpOcc7DaysMin = filters.pickUpOcc7DaysMin ?? null;
+    this.pickUpOcc7DaysMax = filters.pickUpOcc7DaysMax ?? null;
+    this.pickUpOcc14DaysMin = filters.pickUpOcc14DaysMin ?? null;
+    this.pickUpOcc14DaysMax = filters.pickUpOcc14DaysMax ?? null;
+    this.pickUpOcc30DaysMin = filters.pickUpOcc30DaysMin ?? null;
+    this.pickUpOcc30DaysMax = filters.pickUpOcc30DaysMax ?? null;
     
     // Performance filters
-    this.stlyVarOccMin = filters.stlyVarOccMin || null;
-    this.stlyVarOccMax = filters.stlyVarOccMax || null;
-    this.stlyVarADRMin = filters.stlyVarADRMin || null;
-    this.stlyVarADRMax = filters.stlyVarADRMax || null;
-    this.stlyVarRevPARMin = filters.stlyVarRevPARMin || null;
-    this.stlyVarRevPARMax = filters.stlyVarRevPARMax || null;
-    this.stlmVarOccMin = filters.stlmVarOccMin || null;
-    this.stlmVarOccMax = filters.stlmVarOccMax || null;
-    this.stlmVarADRMin = filters.stlmVarADRMin || null;
-    this.stlmVarADRMax = filters.stlmVarADRMax || null;
-    this.stlmVarRevPARMin = filters.stlmVarRevPARMin || null;
-    this.stlmVarRevPARMax = filters.stlmVarRevPARMax || null;
+    this.stlyVarOccMin = filters.stlyVarOccMin ?? null;
+    this.stlyVarOccMax = filters.stlyVarOccMax ?? null;
+    this.stlyVarADRMin = filters.stlyVarADRMin ?? null;
+    this.stlyVarADRMax = filters.stlyVarADRMax ?? null;
+    this.stlyVarRevPARMin = filters.stlyVarRevPARMin ?? null;
+    this.stlyVarRevPARMax = filters.stlyVarRevPARMax ?? null;
+    this.stlmVarOccMin = filters.stlmVarOccMin ?? null;
+    this.stlmVarOccMax = filters.stlmVarOccMax ?? null;
+    this.stlmVarADRMin = filters.stlmVarADRMin ?? null;
+    this.stlmVarADRMax = filters.stlmVarADRMax ?? null;
+    this.stlmVarRevPARMin = filters.stlmVarRevPARMin ?? null;
+    this.stlmVarRevPARMax = filters.stlmVarRevPARMax ?? null;
     
     // Platform filters
-    this.bookingGeniusFilter = filters.bookingGeniusFilter || 'not-present';
-    this.bookingMobileFilter = filters.bookingMobileFilter || 'not-present';
-    this.bookingPrefFilter = filters.bookingPrefFilter || 'not-present';
-    this.bookingWeeklyFilter = filters.bookingWeeklyFilter || 'not-present';
-    this.bookingMonthlyFilter = filters.bookingMonthlyFilter || 'not-present';
-    this.bookingLMDiscFilter = filters.bookingLMDiscFilter || 'not-present';
-    this.airbnbWeeklyFilter = filters.airbnbWeeklyFilter || 'not-present';
-    this.airbnbMonthlyFilter = filters.airbnbMonthlyFilter || 'not-present';
-    this.airbnbMemberFilter = filters.airbnbMemberFilter || 'not-present';
-    this.airbnbLMDiscFilter = filters.airbnbLMDiscFilter || 'not-present';
-    this.vrboWeeklyFilter = filters.vrboWeeklyFilter || 'not-present';
-    this.vrboMonthlyFilter = filters.vrboMonthlyFilter || 'not-present';
+    this.bookingGeniusFilter = filters.bookingGeniusFilter ?? 'not-present';
+    this.bookingMobileFilter = filters.bookingMobileFilter ?? 'not-present';
+    this.bookingPrefFilter = filters.bookingPrefFilter ?? 'not-present';
+    this.bookingWeeklyFilter = filters.bookingWeeklyFilter ?? 'not-present';
+    this.bookingMonthlyFilter = filters.bookingMonthlyFilter ?? 'not-present';
+    this.bookingLMDiscFilter = filters.bookingLMDiscFilter ?? 'not-present';
+    this.airbnbWeeklyFilter = filters.airbnbWeeklyFilter ?? 'not-present';
+    this.airbnbMonthlyFilter = filters.airbnbMonthlyFilter ?? 'not-present';
+    this.airbnbMemberFilter = filters.airbnbMemberFilter ?? 'not-present';
+    this.airbnbLMDiscFilter = filters.airbnbLMDiscFilter ?? 'not-present';
+    this.vrboWeeklyFilter = filters.vrboWeeklyFilter ?? 'not-present';
+    this.vrboMonthlyFilter = filters.vrboMonthlyFilter ?? 'not-present';
     
     // Reviews filters
-    this.bookingRevScoreMin = filters.bookingRevScoreMin || null;
-    this.bookingRevScoreMax = filters.bookingRevScoreMax || null;
-    this.bookingTotalRevMin = filters.bookingTotalRevMin || null;
-    this.bookingTotalRevMax = filters.bookingTotalRevMax || null;
-    this.airbnbRevScoreMin = filters.airbnbRevScoreMin || null;
-    this.airbnbRevScoreMax = filters.airbnbRevScoreMax || null;
-    this.airbnbTotalRevMin = filters.airbnbTotalRevMin || null;
-    this.airbnbTotalRevMax = filters.airbnbTotalRevMax || null;
-    this.vrboRevScoreMin = filters.vrboRevScoreMin || null;
-    this.vrboRevScoreMax = filters.vrboRevScoreMax || null;
-    this.vrboTotalRevMin = filters.vrboTotalRevMin || null;
-    this.vrboTotalRevMax = filters.vrboTotalRevMax || null;
+    this.bookingRevScoreMin = filters.bookingRevScoreMin ?? null;
+    this.bookingRevScoreMax = filters.bookingRevScoreMax ?? null;
+    this.bookingTotalRevMin = filters.bookingTotalRevMin ?? null;
+    this.bookingTotalRevMax = filters.bookingTotalRevMax ?? null;
+    this.airbnbRevScoreMin = filters.airbnbRevScoreMin ?? null;
+    this.airbnbRevScoreMax = filters.airbnbRevScoreMax ?? null;
+    this.airbnbTotalRevMin = filters.airbnbTotalRevMin ?? null;
+    this.airbnbTotalRevMax = filters.airbnbTotalRevMax ?? null;
+    this.vrboRevScoreMin = filters.vrboRevScoreMin ?? null;
+    this.vrboRevScoreMax = filters.vrboRevScoreMax ?? null;
+    this.vrboTotalRevMin = filters.vrboTotalRevMin ?? null;
+    this.vrboTotalRevMax = filters.vrboTotalRevMax ?? null;
     
     // Update temporary filters to match
     this.initializeTempFilters();
@@ -3248,7 +3248,6 @@ export class RevenueComponent implements OnInit {
   onPresetSelectionChange(): void {
     // Exit preset mode when changing presets
     this.isPresetMode = false;
-    
     if (this.selectedPresetId && this.operatorId) {
       // Show preset loading state
       this.presetLoading = true;
