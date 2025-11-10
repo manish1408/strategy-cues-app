@@ -163,7 +163,9 @@ export class PropertiesService {
         operator_id: property.operator_id,
         listing_id: property.listing_id,
         createdAt: property.createdAt,
-        status: property.status
+        status: property.status,
+        // New Pricelabs Sync Status field  
+        Pricelabs_SyncStatus: property.Pricelabs_SyncStatus
       }));
       console.log('Mapped properties:', mappedProperties);
       return mappedProperties;
