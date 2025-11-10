@@ -37,7 +37,7 @@
               <i class="fas fa-times-circle"></i>
             </div>
             <div class="card-content">
-              <h3>{{ item.title }}</h3>
+              <h3 class="clickable-title" (click)="openDescriptionModal(item)">{{ item.title }}</h3>
             </div>
           </div>
         </div>
@@ -58,7 +58,7 @@
               <i class="fas fa-star"></i>
             </div>
             <div class="card-content">
-              <h3>{{ item.title }}</h3>
+              <h3 class="clickable-title" (click)="openDescriptionModal(item)">{{ item.title }}</h3>
             </div>
           </div>
         </div>
@@ -79,7 +79,7 @@
               <i class="fas fa-heart"></i>
             </div>
             <div class="card-content">
-              <h3>{{ item.title }}</h3>
+              <h3 class="text-black clickable-title" (click)="openDescriptionModal(item)">{{ item.title }}</h3>
             </div>
           </div>
         </div>
@@ -115,7 +115,7 @@
               <i class="fas fa-arrow-up"></i>
             </div>
             <div class="card-content">
-              <h3>{{ item.title }}</h3>
+              <h3 class="clickable-title" (click)="openDescriptionModal(item)">{{ item.title }}</h3>
             </div>
           </div>
         </div>
@@ -132,6 +132,24 @@
     <button class="help-btn" title="Help">
       <i class="fas fa-question"></i>
     </button>
+  </div>
+</div>
+
+<!-- Description Modal -->
+<div class="modal fade" id="descriptionModal" tabindex="-1" aria-labelledby="descriptionModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="descriptionModalLabel">{{ selectedItem?.title }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p class="description-text">{{ selectedItem?.description || 'No description available.' }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
   </div>
 </div>
 </div>
