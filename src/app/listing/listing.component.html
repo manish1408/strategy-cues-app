@@ -9,10 +9,18 @@
           </div>
         </div>
         <div class="col-12 col-md-6">
-          <div class="d-flex gap-2 float-end" >
-            <div *ngIf="lastSyncDate" class="badge bg-secondary d-flex align-items-center justify-content-center">
-              Last Sync: {{ lastSyncDate | date:'dd MMM yyyy' }}
+          <div class="d-flex gap-2 flex-wrap justify-content-end" >
+            <div class="d-flex gap-2">
+            <div *ngIf="bookingLastSyncedAt" class="badge bg-secondary d-flex align-items-center justify-content-center sync-dates">
+              Booking Last Sync: {{ bookingLastSyncedAt | date:'dd MMM yyyy, HH:mm' }} ({{ localTimezone }})
             </div>
+            <div *ngIf="airbnbLastSyncedAt" class="badge bg-secondary d-flex align-items-center justify-content-center sync-dates">
+              Airbnb Last Sync: {{ airbnbLastSyncedAt | date:'dd MMM yyyy, HH:mm' }} ({{ localTimezone }})
+            </div>
+            <div *ngIf="pricelabsLastSyncedAt" class="badge bg-secondary d-flex align-items-center justify-content-center sync-dates">
+              Pricelabs Last Sync: {{ pricelabsLastSyncedAt | date:'dd MMM yyyy, HH:mm' }} ({{ localTimezone }})
+            </div>
+          </div>
             <button class="btn btn-outline-secondary" (click)="uploadListings()" [disabled]="uploadingFile">
               <span *ngIf="uploadingFile" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
               <i *ngIf="!uploadingFile" class="fas fa-upload me-2"></i>

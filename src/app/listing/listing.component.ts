@@ -60,7 +60,11 @@ export class ListingComponent implements OnInit, OnDestroy {
   propertyStatuses: { [key: string]: PropertyStatus } = {}; // Store status for each property
   statusPollingIntervals: { [key: string]: any } = {}; // Store polling intervals for each property
   
-  lastSyncDate: string = '';
+  lastSyncDate: Date | null = null;
+  bookingLastSyncedAt: Date | null = null;
+  airbnbLastSyncedAt: Date | null = null;
+  pricelabsLastSyncedAt: Date | null = null;
+  localTimezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone;
   constructor(
     private toastr: ToastrService,
     private fb: FormBuilder,
@@ -130,7 +134,11 @@ export class ListingComponent implements OnInit, OnDestroy {
       if (res.success) {
         console.log(res.data);
         if(res.data.properties && res.data.properties.length > 0) {
-          this.lastSyncDate = res.data.lastSyncDate;
+          const lastSyncDates = res.data.lastSyncDates || {};
+          this.lastSyncDate = this.convertUtcStringToDate(lastSyncDates.lastSyncDate);
+          this.bookingLastSyncedAt = this.convertUtcStringToDate(lastSyncDates.bookingLastSyncedAt);
+          this.airbnbLastSyncedAt = this.convertUtcStringToDate(lastSyncDates.airbnbLastSyncedAt);
+          this.pricelabsLastSyncedAt = this.convertUtcStringToDate(lastSyncDates.pricelabsLastSyncedAt);
         }
         // Ensure properties is an array
         if (Array.isArray(res.data.properties)) {
@@ -180,6 +188,29 @@ export class ListingComponent implements OnInit, OnDestroy {
       this.isLoadingMore = false;
     }
   });
+  }
+
+  private convertUtcStringToDate(dateString: string | null | undefined): Date | null {
+    if (!dateString) {
+      return null;
+    }
+
+    const normalizedString = this.normalizeUtcDateString(dateString);
+    const parsedDate = new Date(normalizedString);
+
+    return isNaN(parsedDate.getTime()) ? null : parsedDate;
+  }
+
+  private normalizeUtcDateString(dateString: string): string {
+    let isoString = dateString.replace(' ', 'T');
+
+    if (!isoString.endsWith('Z')) {
+      isoString += 'Z';
+    }
+
+    isoString = isoString.replace(/(\.\d{3})\d+Z$/, '$1Z');
+
+    return isoString;
   }
 
   initializePropertyStatuses(properties: any[]) {
