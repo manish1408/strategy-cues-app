@@ -338,7 +338,7 @@ export class RevenueComponent implements OnInit {
     private deploymentCuesService: DeploymentCuesService,
     private cuePropertiesService: CuePropertiesService,
   ) {
-    this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
+    // this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
   }
 
   // Helper methods to safely parse values that might be strings or numbers
@@ -396,7 +396,7 @@ export class RevenueComponent implements OnInit {
         // Fallback to localStorage
         this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
       }
-      
+      this.resetPageState();
       // Load properties with the operatorId
       this.loadProperties();
       
@@ -404,6 +404,79 @@ export class RevenueComponent implements OnInit {
       this.loadFilterPresets();
     });
 
+  }
+
+  resetPageState(): void {
+    this.currentPage = 1;
+    this.totalPages = 1;
+    this.hasMoreData = true;
+    this.isLoadingMore = false;
+
+    this.propertyData = [];
+    this.selectedPresetId = '';
+    this.selectedPropertyIds.clear();
+    this.selectAllProperties = false;
+
+    this.selectedForPresetIds.clear();
+    this.selectAllForPreset = false;
+    this.isPresetMode = false;
+    this.showOnlySelected = false;
+    this.presetPropertyIds = [];
+
+    this.searchTerm = '';
+    this.selectedArea = '';
+    this.selectedRoomType = '';
+    this.resetFilterValues();
+  }
+
+  private resetFilterValues(): void {
+    this.adrMin = this.adrMax = null;
+    this.revparMin = this.revparMax = null;
+    this.mpiMin = this.mpiMax = null;
+    this.minRateThresholdMin = this.minRateThresholdMax = null;
+
+    this.occupancyTMMin = this.occupancyTMMax = null;
+    this.occupancyNMMin = this.occupancyNMMax = null;
+    this.occupancy7DaysMin = this.occupancy7DaysMax = null;
+    this.occupancy30DaysMin = this.occupancy30DaysMax = null;
+
+    this.pickUpOcc7DaysMin = this.pickUpOcc7DaysMax = null;
+    this.pickUpOcc14DaysMin = this.pickUpOcc14DaysMax = null;
+    this.pickUpOcc30DaysMin = this.pickUpOcc30DaysMax = null;
+
+    this.stlyVarOccMin = this.stlyVarOccMax = null;
+    this.stlyVarADRMin = this.stlyVarADRMax = null;
+    this.stlyVarRevPARMin = this.stlyVarRevPARMax = null;
+
+    this.stlmVarOccMin = this.stlmVarOccMax = null;
+    this.stlmVarADRMin = this.stlmVarADRMax = null;
+    this.stlmVarRevPARMin = this.stlmVarRevPARMax = null;
+
+    this.bookingGeniusFilter =
+      this.bookingMobileFilter =
+      this.bookingPrefFilter =
+      this.bookingWeeklyFilter =
+      this.bookingMonthlyFilter =
+      this.bookingLMDiscFilter = 'not-present';
+
+    this.airbnbWeeklyFilter =
+      this.airbnbMonthlyFilter =
+      this.airbnbMemberFilter =
+      this.airbnbLMDiscFilter = 'not-present';
+
+    this.vrboWeeklyFilter = this.vrboMonthlyFilter = 'not-present';
+
+    this.bookingRevScoreMin = this.bookingRevScoreMax = null;
+    this.bookingTotalRevMin = this.bookingTotalRevMax = null;
+    this.airbnbRevScoreMin = this.airbnbRevScoreMax = null;
+    this.airbnbTotalRevMin = this.airbnbTotalRevMax = null;
+    this.vrboRevScoreMin = this.vrboRevScoreMax = null;
+    this.vrboTotalRevMin = this.vrboTotalRevMax = null;
+
+    this.searchTerm = '';
+    this.tempSelectedArea = '';
+    this.tempSelectedRoomType = '';
+    this.initializeTempFilters();
   }
 
   loadProperties(): void {
