@@ -1,29 +1,24 @@
 <div class="container-fluid">
-  <div class="row align-items-center mb-4">
-    <div class="col-12 col-lg-6">
-      <div class="page-header">
-        <h4 class="title text-dark">Analytics Cues</h4>
-        <p class="desc">This is the Analytics Cues page. Here you can manage the Analytics Cues data.</p>
+  <div class="row align-items-end mb-4">
+    <div class="col-12 col-lg-6 mb-4 mb-lg-0">
+      <div class="d-flex justify-content-start align-items-end gap-2">
+        <div class="form-group">
+          <label for="startDate">Start Date</label>
+          <input type="date" class="form-control" id="startDate" [value]="startDate"
+            (change)="onDateInputChange('start', $any($event.target).value)">
+        </div>
+        <div class="form-group">
+          <label for="endDate">End Date</label>
+          <input type="date" class="form-control" id="endDate" [value]="endDate"
+            (change)="onDateInputChange('end', $any($event.target).value)">
+        </div>
+        <button class="btn btn-outline-success" (click)="onManualSubmit()" [disabled]="presetLoading">
+          <i class="fas fa-paper-plane me-2"></i>Submit
+        </button>
       </div>
     </div>
     <div class="col-12 col-lg-6">
-      <div class="d-flex flex-column align-items-end gap-3">
-        <div class="d-flex justify-content-between align-items-end gap-2">
-          <div class="form-group">
-            <label for="startDate">Start Date</label>
-            <input type="date" class="form-control" id="startDate" [value]="startDate"
-              (change)="onDateInputChange('start', $any($event.target).value)">
-          </div>
-          <div class="form-group">
-            <label for="endDate">End Date</label>
-            <input type="date" class="form-control" id="endDate" [value]="endDate"
-              (change)="onDateInputChange('end', $any($event.target).value)">
-          </div>
-          <button class="btn btn-outline-success" (click)="onManualSubmit()" [disabled]="presetLoading">
-            <i class="fas fa-paper-plane me-2"></i>Submit
-          </button>
-        </div>
-        <div class="d-flex justify-content-between align-items-end gap-2">
+        <div class="d-flex justify-content-start justify-content-lg-end  align-items-center gap-2">
           <!-- Filter Presets Dropdown -->
           <div class="dropdown">
             <button class="btn btn-outline-info dropdown-toggle" type="button" id="filterPresetsDropdown"
@@ -88,9 +83,7 @@
           <i *ngIf="exportLoading" class="fas fa-spinner fa-spin me-2"></i>Export CSV
         </button>
         </div>
-      </div>
     </div>
-
   </div>
 
   <!-- Loading State -->
