@@ -18,6 +18,7 @@ export class UserManagementComponent {
   loading: boolean = false;
   allOperatorList: any[] = [];
   allUsersList: any[] = [];
+  private usersByIdMap: Map<string, any> = new Map<string, any>();
   addOperatorForm: FormGroup;
   selectedOperator: any | null = null;
   constructor(
@@ -47,6 +48,7 @@ export class UserManagementComponent {
           .subscribe({
             next: (_res: any) => {
               this.allUsersList = _res?.data?.users ?? [];
+              this.usersByIdMap = this.buildUsersByIdMap(this.allUsersList);
             },
             error: (error: any) => {
               this.toastr.error("Failed to load users");
@@ -65,30 +67,11 @@ export class UserManagementComponent {
     if (!user) {
       return "";
     }
-
-    const fullNameCandidate =
-      user.fullName ??
-      user.fullname ??
-      [user.firstName, user.lastName].filter(Boolean).join(" ");
-
-    const fullName =
-      typeof fullNameCandidate === "string" && fullNameCandidate.trim().length
-        ? fullNameCandidate.trim()
-        : null;
-
-    if (fullName) {
-      return fullName;
+    if (user.fullName ) {
+      return user.fullName ;
     }
 
-    if (typeof user.name === "string" && user.name.trim().length) {
-      return user.name.trim();
-    }
-
-    if (typeof user.email === "string" && user.email.trim().length) {
-      return user.email.trim();
-    }
-
-    return (user._id ?? user.id ?? "").toString();
+    return  user.id
   }
 
   getUsersDetails(userIds: any[]): Array<{ id: string; fullName: string }> {
@@ -100,24 +83,15 @@ export class UserManagementComponent {
       return [];
     }
 
-    const usersMap = new Map(
-      this.allUsersList
-        .filter((user: any) => user?._id || user?.id)
-        .map((user: any) => [user._id ?? user.id, user])
-    );
-
     return userIds
       .map((userIdentifier: any) => {
-        const lookupKey =
-          typeof userIdentifier === "string"
-            ? userIdentifier
-            : userIdentifier?._id ?? userIdentifier?.id;
+        const lookupKey =  userIdentifier;
 
         if (!lookupKey) {
           return null;
         }
 
-        const user = usersMap.get(lookupKey);
+        const user = this.usersByIdMap.get(lookupKey);
 
         if (!user) {
           return null;
@@ -126,7 +100,7 @@ export class UserManagementComponent {
         const fullName = this.getUserDisplayName(user);
 
         return {
-          id: user._id ?? user.id ?? lookupKey,
+          id: user.id ?? lookupKey,
           fullName,
         };
       })
@@ -144,7 +118,7 @@ export class UserManagementComponent {
     const assignedUserIds = this.getAssignedUserIdSet(this.selectedOperator);
 
     return this.allUsersList.filter((user: any) => {
-      const userId = user?._id ?? user?.id;
+      const userId = user?.id;
       return userId ? !assignedUserIds.has(userId) : true;
     });
   }
@@ -274,6 +248,18 @@ export class UserManagementComponent {
       .filter((id: any): id is string => typeof id === "string" && !!id);
 
     return new Set<string>(normalizedIds);
+  }
+
+  private buildUsersByIdMap(users: any[]): Map<string, any> {
+    if (!Array.isArray(users)) {
+      return new Map<string, any>();
+    }
+
+    return new Map<string, any>(
+      users
+        .filter((user: any) =>  user?.id)
+        .map((user: any) => [user.id, user])
+    );
   }
 
   private closeModal() {
