@@ -4,7 +4,7 @@ import { AuthGuard } from "./_guards/auth.guard";
 import { OperatorGuard } from "./_guards/operator.guard";
 
 const routes: Routes = [
-  { path: '', redirectTo: 'signin', pathMatch: 'full' },
+  { path: "", redirectTo: "signin", pathMatch: "full" },
   {
     path: "",
     loadChildren: () =>
@@ -19,7 +19,6 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
 
-  
   {
     path: "profile",
     loadChildren: () =>
@@ -61,7 +60,9 @@ const routes: Routes = [
   {
     path: "all-operators",
     loadChildren: () =>
-      import("./all-operators/all-operators.module").then((m) => m.AllOperatorsModule),
+      import("./all-operators/all-operators.module").then(
+        (m) => m.AllOperatorsModule
+      ),
     canActivate: [AuthGuard],
   },
   {
@@ -74,44 +75,56 @@ const routes: Routes = [
     path: "listing",
     loadChildren: () =>
       import("./listing/listing.module").then((m) => m.ListingModule),
-    canActivate: [AuthGuard,OperatorGuard],
+    canActivate: [AuthGuard, OperatorGuard],
   },
   {
     path: "revenue",
     loadChildren: () =>
       import("./revenue/revenue.module").then((m) => m.RevenueModule),
-    canActivate: [AuthGuard,OperatorGuard],
+    canActivate: [AuthGuard, OperatorGuard],
   },
   {
     path: "revenue/property-details/:id",
     loadChildren: () =>
-      import("./revenue/property-details/property-details.module").then((m) => m.PropertyDetailsModule),
-    canActivate: [AuthGuard,OperatorGuard],
+      import("./revenue/property-details/property-details.module").then(
+        (m) => m.PropertyDetailsModule
+      ),
+    canActivate: [AuthGuard, OperatorGuard],
   },
   {
     path: "content",
     loadChildren: () =>
       import("./content/content.module").then((m) => m.ContentModule),
-    canActivate: [AuthGuard,OperatorGuard],
+    canActivate: [AuthGuard, OperatorGuard],
   },
   {
     path: "deployment",
     loadChildren: () =>
       import("./deployment/deployment.module").then((m) => m.DeploymentModule),
-    canActivate: [AuthGuard,OperatorGuard],
+    canActivate: [AuthGuard, OperatorGuard],
   },
   {
     path: "status",
     loadChildren: () =>
       import("./status/status.module").then((m) => m.StatusModule),
-    canActivate: [AuthGuard,OperatorGuard],
+    canActivate: [AuthGuard, OperatorGuard],
   },
   {
     path: "pricelabs-admin",
     loadChildren: () =>
-      import("./pricelabs-admin/pricelabs-admin.module").then((m) => m.PricelabsAdminModule),
-    canActivate: [AuthGuard,OperatorGuard],
-  }
+      import("./pricelabs-admin/pricelabs-admin.module").then(
+        (m) => m.PricelabsAdminModule
+      ),
+    canActivate: [AuthGuard, OperatorGuard],
+  },
+  {
+    path: "user-management",
+    loadChildren: () =>
+      import("./user-management/user-management.module").then(
+        (m) => m.UserManagementModule
+      ),
+    canActivate: [AuthGuard],
+  },
 ];
 
 @NgModule({

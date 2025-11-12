@@ -1,0 +1,136 @@
+<div class="row">
+    <div class="col-12 d-flex justify-content-between align-items-center">
+      <div>
+        <h4 class="title">Users management</h4>
+        <p class="desc">Manage your users and operators here</p>
+      </div>
+    </div>
+  </div>
+  
+  <div *ngIf="apiLoading" class="mt-5 text-center loading-state">
+    <div class="spinner-border text-dark" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-3">Loading users and operators...</p>
+  </div>
+
+ 
+  
+  <ng-container *ngIf="!apiLoading">
+    <!-- Show table when operators exist -->
+    <div *ngIf="allOperatorList && allOperatorList.length > 0">
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Operator Name</th>
+                  <th scope="col">Users</th>
+                  <th scope="col" [width]="'100px'">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let operator of allOperatorList; let i = index">
+                  <td scope="row">{{ i + 1 }}</td>
+                  <td>{{ operator?.name }}</td>
+                  <td class="w-50 ">
+                    <div class="d-flex align-items-center flex-wrap gap-2 ">
+                    <ng-container *ngFor="let user of getUsersDetails(operator?.userId)">
+                      <span class="badge user-badge text-bg-primary">{{ user?.fullName }}
+                        <i class="fa-solid fa-xmark" (click)="removeUser(operator, user.id)"></i>
+                      </span>
+                    </ng-container>
+                    </div>
+                  </td>
+                  <td>
+                    <img
+                      src="assets/icons/edit.svg"
+                      class="cursor-pointer me-2"
+                      data-bs-toggle="modal"
+                      data-bs-target="#addOperator"
+                      (click)="addUser(operator)"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Show empty state when no operators -->
+    <div *ngIf="!allOperatorList || allOperatorList.length === 0" class="mt-5 text-center">
+      <div class="">
+        <div class="card-body">
+          <h5 class="card-title mb-3">No Operators Found</h5>
+          
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  
+  <!-- Add Form Modal -->
+      <div
+        class="modal fade"
+        id="addOperator"
+       
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+          aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content" style="background: white">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">
+                Assign User to operator
+              </h5>
+              <i class="fa-solid fa-xmark" data-bs-dismiss="modal"></i>
+            </div>
+            <div class="modal-body">
+              <form [formGroup]="addOperatorForm">
+                <div class="mb-3">
+                  <label for="userSelect" class="form-label">Select User</label>
+                  <select
+                    id="userSelect"
+                    class="form-select"
+                    formControlName="userId"
+                    [ngClass]="{ 'is-invalid': hasError('userId') }"
+                  >
+                    <option [ngValue]="null" disabled>Select a user</option>
+                    <option
+                      *ngFor="let user of getAvailableUsers()"
+                      [value]="user?._id || user?.id"
+                    >
+                      {{ user?.fullName }}
+                    </option>
+                  </select>
+                  <div class="invalid-feedback">
+                    <span *ngIf="addOperatorForm.get('userId')?.errors?.['required']">User is required</span>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer d-flex justify-content-end">
+              <button
+                #closeButton
+                data-bs-dismiss="modal"
+                class="btn btn-outline-secondary"
+                (click)="resetForm()"
+              >
+                Cancel
+              </button>
+              <button type="button" class="btn btn-primary d-flex align-items-center justify-content-center gap-2" (click)="onSubmit()" [disabled]="loading">
+                <div *ngIf="loading" class="spinner-border spinner-border-sm" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+                Assign User
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+  

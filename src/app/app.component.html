@@ -146,6 +146,12 @@
                 " />
                     All Operators</a>
                 </li>
+                <li *ngIf="user?.userType === 'admin'">
+                  <a class="dropdown-item" routerLink="/user-management">
+                    <img src="assets/icons/profile-circle.svg
+                " />
+                    User Management</a>
+                </li>
 <!-- 
                 <li>
                   <a class="dropdown-item" routerLink="/all-users">
