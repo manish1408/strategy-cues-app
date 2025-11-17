@@ -1006,6 +1006,9 @@ export class RevenueComponent implements OnInit {
       operator_id: this.operatorId
     };
 
+    if (this.isPresetMode && this.presetPropertyIds.length > 0) {
+      params.property_ids = this.presetPropertyIds; 
+    } 
     // Search term
     if (this.searchTerm && this.searchTerm.trim()) {
       params.search_query = this.searchTerm.trim();
@@ -1138,6 +1141,10 @@ export class RevenueComponent implements OnInit {
       params.search_query = this.searchTerm.trim();
     }
 
+    if (this.isPresetMode && this.presetPropertyIds.length > 0) {
+      params.property_ids = this.presetPropertyIds;
+    }
+
     // Basic filters
     if (this.selectedArea) params.area = this.selectedArea;
     if (this.selectedRoomType) params.room_type = this.selectedRoomType;
@@ -1259,7 +1266,7 @@ export class RevenueComponent implements OnInit {
     
     // Clear property selection when applying new filters since the filtered results might be different
     this.clearPropertySelection();
-    
+    this.selectedForPresetIds.clear();
     this.loadFilteredPropertiesData();
   }
 
@@ -3374,6 +3381,7 @@ export class RevenueComponent implements OnInit {
   }
 
   saveCurrentFiltersAsPreset(): void {
+    
     if (!this.newPresetName.trim()) {
       this.presetSaveError = 'Please enter a preset name';
       return;
@@ -3397,7 +3405,6 @@ export class RevenueComponent implements OnInit {
       
       // Determine if all properties are selected based on selectAllForPreset checkbox
       const isAllPropertiesSelected = this.selectAllForPreset;
-      
       const savedPreset = this.filterPresetService.savePreset(
         this.newPresetName.trim(),
         currentFilters,

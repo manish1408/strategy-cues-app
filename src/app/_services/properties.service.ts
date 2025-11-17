@@ -189,8 +189,16 @@ export class PropertiesService {
     
     // Add all filter parameters to the query string
     Object.keys(filters).forEach(key => {
-      if (filters[key] !== null && filters[key] !== undefined && filters[key] !== '') {
-        params = params.set(key, filters[key].toString());
+      const value = filters[key];
+      if (value !== null && value !== undefined && value !== '') {
+        // Handle arrays by appending each element separately
+        if (Array.isArray(value)) {
+          value.forEach(item => {
+            params = params.append(key, item.toString());
+          });
+        } else {
+          params = params.set(key, value.toString());
+        }
       }
     });
     

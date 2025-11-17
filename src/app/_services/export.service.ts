@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 
 @Injectable({
@@ -15,16 +15,25 @@ import { HttpClient } from '@angular/common/http';
     
     // Add query parameters if filterParams are provided
     if (filterParams) {
-      const queryParams = new URLSearchParams();
+      let httpParams = new HttpParams();
       Object.keys(filterParams).forEach(key => {
-        if (filterParams[key] !== null && filterParams[key] !== undefined && filterParams[key] !== '') {
-          queryParams.append(key, filterParams[key]);
+        const value = filterParams[key];
+        if (value !== null && value !== undefined && value !== '') {
+          // Handle arrays by appending each element separately
+          if (Array.isArray(value)) {
+            value.forEach(item => {
+              httpParams = httpParams.append(key, item.toString());
+            });
+          } else {
+            httpParams = httpParams.append(key, value.toString());
+          }
         }
       });
-      const queryString = queryParams.toString();
-      if (queryString) {
-        url += `?${queryString}`;
-      }
+      
+      return this.http.get(url, {
+        params: httpParams,
+        observe: 'response'
+      });
     }
     
     return this.http.get(url, {
