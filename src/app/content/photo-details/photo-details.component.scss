@@ -413,7 +413,7 @@
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
-      height: 60px;
+      height: 80px;
       overflow: hidden;
 
       .review-count {
@@ -1514,7 +1514,7 @@
 
     .suggestion-item {
       display: flex;
-      align-items: center;
+      align-items: start;
       gap: 1rem;
       padding: 1rem;
       border-bottom: 1px solid #e9ecef;
@@ -1571,7 +1571,7 @@
 
       .suggestion-content {
         display: flex;
-        align-items: center;
+        align-items: start;
         gap: 0.5rem;
         flex: 1;
         min-width: 0;
@@ -1589,9 +1589,9 @@
             font-size: 1rem;
             font-weight: 500;
             color: #343a40;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            // white-space: nowrap;
+            // overflow: hidden;
+            // text-overflow: ellipsis;
           }
 
           .suggestion-meta {
@@ -2106,7 +2106,7 @@
 .amenities-scores {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  // gap: 16px;
   align-items: center;
 }
 
@@ -2208,4 +2208,16 @@
 
 .no-competitors-message{
   color: var(--brand-black) !important;
+}
+
+.property-title{
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--brand-black) !important;
+}
+.amenities-title{
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--brand-black);
+  margin-bottom: 4px;
 }

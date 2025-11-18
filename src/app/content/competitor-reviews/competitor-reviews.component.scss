@@ -166,7 +166,7 @@ $improvement-text: #2563eb;
       position: relative;
       overflow: hidden;
       display: flex;
-      align-items: center;
+      align-items: start;
       gap: 1rem;
 
 
@@ -200,7 +200,7 @@ $improvement-text: #2563eb;
           color: #101828;
 
           &.clickable-title {
-            cursor: pointer;
+            // cursor: pointer;
             transition: color 0.2s ease;
 
             
@@ -460,11 +460,11 @@ $improvement-text: #2563eb;
       .review-card {
         padding: 1.25rem;
         flex-direction: column;
-        text-align: center;
+        text-align: start;
         gap: 0.75rem;
 
         .card-icon {
-          align-self: center;
+          align-self: start;
           margin-top: 0;
         }
 
@@ -709,14 +709,15 @@ $improvement-text: #2563eb;
 }
 
 // Modal styles
-#descriptionModal {
-  .modal-body {
+// #descriptionModal {
+//   .modal-body {
     .description-text {
-      font-size: 1rem;
+      font-size: 14px;
       line-height: 1.6;
-      color: #333;
+      color: #6c757d !important;
       white-space: pre-wrap;
       word-wrap: break-word;
+      margin-top: 2px;
     }
-  }
-}
+//   }
+// }

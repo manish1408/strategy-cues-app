@@ -14,371 +14,385 @@
 
   <!-- Main Content - Hidden when loading -->
   <div *ngIf="!isLoading">
+    <h1 class="property-title mb-2" [innerHtml]="propertyData.Listing_Name"></h1>
     <!-- Tab Navigation -->
-  <div class="tab-navigation">
-    <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <a class="nav-link" 
-           [class.active]="activeTab === 'photos'"
-           (click)="setActiveTab('photos')">
-          Photos
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" 
-           [class.active]="activeTab === 'competitor-reviews'"
-           (click)="setActiveTab('competitor-reviews')">
-          Competitor Reviews 
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" 
-           [class.active]="activeTab === 'my-reviews'"
-           (click)="setActiveTab('my-reviews')">
-          My Reviews 
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" 
-           [class.active]="activeTab === 'amenities'"
-           (click)="setActiveTab('amenities')">
-          Amenities Analyser
-        </a>
-      </li>
-    </ul>
-  </div>
- 
-
-  
-
-  <!-- Tab Content -->
-  <div class="tab-content">
-    <!-- Photos Tab -->
-    <div class="tab-pane" [class.active]="activeTab === 'photos'" *ngIf="activeTab === 'photos'">
- 
-  <!-- Platform and Competitor Selection -->
-  <div class="selection-container" *ngIf="propertyData">
-    <!-- Platform Tabs -->
-    <div class="platform-tabs-container">
-      <ul class="platform-tabs">
-        <li class="platform-tab" 
-            [class.active]="selectedPlatform === 'airbnb'"
-            (click)="selectPlatform('airbnb')">
-          <i class="fab fa-airbnb"></i>
-          <span>Airbnb</span>
+    <div class="tab-navigation">
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link" [class.active]="activeTab === 'photos'" (click)="setActiveTab('photos')">
+            Photos
+          </a>
         </li>
-        <li class="platform-tab" 
-            [class.active]="selectedPlatform === 'booking'"
-            (click)="selectPlatform('booking')">
-          <i class="fas fa-bed"></i>
-          <span>Booking.com</span>
+        <li class="nav-item">
+          <a class="nav-link" [class.active]="activeTab === 'competitor-reviews'"
+            (click)="setActiveTab('competitor-reviews')">
+            Competitor Reviews
+          </a>
         </li>
-        <!-- VRBO temporarily commented out -->
-        <!-- <li class="platform-tab" 
+        <li class="nav-item">
+          <a class="nav-link" [class.active]="activeTab === 'my-reviews'" (click)="setActiveTab('my-reviews')">
+            My Reviews
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [class.active]="activeTab === 'amenities'" (click)="setActiveTab('amenities')">
+            Amenities Analyser
+          </a>
+        </li>
+      </ul>
+    </div>
+
+
+
+
+    <!-- Tab Content -->
+    <div class="tab-content">
+      <!-- Photos Tab -->
+      <div class="tab-pane" [class.active]="activeTab === 'photos'" *ngIf="activeTab === 'photos'">
+
+        <!-- Platform and Competitor Selection -->
+        <div class="selection-container" *ngIf="propertyData">
+          <!-- Platform Tabs -->
+          <div class="platform-tabs-container">
+            <ul class="platform-tabs">
+              <li class="platform-tab" [class.active]="selectedPlatform === 'airbnb'"
+                (click)="selectPlatform('airbnb')">
+                <i class="fab fa-airbnb"></i>
+                <span>Airbnb</span>
+              </li>
+              <li class="platform-tab" [class.active]="selectedPlatform === 'booking'"
+                (click)="selectPlatform('booking')">
+                <i class="fas fa-bed"></i>
+                <span>Booking.com</span>
+              </li>
+              <!-- VRBO temporarily commented out -->
+              <!-- <li class="platform-tab" 
             [class.active]="selectedPlatform === 'vrbo'"
             (click)="selectPlatform('vrbo')">
           <i class="fas fa-home"></i>
           <span>VRBO</span>
         </li> -->
-      </ul>
-    </div>
+            </ul>
+          </div>
 
-    <!-- Competitor Select -->
-    <div class="competitor-select-container" *ngIf="getCompetitorsCountForSelectedPlatform() > 0">
-      <select class="form-select" [ngModel]="selectedCompetitorIndex" (ngModelChange)="selectCompetitor($event)">
-        <option [ngValue]="-1" disabled>
-          Select Competitor
-        </option>
-        <ng-container *ngFor="let competitor of propertyData.competitor; let i = index">
-          <option *ngIf="competitor.bookingLink !== null && selectedPlatform == 'booking' && competitor.propertyName" [ngValue]="i">
-            {{ competitor.propertyName }}
-          </option>
+          <!-- Competitor Select -->
+          <div class="competitor-select-container" *ngIf="getCompetitorsCountForSelectedPlatform() > 0">
+            <select class="form-select" [ngModel]="selectedCompetitorIndex" (ngModelChange)="selectCompetitor($event)">
+              <option [ngValue]="-1" disabled>
+                Select Competitor
+              </option>
+              <ng-container *ngFor="let competitor of propertyData.competitor; let i = index">
+                <option
+                  *ngIf="competitor.bookingLink !== null && selectedPlatform == 'booking' && competitor.propertyName"
+                  [ngValue]="i">
+                  {{ competitor.propertyName }}
+                </option>
 
-          <option *ngIf="competitor.airbnbLink !== null && selectedPlatform == 'airbnb' && competitor.propertyName" [ngValue]="i">
-            {{ competitor.propertyName }}
-          </option>
+                <option
+                  *ngIf="competitor.airbnbLink !== null && selectedPlatform == 'airbnb' && competitor.propertyName"
+                  [ngValue]="i">
+                  {{ competitor.propertyName }}
+                </option>
 
-        </ng-container>
-      </select>
-    </div>
-    <div class="no-competitors-message" *ngIf="getCompetitorsCountForSelectedPlatform() === 0">
-      No competitors listed for {{ selectedPlatform | titlecase }}
-    </div>
-  </div>
-
-  <!-- Main Comparison Layout -->
-  <div class="comparison-layout" *ngIf="propertyData">
-
-    <!-- Your Photos Section -->
-    <div class="comparison-section your-photos">
-      <div class="section-header">
-        <div class="d-flex justify-content-between align-items-center">
-          <h2>Your property photos</h2>
-          <div class="property-links" *ngIf="propertyData">
-            <!-- Airbnb Link -->
-            <a *ngIf="selectedPlatform === 'airbnb' && propertyData?.AirbnbUrl"
-               [href]="propertyData.AirbnbUrl" target="_blank"
-               class="platform-link airbnb" title="View on Airbnb">
-              <i class="fab fa-airbnb"></i>
-            </a>
-            <span *ngIf="selectedPlatform === 'airbnb' && !propertyData?.AirbnbUrl"
-                  class="platform-link airbnb disabled" title="No Airbnb URL available">
-              <i class="fab fa-airbnb"></i>
-            </span>
-
-            <!-- Booking.com Link -->
-            <a *ngIf="selectedPlatform === 'booking' && propertyData?.BookingUrl"
-               [href]="propertyData.BookingUrl" target="_blank"
-               class="platform-link booking" title="View on Booking.com">
-              <i class="fas fa-bed"></i>
-            </a>
-            <span *ngIf="selectedPlatform === 'booking' && !propertyData?.BookingUrl"
-                  class="platform-link booking disabled" title="No Booking URL available">
-              <i class="fas fa-bed"></i>
-            </span>
-
-            <!-- VRBO Link -->
-            <a *ngIf="selectedPlatform === 'vrbo' && propertyData?.VRBOUrl"
-               [href]="propertyData.VRBOUrl" target="_blank"
-               class="platform-link vrbo" title="View on VRBO">
-              <i class="fas fa-home"></i>
-            </a>
-            <span *ngIf="selectedPlatform === 'vrbo' && !propertyData?.VRBOUrl"
-                  class="platform-link vrbo disabled" title="No VRBO URL available">
-              <i class="fas fa-home"></i>
-            </span>
+              </ng-container>
+            </select>
+          </div>
+          <div class="no-competitors-message" *ngIf="getCompetitorsCountForSelectedPlatform() === 0">
+            No competitors listed for {{ selectedPlatform | titlecase }}
           </div>
         </div>
-        <div class="review-summary">
-    
-          <!-- Amenities Section -->
-<div class="amenities-section">
-             <div class="amenities-scores" *ngIf="getPropertyAmenitiesForPlatform(selectedPlatform).length > 0">
-               <!-- Platform-specific Amenities -->
-               <div class="platform-amenity-group">
-                 <!-- <i class="fas" [ngClass]="selectedPlatform === 'airbnb' ? 'fab fa-airbnb platform-icon airbnb-icon' : selectedPlatform === 'booking' ? 'fas fa-bed platform-icon booking-icon' : 'fas fa-home platform-icon vrbo-icon'"></i> -->
-                 <span class="amenity-item" *ngFor="let amenity of getPropertyAmenitiesForPlatform(selectedPlatform)">
-                   <i class="fas" [ngClass]="getAmenityIcon(amenity.icon, amenity.title || amenity.name)"></i>
-                   {{amenity.title || amenity.name}}
-                 </span>
-               </div>
-             </div>
-             <div class="no-amenities-message" *ngIf="getPropertyAmenitiesForPlatform(selectedPlatform).length === 0">
-               No amenities found for {{ selectedPlatform | titlecase }}
-             </div>
-           </div>
-        </div>
-        <!-- <div class="photo-count">{{getPropertyPlatformPhotoCount(selectedPlatform)}} photos</div> -->
-      </div>
-     
 
-      <!-- Loading State -->
-      <div class="gallery-loading" *ngIf="isPropertyGalleryLoading">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-      </div>
+        <!-- Main Comparison Layout -->
+        <div class="comparison-layout" *ngIf="propertyData">
 
-      <!-- Gallery -->
-      <div *ngIf="!isPropertyGalleryLoading">
-        <div class="your-gallery" *ngIf="isPropertyGalleryVisible && images && images.length > 0">
-          <span class="your-gallery-title">Your Property</span>
-          <gallery [items]="images" bullets="true" bulletPosition='bottom' scrollBehavior='smooth' [ngStyle]="{'background-color': 'white', 'padding': '25px' , 'max-width': '816px'}" gestures="true" imageSize='cover' counter="true" nav="true" itemAutosize="true" thumbs="true"  thumbPosition='bottom' [id]="'your-photos-gallery-' + galleryRefreshKey"></gallery>
-        </div>
-        
-        <!-- No Images Placeholder -->
-        <div *ngIf="!images || images.length === 0" class="no-images-placeholder">
-          <div class="placeholder-content">
-            <i class="fas fa-image"></i>
-            <h3>No photos available</h3>
-            <p>No photos found for this platform</p>
-          </div>
-        </div>
-      </div>
-    </div>  
+          <!-- Your Photos Section -->
+          <div class="comparison-section your-photos">
+            <div class="section-header">
+              <div class="d-flex justify-content-between align-items-center">
+                <h2>Your property photos</h2>
+                <div class="property-links" *ngIf="propertyData">
+                  <!-- Airbnb Link -->
+                  <a *ngIf="selectedPlatform === 'airbnb' && propertyData?.AirbnbUrl" [href]="propertyData.AirbnbUrl"
+                    target="_blank" class="platform-link airbnb" title="View on Airbnb">
+                    <i class="fab fa-airbnb"></i>
+                  </a>
+                  <span *ngIf="selectedPlatform === 'airbnb' && !propertyData?.AirbnbUrl"
+                    class="platform-link airbnb disabled" title="No Airbnb URL available">
+                    <i class="fab fa-airbnb"></i>
+                  </span>
 
-    <!-- Competitor Photos Section -->
-    <div class="comparison-section competitor-photos" *ngIf="getCurrentCompetitor()">
-      <div class="section-header">  
-        <div class="d-flex justify-content-between align-items-center">
-          <h2>Competitor property photos</h2>
-          <div class="property-links" *ngIf="getCurrentCompetitor()">
-            <!-- Airbnb Link -->
-            <a *ngIf="selectedPlatform === 'airbnb' && getCurrentCompetitor().airbnbLink"
-               [href]="getCurrentCompetitor().airbnbLink" target="_blank"
-               class="platform-link airbnb" title="View on Airbnb">
-              <i class="fab fa-airbnb"></i>
-            </a>
-            <span *ngIf="selectedPlatform === 'airbnb' && !getCurrentCompetitor().airbnbLink"
-                  class="platform-link airbnb disabled" title="No Airbnb URL available">
-              <i class="fab fa-airbnb"></i>
-            </span>
+                  <!-- Booking.com Link -->
+                  <a *ngIf="selectedPlatform === 'booking' && propertyData?.BookingUrl" [href]="propertyData.BookingUrl"
+                    target="_blank" class="platform-link booking" title="View on Booking.com">
+                    <i class="fas fa-bed"></i>
+                  </a>
+                  <span *ngIf="selectedPlatform === 'booking' && !propertyData?.BookingUrl"
+                    class="platform-link booking disabled" title="No Booking URL available">
+                    <i class="fas fa-bed"></i>
+                  </span>
 
-            <!-- Booking.com Link -->
-            <a *ngIf="selectedPlatform === 'booking' && getCurrentCompetitor().bookingLink"
-               [href]="getCurrentCompetitor().bookingLink" target="_blank"
-               class="platform-link booking" title="View on Booking.com">
-              <i class="fas fa-bed"></i>
-            </a>
-            <span *ngIf="selectedPlatform === 'booking' && !getCurrentCompetitor().bookingLink"
-                  class="platform-link booking disabled" title="No Booking URL available">
-              <i class="fas fa-bed"></i>
-            </span>
+                  <!-- VRBO Link -->
+                  <a *ngIf="selectedPlatform === 'vrbo' && propertyData?.VRBOUrl" [href]="propertyData.VRBOUrl"
+                    target="_blank" class="platform-link vrbo" title="View on VRBO">
+                    <i class="fas fa-home"></i>
+                  </a>
+                  <span *ngIf="selectedPlatform === 'vrbo' && !propertyData?.VRBOUrl"
+                    class="platform-link vrbo disabled" title="No VRBO URL available">
+                    <i class="fas fa-home"></i>
+                  </span>
+                </div>
+              </div>
+              <div class="review-summary">
 
-            <!-- VRBO Link -->
-            <a *ngIf="selectedPlatform === 'vrbo' && getCurrentCompetitor().vrboLink"
-               [href]="getCurrentCompetitor().vrboLink" target="_blank"
-               class="platform-link vrbo" title="View on VRBO">
-              <i class="fas fa-home"></i>
-            </a>
-            <span *ngIf="selectedPlatform === 'vrbo' && !getCurrentCompetitor().vrboLink"
-                  class="platform-link vrbo disabled" title="No VRBO URL available">
-              <i class="fas fa-home"></i>
-            </span>
-          </div>
-        </div>
-       
-        <div class="review-summary">
-       
-               <!-- Amenities Section -->
-               <div class="amenities-section">
-                 <div class="amenities-scores" *ngIf="getCompetitorAmenitiesForPlatform(selectedPlatform).length > 0">
-                   <!-- Platform-specific Amenities -->
-                   <div class="platform-amenity-group">
-                     <!-- <i class="fas" [ngClass]="selectedPlatform === 'airbnb' ? 'fab fa-airbnb platform-icon airbnb-icon' : selectedPlatform === 'booking' ? 'fas fa-bed platform-icon booking-icon' : 'fas fa-home platform-icon vrbo-icon'"></i> -->
-                     <span class="amenity-item" *ngFor="let amenity of getCompetitorAmenitiesForPlatform(selectedPlatform)">
-                       <i class="fas" [ngClass]="getAmenityIcon(amenity.icon, amenity.title)"></i>
-                       {{amenity.title}}
-                     </span>
-                   </div>
-                 </div>
-                 <div class="no-amenities-message" *ngIf="getCompetitorAmenitiesForPlatform(selectedPlatform).length === 0">
-                   No amenities found for {{ selectedPlatform | titlecase }}
-                 </div>
-               </div>
-        </div>
-        <!-- <div class="photo-count">{{getCompetitorPlatformPhotoCount(selectedPlatform)}} photos</div> -->
-      </div>
- 
-
-      <!-- Loading State -->
-      <div class="gallery-loading" *ngIf="isCompetitorGalleryLoading">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-      </div>
-
-      <!-- Gallery -->
-      <div *ngIf="!isCompetitorGalleryLoading">
-        <div class="competitor-gallery" *ngIf="isCompetitorGalleryVisible && competitorImages && competitorImages.length > 0">
-          <span class="competitor-gallery-title">Competitor</span>
-          <gallery  [items]="competitorImages" bullets="true" bulletPosition='bottom' scrollBehavior='smooth' [ngStyle]="{'background-color': 'white', 'padding': '25px', 'max-width': '816px'}" gestures="true" imageSize='cover' counter="true" nav="true" itemAutosize="true" thumbs="true"  thumbPosition='bottom' [id]="'competitor-photos-gallery-' + galleryRefreshKey"></gallery>
-        </div>
-        
-        <!-- No Images Placeholder -->
-        <div *ngIf="!competitorImages || competitorImages.length === 0" class="no-images-placeholder">
-          <div class="placeholder-content">
-            <i class="fas fa-image"></i>
-            <h3>No photos available</h3>
-            <p>No photos found for this platform</p>
-          </div>
-        </div>
-      </div>
-   
-    </div>
-  </div>
-
-  <!-- Competitor Comparison -->
-  <div class="competitor-section" *ngIf="getCurrentCompetitor()">
-    <h2>Competitor Information</h2>
-    <div class="competitor-grid">
-      <div class="competitor-card">
-        <div class="competitor-header">
-          <h3 [title]="getCurrentCompetitor()?.propertyName || 'Competitor'">
-            {{ getCurrentCompetitor()?.propertyName || 'Competitor' }}
-          </h3>
-          <div class="competitor-rating">
-            <div class="platform-badges" *ngIf="(selectedPlatform === 'airbnb' && getCurrentCompetitor()?.reviewsAirbnb && getCurrentCompetitor()?.reviewsAirbnb.length > 0) || (selectedPlatform === 'booking' && getCurrentCompetitor()?.reviewsBooking && getCurrentCompetitor()?.reviewsBooking.length > 0) || (selectedPlatform === 'vrbo' && getCurrentCompetitor()?.reviewsVrbo && getCurrentCompetitor()?.reviewsVrbo.length > 0)">
-              Reviews 
-              <span class="badge airbnb-badge" *ngIf="selectedPlatform === 'airbnb' && getCurrentCompetitor()?.reviewsAirbnb && getCurrentCompetitor()?.reviewsAirbnb.length > 0">
-                <i class="fab fa-airbnb"></i> {{getCurrentCompetitor()?.reviewsAirbnb.length}}
-              </span>
-              <span class="badge booking-badge" *ngIf="selectedPlatform === 'booking' && getCurrentCompetitor()?.reviewsBooking && getCurrentCompetitor()?.reviewsBooking.length > 0">
-                <i class="fas fa-bed"></i> {{getCurrentCompetitor()?.reviewsBooking.length}}
-              </span>
-              <span class="badge vrbo-badge" *ngIf="selectedPlatform === 'vrbo' && getCurrentCompetitor()?.reviewsVrbo && getCurrentCompetitor()?.reviewsVrbo.length > 0">
-                <i class="fas fa-home"></i> {{getCurrentCompetitor()?.reviewsVrbo.length}}
-              </span>
+                <!-- Amenities Section -->
+                <div class="amenities-section">
+                  <ng-container *ngIf="getPropertyAmenitiesForPlatform(selectedPlatform).length > 0">
+                    <h3 class="amenities-title">Amenities</h3>
+                    <div class="amenities-scores">
+                      <!-- Platform-specific Amenities -->
+                      <div class="platform-amenity-group">
+                        <!-- <i class="fas" [ngClass]="selectedPlatform === 'airbnb' ? 'fab fa-airbnb platform-icon airbnb-icon' : selectedPlatform === 'booking' ? 'fas fa-bed platform-icon booking-icon' : 'fas fa-home platform-icon vrbo-icon'"></i> -->
+                        <span class="amenity-item"
+                          *ngFor="let amenity of getPropertyAmenitiesForPlatform(selectedPlatform)">
+                          <i class="fas" [ngClass]="getAmenityIcon(amenity.icon, amenity.title || amenity.name)"></i>
+                          {{amenity.title || amenity.name}}
+                        </span>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <div class="no-amenities-message"
+                    *ngIf="getPropertyAmenitiesForPlatform(selectedPlatform).length === 0">
+                    No amenities found for {{ selectedPlatform | titlecase }}
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="photo-count">{{getPropertyPlatformPhotoCount(selectedPlatform)}} photos</div> -->
             </div>
-            <!-- <span class="reviews-count">({{comp.reviews_count}} reviews)</span> -->
-          </div>
-        </div>
-        <div class="competitor-stats">
-          <div class="platform-stats-badges">
-            <!-- Current Platform Stats -->
-            <div class="platform-badge-group">
-             
-              <span class="badge bg-light text-dark">
-                {{getCompetitorPlatformPhotoCountForCompetitor(getCurrentCompetitor(), selectedPlatform)}} Competitor photos
-              </span>
-             
+
+
+            <!-- Loading State -->
+            <div class="gallery-loading" *ngIf="isPropertyGalleryLoading">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+
+            <!-- Gallery -->
+            <div *ngIf="!isPropertyGalleryLoading">
+              <div class="your-gallery" *ngIf="isPropertyGalleryVisible && images && images.length > 0">
+                <span class="your-gallery-title">Your Property</span>
+                <gallery [items]="images" bullets="true" bulletPosition='bottom' scrollBehavior='smooth'
+                  [ngStyle]="{'background-color': 'white', 'padding': '25px' , 'max-width': '816px'}" gestures="true"
+                  imageSize='cover' counter="true" nav="true" itemAutosize="true" thumbs="true" thumbPosition='bottom'
+                  [id]="'your-photos-gallery-' + galleryRefreshKey"></gallery>
+              </div>
+
+              <!-- No Images Placeholder -->
+              <div *ngIf="!images || images.length === 0" class="no-images-placeholder">
+                <div class="placeholder-content">
+                  <i class="fas fa-image"></i>
+                  <h3>No photos available</h3>
+                  <p>No photos found for this platform</p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        
-      </div>
-    </div>
-  </div>
 
-  <!-- Additional Photo Suggestions -->
-  <div class="photo-suggestions-section" *ngIf="getCurrentCompetitor()">
-    <div class="suggestions-header">
-      <h2>Additional Photo Suggestions</h2>
-      <div class="analysis-status" *ngIf="isAnalyzingPhotos">
-        <i class="fas fa-spinner fa-spin"></i>
-        <span>Analyzing photos with AI...</span>
-      </div>
-    </div>
-    
-    <!-- Suggestions List -->
-    <div class="suggestions-list" *ngIf="getPhotoSuggestions().length > 0">
-      <div class="suggestion-item" *ngFor="let suggestion of getPhotoSuggestions()" 
-           [ngClass]="'suggestion-' + suggestion.type">
-        <div class="suggestion-status">
-          <i class="fas" [ngClass]="suggestion.available ? 'fa-check' : 'fa-times'" 
-             [class.status-available]="suggestion.available" 
-             [class.status-unavailable]="!suggestion.available"></i>
+          <!-- Competitor Photos Section -->
+          <div class="comparison-section competitor-photos" *ngIf="getCurrentCompetitor()">
+            <div class="section-header">
+              <div class="d-flex justify-content-between align-items-center">
+                <h2>Competitor property photos</h2>
+                <div class="property-links" *ngIf="getCurrentCompetitor()">
+                  <!-- Airbnb Link -->
+                  <a *ngIf="selectedPlatform === 'airbnb' && getCurrentCompetitor().airbnbLink"
+                    [href]="getCurrentCompetitor().airbnbLink" target="_blank" class="platform-link airbnb"
+                    title="View on Airbnb">
+                    <i class="fab fa-airbnb"></i>
+                  </a>
+                  <span *ngIf="selectedPlatform === 'airbnb' && !getCurrentCompetitor().airbnbLink"
+                    class="platform-link airbnb disabled" title="No Airbnb URL available">
+                    <i class="fab fa-airbnb"></i>
+                  </span>
+
+                  <!-- Booking.com Link -->
+                  <a *ngIf="selectedPlatform === 'booking' && getCurrentCompetitor().bookingLink"
+                    [href]="getCurrentCompetitor().bookingLink" target="_blank" class="platform-link booking"
+                    title="View on Booking.com">
+                    <i class="fas fa-bed"></i>
+                  </a>
+                  <span *ngIf="selectedPlatform === 'booking' && !getCurrentCompetitor().bookingLink"
+                    class="platform-link booking disabled" title="No Booking URL available">
+                    <i class="fas fa-bed"></i>
+                  </span>
+
+                  <!-- VRBO Link -->
+                  <a *ngIf="selectedPlatform === 'vrbo' && getCurrentCompetitor().vrboLink"
+                    [href]="getCurrentCompetitor().vrboLink" target="_blank" class="platform-link vrbo"
+                    title="View on VRBO">
+                    <i class="fas fa-home"></i>
+                  </a>
+                  <span *ngIf="selectedPlatform === 'vrbo' && !getCurrentCompetitor().vrboLink"
+                    class="platform-link vrbo disabled" title="No VRBO URL available">
+                    <i class="fas fa-home"></i>
+                  </span>
+                </div>
+              </div>
+
+              <div class="review-summary">
+
+                <!-- Amenities Section -->
+                <div class="amenities-section">
+                  <ng-container *ngIf="getCompetitorAmenitiesForPlatform(selectedPlatform).length > 0">
+                    <h3 class="amenities-title">Amenities</h3>
+                    <div class="amenities-scores">
+                      <!-- Platform-specific Amenities -->
+                      <div class="platform-amenity-group">
+                        <!-- <i class="fas" [ngClass]="selectedPlatform === 'airbnb' ? 'fab fa-airbnb platform-icon airbnb-icon' : selectedPlatform === 'booking' ? 'fas fa-bed platform-icon booking-icon' : 'fas fa-home platform-icon vrbo-icon'"></i> -->
+                        <span class="amenity-item"
+                          *ngFor="let amenity of getCompetitorAmenitiesForPlatform(selectedPlatform)">
+                          <i class="fas" [ngClass]="getAmenityIcon(amenity.icon, amenity.title)"></i>
+                          {{amenity.title}}
+                        </span>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <div class="no-amenities-message"
+                    *ngIf="getCompetitorAmenitiesForPlatform(selectedPlatform).length === 0">
+                    No amenities found for {{ selectedPlatform | titlecase }}
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="photo-count">{{getCompetitorPlatformPhotoCount(selectedPlatform)}} photos</div> -->
+            </div>
+
+
+            <!-- Loading State -->
+            <div class="gallery-loading" *ngIf="isCompetitorGalleryLoading">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+
+            <!-- Gallery -->
+            <div *ngIf="!isCompetitorGalleryLoading">
+              <div class="competitor-gallery"
+                *ngIf="isCompetitorGalleryVisible && competitorImages && competitorImages.length > 0">
+                <span class="competitor-gallery-title">Competitor</span>
+                <gallery [items]="competitorImages" bullets="true" bulletPosition='bottom' scrollBehavior='smooth'
+                  [ngStyle]="{'background-color': 'white', 'padding': '25px', 'max-width': '816px'}" gestures="true"
+                  imageSize='cover' counter="true" nav="true" itemAutosize="true" thumbs="true" thumbPosition='bottom'
+                  [id]="'competitor-photos-gallery-' + galleryRefreshKey"></gallery>
+              </div>
+
+              <!-- No Images Placeholder -->
+              <div *ngIf="!competitorImages || competitorImages.length === 0" class="no-images-placeholder">
+                <div class="placeholder-content">
+                  <i class="fas fa-image"></i>
+                  <h3>No photos available</h3>
+                  <p>No photos found for this platform</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
-        <div class="suggestion-content">
-          <div class="suggestion-main">
-            <span class="suggestion-title">{{suggestion.title}}</span>
-            <div class="suggestion-meta" *ngIf="suggestion.impact && suggestion.effort">
-              <span class="impact-badge" [ngClass]="'impact-' + suggestion.impact">{{suggestion.impact}} impact</span>
-              <span class="effort-badge" [ngClass]="'effort-' + suggestion.effort">{{suggestion.effort}} effort</span>
+
+        <!-- Competitor Comparison -->
+        <div class="competitor-section" *ngIf="getCurrentCompetitor()">
+          <h2>Competitor Information</h2>
+          <div class="competitor-grid">
+            <div class="competitor-card">
+              <div class="competitor-header">
+                <h3 [title]="getCurrentCompetitor()?.propertyName || 'Competitor'">
+                  {{ getCurrentCompetitor()?.propertyName || 'Competitor' }}
+                </h3>
+                <div class="competitor-rating">
+                  <div class="platform-badges"
+                    *ngIf="(selectedPlatform === 'airbnb' && getCurrentCompetitor()?.reviewsAirbnb && getCurrentCompetitor()?.reviewsAirbnb.length > 0) || (selectedPlatform === 'booking' && getCurrentCompetitor()?.reviewsBooking && getCurrentCompetitor()?.reviewsBooking.length > 0) || (selectedPlatform === 'vrbo' && getCurrentCompetitor()?.reviewsVrbo && getCurrentCompetitor()?.reviewsVrbo.length > 0)">
+                    Reviews
+                    <span class="badge airbnb-badge"
+                      *ngIf="selectedPlatform === 'airbnb' && getCurrentCompetitor()?.reviewsAirbnb && getCurrentCompetitor()?.reviewsAirbnb.length > 0">
+                      <i class="fab fa-airbnb"></i> {{getCurrentCompetitor()?.reviewsAirbnb.length}}
+                    </span>
+                    <span class="badge booking-badge"
+                      *ngIf="selectedPlatform === 'booking' && getCurrentCompetitor()?.reviewsBooking && getCurrentCompetitor()?.reviewsBooking.length > 0">
+                      <i class="fas fa-bed"></i> {{getCurrentCompetitor()?.reviewsBooking.length}}
+                    </span>
+                    <span class="badge vrbo-badge"
+                      *ngIf="selectedPlatform === 'vrbo' && getCurrentCompetitor()?.reviewsVrbo && getCurrentCompetitor()?.reviewsVrbo.length > 0">
+                      <i class="fas fa-home"></i> {{getCurrentCompetitor()?.reviewsVrbo.length}}
+                    </span>
+                  </div>
+                  <!-- <span class="reviews-count">({{comp.reviews_count}} reviews)</span> -->
+                </div>
+              </div>
+              <div class="competitor-stats">
+                <div class="platform-stats-badges">
+                  <!-- Current Platform Stats -->
+                  <div class="platform-badge-group">
+
+                    <span class="badge bg-light text-dark">
+                      {{getCompetitorPlatformPhotoCountForCompetitor(getCurrentCompetitor(), selectedPlatform)}}
+                      Competitor photos
+                    </span>
+
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
-          <div class="info-icon-container">
-            <i class="fas fa-info-circle info-icon" 
-               (click)="showSuggestionInfo(suggestion)"></i>
-            <div class="tooltip">{{suggestion.description}}</div>
+        </div>
+
+        <!-- Additional Photo Suggestions -->
+        <div class="photo-suggestions-section" *ngIf="getCurrentCompetitor()">
+          <div class="suggestions-header">
+            <h2>Additional Photo Suggestions</h2>
+            <div class="analysis-status" *ngIf="isAnalyzingPhotos">
+              <i class="fas fa-spinner fa-spin"></i>
+              <span>Analyzing photos with AI...</span>
+            </div>
+          </div>
+
+          <!-- Suggestions List -->
+          <div class="suggestions-list" *ngIf="getPhotoSuggestions().length > 0">
+            <div class="suggestion-item" *ngFor="let suggestion of getPhotoSuggestions()"
+              [ngClass]="'suggestion-' + suggestion.type">
+              <div class="suggestion-status">
+                <i class="fas" [ngClass]="suggestion.available ? 'fa-check' : 'fa-times'"
+                  [class.status-available]="suggestion.available"
+                  [class.status-unavailable]="!suggestion.available"></i>
+              </div>
+              <div class="suggestion-content">
+                <div class="suggestion-main">
+                  <span class="suggestion-title">{{suggestion.title}}</span>
+                  <div class="suggestion-meta" *ngIf="suggestion.impact && suggestion.effort">
+                    <span class="impact-badge" [ngClass]="'impact-' + suggestion.impact">{{suggestion.impact}}
+                      impact</span>
+                    <span class="effort-badge" [ngClass]="'effort-' + suggestion.effort">{{suggestion.effort}}
+                      effort</span>
+                  </div>
+                </div>
+                <div class="info-icon-container">
+                  <i class="fas fa-info-circle info-icon" (click)="showSuggestionInfo(suggestion)"></i>
+                  <div class="tooltip">{{suggestion.description}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty State -->
+          <div class="suggestions-empty-state" *ngIf="getPhotoSuggestions().length === 0">
+            <app-empty-state icon="fas fa-lightbulb" title="No Photo Suggestions Available">
+            </app-empty-state>
           </div>
         </div>
-      </div>
-    </div>
-    
-    <!-- Empty State -->
-    <div class="suggestions-empty-state" *ngIf="getPhotoSuggestions().length === 0">
-      <app-empty-state 
-        icon="fas fa-lightbulb"
-        title="No Photo Suggestions Available">
-      </app-empty-state>
-    </div>
-  </div>
 
-  
 
-  <!-- Photo Gallery -->
-  <!-- <div class="photo-gallery" *ngIf="propertyData?.property_photos">
+
+        <!-- Photo Gallery -->
+        <!-- <div class="photo-gallery" *ngIf="propertyData?.property_photos">
     <h2>Photo Gallery</h2>
     <div class="gallery-grid">
       <div class="photo-item" *ngFor="let photo of propertyData.property_photos; let i = index" (click)="openPhotoModal(i)">
@@ -397,74 +411,68 @@
     </div>
   </div> -->
 
-  <!-- Photo Captions Section -->
-  <div class="missing-captions-section" *ngIf="currentPlatformPhotos && currentPlatformPhotos.length > 0">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h2>Photo Captions for {{ selectedPlatform | titlecase }} ({{ currentPlatformPhotos.length }} photos)</h2>
-      <button 
-          class="btn btn-sm btn-primary" 
-          (click)="generateAllCaptions()"
-          [disabled]="isGeneratingAllCaptions || isGeneratingCaption">
-          <!-- <span *ngIf="isGeneratingAllCaptions" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> -->
-          <span *ngIf="isGeneratingAllCaptions">Generating captions for all photos...</span>
-          <span *ngIf="!isGeneratingAllCaptions">Generate captions for all photos</span>
-        </button>
-    </div>
-    <div class="missing-list">
-      <div class="missing-item" *ngFor="let photo of currentPlatformPhotos">
-        <i class="fas fa-exclamation-triangle" *ngIf="!photo?.caption"></i>
-        <i class="fas fa-check-circle text-success" *ngIf="photo?.caption"></i>
-        <img style="width: 40px; height: 40px; object-fit: fill; cursor: pointer;" [src]="photo?.url" [alt]="'Photo ' + photo?.id" (error)="onImageError($event)" (click)="openPhotoInNewWindow(photo?.id)">
-        
-        <div class="photo-info">
-          <span *ngIf="!photo?.caption" class="needs-caption">Photo {{photo?.id}} needs a caption</span>
-          <div *ngIf="photo?.caption" class="generated-caption">
-            <strong>Generated Caption:</strong>
-            <p class="caption-text">{{photo?.caption}}</p>
+        <!-- Photo Captions Section -->
+        <div class="missing-captions-section" *ngIf="currentPlatformPhotos && currentPlatformPhotos.length > 0">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>Photo Captions for {{ selectedPlatform | titlecase }} ({{ currentPlatformPhotos.length }} photos)</h2>
+            <button class="btn btn-sm btn-primary" (click)="generateAllCaptions()"
+              [disabled]="isGeneratingAllCaptions || isGeneratingCaption">
+              <!-- <span *ngIf="isGeneratingAllCaptions" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> -->
+              <span *ngIf="isGeneratingAllCaptions">Generating captions for all photos...</span>
+              <span *ngIf="!isGeneratingAllCaptions">Generate captions for all photos</span>
+            </button>
+          </div>
+          <div class="missing-list">
+            <div class="missing-item" *ngFor="let photo of currentPlatformPhotos">
+              <i class="fas fa-exclamation-triangle" *ngIf="!photo?.caption"></i>
+              <i class="fas fa-check-circle text-success" *ngIf="photo?.caption"></i>
+              <img style="width: 40px; height: 40px; object-fit: fill; cursor: pointer;" [src]="photo?.url"
+                [alt]="'Photo ' + photo?.id" (error)="onImageError($event)" (click)="openPhotoInNewWindow(photo?.id)">
+
+              <div class="photo-info">
+                <span *ngIf="!photo?.caption" class="needs-caption">Photo {{photo?.id}} needs a caption</span>
+                <div *ngIf="photo?.caption" class="generated-caption">
+                  <strong>Generated Caption:</strong>
+                  <p class="caption-text">{{photo?.caption}}</p>
+                </div>
+              </div>
+
+              <button class="btn btn-sm btn-primary" (click)="generateCaption(photo?.url, photo?.id)"
+                [disabled]="isGeneratingCaptionForPhotoUrl(photo?.url) || photo?.caption || isGeneratingAllCaptions">
+                <!-- Generating state -->
+                <span *ngIf="isGeneratingCaptionForPhotoUrl(photo?.url)">Generating caption...</span>
+
+                <!-- Already generated -->
+                <span *ngIf="!isGeneratingCaptionForPhotoUrl(photo?.url) && photo?.caption">
+                  Caption Generated
+                </span>
+
+                <!-- Default -->
+                <span *ngIf="!isGeneratingCaptionForPhotoUrl(photo?.url) && !photo?.caption">
+                  Generate Caption
+                </span>
+              </button>
+            </div>
           </div>
         </div>
-     
-        <button 
-          class="btn btn-sm btn-primary" 
-          (click)="generateCaption(photo?.url, photo?.id)"
-          [disabled]="isGeneratingCaptionForPhotoUrl(photo?.url) || photo?.caption || isGeneratingAllCaptions">
-        <!-- Generating state -->
-  <span *ngIf="isGeneratingCaptionForPhotoUrl(photo?.url)">Generating caption...</span>
+      </div>
 
-  <!-- Already generated -->
-  <span *ngIf="!isGeneratingCaptionForPhotoUrl(photo?.url) && photo?.caption">
-    Caption Generated
-  </span>
+      <!-- Competitor Reviews Tab -->
+      <div class="tab-pane" [class.active]="activeTab === 'competitor-reviews'"
+        *ngIf="activeTab === 'competitor-reviews'">
+        <app-competitor-reviews></app-competitor-reviews>
+      </div>
 
-  <!-- Default -->
-  <span *ngIf="!isGeneratingCaptionForPhotoUrl(photo?.url) && !photo?.caption">
-    Generate Caption
-  </span>
-        </button>
+      <!-- My Reviews Tab -->
+      <div class="tab-pane" [class.active]="activeTab === 'my-reviews'" *ngIf="activeTab === 'my-reviews'">
+        <app-my-reviews></app-my-reviews>
+      </div>
+
+      <!-- Amenities Analyser Tab -->
+      <div class="tab-pane" [class.active]="activeTab === 'amenities'" *ngIf="activeTab === 'amenities'">
+        <app-amenities-analyzer [propertyId]="propertyId" [operatorId]="operatorId">
+        </app-amenities-analyzer>
       </div>
     </div>
-  </div>
-    </div>
-
-    <!-- Competitor Reviews Tab -->
-    <div class="tab-pane" [class.active]="activeTab === 'competitor-reviews'" *ngIf="activeTab === 'competitor-reviews'">
-      <app-competitor-reviews></app-competitor-reviews>
-    </div>
-
-    <!-- My Reviews Tab -->
-    <div class="tab-pane" [class.active]="activeTab === 'my-reviews'" *ngIf="activeTab === 'my-reviews'">
-      <app-my-reviews></app-my-reviews>
-    </div>
-
-    <!-- Amenities Analyser Tab -->
-    <div class="tab-pane" [class.active]="activeTab === 'amenities'" *ngIf="activeTab === 'amenities'">
-      <app-amenities-analyzer 
-        [propertyId]="propertyId" 
-        [operatorId]="operatorId">
-      </app-amenities-analyzer>
-    </div>
-  </div>
   </div><!-- End of *ngIf="!isLoading" -->
 </div><!-- End of photo-details-container -->
-
-
