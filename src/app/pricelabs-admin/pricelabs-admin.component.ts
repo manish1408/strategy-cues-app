@@ -103,8 +103,8 @@ export class PricelabsAdminComponent implements OnDestroy {
                 ? payload.reportData
                 : [];
 
-              if (reportResp?.success === false) {
-                this.error = reportResp?.error || "";
+              if (payload?.reportData?.success === false) {
+                this.error = payload?.reportData?.error || "";
                 this.data = [];
                 this.loading = false;
                 return;
