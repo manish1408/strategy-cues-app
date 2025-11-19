@@ -9,6 +9,7 @@ import { EventService } from "./_services/event.service";
 import { ProfileService } from "./_services/profile.service";
 import { LocalStorageService } from "./_services/local-storage.service";
 import { OperatorService } from "./_services/operator.service";
+import { environment } from "../environments/environment";
 
 @Component({
   selector: "app-root",
@@ -29,7 +30,7 @@ export class AppComponent {
   formLoading: boolean = false;
 
   isOperatorPage = false;
-
+  chromeExtensionUrl = environment.chromeExtensionUrl;
   constructor(
     private router: Router,
     private authService: AuthenticationService,
