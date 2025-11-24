@@ -16,8 +16,8 @@ export class OperatorService {
 
  
 
-  getAllOperator(){
-    return this.http.get(`${this._url}/list`);
+  getAllOperator(page: number = 1, limit: number = 20){
+    return this.http.get(`${this._url}/list?page=${page}&limit=${limit}`);
   }
   createOperator(data: any) {
     return this.http.post<any>(`${this._url}/create`, data);
