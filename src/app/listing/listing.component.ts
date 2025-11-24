@@ -1107,19 +1107,23 @@ export class ListingComponent implements OnInit, OnDestroy {
       })
     ).subscribe({
       next: (response: any) => {
+       
         if (response.success) {
           this.toastr.success(response.message || 'Listings uploaded successfully');
           // Reload listings to show the newly uploaded data
           this.currentPage = 1;
           this.loadListings();
         } else {
-          this.toastr.error(response.message || 'Failed to upload listings');
+          this.toastr.error(response.message || response.error?.detail?.error || 'Failed to upload listings');
         }
       },
       error: (error: any) => {
-        console.error('Upload error:', error);
-        const errorMessage = error?.error?.detail || error?.error?.message || error?.message || 'Failed to upload Excel file';
-        this.toastr.error(errorMessage);
+        const errorMessage = error?.error?.detail?.error 
+        ?? error?.error?.message 
+        ?? error?.message 
+        ?? 'Failed to upload Excel file';
+      
+      this.toastr.error(errorMessage);
       }
     });
   }
