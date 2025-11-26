@@ -123,6 +123,13 @@ export class UserManagementComponent {
     });
   }
 
+  areAllUsersAssigned(): boolean {
+    if (!this.selectedOperator || !Array.isArray(this.allUsersList) || this.allUsersList.length === 0) {
+      return false;
+    }
+    return this.getAvailableUsers().length === 0;
+  }
+
   hasError(controlName: string) {
     const control = this.addOperatorForm.get(controlName);
     return control?.invalid && control?.touched;
@@ -139,6 +146,12 @@ export class UserManagementComponent {
     });
 
     this.selectedOperator = operator;
+    const allAssigned = this.areAllUsersAssigned();
+    if (allAssigned) {
+      this.addOperatorForm.get('userId')?.disable();
+    } else {
+      this.addOperatorForm.get('userId')?.enable();
+    }
   }
 
   resetForm() {
@@ -146,6 +159,7 @@ export class UserManagementComponent {
       userId: null,
     });
     this.selectedOperator = null;
+    this.addOperatorForm.get('userId')?.enable();
   }
 
   onSubmit() {
@@ -162,19 +176,42 @@ export class UserManagementComponent {
 
     this.loading = true;
 
-    const selectedUserId: string | null =
+    const selectedValue: string | null =
       this.addOperatorForm.value.userId ?? null;
 
-    if (!selectedUserId) {
+    if (!selectedValue) {
       this.toastr.error("Please select a user");
       this.loading = false;
       return;
     }
 
-   
+    let userIdsToAdd: string[] = [];
+
+    // Check if "Select all users" was selected
+    if (selectedValue === "SELECT_ALL") {
+      const availableUsers = this.getAvailableUsers();
+      userIdsToAdd = availableUsers
+        .map((user: any) => user?.id || user?._id)
+        .filter((id: any): id is string => !!id);
+      
+      if (userIdsToAdd.length === 0) {
+        this.toastr.warning("No available users to assign");
+        this.loading = false;
+        return;
+      }
+    } else {
+      userIdsToAdd = [selectedValue];
+    }
+
+    const currentUserIds = Array.isArray(this.selectedOperator.userId)
+      ? this.selectedOperator.userId
+      : this.selectedOperator.userId
+      ? [this.selectedOperator.userId]
+      : [];
+
     const payload = {
       ...this.selectedOperator,
-      userId: [...this.selectedOperator.userId, selectedUserId],
+      userId: [...currentUserIds, ...userIdsToAdd],
     };
 
     this.operatorService
@@ -183,7 +220,10 @@ export class UserManagementComponent {
       .subscribe({
         next: (res: any) => {
           if (res.success) {
-            this.toastr.success("User assigned successfully");
+            const message = selectedValue === "SELECT_ALL" 
+              ? `${userIdsToAdd.length} users assigned successfully`
+              : "User assigned successfully";
+            this.toastr.success(message);
             this.loadOperatorsAndUser();
             this.closeModal();
           } else {
