@@ -31,6 +31,7 @@ export class AppComponent {
 
   isOperatorPage = false;
   chromeExtensionUrl = environment.chromeExtensionUrl;
+  chromeExtensionLastUpdated = environment.chromeExtensionLastUpdated;
   constructor(
     private router: Router,
     private authService: AuthenticationService,

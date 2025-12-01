@@ -427,6 +427,25 @@
  
 }
 
+.downaload-link {
+  flex-direction: column;
+  align-items: flex-start;
+  
+  a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.extension-update-date {
+  color: #a5a5a5;
+  font-size: var(--font-size-sm);
+  padding-left: 6px;
+  margin-top: -4px;
+  opacity: 0.8;
+}
+
 .empty-state-text{
   color: #a5a5a5 !important;
 }
