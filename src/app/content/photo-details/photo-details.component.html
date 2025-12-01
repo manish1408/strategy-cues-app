@@ -1,8 +1,5 @@
 <div class="photo-details-container">
-  <button class="btn btn-outline-secondary mb-3" (click)="goBack()">
-    <i class="fas fa-arrow-left"></i> Back to Content cues
-  </button>
-  <!-- Loading Spinner -->
+
   <div class="loading-container" *ngIf="isLoading">
     <div class="spinner-container loading-state">
       <div class="spinner-border text-primary" role="status">
@@ -12,34 +9,98 @@
     </div>
   </div>
 
-  <!-- Main Content - Hidden when loading -->
+  <div class="row">
+    <div class="col-1">
+      <button class="btn btn-outline-secondary mb-3" (click)="goBack()">
+        <i class="fas fa-arrow-left"></i> Back 
+      </button>
+    </div>
+    <div class="col-7">
+      <h1 class="property-title mb-2 pull-left" [innerHtml]="propertyData.Listing_Name"></h1>
+    </div>
+    <div class="col-4">
+        <div class="platform-tabs-container"  *ngIf="propertyData">
+          <ul class="platform-tabs">
+            <li class="platform-tab" [class.active]="selectedPlatform === 'airbnb'" (click)="selectPlatform('airbnb')">
+              <i class="fab fa-airbnb"></i>
+              <span>Airbnb</span>
+            </li>
+            <li class="platform-tab" [class.active]="selectedPlatform === 'booking'"
+              (click)="selectPlatform('booking')">
+              <i class="fas fa-bed"></i>
+              <span>Booking.com</span>
+            </li>
+            <!-- VRBO temporarily commented out -->
+            <!-- <li class="platform-tab" 
+              [class.active]="selectedPlatform === 'vrbo'"
+              (click)="selectPlatform('vrbo')">
+            <i class="fas fa-home"></i>
+            <span>VRBO</span>
+          </li> -->
+          </ul>
+        </div>
+    </div>
+  </div>
+
+
   <div *ngIf="!isLoading">
-    <h1 class="property-title mb-2" [innerHtml]="propertyData.Listing_Name"></h1>
-    <!-- Tab Navigation -->
+
+
+
+
+
+    
     <div class="tab-navigation">
-      <ul class="nav nav-tabs">
-        <li class="nav-item">
-          <a class="nav-link" [class.active]="activeTab === 'photos'" (click)="setActiveTab('photos')">
-            Photos
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [class.active]="activeTab === 'competitor-reviews'"
-            (click)="setActiveTab('competitor-reviews')">
-            Competitor Reviews
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [class.active]="activeTab === 'my-reviews'" (click)="setActiveTab('my-reviews')">
-            My Reviews
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [class.active]="activeTab === 'amenities'" (click)="setActiveTab('amenities')">
-            Amenities Analyser
-          </a>
-        </li>
-      </ul>
+      <div class="tab-navigation-left">
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link" [class.active]="activeTab === 'photos'" (click)="setActiveTab('photos')">
+              Photos
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [class.active]="activeTab === 'competitor-reviews'"
+              (click)="setActiveTab('competitor-reviews')">
+              Competitor Reviews
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [class.active]="activeTab === 'my-reviews'" (click)="setActiveTab('my-reviews')">
+              My Reviews
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [class.active]="activeTab === 'amenities'" (click)="setActiveTab('amenities')">
+              Amenities Analyser
+            </a>
+          </li>
+        </ul>
+      </div>  
+      <div class="tab-navigation-right">
+        <div *ngIf="getCompetitorsCountForSelectedPlatform() > 0">
+          <select class="form-select" [ngModel]="selectedCompetitorIndex" (ngModelChange)="selectCompetitor($event)">
+            <option [ngValue]="-1" disabled>
+              Select Competitor
+            </option>
+            <ng-container *ngFor="let competitor of propertyData.competitor; let i = index">
+              <option
+                *ngIf="competitor.bookingLink !== null && selectedPlatform == 'booking' && competitor.propertyName"
+                [ngValue]="i">
+                {{ competitor.propertyName }}
+              </option>
+
+              <option *ngIf="competitor.airbnbLink !== null && selectedPlatform == 'airbnb' && competitor.propertyName"
+                [ngValue]="i">
+                {{ competitor.propertyName }}
+              </option>
+
+            </ng-container>
+          </select>
+        </div>
+        <div class="no-competitors-message" *ngIf="getCompetitorsCountForSelectedPlatform() === 0">
+          No competitors listed for {{ selectedPlatform | titlecase }}
+        </div>
+      </div>
     </div>
 
 
@@ -50,57 +111,6 @@
       <!-- Photos Tab -->
       <div class="tab-pane" [class.active]="activeTab === 'photos'" *ngIf="activeTab === 'photos'">
 
-        <!-- Platform and Competitor Selection -->
-        <div class="selection-container" *ngIf="propertyData">
-          <!-- Platform Tabs -->
-          <div class="platform-tabs-container">
-            <ul class="platform-tabs">
-              <li class="platform-tab" [class.active]="selectedPlatform === 'airbnb'"
-                (click)="selectPlatform('airbnb')">
-                <i class="fab fa-airbnb"></i>
-                <span>Airbnb</span>
-              </li>
-              <li class="platform-tab" [class.active]="selectedPlatform === 'booking'"
-                (click)="selectPlatform('booking')">
-                <i class="fas fa-bed"></i>
-                <span>Booking.com</span>
-              </li>
-              <!-- VRBO temporarily commented out -->
-              <!-- <li class="platform-tab" 
-            [class.active]="selectedPlatform === 'vrbo'"
-            (click)="selectPlatform('vrbo')">
-          <i class="fas fa-home"></i>
-          <span>VRBO</span>
-        </li> -->
-            </ul>
-          </div>
-
-          <!-- Competitor Select -->
-          <div class="competitor-select-container" *ngIf="getCompetitorsCountForSelectedPlatform() > 0">
-            <select class="form-select" [ngModel]="selectedCompetitorIndex" (ngModelChange)="selectCompetitor($event)">
-              <option [ngValue]="-1" disabled>
-                Select Competitor
-              </option>
-              <ng-container *ngFor="let competitor of propertyData.competitor; let i = index">
-                <option
-                  *ngIf="competitor.bookingLink !== null && selectedPlatform == 'booking' && competitor.propertyName"
-                  [ngValue]="i">
-                  {{ competitor.propertyName }}
-                </option>
-
-                <option
-                  *ngIf="competitor.airbnbLink !== null && selectedPlatform == 'airbnb' && competitor.propertyName"
-                  [ngValue]="i">
-                  {{ competitor.propertyName }}
-                </option>
-
-              </ng-container>
-            </select>
-          </div>
-          <div class="no-competitors-message" *ngIf="getCompetitorsCountForSelectedPlatform() === 0">
-            No competitors listed for {{ selectedPlatform | titlecase }}
-          </div>
-        </div>
 
         <!-- Main Comparison Layout -->
         <div class="comparison-layout" *ngIf="propertyData">
@@ -144,14 +154,11 @@
               </div>
               <div class="review-summary">
 
-                <!-- Amenities Section -->
                 <div class="amenities-section">
                   <ng-container *ngIf="getPropertyAmenitiesForPlatform(selectedPlatform).length > 0">
                     <h3 class="amenities-title">Amenities</h3>
                     <div class="amenities-scores">
-                      <!-- Platform-specific Amenities -->
                       <div class="platform-amenity-group">
-                        <!-- <i class="fas" [ngClass]="selectedPlatform === 'airbnb' ? 'fab fa-airbnb platform-icon airbnb-icon' : selectedPlatform === 'booking' ? 'fas fa-bed platform-icon booking-icon' : 'fas fa-home platform-icon vrbo-icon'"></i> -->
                         <span class="amenity-item"
                           *ngFor="let amenity of getPropertyAmenitiesForPlatform(selectedPlatform)">
                           <i class="fas" [ngClass]="getAmenityIcon(amenity.icon, amenity.title || amenity.name)"></i>

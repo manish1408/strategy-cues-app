@@ -20,6 +20,7 @@ import { from, of } from "rxjs";
 export class PhotoDetailsComponent implements OnInit {
   operatorId: string = "";
   propertyId: string = "";
+  source: string = "";
   activeTab: string = "photos";
   propertyData: any;
   selectedPhotoIndex: number | null = null;
@@ -86,6 +87,7 @@ export class PhotoDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.propertyId = this.route.snapshot.params["id"];
     this.operatorId = this.route.snapshot.queryParams["operatorId"] || "";
+    this.source = this.route.snapshot.queryParams["source"] || "";
 
     // API call to get property competitors
     this.loadPropertyCompetitors(this.propertyId);
@@ -96,7 +98,7 @@ export class PhotoDetailsComponent implements OnInit {
   // Load property competitors from API
   loadPropertyCompetitors(propertyId: string): void {
     this.competitorComparisonService
-      .getPropertyCompetitors(propertyId)
+      .getPropertyCompetitors(propertyId, this.source)
       .subscribe({
         next: (response: any) => {
           if (response?.data) {
@@ -745,7 +747,7 @@ export class PhotoDetailsComponent implements OnInit {
 
     this.isAnalyzingPhotos = true;
 
-    this.competitorComparisonService.getAIPhotoAnalysis(this.propertyId, this.operatorId)
+    this.competitorComparisonService.getAIPhotoAnalysis(this.propertyId, this.operatorId, this.source)
       .subscribe({
         next: (response: any) => {
           if (response.success && response.data) {
@@ -776,10 +778,12 @@ export class PhotoDetailsComponent implements OnInit {
     this.isRefreshingCaptions = true;
 
     // Get captions by source (saved captions)
+    // Use query param source if available, otherwise use platform
+    const sourceToUse = this.source || platform;
     this.imageCaptionService.getCaptionsBySource({
       operator_id: this.operatorId,
       property_id: this.propertyId,
-      source: platform as 'airbnb' | 'booking' | 'vrbo'
+      source: sourceToUse as 'airbnb' | 'booking' | 'vrbo'
     }).subscribe({
       next: (response: any) => {
         if (response.success && response.data && Array.isArray(response.data)) {
@@ -924,24 +928,22 @@ export class PhotoDetailsComponent implements OnInit {
   getPropertyAmenitiesForPlatform(platform: string): any[] {
     if (!this.propertyData) return [];
 
+    // Helper function to filter out "Not included" category
+    const filterNotIncluded = (amenities: any[]): any[] => {
+      if (!Array.isArray(amenities)) return [];
+      return amenities.filter(amenity => amenity?.category !== "Not included");
+    };
+
+
     // Check if Amenities object exists (API response structure)
     if (this.propertyData.Amenities) {
       switch (platform) {
         case 'airbnb':
-          return this.propertyData.Amenities.Airbnb || [];
+          return filterNotIncluded(this.propertyData.Amenities.Airbnb || []);
         case 'booking':
-        
-          if (this.propertyData.Amenities.Booking) {
-            const bookingAmenities = this.propertyData.Amenities.Booking as any;
-            if (Array.isArray(bookingAmenities)) {
-              return bookingAmenities;
-            }
-          
-            return bookingAmenities.accommodationHighlights || bookingAmenities.facilities || [];
-          }
-          return [];
+          return filterNotIncluded(this.propertyData.Amenities.Booking || []);
         case 'vrbo':
-          return this.propertyData.Amenities.VRBO || [];
+          return filterNotIncluded(this.propertyData.Amenities.VRBO || []);
         default:
           return [];
       }
@@ -950,20 +952,21 @@ export class PhotoDetailsComponent implements OnInit {
     // Fallback to old structure if Amenities object doesn't exist
     switch (platform) {
       case 'airbnb':
-        return this.propertyData.amenitiesAirbnb || [];
+        return filterNotIncluded(this.propertyData.amenitiesAirbnb || []);
       case 'booking':
         // Booking may be an array or an object with accommodationHighlights/facilities
         if (this.propertyData.amenitiesBooking) {
           const bookingAmenities = this.propertyData.amenitiesBooking as any;
           if (Array.isArray(bookingAmenities)) {
-            return bookingAmenities;
+            return filterNotIncluded(bookingAmenities);
           }
           // Return accommodationHighlights if available, otherwise try facilities
-          return bookingAmenities.accommodationHighlights || bookingAmenities.facilities || [];
+          const amenities = bookingAmenities.accommodationHighlights || bookingAmenities.facilities || [];
+          return filterNotIncluded(amenities);
         }
         return [];
       case 'vrbo':
-        return this.propertyData.amenitiesVrbo || [];
+        return filterNotIncluded(this.propertyData.amenitiesVrbo || []);
       default:
         return [];
     }
@@ -971,6 +974,7 @@ export class PhotoDetailsComponent implements OnInit {
 
   // Get competitor amenities for selected platform
   getCompetitorAmenitiesForPlatform(platform: string): any[] {
+
     const competitor = this.getCurrentCompetitor();
     if (!competitor) return [];
 
@@ -979,13 +983,7 @@ export class PhotoDetailsComponent implements OnInit {
       case 'airbnb':
         return competitor.amenitiesAirbnb || [];
       case 'booking':
-        // Booking has a different structure - extract from accommodationHighlights
-        if (competitor.amenitiesBooking) {
-          const bookingAmenities = competitor.amenitiesBooking;
-          // Return accommodationHighlights if available, otherwise try facilities
-          return bookingAmenities.accommodationHighlights || bookingAmenities.facilities || [];
-        }
-        return [];
+        return competitor.amenitiesBooking || [];
       case 'vrbo':
         return competitor.amenitiesVrbo || [];
       default:
@@ -1568,10 +1566,12 @@ export class PhotoDetailsComponent implements OnInit {
     this.isGeneratingCaption = true;
     this.generatingPhotoUrl = photoUrl;
 
+    // Use query param source if available, otherwise use selected platform
+    const sourceToUse = this.source || this.selectedPropertyPlatform;
     this.imageCaptionService.generateCaption({
       operator_id: this.operatorId,
       property_id: this.propertyId,
-      source: this.selectedPropertyPlatform as 'airbnb' | 'booking' | 'vrbo',
+      source: sourceToUse as 'airbnb' | 'booking' | 'vrbo',
       image_url: photoUrl,
       image_id: photoUrl
     })
@@ -1794,13 +1794,15 @@ export class PhotoDetailsComponent implements OnInit {
     }
     this.isGeneratingAllCaptions = true; 
     this.isGeneratingCaption = true; 
+    // Use query param source if available, otherwise use selected platform
+    const sourceToUse = this.source || this.selectedPropertyPlatform;
     from(photosToProcess)
       .pipe(
         concatMap((photo:any) =>
           this.imageCaptionService.generateCaption({
             operator_id: this.operatorId,
             property_id: this.propertyId,
-            source: this.selectedPropertyPlatform as 'airbnb' | 'booking' | 'vrbo',
+            source: sourceToUse as 'airbnb' | 'booking' | 'vrbo',
             image_url: photo.url,
             image_id: photo.id
           }).pipe(

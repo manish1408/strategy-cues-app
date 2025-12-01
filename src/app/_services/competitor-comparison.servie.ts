@@ -26,15 +26,19 @@ export class CompetitorComparisonService {
     return this.http.get<any>(`${this._url}/get-comparisons`, { params });
   }
 
-  getPropertyCompetitors(property_id: string) {
-    return this.http.get<any>(`${this._url}/get-property-competitors/${property_id}`);
+  getPropertyCompetitors(property_id: string, source?: string) {
+    let params = new HttpParams();
+    if (source) {
+      params = params.set('source', source);
+    }
+    return this.http.get<any>(`${this._url}/get-property-competitors/${property_id}`, { params });
   }
 
   getGuestDidntLikeInCompetitor(property_id: string, operator_id: string) {
     const params = new HttpParams()
       .set('operator_id', operator_id);
     
-    return this.http.get<any>(`${this._url}/guest-didnt-like-in-competitor/${property_id}`, { params });
+    return this.http.get<any>(`${this._url}/guest-didnt-like-in-competitor/${property_id}?source=airbnb`, { params });
   }
 
 
@@ -42,62 +46,66 @@ export class CompetitorComparisonService {
     const params = new HttpParams()
       .set('operator_id', operator_id);
     
-    return this.http.get<any>(`${this._url}/guest-wish-they-had-in-competitor/${property_id}`, { params });
+    return this.http.get<any>(`${this._url}/guest-wish-they-had-in-competitor/${property_id}?source=airbnb`, { params });
   }
   
   getGuestLovedInCompetitor(property_id: string, operator_id: string) {
     const params = new HttpParams()
       .set('operator_id', operator_id);
     
-    return this.http.get<any>(`${this._url}/guest-loved-in-competitor/${property_id}`, { params });
+    return this.http.get<any>(`${this._url}/guest-loved-in-competitor/${property_id}?source=airbnb`, { params });
   }
 
   getWhatToImproveBasedOnCompetitor(property_id: string, operator_id: string) {
     const params = new HttpParams()
       .set('operator_id', operator_id);
     
-    return this.http.get<any>(`${this._url}/what-to-improve-based-on-competitor/${property_id}`, { params });
+    return this.http.get<any>(`${this._url}/what-to-improve-based-on-competitor/${property_id}?source=airbnb`, { params });
   }
 
   getGuestDidntLikeInMyProperty(property_id: string, operator_id: string) {
     const params = new HttpParams()
       .set('operator_id', operator_id);
     
-    return this.http.get<any>(`${this._url}/guest-didnt-like-in-my-property/${property_id}`, { params });
+    return this.http.get<any>(`${this._url}/guest-didnt-like-in-my-property/${property_id}?source=airbnb`, { params });
   }
   
   getGuestWishesInMyProperty(property_id: string, operator_id: string) {
     const params = new HttpParams()
       .set('operator_id', operator_id);
     
-    return this.http.get<any>(`${this._url}/guest-wish-they-had-my-property/${property_id}`, { params });
+    return this.http.get<any>(`${this._url}/guest-wish-they-had-my-property/${property_id}?source=airbnb`, { params });
   }
   
   getGuestLovedInMyProperty(property_id: string, operator_id: string) {
     const params = new HttpParams()
       .set('operator_id', operator_id);
     
-    return this.http.get<any>(`${this._url}/guest-loved-in-my-property/${property_id}`, { params });
+    return this.http.get<any>(`${this._url}/guest-loved-in-my-property/${property_id}?source=airbnb`, { params });
   }
   
   getWhatToImproveBasedOnMyProperty(property_id: string, operator_id: string) {
     const params = new HttpParams()
       .set('operator_id', operator_id);
     
-    return this.http.get<any>(`${this._url}/what-to-improve-based-on-my-reviews/${property_id}`, { params });
+    return this.http.get<any>(`${this._url}/what-to-improve-based-on-my-reviews/${property_id}?source=airbnb`, { params });
   }
 
   getConversionBoostersAndAmenities(property_id: string, operator_id: string) {
     const params = new HttpParams()
     .set('operator_id', operator_id);
   
-  return this.http.get<any>(`${this._url}/conversion-boosters-and-amenities/${property_id}`, { params });
+  return this.http.get<any>(`${this._url}/conversion-boosters-and-amenities/${property_id}?source=airbnb`, { params });
 }
 
- getAIPhotoAnalysis(property_id: string, operator_id: string) {
-  const params = new HttpParams()
+ getAIPhotoAnalysis(property_id: string, operator_id: string, source?: string) {
+  let params = new HttpParams()
   .set('operator_id', operator_id)
   .set('property_id', property_id);
+  
+  if (source) {
+    params = params.set('source', source);
+  }
 
   return this.http.get<any>(`${this._url}/ai-photo-analysis`, { params });
  }
