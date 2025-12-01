@@ -353,7 +353,7 @@
         </div>
 
         <!-- Additional Photo Suggestions -->
-        <div class="photo-suggestions-section" *ngIf="getCurrentCompetitor()">
+        <!-- <div class="photo-suggestions-section" *ngIf="getCurrentCompetitor()">
           <div class="suggestions-header">
             <h2>Additional Photo Suggestions</h2>
             <div class="analysis-status" *ngIf="isAnalyzingPhotos">
@@ -362,7 +362,6 @@
             </div>
           </div>
 
-          <!-- Suggestions List -->
           <div class="suggestions-list" *ngIf="getPhotoSuggestions().length > 0">
             <div class="suggestion-item" *ngFor="let suggestion of getPhotoSuggestions()"
               [ngClass]="'suggestion-' + suggestion.type">
@@ -389,12 +388,11 @@
             </div>
           </div>
 
-          <!-- Empty State -->
           <div class="suggestions-empty-state" *ngIf="getPhotoSuggestions().length === 0">
             <app-empty-state icon="fas fa-lightbulb" title="No Photo Suggestions Available">
             </app-empty-state>
           </div>
-        </div>
+        </div> -->
 
 
 
