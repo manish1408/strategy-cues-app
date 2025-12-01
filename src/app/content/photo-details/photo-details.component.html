@@ -77,7 +77,7 @@
         </ul>
       </div>  
       <div class="tab-navigation-right">
-        <div *ngIf="getCompetitorsCountForSelectedPlatform() > 0">
+        <div *ngIf="getCompetitorsCountForSelectedPlatform() > 0" [hidden]="activeTab !== 'photos'">
           <select class="form-select" [ngModel]="selectedCompetitorIndex" (ngModelChange)="selectCompetitor($event)">
             <option [ngValue]="-1" disabled>
               Select Competitor
@@ -464,22 +464,19 @@
         </div>
       </div>
 
-      <!-- Competitor Reviews Tab -->
       <div class="tab-pane" [class.active]="activeTab === 'competitor-reviews'"
         *ngIf="activeTab === 'competitor-reviews'">
-        <app-competitor-reviews></app-competitor-reviews>
+        <app-competitor-reviews [selectedPlatform]="selectedPlatform"></app-competitor-reviews>
       </div>
 
-      <!-- My Reviews Tab -->
       <div class="tab-pane" [class.active]="activeTab === 'my-reviews'" *ngIf="activeTab === 'my-reviews'">
-        <app-my-reviews></app-my-reviews>
+        <app-my-reviews [selectedPlatform]="selectedPlatform"></app-my-reviews>
       </div>
 
-      <!-- Amenities Analyser Tab -->
       <div class="tab-pane" [class.active]="activeTab === 'amenities'" *ngIf="activeTab === 'amenities'">
-        <app-amenities-analyzer [propertyId]="propertyId" [operatorId]="operatorId">
+        <app-amenities-analyzer [propertyId]="propertyId" [operatorId]="operatorId" [selectedPlatform]="selectedPlatform">
         </app-amenities-analyzer>
       </div>
     </div>
-  </div><!-- End of *ngIf="!isLoading" -->
-</div><!-- End of photo-details-container -->
+  </div>
+</div><

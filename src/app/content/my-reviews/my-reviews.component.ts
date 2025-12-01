@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from "@angular/core";
 import { CompetitorComparisonService } from "../../_services/competitor-comparison.servie";
 import { ActivatedRoute } from "@angular/router";
 import { LocalStorageService } from "../../_services/local-storage.service";
@@ -11,7 +11,9 @@ declare var bootstrap: any;
   templateUrl: './my-reviews.component.html',
   styleUrls: ['./my-reviews.component.scss']
 })
-export class MyReviewsComponent implements OnInit {
+export class MyReviewsComponent implements OnInit, OnChanges {
+  @Input() selectedPlatform: string = '';
+  
   reportDate: string = 'Sep 01, 2025';
   totalReviews: number = 45; // Example number for your own reviews
   
@@ -65,19 +67,30 @@ export class MyReviewsComponent implements OnInit {
       "";
 
     if (this.operatorId) {
-      this.loadGuestDidntLikeData();
-      this.loadGuestLovedData();
-      this.loadGuestWishData();
-      this.loadWhatToImproveData();
+      this.loadAllData();
     } else {
     }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // Reload data when selectedPlatform changes
+    if (changes['selectedPlatform'] && !changes['selectedPlatform'].firstChange && this.operatorId) {
+      this.loadAllData();
+    }
+  }
+
+  private loadAllData(): void {
+    this.loadGuestDidntLikeData();
+    this.loadGuestLovedData();
+    this.loadGuestWishData();
+    this.loadWhatToImproveData();
   }
 
   loadGuestDidntLikeData(): void {
     this.guestDidntLikeLoading = true;
 
     this.competitorComparisonService
-      .getGuestDidntLikeInMyProperty(this.propertyId, this.operatorId)
+      .getGuestDidntLikeInMyProperty(this.propertyId, this.operatorId, this.selectedPlatform)
       .subscribe({
         next: (response: any) => {
           // Handle the case where data might be empty or undefined
@@ -102,7 +115,7 @@ export class MyReviewsComponent implements OnInit {
     this.guestWishesLoading = true;
     
     this.competitorComparisonService
-      .getGuestWishesInMyProperty(this.propertyId, this.operatorId)
+      .getGuestWishesInMyProperty(this.propertyId, this.operatorId, this.selectedPlatform)
       .subscribe({
         next: (response: any) => {
           // Handle the case where data might be empty or undefined
@@ -128,7 +141,7 @@ export class MyReviewsComponent implements OnInit {
     this.guestLovedLoading = true;
     
     this.competitorComparisonService
-      .getGuestLovedInMyProperty(this.propertyId, this.operatorId)
+      .getGuestLovedInMyProperty(this.propertyId, this.operatorId, this.selectedPlatform)
       .subscribe({
         next: (response: any) => {
           // Handle the case where data might be empty or undefined
@@ -154,7 +167,7 @@ export class MyReviewsComponent implements OnInit {
     this.whatToImproveLoading = true;
     
     this.competitorComparisonService
-      .getWhatToImproveBasedOnMyProperty(this.propertyId, this.operatorId)
+      .getWhatToImproveBasedOnMyProperty(this.propertyId, this.operatorId, this.selectedPlatform)
       .subscribe({
         next: (response: any) => {
           // Handle the case where data might be empty or undefined

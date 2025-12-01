@@ -20,7 +20,6 @@ import { from, of } from "rxjs";
 export class PhotoDetailsComponent implements OnInit {
   operatorId: string = "";
   propertyId: string = "";
-  source: string = "";
   activeTab: string = "photos";
   propertyData: any;
   selectedPhotoIndex: number | null = null;
@@ -87,18 +86,14 @@ export class PhotoDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.propertyId = this.route.snapshot.params["id"];
     this.operatorId = this.route.snapshot.queryParams["operatorId"] || "";
-    this.source = this.route.snapshot.queryParams["source"] || "";
-
-    // API call to get property competitors
     this.loadPropertyCompetitors(this.propertyId);
-
     this.updateCompetitorPlatformImages();
   }
 
   // Load property competitors from API
   loadPropertyCompetitors(propertyId: string): void {
     this.competitorComparisonService
-      .getPropertyCompetitors(propertyId, this.source)
+      .getPropertyCompetitors(propertyId, this.selectedPlatform)
       .subscribe({
         next: (response: any) => {
           if (response?.data) {
@@ -747,7 +742,7 @@ export class PhotoDetailsComponent implements OnInit {
 
     this.isAnalyzingPhotos = true;
 
-    this.competitorComparisonService.getAIPhotoAnalysis(this.propertyId, this.operatorId, this.source)
+    this.competitorComparisonService.getAIPhotoAnalysis(this.propertyId, this.operatorId, this.selectedPlatform)
       .subscribe({
         next: (response: any) => {
           if (response.success && response.data) {
@@ -779,7 +774,7 @@ export class PhotoDetailsComponent implements OnInit {
 
     // Get captions by source (saved captions)
     // Use query param source if available, otherwise use platform
-    const sourceToUse = this.source || platform;
+    const sourceToUse = this.selectedPlatform;
     this.imageCaptionService.getCaptionsBySource({
       operator_id: this.operatorId,
       property_id: this.propertyId,
@@ -1567,7 +1562,7 @@ export class PhotoDetailsComponent implements OnInit {
     this.generatingPhotoUrl = photoUrl;
 
     // Use query param source if available, otherwise use selected platform
-    const sourceToUse = this.source || this.selectedPropertyPlatform;
+    const sourceToUse = this.selectedPlatform;
     this.imageCaptionService.generateCaption({
       operator_id: this.operatorId,
       property_id: this.propertyId,
@@ -1795,7 +1790,7 @@ export class PhotoDetailsComponent implements OnInit {
     this.isGeneratingAllCaptions = true; 
     this.isGeneratingCaption = true; 
     // Use query param source if available, otherwise use selected platform
-    const sourceToUse = this.source || this.selectedPropertyPlatform;
+    const sourceToUse = this.selectedPlatform;
     from(photosToProcess)
       .pipe(
         concatMap((photo:any) =>

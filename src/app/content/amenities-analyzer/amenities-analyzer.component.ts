@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CompetitorComparisonService } from '../../_services/competitor-comparison.servie';
 import { ToastrService } from 'ngx-toastr';
 
@@ -36,9 +36,10 @@ interface ConversionBoostersResponse {
   templateUrl: './amenities-analyzer.component.html',
   styleUrls: ['./amenities-analyzer.component.scss']
 })
-export class AmenitiesAnalyzerComponent implements OnInit {
+export class AmenitiesAnalyzerComponent implements OnInit, OnChanges {
   @Input() propertyId: string = '';
   @Input() operatorId: string = '';
+  @Input() selectedPlatform: string = '';
   
   // Ranking & Conversion Boosters Data (populated from API only)
   rankingBoosters: Array<{ name: string; has: boolean }>= [];
@@ -67,9 +68,16 @@ export class AmenitiesAnalyzerComponent implements OnInit {
     }
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    // Reload data when selectedPlatform changes
+    if (changes['selectedPlatform'] && !changes['selectedPlatform'].firstChange && this.propertyId && this.operatorId) {
+      this.loadConversionBoostersAndAmenities();
+    }
+  }
+
   loadConversionBoostersAndAmenities(): void {
     this.isLoading = true;
-    this.competitorComparisonService.getConversionBoostersAndAmenities(this.propertyId, this.operatorId)
+    this.competitorComparisonService.getConversionBoostersAndAmenities(this.propertyId, this.operatorId, this.selectedPlatform)
       .subscribe({
         next: (response: ConversionBoostersResponse) => {
           if (response.success && response.data) {
