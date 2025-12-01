@@ -29,7 +29,7 @@ export class CompetitorComparisonService {
   getPropertyCompetitors(property_id: string, source?: string) {
     let params = new HttpParams();
     if (source) {
-      params = params.set('source', source);
+      params = params.set('platform', source);
     }
     return this.http.get<any>(`${this._url}/get-property-competitors/${property_id}`, { params });
   }
@@ -39,7 +39,7 @@ export class CompetitorComparisonService {
       .set('operator_id', operator_id);
     
     if (source) {
-      params = params.set('source', source);
+      params = params.set('platform', source);
     }
     
     return this.http.get<any>(`${this._url}/guest-didnt-like-in-competitor/${property_id}`, { params });
@@ -51,7 +51,7 @@ export class CompetitorComparisonService {
       .set('operator_id', operator_id);
     
     if (source) {
-      params = params.set('source', source);
+      params = params.set('platform', source);
     }
     
     return this.http.get<any>(`${this._url}/guest-wish-they-had-in-competitor/${property_id}`, { params });
@@ -62,7 +62,7 @@ export class CompetitorComparisonService {
       .set('operator_id', operator_id);
     
     if (source) {
-      params = params.set('source', source);
+      params = params.set('platform', source);
     }
     
     return this.http.get<any>(`${this._url}/guest-loved-in-competitor/${property_id}`, { params });
@@ -73,7 +73,7 @@ export class CompetitorComparisonService {
       .set('operator_id', operator_id);
     
     if (source) {
-      params = params.set('source', source);
+      params = params.set('platform', source);
     }
     
     return this.http.get<any>(`${this._url}/what-to-improve-based-on-competitor/${property_id}`, { params });
@@ -84,7 +84,7 @@ export class CompetitorComparisonService {
       .set('operator_id', operator_id);
     
     if (source) {
-      params = params.set('source', source);
+      params = params.set('platform', source);
     }
     
     return this.http.get<any>(`${this._url}/guest-didnt-like-in-my-property/${property_id}`, { params });
@@ -95,7 +95,7 @@ export class CompetitorComparisonService {
       .set('operator_id', operator_id);
     
     if (source) {
-      params = params.set('source', source);
+      params = params.set('platform', source);
     }
     
     return this.http.get<any>(`${this._url}/guest-wish-they-had-my-property/${property_id}`, { params });
@@ -106,7 +106,7 @@ export class CompetitorComparisonService {
       .set('operator_id', operator_id);
     
     if (source) {
-      params = params.set('source', source);
+      params = params.set('platform', source);
     }
     
     return this.http.get<any>(`${this._url}/guest-loved-in-my-property/${property_id}`, { params });
@@ -117,7 +117,7 @@ export class CompetitorComparisonService {
       .set('operator_id', operator_id);
     
     if (source) {
-      params = params.set('source', source);
+      params = params.set('platform', source);
     }
     
     return this.http.get<any>(`${this._url}/what-to-improve-based-on-my-reviews/${property_id}`, { params });
@@ -128,7 +128,7 @@ export class CompetitorComparisonService {
     .set('operator_id', operator_id);
   
     if (source) {
-      params = params.set('source', source);
+      params = params.set('platform', source);
     }
   
     return this.http.get<any>(`${this._url}/conversion-boosters-and-amenities/${property_id}`, { params });
@@ -140,7 +140,7 @@ export class CompetitorComparisonService {
   .set('property_id', property_id);
   
   if (source) {
-    params = params.set('source', source);
+    params = params.set('platform', source);
   }
 
   return this.http.get<any>(`${this._url}/ai-photo-analysis`, { params });
