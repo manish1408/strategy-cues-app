@@ -98,9 +98,13 @@ export class PhotoDetailsComponent implements OnInit {
         next: (response: any) => {
           if (response?.data) {
             if (response.data) {
+
               this.propertyData = response.data.property;
-              this.propertyData.competitor = response.data.competitors;
-            if (this.propertyData.competitor.length > 0) {
+              let bookingCompetitors = response.data.competitors.filter((competitor: any) => competitor.bookingLink !== null).slice(0, 2);
+              let airbnbCompetitors = response.data.competitors.filter((competitor: any) => competitor.airbnbLink !== null).slice(0, 2);
+              this.propertyData.competitor = [...bookingCompetitors, ...airbnbCompetitors];
+
+              if (this.propertyData.competitor.length > 0) {
               // Ensure initial selection matches active platform
               this.alignSelectedCompetitorWithPlatform();
               this.updateCompetitorImages();
