@@ -84,9 +84,9 @@
             </option>
             <ng-container *ngFor="let competitor of propertyData.competitor; let i = index">
               <option
-                *ngIf="competitor.bookingLink !== null && selectedPlatform == 'booking' && competitor.propertyName"
+                *ngIf="competitor.bookingId !== null && selectedPlatform == 'booking'"
                 [ngValue]="i">
-                {{ competitor.propertyName }}
+                {{ competitor.propertyName || competitor.bookingId }}
               </option>
 
               <option *ngIf="competitor.airbnbLink !== null && selectedPlatform == 'airbnb' && competitor.propertyName"
