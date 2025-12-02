@@ -208,7 +208,12 @@ export class ContentComponent implements OnInit, OnDestroy {
   }
 
   getCompetitorCount(property: any): number {
-    return this.getCompetitorsForProperty(property).length;
+    let count = 0;
+    count = this.getCompetitorsForProperty(property).length;
+    if(count > 4) {
+      count = 4;
+    }
+    return count;
   }
 
   getTotalMissingCaptions(): number {
