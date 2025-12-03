@@ -1023,8 +1023,8 @@ export class RevenueComponent implements OnInit {
     if (this.adrMax !== null) params.adr_max = this.adrMax;
     if (this.revparMin !== null) params.revpar_min = this.revparMin;
     if (this.revparMax !== null) params.revpar_max = this.revparMax;
-    if (this.mpiMin !== null) params.mpi_min = this.mpiMin;
-    if (this.mpiMax !== null) params.mpi_max = this.mpiMax;
+    if (this.mpiMin !== null) params.mpi_tm_min = this.mpiMin;
+    if (this.mpiMax !== null) params.mpi_tm_max = this.mpiMax;
     if (this.minRateThresholdMin !== null) params.min_rate_threshold_min = this.minRateThresholdMin;
     if (this.minRateThresholdMax !== null) params.min_rate_threshold_max = this.minRateThresholdMax;
 
@@ -1154,8 +1154,8 @@ export class RevenueComponent implements OnInit {
     if (this.adrMax !== null) params.adr_max = this.adrMax;
     if (this.revparMin !== null) params.revpar_min = this.revparMin;
     if (this.revparMax !== null) params.revpar_max = this.revparMax;
-    if (this.mpiMin !== null) params.mpi_min = this.mpiMin;
-    if (this.mpiMax !== null) params.mpi_max = this.mpiMax;
+    if (this.mpiMin !== null) params.mpi_tm_min = this.mpiMin;
+    if (this.mpiMax !== null) params.mpi_tm_max = this.mpiMax;
     if (this.minRateThresholdMin !== null) params.min_rate_threshold_min = this.minRateThresholdMin;
     if (this.minRateThresholdMax !== null) params.min_rate_threshold_max = this.minRateThresholdMax;
 
