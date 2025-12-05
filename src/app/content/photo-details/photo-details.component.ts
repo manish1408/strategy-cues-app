@@ -753,7 +753,7 @@ export class PhotoDetailsComponent implements OnInit {
             // Store the AI analysis data in propertyData
             this.propertyData = {
               ...this.propertyData,
-              aiAnalysis: response.data
+              aiAnalysis: response.data.aiPhotoAnalysis
             };
 
             // Trigger change detection to update suggestions
@@ -909,6 +909,7 @@ export class PhotoDetailsComponent implements OnInit {
     setTimeout(() => {
       this.updatePropertyPlatformImages();
       this.updateCompetitorPlatformImages();
+      this.fetchAIPhotoAnalysis();
       this.isPropertyGalleryLoading = false;
       this.isCompetitorGalleryLoading = false;
       this.isPropertyGalleryVisible = true;
