@@ -66,7 +66,7 @@
                 Listings
               </a>
             </li>
-            <li class="sidebar-menu-item  downaload-link">
+            <li class="sidebar-menu-item  downaload-link" *ngIf="user?.userType === 'admin'">
               <a [href]="chromeExtensionUrl" target="_blank" class="sidebar-link">
                 <i class="fas fa-download"></i>
                 <span>Download chrome extension</span>
