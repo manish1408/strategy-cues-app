@@ -1,8 +1,8 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { OperatorService } from "../_services/operator.service";
 import { ToastrService } from "ngx-toastr";
-import { finalize } from "rxjs";
+import { finalize, forkJoin, of } from "rxjs";
+import { map, catchError } from "rxjs/operators";
 import { AuthenticationService } from "../_services/authentication.service";
 import { ToastService } from "../_services/toast.service";
 
@@ -18,19 +18,19 @@ export class UserManagementComponent {
   loading: boolean = false;
   allOperatorList: any[] = [];
   allUsersList: any[] = [];
-  private usersByIdMap: Map<string, any> = new Map<string, any>();
-  addOperatorForm: FormGroup;
-  selectedOperator: any | null = null;
+  private operatorsByIdMap: Map<string, any> = new Map<string, any>();
+  private operatorsByUserIdMap: Map<string, Set<string>> = new Map<string, Set<string>>();
+  selectedUser: any | null = null;
+  selectedOperators: any[] = []; // For ngModel binding
+  availableOperatorsForDropdown: any[] = []; // Cached dropdown options
+  isSubmitted = false;
+  userLoading: boolean = false;
   constructor(
     private operatorService: OperatorService,
     private toastr: ToastrService,
-    private fb: FormBuilder,
     private authService: AuthenticationService,
     private toastService: ToastService
   ) {
-    this.addOperatorForm = this.fb.group({
-      userId: [null, Validators.required],
-    });
   }
 
   ngOnInit() {
@@ -42,13 +42,14 @@ export class UserManagementComponent {
     this.operatorService.getAllOperatorList().subscribe({
       next: (res: any) => {
         this.allOperatorList = res?.data?.operators ?? [];
+        this.operatorsByIdMap = this.buildOperatorsByIdMap(this.allOperatorList);
+        this.operatorsByUserIdMap = this.buildOperatorsByUserIdMap(this.allOperatorList);
         this.authService
           .getAllUsers()
           .pipe(finalize(() => (this.apiLoading = false)))
           .subscribe({
             next: (_res: any) => {
               this.allUsersList = _res?.data?.users ?? [];
-              this.usersByIdMap = this.buildUsersByIdMap(this.allUsersList);
             },
             error: (error: any) => {
               this.toastr.error("Failed to load users");
@@ -67,197 +68,227 @@ export class UserManagementComponent {
     if (!user) {
       return "";
     }
-    if (user.fullName ) {
-      return user.fullName ;
+    if (user.fullName) {
+      return user.fullName;
     }
-
-    return  user.id
+    return user.id || "";
   }
 
-  getUsersDetails(userIds: any[]): Array<{ id: string; fullName: string }> {
-    if (
-      !Array.isArray(userIds) ||
-      !userIds.length ||
-      !Array.isArray(this.allUsersList)
-    ) {
+  getOperatorDisplayName(operator: any): string {
+    if (!operator) {
+      return "";
+    }
+    return operator.name || operator._id || "";
+  }
+
+  getOperatorsForUser(user: any): Array<{ id: string; name: string }> {
+    if (!user || !user.id) {
       return [];
     }
 
-    return userIds
-      .map((userIdentifier: any) => {
-        const lookupKey =  userIdentifier;
+    const operatorIds = this.operatorsByUserIdMap.get(user.id);
+    if (!operatorIds || operatorIds.size === 0) {
+      return [];
+    }
 
-        if (!lookupKey) {
+    return Array.from(operatorIds)
+      .map((operatorId: string) => {
+        const operator = this.operatorsByIdMap.get(operatorId);
+        if (!operator) {
           return null;
         }
-
-        const user = this.usersByIdMap.get(lookupKey);
-
-        if (!user) {
-          return null;
-        }
-
-        const fullName = this.getUserDisplayName(user);
 
         return {
-          id: user.id ?? lookupKey,
-          fullName,
+          id: operator._id || operator.id || operatorId,
+          name: this.getOperatorDisplayName(operator),
         };
       })
       .filter(
-        (user): user is { id: string; fullName: string } =>
-          !!user && !!user.fullName
+        (op): op is { id: string; name: string } =>
+          !!op && !!op.name
       );
   }
 
-  getAvailableUsers(): any[] {
-    if (!Array.isArray(this.allUsersList) || !this.selectedOperator) {
-      return this.allUsersList ?? [];
+  getAvailableOperators(): any[] {
+    if (!Array.isArray(this.allOperatorList) || !this.selectedUser) {
+      return this.allOperatorList ?? [];
     }
 
-    const assignedUserIds = this.getAssignedUserIdSet(this.selectedOperator);
+    const assignedOperatorIds = this.operatorsByUserIdMap.get(this.selectedUser.id) || new Set<string>();
 
-    return this.allUsersList.filter((user: any) => {
-      const userId = user?.id;
-      return userId ? !assignedUserIds.has(userId) : true;
+    return this.allOperatorList.filter((operator: any) => {
+      const operatorId = operator?._id || operator?.id;
+      return operatorId ? !assignedOperatorIds.has(operatorId) : true;
     });
   }
 
-  areAllUsersAssigned(): boolean {
-    if (!this.selectedOperator || !Array.isArray(this.allUsersList) || this.allUsersList.length === 0) {
+  getOperatorsForDropdown(): any[] {
+    const available = this.getAvailableOperators();
+    const groupKey = 'All Operators';
+    
+    // Single group for all operators
+    this.availableOperatorsForDropdown = available.map((operator: any) => ({
+      id: operator._id || operator.id,
+      name: operator.name || operator._id || operator.id,
+      group: groupKey
+    }));
+    
+    return this.availableOperatorsForDropdown;
+  }
+
+  // Function to group items by their group property
+  groupByFn = (item: any) => {
+    return item.group || 'All Operators';
+  }
+
+  // Check if a group is fully selected
+  isGroupSelected(groupName: string): boolean {
+    const groupItems = this.availableOperatorsForDropdown.filter(item => item.group === groupName);
+    if (groupItems.length === 0) return false;
+    return groupItems.every(item => this.selectedOperators.includes(item.id));
+  }
+
+
+
+  areAllOperatorsAssigned(): boolean {
+    if (!this.selectedUser || !Array.isArray(this.allOperatorList) || this.allOperatorList.length === 0) {
       return false;
     }
-    return this.getAvailableUsers().length === 0;
+    return this.getAvailableOperators().length === 0;
   }
 
-  hasError(controlName: string) {
-    const control = this.addOperatorForm.get(controlName);
-    return control?.invalid && control?.touched;
-  }
+ 
 
-  addUser(operator: any) {
-    if (!operator || !operator._id) {
-      this.toastr.error("Invalid operator selected");
+  addOperator(user: any) {
+    if (!user || !user.id) {
+      this.toastr.error("Invalid user selected");
       return;
     }
+    this.selectedUser = user;
+    this.selectedOperators = [];
 
-    this.addOperatorForm.reset({
-      userId: null,
-    });
-
-    this.selectedOperator = operator;
-    const allAssigned = this.areAllUsersAssigned();
-    if (allAssigned) {
-      this.addOperatorForm.get('userId')?.disable();
-    } else {
-      this.addOperatorForm.get('userId')?.enable();
-    }
+    // Update dropdown options
+    this.getOperatorsForDropdown();
   }
 
   resetForm() {
-    this.addOperatorForm.reset({
-      userId: null,
-    });
-    this.selectedOperator = null;
-    this.addOperatorForm.get('userId')?.enable();
+    this.selectedOperators = [];
+    this.selectedUser = null;
   }
 
   onSubmit() {
-    this.addOperatorForm.markAllAsTouched();
-
-    if (this.addOperatorForm.invalid) {
+    this.isSubmitted = true;
+    if (this.selectedOperators.length === 0) {
       return;
     }
 
-    if (!this.selectedOperator || !this.selectedOperator._id) {
-      this.toastr.error("No operator selected");
+    if (!this.selectedUser || !this.selectedUser.id) {
+      this.toastr.error("No user selected");
       return;
     }
 
     this.loading = true;
-
-    const selectedValue: string | null =
-      this.addOperatorForm.value.userId ?? null;
-
-    if (!selectedValue) {
-      this.toastr.error("Please select a user");
-      this.loading = false;
-      return;
-    }
-
-    let userIdsToAdd: string[] = [];
-
-    // Check if "Select all users" was selected
-    if (selectedValue === "SELECT_ALL") {
-      const availableUsers = this.getAvailableUsers();
-      userIdsToAdd = availableUsers
-        .map((user: any) => user?.id || user?._id)
-        .filter((id: any): id is string => !!id);
-      
-      if (userIdsToAdd.length === 0) {
-        this.toastr.warning("No available users to assign");
-        this.loading = false;
-        return;
+    // For each operator, add the user to its userId array
+    const updateObservables = this.selectedOperators.map((operatorId: string) => {
+      const operator = this.operatorsByIdMap.get(operatorId);
+      if (!operator) {
+        return of({ success: false, skipped: false, error: `Operator ${operatorId} not found` });
       }
-    } else {
-      userIdsToAdd = [selectedValue];
-    }
+      const currentUserIds = Array.isArray(operator.userId)
+        ? operator.userId
+        : operator.userId
+        ? [operator.userId]
+        : [];
 
-    const currentUserIds = Array.isArray(this.selectedOperator.userId)
-      ? this.selectedOperator.userId
-      : this.selectedOperator.userId
-      ? [this.selectedOperator.userId]
-      : [];
+      // Check if user is already assigned
+      if (currentUserIds.includes(this.selectedUser.id)) {
+        return of({ success: true, skipped: true, operatorId });
+      }
 
-    const payload = {
-      ...this.selectedOperator,
-      userId: [...currentUserIds, ...userIdsToAdd],
-    };
-
-    this.operatorService
-      .updateOperator(payload, this.selectedOperator._id)
+      const payload = {
+        ...operator,
+        userId: [...currentUserIds, this.selectedUser.id],
+      };
+      return this.operatorService
+        .updateOperator(payload, operator._id)
+        .pipe(
+          map((res: any) => ({ ...res, skipped: false, operatorId })),
+          catchError((error: any) => of({ success: false, skipped: false, error: error?.error?.detail || error?.message || "Failed to update operator" }))
+        );
+    });
+    forkJoin(updateObservables)
       .pipe(finalize(() => (this.loading = false)))
       .subscribe({
-        next: (res: any) => {
-          if (res.success) {
-            const message = selectedValue === "SELECT_ALL" 
-              ? `${userIdsToAdd.length} users assigned successfully`
-              : "User assigned successfully";
+        next: (results: any[]) => {
+          const successCount = results.filter(r => r?.success || r?.skipped).length;
+          const skippedCount = results.filter(r => r?.skipped).length;
+          const actualAssigned = successCount - skippedCount;
+          const errors = results.filter(r => !r?.success && !r?.skipped);
+
+          if (errors.length > 0 && errors.length === results.length) {
+            // All failed
+            this.toastr.error(errors[0]?.error || "Failed to assign operator");
+            return;
+          }
+
+          if (actualAssigned > 0 || skippedCount > 0) {
+            const message = this.selectedOperators.length > 1
+              ? `${actualAssigned} operator${actualAssigned !== 1 ? 's' : ''} assigned successfully${skippedCount > 0 ? ` (${skippedCount} already assigned)` : ''}`
+              : "Operator assigned successfully";
             this.toastr.success(message);
             this.loadOperatorsAndUser();
             this.closeModal();
+            this.isSubmitted = false;
           } else {
-            this.toastr.error(res.detail || "Failed to assign user");
+            this.toastr.warning("No operators were assigned");
           }
         },
         error: (error: any) => {
-          this.toastr.error(error.error.detail || "Failed to assign user");
-          this.loading = false;
+          this.toastr.error(error?.error?.detail || error?.message || "Failed to assign operator");
         },
       });
   }
 
-  removeUser(operator: any, userId: string) {
+  onUserTypeChange(user: any, event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const selectedValue = selectElement.value;
+    this.userLoading = true;
+    this.authService.updateUser(user.id, { userType: selectedValue }).pipe(finalize(() => (this.userLoading = false))).subscribe({
+      next: (res: any) => {
+        if (res.success) {
+        this.toastr.success("User type updated successfully");
+          this.loadOperatorsAndUser();
+        } else {
+          this.toastr.error(res.detail.error || "Failed to update user type");
+        }
+      },
+      error: (error: any) => {
+        this.toastr.error(error.error.detail.error || "Failed to update user type");
+      },
+    });
+  }
+
+  removeOperator(user: any, operatorId: string) {
     this.toastService.showConfirm(
       "Are you sure?",
-      "Remove the selected user from the operator?",
+      "Remove the selected operator from the user?",
       "Yes, remove it!",
       "No, cancel",
       () => {
         this.operatorService
-          .deleteOperatorUser(userId, operator._id)
+          .deleteOperatorUser(user.id, operatorId)
           .pipe(finalize(() => (this.loading = false)))
           .subscribe({
             next: (res: any) => {
               if (res.success) {
-                this.toastr.success("User removed successfully");
+                this.toastr.success("Operator removed successfully");
                 this.loadOperatorsAndUser();
               } else {
-                this.toastr.error(res.detail || "Failed to remove user");
+                this.toastr.error(res.detail || "Failed to remove operator");
               }
             },
             error: (error: any) => {
-              this.toastr.error(error.error.detail || "Failed to remove user");
+              this.toastr.error(error.error.detail || "Failed to remove operator");
               this.loading = false;
             },
           });
@@ -268,38 +299,54 @@ export class UserManagementComponent {
     );
   }
 
-  private getAssignedUserIdSet(operator: any): Set<string> {
-    if (!operator) {
-      return new Set<string>();
-    }
-
-    const rawIds = Array.isArray(operator?.userId)
-      ? operator.userId
-      : operator?.userId
-      ? [operator.userId]
-      : [];
-
-    const normalizedIds = rawIds
-      .map((userIdentifier: any) =>
-        typeof userIdentifier === "string"
-          ? userIdentifier
-          : userIdentifier?._id ?? userIdentifier?.id ?? ""
-      )
-      .filter((id: any): id is string => typeof id === "string" && !!id);
-
-    return new Set<string>(normalizedIds);
-  }
-
-  private buildUsersByIdMap(users: any[]): Map<string, any> {
-    if (!Array.isArray(users)) {
+  private buildOperatorsByIdMap(operators: any[]): Map<string, any> {
+    if (!Array.isArray(operators)) {
       return new Map<string, any>();
     }
 
     return new Map<string, any>(
-      users
-        .filter((user: any) =>  user?.id)
-        .map((user: any) => [user.id, user])
+      operators
+        .filter((operator: any) => operator?._id || operator?.id)
+        .map((operator: any) => [operator._id || operator.id, operator])
     );
+  }
+
+  private buildOperatorsByUserIdMap(operators: any[]): Map<string, Set<string>> {
+    const map = new Map<string, Set<string>>();
+
+    if (!Array.isArray(operators)) {
+      return map;
+    }
+
+    operators.forEach((operator: any) => {
+      const operatorId = operator?._id || operator?.id;
+      if (!operatorId) {
+        return;
+      }
+
+      const rawIds = Array.isArray(operator?.userId)
+        ? operator.userId
+        : operator?.userId
+        ? [operator.userId]
+        : [];
+
+      const normalizedIds = rawIds
+        .map((userIdentifier: any) =>
+          typeof userIdentifier === "string"
+            ? userIdentifier
+            : userIdentifier?._id ?? userIdentifier?.id ?? ""
+        )
+        .filter((id: any): id is string => typeof id === "string" && !!id);
+
+      normalizedIds.forEach((userId: string) => {
+        if (!map.has(userId)) {
+          map.set(userId, new Set<string>());
+        }
+        map.get(userId)!.add(operatorId);
+      });
+    });
+
+    return map;
   }
 
   private closeModal() {
