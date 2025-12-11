@@ -24,11 +24,17 @@
       <!-- Ranking & Conversion Boosters Section -->
       <div class="section">
       <div class="section-header">
-        <h2>Ranking & Conversion Boosters</h2>
-        <p class="section-description">
-          Our research has found these amenities to boost visibility & conversions for most listings. 
-          Green shows amenities you have & red shows missing amenities.
-        </p>
+        <div>
+          <h2>Ranking & Conversion Boosters</h2>
+          <p class="section-description">
+            Our research has found these amenities to boost visibility & conversions for most listings. 
+            Green shows amenities you have & red shows missing amenities.
+          </p>
+        </div>
+        <div class="ai-badge">
+          <i class="fas fa-robot"></i>
+          <span>AI generated</span>
+        </div>
       </div>
       
       <div class="amenities-grid" *ngIf="rankingBoosters.length > 0">
@@ -54,14 +60,20 @@
     <!-- Top Ranking Amenities Section -->
     <div class="section">
       <div class="section-header">
-        <h2>Top Ranking Amenities in Your Area</h2>
-        <p class="section-description">
-          You're missing these high-ranking items based on your local area.
-        </p>
-        <!-- <div class="tip-box">
-          <strong>Tip:</strong> Items listed below are not always found in the Airbnb Amenities section of the Airbnb editor. 
-          Some items are found under 'House Rules', 'Check-in method' or 'Accessibility'.
-        </div> -->
+        <div>
+          <h2>Top Ranking Amenities in Your Area</h2>
+          <p class="section-description">
+            You're missing these high-ranking items based on your local area.
+          </p>
+          <!-- <div class="tip-box">
+            <strong>Tip:</strong> Items listed below are not always found in the Airbnb Amenities section of the Airbnb editor. 
+            Some items are found under 'House Rules', 'Check-in method' or 'Accessibility'.
+          </div> -->
+        </div>
+        <div class="ai-badge">
+          <i class="fas fa-robot"></i>
+          <span>AI generated</span>
+        </div>
       </div>
       
       <div class="amenities-grid" *ngIf="topRankingAmenities.length > 0">

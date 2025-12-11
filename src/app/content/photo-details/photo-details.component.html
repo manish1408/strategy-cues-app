@@ -16,7 +16,7 @@
       </button>
     </div>
     <div class="col-7">
-      <h1 class="property-title mb-2 pull-left" [innerHtml]="propertyData.Listing_Name"></h1>
+      <h1 class="property-title pull-left" style="line-height: 40px;" [innerHtml]="propertyData.Listing_Name"></h1>
     </div>
     <div class="col-4">
         <div class="platform-tabs-container"  *ngIf="propertyData">
@@ -355,7 +355,7 @@
         <!-- Additional Photo Suggestions -->
         <div class="photo-suggestions-section" *ngIf="getCurrentCompetitor()">
           <div class="suggestions-header">
-            <h2>Additional Photo Suggestions</h2>
+            <h2>AI Photo Suggestions</h2>
             <div class="analysis-status" *ngIf="isAnalyzingPhotos">
               <i class="fas fa-spinner fa-spin"></i>
               <span>Analyzing photos with AI...</span>
@@ -419,7 +419,7 @@
         <!-- Photo Captions Section -->
         <div class="missing-captions-section" *ngIf="currentPlatformPhotos && currentPlatformPhotos.length > 0">
           <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2>Photo Captions for {{ selectedPlatform | titlecase }} ({{ currentPlatformPhotos.length }} photos)</h2>
+            <h2>AI Photo Captions for {{ selectedPlatform | titlecase }} ({{ currentPlatformPhotos.length }} photos)</h2>
             <button class="btn btn-sm btn-primary" (click)="generateAllCaptions()"
               [disabled]="isGeneratingAllCaptions || isGeneratingCaption">
               <!-- <span *ngIf="isGeneratingAllCaptions" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> -->

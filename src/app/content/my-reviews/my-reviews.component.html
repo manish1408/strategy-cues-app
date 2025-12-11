@@ -30,6 +30,10 @@
       <div class="reviews-section">
         <div class="section-header">
           <h2>What guests didn't like about my properties</h2>
+          <div class="ai-badge">
+            <i class="fas fa-robot"></i>
+            <span>AI generated</span>
+          </div>
         </div>
         <div class="cards-grid" *ngIf="guestDidntLikeData && guestDidntLikeData.length > 0">
           <div class="review-card dislike-card" *ngFor="let item of guestDidntLikeData">
@@ -52,6 +56,10 @@
       <div class="reviews-section">
         <div class="section-header">
           <h2>What guests wish they had from my properties</h2>
+          <div class="ai-badge">
+            <i class="fas fa-robot"></i>
+            <span>AI generated</span>
+          </div>
         </div>
         <div class="cards-grid" *ngIf="guestWishesData && guestWishesData.length > 0">
           <div class="review-card wish-card" *ngFor="let item of guestWishesData">
@@ -74,6 +82,10 @@
       <div class="reviews-section">
         <div class="section-header">
           <h2>What guests love about my properties</h2>
+          <div class="ai-badge">
+            <i class="fas fa-robot"></i>
+            <span>AI generated</span>
+          </div>
         </div>
         <div class="cards-grid" *ngIf="guestLovedData && guestLovedData.length > 0">
           <div class="review-card love-card" *ngFor="let item of guestLovedData">
@@ -96,6 +108,10 @@
       <div class="reviews-section improvement-section">
         <div class="section-header">
           <h2>Based on my reviews, what can I improve?</h2>
+          <div class="ai-badge">
+            <i class="fas fa-robot"></i>
+            <span>AI generated</span>
+          </div>
         </div>
         <!-- <div class="improvement-input-container" *ngIf="whatToImproveData && whatToImproveData.length > 0">
           <div class="improvement-input">

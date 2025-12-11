@@ -64,16 +64,6 @@ export class UserManagementComponent {
     });
   }
 
-  getUserDisplayName(user: any): string {
-    if (!user) {
-      return "";
-    }
-    if (user.fullName) {
-      return user.fullName;
-    }
-    return user.id || "";
-  }
-
   getOperatorDisplayName(operator: any): string {
     if (!operator) {
       return "";

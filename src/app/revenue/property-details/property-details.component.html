@@ -9,18 +9,8 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [class.active]="activeTab === 'performance'" (click)="switchTab('performance')">
-            <i class="fas fa-trending-up me-2"></i>Performance
-          </a>
-        </li>
-        <li class="nav-item">
           <a class="nav-link" [class.active]="activeTab === 'platforms'" (click)="switchTab('platforms')">
             <i class="fas fa-globe me-2"></i>Platforms
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [class.active]="activeTab === 'reviews'" (click)="switchTab('reviews')">
-            <i class="fas fa-star me-2"></i>Reviews
           </a>
         </li>
       </ul>
@@ -102,13 +92,13 @@
                 <div class="row mt-3">
                   <div class="col-6">
                     <div class="metric-card small">
-                      <div class="metric-label">7 Days</div>
+                      <div class="metric-label">Last 7 Days</div>
                       <div class="metric-value">{{ property.Occupancy['7_days'] ? property.Occupancy['7_days'] + '%' : 'N/A' }}</div>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="metric-card small">
-                      <div class="metric-label">30 Days</div>
+                      <div class="metric-label">Last 30 Days</div>
                       <div class="metric-value">{{ property.Occupancy['30_days'] ? property.Occupancy['30_days'] + '%' : 'N/A' }}</div>
                     </div>
                   </div>
@@ -219,87 +209,6 @@
           </div>
         </div>
 
-        <!-- Photos Section -->
-        <div class="row" *ngIf="property.Photos">
-          <div class="col-12 mb-4">
-            <div class="card">
-              <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-images me-2"></i>Property Photos</h5>
-              </div>
-              <div class="card-body">
-                <div class="row">
-                  <!-- Booking.com Photos -->
-                  <div class="col-md-6 mb-3" *ngIf="property.Photos.booking && property.Photos.booking.length > 0">
-                    <h6><i class="fas fa-bed me-2"></i>Booking.com Photos ({{ property.Photos.booking.length }})</h6>
-                    <div class="photo-grid">
-                      <div class="photo-item" *ngFor="let photo of property.Photos.booking.slice(0, 6)">
-                        <img [src]="photo.url || placeholderImage" 
-                             [alt]="photo.accessibility_label || 'Property photo'" 
-                             class="img-fluid rounded" 
-                             (click)="openPhotoModal(photo.url, photo.accessibility_label)"
-                             (error)="onImageError($event)"
-                             loading="lazy">
-                      </div>
-                    </div>
-                    <small class="text-muted" *ngIf="property.Photos.booking.length > 6">
-                      Showing first 6 of {{ property.Photos.booking.length }} photos
-                    </small>
-                  </div>
-                  
-                  <!-- Booking.com Photos Placeholder -->
-                  <div class="col-md-6 mb-3" *ngIf="!property.Photos.booking || property.Photos.booking.length === 0">
-                    <h6><i class="fas fa-bed me-2"></i>Booking.com Photos</h6>
-                    <div class="photo-grid">
-                      <div class="photo-item">
-                        <img [src]="placeholderImage" 
-                             alt="No Booking.com photos available" 
-                             class="img-fluid rounded placeholder-image">
-                      </div>
-                    </div>
-                    <small class="text-muted">No Booking.com photos available</small>
-                  </div>
-                  
-                  <!-- Airbnb Photos -->
-                  <div class="col-md-6 mb-3" *ngIf="property.Photos.airbnb && property.Photos.airbnb.length > 0">
-                    <h6><i class="fab fa-airbnb me-2"></i>Airbnb Photos ({{ property.Photos.airbnb.length }})</h6>
-                    <div class="photo-grid">
-                      <div class="photo-item" *ngFor="let photo of property.Photos.airbnb.slice(0, 6)">
-                        <img [src]="photo.url || placeholderImage" 
-                             [alt]="photo.accessibility_label || 'Property photo'" 
-                             class="img-fluid rounded" 
-                             (click)="openPhotoModal(photo.url, photo.accessibility_label)"
-                             (error)="onImageError($event)"
-                             loading="lazy">
-                      </div>
-                    </div>
-                    <small class="text-muted" *ngIf="property.Photos.airbnb.length > 6">
-                      Showing first 6 of {{ property.Photos.airbnb.length }} photos
-                    </small>
-                  </div>
-                  
-                  <!-- Airbnb Photos Placeholder -->
-                  <div class="col-md-6 mb-3" *ngIf="!property.Photos.airbnb || property.Photos.airbnb.length === 0">
-                    <h6><i class="fab fa-airbnb me-2"></i>Airbnb Photos</h6>
-                    <div class="photo-grid">
-                      <div class="photo-item">
-                        <img [src]="placeholderImage" 
-                             alt="No Airbnb photos available" 
-                             class="img-fluid rounded placeholder-image">
-                      </div>
-                    </div>
-                    <small class="text-muted">No Airbnb photos available</small>
-                  </div>
-                </div>
-                
-                <!-- No Photos Message - Only show if no Photos object at all -->
-                <div class="text-center py-3" *ngIf="!property.Photos">
-                  <i class="fas fa-image fa-2x text-muted mb-2"></i>
-                  <p class="text-muted mb-0">No photos available for this property</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
         <!-- No Data Available Message -->
         <div class="row"
@@ -314,10 +223,8 @@
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Performance Tab -->
-      <div *ngIf="activeTab === 'performance'" class="tab-pane">
+
         <div class="row" *ngIf="property.STLY_Var">
           <div class="col-lg-6 mb-4" *ngIf="property.STLY_Var">
             <div class="card">
@@ -392,7 +299,10 @@
             </div>
           </div>
         </div>
+
+
       </div>
+
 
       <!-- Platforms Tab -->
       <div *ngIf="activeTab === 'platforms'" class="tab-pane">
@@ -411,7 +321,7 @@
                       [ngClass]="isFeatureEnabled(property.BookingCom.Genius) ? 'enabled' : 'disabled'">
                       <i class="fas"
                         [ngClass]="isFeatureEnabled(property.BookingCom.Genius) ? 'fa-check-circle' : 'fa-times-circle'"></i>
-                      {{ property.BookingCom.Genius }}
+                       10%
                     </span>
                     <span class="feature-status" *ngIf="property.BookingCom.Genius === null" style="color: #ccc;">
                       <i class="fas fa-minus-circle"></i>
@@ -424,7 +334,7 @@
                       [ngClass]="isFeatureEnabled(property.BookingCom.Mobile) ? 'enabled' : 'disabled'">
                       <i class="fas"
                         [ngClass]="isFeatureEnabled(property.BookingCom.Mobile) ? 'fa-check-circle' : 'fa-times-circle'"></i>
-                      {{ property.BookingCom.Mobile }}
+                     10%
                     </span>
                     <span class="feature-status" *ngIf="property.BookingCom.Mobile === null" style="color: #ccc;">
                       <i class="fas fa-minus-circle"></i>
@@ -437,7 +347,7 @@
                       [ngClass]="isFeatureEnabled(property.BookingCom.Pref) ? 'enabled' : 'disabled'">
                       <i class="fas"
                         [ngClass]="isFeatureEnabled(property.BookingCom.Pref) ? 'fa-check-circle' : 'fa-times-circle'"></i>
-                      {{ property.BookingCom.Pref }}
+                     5%
                     </span>
                     <span class="feature-status" *ngIf="property.BookingCom.Pref === null" style="color: #ccc;">
                       <i class="fas fa-minus-circle"></i>
@@ -607,11 +517,10 @@
               <div class="card-body">
                 <!-- Cancellation Policies Section -->
                 <div *ngIf="hasCancellationPolicies()" class="mb-4">
-                  <h6 class="mb-3"><i class="fas fa-list-alt me-2"></i>Cancellation Policies</h6>
                   <div class="row">
                     <!-- Booking.com Policies -->
-                    <div *ngIf="property.CXL_Policy.Booking && property.CXL_Policy.Booking.length > 0" class="col-12 mb-3">
-                      <div class="policy-platform-card">
+                    <div *ngIf="property.CXL_Policy.Booking && property.CXL_Policy.Booking.length > 0" class="col-md-6 col-lg-4 mb-3">
+                      <div class="policy-card">
                         <div class="policy-platform-header">
                           <span class="platform-name">
                             <i class="fas fa-bed me-1"></i>
@@ -620,7 +529,7 @@
                         </div>
                         <div class="row">
                           <div class="col-md-6 col-lg-4 mb-3" *ngFor="let policy of property.CXL_Policy.Booking">
-                            <div class="policy-card">
+                            <div class="">
                               <div class="policy-header">
                                 <span class="policy-type badge badge-primary">
                                   {{ policy.ratePlanName }}
@@ -844,10 +753,7 @@
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Reviews Tab -->
-      <div *ngIf="activeTab === 'reviews'" class="tab-pane">
         <div class="row" *ngIf="property.Reviews">
           <!-- Booking.com Reviews -->
           <div class="col-lg-4 mb-4" *ngIf="property.Reviews.Booking">
@@ -920,42 +826,6 @@
               </div>
             </div>
           </div>
-
-          <!-- VRBO Reviews -->
-          <!-- <div class="col-lg-4 mb-4" *ngIf="property.Reviews.VRBO">
-            <div class="card review-card">
-              <div class="card-header bg-warning text-dark">
-                <h5 class="mb-0"><i class="fas fa-building me-2"></i>VRBO Reviews</h5>
-              </div>
-              <div class="card-body">
-                <div class="review-summary">
-                  <div class="score-display">
-                    <span class="score-value" [ngClass]="getReviewScoreClass(property.Reviews.VRBO.Rev_Score)">
-                      {{ property.Reviews.VRBO.Rev_Score || 'N/A' }}
-                    </span>
-                    <div class="score-stars" *ngIf="property.Reviews.VRBO.Rev_Score">
-                      <i class="fas fa-star" *ngFor="let star of [1,2,3,4,5]; let i = index"
-                        [ngClass]="i < Math.floor(+property.Reviews.VRBO.Rev_Score) ? 'text-warning' : 'text-muted'"></i>
-                    </div>
-                  </div>
-                  <div class="review-details">
-                    <div class="detail-item">
-                      <span class="label">Total Reviews:</span>
-                      <span class="value">{{ property.Reviews.VRBO.Total_Rev || 'N/A' }}</span>
-                    </div>
-                    <div class="detail-item">
-                      <span class="label">Last Review Date:</span>
-                      <span class="value">{{ property.Reviews.VRBO.Last_Rev_Dt || 'N/A' }}</span>
-                    </div>
-                    <div class="detail-item">
-                      <span class="label">Last Review Score:</span>
-                      <span class="value">{{ property.Reviews.VRBO.Last_Rev_Score || 'N/A' }}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> -->
         </div>
 
         <!-- No Reviews Data Available Message -->
@@ -970,7 +840,9 @@
             </div>
           </div>
         </div>
+
       </div>
+
     </div>
   </div>
 </div>

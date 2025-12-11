@@ -30,6 +30,7 @@ $transition: all 0.3s ease;
     .section-header {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 1rem;
       margin-bottom: 2rem;
       padding: 0 0 1rem 0 !important;
@@ -41,6 +42,27 @@ $transition: all 0.3s ease;
         color: $dark-color;
         margin: 0;
         line-height: 1.3;
+        flex: 1;
+      }
+
+      .ai-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: #000000;
+        color: #ffffff;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        white-space: nowrap;
+        max-width: 155px;
+        float: right;
+        margin-left: auto;
+
+        i {
+          font-size: 0.875rem;
+        }
       }
     }
 

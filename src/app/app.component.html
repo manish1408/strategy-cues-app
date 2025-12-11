@@ -66,7 +66,7 @@
                 Listings
               </a>
             </li>
-            <li class="sidebar-menu-item  downaload-link" *ngIf="user?.userType === 'admin'">
+            <li class="sidebar-menu-item  downaload-link" *ngIf="user?.userType !== 'partner'">
               <a [href]="chromeExtensionUrl" target="_blank" class="sidebar-link">
                 <i class="fas fa-download"></i>
                 <span>Download chrome extension</span>
@@ -102,7 +102,7 @@
 
               <ul class="dropdown-menu chat-drop p-0">
                 <li>
-                  <a routerLink="/all-operators" class="dropdown-item">
+                  <a routerLink="/all-operators" *ngIf="user?.userType !== 'partner'" class="dropdown-item">
                     All Operators</a>
                 </li>
                

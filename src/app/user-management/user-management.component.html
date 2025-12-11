@@ -35,7 +35,9 @@
             <tbody>
               <tr *ngFor="let user of allUsersList; let i = index">
                 <td scope="row">{{ i + 1 }}</td>
-                <td>{{ getUserDisplayName(user) }}</td>
+                <td>{{ user.fullName }} 
+                  <div> <small class="text-small">{{ user.email }}</small> </div>
+                </td>
                 <td class="w-50 ">
                   <div class="d-flex align-items-center flex-wrap gap-2 ">
                     <ng-container *ngFor="let operator of getOperatorsForUser(user)">

@@ -27,6 +27,14 @@ $transition: all 0.3s ease;
     .section-header {
       padding: 0 !important;
       margin-bottom: 2rem;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+
+      > div {
+        flex: 1;
+      }
 
       h2 {
         font-size: 1.8rem;
@@ -63,6 +71,28 @@ $transition: all 0.3s ease;
         color: #856404;
         font-size: 0.95rem;
         line-height: 1.5;
+      }
+
+      .ai-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: #000000;
+        color: #ffffff;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        white-space: nowrap;
+        max-width: 155px;
+        float: right;
+        margin-left: auto;
+        align-self: flex-start;
+        margin-top: 0;
+
+        i {
+          font-size: 0.875rem;
+        }
       }
     }
 
