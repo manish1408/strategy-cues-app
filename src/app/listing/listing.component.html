@@ -11,6 +11,10 @@
         <div class="col-12 col-md-6">
           <div class="d-flex gap-2 flex-wrap justify-content-end" >
             <div class="d-flex gap-2">
+              <i class="fas fa-info-circle text-primary cursor-pointer" 
+                 style="font-size: 1.2rem; cursor: pointer;" 
+                 (click)="openSyncStatusModal()"
+                 title="View Sync Status"></i>
             <div *ngIf="bookingLastSyncedAt" class="badge bg-secondary d-flex align-items-center justify-content-center sync-dates">
               Booking Last Sync: {{ bookingLastSyncedAt | date:'dd MMM yyyy, HH:mm' }} ({{ localTimezone }})
             </div>
@@ -393,7 +397,16 @@
                         {{ getPlatformName(competitor.get('platform')?.value) }} URL
                       </label> -->
                       <input type="text" formControlName="platformUrl" class="form-control"
+                        [ngClass]="{ 'is-invalid': competitor.get('platformUrl')?.invalid && competitor.get('platformUrl')?.touched }"
                         [placeholder]="'Enter ' + getPlatformName(competitor.get('platform')?.value) + ' URL'" />
+                      <div *ngIf="competitor.get('platformUrl')?.invalid && competitor.get('platformUrl')?.touched" class="text-danger small mt-1">
+                        <span *ngIf="competitor.get('platformUrl')?.errors?.['invalidBookingUrl']">
+                          {{ competitor.get('platformUrl')?.errors?.['invalidBookingUrl']?.message }}
+                        </span>
+                        <span *ngIf="competitor.get('platformUrl')?.errors?.['invalidAirbnbUrl']">
+                          {{ competitor.get('platformUrl')?.errors?.['invalidAirbnbUrl']?.message }}
+                        </span>
+                      </div>
                     </div>
                   </div>
 
@@ -409,7 +422,7 @@
               <!-- Add Competitor Button -->
               <div class="d-flex justify-content-end mt-3" *ngIf="!loadingCompetitors">
                 <button type="button" class="btn btn-primary" (click)="addCompetitor()"
-                  [disabled]="savingCompetitor">
+                  [disabled]="savingCompetitor || hasCompetitorValidationErrors()">
                   <span *ngIf="savingCompetitor" class="spinner-border spinner-border-sm me-2" role="status"
                     aria-hidden="true"></span>
                   <i class="fas fa-plus me-1"></i>Add Competitor
@@ -430,6 +443,73 @@
           </div>
           {{ isEdit ? 'Update' : 'Create' }}
         </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sync Status Modal -->
+<div class="modal fade" id="syncStatusModal" tabindex="-1" aria-labelledby="syncStatusModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="syncStatusModalLabel">Sync Status Information</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="loadingSyncStatus" class="text-center py-4">
+          <div class="spinner-border text-primary mb-3" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p>Loading sync status...</p>
+        </div>
+        
+        <div *ngIf="!loadingSyncStatus && syncStatusData">
+          <!-- Booking Admin Sync Status -->
+          <div class="mb-3 p-3 rounded border" [ngClass]="syncStatusData.bookingAdminSynced ? 'bg-light border-success' : 'bg-light border-danger'">
+            <div class="d-flex align-items-center mb-2">
+              <i class="fas" [ngClass]="syncStatusData.bookingAdminSynced ? 'fa-check-circle text-success' : 'fa-times-circle text-danger'"></i>
+              <strong class="ms-2 text-dark">Booking Admin Sync</strong>
+            </div>
+            <p class="mb-0 ms-4 text-dark">{{ syncStatusData.bookingAdminMessage || 'No message available' }}</p>
+          </div>
+
+          <!-- Pricelabs Sync Status -->
+          <div class="mb-3 p-3 rounded border" [ngClass]="syncStatusData.pricelabsSynced ? 'bg-light border-success' : 'bg-light border-danger'">
+            <div class="d-flex align-items-center mb-2">
+              <i class="fas" [ngClass]="syncStatusData.pricelabsSynced ? 'fa-check-circle text-success' : 'fa-times-circle text-danger'"></i>
+              <strong class="ms-2 text-dark">Pricelabs Sync</strong>
+            </div>
+            <p class="mb-0 ms-4 text-dark">{{ syncStatusData.pricelabsMessage || 'No message available' }}</p>
+          </div>
+
+          <!-- Competitors Sync Status -->
+          <div class="mb-3 p-3 rounded border" [ngClass]="(syncStatusData.bookingCompetitorsSynced && syncStatusData.airbnbCompetitorsSynced) ? 'bg-light border-success' : 'bg-light border-warning'">
+            <div class="d-flex align-items-center mb-2">
+              <i class="fas" [ngClass]="(syncStatusData.bookingCompetitorsSynced && syncStatusData.airbnbCompetitorsSynced) ? 'fa-check-circle text-success' : 'fa-exclamation-circle text-warning'"></i>
+              <strong class="ms-2 text-dark">Competitors Sync</strong>
+            </div>
+            <div class="ms-4">
+              <p class="mb-1 text-dark">
+                <span class="badge" [ngClass]="syncStatusData.bookingCompetitorsSynced ? 'bg-success' : 'bg-secondary'">
+                  Booking: {{ syncStatusData.bookingCompetitorsSynced ? 'Synced' : 'Not Synced' }}
+                </span>
+                <span class="badge ms-2" [ngClass]="syncStatusData.airbnbCompetitorsSynced ? 'bg-success' : 'bg-secondary'">
+                  Airbnb: {{ syncStatusData.airbnbCompetitorsSynced ? 'Synced' : 'Not Synced' }}
+                </span>
+              </p>
+              <p class="mb-0 text-dark">{{ syncStatusData.competitorsMessage || 'No message available' }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="!loadingSyncStatus && !syncStatusData" class="text-center py-4">
+          <i class="fas fa-exclamation-triangle text-warning fa-2x mb-3"></i>
+          <p class="text-dark">No sync status data available</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

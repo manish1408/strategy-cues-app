@@ -39,4 +39,8 @@ export class OperatorService {
   deleteOperatorUser(user_id: string, operator_id:string) {
     return this.http.delete<any>(`${this._url}/${operator_id}/users/${user_id}`);
   }
+
+  getSyncStatus(operator_id: string) {
+    return this.http.get<any>(`${this._url}/sync-status/${operator_id}`);
+  }
 }

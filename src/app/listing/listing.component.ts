@@ -10,6 +10,7 @@ import { ListingService } from "../_services/listing.service";
 import { ActivatedRoute } from "@angular/router";
 import { PricelabsService } from "../_services/pricelabs.service";
 import { CompetitorPropertiesService } from "../_services/competitor-properties.service";
+import { OperatorService } from "../_services/operator.service";
 import { Status, PropertyStatus } from "../_models/status.model";
 
 @Component({
@@ -65,6 +66,10 @@ export class ListingComponent implements OnInit, OnDestroy {
   airbnbLastSyncedAt: Date | null = null;
   pricelabsLastSyncedAt: Date | null = null;
   localTimezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  
+  // Sync status data
+  syncStatusData: any = null;
+  loadingSyncStatus: boolean = false;
   constructor(
     private toastr: ToastrService,
     private fb: FormBuilder,
@@ -75,7 +80,8 @@ export class ListingComponent implements OnInit, OnDestroy {
     private listingService: ListingService,
     private route: ActivatedRoute,
     private pricelabsService: PricelabsService,
-    private competitorPropertiesService: CompetitorPropertiesService
+    private competitorPropertiesService: CompetitorPropertiesService,
+    private operatorService: OperatorService
   ) {
     this.addListingForm = this.fb.group({
       bookingCom: this.fb.group({
@@ -111,6 +117,11 @@ export class ListingComponent implements OnInit, OnDestroy {
         } else {
           // Fallback to localStorage
           this.operatorId = this.localStorageService.getSelectedOperatorId() || null;
+        }
+        
+        // Call sync-status API on page load
+        if (this.operatorId) {
+          this.loadSyncStatus();
         }
         
         // Load properties with the operatorId
@@ -918,6 +929,17 @@ export class ListingComponent implements OnInit, OnDestroy {
     this.competitorsFormArray.push(competitorForm);
   }
 
+  // Check if any competitor form has validation errors
+  hasCompetitorValidationErrors(): boolean {
+    for (let i = 0; i < this.competitorsFormArray.length; i++) {
+      const competitorForm = this.competitorsFormArray.at(i);
+      if (competitorForm.get('platformUrl')?.invalid) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   // Load competitor data from API
   loadCompetitorData(listingId: string): void {
     if (!this.operatorId) {
@@ -970,11 +992,71 @@ export class ListingComponent implements OnInit, OnDestroy {
   }
 
   createCompetitorForm(): FormGroup {
-    return this.fb.group({
+    const form = this.fb.group({
       platform: [''],
       platformId: [''],
       platformUrl: ['']
     });
+
+    // Add custom validator for URL based on platform
+    form.get('platformUrl')?.setValidators([this.urlValidator.bind(this)]);
+    
+    // Re-validate URL when platform changes
+    form.get('platform')?.valueChanges.subscribe(() => {
+      const urlControl = form.get('platformUrl');
+      if (urlControl) {
+        urlControl.updateValueAndValidity();
+        // Mark as touched if there's a value to show errors immediately
+        if (urlControl.value) {
+          urlControl.markAsTouched();
+        }
+      }
+    });
+
+    // Mark URL as touched when user types (for real-time validation feedback)
+    form.get('platformUrl')?.valueChanges.subscribe(() => {
+      const urlControl = form.get('platformUrl');
+      if (urlControl && urlControl.value) {
+        urlControl.markAsTouched();
+      }
+    });
+
+    return form;
+  }
+
+  // Custom validator for URL based on platform
+  urlValidator(control: any): { [key: string]: any } | null {
+    if (!control || !control.parent) {
+      return null;
+    }
+
+    const platform = control.parent.get('platform')?.value;
+    const url = control.value;
+
+    // If no URL is provided, no validation error (optional field)
+    if (!url || url.trim() === '') {
+      return null;
+    }
+
+    // If platform is not selected, no validation
+    if (!platform) {
+      return null;
+    }
+
+    const urlLower = url.toLowerCase();
+
+    // Validate based on platform
+    if (platform === 'booking') {
+      if (!urlLower.includes('booking')) {
+        return { invalidBookingUrl: { message: 'Booking.com URL must contain "booking"' } };
+      }
+    } else if (platform === 'airbnb') {
+      if (!urlLower.includes('airbnb')) {
+        return { invalidAirbnbUrl: { message: 'Airbnb URL must contain "airbnb"' } };
+      }
+    }
+
+    return null;
   }
 
   // Map raw competitor API object to form data with platform selection strictly by IDs
@@ -1034,6 +1116,13 @@ export class ListingComponent implements OnInit, OnDestroy {
       platformId: '',
       platformUrl: ''
     });
+    
+    // Mark URL as touched to show validation errors if URL was already entered
+    const urlControl = competitorForm.get('platformUrl');
+    if (urlControl && urlControl.value) {
+      urlControl.markAsTouched();
+      urlControl.updateValueAndValidity();
+    }
   }
 
 
@@ -1126,6 +1215,46 @@ export class ListingComponent implements OnInit, OnDestroy {
       this.toastr.error(errorMessage);
       }
     });
+  }
+
+  // Load sync status and open modal
+  loadSyncStatus(): void {
+    if (!this.operatorId) {
+      return;
+    }
+
+    this.loadingSyncStatus = true;
+    this.operatorService.getSyncStatus(this.operatorId).subscribe({
+      next: (res: any) => {
+        if (res.success && res.data) {
+          this.syncStatusData = res.data;
+        }
+        this.loadingSyncStatus = false;
+      },
+      error: (error: any) => {
+        console.error('Error fetching sync status:', error);
+        this.loadingSyncStatus = false;
+        this.toastr.error('Failed to load sync status');
+      }
+    });
+  }
+
+  // Open sync status modal
+  openSyncStatusModal(): void {
+    if (!this.operatorId) {
+      this.toastr.warning('Operator ID not available');
+      return;
+    }
+
+    // Always reload sync status when opening modal
+    this.loadSyncStatus();
+
+    // Open the modal using Bootstrap
+    const modalElement = document.getElementById('syncStatusModal');
+    if (modalElement) {
+      const modal = new (window as any).bootstrap.Modal(modalElement);
+      modal.show();
+    }
   }
 
 }
