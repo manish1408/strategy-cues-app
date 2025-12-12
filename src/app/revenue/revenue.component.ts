@@ -113,12 +113,16 @@ export class RevenueComponent implements OnInit {
   bookingRevScoreMax: number | null = null;
   bookingTotalRevMin: number | null = null;
   bookingTotalRevMax: number | null = null;
+  bookingLastReviewStart: string | null = null;
+  bookingLastReviewEnd: string | null = null;
 
   // Reviews filter properties - Airbnb
   airbnbRevScoreMin: number | null = null;
   airbnbRevScoreMax: number | null = null;
   airbnbTotalRevMin: number | null = null;
   airbnbTotalRevMax: number | null = null;
+  airbnbLastReviewStart: string | null = null;
+  airbnbLastReviewEnd: string | null = null;
 
   // Reviews filter properties - VRBO
   vrboRevScoreMin: number | null = null;
@@ -195,12 +199,16 @@ export class RevenueComponent implements OnInit {
   tempBookingRevScoreMax: number | null = null;
   tempBookingTotalRevMin: number | null = null;
   tempBookingTotalRevMax: number | null = null;
+  tempBookingLastReviewStart: string | null = null;
+  tempBookingLastReviewEnd: string | null = null;
 
   // Temporary Reviews filter properties - Airbnb
   tempAirbnbRevScoreMin: number | null = null;
   tempAirbnbRevScoreMax: number | null = null;
   tempAirbnbTotalRevMin: number | null = null;
   tempAirbnbTotalRevMax: number | null = null;
+  tempAirbnbLastReviewStart: string | null = null;
+  tempAirbnbLastReviewEnd: string | null = null;
 
   // Temporary Reviews filter properties - VRBO
   tempVrboRevScoreMin: number | null = null;
@@ -939,10 +947,14 @@ export class RevenueComponent implements OnInit {
     this.tempBookingRevScoreMax = this.bookingRevScoreMax;
     this.tempBookingTotalRevMin = this.bookingTotalRevMin;
     this.tempBookingTotalRevMax = this.bookingTotalRevMax;
+    this.tempBookingLastReviewStart = this.bookingLastReviewStart;
+    this.tempBookingLastReviewEnd = this.bookingLastReviewEnd;
     this.tempAirbnbRevScoreMin = this.airbnbRevScoreMin;
     this.tempAirbnbRevScoreMax = this.airbnbRevScoreMax;
     this.tempAirbnbTotalRevMin = this.airbnbTotalRevMin;
     this.tempAirbnbTotalRevMax = this.airbnbTotalRevMax;
+    this.tempAirbnbLastReviewStart = this.airbnbLastReviewStart;
+    this.tempAirbnbLastReviewEnd = this.airbnbLastReviewEnd;
     this.tempVrboRevScoreMin = this.vrboRevScoreMin;
     this.tempVrboRevScoreMax = this.vrboRevScoreMax;
     this.tempVrboTotalRevMin = this.vrboTotalRevMin;
@@ -1109,12 +1121,16 @@ export class RevenueComponent implements OnInit {
     if (this.bookingRevScoreMax !== null) params.booking_review_max = this.bookingRevScoreMax;
     if (this.bookingTotalRevMin !== null) params.booking_total_reviews_min = this.bookingTotalRevMin;
     if (this.bookingTotalRevMax !== null) params.booking_total_reviews_max = this.bookingTotalRevMax;
+    if (this.bookingLastReviewStart !== null && this.bookingLastReviewStart.trim()) params.booking_last_review_start = this.bookingLastReviewStart;
+    if (this.bookingLastReviewEnd !== null && this.bookingLastReviewEnd.trim()) params.booking_last_review_end = this.bookingLastReviewEnd;
 
     // Review filters - Airbnb
     if (this.airbnbRevScoreMin !== null) params.airbnb_review_min = this.airbnbRevScoreMin;
     if (this.airbnbRevScoreMax !== null) params.airbnb_review_max = this.airbnbRevScoreMax;
     if (this.airbnbTotalRevMin !== null) params.airbnb_total_reviews_min = this.airbnbTotalRevMin;
     if (this.airbnbTotalRevMax !== null) params.airbnb_total_reviews_max = this.airbnbTotalRevMax;
+    if (this.airbnbLastReviewStart !== null && this.airbnbLastReviewStart.trim()) params.airbnb_last_review_start = this.airbnbLastReviewStart;
+    if (this.airbnbLastReviewEnd !== null && this.airbnbLastReviewEnd.trim()) params.airbnb_last_review_end = this.airbnbLastReviewEnd;
 
     // Review filters - VRBO
     if (this.vrboRevScoreMin !== null) params.vrbo_review_min = this.vrboRevScoreMin;
@@ -1240,12 +1256,16 @@ export class RevenueComponent implements OnInit {
     if (this.bookingRevScoreMax !== null) params.booking_review_max = this.bookingRevScoreMax;
     if (this.bookingTotalRevMin !== null) params.booking_total_reviews_min = this.bookingTotalRevMin;
     if (this.bookingTotalRevMax !== null) params.booking_total_reviews_max = this.bookingTotalRevMax;
+    if (this.bookingLastReviewStart !== null && this.bookingLastReviewStart.trim()) params.booking_last_review_start = this.bookingLastReviewStart;
+    if (this.bookingLastReviewEnd !== null && this.bookingLastReviewEnd.trim()) params.booking_last_review_end = this.bookingLastReviewEnd;
 
     // Review filters - Airbnb
     if (this.airbnbRevScoreMin !== null) params.airbnb_review_min = this.airbnbRevScoreMin;
     if (this.airbnbRevScoreMax !== null) params.airbnb_review_max = this.airbnbRevScoreMax;
     if (this.airbnbTotalRevMin !== null) params.airbnb_total_reviews_min = this.airbnbTotalRevMin;
     if (this.airbnbTotalRevMax !== null) params.airbnb_total_reviews_max = this.airbnbTotalRevMax;
+    if (this.airbnbLastReviewStart !== null && this.airbnbLastReviewStart.trim()) params.airbnb_last_review_start = this.airbnbLastReviewStart;
+    if (this.airbnbLastReviewEnd !== null && this.airbnbLastReviewEnd.trim()) params.airbnb_last_review_end = this.airbnbLastReviewEnd;
 
     // Review filters - VRBO
     if (this.vrboRevScoreMin !== null) params.vrbo_review_min = this.vrboRevScoreMin;
@@ -1630,10 +1650,14 @@ export class RevenueComponent implements OnInit {
       this.bookingRevScoreMax !== null ||
       this.bookingTotalRevMin !== null ||
       this.bookingTotalRevMax !== null ||
+      (this.bookingLastReviewStart !== null && this.bookingLastReviewStart.trim()) ||
+      (this.bookingLastReviewEnd !== null && this.bookingLastReviewEnd.trim()) ||
       this.airbnbRevScoreMin !== null ||
       this.airbnbRevScoreMax !== null ||
       this.airbnbTotalRevMin !== null ||
       this.airbnbTotalRevMax !== null ||
+      (this.airbnbLastReviewStart !== null && this.airbnbLastReviewStart.trim()) ||
+      (this.airbnbLastReviewEnd !== null && this.airbnbLastReviewEnd.trim()) ||
       this.vrboRevScoreMin !== null ||
       this.vrboRevScoreMax !== null ||
       this.vrboTotalRevMin !== null ||
@@ -1851,10 +1875,14 @@ export class RevenueComponent implements OnInit {
     this.bookingRevScoreMax = this.tempBookingRevScoreMax;
     this.bookingTotalRevMin = this.tempBookingTotalRevMin;
     this.bookingTotalRevMax = this.tempBookingTotalRevMax;
+    this.bookingLastReviewStart = this.tempBookingLastReviewStart;
+    this.bookingLastReviewEnd = this.tempBookingLastReviewEnd;
     this.airbnbRevScoreMin = this.tempAirbnbRevScoreMin;
     this.airbnbRevScoreMax = this.tempAirbnbRevScoreMax;
     this.airbnbTotalRevMin = this.tempAirbnbTotalRevMin;
     this.airbnbTotalRevMax = this.tempAirbnbTotalRevMax;
+    this.airbnbLastReviewStart = this.tempAirbnbLastReviewStart;
+    this.airbnbLastReviewEnd = this.tempAirbnbLastReviewEnd;
     this.vrboRevScoreMin = this.tempVrboRevScoreMin;
     this.vrboRevScoreMax = this.tempVrboRevScoreMax;
     this.vrboTotalRevMin = this.tempVrboTotalRevMin;
@@ -2180,6 +2208,30 @@ export class RevenueComponent implements OnInit {
         key: "airbnbRevScore",
       });
     }
+    if (this.bookingLastReviewStart !== null && this.bookingLastReviewStart.trim() || 
+        this.bookingLastReviewEnd !== null && this.bookingLastReviewEnd.trim()) {
+      const start = this.bookingLastReviewStart || '';
+      const end = this.bookingLastReviewEnd || '';
+      const value = start && end ? `${start} to ${end}` : start || end;
+      filters.push({
+        type: "date",
+        label: "Booking Last Review Date",
+        value: value,
+        key: "bookingLastReviewDate",
+      });
+    }
+    if (this.airbnbLastReviewStart !== null && this.airbnbLastReviewStart.trim() || 
+        this.airbnbLastReviewEnd !== null && this.airbnbLastReviewEnd.trim()) {
+      const start = this.airbnbLastReviewStart || '';
+      const end = this.airbnbLastReviewEnd || '';
+      const value = start && end ? `${start} to ${end}` : start || end;
+      filters.push({
+        type: "date",
+        label: "Airbnb Last Review Date",
+        value: value,
+        key: "airbnbLastReviewDate",
+      });
+    }
 
     return filters;
   }
@@ -2339,6 +2391,18 @@ export class RevenueComponent implements OnInit {
         this.tempAirbnbRevScoreMin = null;
         this.tempAirbnbRevScoreMax = null;
         break;
+      case "bookingLastReviewDate":
+        this.bookingLastReviewStart = null;
+        this.bookingLastReviewEnd = null;
+        this.tempBookingLastReviewStart = null;
+        this.tempBookingLastReviewEnd = null;
+        break;
+      case "airbnbLastReviewDate":
+        this.airbnbLastReviewStart = null;
+        this.airbnbLastReviewEnd = null;
+        this.tempAirbnbLastReviewStart = null;
+        this.tempAirbnbLastReviewEnd = null;
+        break;
     }
     this.filterData();
   }
@@ -2410,10 +2474,14 @@ export class RevenueComponent implements OnInit {
     this.bookingRevScoreMax = null;
     this.bookingTotalRevMin = null;
     this.bookingTotalRevMax = null;
+    this.bookingLastReviewStart = null;
+    this.bookingLastReviewEnd = null;
     this.airbnbRevScoreMin = null;
     this.airbnbRevScoreMax = null;
     this.airbnbTotalRevMin = null;
     this.airbnbTotalRevMax = null;
+    this.airbnbLastReviewStart = null;
+    this.airbnbLastReviewEnd = null;
     this.vrboRevScoreMin = null;
     this.vrboRevScoreMax = null;
     this.vrboTotalRevMin = null;
@@ -2500,10 +2568,14 @@ export class RevenueComponent implements OnInit {
     this.bookingRevScoreMax = null;
     this.bookingTotalRevMin = null;
     this.bookingTotalRevMax = null;
+    this.bookingLastReviewStart = null;
+    this.bookingLastReviewEnd = null;
     this.airbnbRevScoreMin = null;
     this.airbnbRevScoreMax = null;
     this.airbnbTotalRevMin = null;
     this.airbnbTotalRevMax = null;
+    this.airbnbLastReviewStart = null;
+    this.airbnbLastReviewEnd = null;
     this.vrboRevScoreMin = null;
     this.vrboRevScoreMax = null;
     this.vrboTotalRevMin = null;
@@ -2800,10 +2872,14 @@ export class RevenueComponent implements OnInit {
       bookingRevScoreMax: this.bookingRevScoreMax !== null ? this.bookingRevScoreMax : undefined,
       bookingTotalRevMin: this.bookingTotalRevMin !== null ? this.bookingTotalRevMin : undefined,
       bookingTotalRevMax: this.bookingTotalRevMax !== null ? this.bookingTotalRevMax : undefined,
+      bookingLastReviewStart: (this.bookingLastReviewStart !== null && this.bookingLastReviewStart.trim()) ? this.bookingLastReviewStart : undefined,
+      bookingLastReviewEnd: (this.bookingLastReviewEnd !== null && this.bookingLastReviewEnd.trim()) ? this.bookingLastReviewEnd : undefined,
       airbnbRevScoreMin: this.airbnbRevScoreMin !== null ? this.airbnbRevScoreMin : undefined,
       airbnbRevScoreMax: this.airbnbRevScoreMax !== null ? this.airbnbRevScoreMax : undefined,
       airbnbTotalRevMin: this.airbnbTotalRevMin !== null ? this.airbnbTotalRevMin : undefined,
       airbnbTotalRevMax: this.airbnbTotalRevMax !== null ? this.airbnbTotalRevMax : undefined,
+      airbnbLastReviewStart: (this.airbnbLastReviewStart !== null && this.airbnbLastReviewStart.trim()) ? this.airbnbLastReviewStart : undefined,
+      airbnbLastReviewEnd: (this.airbnbLastReviewEnd !== null && this.airbnbLastReviewEnd.trim()) ? this.airbnbLastReviewEnd : undefined,
       vrboRevScoreMin: this.vrboRevScoreMin !== null ? this.vrboRevScoreMin : undefined,
       vrboRevScoreMax: this.vrboRevScoreMax !== null ? this.vrboRevScoreMax : undefined,
       vrboTotalRevMin: this.vrboTotalRevMin !== null ? this.vrboTotalRevMin : undefined,
@@ -3096,8 +3172,12 @@ export class RevenueComponent implements OnInit {
     // Reviews filters
     if (filters.bookingRevScoreMin !== null || filters.bookingRevScoreMax !== null ||
         filters.bookingTotalRevMin !== null || filters.bookingTotalRevMax !== null ||
+        (filters.bookingLastReviewStart && filters.bookingLastReviewStart.trim()) ||
+        (filters.bookingLastReviewEnd && filters.bookingLastReviewEnd.trim()) ||
         filters.airbnbRevScoreMin !== null || filters.airbnbRevScoreMax !== null ||
         filters.airbnbTotalRevMin !== null || filters.airbnbTotalRevMax !== null ||
+        (filters.airbnbLastReviewStart && filters.airbnbLastReviewStart.trim()) ||
+        (filters.airbnbLastReviewEnd && filters.airbnbLastReviewEnd.trim()) ||
         filters.vrboRevScoreMin !== null || filters.vrboRevScoreMax !== null ||
         filters.vrboTotalRevMin !== null || filters.vrboTotalRevMax !== null) {
       return true;
@@ -3181,10 +3261,14 @@ export class RevenueComponent implements OnInit {
     this.bookingRevScoreMax = filters.bookingRevScoreMax ?? null;
     this.bookingTotalRevMin = filters.bookingTotalRevMin ?? null;
     this.bookingTotalRevMax = filters.bookingTotalRevMax ?? null;
+    this.bookingLastReviewStart = filters.bookingLastReviewStart ?? null;
+    this.bookingLastReviewEnd = filters.bookingLastReviewEnd ?? null;
     this.airbnbRevScoreMin = filters.airbnbRevScoreMin ?? null;
     this.airbnbRevScoreMax = filters.airbnbRevScoreMax ?? null;
     this.airbnbTotalRevMin = filters.airbnbTotalRevMin ?? null;
     this.airbnbTotalRevMax = filters.airbnbTotalRevMax ?? null;
+    this.airbnbLastReviewStart = filters.airbnbLastReviewStart ?? null;
+    this.airbnbLastReviewEnd = filters.airbnbLastReviewEnd ?? null;
     this.vrboRevScoreMin = filters.vrboRevScoreMin ?? null;
     this.vrboRevScoreMax = filters.vrboRevScoreMax ?? null;
     this.vrboTotalRevMin = filters.vrboTotalRevMin ?? null;
