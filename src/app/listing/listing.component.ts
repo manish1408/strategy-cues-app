@@ -1257,4 +1257,14 @@ export class ListingComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Download sample Excel file
+  downloadSampleExcel(): void {
+    const link = document.createElement('a');
+    link.href = 'assets/General_sample_file.xlsx';
+    link.download = 'General_sample_file.xlsx';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
 }

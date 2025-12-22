@@ -25,6 +25,10 @@
               Pricelabs Last Sync: {{ pricelabsLastSyncedAt | date:'dd MMM yyyy, HH:mm' }} ({{ localTimezone }})
             </div>
           </div>
+            <button class="btn btn-outline-secondary" (click)="downloadSampleExcel()">
+              <i class="fas fa-download me-2"></i>
+              Download Sample Excel
+            </button>
             <button class="btn btn-outline-secondary" (click)="uploadListings()" [disabled]="uploadingFile">
               <span *ngIf="uploadingFile" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
               <i *ngIf="!uploadingFile" class="fas fa-upload me-2"></i>
