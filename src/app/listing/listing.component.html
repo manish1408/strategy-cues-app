@@ -231,6 +231,31 @@
         <i class="fa-solid fa-xmark" data-bs-dismiss="modal"></i>
       </div>
       <div class="modal-body">
+        <!-- How to Add Listing Video Section -->
+        <div class="mb-3">
+          <button class="btn btn-outline-info btn-sm w-100 d-flex align-items-center justify-content-between" 
+                  type="button" 
+                  (click)="showVideoHelp = !showVideoHelp"
+                  [attr.aria-expanded]="showVideoHelp"
+                  aria-controls="videoHelpCollapse">
+            <span>
+              <i class="fas fa-video me-2"></i>
+              How to Add Listing Manually
+            </span>
+            <i class="fas" [ngClass]="showVideoHelp ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+          </button>
+          <div class="collapse mt-2" [class.show]="showVideoHelp" id="videoHelpCollapse">
+            <div class="card card-body">
+              <div class="ratio ratio-16x9">
+                <video controls class="w-100">
+                  <source src="assets/Adding Listings and Competitors in the System.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Tab Navigation -->
         <ul class="nav nav-tabs mb-3" id="listingTabs" role="tablist">
           <li class="nav-item" role="presentation">

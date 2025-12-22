@@ -70,6 +70,9 @@ export class ListingComponent implements OnInit, OnDestroy {
   // Sync status data
   syncStatusData: any = null;
   loadingSyncStatus: boolean = false;
+  
+  // Video help section
+  showVideoHelp: boolean = false;
   constructor(
     private toastr: ToastrService,
     private fb: FormBuilder,
@@ -658,6 +661,7 @@ export class ListingComponent implements OnInit, OnDestroy {
     this.competitorOriginalById = {};
     this.isEdit = false;
     this.editingListingId = null;
+    this.showVideoHelp = false;
   }
 
   closeModal() {
