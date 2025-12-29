@@ -125,6 +125,7 @@ const routes: Routes = [
       ),
     canActivate: [AuthGuard],
   },
+  { path: 'file-management', loadChildren: () => import('./file-management/file-management.module').then(m => m.FileManagementModule) },
 ];
 
 @NgModule({

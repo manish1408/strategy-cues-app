@@ -66,6 +66,12 @@
                 Listings
               </a>
             </li>
+            <li class="sidebar-menu-item" *ngIf="user?.userType !== 'partner'">
+              <a routerLink="/file-management" routerLinkActive="active-link" class="sidebar-link">
+                <i class="fas fa-file-alt me-2"></i> 
+                File Management
+              </a>
+            </li>
             <li class="sidebar-menu-item  downaload-link" *ngIf="user?.userType !== 'partner'">
               <a [href]="chromeExtensionUrl" target="_blank" class="sidebar-link">
                 <i class="fas fa-download"></i>
