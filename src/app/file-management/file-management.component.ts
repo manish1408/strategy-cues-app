@@ -21,6 +21,12 @@ export class FileManagementComponent implements OnInit {
   totalPages: number = 0;
   hasMoreData: boolean = true;
 
+  // Sorting properties
+  sortDirection: "asc" | "desc" = "desc";
+  sortField: string = "createdAt";
+  sortApiField: string = "createdAt"; // Default value: createdAt
+  sortApiOrder: "asc" | "desc" = "desc";
+
   // File upload
   selectedFile: File | null = null;
   
@@ -51,7 +57,7 @@ export class FileManagementComponent implements OnInit {
     const skip = this.currentPage * this.limit;
     
     this.fileManagementService
-      .getFiles(skip, this.limit)
+      .getFiles(skip, this.limit, this.sortApiField, this.sortApiOrder)
       .pipe(finalize(() => (this.loading = false)))
       .subscribe({
         next: (res: any) => {
@@ -182,15 +188,14 @@ export class FileManagementComponent implements OnInit {
             this.toastr.success('File uploaded successfully');
             this.selectedFile = null;
             this.closeModal();
-            // Reset pagination and reload
             this.currentPage = 0;
             this.loadFiles();
           } else {
-            this.toastr.error(res.message || 'Failed to upload file');
+            this.toastr.error(res.detail.error || 'Failed to upload file');
           }
         },
         error: (error: any) => {
-          this.toastr.error(error.error?.message || 'Failed to upload file');
+          this.toastr.error(error.error?.detail.error || 'Failed to upload file');
           console.error('Error uploading file:', error);
         },
       });
@@ -253,21 +258,59 @@ export class FileManagementComponent implements OnInit {
     return file.id || '';
   }
 
-  
-
   getFileUrl(file: FileResponse): string {
     return file.url || '';
   }
 
-  getTruncatedUrl(file: FileResponse, maxLength: number = 50): string {
-    const url = this.getFileUrl(file);
-    if (!url) return '';
-    if (url.length <= maxLength) return url;
-    return url.substring(0, maxLength) + '...';
+  getUploadedDate(file: FileResponse): string {
+    if (!file.createdAt) return 'N/A';
+    return new Date(file.createdAt).toLocaleDateString();
   }
 
-  getUploadedDate(file: FileResponse): string {
-    if (!file.created_at) return 'N/A';
-    return new Date(file.created_at).toLocaleDateString();
+  downloadFile(file: FileResponse) {
+    const fileUrl = this.getFileUrl(file);
+    if (!fileUrl) {
+      this.toastr.error('File URL not available');
+      return;
+    }
+
+    // Extract filename from URL
+    const urlParts = fileUrl.split('/');
+    const fileName = urlParts[urlParts.length - 1] || 'download';
+
+    // Create a temporary anchor element to trigger download
+    const link = document.createElement('a');
+    link.href = fileUrl;
+    link.download = fileName;
+    link.target = '_blank';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  // Sort data by field
+  sortBy(field: string): void {
+    // Map UI field to API sort_by value
+    const fieldMap: Record<string, string> = {
+      fileName: 'fileName',
+      createdAt: 'createdAt',
+      _id: '_id'
+    };
+
+    if (this.sortField === field) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortDirection = 'desc';
+    }
+
+    // Set API sort params and reload data from server
+    this.sortApiField = fieldMap[field] || '_id';
+    this.sortApiOrder = this.sortDirection;
+
+    // Reset to first page and fetch with sorting
+    this.currentPage = 0;
+    this.hasMoreData = true;
+    this.loadFiles();
   }
 }

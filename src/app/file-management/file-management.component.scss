@@ -4,3 +4,25 @@
     margin: 0;
     
 }
+
+.sort-arrow {
+  width: 16px;
+  height: 16px;
+  stroke: var(--brand-yellow);
+  transform: rotate(0deg);
+  transition: transform 0.15s ease-in-out;
+
+  &.asc {
+    transform: rotate(180deg);
+  }
+}
+
+thead th button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--brand-yellow);
+}

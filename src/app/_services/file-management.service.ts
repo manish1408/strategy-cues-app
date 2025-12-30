@@ -5,9 +5,11 @@ import { environment } from '../../environments/environment';
 
 export interface FileResponse {
   id: string;
+  fileName: string;
   user_id: string;
   url: string;
-  created_at: string;
+  createdAt: string;
+  userName: string;
 }
 
 export interface FilesListResponse {
@@ -53,12 +55,16 @@ export class FileManagementService {
    * Get user files with pagination
    * @param skip - Number of records to skip
    * @param limit - Number of records to return
+   * @param sort_by - Field to sort by (default: '_id')
+   * @param sort_order - Sort order 'asc' or 'desc' (default: 'desc')
    * @returns Observable of files list response
    */
-  getFiles(skip: number = 0, limit: number = 10): Observable<{ data: FilesListResponse; success: boolean }> {
-    const params = new HttpParams()
+  getFiles(skip: number = 0, limit: number = 10, sort_by: string = '_id', sort_order: string = 'desc'): Observable<{ data: FilesListResponse; success: boolean }> {
+    let params = new HttpParams()
       .set('skip', skip.toString())
-      .set('limit', limit.toString());
+      .set('limit', limit.toString())
+      .set('sortBy', sort_by)
+      .set('sortOrder', sort_order);
     
     return this.http.get<{ data: FilesListResponse; success: boolean }>(`${this.baseUrl}/`, { params });
   }

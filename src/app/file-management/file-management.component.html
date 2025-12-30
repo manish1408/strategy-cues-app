@@ -32,20 +32,51 @@
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">URL</th>
-                <th scope="col">Created Date</th>
+                <th>
+                  <div class="d-flex align-items-center gap-1">
+                    <button class="btn btn-md p-0 text-start" (click)="sortBy('fileName')" title="Sort by File Name">
+                      <span>File Name</span>
+                    </button>
+                    <svg *ngIf="sortField === 'fileName'" class="sort-arrow" [class.asc]="sortDirection === 'asc'"
+                      viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 4v16M12 20l6-6M12 20l-6-6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                      </path>
+                    </svg>
+                  </div>
+                </th>
+                <th>
+                  <div class="d-flex align-items-center gap-1">
+                    <button class="btn btn-md p-0 text-start" (click)="sortBy('createdAt')" title="Sort by Uploaded Date">
+                      <span>Uploaded Date</span>
+                    </button>
+                    <svg *ngIf="sortField === 'createdAt'" class="sort-arrow" [class.asc]="sortDirection === 'asc'"
+                      viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 4v16M12 20l6-6M12 20l-6-6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                      </path>
+                    </svg>
+                  </div>
+                </th>
+                <th scope="col">Uploaded By</th>
+                <th scope="col">Download</th>
                 <th scope="col" [width]="'100px'">Action</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let file of filesList; let i = index">
                 <td>{{ i + 1 }}</td>
+                <td>{{ file?.fileName }}</td>
+                <td>{{ file?.createdAt | date:'dd/MM/yyyy' }}</td>
+                <td>{{ file?.userName }}</td>
                 <td>
-                  <a [href]="getFileUrl(file)" target="_blank" class="text-primary text-decoration-none" [title]="getFileUrl(file)">
-                    {{ getTruncatedUrl(file) }}
-                  </a>
+                  <button
+                    class="btn btn-sm btn-primary"
+                    (click)="downloadFile(file)"
+                    title="Download file"
+                  >
+                    <i class="fas fa-download me-1"></i>
+                    Download
+                  </button>
                 </td>
-                <td>{{ getUploadedDate(file) }}</td>
                 <td>
                   <img
                     src="assets/icons/trash.svg"
