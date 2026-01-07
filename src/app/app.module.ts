@@ -11,7 +11,7 @@ import { JwtInterceptor } from './_guards/jwt.interceptor';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { EventService } from './_services/event.service';
 import { SharedModule } from './shared/sharedModule';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SelectDropDownModule } from "ngx-select-dropdown";
 import { GALLERY_CONFIG, GalleryConfig } from 'ng-gallery';
 import { SummaryPipe } from './summary.pipe';
@@ -28,6 +28,7 @@ import { SummaryPipe } from './summary.pipe';
       preventDuplicates: true,
     }),
     MonacoEditorModule.forRoot(),
+    FormsModule,
     ReactiveFormsModule,    
     SharedModule,
     SelectDropDownModule

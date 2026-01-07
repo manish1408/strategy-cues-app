@@ -22,6 +22,7 @@ export class AppComponent {
   user: any;
   operators: any;
   selectedOperator: any;
+  operatorSearchTerm: string = '';
 
   avatar =
     "https://milodocs.blob.core.windows.net/public-docs/profile-picture.webp";
@@ -32,6 +33,16 @@ export class AppComponent {
   isOperatorPage = false;
   chromeExtensionUrl = environment.chromeExtensionUrl;
   chromeExtensionLastUpdated = environment.chromeExtensionLastUpdated;
+
+  get filteredOperators(): any[] {
+    if (!this.operators || !this.operatorSearchTerm) {
+      return this.operators || [];
+    }
+    const searchTerm = this.operatorSearchTerm.toLowerCase().trim();
+    return this.operators.filter((operator: any) => 
+      operator?.name?.toLowerCase().includes(searchTerm)
+    );
+  }
   constructor(
     private router: Router,
     private authService: AuthenticationService,
@@ -156,6 +167,9 @@ export class AppComponent {
     this.selectedOperator = operator;
     localStorage.setItem("selectedOperator", JSON.stringify(operator));
     // console.log('Operator saved to localStorage:', localStorage.getItem("selectedOperator"));
+    
+    // Clear search term when operator is selected
+    this.operatorSearchTerm = '';
     
     // Show success message
     this.toastr.success(`Operator "${operator.name}" selected successfully!`);

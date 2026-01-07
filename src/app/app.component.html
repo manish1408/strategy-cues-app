@@ -26,14 +26,16 @@
           <ul class="sidebar-nav">
             <!-- New Pages -->
             <li class="sidebar-menu-item">
-              <a routerLink="/revenue" [queryParams]="{ id: selectedOperator?._id }" routerLinkActive="active-link" class="sidebar-link">
+              <a routerLink="/revenue" [queryParams]="{ id: selectedOperator?._id }" routerLinkActive="active-link"
+                class="sidebar-link">
                 <i class="fas fa-chart-line me-2"></i>
                 Revenue Cues
               </a>
             </li>
 
             <li class="sidebar-menu-item">
-              <a routerLink="/content" [queryParams]="{ id: selectedOperator?._id }" routerLinkActive="active-link" class="sidebar-link">
+              <a routerLink="/content" [queryParams]="{ id: selectedOperator?._id }" routerLinkActive="active-link"
+                class="sidebar-link">
                 <i class="fas fa-file-alt me-2"></i>
                 Content Cues
               </a>
@@ -54,7 +56,8 @@
             </li> -->
 
             <li class="sidebar-menu-item">
-              <a routerLink="/pricelabs-admin" [queryParams]="{ id: selectedOperator?._id }" routerLinkActive="active-link" class="sidebar-link">
+              <a routerLink="/pricelabs-admin" [queryParams]="{ id: selectedOperator?._id }"
+                routerLinkActive="active-link" class="sidebar-link">
                 <i class="fas fa-chart-line me-2"></i>
                 Analytics Cues
               </a>
@@ -65,14 +68,15 @@
           <ul class="sidebar-nav">
 
             <li class="sidebar-menu-item">
-              <a routerLink="/listing" [queryParams]="{ id: selectedOperator?._id }" routerLinkActive="active-link" class="sidebar-link">
+              <a routerLink="/listing" [queryParams]="{ id: selectedOperator?._id }" routerLinkActive="active-link"
+                class="sidebar-link">
                 <i class="fas fa-list me-2"></i>
                 Listings
               </a>
             </li>
             <li class="sidebar-menu-item" *ngIf="user?.userType !== 'partner'">
               <a routerLink="/file-management" routerLinkActive="active-link" class="sidebar-link">
-                <i class="fas fa-file-alt me-2"></i> 
+                <i class="fas fa-file-alt me-2"></i>
                 Action Points & Notes
               </a>
             </li>
@@ -96,7 +100,7 @@
       </div> -->
       </aside>
       <!-- Main Component -->
-      <div class="main" >
+      <div class="main">
         <nav class="navbar navbar-expand px-3 justify-content-between top-nav">
           <div class="d-flex align-items-center justify-content-between">
             <img *ngIf="isCollapsed" src="assets/icons/arrow-square-left.svg" (click)="toggleSidebar()"
@@ -110,17 +114,38 @@
               </button>
 
               <ul class="dropdown-menu chat-drop p-0">
+                <!-- Search Input -->
+                <li class="px-3 py-2 border-bottom">
+                  <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0">
+                      <i class="fas fa-search text-muted"></i>
+                    </span>
+                    <input 
+                      type="text" 
+                      class="form-control border-start-0" 
+                      placeholder="Search operators..." 
+                      [(ngModel)]="operatorSearchTerm"
+                      (click)="$event.stopPropagation()"
+                      (keydown)="$event.stopPropagation()">
+                  </div>
+                </li>
+
                 <li>
                   <a routerLink="/all-operators" *ngIf="user?.userType !== 'partner'" class="dropdown-item">
                     All Operators</a>
                 </li>
-               
-                <li *ngFor="let operator of operators">
+
+                <li *ngFor="let operator of filteredOperators">
                   <a role="button" class="dropdown-item" (click)="selectOperator(operator)">{{
                     operator?.name
                     }}</a>
                 </li>
-               
+
+                <!-- Show message if no operators match search -->
+                <li *ngIf="filteredOperators.length === 0 && operators && operators.length > 0" class="dropdown-item text-muted empty-state-text">
+                  No operators match your search
+                </li>
+
                 <!-- Show message if no operators -->
                 <li *ngIf="!operators || operators.length === 0" class="dropdown-item text-muted empty-state-text">
                   No operators found
@@ -132,12 +157,8 @@
             <div class="dropdown">
               <button class="btn dropdown-toggle profile-dropdown m-0" type="button" id="dropdownMenuButton1"
                 data-bs-toggle="dropdown" aria-expanded="false">
-                <img 
-                  [src]="user && user?.profilePicture ? user?.profilePicture : avatar" 
-                  class="avatar-img" 
-                  
-                  [alt]="user?.fullName || 'User'"
-                />
+                <img [src]="user && user?.profilePicture ? user?.profilePicture : avatar" class="avatar-img"
+                  [alt]="user?.fullName || 'User'" />
                 <h4 *ngIf="user?.fullName">
                   {{ user?.fullName }}
                 </h4>
@@ -170,8 +191,8 @@
                 " />
                     User Management</a>
                 </li>
-                
-<!-- 
+
+                <!-- 
                 <li>
                   <a class="dropdown-item" routerLink="/all-users">
                     <img src="assets/icons/profile-circle.svg
@@ -204,7 +225,7 @@
           <div class="container-fluid">
             <app-warning-modal></app-warning-modal>
             <router-outlet></router-outlet>
-         
+
           </div>
         </main>
       </div>
