@@ -17,13 +17,13 @@
           <!-- Sidebar Navigation -->
 
           <div class="d-flex align-items-center justify-content-between">
-            <!-- <img class="brand-logo img-fluid" src="https://strategycues.com/wp-content/uploads/2025/02/Asset-2-8.png" /> -->
+            <img class="brand-logo img-fluid" src="https://strategycues.com/wp-content/uploads/2025/02/Asset-2-8.png" />
 
             <img src="assets/icons/arrow-square-left.svg" (click)="toggleSidebar()" class="cursor-pointer" />
           </div>
 
-          <ul class="sidebar-nav mt-4">
-
+          <h2 _ngcontent-ng-c3480073262="" class=" mt-4 sidebar-menu-title">Analytics</h2>
+          <ul class="sidebar-nav">
             <!-- New Pages -->
             <li class="sidebar-menu-item">
               <a routerLink="/revenue" [queryParams]="{ id: selectedOperator?._id }" routerLinkActive="active-link" class="sidebar-link">
@@ -59,6 +59,10 @@
                 Analytics Cues
               </a>
             </li>
+          </ul>
+
+          <h2 _ngcontent-ng-c3480073262="" class="sidebar-menu-title">Admin</h2>
+          <ul class="sidebar-nav">
 
             <li class="sidebar-menu-item">
               <a routerLink="/listing" [queryParams]="{ id: selectedOperator?._id }" routerLinkActive="active-link" class="sidebar-link">
@@ -69,13 +73,13 @@
             <li class="sidebar-menu-item" *ngIf="user?.userType !== 'partner'">
               <a routerLink="/file-management" routerLinkActive="active-link" class="sidebar-link">
                 <i class="fas fa-file-alt me-2"></i> 
-                File Management
+                Action Points & Notes
               </a>
             </li>
             <li class="sidebar-menu-item  downaload-link" *ngIf="user?.userType !== 'partner'">
               <a [href]="chromeExtensionUrl" target="_blank" class="sidebar-link">
                 <i class="fas fa-download"></i>
-                <span>Download chrome extension</span>
+                <span>Listing OptiCues Extention</span>
               </a>
               <small class="extension-update-date" *ngIf="chromeExtensionLastUpdated">
                 Last updated: {{ chromeExtensionLastUpdated }}
@@ -83,7 +87,6 @@
             </li>
 
           </ul>
-
 
 
         </div>
