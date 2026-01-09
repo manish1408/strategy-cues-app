@@ -397,8 +397,8 @@
               </div>
             </th>
             <th class="text-center" *ngIf="columnVisibility.sync">Sync</th>
-            <th *ngIf="columnVisibility.occupancyTM">
-              <div class="d-flex align-items-center gap-1">
+            <th style="text-align: center;" *ngIf="columnVisibility.occupancyTM">
+              <div class="d-flex align-items-center justify-content-center gap-1">
                 <button class="btn btn-md p-0 text-start" (click)="sortBy('occupancyTM')" title="Sort by Occupancy TM">
                   <span>Occupancy This Month</span>
                 </button>
@@ -409,8 +409,8 @@
                 </svg>
               </div>
             </th>
-            <th *ngIf="columnVisibility.occupancyNM">
-              <div class="d-flex align-items-center gap-1 ">
+            <th style="text-align: center;" *ngIf="columnVisibility.occupancyNM">
+              <div class="d-flex align-items-center justify-content-center gap-1 ">
                 <button class="btn btn-md p-0 text-start" (click)="sortBy('occupancyNM')" title="Sort by Occupancy NM">
                   <span>Occupancy Next Month</span>
                 </button>
@@ -421,28 +421,28 @@
                 </svg>
               </div>
             </th>
-            <th *ngIf="columnVisibility.adr">Average Daily Rate<br />
+            <th style="text-align: center;" *ngIf="columnVisibility.adr">Average Daily Rate<br />
               
             <span class="th-sub">
-              <div class="d-flex align-items-center gap-2">
+              <div class="d-flex align-items-center justify-content-center gap-2">
                 <div>This month</div>
                 <div class="d-divider"></div>
                 <div>Next month</div>
               </div>
             </span></th>
-            <th *ngIf="columnVisibility.revpar">Revenue Per Available Room<br />
+            <th   style="text-align: center;" *ngIf="columnVisibility.revpar">Revenue Per Available Room<br />
                
              <span class="th-sub">
-              <div class="d-flex align-items-center gap-2">
+              <div class="d-flex align-items-center justify-content-center gap-2">
                 <div>This month</div>
                 <div class="d-divider"></div>
                 <div>Next month</div>
               </div>
             </span></th>
-            <th *ngIf="columnVisibility.mpi">Market Penetration Index<br />
+            <th style="text-align: center;" *ngIf="columnVisibility.mpi">Market Penetration Index<br />
                
              <span class="th-sub">
-              <div class="d-flex align-items-center gap-2">
+              <div class="d-flex align-items-center justify-content-center  gap-2">
                 <div>This month</div>
                 <div class="d-divider"></div>
                 <div>Next month</div>
@@ -450,10 +450,10 @@
                 <div>Last year this month</div>
               </div>
             </span></th>
-            <th *ngIf="columnVisibility.stlyVarOcc">STLY <br />Var Occ</th>
-            <th *ngIf="columnVisibility.stlyVarRevPAR">STLY Var <br /> RevPAR</th>
-            <th *ngIf="columnVisibility.minRateThreshold">Min Rate <br /> Threshold</th>
-            <th *ngIf="columnVisibility.pickupOcc">Pick up Occ</th>
+            <th style="text-align: center;" *ngIf="columnVisibility.stlyVarOcc">STLY <br />Var Occ</th>
+            <th style="text-align: center;" *ngIf="columnVisibility.stlyVarRevPAR">STLY Var <br /> RevPAR</th>
+            <th style="text-align: center;" *ngIf="columnVisibility.minRateThreshold">Min Rate <br /> Threshold</th>
+            <th style="text-align: center;" *ngIf="columnVisibility.pickupOcc">Pick up Occ</th>
             <th *ngIf="columnVisibility.reviews">Reviews</th>
             <th *ngIf="columnVisibility.lastReviewScore">Last Review <br /> Score</th>
             <th *ngIf="columnVisibility.lastReviewDate">Last Review <br /> Date</th>
@@ -523,7 +523,7 @@
             <td class="text-center">
               <input type="checkbox" [checked]="property?.Pricelabs_SyncStatus === true" disabled readonly class="form-check-input sync-checkbox">
             </td>
-            <td *ngIf="columnVisibility.occupancyTM">
+            <td *ngIf="columnVisibility.occupancyTM" style="text-align: center;">
               <div class="occupancy-cell" *ngIf="property.Occupancy">
                 <circle-progress [percent]="safeParseNumber(property.Occupancy.TM)" [radius]="24"
                   [backgroundPadding]="-3" [backgroundStroke]="'#ccc'" [backgroundStrokeWidth]="6"
@@ -539,7 +539,7 @@
                 <span class="text-muted">N/A</span>
               </div>
             </td>
-            <td *ngIf="columnVisibility.occupancyNM">
+            <td style="text-align: center;" *ngIf="columnVisibility.occupancyNM">
               <div class="occupancy-cell" *ngIf="property.Occupancy">
                 <circle-progress [percent]="safeParseNumber(property.Occupancy.NM)" [radius]="24"
                   [backgroundPadding]="-3" [backgroundStroke]="'#ccc'" [backgroundStrokeWidth]="6"
@@ -555,7 +555,7 @@
                 <span class="text-muted">N/A</span>
               </div>
             </td>
-            <td *ngIf="columnVisibility.adr">
+            <td style="text-align: center;" *ngIf="columnVisibility.adr">
               <div class="dual-value-cell">
                 <div class="value-pair" *ngIf="property.ADR">
                   <div class="badge badge-light-gray d-flex align-items-center gap-2">  
@@ -568,7 +568,7 @@
                 </div>
               </div>
             </td>
-            <td *ngIf="columnVisibility.revpar">
+            <td style="text-align: center;" *ngIf="columnVisibility.revpar">
               <div class="dual-value-cell">
                 <div class="value-pair" *ngIf="property.RevPAR">
                   <div class="badge badge-light-gray d-flex align-items-center gap-2">  
@@ -581,7 +581,7 @@
                 </div>
               </div>
             </td>
-            <td *ngIf="columnVisibility.mpi">
+            <td style="text-align: center;" *ngIf="columnVisibility.mpi">
               <div class="dual-value-cell">
                 <div class="value-pair" *ngIf="property.MPI">
                   <div class="badge badge-light-gray d-flex align-items-center gap-2">  
@@ -596,26 +596,26 @@
                 </div>
               </div>
             </td>
-            <td *ngIf="columnVisibility.stlyVarOcc">
+            <td style="text-align: center;" *ngIf="columnVisibility.stlyVarOcc">
               <div class="stly-var-single-cell">
                 <span class="badge" [ngClass]="getPerformanceClass(property.STLY_Var.Occ)">
                   {{ property.STLY_Var.Occ }}
                 </span>
               </div>
             </td>
-            <td *ngIf="columnVisibility.stlyVarRevPAR">
+            <td style="text-align: center;" *ngIf="columnVisibility.stlyVarRevPAR">
               <div class="stly-var-single-cell">
                 <span class="badge" [ngClass]="getPerformanceClass(property.STLY_Var.RevPAR)">
                   {{ property.STLY_Var.RevPAR }}
                 </span>
               </div>
             </td>
-            <td *ngIf="columnVisibility.minRateThreshold">
+            <td style="text-align: center;" *ngIf="columnVisibility.minRateThreshold">
               <div class="min-rate-threshold-cell">
                 <span class="threshold-value">{{ property.Min_Rate_Threshold || 'N/A' }}</span>
               </div>
             </td>
-            <td *ngIf="columnVisibility.pickupOcc">
+            <td style="text-align: center;" *ngIf="columnVisibility.pickupOcc">
               <div class="pickup-occ-cell">
                 <div class="pickup-item"
                   *ngIf="property.Pick_Up_Occ && property.Pick_Up_Occ['7_Days'] !== null && property.Pick_Up_Occ['7_Days'] !== undefined">

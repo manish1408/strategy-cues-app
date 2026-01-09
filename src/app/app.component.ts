@@ -35,13 +35,26 @@ export class AppComponent {
   chromeExtensionLastUpdated = environment.chromeExtensionLastUpdated;
 
   get filteredOperators(): any[] {
-    if (!this.operators || !this.operatorSearchTerm) {
-      return this.operators || [];
+    if (!this.operators) {
+      return [];
     }
-    const searchTerm = this.operatorSearchTerm.toLowerCase().trim();
-    return this.operators.filter((operator: any) => 
-      operator?.name?.toLowerCase().includes(searchTerm)
-    );
+    
+    let result = this.operators;
+    
+    // Filter by search term if provided
+    if (this.operatorSearchTerm) {
+      const searchTerm = this.operatorSearchTerm.toLowerCase().trim();
+      result = this.operators.filter((operator: any) => 
+        operator?.name?.toLowerCase().includes(searchTerm)
+      );
+    }
+    
+    // Sort alphabetically in ascending order
+    return result.sort((a: any, b: any) => {
+      const nameA = (a?.name || '').toLowerCase();
+      const nameB = (b?.name || '').toLowerCase();
+      return nameA.localeCompare(nameB);
+    });
   }
   constructor(
     private router: Router,
@@ -116,7 +129,13 @@ export class AppComponent {
   getAllOperators() {
     this.operatorService.getAllOperator().subscribe({
       next: (res: any) => {
-        this.operators = res.data?.operators || [];
+        const operatorsList = res.data?.operators || [];
+        // Sort operators alphabetically by name in ascending order
+        this.operators = operatorsList.sort((a: any, b: any) => {
+          const nameA = (a?.name || '').toLowerCase();
+          const nameB = (b?.name || '').toLowerCase();
+          return nameA.localeCompare(nameB);
+        });
         if (this.operators.length > 0) {
           const storedOperator = localStorage.getItem("selectedOperator");
           if (storedOperator) {
