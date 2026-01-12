@@ -151,7 +151,7 @@ export class ListingComponent implements OnInit, OnDestroy {
           const lastSyncDates = res.data.lastSyncDates || {};
           this.lastSyncDate = this.convertUtcStringToDate(lastSyncDates.lastSyncDate);
           this.bookingLastSyncedAt = this.convertUtcStringToDate(lastSyncDates.bookingLastSyncedAt);
-          this.airbnbLastSyncedAt = this.convertUtcStringToDate(lastSyncDates.airbnbLastSyncedAt);
+          this.airbnbLastSyncedAt = this.convertUtcStringToDate(lastSyncDates.airbnbLastSyncDate);
           this.pricelabsLastSyncedAt = this.convertUtcStringToDate(lastSyncDates.pricelabsLastSyncedAt);
         }
         // Ensure properties is an array
