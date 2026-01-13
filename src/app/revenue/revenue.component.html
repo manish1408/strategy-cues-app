@@ -266,6 +266,30 @@
                   </div>
 
                   <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
+                    <input class="form-check-input" type="checkbox" id="col-genius"
+                      [(ngModel)]="columnVisibility.genius">
+                    <label class="form-check-label">
+                      Genius Program
+                    </label>
+                  </div>
+
+                  <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
+                    <input class="form-check-input" type="checkbox" id="col-mobile"
+                      [(ngModel)]="columnVisibility.mobile">
+                    <label class="form-check-label">
+                      Mobile Discount
+                    </label>
+                  </div>
+
+                  <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
+                    <input class="form-check-input" type="checkbox" id="col-pref"
+                      [(ngModel)]="columnVisibility.pref">
+                    <label class="form-check-label">
+                      Preferred Partner
+                    </label>
+                  </div>
+
+                  <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
                     <input class="form-check-input" type="checkbox" id="col-actions"
                       [(ngModel)]="columnVisibility.actions" disabled>
                     <label class="form-check-label">
@@ -459,6 +483,9 @@
             <th *ngIf="columnVisibility.lastReviewDate">Last Review <br /> Date</th>
             <th *ngIf="columnVisibility.cxlPolicy">Cancellation Policy</th>
             <th *ngIf="columnVisibility.adultChildConfig">Adult Child <br /> Config</th>
+            <th style="text-align: center;" *ngIf="columnVisibility.genius">Genius <br /> Program</th>
+            <th style="text-align: center;" *ngIf="columnVisibility.mobile">Mobile <br /> Discount</th>
+            <th style="text-align: center;" *ngIf="columnVisibility.pref">Preferred <br /> Partner</th>
             <th *ngIf="columnVisibility.actions">Actions</th>
           </tr>
         </thead>
@@ -874,6 +901,30 @@
                   <small class="text-muted" style="font-size: var(--font-size-xs);">No configuration</small>
                 </div>
               </div>
+            </td>
+            <td style="text-align: center;" *ngIf="columnVisibility.genius">
+              <span *ngIf="isFeatureEnabled(property.BookingCom?.Genius)" class="text-success fw-bold">
+                {{ getGeniusDisplayValue(property) }}
+              </span>
+              <span *ngIf="!isFeatureEnabled(property.BookingCom?.Genius)" class="text-muted">
+                {{ getGeniusDisplayValue(property) }}
+              </span>
+            </td>
+            <td style="text-align: center;" *ngIf="columnVisibility.mobile">
+              <span *ngIf="isFeatureEnabled(property.BookingCom?.Mobile)" class="text-success fw-bold">
+                {{ getMobileDisplayValue(property) }}
+              </span>
+              <span *ngIf="!isFeatureEnabled(property.BookingCom?.Mobile)" class="text-muted">
+                {{ getMobileDisplayValue(property) }}
+              </span>
+            </td>
+            <td style="text-align: center;" *ngIf="columnVisibility.pref">
+              <span *ngIf="isFeatureEnabled(property.BookingCom?.Pref)" class="text-success fw-bold">
+                {{ getPrefDisplayValue(property) }}
+              </span>
+              <span *ngIf="!isFeatureEnabled(property.BookingCom?.Pref)" class="text-muted">
+                {{ getPrefDisplayValue(property) }}
+              </span>
             </td>
             <td *ngIf="columnVisibility.actions">
               <div class="btn-group btn-group-sm">

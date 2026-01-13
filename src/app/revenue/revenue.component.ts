@@ -251,6 +251,9 @@ export class RevenueComponent implements OnInit {
     stlyVarRevPAR: true,
     lastReviewScore: true,
     lastReviewDate: true,
+    genius: false,
+    mobile: false,
+    pref: false,
     actions: true,
   };
 
@@ -373,6 +376,50 @@ export class RevenueComponent implements OnInit {
 
   isArray(value: any): boolean {
     return Array.isArray(value);
+  }
+
+  // Helper method to check if a Booking.com feature is enabled
+  isFeatureEnabled(value: string | null | undefined): boolean {
+    if (!value || value === null || value === undefined) return false;
+    if (typeof value === 'object') return true; // Objects are considered enabled
+    const strValue = String(value).toLowerCase().trim();
+    return strValue === 'yes' || strValue === 'enabled' || strValue === 'true';
+  }
+
+  // Get display value for Genius feature
+  getGeniusDisplayValue(property: any): string {
+    if (!property?.BookingCom || property.BookingCom.Genius === null || property.BookingCom.Genius === undefined) {
+      return '-';
+    }
+    if (this.isFeatureEnabled(property.BookingCom.Genius)) {
+      return '10%';
+    }
+    // Return the actual value if not enabled (e.g., "Eligible", "Not Eligible", etc.)
+    return String(property.BookingCom.Genius);
+  }
+
+  // Get display value for Mobile feature
+  getMobileDisplayValue(property: any): string {
+    if (!property?.BookingCom || property.BookingCom.Mobile === null || property.BookingCom.Mobile === undefined) {
+      return '-';
+    }
+    if (this.isFeatureEnabled(property.BookingCom.Mobile)) {
+      return '10%';
+    }
+    // Return the actual value if not enabled (e.g., "Eligible", "Not Eligible", etc.)
+    return String(property.BookingCom.Mobile);
+  }
+
+  // Get display value for Preferred Partner feature
+  getPrefDisplayValue(property: any): string {
+    if (!property?.BookingCom || property.BookingCom.Pref === null || property.BookingCom.Pref === undefined) {
+      return '-';
+    }
+    if (this.isFeatureEnabled(property.BookingCom.Pref)) {
+      return '5%';
+    }
+    // Return the actual value if not enabled (e.g., "Eligible", "Not Eligible", etc.)
+    return String(property.BookingCom.Pref);
   }
 
   hasBookingPolicies(bookingData: any): boolean {
@@ -2642,6 +2689,9 @@ export class RevenueComponent implements OnInit {
       stlyVarRevPAR: true,
       lastReviewScore: true,
       lastReviewDate: true,
+      genius: false,
+      mobile: false,
+      pref: false,
       actions: true,
     };
   }

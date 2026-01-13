@@ -316,45 +316,6 @@
               <div class="card-body">
                 <div class="platform-features">
                   <div class="feature-item">
-                    <span class="feature-name">Genius Program</span>
-                    <span class="feature-status" *ngIf="property.BookingCom.Genius !== null"
-                      [ngClass]="isFeatureEnabled(property.BookingCom.Genius) ? 'enabled' : 'disabled'">
-                      <i class="fas"
-                        [ngClass]="isFeatureEnabled(property.BookingCom.Genius) ? 'fa-check-circle' : 'fa-times-circle'"></i>
-                       10%
-                    </span>
-                    <span class="feature-status" *ngIf="property.BookingCom.Genius === null" style="color: #ccc;">
-                      <i class="fas fa-minus-circle"></i>
-                      -
-                    </span>
-                  </div>
-                  <div class="feature-item">
-                    <span class="feature-name">Mobile Discount</span>
-                    <span class="feature-status" *ngIf="property.BookingCom.Mobile !== null"
-                      [ngClass]="isFeatureEnabled(property.BookingCom.Mobile) ? 'enabled' : 'disabled'">
-                      <i class="fas"
-                        [ngClass]="isFeatureEnabled(property.BookingCom.Mobile) ? 'fa-check-circle' : 'fa-times-circle'"></i>
-                     10%
-                    </span>
-                    <span class="feature-status" *ngIf="property.BookingCom.Mobile === null" style="color: #ccc;">
-                      <i class="fas fa-minus-circle"></i>
-                      -
-                    </span>
-                  </div>
-                  <div class="feature-item">
-                    <span class="feature-name">Preferred Partner</span>
-                    <span class="feature-status" *ngIf="property.BookingCom.Pref !== null"
-                      [ngClass]="isFeatureEnabled(property.BookingCom.Pref) ? 'enabled' : 'disabled'">
-                      <i class="fas"
-                        [ngClass]="isFeatureEnabled(property.BookingCom.Pref) ? 'fa-check-circle' : 'fa-times-circle'"></i>
-                     5%
-                    </span>
-                    <span class="feature-status" *ngIf="property.BookingCom.Pref === null" style="color: #ccc;">
-                      <i class="fas fa-minus-circle"></i>
-                      -
-                    </span>
-                  </div>
-                  <div class="feature-item">
                     <span class="feature-name">Weekly Discount</span>
                     <span class="feature-status" *ngIf="property.BookingCom.Weekly !== null"
                       [ngClass]="isFeatureEnabled(property.BookingCom.Weekly) ? 'enabled' : 'disabled'">
