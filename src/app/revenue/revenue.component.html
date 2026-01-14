@@ -654,16 +654,7 @@
                   <span class="pickup-label">7D:</span>
                   <span class="pickup-value na-value">N/A</span>
                 </div>
-                <div class="pickup-item"
-                  *ngIf="property.Pick_Up_Occ && property.Pick_Up_Occ['14_Days'] !== null && property.Pick_Up_Occ['14_Days'] !== undefined">
-                  <span class="pickup-label">14D:</span>
-                  <span class="pickup-value">{{ property.Pick_Up_Occ['14_Days'] }}</span>
-                </div>
-                <div class="pickup-item"
-                  *ngIf="!property.Pick_Up_Occ || property.Pick_Up_Occ['14_Days'] === null || property.Pick_Up_Occ['14_Days'] === undefined">
-                  <span class="pickup-label">14D:</span>
-                  <span class="pickup-value na-value">N/A</span>
-                </div>
+    
                 <div class="pickup-item"
                   *ngIf="property.Pick_Up_Occ && property.Pick_Up_Occ['30_Days'] !== null && property.Pick_Up_Occ['30_Days'] !== undefined">
                   <span class="pickup-label">30D:</span>
@@ -672,6 +663,16 @@
                 <div class="pickup-item"
                   *ngIf="!property.Pick_Up_Occ || property.Pick_Up_Occ['30_Days'] === null || property.Pick_Up_Occ['30_Days'] === undefined">
                   <span class="pickup-label">30D:</span>
+                  <span class="pickup-value na-value">N/A</span>
+                </div>
+                 <div class="pickup-item"
+                  *ngIf="property.Pick_Up_Occ && property.Pick_Up_Occ['14_Days'] !== null && property.Pick_Up_Occ['14_Days'] !== undefined">
+                  <span class="pickup-label">60D:</span>
+                  <span class="pickup-value">{{ property.Pick_Up_Occ['14_Days'] }}</span>
+                </div>
+                <div class="pickup-item"
+                  *ngIf="!property.Pick_Up_Occ || property.Pick_Up_Occ['14_Days'] === null || property.Pick_Up_Occ['14_Days'] === undefined">
+                  <span class="pickup-label">60D:</span>
                   <span class="pickup-value na-value">N/A</span>
                 </div>
               </div>
@@ -1178,9 +1179,9 @@
                     </div>
                   </div>
 
-                  <!-- Pick Up Occupancy 14 Days -->
+                  <!-- Pick Up Occupancy 60 Days -->
                   <div class="col-md-6 mb-3">
-                    <label class="form-label">Pick Up Occ 14 Days Range</label>
+                    <label class="form-label">Pick Up Occ 60 Days Range</label>
                     <div class="range-slider-container">
                       <div class="range-values">
                         <div style="display: inline-flex; align-items: center;">
