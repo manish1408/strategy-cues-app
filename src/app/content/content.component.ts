@@ -95,35 +95,109 @@ export class ContentComponent implements OnInit, OnDestroy {
   }
 
   loadCompetitorComparisonDataForProperties(propertyIds: string[]): void {
-    // Fetch competitor comparison data for specific properties
-    this.competitorComparisonService.getCompetitorById(this.operatorId, this.currentPage, this.itemsPerPage)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (response: any) => {
-          if (response?.data?.comparisons) {
-            // Filter the comparison data to only include the searched properties
-            const allComparisons = response.data.comparisons;
-            const filteredComparisons = allComparisons.filter((comparison: any) => 
-              propertyIds.includes(comparison.propertyId) || 
-              propertyIds.includes(comparison._id) ||
-              propertyIds.includes(comparison.listing_id)
-            );
-            
-            // Update the data with filtered results
-            this.photoComparisonData = filteredComparisons;
-            this.filteredData = [...filteredComparisons];
-            this.totalItems = filteredComparisons.length;
-            this.totalPages = 1; // Search results don't support pagination
-            this.hasMoreData = false; // No more data to load for search results
-            this.loading = false;
-          } else {
-            this.handleError('No comparison data available');
+    // Fetch competitor comparison data for specific properties by searching through all pages
+    const foundProperties: any[] = [];
+    const remainingPropertyIds = new Set(propertyIds);
+    let currentPage = 1;
+    let totalPages = 1;
+    let hasMorePages = true;
+
+    const fetchPage = (page: number): void => {
+      if (!hasMorePages || remainingPropertyIds.size === 0) {
+        // All properties found or no more pages, display results
+        this.photoComparisonData = foundProperties;
+        this.filteredData = [...foundProperties];
+        this.totalItems = foundProperties.length;
+        this.totalPages = 1; // Search results don't support pagination
+        this.hasMoreData = false; // No more data to load for search results
+        this.loading = false;
+        return;
+      }
+
+      this.competitorComparisonService.getCompetitorById(this.operatorId, page, this.itemsPerPage)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (response: any) => {
+            if (response?.data?.comparisons) {
+              const allComparisons = response.data.comparisons;
+              
+              // Filter and collect matching properties
+              const matchingComparisons = allComparisons.filter((comparison: any) => {
+                const matches = propertyIds.includes(comparison.propertyId) || 
+                               propertyIds.includes(comparison._id) ||
+                               propertyIds.includes(comparison.listing_id);
+                
+                if (matches) {
+                  // Remove found property IDs from remaining set
+                  if (comparison.propertyId && remainingPropertyIds.has(comparison.propertyId)) {
+                    remainingPropertyIds.delete(comparison.propertyId);
+                  }
+                  if (comparison._id && remainingPropertyIds.has(comparison._id)) {
+                    remainingPropertyIds.delete(comparison._id);
+                  }
+                  if (comparison.listing_id && remainingPropertyIds.has(comparison.listing_id)) {
+                    remainingPropertyIds.delete(comparison.listing_id);
+                  }
+                }
+                
+                return matches;
+              });
+              
+              foundProperties.push(...matchingComparisons);
+              
+              // Update pagination info
+              if (response.data.pagination) {
+                totalPages = response.data.pagination.totalPages || 1;
+                hasMorePages = page < totalPages;
+              } else {
+                // If no pagination info, check if we got fewer items than requested (last page)
+                hasMorePages = allComparisons.length >= this.itemsPerPage;
+              }
+              
+              // Continue to next page if there are more pages and we haven't found all properties
+              if (hasMorePages && remainingPropertyIds.size > 0) {
+                fetchPage(page + 1);
+              } else {
+                // All properties found or no more pages, display results
+                this.photoComparisonData = foundProperties;
+                this.filteredData = [...foundProperties];
+                this.totalItems = foundProperties.length;
+                this.totalPages = 1; // Search results don't support pagination
+                this.hasMoreData = false; // No more data to load for search results
+                this.loading = false;
+              }
+            } else {
+              // No more data available
+              this.photoComparisonData = foundProperties;
+              this.filteredData = [...foundProperties];
+              this.totalItems = foundProperties.length;
+              this.totalPages = 1;
+              this.hasMoreData = false;
+              this.loading = false;
+              
+              if (foundProperties.length === 0) {
+                this.handleError('No comparison data available');
+              }
+            }
+          },
+          error: (error: any) => {
+            // Even if there's an error, show what we found so far
+            if (foundProperties.length > 0) {
+              this.photoComparisonData = foundProperties;
+              this.filteredData = [...foundProperties];
+              this.totalItems = foundProperties.length;
+              this.totalPages = 1;
+              this.hasMoreData = false;
+              this.loading = false;
+            } else {
+              this.handleApiError(error);
+            }
           }
-        },
-        error: (error: any) => {
-          this.handleApiError(error);
-        }
-      });
+        });
+    };
+
+    // Start fetching from page 1
+    fetchPage(1);
   }
 
   private handleApiResponse(response: any): void {
