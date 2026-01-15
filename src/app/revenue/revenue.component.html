@@ -172,6 +172,14 @@
                   </div>
 
                   <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
+                    <input class="form-check-input" type="checkbox" id="col-occupancyDays"
+                      [(ngModel)]="columnVisibility.occupancyDays">
+                    <label class="form-check-label">
+                      Occupancy Days
+                    </label>
+                  </div>
+
+                  <div class="form-check dropdown-item" (click)="$event.stopPropagation()">
                     <input class="form-check-input" type="checkbox" id="col-adr" [(ngModel)]="columnVisibility.adr">
                     <label class="form-check-label">
                       Average Daily Rate
@@ -477,6 +485,16 @@
             <th style="text-align: center;" *ngIf="columnVisibility.stlyVarOcc">STLY <br />Var Occ</th>
             <th style="text-align: center;" *ngIf="columnVisibility.stlyVarRevPAR">STLY Var <br /> RevPAR</th>
             <th style="text-align: center;" *ngIf="columnVisibility.minRateThreshold">Min Rate <br /> Threshold</th>
+            <th style="text-align: center;" *ngIf="columnVisibility.occupancyDays">Occupancy Days<br />
+             <span class="th-sub">
+              <div class="d-flex align-items-center justify-content-center gap-2">
+                <div>7 Days</div>
+                <div class="d-divider"></div>
+                <div>30 Days</div>
+                <div class="d-divider"></div>
+                <div>60 Days</div>
+              </div>
+            </span></th>
             <th style="text-align: center;" *ngIf="columnVisibility.pickupOcc">Pick up Occ</th>
             <th *ngIf="columnVisibility.reviews">Reviews</th>
             <th *ngIf="columnVisibility.lastReviewScore">Last Review <br /> Score</th>
@@ -642,6 +660,41 @@
                 <span class="threshold-value">{{ property.Min_Rate_Threshold || 'N/A' }}</span>
               </div>
             </td>
+            <td style="text-align: center;" *ngIf="columnVisibility.occupancyDays">
+              <div class="pickup-occ-cell">
+                <div class="pickup-item"
+                  *ngIf="property.Occupancy && property.Occupancy['7_days'] !== null && property.Occupancy['7_days'] !== undefined">
+                  <span class="pickup-label">7D:</span>
+                  <span class="pickup-value">{{ property.Occupancy['7_days'] }}%</span>
+                </div>
+                <div class="pickup-item"
+                  *ngIf="!property.Occupancy || property.Occupancy['7_days'] === null || property.Occupancy['7_days'] === undefined">
+                  <span class="pickup-label">7D:</span>
+                  <span class="pickup-value na-value">N/A</span>
+                </div>
+    
+                <div class="pickup-item"
+                  *ngIf="property.Occupancy && property.Occupancy['30_days'] !== null && property.Occupancy['30_days'] !== undefined">
+                  <span class="pickup-label">30D:</span>
+                  <span class="pickup-value">{{ property.Occupancy['30_days'] }}%</span>
+                </div>
+                <div class="pickup-item"
+                  *ngIf="!property.Occupancy || property.Occupancy['30_days'] === null || property.Occupancy['30_days'] === undefined">
+                  <span class="pickup-label">30D:</span>
+                  <span class="pickup-value na-value">N/A</span>
+                </div>
+                <div class="pickup-item"
+                  *ngIf="property.Occupancy && property.Occupancy['60_days'] !== null && property.Occupancy['60_days'] !== undefined">
+                  <span class="pickup-label">60D:</span>
+                  <span class="pickup-value">{{ property.Occupancy['60_days'] }}%</span>
+                </div>
+                <div class="pickup-item"
+                  *ngIf="!property.Occupancy || property.Occupancy['60_days'] === null || property.Occupancy['60_days'] === undefined">
+                  <span class="pickup-label">60D:</span>
+                  <span class="pickup-value na-value">N/A</span>
+                </div>
+              </div>
+            </td>
             <td style="text-align: center;" *ngIf="columnVisibility.pickupOcc">
               <div class="pickup-occ-cell">
                 <div class="pickup-item"
@@ -656,6 +709,16 @@
                 </div>
     
                 <div class="pickup-item"
+                  *ngIf="property.Pick_Up_Occ && property.Pick_Up_Occ['14_Days'] !== null && property.Pick_Up_Occ['14_Days'] !== undefined">
+                  <span class="pickup-label">14D:</span>
+                  <span class="pickup-value">{{ property.Pick_Up_Occ['14_Days'] }}</span>
+                </div>
+                <div class="pickup-item"
+                  *ngIf="!property.Pick_Up_Occ || property.Pick_Up_Occ['14_Days'] === null || property.Pick_Up_Occ['14_Days'] === undefined">
+                  <span class="pickup-label">14D:</span>
+                  <span class="pickup-value na-value">N/A</span>
+                </div>
+                <div class="pickup-item"
                   *ngIf="property.Pick_Up_Occ && property.Pick_Up_Occ['30_Days'] !== null && property.Pick_Up_Occ['30_Days'] !== undefined">
                   <span class="pickup-label">30D:</span>
                   <span class="pickup-value">{{ property.Pick_Up_Occ['30_Days'] }}</span>
@@ -663,16 +726,6 @@
                 <div class="pickup-item"
                   *ngIf="!property.Pick_Up_Occ || property.Pick_Up_Occ['30_Days'] === null || property.Pick_Up_Occ['30_Days'] === undefined">
                   <span class="pickup-label">30D:</span>
-                  <span class="pickup-value na-value">N/A</span>
-                </div>
-                 <div class="pickup-item"
-                  *ngIf="property.Pick_Up_Occ && property.Pick_Up_Occ['14_Days'] !== null && property.Pick_Up_Occ['14_Days'] !== undefined">
-                  <span class="pickup-label">60D:</span>
-                  <span class="pickup-value">{{ property.Pick_Up_Occ['14_Days'] }}</span>
-                </div>
-                <div class="pickup-item"
-                  *ngIf="!property.Pick_Up_Occ || property.Pick_Up_Occ['14_Days'] === null || property.Pick_Up_Occ['14_Days'] === undefined">
-                  <span class="pickup-label">60D:</span>
                   <span class="pickup-value na-value">N/A</span>
                 </div>
               </div>
@@ -1168,6 +1221,26 @@
                     </div>
                   </div>
 
+                  <!-- Occupancy 60 Days Range -->
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Occupancy 60 Days Range</label>
+                    <div class="range-slider-container">
+                      <div class="range-values">
+                        <div style="display: inline-flex; align-items: center;">
+                          <input type="number" class="min-value" [(ngModel)]="tempOccupancy60DaysMin"
+                            >
+                          <span class="range-percentage">%</span>
+                        </div>
+                        <span style="color: black; display: inline-flex; align-items: center; margin: 0 4px;">—</span>
+                        <div style="display: inline-flex; align-items: center;">
+                          <input type="number" class="max-value" [(ngModel)]="tempOccupancy60DaysMax"
+                            >
+                          <span class="range-percentage">%</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   <!-- Pick Up Occupancy 7 Days -->
                   <div class="col-md-6 mb-3">
                     <label class="form-label">Pick Up Occ 7 Days Range</label>
@@ -1188,9 +1261,9 @@
                     </div>
                   </div>
 
-                  <!-- Pick Up Occupancy 60 Days -->
+                  <!-- Pick Up Occupancy 14 Days -->
                   <div class="col-md-6 mb-3">
-                    <label class="form-label">Pick Up Occ 60 Days Range</label>
+                    <label class="form-label">Pick Up Occ 14 Days Range</label>
                     <div class="range-slider-container">
                       <div class="range-values">
                         <div style="display: inline-flex; align-items: center;">

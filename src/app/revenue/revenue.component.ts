@@ -67,6 +67,8 @@ export class RevenueComponent implements OnInit {
   occupancy7DaysMax: number | null = null;
   occupancy30DaysMin: number | null = null;
   occupancy30DaysMax: number | null = null;
+  occupancy60DaysMin: number | null = null;
+  occupancy60DaysMax: number | null = null;
   pickUpOcc7DaysMin: number | null = null;
   pickUpOcc7DaysMax: number | null = null;
   pickUpOcc14DaysMin: number | null = null;
@@ -153,6 +155,8 @@ export class RevenueComponent implements OnInit {
   tempOccupancy7DaysMax: number | null = null;
   tempOccupancy30DaysMin: number | null = null;
   tempOccupancy30DaysMax: number | null = null;
+  tempOccupancy60DaysMin: number | null = null;
+  tempOccupancy60DaysMax: number | null = null;
   tempPickUpOcc7DaysMin: number | null = null;
   tempPickUpOcc7DaysMax: number | null = null;
   tempPickUpOcc14DaysMin: number | null = null;
@@ -239,6 +243,7 @@ export class RevenueComponent implements OnInit {
     sync: true,
     occupancyTM: true,
     occupancyNM: true,
+    occupancyDays: true,
     adr: true,
     revpar: true,
     mpi: true,
@@ -494,6 +499,7 @@ export class RevenueComponent implements OnInit {
     this.occupancyNMMin = this.occupancyNMMax = null;
     this.occupancy7DaysMin = this.occupancy7DaysMax = null;
     this.occupancy30DaysMin = this.occupancy30DaysMax = null;
+    this.occupancy60DaysMin = this.occupancy60DaysMax = null;
 
     this.pickUpOcc7DaysMin = this.pickUpOcc7DaysMax = null;
     this.pickUpOcc14DaysMin = this.pickUpOcc14DaysMax = null;
@@ -954,6 +960,8 @@ export class RevenueComponent implements OnInit {
     this.tempOccupancy7DaysMax = this.occupancy7DaysMax;
     this.tempOccupancy30DaysMin = this.occupancy30DaysMin;
     this.tempOccupancy30DaysMax = this.occupancy30DaysMax;
+    this.tempOccupancy60DaysMin = this.occupancy60DaysMin;
+    this.tempOccupancy60DaysMax = this.occupancy60DaysMax;
     this.tempPickUpOcc7DaysMin = this.pickUpOcc7DaysMin;
     this.tempPickUpOcc7DaysMax = this.pickUpOcc7DaysMax;
     this.tempPickUpOcc14DaysMin = this.pickUpOcc14DaysMin;
@@ -1096,6 +1104,8 @@ export class RevenueComponent implements OnInit {
     if (this.occupancy7DaysMax !== null) params.occ_7days_max = this.occupancy7DaysMax;
     if (this.occupancy30DaysMin !== null) params.occ_30days_min = this.occupancy30DaysMin;
     if (this.occupancy30DaysMax !== null) params.occ_30days_max = this.occupancy30DaysMax;
+    if (this.occupancy60DaysMin !== null) params.occ_60days_min = this.occupancy60DaysMin;
+    if (this.occupancy60DaysMax !== null) params.occ_60days_max = this.occupancy60DaysMax;
 
     // Pickup occupancy filters
     if (this.pickUpOcc7DaysMin !== null) params.pickup_7days_min = this.pickUpOcc7DaysMin;
@@ -1231,6 +1241,8 @@ export class RevenueComponent implements OnInit {
     if (this.occupancy7DaysMax !== null) params.occ_7days_max = this.occupancy7DaysMax;
     if (this.occupancy30DaysMin !== null) params.occ_30days_min = this.occupancy30DaysMin;
     if (this.occupancy30DaysMax !== null) params.occ_30days_max = this.occupancy30DaysMax;
+    if (this.occupancy60DaysMin !== null) params.occ_60days_min = this.occupancy60DaysMin;
+    if (this.occupancy60DaysMax !== null) params.occ_60days_max = this.occupancy60DaysMax;
 
     // Pickup occupancy filters
     if (this.pickUpOcc7DaysMin !== null) params.pickup_7days_min = this.pickUpOcc7DaysMin;
@@ -1660,6 +1672,8 @@ export class RevenueComponent implements OnInit {
       this.occupancy7DaysMax !== null ||
       this.occupancy30DaysMin !== null ||
       this.occupancy30DaysMax !== null ||
+      this.occupancy60DaysMin !== null ||
+      this.occupancy60DaysMax !== null ||
       this.pickUpOcc7DaysMin !== null ||
       this.pickUpOcc7DaysMax !== null ||
       this.pickUpOcc14DaysMin !== null ||
@@ -1731,6 +1745,8 @@ export class RevenueComponent implements OnInit {
     if (this.occupancy7DaysMin !== null || this.occupancy7DaysMax !== null)
       count++;
     if (this.occupancy30DaysMin !== null || this.occupancy30DaysMax !== null)
+      count++;
+    if (this.occupancy60DaysMin !== null || this.occupancy60DaysMax !== null)
       count++;
     if (this.pickUpOcc7DaysMin !== null || this.pickUpOcc7DaysMax !== null)
       count++;
@@ -1882,6 +1898,8 @@ export class RevenueComponent implements OnInit {
     this.occupancy7DaysMax = this.tempOccupancy7DaysMax;
     this.occupancy30DaysMin = this.tempOccupancy30DaysMin;
     this.occupancy30DaysMax = this.tempOccupancy30DaysMax;
+    this.occupancy60DaysMin = this.tempOccupancy60DaysMin;
+    this.occupancy60DaysMax = this.tempOccupancy60DaysMax;
     this.pickUpOcc7DaysMin = this.tempPickUpOcc7DaysMin;
     this.pickUpOcc7DaysMax = this.tempPickUpOcc7DaysMax;
     this.pickUpOcc14DaysMin = this.tempPickUpOcc14DaysMin;
@@ -2061,6 +2079,17 @@ export class RevenueComponent implements OnInit {
         label: "Occupancy 30 Days",
         value: value,
         key: "occupancy30Days",
+      });
+    }
+    if (this.occupancy60DaysMin !== null || this.occupancy60DaysMax !== null) {
+      const value = `${this.occupancy60DaysMin || 0}% - ${
+        this.occupancy60DaysMax || 100
+      }%`;
+      filters.push({
+        type: "range",
+        label: "Occupancy 60 Days",
+        value: value,
+        key: "occupancy60Days",
       });
     }
 
@@ -2342,6 +2371,12 @@ export class RevenueComponent implements OnInit {
         this.tempOccupancy30DaysMin = null;
         this.tempOccupancy30DaysMax = null;
         break;
+      case "occupancy60Days":
+        this.occupancy60DaysMin = null;
+        this.occupancy60DaysMax = null;
+        this.tempOccupancy60DaysMin = null;
+        this.tempOccupancy60DaysMax = null;
+        break;
       case "pickUpOcc7Days":
         this.pickUpOcc7DaysMin = null;
         this.pickUpOcc7DaysMax = null;
@@ -2481,6 +2516,8 @@ export class RevenueComponent implements OnInit {
     this.occupancy7DaysMax = null;
     this.occupancy30DaysMin = null;
     this.occupancy30DaysMax = null;
+    this.occupancy60DaysMin = null;
+    this.occupancy60DaysMax = null;
     this.pickUpOcc7DaysMin = null;
     this.pickUpOcc7DaysMax = null;
     this.pickUpOcc14DaysMin = null;
@@ -2575,6 +2612,8 @@ export class RevenueComponent implements OnInit {
     this.occupancy7DaysMax = null;
     this.occupancy30DaysMin = null;
     this.occupancy30DaysMax = null;
+    this.occupancy60DaysMin = null;
+    this.occupancy60DaysMax = null;
     this.pickUpOcc7DaysMin = null;
     this.pickUpOcc7DaysMax = null;
     this.pickUpOcc14DaysMin = null;
@@ -2677,6 +2716,7 @@ export class RevenueComponent implements OnInit {
       sync: true,
       occupancyTM: true,
       occupancyNM: true,
+      occupancyDays: true,
       adr: true,
       revpar: true,
       mpi: true,
@@ -2882,6 +2922,8 @@ export class RevenueComponent implements OnInit {
       occupancy7DaysMax: this.occupancy7DaysMax !== null ? this.occupancy7DaysMax : undefined,
       occupancy30DaysMin: this.occupancy30DaysMin !== null ? this.occupancy30DaysMin : undefined,
       occupancy30DaysMax: this.occupancy30DaysMax !== null ? this.occupancy30DaysMax : undefined,
+      occupancy60DaysMin: this.occupancy60DaysMin !== null ? this.occupancy60DaysMin : undefined,
+      occupancy60DaysMax: this.occupancy60DaysMax !== null ? this.occupancy60DaysMax : undefined,
       pickUpOcc7DaysMin: this.pickUpOcc7DaysMin !== null ? this.pickUpOcc7DaysMin : undefined,
       pickUpOcc7DaysMax: this.pickUpOcc7DaysMax !== null ? this.pickUpOcc7DaysMax : undefined,
       pickUpOcc14DaysMin: this.pickUpOcc14DaysMin !== null ? this.pickUpOcc14DaysMin : undefined,
@@ -3193,6 +3235,7 @@ export class RevenueComponent implements OnInit {
         filters.occupancyNMMin !== null || filters.occupancyNMMax !== null ||
         filters.occupancy7DaysMin !== null || filters.occupancy7DaysMax !== null ||
         filters.occupancy30DaysMin !== null || filters.occupancy30DaysMax !== null ||
+        filters.occupancy60DaysMin !== null || filters.occupancy60DaysMax !== null ||
         filters.pickUpOcc7DaysMin !== null || filters.pickUpOcc7DaysMax !== null ||
         filters.pickUpOcc14DaysMin !== null || filters.pickUpOcc14DaysMax !== null ||
         filters.pickUpOcc30DaysMin !== null || filters.pickUpOcc30DaysMax !== null) {
@@ -3271,6 +3314,8 @@ export class RevenueComponent implements OnInit {
     this.occupancy7DaysMax = filters.occupancy7DaysMax ?? null;
     this.occupancy30DaysMin = filters.occupancy30DaysMin ?? null;
     this.occupancy30DaysMax = filters.occupancy30DaysMax ?? null;
+    this.occupancy60DaysMin = filters.occupancy60DaysMin ?? null;
+    this.occupancy60DaysMax = filters.occupancy60DaysMax ?? null;
     this.pickUpOcc7DaysMin = filters.pickUpOcc7DaysMin ?? null;
     this.pickUpOcc7DaysMax = filters.pickUpOcc7DaysMax ?? null;
     this.pickUpOcc14DaysMin = filters.pickUpOcc14DaysMin ?? null;
