@@ -55,7 +55,7 @@
               </a>
             </li> -->
 
-            <li class="sidebar-menu-item">
+            <li class="sidebar-menu-item" *ngIf="user?.userType !== 'partner'">
               <a routerLink="/pricelabs-admin" [queryParams]="{ id: selectedOperator?._id }"
                 routerLinkActive="active-link" class="sidebar-link">
                 <i class="fas fa-chart-line me-2"></i>
