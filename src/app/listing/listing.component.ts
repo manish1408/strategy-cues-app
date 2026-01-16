@@ -60,6 +60,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   Status = Status; // Make Status enum available in template
   propertyStatuses: { [key: string]: PropertyStatus } = {}; // Store status for each property
   statusPollingIntervals: { [key: string]: any } = {}; // Store polling intervals for each property
+  resyncLoading: { [key: string]: boolean } = {}; // Track resync loading state per property
   
   lastSyncDate: Date | null = null;
   bookingLastSyncedAt: Date | null = null;
@@ -448,6 +449,50 @@ export class ListingComponent implements OnInit, OnDestroy {
       () => {
       }
     );
+  }
+
+  resyncProperty(propertyId: string) {
+    if (!propertyId || this.resyncLoading[propertyId]) {
+      return;
+    }
+
+    this.resyncLoading[propertyId] = true;
+    const propertyData = { 
+      status: 'pending',
+      operator_id: this.operatorId || ''
+    };
+
+    this.propertiesService
+      .updateProperty(propertyData, propertyId)
+      .pipe(finalize(() => {
+        this.resyncLoading[propertyId] = false;
+      }))
+      .subscribe({
+        next: (res: any) => {
+          if (res.success) {
+            // Update the property status to pending
+            if (this.propertyStatuses[propertyId]) {
+              this.propertyStatuses[propertyId] = {
+                ...this.propertyStatuses[propertyId],
+                syncStatus: 'pending',
+                mappingStatus: 'pending',
+                lastUpdated: new Date()
+              };
+            }
+            // Update the listing object in the array
+            const listingIndex = this.allListingList.findIndex(listing => listing?.id === propertyId);
+            if (listingIndex !== -1 && this.allListingList[listingIndex].urls) {
+              this.allListingList[listingIndex].urls.status = 'pending';
+            }
+            this.toastr.success("Property status updated to pending successfully");
+          } else {
+            this.toastr.error("Failed to resync property");
+          }
+        },
+        error: (error: any) => {
+          this.toastr.error("Failed to resync property");
+        },
+      });
   }
 
 
