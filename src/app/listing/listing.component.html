@@ -164,15 +164,27 @@
                   </div>
 
                   <!-- Combined Status Badge -->
-                  <div *ngIf="!isStatusLoading(listing?.id)" class="d-flex align-items-center gap-1">
-                    <span class="badge" [class]="getCombinedStatusClass(listing?.id)">
-                      <i class="fas fa-cogs me-1"
-                        [class.fa-spin]="isPollingActive(listing?.id) && (getCombinedStatusText(listing?.id) === 'scraping_in_progress' || getCombinedStatusText(listing?.id) === 'mapping_in_progress')"></i>{{
-                      getCombinedStatusText(listing?.id) }}
-                    </span>
-                    <small *ngIf="isPollingActive(listing?.id)" class="text-muted">
-                      <i class="fas fa-circle" style="font-size: 6px; color: #28a745;"></i> Live
-                    </small>
+                  <div *ngIf="!isStatusLoading(listing?.id)" class="d-flex align-items-center gap-2">
+                    <div class="d-flex align-items-center gap-1">
+                      <span class="badge" [class]="getCombinedStatusClass(listing?.id)">
+                        <i class="fas fa-cogs me-1"
+                          [class.fa-spin]="isPollingActive(listing?.id) && (getCombinedStatusText(listing?.id) === 'scraping_in_progress' || getCombinedStatusText(listing?.id) === 'mapping_in_progress')"></i>{{
+                        getCombinedStatusText(listing?.id) }}
+                      </span>
+                      <small *ngIf="isPollingActive(listing?.id)" class="text-muted">
+                        <i class="fas fa-circle" style="font-size: 6px; color: #28a745;"></i> Live
+                      </small>
+                    </div>
+                    <!-- Resync Button -->
+                    <button 
+                      class="btn btn-sm btn-outline-secondary p-1" 
+                      (click)="resyncProperty(listing?.id)"
+                      [disabled]="resyncLoading[listing?.id]"
+                      title="Resync property status to pending"
+                      style="min-width: 28px; height: 28px; padding: 0; display: flex; align-items: center; justify-content: center;">
+                      <i *ngIf="!resyncLoading[listing?.id]" class="fas fa-sync-alt"></i>
+                      <i *ngIf="resyncLoading[listing?.id]" class="fas fa-spinner fa-spin"></i>
+                    </button>
                   </div>
                 </td>
                 <td>
