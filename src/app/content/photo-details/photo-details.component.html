@@ -12,33 +12,34 @@
   <div class="row">
     <div class="col-1" *ngIf="!isLoading">
       <button class="btn btn-outline-secondary mb-3" (click)="goBack()">
-        <i class="fas fa-arrow-left"></i> Back 
+        <i class="fas fa-arrow-left"></i> Back
       </button>
+
+
     </div>
     <div class="col-7">
       <h1 class="property-title pull-left" style="line-height: 40px;" [innerHtml]="propertyData?.Listing_Name"></h1>
     </div>
     <div class="col-4">
-        <div class="platform-tabs-container"  *ngIf="propertyData">
-          <ul class="platform-tabs">
-            <li class="platform-tab" [class.active]="selectedPlatform === 'airbnb'" (click)="selectPlatform('airbnb')">
-              <i class="fab fa-airbnb"></i>
-              <span>Airbnb</span>
-            </li>
-            <li class="platform-tab" [class.active]="selectedPlatform === 'booking'"
-              (click)="selectPlatform('booking')">
-              <i class="fas fa-bed"></i>
-              <span>Booking.com</span>
-            </li>
-            <!-- VRBO temporarily commented out -->
-            <!-- <li class="platform-tab" 
+      <div class="platform-tabs-container" *ngIf="propertyData">
+        <ul class="platform-tabs">
+          <li class="platform-tab" [class.active]="selectedPlatform === 'airbnb'" (click)="selectPlatform('airbnb')">
+            <i class="fab fa-airbnb"></i>
+            <span>Airbnb</span>
+          </li>
+          <li class="platform-tab" [class.active]="selectedPlatform === 'booking'" (click)="selectPlatform('booking')">
+            <i class="fas fa-bed"></i>
+            <span>Booking.com</span>
+          </li>
+          <!-- VRBO temporarily commented out -->
+          <!-- <li class="platform-tab" 
               [class.active]="selectedPlatform === 'vrbo'"
               (click)="selectPlatform('vrbo')">
             <i class="fas fa-home"></i>
             <span>VRBO</span>
           </li> -->
-          </ul>
-        </div>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -49,7 +50,7 @@
 
 
 
-    
+
     <div class="tab-navigation">
       <div class="tab-navigation-left">
         <ul class="nav nav-tabs">
@@ -75,7 +76,7 @@
             </a>
           </li>
         </ul>
-      </div>  
+      </div>
       <div class="tab-navigation-right">
         <div *ngIf="getCompetitorsCountForSelectedPlatform() > 0" [hidden]="activeTab !== 'photos'">
           <select class="form-select" [ngModel]="selectedCompetitorIndex" (ngModelChange)="selectCompetitor($event)">
@@ -83,9 +84,7 @@
               Select Competitor
             </option>
             <ng-container *ngFor="let competitor of propertyData.competitor; let i = index">
-              <option
-                *ngIf="competitor.bookingId !== null && selectedPlatform == 'booking'"
-                [ngValue]="i">
+              <option *ngIf="competitor.bookingId !== null && selectedPlatform == 'booking'" [ngValue]="i">
                 {{ competitor.propertyName || competitor.bookingId }}
               </option>
 
@@ -352,6 +351,51 @@
           </div>
         </div>
 
+         <!-- Photo Captions Section -->
+         <div class="missing-captions-section" *ngIf="currentPlatformPhotos && currentPlatformPhotos.length > 0">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>AI Photo Captions for {{ selectedPlatform | titlecase }} ({{ currentPlatformPhotos.length }} photos)
+            </h2>
+            <button type="button" class="btn btn-sm btn-primary" (click)="generateAllCaptions()"
+              [disabled]="isGeneratingAllCaptions || isGeneratingCaption">
+              <span *ngIf="isGeneratingAllCaptions">Generating captions for all photos...</span>
+              <span *ngIf="!isGeneratingAllCaptions">Generate captions for all photos</span>
+            </button>
+          </div>
+          <div class="missing-list">
+            <div class="missing-item" *ngFor="let photo of currentPlatformPhotos">
+              <i class="fas fa-exclamation-triangle" *ngIf="!photo?.caption"></i>
+              <i class="fas fa-check-circle text-success" *ngIf="photo?.caption"></i>
+              <img style="width: 40px; height: 40px; object-fit: fill; cursor: pointer;" [src]="photo?.url"
+                [alt]="'Photo ' + photo?.id" (error)="onImageError($event)" (click)="openPhotoInNewWindow(photo?.id)">
+
+              <div class="photo-info">
+                <span *ngIf="!photo?.caption" class="needs-caption">Photo {{photo?.id}} needs a caption</span>
+                <div *ngIf="photo?.caption" class="generated-caption">
+                  <strong>Generated Caption:</strong>
+                  <p class="caption-text">{{photo?.caption}}</p>
+                </div>
+              </div>
+
+              <button type="button" class="btn btn-sm btn-primary" (click)="generateCaption(photo?.url, photo?.id)"
+                [disabled]="isGeneratingCaptionForPhotoUrl(photo?.url) || photo?.caption || isGeneratingAllCaptions">
+                <!-- Generating state -->
+                <span *ngIf="isGeneratingCaptionForPhotoUrl(photo?.url)">Generating caption...</span>
+
+                <!-- Already generated -->
+                <span *ngIf="!isGeneratingCaptionForPhotoUrl(photo?.url) && photo?.caption">
+                  Caption Generated
+                </span>
+
+                <!-- Default -->
+                <span *ngIf="!isGeneratingCaptionForPhotoUrl(photo?.url) && !photo?.caption">
+                  Generate Caption
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+
         <!-- Additional Photo Suggestions -->
         <div class="photo-suggestions-section" *ngIf="getCurrentCompetitor()">
           <div class="suggestions-header">
@@ -395,71 +439,7 @@
         </div>
 
 
-
-        <!-- Photo Gallery -->
-        <!-- <div class="photo-gallery" *ngIf="propertyData?.property_photos">
-    <h2>Photo Gallery</h2>
-    <div class="gallery-grid">
-      <div class="photo-item" *ngFor="let photo of propertyData.property_photos; let i = index" (click)="openPhotoModal(i)">
-        <img [src]="photo.url" [alt]="photo.caption || 'Property photo'" (error)="onImageError($event)">
-        <div class="photo-overlay">
-          <div class="photo-info">
-            <span class="photo-type">{{photo.type}}</span>
-            <span class="photo-caption" *ngIf="photo.caption">{{photo.caption}}</span>
-            <span class="no-caption" *ngIf="!photo.caption">
-              <i class="fas fa-exclamation-triangle"></i>
-              No Caption
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
-
-        <!-- Photo Captions Section -->
-        <div class="missing-captions-section" *ngIf="currentPlatformPhotos && currentPlatformPhotos.length > 0">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2>AI Photo Captions for {{ selectedPlatform | titlecase }} ({{ currentPlatformPhotos.length }} photos)</h2>
-            <button type="button" class="btn btn-sm btn-primary" (click)="generateAllCaptions()"
-              [disabled]="isGeneratingAllCaptions || isGeneratingCaption">
-              <!-- <span *ngIf="isGeneratingAllCaptions" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> -->
-              <span *ngIf="isGeneratingAllCaptions">Generating captions for all photos...</span>
-              <span *ngIf="!isGeneratingAllCaptions">Generate captions for all photos</span>
-            </button>
-          </div>
-          <div class="missing-list">
-            <div class="missing-item" *ngFor="let photo of currentPlatformPhotos">
-              <i class="fas fa-exclamation-triangle" *ngIf="!photo?.caption"></i>
-              <i class="fas fa-check-circle text-success" *ngIf="photo?.caption"></i>
-              <img style="width: 40px; height: 40px; object-fit: fill; cursor: pointer;" [src]="photo?.url"
-                [alt]="'Photo ' + photo?.id" (error)="onImageError($event)" (click)="openPhotoInNewWindow(photo?.id)">
-
-              <div class="photo-info">
-                <span *ngIf="!photo?.caption" class="needs-caption">Photo {{photo?.id}} needs a caption</span>
-                <div *ngIf="photo?.caption" class="generated-caption">
-                  <strong>Generated Caption:</strong>
-                  <p class="caption-text">{{photo?.caption}}</p>
-                </div>
-              </div>
-
-              <button type="button" class="btn btn-sm btn-primary" (click)="generateCaption(photo?.url, photo?.id)"
-                [disabled]="isGeneratingCaptionForPhotoUrl(photo?.url) || photo?.caption || isGeneratingAllCaptions">
-                <!-- Generating state -->
-                <span *ngIf="isGeneratingCaptionForPhotoUrl(photo?.url)">Generating caption...</span>
-
-                <!-- Already generated -->
-                <span *ngIf="!isGeneratingCaptionForPhotoUrl(photo?.url) && photo?.caption">
-                  Caption Generated
-                </span>
-
-                <!-- Default -->
-                <span *ngIf="!isGeneratingCaptionForPhotoUrl(photo?.url) && !photo?.caption">
-                  Generate Caption
-                </span>
-              </button>
-            </div>
-          </div>
-        </div>
+       
       </div>
 
       <div class="tab-pane" [class.active]="activeTab === 'competitor-reviews'"
@@ -472,7 +452,8 @@
       </div>
 
       <div class="tab-pane" [class.active]="activeTab === 'amenities'" *ngIf="activeTab === 'amenities'">
-        <app-amenities-analyzer [propertyId]="propertyId" [operatorId]="operatorId" [selectedPlatform]="selectedPlatform">
+        <app-amenities-analyzer [propertyId]="propertyId" [operatorId]="operatorId"
+          [selectedPlatform]="selectedPlatform">
         </app-amenities-analyzer>
       </div>
     </div>
