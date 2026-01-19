@@ -10,13 +10,13 @@
   </div>
 
   <div class="row">
-    <div class="col-1">
+    <div class="col-1" *ngIf="!isLoading">
       <button class="btn btn-outline-secondary mb-3" (click)="goBack()">
         <i class="fas fa-arrow-left"></i> Back 
       </button>
     </div>
     <div class="col-7">
-      <h1 class="property-title pull-left" style="line-height: 40px;" [innerHtml]="propertyData.Listing_Name"></h1>
+      <h1 class="property-title pull-left" style="line-height: 40px;" [innerHtml]="propertyData?.Listing_Name"></h1>
     </div>
     <div class="col-4">
         <div class="platform-tabs-container"  *ngIf="propertyData">
@@ -420,7 +420,7 @@
         <div class="missing-captions-section" *ngIf="currentPlatformPhotos && currentPlatformPhotos.length > 0">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <h2>AI Photo Captions for {{ selectedPlatform | titlecase }} ({{ currentPlatformPhotos.length }} photos)</h2>
-            <button class="btn btn-sm btn-primary" (click)="generateAllCaptions()"
+            <button type="button" class="btn btn-sm btn-primary" (click)="generateAllCaptions()"
               [disabled]="isGeneratingAllCaptions || isGeneratingCaption">
               <!-- <span *ngIf="isGeneratingAllCaptions" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> -->
               <span *ngIf="isGeneratingAllCaptions">Generating captions for all photos...</span>
@@ -442,7 +442,7 @@
                 </div>
               </div>
 
-              <button class="btn btn-sm btn-primary" (click)="generateCaption(photo?.url, photo?.id)"
+              <button type="button" class="btn btn-sm btn-primary" (click)="generateCaption(photo?.url, photo?.id)"
                 [disabled]="isGeneratingCaptionForPhotoUrl(photo?.url) || photo?.caption || isGeneratingAllCaptions">
                 <!-- Generating state -->
                 <span *ngIf="isGeneratingCaptionForPhotoUrl(photo?.url)">Generating caption...</span>
@@ -477,4 +477,4 @@
       </div>
     </div>
   </div>
-</div><
+</div>

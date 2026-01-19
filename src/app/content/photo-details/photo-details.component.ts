@@ -1557,7 +1557,6 @@ export class PhotoDetailsComponent implements OnInit {
 
   // Caption generation methods
   generateCaption(photoUrl: string, photoId: string): void {
-
     console.log('Generating caption for photo:', photoUrl, photoId);
     if (this.isGeneratingCaption) {
       return;
@@ -1784,10 +1783,7 @@ export class PhotoDetailsComponent implements OnInit {
   }
   isGeneratingAllCaptions: boolean = false; 
   generateAllCaptions(): void {
-    console.log('Generating captions for all photos');
-  
     const photosToProcess = this.currentPlatformPhotos.filter(p => !p.caption);
-  
     if (photosToProcess.length === 0) {
       this.toastr.error('All captions are already generated.');
       return;
@@ -1804,7 +1800,7 @@ export class PhotoDetailsComponent implements OnInit {
             property_id: this.propertyId,
             source: sourceToUse as 'airbnb' | 'booking' | 'vrbo',
             image_url: photo.url,
-            image_id: photo.id
+            image_id: photo.url
           }).pipe(
             catchError(err => {
               console.error('Error generating caption:', err);
@@ -1831,7 +1827,7 @@ export class PhotoDetailsComponent implements OnInit {
             // extract captions and update UI
             successResponses.forEach(r => {
               const caption = r.data?.caption || r.caption;
-              const imageUrl = r.image_url || r.image_id; // adjust as needed
+              const imageUrl = r.imageUrl || r.imageId; // adjust as needed
               if (caption && imageUrl) {
                 this.updatePhotoCaptionByUrl(imageUrl, caption);
               }
