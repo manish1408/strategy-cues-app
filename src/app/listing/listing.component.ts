@@ -518,18 +518,43 @@ export class ListingComponent implements OnInit, OnDestroy {
     if (this.addListingForm.valid) {
       this.loading = true;
       
-      // First, create any new competitors
-      this.createNewCompetitors().then(() => {
-        // Then update/create the listing
-        this.saveListing(bookingCom, airbnb, vrbo, pricelab);
-      }).catch((error) => {
-        this.toastr.error("Failed to create competitors");
-        this.loading = false;
-      });
+      if (this.isEdit && this.editingListingId) {
+        // When editing: Save listing first, then add competitors using new API
+        this.saveListing(bookingCom, airbnb, vrbo, pricelab).then(() => {
+          // After listing is saved, add new competitors
+          this.addCompetitorsToProperty().then(() => {
+            this.loading = false;
+            this.loadListings();
+            this.resetForm();
+            this.closeModal();
+          }).catch((error) => {
+            this.loading = false;
+            this.toastr.error(error.message || "Failed to add competitors");
+          });
+        }).catch((error) => {
+          this.loading = false;
+          this.toastr.error("Failed to update listing");
+        });
+      } else {
+        // When creating: Use old flow (create competitors first, then listing)
+        this.createNewCompetitors().then(() => {
+          // Then update/create the listing
+          this.saveListing(bookingCom, airbnb, vrbo, pricelab);
+        }).catch((error) => {
+          this.toastr.error("Failed to create competitors");
+          this.loading = false;
+        });
+      }
     }
   }
 
   private async createNewCompetitors(): Promise<void> {
+    // If editing, use the new API to add competitors to property
+    if (this.isEdit && this.editingListingId) {
+      return this.addCompetitorsToProperty();
+    }
+    
+    // For new listings, use the old method
     const newCompetitors = this.getNewCompetitors();
     
     if (newCompetitors.length === 0) {
@@ -558,6 +583,75 @@ export class ListingComponent implements OnInit, OnDestroy {
         }
       });
     });
+  }
+
+  private async addCompetitorsToProperty(): Promise<void> {
+    const newCompetitors = this.getNewCompetitorsForProperty();
+    
+    if (newCompetitors.bookingCompetitors.length === 0 && newCompetitors.airbnbCompetitors.length === 0) {
+      return Promise.resolve();
+    }
+
+    if (!this.editingListingId) {
+      return Promise.reject(new Error('Property ID is required'));
+    }
+
+    const requestData = {
+      propertyId: this.editingListingId,
+      bookingCompetitors: newCompetitors.bookingCompetitors,
+      airbnbCompetitors: newCompetitors.airbnbCompetitors
+    };
+
+    return new Promise((resolve, reject) => {
+      this.competitorPropertiesService.addCompetitorsToProperty(requestData).subscribe({
+        next: (response: any) => {
+          this.toastr.success('Competitors added successfully');
+          resolve();
+        },
+        error: (error: any) => {
+          const errorMessage = error?.error?.detail?.error || error?.error?.message || error?.message || 'Failed to add competitors';
+          reject(new Error(errorMessage));
+        }
+      });
+    });
+  }
+
+  private getNewCompetitorsForProperty(): {
+    bookingCompetitors: Array<{ bookingId: string; bookingLink: string }>;
+    airbnbCompetitors: Array<{ airbnbId: string; airbnbLink: string }>;
+  } {
+    const bookingCompetitors: Array<{ bookingId: string; bookingLink: string }> = [];
+    const airbnbCompetitors: Array<{ airbnbId: string; airbnbLink: string }> = [];
+    
+    for (let i = 0; i < this.competitorsFormArray.length; i++) {
+      const form = this.competitorsFormArray.at(i);
+      const competitorId = this.competitorIds[i];
+      
+      // Check if this is a new competitor (no ID or has temp ID)
+      if (!competitorId || competitorId.startsWith('temp_')) {
+        const platform = form.get('platform')?.value || "";
+        const platformId = form.get('platformId')?.value || "";
+        const platformUrl = form.get('platformUrl')?.value || "";
+        
+        // Only add competitor if platform is selected and has data
+        if (platform && (platformId || platformUrl)) {
+          if (platform === 'booking') {
+            bookingCompetitors.push({
+              bookingId: platformId || '',
+              bookingLink: platformUrl || ''
+            });
+          } else if (platform === 'airbnb') {
+            airbnbCompetitors.push({
+              airbnbId: platformId || '',
+              airbnbLink: platformUrl || ''
+            });
+          }
+          // Note: VRBO is not supported by the new API based on the curl example
+        }
+      }
+    }
+    
+    return { bookingCompetitors, airbnbCompetitors };
   }
 
   private getNewCompetitors(): any[] {
@@ -613,16 +707,14 @@ export class ListingComponent implements OnInit, OnDestroy {
     return newCompetitors;
   }
 
-  private saveListing(bookingCom: any, airbnb: any, vrbo: any, pricelab: any): void {
-    // For existing listings, only send newly created competitor IDs
+  private saveListing(bookingCom: any, airbnb: any, vrbo: any, pricelab: any): Promise<void> {
+    // For existing listings, don't send competitor IDs (they're added separately via new API)
     // For new listings, send all competitor IDs
     let competitorIdsToSend: string[] = [];
     
     if (this.isEdit && this.editingListingId) {
-      // When editing, only send newly created competitors (those that were created in this session)
-      competitorIdsToSend = this.competitorIds.filter(id => 
-        id && !id.startsWith('temp_') && !this.competitorOriginalById[id]
-      );
+      // When editing, don't send competitor IDs - they're added via addCompetitorsToProperty API
+      competitorIdsToSend = [];
     } else {
       // When creating new listing, send all competitor IDs
       competitorIdsToSend = this.competitorIds.filter(id => id && !id.startsWith('temp_'));
@@ -642,37 +734,38 @@ export class ListingComponent implements OnInit, OnDestroy {
       competitorIds: competitorIdsToSend,
     };
 
-    if (this.isEdit && this.editingListingId) {
-      this.propertiesService
-        .updateProperty(formData, this.editingListingId)
-        .pipe(finalize(() => (this.loading = false)))
-        .subscribe({
-          next: (res: any) => {
-            this.toastr.success("Listing updated successfully");
-            this.loadListings();
-            this.resetForm();
-            this.closeModal();
-          },
-          error: (error: any) => {
-            this.toastr.error("Failed to update listing");
-          },
-        });
-    } else {
-      this.propertiesService
-        .createProperty(formData)
-        .pipe(finalize(() => (this.loading = false)))
-        .subscribe({
-          next: (res: any) => {
-            this.toastr.success("Listing created successfully");
-            this.loadListings();
-            this.resetForm();
-            this.closeModal();
-          },
-          error: (error: any) => {
-            this.toastr.error("Failed to create listing");
-          },
-        });
-    }
+    return new Promise((resolve, reject) => {
+      if (this.isEdit && this.editingListingId) {
+        this.propertiesService
+          .updateProperty(formData, this.editingListingId)
+          .subscribe({
+            next: (res: any) => {
+              this.toastr.success("Listing updated successfully");
+              resolve();
+            },
+            error: (error: any) => {
+              reject(error);
+            },
+          });
+      } else {
+        this.propertiesService
+          .createProperty(formData)
+          .pipe(finalize(() => (this.loading = false)))
+          .subscribe({
+            next: (res: any) => {
+              this.toastr.success("Listing created successfully");
+              this.loadListings();
+              this.resetForm();
+              this.closeModal();
+              resolve();
+            },
+            error: (error: any) => {
+              this.toastr.error("Failed to create listing");
+              reject(error);
+            },
+          });
+      }
+    });
   }
 
   resetForm() {

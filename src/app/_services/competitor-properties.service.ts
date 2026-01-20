@@ -26,5 +26,13 @@ export class CompetitorPropertiesService {
     return this.http.get<any>(`${this._url}/get-competitors-by-property/${property_id}`);
   }
 
+  addCompetitorsToProperty(data: {
+    propertyId: string;
+    bookingCompetitors?: Array<{ bookingId: string; bookingLink: string }>;
+    airbnbCompetitors?: Array<{ airbnbId: string; airbnbLink: string }>;
+  }) {
+    return this.http.post<any>(`${this._url}/add-competitors-to-property`, data);
+  }
+
  
 }

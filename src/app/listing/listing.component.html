@@ -278,7 +278,7 @@
               <i class="fas fa-home me-2"></i>Listing Details
             </button>
           </li>
-          <li class="nav-item" role="presentation">
+          <li class="nav-item" role="presentation" *ngIf="isEdit">
             <button class="nav-link" id="competitors-tab" data-bs-toggle="tab" data-bs-target="#competitors"
               type="button" role="tab" aria-controls="competitors" aria-selected="false">
               <i class="fas fa-users me-2"></i>Competitors
@@ -390,7 +390,7 @@
           </div>
 
           <!-- Competitors Tab -->
-          <div class="tab-pane fade" id="competitors" role="tabpanel" aria-labelledby="competitors-tab">
+          <div class="tab-pane fade" id="competitors" role="tabpanel" aria-labelledby="competitors-tab" *ngIf="isEdit">
             <form [formGroup]="addListingForm">
            
 
