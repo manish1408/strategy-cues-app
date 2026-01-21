@@ -274,13 +274,15 @@
         <ul class="nav nav-tabs mb-3" id="listingTabs" role="tablist">
           <li class="nav-item" role="presentation">
             <button class="nav-link active" id="listing-tab" data-bs-toggle="tab" data-bs-target="#listing"
-              type="button" role="tab" aria-controls="listing" aria-selected="true">
+              type="button" role="tab" aria-controls="listing" aria-selected="true"
+              (click)="activeTab = 'listing'">
               <i class="fas fa-home me-2"></i>Listing Details
             </button>
           </li>
           <li class="nav-item" role="presentation" *ngIf="isEdit">
             <button class="nav-link" id="competitors-tab" data-bs-toggle="tab" data-bs-target="#competitors"
-              type="button" role="tab" aria-controls="competitors" aria-selected="false">
+              type="button" role="tab" aria-controls="competitors" aria-selected="false"
+              (click)="activeTab = 'competitors'">
               <i class="fas fa-users me-2"></i>Competitors
             </button>
           </li>
@@ -462,13 +464,22 @@
                 </div>
               </div>
 
-              <!-- Add Competitor Button -->
-              <div class="d-flex justify-content-end mt-3" *ngIf="!loadingCompetitors">
+              <!-- Add Competitor and Update Competitor Buttons -->
+              <div class="d-flex justify-content-between mt-3" *ngIf="!loadingCompetitors">
                 <button type="button" class="btn btn-primary" (click)="addCompetitor()"
                   [disabled]="savingCompetitor || hasCompetitorValidationErrors()">
                   <span *ngIf="savingCompetitor" class="spinner-border spinner-border-sm me-2" role="status"
                     aria-hidden="true"></span>
                   <i class="fas fa-plus me-1"></i>Add Competitor
+                </button>
+                <button type="button" class="btn d-flex align-items-center justify-content-center gap-2"
+                  style="background-color: #fcdf46; color: #000000; border-color: #fcdf46; font-weight: 500;"
+                  (click)="updateCompetitors()" [disabled]="updatingCompetitors || hasCompetitorValidationErrors()">
+                  <div *ngIf="updatingCompetitors" class="spinner-border spinner-border-sm" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                  <i *ngIf="!updatingCompetitors" class="fas fa-save me-1"></i>
+                  Update Competitor
                 </button>
               </div>
             </form>
@@ -479,7 +490,7 @@
         <button #closeButton data-bs-dismiss="modal" class="btn btn-outline-secondary" (click)="resetForm()">
           Cancel
         </button>
-        <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center gap-2"
+        <button *ngIf="activeTab !== 'competitors'" type="submit" class="btn btn-primary d-flex align-items-center justify-content-center gap-2"
           (click)="onSubmit()" [disabled]="loading">
           <div *ngIf="loading" class="spinner-border spinner-border-sm" role="status">
             <span class="visually-hidden">Loading...</span>
