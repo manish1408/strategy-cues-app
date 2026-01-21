@@ -2023,3 +2023,41 @@ thead th {
 .sync-dates {
   text-transform: capitalize !important;
 }
+
+// Update Competitor button styling - yellow with black text (same as Add Competitor button)
+.btn[style*="background-color: #fcdf46"] {
+  background-color: #fcdf46 !important;
+  color: #000000 !important;
+  border-color: #fcdf46 !important;
+  font-weight: 500 !important;
+  
+  &:hover:not(:disabled) {
+    background-color: #fbbf24 !important;
+    color: #000000 !important;
+    border-color: #fbbf24 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(252, 223, 70, 0.3);
+  }
+  
+  &:focus:not(:disabled) {
+    background-color: #fcdf46 !important;
+    color: #000000 !important;
+    border-color: #fcdf46 !important;
+    box-shadow: 0 0 0 0.2rem rgba(252, 223, 70, 0.5) !important;
+  }
+  
+  &:active:not(:disabled) {
+    background-color: #fbbf24 !important;
+    color: #000000 !important;
+    border-color: #fbbf24 !important;
+  }
+  
+  &:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+  
+  .spinner-border-sm {
+    border-color: #000000 transparent #000000 #000000 !important;
+  }
+}

@@ -37,6 +37,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   loading: boolean = false;
   loadingCompetitors: boolean = false;
   uploadingFile: boolean = false;
+  updatingCompetitors: boolean = false;
   
   // Data
   allListingList: any[] = [];
@@ -74,6 +75,9 @@ export class ListingComponent implements OnInit, OnDestroy {
   
   // Video help section
   showVideoHelp: boolean = false;
+  
+  // Active tab tracking
+  activeTab: string = 'listing'; // 'listing' or 'competitors'
   constructor(
     private toastr: ToastrService,
     private fb: FormBuilder,
@@ -131,7 +135,6 @@ export class ListingComponent implements OnInit, OnDestroy {
         // Load properties with the operatorId
         this.loadListings();
       });
-   
   }
  
 
@@ -388,6 +391,7 @@ export class ListingComponent implements OnInit, OnDestroy {
     if (listing && listing.id) {
       this.isEdit = true;
       this.editingListingId = listing.id;
+      this.activeTab = 'listing'; // Reset to listing tab when editing
       
       const formData = {
         bookingCom: {
@@ -519,18 +523,13 @@ export class ListingComponent implements OnInit, OnDestroy {
       this.loading = true;
       
       if (this.isEdit && this.editingListingId) {
-        // When editing: Save listing first, then add competitors using new API
+        // When editing: Only update the property, NOT competitors
+        // Competitors are updated separately via "Update Competitor" button
         this.saveListing(bookingCom, airbnb, vrbo, pricelab).then(() => {
-          // After listing is saved, add new competitors
-          this.addCompetitorsToProperty().then(() => {
-            this.loading = false;
-            this.loadListings();
-            this.resetForm();
-            this.closeModal();
-          }).catch((error) => {
-            this.loading = false;
-            this.toastr.error(error.message || "Failed to add competitors");
-          });
+          this.loading = false;
+          this.loadListings();
+          this.resetForm();
+          this.closeModal();
         }).catch((error) => {
           this.loading = false;
           this.toastr.error("Failed to update listing");
@@ -800,6 +799,7 @@ export class ListingComponent implements OnInit, OnDestroy {
     this.isEdit = false;
     this.editingListingId = null;
     this.showVideoHelp = false;
+    this.activeTab = 'listing'; // Reset to listing tab
   }
 
   closeModal() {
@@ -981,7 +981,41 @@ export class ListingComponent implements OnInit, OnDestroy {
     // Simply add a new blank competitor form
     this.addBlankCompetitorForm();
     
-    this.toastr.success('New competitor form added. Fill the details and click Update to save.');
+    this.toastr.success('New competitor form added. Fill the details and click Update Competitor to save.');
+  }
+
+  // Update competitors separately (only calls competitor API, not property API)
+  updateCompetitors(): void {
+    if (!this.isEdit || !this.editingListingId) {
+      this.toastr.error('Cannot update competitors. Property must be in edit mode.');
+      return;
+    }
+
+    // Check for validation errors
+    if (this.hasCompetitorValidationErrors()) {
+      this.toastr.error('Please fix validation errors before updating competitors.');
+      return;
+    }
+
+    // Check if there are any new competitors to add
+    const newCompetitors = this.getNewCompetitorsForProperty();
+    if (newCompetitors.bookingCompetitors.length === 0 && newCompetitors.airbnbCompetitors.length === 0) {
+      this.toastr.info('No new competitors to add. Add competitors using the "Add Competitor" button.');
+      return;
+    }
+
+    this.updatingCompetitors = true;
+    this.addCompetitorsToProperty().then(() => {
+      this.updatingCompetitors = false;
+      this.toastr.success('Competitors updated successfully');
+      // Reload competitor data to refresh the form
+      this.loadCompetitorData(this.editingListingId!);
+      // Reload listings to refresh the table
+      this.loadListings();
+    }).catch((error) => {
+      this.updatingCompetitors = false;
+      this.toastr.error(error.message || 'Failed to update competitors');
+    });
   }
 
   deleteCompetitor(index: number): void {
