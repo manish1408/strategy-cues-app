@@ -485,16 +485,7 @@
             <th style="text-align: center;" *ngIf="columnVisibility.stlyVarOcc">STLY <br />Var Occ</th>
             <th style="text-align: center;" *ngIf="columnVisibility.stlyVarRevPAR">STLY Var <br /> RevPAR</th>
             <th style="text-align: center;" *ngIf="columnVisibility.minRateThreshold">Min Rate <br /> Threshold</th>
-            <th style="text-align: center;" *ngIf="columnVisibility.occupancyDays">Occupancy Days<br />
-             <span class="th-sub">
-              <div class="d-flex align-items-center justify-content-center gap-2">
-                <div>7 Days</div>
-                <div class="d-divider"></div>
-                <div>30 Days</div>
-                <div class="d-divider"></div>
-                <div>60 Days</div>
-              </div>
-            </span></th>
+            <th style="text-align: center;" *ngIf="columnVisibility.occupancyDays">Occupancy Days</th>
             <th style="text-align: center;" *ngIf="columnVisibility.pickupOcc">Pick up Occ</th>
             <th *ngIf="columnVisibility.reviews">Reviews</th>
             <th *ngIf="columnVisibility.lastReviewScore">Last Review <br /> Score</th>
@@ -700,7 +691,7 @@
                 <div class="pickup-item"
                   *ngIf="property.Pick_Up_Occ && property.Pick_Up_Occ['7_Days'] !== null && property.Pick_Up_Occ['7_Days'] !== undefined">
                   <span class="pickup-label">7D:</span>
-                  <span class="pickup-value">{{ property.Pick_Up_Occ['7_Days'] }}</span>
+                  <span class="pickup-value">{{ property.Pick_Up_Occ['7_Days'] }}%</span>
                 </div>
                 <div class="pickup-item"
                   *ngIf="!property.Pick_Up_Occ || property.Pick_Up_Occ['7_Days'] === null || property.Pick_Up_Occ['7_Days'] === undefined">
@@ -711,7 +702,7 @@
                 <div class="pickup-item"
                   *ngIf="property.Pick_Up_Occ && property.Pick_Up_Occ['14_Days'] !== null && property.Pick_Up_Occ['14_Days'] !== undefined">
                   <span class="pickup-label">14D:</span>
-                  <span class="pickup-value">{{ property.Pick_Up_Occ['14_Days'] }}</span>
+                  <span class="pickup-value">{{ property.Pick_Up_Occ['14_Days'] }}%</span>
                 </div>
                 <div class="pickup-item"
                   *ngIf="!property.Pick_Up_Occ || property.Pick_Up_Occ['14_Days'] === null || property.Pick_Up_Occ['14_Days'] === undefined">
@@ -721,7 +712,7 @@
                 <div class="pickup-item"
                   *ngIf="property.Pick_Up_Occ && property.Pick_Up_Occ['30_Days'] !== null && property.Pick_Up_Occ['30_Days'] !== undefined">
                   <span class="pickup-label">30D:</span>
-                  <span class="pickup-value">{{ property.Pick_Up_Occ['30_Days'] }}</span>
+                  <span class="pickup-value">{{ property.Pick_Up_Occ['30_Days'] }}%</span>
                 </div>
                 <div class="pickup-item"
                   *ngIf="!property.Pick_Up_Occ || property.Pick_Up_Occ['30_Days'] === null || property.Pick_Up_Occ['30_Days'] === undefined">
