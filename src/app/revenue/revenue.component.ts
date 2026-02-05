@@ -3929,7 +3929,7 @@ export class RevenueComponent implements OnInit {
       // Booking structure: extract numbers from strings like "6 adults", "5 children"
       const adults = this.extractNumber(guestConfig.max_adults) || 0;
       const children = this.extractNumber(guestConfig.max_children) || 0;
-      const total = adults + children;
+      const total = this.extractNumber(guestConfig.max_guests) || 0;
 
       return `${total} (${adults}+${children})`;
     }
