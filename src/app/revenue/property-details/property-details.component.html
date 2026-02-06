@@ -306,64 +306,12 @@
 
       <!-- Platforms Tab -->
       <div *ngIf="activeTab === 'platforms'" class="tab-pane">
-        <div class="row" *ngIf="property.BookingCom || property.Airbnb">
-          <!-- Booking.com -->
-          <div class="col-lg-4 mb-4" *ngIf="property.BookingCom">
-            <div class="card platform-card">
-              <div class="card-header text-white">
-                <h5 class="mb-0"><i class="fas fa-bed me-2"></i>Booking.com</h5>
-              </div>
-              <div class="card-body">
-                <div class="platform-features">
-                  <div class="feature-item">
-                    <span class="feature-name">Weekly Discount</span>
-                    <span class="feature-status" *ngIf="property.BookingCom.Weekly !== null"
-                      [ngClass]="isFeatureEnabled(property.BookingCom.Weekly) ? 'enabled' : 'disabled'">
-                      <i class="fas"
-                        [ngClass]="isFeatureEnabled(property.BookingCom.Weekly) ? 'fa-check-circle' : 'fa-times-circle'"></i>
-                      {{ property.BookingCom.Weekly }}
-                    </span>
-                    <span class="feature-status" *ngIf="property.BookingCom.Weekly === null" style="color: #ccc;">
-                      <i class="fas fa-minus-circle"></i>
-                      -
-                    </span>
-                  </div>
-                  <div class="feature-item">
-                    <span class="feature-name">Monthly Discount</span>
-                    <span class="feature-status" *ngIf="property.BookingCom.Monthly !== null"
-                      [ngClass]="isFeatureEnabled(property.BookingCom.Monthly) ? 'enabled' : 'disabled'">
-                      <i class="fas"
-                        [ngClass]="isFeatureEnabled(property.BookingCom.Monthly) ? 'fa-check-circle' : 'fa-times-circle'"></i>
-                      {{ property.BookingCom.Monthly }}
-                    </span>
-                    <span class="feature-status" *ngIf="property.BookingCom.Monthly === null" style="color: #ccc;">
-                      <i class="fas fa-minus-circle"></i>
-                      -
-                    </span>
-                  </div>
-                  <div class="feature-item">
-                    <span class="feature-name">Last Minute Discount</span>
-                    <span class="feature-status" *ngIf="property.BookingCom.LM_Disc !== null"
-                      [ngClass]="isFeatureEnabled(property.BookingCom.LM_Disc) ? 'enabled' : 'disabled'">
-                      <i class="fas"
-                        [ngClass]="isFeatureEnabled(property.BookingCom.LM_Disc) ? 'fa-check-circle' : 'fa-times-circle'"></i>
-                      {{ property.BookingCom.LM_Disc }}
-                    </span>
-                    <span class="feature-status" *ngIf="property.BookingCom.LM_Disc === null" style="color: #ccc;">
-                      <i class="fas fa-minus-circle"></i>
-                      -
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Airbnb -->
+        <div class="row" *ngIf="property.Airbnb">
+          <!-- Airbnb Com -->
           <div class="col-lg-4 mb-4" *ngIf="property.Airbnb">
             <div class="card platform-card">
               <div class="card-header bg-danger text-white">
-                <h5 class="mb-0"><i class="fab fa-airbnb me-2"></i>Airbnb</h5>
+                <h5 class="mb-0"><i class="fab fa-airbnb me-2"></i>Airbnb Com</h5>
               </div>
               <div class="card-body">
                 <div class="platform-features">
@@ -382,31 +330,6 @@
                       {{ property.Airbnb.Monthly }}%
                     </span>
                     <span class="feature-status" *ngIf="property.Airbnb.Monthly === null" style="color: #ccc;">
-                      -
-                    </span>
-                  </div>
-                  <!-- <div class="feature-item">
-                    <span class="feature-name">Member Discount</span>
-                    <span class="feature-status" *ngIf="property.Airbnb.Member !== null" [ngClass]="'enabled'">
-                      <i class="fas fa-check-circle"></i>
-                      {{ property.Airbnb.Member }}
-                    </span>
-                    <span class="feature-status" *ngIf="property.Airbnb.Member === null" style="color: #ccc;">
-                      <i class="fas fa-minus-circle"></i>
-                      -
-                    </span>
-                  </div> -->
-                  <div class="feature-item">
-                    <span class="feature-name">Last Minute Discount</span>
-                    <span class="feature-status" *ngIf="property.Airbnb.LM_Disc !== null" [ngClass]="'enabled'">
-                      <span *ngIf="isObject(property.Airbnb.LM_Disc)">
-                        {{ property.Airbnb.LM_Disc.leadDays }} days, {{ property.Airbnb.LM_Disc.priceChange }}% off
-                      </span>
-                      <span *ngIf="!isObject(property.Airbnb.LM_Disc)">
-                        {{ property.Airbnb.LM_Disc }}
-                      </span>
-                    </span>
-                    <span class="feature-status" *ngIf="property.Airbnb.LM_Disc === null" style="color: #ccc;">
                       -
                     </span>
                   </div>
@@ -456,7 +379,7 @@
         </div>
 
         <!-- No Platform Data Available Message -->
-        <div class="row" *ngIf="!property.BookingCom && !property.Airbnb">
+        <div class="row" *ngIf="!property.Airbnb">
           <div class="col-12">
             <div class="card">
               <div class="card-body text-center py-5">
