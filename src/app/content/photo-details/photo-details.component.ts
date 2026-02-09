@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Location } from "@angular/common";
 // import photoComparisonData from "../../json_data/photo_comparison_data.json";
@@ -73,6 +73,10 @@ export class PhotoDetailsComponent implements OnInit {
   isPropertyGalleryVisible: boolean = true;
   isCompetitorGalleryVisible: boolean = true;
 
+  isCaptionsCollapsed = true;
+
+  @ViewChild('captionsList') captionsList!: ElementRef<HTMLDivElement>;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -88,6 +92,30 @@ export class PhotoDetailsComponent implements OnInit {
     this.operatorId = this.route.snapshot.queryParams["operatorId"] || "";
     this.loadPropertyCompetitors(this.propertyId);
     this.updateCompetitorPlatformImages();
+  }
+
+  toggleCaptions() {
+    const wasCollapsed = this.isCaptionsCollapsed;
+    this.isCaptionsCollapsed = !this.isCaptionsCollapsed;
+  
+    if (wasCollapsed && !this.isCaptionsCollapsed) {
+      setTimeout(() => {
+        if (this.captionsList?.nativeElement) {
+          const el = this.captionsList.nativeElement;
+  
+          // Adjust this if you have a fixed header (e.g. 80px)
+          const headerOffset = 120;
+  
+          const rect = el.getBoundingClientRect();
+          const scrollTop = window.scrollY + rect.top - headerOffset;
+  
+          window.scrollTo({
+            top: scrollTop,
+            behavior: 'smooth',
+          });
+        }
+      }, 0);
+    }
   }
 
   // Load property competitors from API
