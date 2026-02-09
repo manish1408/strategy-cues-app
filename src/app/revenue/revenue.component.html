@@ -556,7 +556,7 @@
                 </div>
               </div>
             </td>
-            <td class="text-center">
+            <td class="text-center" *ngIf="columnVisibility.sync">
               <input type="checkbox" [checked]="property?.Pricelabs_SyncStatus === true" disabled readonly class="form-check-input sync-checkbox">
             </td>
             <td *ngIf="columnVisibility.occupancyTM" style="text-align: center;">
