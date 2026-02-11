@@ -62,19 +62,6 @@ export class PropertyDetailsComponent implements OnInit {
       next: (res: any) => {
         if (res.success && res.data) {
           this.property = res.data;
-          
-          // Remove duplicates from CXL_Policy.Booking based on ratePlanName
-          if (this.property.CXL_Policy?.Booking) {
-            const seen = new Set();
-            this.property.CXL_Policy.Booking = this.property.CXL_Policy.Booking.filter((item: any) => {
-              if (seen.has(item.ratePlanName)) {
-                return false;
-              }
-              seen.add(item.ratePlanName);
-              return true;
-            });
-          }
-          
         } else {
           this.error = res.message || 'Property not found';
         }
@@ -265,5 +252,49 @@ export class PropertyDetailsComponent implements OnInit {
               this.property.Adult_Child_Config.Airbnb ||
               this.property.Adult_Child_Config.VRBO ||
               this.property.Adult_Child_Config.Pricelabs);
+  }
+
+  // Check if Booking adult/child config exists (array or object format)
+  hasBookingAdultChildConfig(): boolean {
+    const booking = this.property?.Adult_Child_Config?.Booking;
+    if (!booking) return false;
+    if (Array.isArray(booking)) return booking.length > 0;
+    return true;
+  }
+
+  // Check if Booking config is array format (new API structure)
+  isBookingConfigArray(): boolean {
+    return Array.isArray(this.property?.Adult_Child_Config?.Booking);
+  }
+
+  // Get Booking config as array (for *ngFor)
+  getBookingConfigArray(): any[] {
+    const booking = this.property?.Adult_Child_Config?.Booking;
+    if (Array.isArray(booking)) return booking;
+    return booking ? [booking] : [];
+  }
+
+  /**
+   * Format discount value - add % only for numeric data.
+   * When no data (null, undefined, empty, N/A), returns '-' without %.
+   */
+  formatDiscountDisplay(value: any): string {
+    if (value == null || value === '' || String(value).trim().toUpperCase() === 'N/A') {
+      return '-';
+    }
+    const num = Number(value);
+    if (!isNaN(num) && Number.isFinite(num)) {
+      return num + '%';
+    }
+    return String(value);
+  }
+
+  /** Returns true if value is valid numeric data (for styling) */
+  hasValidNumericDiscount(value: any): boolean {
+    if (value == null || value === '' || String(value).trim().toUpperCase() === 'N/A') {
+      return false;
+    }
+    const num = Number(value);
+    return !isNaN(num) && Number.isFinite(num);
   }
 }

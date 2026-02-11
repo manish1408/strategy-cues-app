@@ -412,6 +412,37 @@
           font-weight: 600;
         }
       }
+
+      .policy-with-rooms {
+        .policy-rooms {
+          padding-top: 0.5rem;
+          border-top: 1px solid #e9ecef;
+
+          .room-info {
+            padding: 0.25rem 0;
+            color: #6c757d;
+          }
+        }
+      }
+    }
+
+    .booking-room-config-row {
+      .booking-room-config-col {
+        flex: 0 0 auto;
+      }
+    }
+
+    .booking-room-table {
+      margin-bottom: 0;
+
+      .booking-room-id-header {
+        background-color: #f8f9fa;
+        font-weight: 600;
+        color: #495057;
+        font-size: 0.9rem;
+        text-align: left;
+        padding: 0.5rem 0.75rem;
+      }
     }
 
     .guest-config-display {

@@ -878,25 +878,7 @@
             </td>
             <td *ngIf="columnVisibility.cxlPolicy">
               <div class="cxl-policy-cell">
-                <!-- Booking.com Policy -->
-                <div class="policy-item" *ngIf="hasBookingPolicies(property.CXL_Policy?.Booking)">
-                  <i class="fas fa-bed"></i>
-                  <div class="policy-details">
-                    <!-- Handle array format - show only first policy -->
-                    <div *ngIf="property.CXL_Policy?.Booking.length > 0" class="policy-type">
-                      <div class="policy-item-row">
-                        {{property.CXL_Policy?.Booking[0]?.ratePlanName}}
-                        ({{property.CXL_Policy?.Booking[0]?.policyInfo?.name}})</div>
-                    </div>
-
-                  </div>
-                </div>
-                <div class="policy-item no-policy" *ngIf="!hasBookingPolicies(property.CXL_Policy?.Booking)">
-                  <i class="fas fa-bed text-muted"></i>
-                  <span class="no-policy-type" style="font-size: var(--font-size-xs);">No policy</span>
-                </div>
-
-                <!-- Airbnb Policy -->
+                <!-- Airbnb Policy Only (Booking.com policies shown in deep dive) -->
                 <div class="policy-item" *ngIf="hasValidAirbnbPolicy(property.CXL_Policy?.Airbnb)">
                   <i class="fab fa-airbnb text-danger"></i>
                   <div class="policy-details">
@@ -927,11 +909,7 @@
             </td>
             <td *ngIf="columnVisibility.adultChildConfig">
               <div class="adult-child-config-cell">
-                <div class="config-item" *ngIf="property.Adult_Child_Config?.Booking">
-                  <i class="fas fa-bed "></i>
-                  <span class="config-text">Max guests: {{ formatGuestConfig(property.Adult_Child_Config.Booking)
-                    }}</span>
-                </div>
+                <!-- Airbnb Only (Booking.com config shown in deep dive) -->
                 <div class="config-item" *ngIf="property.Adult_Child_Config?.Airbnb">
                   <i class="fab fa-airbnb text-danger"></i>
                   <span class="config-text">Max guests: {{ formatGuestConfig(property.Adult_Child_Config.Airbnb)
@@ -942,7 +920,7 @@
                   <span class="config-text">Max guests: {{ formatGuestConfig(property.Adult_Child_Config.VRBO) }}</span>
                 </div> -->
                 <div class="no-config-text"
-                  *ngIf="!property.Adult_Child_Config?.Booking && !property.Adult_Child_Config?.Airbnb && !property.Adult_Child_Config?.VRBO">
+                  *ngIf="!property.Adult_Child_Config?.Airbnb">
                   <small class="text-muted" style="font-size: var(--font-size-xs);">No configuration</small>
                 </div>
               </div>
