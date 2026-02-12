@@ -317,20 +317,16 @@
                 <div class="platform-features">
                   <div class="feature-item">
                     <span class="feature-name">Weekly Discount</span>
-                    <span class="feature-status" *ngIf="property.Airbnb.Weekly !== null" [ngClass]="'enabled'">
-                      {{ property.Airbnb.Weekly }}%
-                    </span>
-                    <span class="feature-status" *ngIf="property.Airbnb.Weekly === null" style="color: #ccc;">
-                      -
+                    <span class="feature-status" [ngClass]="hasValidNumericDiscount(property.Airbnb?.Weekly) ? 'enabled' : ''"
+                      [style.color]="!hasValidNumericDiscount(property.Airbnb?.Weekly) ? '#ccc' : null">
+                      {{ formatDiscountDisplay(property.Airbnb?.Weekly) }}
                     </span>
                   </div>
                   <div class="feature-item">
                     <span class="feature-name">Monthly Discount</span>
-                    <span class="feature-status" *ngIf="property.Airbnb.Monthly !== null" [ngClass]="'enabled'">
-                      {{ property.Airbnb.Monthly }}%
-                    </span>
-                    <span class="feature-status" *ngIf="property.Airbnb.Monthly === null" style="color: #ccc;">
-                      -
+                    <span class="feature-status" [ngClass]="hasValidNumericDiscount(property.Airbnb?.Monthly) ? 'enabled' : ''"
+                      [style.color]="!hasValidNumericDiscount(property.Airbnb?.Monthly) ? '#ccc' : null">
+                      {{ formatDiscountDisplay(property.Airbnb?.Monthly) }}
                     </span>
                   </div>
                 </div>
@@ -402,8 +398,8 @@
                 <!-- Cancellation Policies Section -->
                 <div *ngIf="hasCancellationPolicies()" class="mb-4">
                   <div class="row">
-                    <!-- Booking.com Policies -->
-                    <div *ngIf="property.CXL_Policy.Booking && property.CXL_Policy.Booking.length > 0" class="col-md-6 col-lg-4 mb-3">
+                    <!-- Booking.com Policies (with Room ID and Room Name) -->
+                    <div *ngIf="property.CXL_Policy.Booking && property.CXL_Policy.Booking.length > 0" class="col-12 mb-3">
                       <div class="policy-card">
                         <div class="policy-platform-header">
                           <span class="platform-name">
@@ -413,7 +409,7 @@
                         </div>
                         <div class="row">
                           <div class="col-md-6 col-lg-4 mb-3" *ngFor="let policy of property.CXL_Policy.Booking">
-                            <div class="">
+                            <div class="policy-with-rooms">
                               <div class="policy-header">
                                 <span class="policy-type badge badge-primary">
                                   {{ policy.ratePlanName }}
@@ -423,6 +419,12 @@
                                 <small>
                                   {{ policy.policyInfo?.name }}
                                 </small>
+                              </div>
+                              <!-- Room IDs and Names from rooms array -->
+                              <div class="policy-rooms mt-2" *ngIf="policy.rooms && policy.rooms.length > 0">
+                                <div class="room-info small" *ngFor="let room of policy.rooms">
+                                  <strong>Room ID:</strong> {{ room.id }} &nbsp;|&nbsp; <strong>Room Name:</strong> {{ room.name || 'N/A' }}
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -496,34 +498,82 @@
                 <div *ngIf="hasGuestConfig()" class="guest-config-section">
                   <h6 class="mb-3"><i class="fas fa-users me-2"></i>Guest Configuration</h6>
                   <div class="row">
-                    <!-- Booking.com Guest Config -->
-                    <div class="col-md-6 col-lg-4 mb-3" *ngIf="property.Adult_Child_Config.Booking">
+                    <!-- Booking.com Guest Config (table per room in array) -->
+                    <div class="col-12 mb-3" *ngIf="hasBookingAdultChildConfig()">
                       <div class="guest-config-card">
                         <div class="guest-config-header">
                           <i class="fas fa-bed me-2"></i>
                           <strong>Booking.com</strong>
                         </div>
                         <div class="guest-config-content">
-                          <div class="guest-details">
-                            <div class="guest-item">
-                              <i class="fas fa-users me-2"></i>
-                              <strong>Max Guests:</strong> {{ property.Adult_Child_Config.Booking.max_guests }}
+                          <!-- Array format: table for each room object (max 3 per row, horizontal) -->
+                          <ng-container *ngIf="isBookingConfigArray()">
+                            <div class="row booking-room-config-row">
+                              <div class="col-md-4 mb-3 booking-room-config-col" *ngFor="let roomConfig of getBookingConfigArray()">
+                                <table class="table table-sm table-bordered booking-room-table">
+                                  <thead>
+                                    <tr>
+                                      <th colspan="2" class="booking-room-id-header">Room id - {{ roomConfig.id }}</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr>
+                                      <td><strong>Max Guests</strong></td>
+                                      <td>{{ roomConfig.max_guests ?? 'N/A' }}</td>
+                                    </tr>
+                                    <tr>
+                                      <td><strong>Max Adults</strong></td>
+                                      <td>{{ roomConfig.max_adults ?? 'N/A' }}</td>
+                                    </tr>
+                                    <tr>
+                                      <td><strong>Max Children</strong></td>
+                                      <td>{{ roomConfig.max_children ?? 'N/A' }}</td>
+                                    </tr>
+                                    <tr *ngIf="roomConfig.max_infants !== undefined && roomConfig.max_infants !== null">
+                                      <td><strong>Max Infants</strong></td>
+                                      <td>{{ roomConfig.max_infants }}</td>
+                                    </tr>
+                                    <tr>
+                                      <td><strong>Room Count</strong></td>
+                                      <td>{{ roomConfig.room_count ?? 'N/A' }}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
                             </div>
-                            <div class="guest-item">
-                              <i class="fas fa-user me-2"></i>
-                              <strong>Max Adults:</strong> {{ property.Adult_Child_Config.Booking.max_adults }}
-                            </div>
-                            <div class="guest-item">
-                              <i class="fas fa-child me-2"></i>
-                              <strong>Max Children:</strong> {{ property.Adult_Child_Config.Booking.max_children }}
-                            </div>
-                            <div class="guest-item" *ngIf="property.Adult_Child_Config.Booking.max_infants">
-                              <i class="fas fa-baby me-2"></i>
-                              <strong>Max Infants:</strong> {{ property.Adult_Child_Config.Booking.max_infants }}
-                            </div>
-                            <div class="guest-item">
-                              <i class="fas fa-door-open me-2"></i>
-                              <strong>Room Count:</strong> {{ property.Adult_Child_Config.Booking.room_count }}
+                          </ng-container>
+                          <!-- Legacy object format (backward compatibility) -->
+                          <div class="row" *ngIf="!isBookingConfigArray() && property.Adult_Child_Config.Booking">
+                            <div class="col-md-4 mb-3">
+                            <table class="table table-sm table-bordered booking-room-table">
+                              <thead>
+                                <tr>
+                                  <th colspan="2" class="booking-room-id-header">Room id - {{ property.Adult_Child_Config.Booking.id || 'N/A' }}</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td><strong>Max Guests</strong></td>
+                                  <td>{{ property.Adult_Child_Config.Booking.max_guests ?? 'N/A' }}</td>
+                                </tr>
+                                <tr>
+                                  <td><strong>Max Adults</strong></td>
+                                  <td>{{ property.Adult_Child_Config.Booking.max_adults ?? 'N/A' }}</td>
+                                </tr>
+                                <tr>
+                                  <td><strong>Max Children</strong></td>
+                                  <td>{{ property.Adult_Child_Config.Booking.max_children ?? 'N/A' }}</td>
+                                </tr>
+                                <tr *ngIf="property.Adult_Child_Config.Booking.max_infants !== undefined && property.Adult_Child_Config.Booking.max_infants !== null">
+                                  <td><strong>Max Infants</strong></td>
+                                  <td>{{ property.Adult_Child_Config.Booking.max_infants }}</td>
+                                </tr>
+                                <tr>
+                                  <td><strong>Room Count</strong></td>
+                                  <td>{{ property.Adult_Child_Config.Booking.room_count ?? 'N/A' }}</td>
+                                </tr>
+                              </tbody>
+                            </table>
                             </div>
                           </div>
                         </div>
