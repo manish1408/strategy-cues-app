@@ -2024,6 +2024,67 @@ thead th {
   text-transform: capitalize !important;
 }
 
+// Search Competitor tab - black text and borders
+.search-competitor-results {
+  .search-competitor-results-title {
+    color: #000 !important;
+  }
+
+  .search-competitor-card {
+    border: 1px solid #000;
+    color: #000;
+
+    .search-competitor-card-inner {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .search-competitor-img-wrap {
+      flex-shrink: 0;
+      width: 80px;
+      height: 80px;
+      overflow: hidden;
+      border-radius: 0.25rem 0 0 0.25rem;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .search-competitor-info {
+      flex: 1;
+      min-width: 0;
+      padding: 0.5rem 0.75rem 0.5rem 0;
+    }
+
+    .search-competitor-booking-id,
+    .search-competitor-name {
+      color: #000 !important;
+      font-size: 0.875rem;
+      line-height: 1.4;
+    }
+
+    .search-competitor-name {
+      font-weight: 600;
+    }
+  }
+}
+
+// Hotel Details modal photos
+.hotel-detail-photo {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
 // Update Competitor button styling - yellow with black text (same as Add Competitor button)
 .btn[style*="background-color: #fcdf46"] {
   background-color: #fcdf46 !important;

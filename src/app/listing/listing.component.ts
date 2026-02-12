@@ -77,7 +77,19 @@ export class ListingComponent implements OnInit, OnDestroy {
   showVideoHelp: boolean = false;
   
   // Active tab tracking
-  activeTab: string = 'listing'; // 'listing' or 'competitors'
+  activeTab: string = 'listing'; // 'listing', 'competitors', or 'searchCompetitor'
+
+  // Search Competitor tab
+  searchCompetitorLocation: string = '';
+  searchCompetitorResults: Array<{ hotel_id: number; name: string; photo_url: string }> = [];
+  searchingCompetitor: boolean = false;
+  searchCompetitorSearched: boolean = false;
+
+  // Hotel Details modal
+  hotelDetailsData: { name: string; url: string; photos: string[]; rating_score?: number } | null = null;
+  hotelDetailsError: string | null = null;
+  loadingHotelDetails: boolean = false;
+  selectedHotelForDetails: { hotel_id: number; name: string } | null = null;
   constructor(
     private toastr: ToastrService,
     private fb: FormBuilder,
@@ -800,6 +812,9 @@ export class ListingComponent implements OnInit, OnDestroy {
     this.editingListingId = null;
     this.showVideoHelp = false;
     this.activeTab = 'listing'; // Reset to listing tab
+    this.searchCompetitorLocation = '';
+    this.searchCompetitorResults = [];
+    this.searchCompetitorSearched = false;
   }
 
   closeModal() {
@@ -1281,6 +1296,117 @@ export class ListingComponent implements OnInit, OnDestroy {
       'pricelab': 'fas fa-chart-line'
     };
     return platformIcons[platform] || 'fas fa-globe';
+  }
+
+  // Search Competitor by location
+  searchCompetitorByLocation(): void {
+    const query = this.searchCompetitorLocation?.trim();
+    if (!query) {
+      this.toastr.info('Please enter a location to search');
+      return;
+    }
+
+    this.searchingCompetitor = true;
+    this.searchCompetitorSearched = true;
+    this.searchCompetitorResults = [];
+
+    this.competitorPropertiesService.searchByLocation(query).subscribe({
+      next: (response: any) => {
+        if (response.success && response.data?.hotels) {
+          this.searchCompetitorResults = response.data.hotels;
+        } else {
+          this.searchCompetitorResults = [];
+        }
+        this.searchingCompetitor = false;
+      },
+      error: (error: any) => {
+        console.error('Error searching competitors by location:', error);
+        this.toastr.error('Failed to search hotels. Please try again.');
+        this.searchCompetitorResults = [];
+        this.searchingCompetitor = false;
+      }
+    });
+  }
+
+  onSearchCompetitorImageError(event: any): void {
+    event.target.src = 'assets/images/placeholder.jpg';
+  }
+
+  openHotelDetailsModal(hotel: { hotel_id: number; name: string; photo_url: string }): void {
+    this.selectedHotelForDetails = { hotel_id: hotel.hotel_id, name: hotel.name };
+    this.hotelDetailsData = null;
+    this.hotelDetailsError = null;
+    this.loadingHotelDetails = true;
+
+    const modalElement = document.getElementById('hotelDetailsModal');
+    if (modalElement) {
+      const modal = new (window as any).bootstrap.Modal(modalElement);
+      modal.show();
+    }
+
+    this.competitorPropertiesService.getHotelDetails(hotel.hotel_id).subscribe({
+      next: (response: any) => {
+        if (response.success && response.data) {
+          this.hotelDetailsData = {
+            name: response.data.name || '',
+            url: response.data.url || '',
+            photos: response.data.photos || [],
+            rating_score: response.data.rating_score
+          };
+        } else {
+          this.hotelDetailsError = 'No property details available';
+        }
+        this.loadingHotelDetails = false;
+      },
+      error: (error: any) => {
+        console.error('Error loading hotel details:', error);
+        this.hotelDetailsError = 'Failed to load property details. Please try again.';
+        this.loadingHotelDetails = false;
+      }
+    });
+  }
+
+  addCompetitorFromHotelDetails(): void {
+    if (!this.hotelDetailsData || !this.selectedHotelForDetails) {
+      this.toastr.error('No property selected to add');
+      return;
+    }
+
+    const hotelId = this.selectedHotelForDetails.hotel_id.toString();
+    const hotelUrl = this.hotelDetailsData.url || '';
+
+    const competitorForm = this.createCompetitorForm();
+    competitorForm.patchValue({
+      platform: 'booking',
+      platformId: hotelId,
+      platformUrl: hotelUrl
+    });
+    this.competitorsFormArray.push(competitorForm);
+    this.competitorIds.push('temp_' + Date.now() + '_' + this.competitorsFormArray.length);
+
+    this.toastr.success('Added as Booking competitor. Click "Update Competitor" to save.');
+    this.activeTab = 'competitors';
+
+    const competitorsTabTrigger = document.querySelector('#competitors-tab') as HTMLElement;
+    if (competitorsTabTrigger) {
+      const tab = new (window as any).bootstrap.Tab(competitorsTabTrigger);
+      tab.show();
+    }
+
+    const hotelDetailsModalElement = document.getElementById('hotelDetailsModal');
+    if (hotelDetailsModalElement) {
+      const modal = (window as any).bootstrap.Modal.getInstance(hotelDetailsModalElement);
+      if (modal) {
+        modal.hide();
+      }
+    }
+
+    this.hotelDetailsData = null;
+    this.selectedHotelForDetails = null;
+  }
+
+  onHotelDetailPhotoError(event: any): void {
+    event.target.src = 'assets/images/placeholder.jpg';
   }
 
   onPlatformChange(competitorIndex: number, event: any): void {
