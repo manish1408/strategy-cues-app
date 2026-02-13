@@ -1146,6 +1146,11 @@ export class ListingComponent implements OnInit, OnDestroy {
         const competitors = response?.data?.competitors || response?.competitors || response;
         
         if (competitors && competitors.length > 0) {
+          while (this.competitorsFormArray.length !== 0) {
+            this.competitorsFormArray.removeAt(0);
+          }
+          this.competitorIds = [];
+          this.competitorOriginalById = {};
           // Populate forms with existing competitor data
           competitors.forEach((competitor: any, index: number) => {
             const competitorForm = this.createCompetitorForm();
@@ -1166,7 +1171,7 @@ export class ListingComponent implements OnInit, OnDestroy {
           });
           
           // Always add a blank form after loading existing competitors
-          this.addBlankCompetitorForm();
+          // this.addBlankCompetitorForm();
         } else {
           // No existing competitors, add one blank form
           this.addBlankCompetitorForm();
