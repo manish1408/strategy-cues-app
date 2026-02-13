@@ -286,6 +286,13 @@
               <i class="fas fa-users me-2"></i>Competitors
             </button>
           </li>
+          <li class="nav-item" role="presentation" *ngIf="isEdit">
+            <button class="nav-link" id="search-competitor-tab" data-bs-toggle="tab" data-bs-target="#searchCompetitor"
+              type="button" role="tab" aria-controls="searchCompetitor" aria-selected="false"
+              (click)="activeTab = 'searchCompetitor'">
+              <i class="fas fa-search me-2"></i>Search Competitor
+            </button>
+          </li>
         </ul>
 
         <!-- Tab Content -->
@@ -484,13 +491,76 @@
               </div>
             </form>
           </div>
+
+          <!-- Search Competitor Tab -->
+          <div class="tab-pane fade" id="searchCompetitor" role="tabpanel" aria-labelledby="search-competitor-tab" *ngIf="isEdit">
+            <div class="mb-3">
+              <label class="form-label">Location</label>
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Enter location to search (e.g., Pune)" [(ngModel)]="searchCompetitorLocation"
+                  (keyup.enter)="searchCompetitorByLocation()">
+                <button class="btn btn-primary" type="button" (click)="searchCompetitorByLocation()"
+                  [disabled]="searchingCompetitor || !searchCompetitorLocation.trim()">
+                  <span *ngIf="searchingCompetitor" class="spinner-border spinner-border-sm me-1" role="status"></span>
+                  <i *ngIf="!searchingCompetitor" class="fas fa-search me-1"></i>
+                  Search
+                </button>
+              </div>
+            </div>
+
+            <!-- Loading state for search -->
+            <div *ngIf="searchingCompetitor" class="text-center py-4 loading-state">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Searching...</span>
+              </div>
+              <p class="mt-2 text-muted">Searching hotels...</p>
+            </div>
+
+            <!-- Search results -->
+            <div *ngIf="!searchingCompetitor && searchCompetitorResults.length > 0" class="search-competitor-results">
+              <h6 class="mb-3 search-competitor-results-title">Search Results ({{ searchCompetitorResults.length }} hotels)</h6>
+              <div class="row g-2">
+                <div *ngFor="let hotel of searchCompetitorResults" class="col-12 col-md-6">
+                  <div class="card search-competitor-card h-100">
+                    <div class="search-competitor-card-inner">
+                      <div class="search-competitor-img-wrap">
+                        <img [src]="hotel.photo_url || 'assets/images/placeholder.jpg'" [alt]="hotel.name"
+                          class="img-fluid"
+                          (error)="onSearchCompetitorImageError($event)">
+                      </div>
+                      <div class="search-competitor-info">
+                        <div class="search-competitor-booking-id">Booking ID: {{ hotel.hotel_id }}</div>
+                        <div class="search-competitor-name text-truncate" [title]="hotel.name">{{ hotel.name }}</div>
+                        <button type="button" class="btn btn-sm btn-outline-primary mt-2"
+                          (click)="openHotelDetailsModal(hotel)">
+                          <i class="fas fa-info-circle me-1"></i>Check Property Details
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- No results / Empty state -->
+            <div *ngIf="!searchingCompetitor && searchCompetitorSearched && searchCompetitorResults.length === 0"
+              class="text-center py-4 loading-state">
+              <i class="fas fa-hotel fa-2x mb-2 text-muted"></i>
+              <p class="text-muted mb-0">No hotels found for this location. Try a different search term.</p>
+            </div>
+
+            <div *ngIf="!searchingCompetitor && !searchCompetitorSearched" class="text-center py-4 loading-state">
+              <i class="fas fa-search fa-2x mb-2 text-muted"></i>
+              <p class="text-muted mb-0">Enter a location and click Search to find competitor hotels.</p>
+            </div>
+          </div>
         </div>
       </div>
       <div class="modal-footer d-flex justify-content-end">
         <button #closeButton data-bs-dismiss="modal" class="btn btn-outline-secondary" (click)="resetForm()">
           Cancel
         </button>
-        <button *ngIf="activeTab !== 'competitors'" type="submit" class="btn btn-primary d-flex align-items-center justify-content-center gap-2"
+        <button *ngIf="activeTab !== 'competitors' && activeTab !== 'searchCompetitor'" type="submit" class="btn btn-primary d-flex align-items-center justify-content-center gap-2"
           (click)="onSubmit()" [disabled]="loading">
           <div *ngIf="loading" class="spinner-border spinner-border-sm" role="status">
             <span class="visually-hidden">Loading...</span>
@@ -564,6 +634,62 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Hotel Details Modal -->
+<div class="modal fade" id="hotelDetailsModal" tabindex="-1" aria-labelledby="hotelDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="hotelDetailsModalLabel">Property Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="loadingHotelDetails" class="text-center py-5">
+          <div class="spinner-border text-primary mb-3" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="text-muted">Loading property details...</p>
+        </div>
+
+        <div *ngIf="!loadingHotelDetails && hotelDetailsData">
+          <div class="mb-3">
+            <label class="form-label text-muted small">Name</label>
+            <div class="fw-semibold text-dark">{{ hotelDetailsData.name }}</div>
+          </div>
+          <div class="mb-3" *ngIf="hotelDetailsData.url">
+            <label class="form-label text-muted small">URL</label>
+            <div>
+              <a [href]="hotelDetailsData.url" target="_blank" rel="noopener noreferrer">{{ hotelDetailsData.url }}</a>
+            </div>
+          </div>
+          <div class="mb-3" *ngIf="hotelDetailsData.rating_score">
+            <label class="form-label text-muted small">Rating Score</label>
+            <div class="fw-semibold text-dark">{{ hotelDetailsData.rating_score }}</div>
+          </div>
+          <div class="mb-3" *ngIf="hotelDetailsData.photos?.length">
+            <label class="form-label text-muted small">Photos</label>
+            <div class="d-flex flex-wrap gap-2">
+              <img *ngFor="let photo of hotelDetailsData.photos" [src]="photo" alt="Hotel photo"
+                class="hotel-detail-photo rounded"
+                (error)="onHotelDetailPhotoError($event)">
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="!loadingHotelDetails && hotelDetailsError" class="text-center py-4">
+          <i class="fas fa-exclamation-triangle text-warning fa-2x mb-2"></i>
+          <p class="text-muted">{{ hotelDetailsError }}</p>
+        </div>
+      </div>
+      <div class="modal-footer" *ngIf="!loadingHotelDetails && hotelDetailsData">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="addCompetitorFromHotelDetails()">
+          <i class="fas fa-plus me-1"></i>Add Competitor
+        </button>
       </div>
     </div>
   </div>
