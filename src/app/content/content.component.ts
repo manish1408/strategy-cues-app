@@ -421,11 +421,11 @@ export class ContentComponent implements OnInit, OnDestroy {
   // }
 
   // Review count methods
-  getAirbnbReviewCount(property: any): { count: number; score: number } {
+  getAirbnbReviewCount(property: any): { count: number; score: number; displayCount: string } {
     return this.createReviewCountResponse(property.airbnbReviews?.total || 0, property.airbnbReviews?.score || 0);
   }
 
-  getBookingReviewCount(property: any): { count: number; score: number } {
+  getBookingReviewCount(property: any): { count: number; score: number; displayCount: string } {
     return this.createReviewCountResponse(property.bookingReviews?.total || 0, property.bookingReviews?.score || 0);
   }
 
@@ -434,10 +434,13 @@ export class ContentComponent implements OnInit, OnDestroy {
   //   return this.createReviewCountResponse(0, 0);
   // }
 
-  private createReviewCountResponse(count: number, score: number): { count: number; score: number } {
+  private createReviewCountResponse(count: number, score: number): { count: number; score: number; displayCount: string } {
+    const numericCount = count || 0;
+    const displayCount = numericCount > 2499 ? '2500+' : String(numericCount);
     return {
-      count: count || 0,
-      score: score || 0
+      count: numericCount,
+      score: score || 0,
+      displayCount
     };
   }
 

@@ -183,7 +183,7 @@
                             </div>
                             <div class="review-info">
                               <div class="review-count">
-                                <span class="count-number">{{getAirbnbReviewCount(property).count}}</span>
+                                <span class="count-number">{{getAirbnbReviewCount(property).displayCount}}</span>
                                 <span class="count-label">reviews</span>
                               </div>
                               <div class="review-score" *ngIf="getAirbnbReviewCount(property).score > 0">
@@ -205,7 +205,7 @@
                             </div>
                             <div class="review-info">
                               <div class="review-count">
-                                <span class="count-number">{{getBookingReviewCount(property).count}}</span>
+                                <span class="count-number">{{getBookingReviewCount(property).displayCount}}</span>
                                 <span class="count-label">reviews</span>
                               </div>
                               <div class="review-score" *ngIf="getBookingReviewCount(property).score > 0">
