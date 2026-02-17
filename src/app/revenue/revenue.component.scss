@@ -61,6 +61,10 @@ $transition: all 0.3s ease;
     color: $danger-color !important;
   }
 
+  .text-booking {
+    color: #003580 !important; // Booking.com blue - matches other policy/config icons
+  }
+
   .text-muted {
     color: #6c757d !important;
   }

@@ -447,6 +447,38 @@ export class RevenueComponent implements OnInit {
     return !!(airbnbData.type || airbnbData.description || airbnbData.free_cancellation_until);
   }
 
+  hasValidBookingPolicy(bookingData: any): boolean {
+    if (!bookingData) return false;
+    if (Array.isArray(bookingData)) {
+      return bookingData.length > 0;
+    }
+    return typeof bookingData === 'string' && bookingData.trim() !== '';
+  }
+
+  getBookingPolicyDisplayText(property: any): string {
+    const booking = property?.CXL_Policy?.Booking;
+    if (!booking) return '';
+    if (Array.isArray(booking) && booking.length > 0) {
+      const policy = booking[0];
+      const name = policy?.policyInfo?.name;
+      const ratePlanName = policy?.ratePlanName;
+      if (name && ratePlanName) {
+        return `${name} (${ratePlanName})`;
+      }
+      return name || ratePlanName || '';
+    }
+    return typeof booking === 'string' ? booking : '';
+  }
+
+  getBookingConfigForDisplay(property: any): any {
+    const booking = property?.Adult_Child_Config?.Booking;
+    if (!booking) return null;
+    if (Array.isArray(booking) && booking.length > 0) {
+      return booking[0];
+    }
+    return booking;
+  }
+
   ngOnInit(): void {
     // First try to get operatorId from query parameters
     this.route.queryParams.subscribe(params => {
