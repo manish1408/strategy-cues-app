@@ -10,13 +10,6 @@
   </div>
 
   <div class="row">
-    <div class="col-1" *ngIf="!isLoading">
-      <button class="btn btn-outline-secondary mb-3" (click)="goBack()">
-        <i class="fas fa-arrow-left"></i> Back
-      </button>
-
-
-    </div>
     <div class="col-7">
       <h1 class="property-title pull-left" style="line-height: 40px;" [innerHtml]="propertyData?.Listing_Name"></h1>
     </div>
