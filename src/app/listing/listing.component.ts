@@ -246,20 +246,22 @@ export class ListingComponent implements OnInit, OnDestroy {
   initializePropertyStatuses(properties: any[]) {
     // Initialize property statuses from the main API response
     properties.forEach((property: any) => {
-      if (property.id && this.operatorId) {
-        const apiStatus = property.urls?.status || 'pending';
-        
-        this.propertyStatuses[property.id] = {
-          propertyId: property.id,
+      // Search API returns _id, main listings API returns id
+      const propertyId = property._id || property.id;
+      // Search API may have status at top level; main API has it under urls
+      const apiStatus = property.urls?.status || property.status || 'pending';
+  
+      if (propertyId && this.operatorId) {
+        this.propertyStatuses[propertyId] = {
+          propertyId: propertyId,
           operatorId: this.operatorId!,
           syncStatus: apiStatus,
           mappingStatus: apiStatus,
           lastUpdated: new Date()
         };
-        
-        // Start polling if any operation is in progress
+  
         if (apiStatus === 'scraping_in_progress' || apiStatus === 'mapping_in_progress') {
-          this.startStatusPolling(property.id);
+          this.startStatusPolling(propertyId);
         }
       }
     });
@@ -892,6 +894,7 @@ export class ListingComponent implements OnInit, OnDestroy {
                 }
               }));
               
+              this.propertyStatuses = {};
               // Initialize property statuses for search results
               this.initializePropertyStatuses(response.data.properties);
               
