@@ -258,6 +258,40 @@ export class UserManagementComponent {
     });
   }
 
+  deleteUser(userId: string) {
+    if (!userId) {
+      this.toastr.error("Invalid user");
+      return;
+    }
+    this.toastService.showConfirm(
+      "Are you sure?",
+      "Delete the selected user?",
+      "Yes, delete it!",
+      "No, cancel",
+      () => {
+        this.authService
+          .deleteUser(userId)
+          .pipe(finalize(() => (this.loading = false)))
+          .subscribe({
+            next: (res: any) => {
+              if (res.success) {
+                this.toastr.success("User deleted successfully");
+                this.loadOperatorsAndUser();
+              } else {
+                this.toastr.error(res?.detail || res?.error || "Failed to delete user");
+              }
+            },
+            error: (err: any) => {
+              this.toastr.error(err?.error?.detail?.error || err?.error?.detail || err?.error?.error || "Failed to delete user");
+            },
+          });
+      },
+      () => {
+        // Cancel callback
+      }
+    );
+  }
+
   removeOperator(user: any, operatorId: string) {
     this.toastService.showConfirm(
       "Are you sure?",

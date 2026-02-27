@@ -58,6 +58,12 @@
                 <td>
                   <img src="assets/icons/edit.svg" class="cursor-pointer me-2" data-bs-toggle="modal"
                     data-bs-target="#addOperator" (click)="addOperator(user)" />
+                  <img
+                    src="assets/icons/trash.svg"
+                    (click)="deleteUser(user?._id || user?.id)"
+                    class="cursor-pointer"
+                    title="Delete user"
+                  />
                 </td>
               </tr>
             </tbody>
